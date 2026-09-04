@@ -243,6 +243,10 @@ export default function App() {
                 
                 <Route path="/san-nhu-cau" element={<DemandsPage />} />
                 <Route path="/san-nhu-cau/:id" element={<DemandDetailPage />} />
+                <Route path="/san-giao-dich-b2b" element={<DemandsPage />} />
+                <Route path="/san-giao-dich-b2b/:id" element={<DemandDetailPage />} />
+                <Route path="/dau-thau-mua-sam" element={<DemandsPage />} />
+                <Route path="/dau-thau-mua-sam/:id" element={<DemandDetailPage />} />
                 <Route path="/nhu-cau" element={<DemandsPage />} />
                 <Route path="/nhu-cau/:id" element={<DemandDetailPage />} />
                 <Route path="/dang-nhu-cau" element={<PostDemandPage />} />

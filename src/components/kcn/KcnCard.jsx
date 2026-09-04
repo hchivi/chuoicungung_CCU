@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Building2, MapPin, Factory, ShieldCheck, ChevronRight, Download, 
+import {
+  Building2, MapPin, Factory, ShieldCheck, ChevronRight, Download,
   Eye, Navigation, Plane, Anchor, Sparkles, TrendingUp, Layers, CheckCircle2
 } from 'lucide-react';
 import { calculateKcnLogistics } from '../../utils/kcnLogisticsUtils';
@@ -13,7 +13,7 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
 
   return (
     <div className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-400 transition-all duration-300 flex flex-col justify-between group relative">
-      
+
       {/* 1. Visual Banner (16:9 Ratio with Master Plan / Photo + Overlays) */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
         <img
@@ -41,7 +41,7 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
 
       {/* 2. Card Body */}
       <div className="p-4 sm:p-5 space-y-3.5 flex-1 flex flex-col justify-between">
-        
+
         {/* Header & Verification */}
         <div className="space-y-1.5">
           <div className="flex items-center space-x-1.5 text-blue-700 text-[11px] font-bold">
@@ -108,7 +108,7 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
 
         {/* 5. Dual Action Buttons */}
         <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-          
+
           <button
             onClick={() => onOpenBrochure && onOpenBrochure(kcn, logistics)}
             className="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold font-heading uppercase transition flex items-center justify-center space-x-1 cursor-pointer"
@@ -122,7 +122,7 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
             className="px-3 py-2.5 rounded-xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] hover:from-[#002f70] hover:to-[#0041a3] text-white text-xs font-bold font-heading uppercase transition shadow-md shadow-blue-900/15 flex items-center justify-center space-x-1 cursor-pointer"
           >
             <Navigation className="w-3.5 h-3.5 text-amber-300" />
-            <span className="truncate">Thực Địa 1-1</span>
+            <span className="truncate">Thực Địa</span>
           </button>
 
         </div>
