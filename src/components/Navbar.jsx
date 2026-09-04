@@ -9,6 +9,7 @@ import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import BrandLogo from './BrandLogo';
+import AuthModal from './auth/AuthModal';
 
 export default function Navbar() {
   const { t, lang } = useLanguage();
@@ -16,25 +17,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authModal, setAuthModal] = useState({ isOpen: false, tab: 'login' });
-  const [authForm, setAuthForm] = useState({
-    role: 'Nhà cung ứng',
-    emailOrPhone: '',
-    password: '',
-    fullName: '',
-    companyName: ''
-  });
-
-  const isActive = (path) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
-    return false;
-  };
-
-  const handleAuthSubmit = (e) => {
-    e.preventDefault();
-    alert(`${authModal.tab === 'login' ? 'Đăng nhập' : 'Đăng ký tài khoản'} thành công với vai trò: ${authForm.role}!`);
-    setAuthModal({ isOpen: false, tab: 'login' });
-  };
 
   // Nav links
   const navLinks = [
@@ -385,150 +367,12 @@ export default function Navbar() {
         )}
       </header>
 
-      {/* Interactive Auth Modal */}
-      {authModal.isOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative space-y-6 animate-in zoom-in-95">
-            <button
-              onClick={() => setAuthModal({ isOpen: false, tab: 'login' })}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition"
-            >
-              ✕
-            </button>
-
-            <div className="text-center space-y-2 flex flex-col items-center">
-              <BrandLogo variant="light" size="md" />
-              <h3 className="text-xl font-black text-[#072348] uppercase font-heading">
-                {lang === 'en' 
-                  ? (authModal.tab === 'login' ? 'Sign in to Supply Chain Portal' : 'Register Enterprise Account')
-                  : (authModal.tab === 'login' ? 'Đăng nhập vào Chuỗi Cung Ứng' : 'Đăng ký Tài khoản Doanh nghiệp')}
-              </h3>
-              <p className="text-xs text-slate-500">
-                {lang === 'en' ? 'B2B Sourcing Platform & Production Lifecycle Architecture' : 'Nền tảng Sourcing B2B & Cấu trúc Vòng đời Hệ thống Sản xuất'}
-              </p>
-            </div>
-
-            <div className="flex bg-slate-100 p-1 rounded-2xl text-xs font-bold">
-              <button
-                onClick={() => setAuthModal({ ...authModal, tab: 'login' })}
-                className={`flex-1 py-2.5 rounded-xl transition whitespace-nowrap ${authModal.tab === 'login' ? 'bg-white text-blue-600 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-              >
-                {lang === 'en' ? 'Login' : 'Đăng nhập'}
-              </button>
-              <button
-                onClick={() => setAuthModal({ ...authModal, tab: 'register' })}
-                className={`flex-1 py-2.5 rounded-xl transition whitespace-nowrap ${authModal.tab === 'register' ? 'bg-white text-blue-600 shadow-xs font-bold' : 'text-slate-600 hover:text-slate-900'
-                  }`}
-              >
-                {lang === 'en' ? 'Register' : 'Đăng ký'}
-              </button>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 block">
-                {lang === 'en' ? 'Join as:' : 'Bạn tham gia với tư cách:'}
-              </label>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                {(lang === 'en' 
-                  ? ["Supplier", "Factory / Investor", "Association", "Industrial Park"]
-                  : ["Nhà cung ứng", "Nhà máy / Chủ đầu tư", "Hội / Hiệp hội", "Khu công nghiệp"]
-                ).map((r, rIdx) => {
-                  const val = ["Nhà cung ứng", "Nhà máy / Chủ đầu tư", "Hội / Hiệp hội", "Khu công nghiệp"][rIdx];
-                  return (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => setAuthForm({ ...authForm, role: val })}
-                      className={`p-2.5 rounded-xl border text-left font-medium transition whitespace-nowrap truncate ${authForm.role === val
-                        ? 'bg-blue-50 border-blue-500 text-blue-700 font-bold'
-                        : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
-                        }`}
-                    >
-                      {r}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <form onSubmit={handleAuthSubmit} className="space-y-4 text-xs">
-              {authModal.tab === 'register' && (
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 text-xs">
-                    {lang === 'en' ? 'Enterprise / Organization Name *' : 'Tên Doanh nghiệp / Tổ chức *'}
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    placeholder={lang === 'en' ? "e.g., Vietnam Precision Engineering LLC" : "VD: Công ty TNHH Cơ khí Chính xác Việt Nam"}
-                    value={authForm.companyName}
-                    onChange={(e) => setAuthForm({ ...authForm, companyName: e.target.value })}
-                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
-                  />
-                </div>
-              )}
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1 text-xs">
-                  {lang === 'en' ? 'Work Email or Phone *' : 'Email hoặc Số điện thoại công tác *'}
-                </label>
-                <input
-                  required
-                  type="text"
-                  placeholder="contact@company.com"
-                  value={authForm.emailOrPhone}
-                  onChange={(e) => setAuthForm({ ...authForm, emailOrPhone: e.target.value })}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1 text-xs">
-                  {lang === 'en' ? 'Password *' : 'Mật khẩu *'}
-                </label>
-                <input
-                  required
-                  type="password"
-                  placeholder="••••••••"
-                  value={authForm.password}
-                  onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
-                  className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm"
-                />
-              </div>
-
-              {authModal.tab === 'login' && (
-                <div className="flex justify-between items-center text-xs">
-                  <label className="flex items-center space-x-2 text-slate-600 cursor-pointer">
-                    <input type="checkbox" className="rounded text-blue-600 focus:ring-0" defaultChecked />
-                    <span>{lang === 'en' ? 'Remember me' : 'Ghi nhớ'}</span>
-                  </label>
-                  <a href="#forgot" onClick={(e) => { e.preventDefault(); alert(lang === 'en' ? "Please contact Hotline 1900 8686 for password recovery." : "Vui lòng liên hệ Hotline 1900 8686 để lấy lại mật khẩu."); }} className="text-blue-600 hover:underline font-semibold">
-                    {lang === 'en' ? 'Forgot password?' : 'Quên mật khẩu?'}
-                  </a>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-md shadow-blue-500/25 transition text-sm flex items-center justify-center space-x-2"
-              >
-                <span>
-                  {lang === 'en'
-                    ? (authModal.tab === 'login' ? 'Sign In Now' : 'Create B2B Account')
-                    : (authModal.tab === 'login' ? 'Đăng nhập ngay' : 'Tạo tài khoản B2B')}
-                </span>
-                <ArrowRight className="w-4 h-4 flex-shrink-0" />
-              </button>
-            </form>
-
-            <div className="text-center text-xs text-slate-500">
-              {lang === 'en' ? 'By proceeding, you agree to our Terms of Service and Privacy Policy.' : 'Bằng cách tiếp tục, bạn đồng ý với Điều khoản dịch vụ và Chính sách bảo mật.'}
-            </div>
-
-          </div>
-        </div>
-      )}
+      {/* Interactive B2B/B2G Enterprise Auth Modal */}
+      <AuthModal
+        isOpen={authModal.isOpen}
+        onClose={() => setAuthModal({ ...authModal, isOpen: false })}
+        initialTab={authModal.tab}
+      />
     </>
   );
 }

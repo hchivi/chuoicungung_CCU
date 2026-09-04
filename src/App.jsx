@@ -50,6 +50,7 @@ const EcosystemOverviewPage = lazy(() => import('./pages/EcosystemOverviewPage')
 const IndustryCategoryPage = lazy(() => import('./pages/IndustryCategoryPage'));
 const KeywordDetailPage = lazy(() => import('./pages/KeywordDetailPage'));
 const RecruitmentPage = lazy(() => import('./pages/RecruitmentPage'));
+const AuthPage = lazy(() => import('./pages/AuthPage'));
 
 // Elegant loading placeholder during route transition
 function PageLoadingFallback() {
@@ -269,6 +270,12 @@ export default function App() {
                 <Route path="/founding-partner" element={<FoundingPartnerPage />} />
                 <Route path="/admin" element={<AdminDashboardPage />} />
                 <Route path="/he-sinh-thai" element={<EcosystemOverviewPage />} />
+                
+                {/* Auth Routes */}
+                <Route path="/dang-nhap" element={<AuthPage />} />
+                <Route path="/dang-ky" element={<AuthPage />} />
+                <Route path="/login" element={<AuthPage />} />
+                <Route path="/register" element={<AuthPage />} />
                 
                 {/* Catch-all */}
                 <Route path="*" element={<HomePage />} />
