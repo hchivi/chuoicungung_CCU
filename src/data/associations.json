@@ -1,0 +1,2550 @@
+[
+  {
+    "id": "hiep-hoi-nghe-tham-viet-nam",
+    "name": "Hiệp Hội Nghề Thảm Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-nghe-tham-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 13 Ngô Văn Sở, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "094 222 8335",
+    "email": "Hoithamvietnam@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2016",
+    "businessType": "Nhà sản xuất, Thương mại, Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ Tịch",
+    "membersCount": 200,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "► Hiệp Hội Thảm Việt Nam (Tiếng Anh: Viet Nam Carpet and Rug Association, viết tắt: VCRA) là tổ chức độc lập, hợp pháp, phi lợi nhuận, được thành lập năm 2016 tại Hà Nội. Hiện chúng tôi là tổ chức đại diện cho doanh nghiệp, cá nhân hoạt động kinh doanh về lĩnh vực thảm.\n► Mục đích hoạt động:\n☑ Hiệp hội ra đời với mong muốn gắn kết, củng cố và phát triển cộng đồng doanh nghiệp và cá nhân sản xuất, kinh doanh thảm, tạo công ăn việc làm cho các lao ...",
+    "keyPersonnel": [
+      {
+        "initials": "TT",
+        "name": "Ms. Phạm Thu Thủy",
+        "role": "Chủ Tịch",
+        "phone": "094 222 8335",
+        "zalo": "https://zalo.me/0942228335",
+        "email": "Hoithamvietnam@gmail.com"
+      },
+      {
+        "initials": "NA",
+        "name": "PhDr.  Phạm Ngọc Anh",
+        "role": "Đại diện tiếp nhận",
+        "phone": "091 558 3738",
+        "zalo": "https://zalo.me/0915583738",
+        "email": "Hoithamvietnam@gmail.com"
+      },
+      {
+        "initials": "TB",
+        "name": "Mr. Bùi Thanh Bình",
+        "role": "Đại diện phía Nam",
+        "phone": "0917 681 909",
+        "zalo": "https://zalo.me/0917681909",
+        "email": "Hoithamvietnam@gmail.com"
+      }
+    ],
+    "galleryGroups": [
+      {
+        "groupName": "Thảm văn phòng",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(8).jpg",
+            "title": "Basic V"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(3).jpg",
+            "title": "Midlands"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(4).jpg",
+            "title": "One Loop"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(7).jpg",
+            "title": "Reconnect"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(5).jpg",
+            "title": "Silken Touch"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(1).jpg",
+            "title": "SUMINOE Japan PX 5000"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(2).jpg",
+            "title": "T606 Premium"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/mot%20(6).jpg",
+            "title": "Valencia"
+          }
+        ]
+      },
+      {
+        "groupName": "Thảm khách sạn",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/hai%20(1).jpg",
+            "title": "Kasmir Hali - TIBET"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/hai%20(4).jpg",
+            "title": "LA 103"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/hai%20(2).jpg",
+            "title": "LA 105"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/hai%20(3).jpg",
+            "title": "LA 106"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/hai%20(5).jpg",
+            "title": "LA 201"
+          }
+        ]
+      },
+      {
+        "groupName": "Thảm Ả Rập - Dubai",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/ba%20(4).jpg",
+            "title": "2725 Bright Red"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/ba%20(5).jpg",
+            "title": "2737 Velvet Purple"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/ba%20(1).jpg",
+            "title": "2749 Deep Brown"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/ba%20(3).jpg",
+            "title": "2790 Grain"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/ba%20(2).jpg",
+            "title": "2792 Cream Beige"
+          }
+        ]
+      },
+      {
+        "groupName": "Thảm Thổ Nhĩ Kỳ",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(8).jpg",
+            "title": "0168 KBJ"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(9).jpg",
+            "title": "4904A Cream Beige"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(1).jpg",
+            "title": "5562A Ocean Blue"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(10).jpg",
+            "title": "5823A D.Red"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(2).jpg",
+            "title": "6473A D.Red"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(4).jpg",
+            "title": "7386A L.Grey - Ivory"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(5).jpg",
+            "title": "7603A L.Beige - Mustard"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(3).jpg",
+            "title": "7609A Ivory"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(6).jpg",
+            "title": "9803A L.Brown"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/namn%20(7).jpg",
+            "title": "9838A Ivory - Turkuaz"
+          }
+        ]
+      },
+      {
+        "groupName": "Thảm dệt tay",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(6).jpg",
+            "title": "Aston Milky White"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(9).jpg",
+            "title": "Brington I30576068"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(7).jpg",
+            "title": "Fadeway I19843310"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(3).jpg",
+            "title": "Orchid I52487420"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(4).jpg",
+            "title": "Orchid I52487860"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(2).jpg",
+            "title": "Oriental Floral I30576380"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(8).jpg",
+            "title": "Oriental Floral I30576440"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(5).jpg",
+            "title": "Paint Color"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(1).jpg",
+            "title": "Runway"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395770651/bon%20(10).jpg",
+            "title": "Twin Stripe I30812840"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hiep-hoi-bat-dong-san-viet-nam",
+    "name": "Hiệp Hội Bất Động Sản Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-bat-dong-san-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Cung Triển Lãm Kiến Trúc Quy Hoạch, Số 01 Đỗ Đức Dục, Q. Nam Từ Liêm, Hà Nội",
+    "phone": "(024) 6293 2028",
+    "email": "vnrea@vnrea.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2002",
+    "businessType": "Tổ chức XN nghề nghiệp",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 253,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Bất Động Sản Việt Namtên tiếng anh là Vietnam National Real Estate Association là tổ chức xã hội - nghề nghiệp của các tổ chức và công dân Việt Nam hoạt động liên quan đến lĩnh vực bất động sản ở Việt Nam theo quy định của pháp luật. Tự nguyện thành lập, không vụ lợi nhằm mục đích hợp tác, liên kết, hỗ trợ và giúp đỡ lẫn nhau trong việc phát triển nghề nghiệp, nâng cao hiệu quả hoạt động và bảo vệ quyền lợi hợp pháp của hội viên, góp phầ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 6293 2028",
+        "zalo": "https://zalo.me/02462932028",
+        "email": "vnrea@vnrea.vn"
+      },
+      {
+        "initials": "KD",
+        "name": "Ms. Dương Kim Dung",
+        "role": "Liên Hệ Quốc Tế",
+        "phone": "(024) 6293 2028",
+        "zalo": "https://zalo.me/02462932028",
+        "email": "vnrea@vnrea.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-che-bien-va-xuat-khau-thuy-san-viet-nam",
+    "name": "Hiệp Hội Chế Biến Và Xuất Khẩu Thủy Sản Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-che-bien-va-xuat-khau-thuy-san-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Số 218 Nguyễn Hữu Cảnh, P. An Khánh, TP. Thủ Đức, TP. Hồ Chí Minh",
+    "phone": "(028 6281 0430",
+    "email": "vasephcmcity@vasep.com.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1998",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 306,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Chế Biến Và Xuất Khẩu Thủy Sản Việt Nam (VASEP) là tổ chức tự nguyện của các DN hoạt động chế biến và xuất nhập khẩu thủy sản của Việt Nam, nhằm mục đích phối hợp liên kết hoạt động của các doanh nghiệp, giúp nhau nâng cao giá trị, chất lượng, khả năng cạnh tranh của sản phẩm thủy sản Việt Nam, phát triển tạo nguồn nguyên liệu cho chế biển xuất khẩu thủy sản, đại diện và bảo vệ lợi ích hợp pháp, chính đáng của các hội viên. Những hoạt độ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(028 6281 0430",
+        "zalo": "https://zalo.me/02862810430",
+        "email": "vasephcmcity@vasep.com.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-lam-vuon-viet-nam",
+    "name": "Hội Làm Vườn Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-lam-vuon-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Tòa 17T1, Khu Đô Thị Trung Văn, Đường Tố Hữu, Q. Nam Từ Liêm, Hà Nội",
+    "phone": "(024) 8589 2257",
+    "email": "vacvina08@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1986",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 359,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hội Làm Vườn Việt Nam là tổ chức nghề nghiệp-xã hội mang tính chất kinh tế kỹ thuật của quần chúng, hoạt động tự nguyện, đoàn kết, hợp tác giúp nhau làm nòng cốt phát triển, kinh tế VAC, kinh tế trang trại và hợp tác xã góp phần thực hiện chủ trương xóa đói, giảm nghèo và làm giàu, xây dựng nông thôn mới xanh sạch đẹp....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 8589 2257",
+        "zalo": "https://zalo.me/02485892257",
+        "email": "vacvina08@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-thep-viet-nam",
+    "name": "Hiệp Hội Thép Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-thep-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Phòng 405, Tòa Nhà 17T1, Đường Hoàng Đạo Thúy, Q. Cầu Giấy, Hà Nội",
+    "phone": "(024) 3514 6230",
+    "email": "vietnam.steel.association@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2001",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 412,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Thép Việt Nam là tổ chức phi Chính phủ, các doanh nghiệp sản xuất, gia công kinh doanh các sản phẩm thép, nguyên vật liệu và 1 số tổ chức kinh tế, dịch vụ có liên quan đến ngành thép ở Việt Nam tự nguyện tham gia. Với mục đích thúc đẩy sự hợp tác giữa các thành viên Hiệp hội trong việc xây dựng ngành công nghiệp thép phát triển bền vững.\nCác thành viên của Hiệp hội Thép Việt Nam bao gồm đủ các thành phần kinh tế: Doanh nghiệp Nhà nước, C...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3514 6230",
+        "zalo": "https://zalo.me/02435146230",
+        "email": "vietnam.steel.association@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-giay-va-bot-giay-viet-nam",
+    "name": "Hiệp Hội Giấy Và Bột Giấy Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-giay-va-bot-giay-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 25 Lý Thường Kiệt, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "(024) 6654 2872",
+    "email": "vanphong.vppa@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1992",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 465,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Giấy Và Bột Giấy Việt Nam là một tổ chức nghề nghiệp được thành lập trên cơ sở tự nguyện và bình đẳng của các hội viên.\nMục đích chủ yếu là tập hợp, tổ chức và tạo điều kiện để các hội viên hợp tác, hiệp lực và giúp đỡ lẫn nhau giúp đỡ và tư vấn cho hôi viên cung cấp cho hội viên các thông tin trong nước và thế giới trong mọi lĩnh vực kỹ thuật, môi trường, thị trường, sản xuất, kinh doanh, quản trị, đào tạo và đầu tư về giấy và bột giấy....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 6654 2872",
+        "zalo": "https://zalo.me/02466542872",
+        "email": "vanphong.vppa@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-khoa-hoc-ky-thuat-an-toan-thuc-pham-viet-nam",
+    "name": "Hội Khoa Học Kỹ Thuật An Toàn Thực Phẩm Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-khoa-hoc-ky-thuat-an-toan-thuc-pham-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 48 Hai Bà Trưng, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "0915 247 896",
+    "email": "phamngocthanhtra@yahoo.com.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2010",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 518,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hội Khoa Học Kỹ Thuật An Toàn Thực Phẩm Việt Nam là tổ chức xã hội nghề nghiệp, tự nguyện của những người hoạt động trong lĩnh vực khoa hoc kỹ thuật an toàn thực phẩm hoặc liên quan đến an toàn thực phẩm. Nhiệm vụ của Hội:\n- Tập hợp tổ chức, công dân của Việt Nam hoạt động trong lĩnh vực ATTP.\n- Tham gia ý kiến hoặc tư vấn khi được nhà nước, tổ chức, cá nhân yêu cầu về các vấn đề: xây dựng chính sách, bảo vệ quyền lợi hội viên, tư vấn DN, phản bi...",
+    "keyPersonnel": [
+      {
+        "initials": "TN",
+        "name": "Ms. Phạm Thị Ngọc",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0915 247 896",
+        "zalo": "https://zalo.me/0915247896",
+        "email": "phamngocthanhtra@yahoo.com.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-dieu-duong-viet-nam",
+    "name": "Hội Điều Dưỡng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-dieu-duong-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 138A Giảng Võ, Q. Ba Đình, Hà Nội",
+    "phone": "(024) 3726 0041",
+    "email": "hoidieuduong@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1990",
+    "businessType": "Hiệp hội, Quốc tế",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 571,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hội điều dưỡng Việt Nam là tổ chức xã hội-nghề nghiệp, tập hợp các cá nhân, tổ chức Việt Nam hoạt động trong các lĩnh vực thuộc chuyên ngành điều dưỡng và những ngành có liên quan nhằm mục đích: Phát triển ngành điều dưỡng thông qua việc đẩy mạnh và nghiên cứu, đào tạo cập nhật và nâng cao kiến thức, kỹ năng cho hội viên và tham gia đào tạo, phổ biến ứng dụng và phát triển các kỹ thuật và dịch vụ điều dưỡng phục vụ sự nghiệp chăm sóc và bảo vệ sứ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3726 0041",
+        "zalo": "https://zalo.me/02437260041",
+        "email": "hoidieuduong@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-chu-thap-do-viet-nam",
+    "name": "Hội Chữ Thập Đỏ Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-chu-thap-do-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 82 Nguyễn Du, Q. Hai Bà Trưng, Hà Nội",
+    "phone": "(024) 3822 4030",
+    "email": "vnrchq@netnam.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1946",
+    "businessType": "Tổ chức xã hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 624,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hội Chữ Thập Đỏ Việt Nam là tổ chức xã hội hoạt động nhân đạo trong phạm vi cả nước theo Hiến pháp, pháp luật của Nhà nước Việt Nam, Điều lệ Hội và 7 nguyên tắc cơ bản của phong trào Chữ Thập Đỏ, Trăng Lưỡi Liềm Đỏ quốc tế: Nhân đạo, vô tư, trung lập, độc lập, tự nguyện, thống nhất, toàn cầu. Hội tập hợp mọi người Việt Nam, không phân biệt thành phần dân tộc, tôn giáo, giới tính để làm công tác nhân đạo.\nCác lĩnh vực hoạt động của hội:\n- Hoạt độn...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3822 4030",
+        "zalo": "https://zalo.me/02438224030",
+        "email": "vnrchq@netnam.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-lang-nghe-viet-nam",
+    "name": "Hiệp Hội Làng Nghề Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-lang-nghe-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Cung Trí Thức Hà Nội, Số 1 Tôn Thất Thuyết, Q. Cầu Giấy, Hà Nội",
+    "phone": "0913 051 163",
+    "email": "nganhnghett@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Tổ chức xã hội nghề nghiệp",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Phó Chủ Tịch",
+    "membersCount": 677,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Làng Nghề Việt Nam là tổ chức xã hội-nghề nghiệp tự nguyện của các ngành hàng từ các làng nghề, phố nghề Việt Nam, các doanh nghiệp, tổ chức kinh tế, văn hóa, các doanh nhân đang hoạt động trong làng nghề, nghệ nhân, các cá nhân tâm huyết giữ gìn, bảo tồn và phát triển nghề thủ công mỹ nghệ Việt Nam.\nMục đích: Tập hợp, đoàn kết các làng nghề, các tổ chức kinh tế, văn hóa, các nghệ nhân trong làng nghề, phố nghề, các nhà quản lý, nhà khoa...",
+    "keyPersonnel": [
+      {
+        "initials": "TL",
+        "name": "Bà Nguyễn Thị Liên",
+        "role": "Phó Chủ Tịch",
+        "phone": "0913 051 163",
+        "zalo": "https://zalo.me/0913051163",
+        "email": "nganhnghett@gmail.com"
+      },
+      {
+        "initials": "KV",
+        "name": "Bà Nguyễn Thị Kiều Vân",
+        "role": "Phó Chánh Văn Phòng",
+        "phone": "0915 220 376",
+        "zalo": "https://zalo.me/0915220376",
+        "email": "nganhnghett@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-dong-y-viet-nam",
+    "name": "Hội Đông Y Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-dong-y-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 19 Phố Tông Đản, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "(024) 3935 0572",
+    "email": "info@votma.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1946",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 730,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hội Đông Y Việt Nam là tổ chức xã hội-nghề nghiệp của những người làm việc trong lĩnh vực Đông Y, Đông Dược tại Việt Nam, bao gồm khám chữa bệnh bằng đông y, thừa kế, phát huy, phát triển, bảo tồn một bộ phận di sản văn hóa dân tộc. Hội Đông Y Việt Nam có vai trò nòng cốt trong phát triển nền Đông y Việt Nam.\nHội Đông Y Việt Nam mang tính chất đặc thù với hệ thống tổ chức hội rộng lớn, hoàn chỉnh ở cả 4 cấp hội từ Trung ương đến cơ sở xã, phường....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3935 0572",
+        "zalo": "https://zalo.me/02439350572",
+        "email": "info@votma.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-bong-soi-viet-nam",
+    "name": "Hiệp Hội Bông Sợi Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-bong-soi-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 25 Bà Triệu, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "0902 379 490",
+    "email": "man.gh@vcosa.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2011",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 783,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Bông Sợi Việt Nam là tổ chức xã hội nghề nghiệp phi lợi nhuận của những người và doanh nghiệp, tổ chức hoạt động trong lĩnh vực bông sợi tại Việt Nam. Hiệp hội có tên giao dịch tiếng anh là ietnam Cotton and Spinning Association, viết tắt làVCOSA.\nHiệp hội Bông Sợi Việt Nam thành lập năm 2011 trên cơ sở hợp nhất 2 hiệp hội Bông Vải và Sợi Việt Nam....",
+    "keyPersonnel": [
+      {
+        "initials": "TV",
+        "name": "Tú Vitas",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0902 379 490",
+        "zalo": "https://zalo.me/0902379490",
+        "email": "man.gh@vcosa.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-det-may-viet-nam",
+    "name": "Hiệp Hội Dệt May Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-det-may-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Tầng 5, Tòa Nhà 25 Bà Triệu, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "(024) 39349608",
+    "email": "info@vietnamtextile.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1999",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 836,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Dệt May Việt Nam (VITAS) là tổ chức xã hội-nghề nghiệp, được thành lập trên cơ sở tự nguyện, bình đẳng của các tổ chức, cá nhân của mọi thành phần kinh tế hoạt động trong lĩnh vực sản xuất, xuất khẩu, tiêu thụ, dịch vụ chuyên ngành kinh tế-kỹ thuật dệt may Việt Nam.\nĐược thành lập ngày 16/7/1999, từ đó đến nay VITAS đã sát cánh cùng DN và Chính phủ trong hoạt động xây dựng chiến lược và các chương trình phát triển cho toàn ngành, tham gi...",
+    "keyPersonnel": [
+      {
+        "initials": "MB",
+        "name": "Văn phòng miền Bắc",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 39349608",
+        "zalo": "https://zalo.me/02439349608",
+        "email": "info@vietnamtextile.org.vn"
+      },
+      {
+        "initials": "MN",
+        "name": "Văn phòng miền Nam",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(028) 22411485",
+        "zalo": "https://zalo.me/02822411485",
+        "email": "info@vietnamtextile.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-nang-luong-viet-nam",
+    "name": "Hiệp Hội Năng Lượng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-nang-luong-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Tầng 6, Số 110 Thụy Khuê, Q. Tây Hồ, Hà Nội",
+    "phone": "(024) 2211 3344",
+    "email": "toasoan@nangluongvietnam.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2004",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 889,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Năng Lượng Việt Nam (VEA) từ khi thành lập có khoảng 200 thành viên, đến nay VEA đã có trên 350 thành viên là các tập đoàn, tổng công ty, công ty nhà nước, các công ty và doanh nghiệp tư nhân, các tổ chức nước ngoài,..hoạt động trong lĩnh vực năng lượng.\n- Mục tiêu hướng tới: Liên kết, hỗ trợ, chia sẻ kinh nghiệm giữa các hội viên trong nghiên cứu khoa học, thành quả về kinh tế kỹ thuật, phát triển sản xuất kinh doanh dịch vụ đại diện và...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 2211 3344",
+        "zalo": "https://zalo.me/02422113344",
+        "email": "toasoan@nangluongvietnam.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-bao-ve-thien-nhien-va-moi-truong-viet-nam",
+    "name": "Hội Bảo Vệ Thiên Nhiên Và Môi Trường Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-bao-ve-thien-nhien-va-moi-truong-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Tầng 9, Tòa Nhà Khách sạn Công Đoàn, 14 Trần Bình Trọng, Hà Nội",
+    "phone": "(024) 3942 0280",
+    "email": "vn@vacne.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1988",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 942,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hội Bảo Vệ Thiên Nhiên Và Môi Trường Việt Nam được thành lập theo quyết định số 299/CT ngày 23/11/1988 của Chủ tịch Hội đồng Bộ Trưởng (nay la Thủ tướng Chính Phủ). Từ đó đến nay, Hội đã trải qua 6 lần Đại hội vào các năm 1988, 1993, 1998, 2003, 2008 và 2013.\nCác nhiệm vụ chính:\n- Tuyên truyền, giáo dục, nâng cao nhận thức và phổ biến kiến thức về bảo vệ thiên nhiên và môi trường (BVTNMT) trong nhân dân, góp phần đưa nội dung BVTNMT vào chương tr...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3942 0280",
+        "zalo": "https://zalo.me/02439420280",
+        "email": "vn@vacne.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-tham-dinh-gia-viet-nam",
+    "name": "Hiệp Hội Thẩm Định Giá Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-tham-dinh-gia-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Phòng 102, Tòa Nhà B, Số 9 Láng Hạ, Q. Ba Đình, Hà Nội",
+    "phone": "(024) 3641 0056",
+    "email": "hoithamdinhgiavn@vva.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 995,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hội Thẩm Định Giá Việt Nam là tổ chức xã hội-nghề nghiệp, được thành lập trên cơ sở tự nguyện của các tổ chức và công dân Việt Nam thuộc mọi thành phần kinh tế hoạt động trong lĩnh vực dịch vụ tư vấn định giá và thẩm định giá theo quy định của pháp luật.\nMục đích hoạt động của Hội là tập hợp, đoàn kết hội viên, đại diện cho quyền lợi và lợi ích chính đáng, hợp pháp của hội viên phối hợp, liên kết hỗ trợ hoạt động của các hội viên vận động, khuyến...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3641 0056",
+        "zalo": "https://zalo.me/02436410056",
+        "email": "hoithamdinhgiavn@vva.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-dich-vu-logistics-viet-nam",
+    "name": "Hiệp Hội Doanh Nghiệp Dịch Vụ Logistics Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-dich-vu-logistics-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Tầng 5, Tòa Nhà Cảng Sài Gòn, Số 3 Nguyễn Tất Thành, P. 12, Q. 4, TP. Hồ Chí Minh",
+    "phone": "028.39433045",
+    "email": "vla-hcm2@vla.com.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1993",
+    "businessType": "Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 248,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Doanh Nghiệp Dịch Vụ Logistics Việt Nam là tổ chức xã hội nghề nghiệp phi lợi nhuận của những tổ chức, doanh nghiệp và công dân trong hoạt động thương mại giao nhận kho vận, dịch vụ logistics nhằm hợp tác, liên kết, hỗ trợ và giúp dỡ lẫn nhau trong việc phát triển nghề nghiệp, nâng cao hiệu quả hoạt động và bảo vệ quyền lợi hợp pháp của hội viên.\nHiện nay, hiệp hội có hơn 400 hội viên.\nTiền thân của chúng tôi là Hiệp hội giao nhận kho vậ...",
+    "keyPersonnel": [
+      {
+        "initials": "LT",
+        "name": "Ms. Lê Thủy",
+        "role": "Đại diện tiếp nhận",
+        "phone": "028.39433045",
+        "zalo": "https://zalo.me/02839433045",
+        "email": "vla-hcm2@vla.com.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-phan-bon-viet-nam",
+    "name": "Hiệp Hội Phân Bón Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-phan-bon-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 10 Nguyễn Công Hoan, Q. Ba Đình, Hà Nội",
+    "phone": "0919 052 336",
+    "email": "vp.hhpbvn@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1957",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 301,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Phân Bón Việt Nam là Hiệp hội ngành nghề tự nguyện của các doanh nghiệp, tổ chức kinh tế của Việt Nam thuộc mọi thành phần kinh tế, hoạt động trong các lĩnh vực sản xuất, kinh doanh, dịch vụ, nhập khẩu, sử dụng phân bón và các mặt hàng liên quan.\nMục đích của Hiệp hội là liên kết, hợp tác, hỗ trợ nhau về kinh tế, kỹ thuật trong sản xuất, kinh doanh, dịch vụ, nâng cao giá trị sản phẩm, đại diện và bảo vệ lợi ích hợp pháp của hội viên, góp...",
+    "keyPersonnel": [
+      {
+        "initials": "VN",
+        "name": "Mr. Lê Văn Ngân",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0919 052 336",
+        "zalo": "https://zalo.me/0919052336",
+        "email": "vp.hhpbvn@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cac-do-thi-viet-nam",
+    "name": "Hiệp Hội Các Đô Thị Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cac-do-thi-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Cung Trí Thức Hà Nội, Số 1 Tôn Thất Thuyết, Q. Cầu Giấy, Hà Nội",
+    "phone": "(024) 3762 9571",
+    "email": "acvn@fpt.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2000",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 354,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Các Đô Thị Việt Nam (ACVN) là một tổ chức xã hội tự nguyện của các đô thị Việt Nam. Với các nhiệm vụ:\n- Tổ chức các hoạt động gắn kết và mang lại lợi ích cho các hội viên. Tạo điều kiện để các đô thị giao lưu, trao đổi thông tin, kinh nghiệm và tìm kiếm cơ hội hợp tác, cùng nhau phát triển.\n- Tập hợp, phản ánh với Chính phủ, các Bộ, Ngành trung ưng những bức xúc, khó khăn, vướng mắc trong quy hoạch, xây dựng, quản lý, phát triển đô thị v...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3762 9571",
+        "zalo": "https://zalo.me/02437629571",
+        "email": "acvn@fpt.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-nhat-ban-tai-viet-nam",
+    "name": "Hiệp Hội Doanh Nghiệp Nhật Bản Tại Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-nhat-ban-tai-viet-nam.svg",
+    "region": "Miền Nam",
+    "address": "Tầng 14, Tòa Nhà Landmark, 5B Tôn Đức Thắng, Q. 1, TP. Hồ Chí Minh",
+    "phone": "(024) 2220 9907",
+    "email": "jcci-info@jcci.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Tổ chức phi chính phủ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 407,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Doanh Nghiệp Nhật Bản tại Việt Nam được thành lập với mục đích nhằm giao lưu, nâng cao tính thân thiết giữa các hội viên và tạo mối quan hệ hữu hảo, giao lưu văn hóa giữa 2 nước Nhật - Việt đồng thời thúc đẩy hợp tác thương mại và kinh tế giữa 2 nước.\nHiệp hội doanh nghiệp Nhật Bản hoạt động không vì mục đích lợi nhuận. Ngoài ra, Hiệp hội không triển khai dự án vì mục đích lợi nhuận cho một cá nhân hoặc pháp nhân và đoàn thể. Hiệp hội kh...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 2220 9907",
+        "zalo": "https://zalo.me/02422209907",
+        "email": "jcci-info@jcci.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-nong-dan-viet-nam",
+    "name": "Hội Nông Dân Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-nong-dan-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 9 Đường Tôn Thất Thuyết, Q. Nam Từ Liêm, Hà Nội",
+    "phone": "(024) 3845 6137",
+    "email": "websitehndvn@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1930",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 460,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hội Nông Dân Việt Nam là đoàn thể chính trị của giai cấp nông dân do Đảng Cộng Sản Việt Nam lãnh đạo, cơ sở chính trị của Nhà nước Cộng hòa xã hội chủ nghĩa Việt Nam và thành viên của mặt trận Tổ quốc Việt Nam.\nMục đích của hội là tập hợp đoàn kết nông dân, xây dựng giai cấp nông dân vững mạnh về mọi mặt, xứng đáng là lực lượng tin cậy trong khối liên minh vững chắc công, nông, trí, bảo đảm thực hiện bằng sự nghiệp công nghiệp hóa, hiện đại hóa n...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3845 6137",
+        "zalo": "https://zalo.me/02438456137",
+        "email": "websitehndvn@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cang-bien-viet-nam",
+    "name": "Hiệp Hội Cảng Biển Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cang-bien-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Số 3 Nguyễn Tất Thành, P. 12, Q. 4, TP. Hồ Chí Minh",
+    "phone": "(028) 3940 1030",
+    "email": "kimlanho.vpa@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1993",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 513,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Cảng Biển Việt Nam là tổ chức xã hội - nghề nghiệp của các tổ chức, doanh nghiệp và công dân Việt Nam hoạt động trong ngành, lĩnh vực liên quan đến cảng biển của Việt Nam, tự nguyện thành lập, nhằm mục đích tập hợp, đoàn kết hội viên, bảo vệ quyền, lợi ích hợp pháp của hội viên, hỗ trợ hoạt động có hiệu quả, góp phần vào việc phát triển kinh tế-xã hội của Đất nước....",
+    "keyPersonnel": [
+      {
+        "initials": "KL",
+        "name": "Mr, Hồ Kim Lân",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(028) 3940 1030",
+        "zalo": "https://zalo.me/02839401030",
+        "email": "kimlanho.vpa@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-ca-phe-ca-cao-viet-nam",
+    "name": "Hiệp Hội Cà Phê Ca Cao Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-ca-phe-ca-cao-viet-nam.jpg",
+    "region": "Miền Trung",
+    "address": "Trụ sở Xúc tiến: TP. Buôn Ma Thuột, Đắk Lắk & 5 Ông Ích Khiêm, Ba Đình, Hà Nội",
+    "phone": "(024) 3733 6520",
+    "email": "info.vicofa@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1990",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 566,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Cà Phê Ca Cao Việt Nam là tổ chức phi chính phủ, phi lợi nhuận, tập hợp và đại diện cho các doanh nghiệp, tổ chức kinh tế và cá nhân sản xuất, chế biến, kinh doanh dịch vụ cung ứng xuất khẩu, nghiên cứu khoa học công nghệ và đào tạo thuộc ngành cà phê-ca cao được thành lập trên cơ sở tự nguyện nhằm phối hợp có hiệu quả các hoạt động sản xuất kinh doanh trên thị trường trong nước và ngoài nước,..\nHiệp hội là cầu nối giữa các DN, hội viên ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3733 6520",
+        "zalo": "https://zalo.me/02437336520",
+        "email": "info.vicofa@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-luong-thuc-viet-nam",
+    "name": "Hiệp Hội Lương Thực Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-luong-thuc-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Số 62 Nguyễn Thị Thập, P. Tân Hưng, Q. 7, TP. Hồ Chí Minh",
+    "phone": "(028) 6298 3495",
+    "email": "vietfood@vietfood.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1989",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 619,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Lương Thực Việt Nam là một tổ chức xã hội của các doanh nghiệp, hoạt động trong các lĩnh vực sản xuất, chế biến, kinh doanh lương thực. Hiệp hội được tổ chức và hoạt động theo Điều lệ do Bộ trưởng Nội Vụ phê duyệt và chịu sự quản lý Nhà nước của Bộ nông nghiệp và Phát triển Nông thôn.\nHiệp hội Lương thực Việt Nam tự lo liệu kinh phí và phương tiện hoạt động\nHiệp hội đã tiến hành 8 kỳ Đại hội, tổng số lượng tham gia xuất khẩu trên 122 tri...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(028) 6298 3495",
+        "zalo": "https://zalo.me/02862983495",
+        "email": "vietfood@vietfood.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-ngan-hang-viet-nam",
+    "name": "Hiệp Hội Ngân Hàng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-ngan-hang-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 19A Bà Triệu, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "(024) 3821 8733",
+    "email": "info@vnba.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1994",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 672,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "HHNH Việt Nam là tổ chức nghề nghiệp tự nguyện của các tổ chức tín dụng Việt Nam, hoạt động theo nguyên tắc tự nguyện, tự quản, tự chịu trách nhiệm về mọi mặt, tập hợp, động viên các hội viên hợp tác, hỗ trợ nhau trong hoạt động kinh doanh, đại diện, bảo vệ quyền và lợi ích hợp pháp của Hội viên, làm cầu nối giữa các hội viên với cươ quan Nhà nước, nhằm ổn định và phát triển lành mạnh, hiệu quả, an toàn hệ thống các tổ chức tín dụng Việt Nam, qua...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3821 8733",
+        "zalo": "https://zalo.me/02438218733",
+        "email": "info@vnba.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "trung-tam-ho-tro-va-phat-trien-cong-dong-anh-duong",
+    "name": "Trung Tâm Hỗ Trợ Và Phát Triển Cộng Đồng ánh Dương",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/trung-tam-ho-tro-va-phat-trien-cong-dong-anh-duong.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "090 105 4622",
+    "email": "btminh16@gmail.com",
+    "website": "",
+    "taxCode": "6300085862",
+    "establishedYear": "2008",
+    "businessType": "Tổ Chức Phi Chính Phủ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Phòng Truyền Thông",
+    "membersCount": 778,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Trung tâm ánh Dương thành lập năm 2008, bởi VUSTA. Tiền thân là một tổ chức phi chính phủ quốc tế Vietnamplus. ánh Dương chủ yếu giúp cộng đồng nâng cao năng lực, tiến tới phát triển bền vững, kinh tế ổn định, đời sống ấm no, hạnh phúc. Giúp những phụ nữ đơn thân, vùng xa, vùng khó khăn có thu nhập trang trải cuộc sống. Chương trình y tế - trường học giúp nâng cao ý thức giữ gìn vệ sinh cá nhân, vệ sinh môi trường, nâng cao sức khoẻ cộng đồng. Hỗ...",
+    "keyPersonnel": [
+      {
+        "initials": "TM",
+        "name": "Mr. Bùi Thanh Minh",
+        "role": "Phòng Truyền Thông",
+        "phone": "090 105 4622",
+        "zalo": "https://zalo.me/0901054622",
+        "email": "btminh16@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-bao-bi-viet-nam",
+    "name": "Hiệp Hội Bao Bì Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-bao-bi-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Tòa Nhà Sunrise City, 27 Nguyễn Hữu Thọ, P. Tân Hưng, Q. 7, TP. Hồ Chí Minh",
+    "phone": "0983 070 663",
+    "email": "nganliksin@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2001",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 831,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Bao Bì Việt Nam là tổ chức xã hội-nghề nghiệp của các nhà sản xuất, kinh doanh, sử dụng, nghiên cứu và quản lý có liên quan trực tiếp hoặc gián tiếp đến lĩnh vực bảo bì.\nHiệp Hội Bao Bì Việt Nam là tổ chức phi chính phủ, hoạt động phi lợi nhuận nhằm mục đích hợp tác giúp đỡ lẫn nhau phát triển nghề nghiệp và bảo vệ lợi ích hợp pháp của hội viên.\nHiệp hội đã từng bước khẳng định được vị trí vai trò của mình trong ngành bao bì, nhằm từng b...",
+    "keyPersonnel": [
+      {
+        "initials": "TK",
+        "name": "Phòng Thư Ký",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0983 070 663",
+        "zalo": "https://zalo.me/0983070663",
+        "email": "nganliksin@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cao-su-viet-nam",
+    "name": "Hiệp Hội Cao Su Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cao-su-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "236 Hai Bà Trưng, P. Tân Định, Q. 1, TP. Hồ Chí Minh",
+    "phone": "028 3932 2605",
+    "email": "office@vra.com.vn",
+    "website": "",
+    "taxCode": "0304309791",
+    "establishedYear": "2004",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chánh Văn Phòng",
+    "membersCount": 884,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp hội Cao su Việt Nam là một tổ chức tự nguyện của các doanh nghiệp, đơn vị hoạt động trong ngành cao su Việt Nam hoặc có liên quan đến ngành cao su Việt Nam nhằm hỗ trợ Hội viên về sản xuất kinh doanh, bảo vệ quyền lợi chính đáng của Hội viên và góp phần phát triển ngành cao su bền vững....",
+    "keyPersonnel": [
+      {
+        "initials": "HV",
+        "name": "Ms. Phan Trần Hồng Vân",
+        "role": "Chánh Văn Phòng",
+        "phone": "028 3932 2605",
+        "zalo": "https://zalo.me/02839322605",
+        "email": "office@vra.com.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-cuu-tro-tre-em-tan-tat-viet-nam",
+    "name": "Hội Cứu Trợ Trẻ Em Tàn Tật Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-cuu-tro-tre-em-tan-tat-viet-nam.png",
+    "region": "Miền Bắc",
+    "address": "Số 51 Vũ Tông Phan, Đường Láng Hạ, Q. Đống Đa, Hà Nội, Việt Nam\n(024) 35621094, (024) 38532785\n(024) 35621094 (số fax)",
+    "phone": "(024) 3562 1094",
+    "email": "cuutrotretantat@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1993",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 937,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hội Cứu Trợ Trẻ Em Tàn Tật Việt Nam là tổ chức xã hội từ thiện phi chính phủ của những người và tổ chức tự nguyện đóng góp cho hoạt động chăm sóc trẻ em khuyết tật tại Việt Nam giảm bớt khổ đau và bất hạnh.\nMục đích tôn chỉ của Hội là huy động công, của, sức lực, trí tuệ cho hoạt động nhằm góp phần làm cho trẻ em khuyết tật giảm bớt khổ đau và bất hạnh, được bảo vệ và chăm sóc theo Luật bảo vệ chăm sóc và giáo dục trẻ em, Luật về người khuyết tật...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3562 1094",
+        "zalo": "https://zalo.me/02435621094",
+        "email": "cuutrotretantat@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-nhua-viet-nam",
+    "name": "Hiệp Hội Nhựa Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-nhua-viet-nam.png",
+    "region": "Miền Nam",
+    "address": "Số 180-182 Lý Chính Thắng, P. 9, Q. 3, TP. Hồ Chí Minh",
+    "phone": "(028) 3521 8552",
+    "email": "info@vpas.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2008",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 990,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Nhựa Việt Nam là một tổ chức tự nguyện Phi Chính Phủ của các đơn vị hoạt động trong lãnh vực nghiên cứu khoa học, sản xuất và kinh doanh các sản phẩm Nhựa, Cao su (chất dẻo).\nMục đích của Hiệp hội là liên kết, hợp tác và hỗ trợ lẫn nhau về kinh tế-kỹ thuật trong nghiên cứu, sản xuất, kinh doanh, dịch vụ, nâng cao giá trị sản phẩm đại diện và bảo vệ lợi ích hợp pháp của hội viên, góp phần tạo thêm việc làm, cải thiện đời sống của người la...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(028) 3521 8552",
+        "zalo": "https://zalo.me/02835218552",
+        "email": "info@vpas.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cac-nganh-sinh-hoc-viet-nam",
+    "name": "Hiệp Hội Các Ngành Sinh Học Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cac-nganh-sinh-hoc-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 18, Đường Hoàng Quốc Việt, Q. Cầu Giấy, Hà Nội, Việt Nam\n0903418530",
+    "phone": "0903 418 530",
+    "email": "letranbinhcd@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 243,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hội Các Ngành Sinh Học Việt Nam là một tổ chức nghề nghiệp tự nguyện của những người Việt Nam làm công tác nghiên cứu, giảng dạy, quản lý và sản xuất kinh doanh thuộc lĩnh vực các ngành sinh học và liên quan.\nHội Các Ngành Sinh Học Việt Nam có các Hội chuyên ngành và Tổ chức thành viên, hoạt động trên phạm vi cả nước. Hội hoạt động theo điều lệ của Hội, điều lệ của Liên hiệp Hội và tuân thủ luật pháp của Việt Nam.\nHội là hội ngành thành viên của ...",
+    "keyPersonnel": [
+      {
+        "initials": "TB",
+        "name": "Ông Lê Trần Bình",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0903 418 530",
+        "zalo": "https://zalo.me/0903418530",
+        "email": "letranbinhcd@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "van-phong-dai-dien-childfund-australia-tai-viet-nam",
+    "name": "Văn Phòng Đại Diện ChildFund Australia Tại Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/van-phong-dai-dien-childfund-australia-tai-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Tầng 5, Tòa Nhà Vinafor, 127 Lò Đúc, Quận Hai Bà Trưng, Hà Nội, Việt Nam\n(024) 39446449\n(024) 39446453 (số fax)",
+    "phone": "(024) 3944 6449",
+    "email": "liennp@childfund.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1995",
+    "businessType": "Tổ chức xã hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 296,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "ChildFun tại Việt Nam là văn phòng đại diện của ChildFund Australia - một tổ chức phát triển quốc tế độc lập và phi tôn giáo, hoạt động vì mục tiêu giảm nghèo cho trẻ em tại các quốc gia đang phát triển.\nChildFun bắt đầu làm việc tại Việt Nam từ năm 1995 và triển khai các chương trình phát triển cộng đồng tập trung vào các lĩnh vực chính là giáo dục, nước sạch và vệ sinh môi trường, sinh kế bền vững, quyền trẻ em và bảo vệ trẻ em, an ninh lương t...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3944 6449",
+        "zalo": "https://zalo.me/02439446449",
+        "email": "liennp@childfund.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-trang-trai-va-doanh-nghiep-nong-nghiep-viet-nam",
+    "name": "Hiệp Hội Trang Trại Và Doanh Nghiệp Nông Nghiệp Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-trang-trai-va-doanh-nghiep-nong-nghiep-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "0973 036 290",
+    "email": "tranhuutam.2710@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2000",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "TP. Kỹ thuật",
+    "membersCount": 349,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Kinh doanh lĩnh vực kinh tế trang trại , kinh tế nông nghiệp....",
+    "keyPersonnel": [
+      {
+        "initials": "HT",
+        "name": "Trần Hữu Tâm",
+        "role": "TP. Kỹ thuật",
+        "phone": "0973 036 290",
+        "zalo": "https://zalo.me/0973036290",
+        "email": "tranhuutam.2710@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-quang-cao-viet-nam",
+    "name": "Hiệp Hội Quảng Cáo Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-quang-cao-viet-nam.png",
+    "region": "Miền Bắc",
+    "address": "Tầng 4, Nhà Hát Múc Rối Việt Nam, 361 Trường Chinh, Q. Thanh Xuân, Hà Nội, Việt Nam\n(024) 39365794\n(024) 39366104 (số fax)",
+    "phone": "(024) 3936 5794",
+    "email": "hhqcvn@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2001",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 402,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Quảng Cáo Việt Nam là tổ chức xã hội-nghề nghiệp, tự nguyện của tổ chức và công dân Việt Nam đang hoạt động trong lĩnh vực quảng cáo hoặc có liên quan đến lĩnh vực quảng cáo. Hiệp hội hoạt động nhằm mục đích tập hợp đoàn kết hội viên, bảo vệ quyền, lợi ích hợp pháp của hội viên, hỗ trợ nhau hoạt động có hiệu quả, nhằm thúc đẩy ngành quảng cáo Việt Nam phát triển, hội nhập với ngành quảng cáo thế giới, góp phần vào việc phát triển kinh tế...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3936 5794",
+        "zalo": "https://zalo.me/02439365794",
+        "email": "hhqcvn@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-san-viet-nam",
+    "name": "Hiệp Hội Sắn Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-san-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 3 Ngõ 479 Hoàng Quốc Việt, Q. Cầu Giấy, Hà Nội",
+    "phone": "0913.234.870",
+    "email": "pvuha2003@yahoo.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2013",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Tổng Thư Ký",
+    "membersCount": 455,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Sắn Việt Nam là tổ chức xã hội - nghề nghiệp của các doanh nghiệp, tổ chức, cá nhân hoạt động trong lĩnh vực nghiên cứu, trồng trọt, sản xuất, kinh doanh, tư vấn về kinh doanh sản phẩm từ nguyên liệu sắn tại Việt Nam, tự nguyện thành lập, nhằm mục đích tập hợp, đoàn kết hội viên, bảo vệ quyền, lợi ích hợp pháp của hội viên, hỗ trợ nhau hoạt động có hiệu quả, góp phần vào việc phát triển kinh tế - xã hội của Đất nước....",
+    "keyPersonnel": [
+      {
+        "initials": "VH",
+        "name": "Ông Phạm Vũ Hà",
+        "role": "Tổng Thư Ký",
+        "phone": "0913.234.870",
+        "zalo": "https://zalo.me/0913234870",
+        "email": "pvuha2003@yahoo.com"
+      }
+    ],
+    "galleryGroups": [
+      {
+        "groupName": "Logo công ty",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395685381/ssss.jpg",
+            "title": "Logo công ty"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-dien-tu-viet-nam",
+    "name": "Hiệp Hội Doanh Nghiệp Điện Tử Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-dien-tu-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "(024) 3933 2845",
+    "email": "oidientu@veia.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2000",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 508,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Doanh Nghiệp Điện Tử Việt Nam là tổ chức nghề nghiệp phạm vi toàn quốc của các doanh nghiệp sản xuất, kinh doanh và dịch vụ trong lĩnh vực điện tử, công nghệ thông tin và viễn thông ở Việt Nam. Hiệp hội là tổ chức phi chính phủ, phi lợi nhuận được thành lập ngày 2/6/2000.\nHiệp Hội Doanh Nghiệp Việt Nam có quan hệ chặt chẽ với nhiều Hội, Hiệp hội cùng ngành hàng trong khu vực và trên thế giới và là thành viên chính thức của các tổ chức xã...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3933 2845",
+        "zalo": "https://zalo.me/02439332845",
+        "email": "oidientu@veia.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-bao-hiem-viet-nam",
+    "name": "Hiệp Hội Bảo Hiểm Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-bao-hiem-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Tầng 5, 141 Lê Duẩn, Q. Hoàn Kiếm, Hà Nội",
+    "phone": "(024) 3942 8106",
+    "email": "hiephoibaohiem@iav.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "1999",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 561,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Bảo Hiểm Việt Nam là tổ chức xã hội-nghề nghiệp của các doanh nghiệp bảo hiểm, tự nguyện thành lập, nhằm mục đích tập hợp, đoàn kết hội viên, bảo vệ quyền, lợi ích hợp pháp của các hội viên, hỗ trợ thúc đẩy lẫn nhau hoạt động có hiệu quả để nâng cao chất lượng dịch vụ, sản phẩm bảo hiểm, năng lực cạnh tranh cùng tạo sự phát triển lành mạnh, bền vững của thị trường bảo hiểm Việt Nam, góp phần vào sự phát triển kinh tế Đất nước....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3942 8106",
+        "zalo": "https://zalo.me/02439428106",
+        "email": "hiephoibaohiem@iav.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-thuong-mai-dien-tu-viet-nam",
+    "name": "Hiệp Hội Thương Mại Điện Tử Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-thuong-mai-dien-tu-viet-nam.jpg",
+    "region": "Miền Nam",
+    "address": "Tầng 7, Tòa Nhà VCCI, 171 Võ Thị Sáu, P. 7, Q. 3, TP. Hồ Chí Minh",
+    "phone": "(028) 6259 8271",
+    "email": "trongtv@vecom.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2007",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chánh Văn Phòng",
+    "membersCount": 614,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Thương Mại Điện Tử Việt Nam (VECOM) là một tổ chức phi Chính phủ với hội viên là các doanh nghiệp, tổ chức và cá nhân trực tiếp kinh doanh bằng thương mại điện tử, hoặc ứng dụng thương mại điện tử phục vụ hoạt động sản xuất, kinh doanh hoặc nghiên cứu hay cung cấp các dịch vụ về thương mại điện tử.\nHiệp hội hoạt động trên cơ sở tự nguyện, phi lợi nhuận, nhằm mục đích tập hợp, đoàn kết, hợp tác, hỗ trợ, bảo vệ các hội viên để phát triển l...",
+    "keyPersonnel": [
+      {
+        "initials": "VT",
+        "name": "Mr. Trần Văn Trọng",
+        "role": "Chánh Văn Phòng",
+        "phone": "(028) 6259 8271",
+        "zalo": "https://zalo.me/02862598271",
+        "email": "trongtv@vecom.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cac-nha-dau-tu-tai-chinh-viet-nam",
+    "name": "Hiệp Hội Các Nhà Đầu Tư Tài Chính Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cac-nha-dau-tu-tai-chinh-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Tầng 6, Tòa Nhà Đa Năng, Số 169, Đường Nguyễn Ngọc Vũ, P. Trung Hòa, Q. Cầu Giấy, Hà Nội, Việt Nam\n(024) 39728133\n(024) 39728133 (số fax)",
+    "phone": "(024) 3972 8133",
+    "email": "office@vafi.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2003",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 667,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Các Nhà Đầu Tư Tài Chính Việt Nam-VAFI là một tổ chức phi lợi nhuận được thành lập theo quyết định số 74/2003/QĐ của Bộ Nội Vụ ngày 5/11/2013.\nChức năng và nhiệm vụ của Hiệp hội:\n- Đề xuất các giải pháp để cải thiện môi trường đầu tư, thúc đẩy thị trường tài chính hội nhập.\n- Bảo vệ quyền lợi của các nhà đầu tư, giúp các nhà đầu tư am hiểu pháp luật và an tâm bỏ vốn đầu tư vào các DN.\n- Xúc tiến đầu tư tài chính trong và ngoài nước. Đào ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3972 8133",
+        "zalo": "https://zalo.me/02439728133",
+        "email": "office@vafi.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-doanh-nhan-tre-long-an",
+    "name": "Hội Doanh Nhân Trẻ Long An",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-doanh-nhan-tre-long-an.svg",
+    "region": "Miền Nam",
+    "address": "Số 02 Đường Song Hành, P. 6, TP. Tân An, Long An",
+    "phone": "0934 002 097",
+    "email": "Vanphong@doanhnhantrelongan.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Tổ chức xã hội nghề nghiệp",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 720,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "aaaaaaaaaaaaaaaaaaaHỘI DOANH NHÂN TRẺ LONG AN\nAAAAAAAAAA\"ĐOÀN KẾT, TIÊN PHONG, ĐỔI MỚI, PHÁT TRIỂN\"\nHội Doanh Nhân Trẻ tỉnh Long An là tổ chức xã hội - nghề nghiệp của những doanh nhân trẻ Việt Nam đang tham gia hoạt động sản xuất, kinh doanh trên địa bàn tỉnh Long An. Hội đoàn kết, tập hợp các doanh nhân trẻ, các nhà quản lý trẻ không phân biệt thành phần kinh tế, lĩnh vực hoạt động, dân tộc, tôn giáo.\nHoạt động tiêu biểu của Hội:\n✰ Bảo vệ quyền...",
+    "keyPersonnel": [
+      {
+        "initials": "H",
+        "name": "Hotline",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0934 002 097",
+        "zalo": "https://zalo.me/0934002097",
+        "email": "Vanphong@doanhnhantrelongan.vn"
+      }
+    ],
+    "galleryGroups": [
+      {
+        "groupName": "Hoạt động của hiệp hội",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(5).jpg",
+            "title": "Chúc tết chính quyền địa phương"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(4).jpg",
+            "title": "Họp mặt đầu xuân"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%2014%20(2).jpg",
+            "title": "Họp mặt chào xuân"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%2014%20(1).jpg",
+            "title": "Họp mặt chào xuân"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(13).jpg",
+            "title": "Hội nghị phát triển du lịch"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(1).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(6).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(7).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(8).JPG",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(9).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(10).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(11).jpg",
+            "title": "Hoạt động của hội"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(2).jpg",
+            "title": "Tặng quà nạn nhân chất độc da cam"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(3).jpg",
+            "title": "Tặng quà nạn nhân chất độc da cam"
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoat%20dong%20(12).jpg",
+            "title": "Trao nhà tình bạn"
+          }
+        ]
+      },
+      {
+        "groupName": "Hội viên",
+        "items": [
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/L39571070100.gif",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(1).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(2).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(3).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(4).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(5).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(6).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(7).jpg",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(9).png",
+            "title": ""
+          },
+          {
+            "image": "https://pic.trangvangvietnam.com/395772059/hoi%20vien%20%20(10).png",
+            "title": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hoi-cuu-thanh-nien-xung-phong-viet-nam",
+    "name": "Hội Cựu Thanh Niên Xung Phong Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-cuu-thanh-nien-xung-phong-viet-nam.png",
+    "region": "Miền Bắc",
+    "address": "Tầng 10, Cung Trí Thức Thành Phố, Số 1 Tôn Thất Thuyết, P. Dịch Vọng Hậu, Q. Cầu Giấy, Hà Nội, Việt Nam\n(024) 37956075\n(024) 37755384 (số fax)",
+    "phone": "(024) 3795 6075",
+    "email": "tnxpvietnam@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2004",
+    "businessType": "Tổ chức xã hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 773,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hội Cựu Thanh Niên Xung Phong Việt Nam là tổ chức xã hội tập hợp lực lượng cựu thanh niên xung phong cả nước đã hoàn thành nhiệm vụ trong các thời kỳ kháng chiến, xây dựng chủ nghĩa xã hội và bảo vệ Tổ quốc, tiếp tục phát huy truyền thống của lực lượng thanh niên xung phong Việt Nam do Bác Hồ sáng lập....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3795 6075",
+        "zalo": "https://zalo.me/02437956075",
+        "email": "tnxpvietnam@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-kinh-doanh-vang-viet-nam",
+    "name": "Hiệp Hội Kinh Doanh Vàng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-kinh-doanh-vang-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "(024) 3564 1675",
+    "email": "vgta2002@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2002",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 826,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Kinh Doanh Vàng Việt Nam là một tổ chức phi chính phủ, phi lợi nhuận, tập hợp tất cả cá nhân, tổ chức sản xuất, kinh doanh vàng bạc, đá quý và hàng trang sức trên cả nước (bao gồm kinh doanh vàng trang sức, vàng mỹ nghệ, vàng miếng, vàng nguyên liệu).\nMục đích hoạt động của Hiệp hội là phối hợp hoạt động của các hội viên nhằm nâng cao hiệu quả sản xuất kinh doanh vàng bạc, đá quý và hàng trang sức, phát triển nghề truyền thống thông qua ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3564 1675",
+        "zalo": "https://zalo.me/02435641675",
+        "email": "vgta2002@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-si-viet-nam",
+    "name": "Hiệp Sĩ Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-si-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "0933 094 944",
+    "email": "vovandat@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2009",
+    "businessType": "Tổ chức phi lợi nhuận",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Ban Điều Hành",
+    "membersCount": 879,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Chuyên:\n- Tổ chức các hoạt động xã hội, từ thiện\n- Chụp ảnh, đấu giá gây quỹ từ thiện...",
+    "keyPersonnel": [
+      {
+        "initials": "VĐ",
+        "name": "Mr. Võ Văn Đạt",
+        "role": "Ban Điều Hành",
+        "phone": "0933 094 944",
+        "zalo": "https://zalo.me/0933094944",
+        "email": "vovandat@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-nho-va-vua-khu-vuc-phia-nam-asmes",
+    "name": "Hiệp Hội Doanh Nghiệp Nhỏ Và Vừa Khu Vực Phía Nam (ASMES)",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-nho-va-vua-khu-vuc-phia-nam-asmes.png",
+    "region": "Miền Nam",
+    "address": "Lầu 19, MB Sunny Tower, 259 Trần Hưng Đạo, P. Cô Giang, Q. 1, TP. Hồ Chí Minh",
+    "phone": "(028) 38385568",
+    "email": "info@asmes.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2013",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Ban Đào Tạo & Hội Viên",
+    "membersCount": 932,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hiệp hội Doanh nghiệp nhỏ và vừa khu vực phía Nam (ASMES) là tổ chức xã hội - nghề nghiệp của công dân và tổ chức Việt Nam đã, đang hoạt động trong lĩnh vực sản xuất, kinh doanh ở các doanh nghiệp nhỏ và vừa khu vực phía Nam. Mục đích hoạt động của Hiệp hội nhằm tập hợp công dân và tổ chức Việt Nam đã, đang hoạt động trong lĩnh vực sản xuất, kinh doanh ở các doanh nghiệp nhỏ và vừa khu vực phía Nam, cùng nhau đoàn kết, hỗ trợ và giúp đỡ lẫn nhau ...",
+    "keyPersonnel": [
+      {
+        "initials": "VT",
+        "name": "Ông Cao Văn Thừa",
+        "role": "Ban Đào Tạo & Hội Viên",
+        "phone": "(028) 38385568",
+        "zalo": "https://zalo.me/02838385568",
+        "email": "info@asmes.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "the-university-of-north-carolina-unc",
+    "name": "The University Of North Carolina (UNC)",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/the-university-of-north-carolina-unc.png",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "0906 212 791",
+    "email": "ducthang@email.unc.edu",
+    "website": "",
+    "taxCode": "0107941419",
+    "establishedYear": "2017",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 985,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "The University Of North Carolina (UNC) là tổ chức phi chính phủ hỗ trợ nhân đạo....",
+    "keyPersonnel": [
+      {
+        "initials": "ĐT",
+        "name": "Mr. Lê Đức Thắng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0906 212 791",
+        "zalo": "https://zalo.me/0906212791",
+        "email": "ducthang@email.unc.edu"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-cao-su-nhua-tp-ho-chi-minh",
+    "name": "Hội Cao Su Nhựa Tp. Hồ Chí Minh",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-cao-su-nhua-tp-ho-chi-minh.svg",
+    "region": "Miền Nam",
+    "address": "Số 156 Nam Kỳ Khởi Nghĩa, P. Bến Nghé, Q. 1, TP. Hồ Chí Minh",
+    "phone": "0918 383 981",
+    "email": "thuky.hoicaosunhua@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hiệp Hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 238,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hội Cao Su Nhựa TPHCM là một tổ chức tự nguyện của các doanh nghiệp thuộc các thành phần kinh tế cùng hoạt động trong lãnh vực cao su - nhựa, các nhà quản lý, chuyên viên kỹ thuật có liên quan đền ngành cao su-nhựa hoạt động trên địa bàn Thành phố. Hội có nhiệm vụ:\n- Đại diện cho Hội viên và quyền lợi chính đáng hợp pháp của Hội viên trong quan hệ giao dịch nghề nghiệp.\n- Đại diện đề đạt với Chính quyền thông qua Hiệp hội Doanh nghiệp liên quan đ...",
+    "keyPersonnel": [
+      {
+        "initials": "ML",
+        "name": "Ms. Linh",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0918 383 981",
+        "zalo": "https://zalo.me/0918383981",
+        "email": "thuky.hoicaosunhua@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-may-van-phong-viet-nam",
+    "name": "Hiệp Hội Máy Văn Phòng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-may-van-phong-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 10 Hồ Xuân Hương, Q. Hai Bà Trưng, Hà Nội",
+    "phone": "0386723838",
+    "email": "tongmilinh2303@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2020",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Thư ký hiệp hội",
+    "membersCount": 291,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Máy Văn Phòng Việt Nam được thành lập vào ngày 07/07/2020 theo quyết định số 498 QĐ-BNV của Bộ nội vụ. Hiệp hội VOMA luôn nỗ lực không ngừng để ngày càng phát triển bền vững, tạo ra những chương trình hoạt động, sự kiện bổ ích cho Hội viên, kết nối giao thương xúc tiến thương mại tạo sự trường thịnh của chính đội ngũ doanh nghiệp trong đại gia đình VOMA....",
+    "keyPersonnel": [
+      {
+        "initials": "ML",
+        "name": "Ms. Tống Mỹ Linh",
+        "role": "Thư ký hiệp hội",
+        "phone": "0386723838",
+        "zalo": "https://zalo.me/0386723838",
+        "email": "tongmilinh2303@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-in-viet-nam",
+    "name": "Hiệp Hội In Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-in-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Số 175 Nguyễn Thái Học, Q. Ba Đình, Hà Nội",
+    "phone": "(024) 3936 5254",
+    "email": "hhivn.vpa@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 344,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội In Việt Nam - Vietnam Printing Association(VPA) là tổ chức xã hội-nghề nghiệp tự nguyện của các doanh nghiệp, tổ chức, cá nhân đang hoạt động trong lĩnh vực in cũng như ngành nghề liên quan đến in. Mục đích của Hiệp hội nhằm tập hợp hội viên đóng góp công sức, trí tuệ cho sự phát triển ngành in Việt Nam và bảo vệ quyền lợi hợp pháp của hội viên....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3936 5254",
+        "zalo": "https://zalo.me/02439365254",
+        "email": "hhivn.vpa@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "vpdd-tong-cuc-du-lich-han-quoc-tai-viet-nam-kto",
+    "name": "VPĐD Tổng Cục Du Lịch Hàn Quốc Tại Việt Nam (KTO)",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/vpdd-tong-cuc-du-lich-han-quoc-tai-viet-nam-kto.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "0975407420",
+    "email": "online.ktovietnam@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 397,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Tổng cục Du lịch Hàn Quốc tại Việt Nam (KTO) là 1 trong 33 chi nhánh của Tổng cục Du lịch Hàn Quốc, được đặt tại Việt Nam để quảng bá du lịch Hàn Quốc đến người dân Việt Nam. KTO là cơ quan chính phủ phi lợi nhuận, hoạt động với mục đích truyền tải thông tin về du lịch Hàn Quốc, giúp cho người dân VN hiểu và thêm yêu mến du lịch Hàn Quốc, lựa chọn Hàn Quốc là điểm đến cho lịch trình du lịch của mình....",
+    "keyPersonnel": [
+      {
+        "initials": "TH",
+        "name": "Ms. Nguyễn Thị Thu Hà",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0975407420",
+        "zalo": "https://zalo.me/0975407420",
+        "email": "online.ktovietnam@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-thiet-bi-giao-duc-viet-nam",
+    "name": "Hiệp Hội Thiết Bị Giáo Dục Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-thiet-bi-giao-duc-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "(024) 3868 4692",
+    "email": "hiephoitbgdvn@moet.edu.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2003",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 450,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hội Thiết Bị Giáo Dục Việt Nam đươc thành lập năm 2003 với các chức năng, nhiệm vụ:\n- Xây dựng môi trường, tạo điều kiện để các doanh nghiệp sản xuất, cung ứng thiết bị giáo dục phát huy năng lực phục vụ có hiệu quả cho quá trình đổi mới giáo dục.\n- Tập hợp, liên kết hoạt động giữa các tổ chức của Hiệp hội, các doanh nghiệp Hội viên với các cơ quan quản lý giáo dục, cơ sở GD&ĐT, các tổ chức, cá nhân ở trong và ngoài nước đóng góp cho sự phát triể...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Văn Phòng",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 3868 4692",
+        "zalo": "https://zalo.me/02438684692",
+        "email": "hiephoitbgdvn@moet.edu.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-nong-nghiep-an-toan-va-huu-co-tinh-thanh-hoa",
+    "name": "Hiệp Hội Doanh Nghiệp Nông Nghiệp An Toàn Và Hữu Cơ Tỉnh Thanh Hóa",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-nong-nghiep-an-toan-va-huu-co-tinh-thanh-hoa.svg",
+    "region": "Miền Trung",
+    "address": "Đại lộ Lê Lợi, P. Đông Hương, TP. Thanh Hóa, Thanh Hóa",
+    "phone": "0912 034 456",
+    "email": "phuongnv.vicet@gmail.com",
+    "website": "",
+    "taxCode": "2802853609",
+    "establishedYear": "2020",
+    "businessType": "Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chánh văn phòng",
+    "membersCount": 503,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp hội doanh nghiệp nông nghiệp an toàn và hữu cơ tỉnh Thanh Hóa là một tổ chức xã hội - nghề nghiệp của công dân, tổ chức Việt Nam trên địa bàn tỉnh Thanh Hóa hoạt động trong lĩnh vực nông nghiệp an toàn và hữu cơ tự nguyện thành lập nhằm mục đích tập hợp, đoàn kết hội viên, bảo vệ quyền, lợi ích hợp pháp của hội viên, hỗ trợ nhau hoạt động có hiệu quả, góp phần vào việc phát triển kinh tế - xã hội của đất nước....",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Mr. Nguyễn Văn Phương",
+        "role": "Chánh văn phòng",
+        "phone": "0912 034 456",
+        "zalo": "https://zalo.me/0912034456",
+        "email": "phuongnv.vicet@gmail.com"
+      },
+      {
+        "initials": "VT",
+        "name": "Mr. Trần Văn Tân",
+        "role": "Chủ tịch",
+        "phone": "0915 363 636",
+        "zalo": "https://zalo.me/0915363636",
+        "email": ""
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-thanh-pho-thanh-hoa",
+    "name": "Hiệp Hội Doanh Nghiệp Thành Phố Thanh Hóa",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-thanh-pho-thanh-hoa.jpg",
+    "region": "Miền Trung",
+    "address": "Số 09 Hàng Đồng, P. Điện Biên, TP. Thanh Hóa, Thanh Hóa",
+    "phone": "0912 318 929",
+    "email": "dntpthanhhoa@gmail.com",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2019",
+    "businessType": "Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 556,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp hội doanh nghiệp Thành Phố là một tổ chức xã hội nghề nghiệp của các doanh nghiệp, tự nguyện, thành lập nhằm mục đích hợp tác, liên kết hỗ trợ nhau trong việc phát triển nghề nghiệp, nâng cao hiệu quả sản xuất kinh doanh, dịch vụ tuyên truyền, quảng bá, xúc tiến thương mại, bảo vệ quyền lợi hợp pháp của hội viên....",
+    "keyPersonnel": [
+      {
+        "initials": "H",
+        "name": "Hotline",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0912 318 929",
+        "zalo": "https://zalo.me/0912318929",
+        "email": "dntpthanhhoa@gmail.com"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "trung-tam-ma-so-ma-vach-quoc-gia",
+    "name": "Trung Tâm Mã Số Mã Vạch Quốc Gia",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/trung-tam-ma-so-ma-vach-quoc-gia.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 8 Hoàng Quốc Việt, P. Nghĩa Đô, Q. Cầu Giấy, Hà Nội, Việt Nam\n1900636218,",
+    "phone": "0389960564",
+    "email": "Huongttm@Nbc.gov.vn",
+    "website": "",
+    "taxCode": "0108737633",
+    "establishedYear": "2019",
+    "businessType": "Hành chính sự nghiệp",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Kế toán",
+    "membersCount": 609,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Trung tâm Mã số, mã vạch Quốc gia là tổ chức khoa học và công nghệ công lập trực thuộc Tổng cục Tiêu chuẩn Đo lường Chất Lượng thực hiện chức năng phục vụ quản lý nhà nước về mã số, mã vạch và các hoạt động dịch vụ khác có liên quan theo quy định của pháp luât....",
+    "keyPersonnel": [
+      {
+        "initials": "MH",
+        "name": "Ms. Trần Thị Mai Hương",
+        "role": "Kế toán",
+        "phone": "0389960564",
+        "zalo": "https://zalo.me/0389960564",
+        "email": "Huongttm@Nbc.gov.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "so-thong-tin-va-truyen-thong-tinh-quang-binh",
+    "name": "Sở Thông tin và Truyền thông tỉnh Quảng Bình",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/so-thong-tin-va-truyen-thong-tinh-quang-binh.png",
+    "region": "Miền Trung",
+    "address": "Số 02 Hương Giang, P. Hải Đình, TP. Đồng Hới, Quảng Bình",
+    "phone": "+84 942072207",
+    "email": "hanhtcn.stttt@quangbinh.gov.vn",
+    "website": "",
+    "taxCode": "3100492946",
+    "establishedYear": "2004",
+    "businessType": "Thương mại",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Admin",
+    "membersCount": 662,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Tỉnh Quảng Bình nằm ở Bắc Trung Bộ, Việt Nam, với diện tích tự nhiên 8.000 km2, dân số năm 2017 có 882.505 người.\nVị trí địa lý: Toạ độ địa lý ở phần đất liền là:\n• Điểm cực Bắc: 18005’ 12\" vĩ độ Bắc\n• Điểm cực Nam: 17005’ 02\" vĩ độ Bắc\n• Điểm cực Đông: 106059’ 37\" kinh độ Đông\n• Điểm cực Tây: 105036’ 55\" kinh độ Đông\nTỉnh có bờ biển dài 116,04 km ở phía Đông và có chung biên giới với Lào 201,87 km ở phía Tây, có cảng Hòn La, cảng Hàng không Đồng...",
+    "keyPersonnel": [
+      {
+        "initials": "NH",
+        "name": "Nghĩa Hạnh",
+        "role": "Admin",
+        "phone": "+84 942072207",
+        "zalo": "https://zalo.me/84942072207",
+        "email": "hanhtcn.stttt@quangbinh.gov.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "cong-ty-tnhh-doanh-nghiep-xa-hoi-tu-thien-va-ho-tro-phat-trien-cong-dong-fly-to-sky",
+    "name": "Công Ty TNHH Doanh Nghiệp Xã Hội Từ Thiện Và Hỗ Trợ Phát Triển Cộng Đồng Fly To Sky",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/cong-ty-tnhh-doanh-nghiep-xa-hoi-tu-thien-va-ho-tro-phat-trien-cong-dong-fly-to-sky.svg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "0935 939 446",
+    "email": "phucvanle@flytoskycharity.vn",
+    "website": "",
+    "taxCode": "5901213612",
+    "establishedYear": "2018",
+    "businessType": "Dịch vụ",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Giám Đốc",
+    "membersCount": 715,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Fly To Sky là Hệ thống thiện nguyện, tập trung vào 5 lĩnh vực chính: Văn hóa - Giáo dục, Chăm sóc sức khỏe cộng đồng, Hỗ trợ kinh doanh, An sinh xã hội và Năng lượng sạch.\nCác hoạt động chính:\n+ Tư vấn, xây dựng chiến lược cộng đồng.\n+ Thiết kế dự án, tổ chức, thi công thực hiện các hoạt động vì cộng đồng.\n+ Kết nối, giới thiệu, hỗ trợ việc làm cho người yếu thế.\nLý do nên đến với Fly To Sky:\n★ Hoạt động phụng sự cộng đồng, phi lợi nhuận.\n★ Hoạt ...",
+    "keyPersonnel": [
+      {
+        "initials": "VP",
+        "name": "Mr. Lê Văn Phúc",
+        "role": "Giám Đốc",
+        "phone": "0935 939 446",
+        "zalo": "https://zalo.me/0935939446",
+        "email": "phucvanle@flytoskycharity.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "so-thong-tin-va-truyen-thong-tuyen-quang",
+    "name": "Sở Thông Tin Và Truyền Thông Tuyên Quang",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/so-thong-tin-va-truyen-thong-tuyen-quang.png",
+    "region": "Miền Bắc",
+    "address": "Số 274 Đường Tân Trào, P. Minh Xuân, TP. Tuyên Quang",
+    "phone": "0913868726",
+    "email": "admin@tuyenquang.gov.vn",
+    "website": "",
+    "taxCode": "5000331836",
+    "establishedYear": "2009",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 768,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Sở Thông tin và Truyền thông là cơ quan chuyên môn thuộc ủy ban nhân dân tỉnh, có chức năng tham mưu, giúp ủy ban nhân dân tỉnh thực hiện quản lý nhà nước về: báo chí xuất bản bưu chính và chuyển phát viễn thông và internet truyền dẫn phát sóng tần số vô tuyến điện công nghệ thông tin, điện tử phát thanh và truyền hình cơ sở hạ tầng thông tin truyền thông quảng cáo trên báo chí, mạng thông tin máy tính và xuất bản phẩm (sau đây gọi tắt là thông t...",
+    "keyPersonnel": [
+      {
+        "initials": "DT",
+        "name": "Hoàng Danh Tuyên",
+        "role": "Đại diện tiếp nhận",
+        "phone": "0913868726",
+        "zalo": "https://zalo.me/0913868726",
+        "email": "admin@tuyenquang.gov.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "so-thong-tin-va-truyen-thong",
+    "name": "Sở Thông Tin Và Truyền Thông",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/so-thong-tin-va-truyen-thong.png",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "+84 258 3899888",
+    "email": "info@khanhhoa.gov.vn",
+    "website": "",
+    "taxCode": "4200777369",
+    "establishedYear": "2005",
+    "businessType": "Thương mạiMã số thuế4200777369",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 821,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Sở Thông tin và Truyền thông là cơ quan chuyên môn thuộc ủy ban nhân dân tỉnh có chức năng tham mưu, giúp ủy ban nhân dân tỉnh quản lý nhà nước về: báo chí xuất bản bưu chính viễn thông tần số vô tuyến điện công nghệ thông tin điện tử phát thanh và truyền hình thông tin đối ngoại bản tin thông tấn thông tin cơ sở hạ tầng thông tin truyền thông quảng cáo trên báo chí, trên môi trường mạng, trên xuất bản phẩm và quảng cáo tích hợp trên các sản phẩm...",
+    "keyPersonnel": [
+      {
+        "initials": "NN",
+        "name": "Nguyễn Nga",
+        "role": "Đại diện tiếp nhận",
+        "phone": "+84 258 3899888",
+        "zalo": "https://zalo.me/842583899888",
+        "email": "info@khanhhoa.gov.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cong-nghiep-ho-tro-viet-nam",
+    "name": "Hiệp Hội Công Nghiệp Hỗ Trợ Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cong-nghiep-ho-tro-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "(024) 39369593",
+    "email": "info@vasi.org.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hiệp hội",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Đại diện tiếp nhận",
+    "membersCount": 874,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Công Nghiệp Hỗ Trợ Việt Nam (VASI) là tổ chức độc lập, phi chính phủ và phi lợi nhuận, đại diện cho doanh nghiệp sản xuất chế tạo và công nghiệp hỗ trợ tại Việt Nam. Các hoạt động của VASI chủ yếu gồm: nâng cao năng lực hội viên qua đào tạo và tư vấn business matching hội viên với người mua trong nước và xuất khẩu nghiên cứu khảo sát cung cấp dữ liệu các ngành liên quan đại diện hội viên đóng góp ý kiến với Chính phủ, các tập đoàn lớn và...",
+    "keyPersonnel": [
+      {
+        "initials": "H",
+        "name": "Hotline",
+        "role": "Đại diện tiếp nhận",
+        "phone": "(024) 39369593",
+        "zalo": "https://zalo.me/02439369593",
+        "email": "info@vasi.org.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-nha-thau-xay-dung-viet-nam",
+    "name": "Hiệp Hội Nhà Thầu Xây Dựng Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-nha-thau-xay-dung-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 927,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Nhà Thầu Xây Dựng Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-an-mon-va-bao-ve-kim-loai-viet-nam",
+    "name": "Hội Ăn Mòn Và Bảo Vệ Kim Loại Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-an-mon-va-bao-ve-kim-loai-viet-nam.svg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 980,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hội Ăn Mòn Và Bảo Vệ Kim Loại Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-duoc-hoc-viet-nam",
+    "name": "Hội Dược Học Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-duoc-hoc-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 233,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hội Dược Học Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-dau-tam-to-viet-nam",
+    "name": "Hiệp Hội Dâu Tằm Tơ Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-dau-tam-to-viet-nam.jpg",
+    "region": "Miền Trung",
+    "address": "Số 425 Trần Phú, P. 1, TP. Bảo Lộc, Lâm Đồng",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 286,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Dâu Tằm Tơ Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-titan-viet-nam",
+    "name": "Hiệp Hội Titan Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-titan-viet-nam.jpg",
+    "region": "Miền Trung",
+    "address": "Số 120 Trần Phú, TP. Quy Nhơn, Bình Định",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 339,
+    "chaptersCount": 11,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Titan Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-chan-nuoi-gia-cam-viet-nam",
+    "name": "Hiệp Hội Chăn Nuôi Gia Cầm Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-chan-nuoi-gia-cam-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 392,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Chăn Nuôi Gia Cầm Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-phan-bon-sinh-hoc-viet-nam",
+    "name": "Hiệp Hội Phân Bón Sinh Học Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-phan-bon-sinh-hoc-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 445,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Phân Bón Sinh Học Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-dan-toc-hoc-viet-nam",
+    "name": "Hội Dân Tộc Học Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-dan-toc-hoc-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 498,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hội Dân Tộc Học Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-phan-mem-viet-nam",
+    "name": "Hiệp Hội Doanh Nghiệp Phần Mềm Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-phan-mem-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Số 7, Đào Duy Anh, Đống Đa, Hà Nội, Việt Nam\n(024) 37648.x.x.x",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 551,
+    "chaptersCount": 7,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Doanh Nghiệp Phần Mềm Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-du-lich-viet-nam",
+    "name": "Hiệp Hội Du Lịch Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-du-lich-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 604,
+    "chaptersCount": 9,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Du Lịch Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-doanh-nghiep-va-trang-trai-nong-dan-nong-thon-viet-nam",
+    "name": "Hiệp Hội Doanh Nghiệp Và Trang Trại Nông Dân - Nông Thôn Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-doanh-nghiep-va-trang-trai-nong-dan-nong-thon-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 710,
+    "chaptersCount": 13,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Doanh Nghiệp Và Trang Trại Nông Dân - Nông Thôn Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hoi-bao-ve-tai-nguyen-va-moi-truong-bien",
+    "name": "Hội Bảo Vệ Tài Nguyên Và Môi Trường Biển",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hoi-bao-ve-tai-nguyen-va-moi-truong-bien.svg",
+    "region": "Miền Trung",
+    "address": "Số 36 Bạch Đằng, Q. Hải Châu, TP. Đà Nẵng",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 763,
+    "chaptersCount": 15,
+    "status": "Đang hoạt động",
+    "description": "Hội Bảo Vệ Tài Nguyên Và Môi Trường Biển là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  },
+  {
+    "id": "hiep-hoi-cong-nghiep-ky-thuat-dien-viet-nam",
+    "name": "Hiệp Hội Công Nghiệp Kỹ Thuật Điện Việt Nam",
+    "tagline": "Tổ chức Hiệp hội Doanh nghiệp & Xúc tiến Thương mại Quốc gia",
+    "logo": "/uploads/associations/hiep-hoi-cong-nghiep-ky-thuat-dien-viet-nam.jpg",
+    "region": "Miền Bắc",
+    "address": "Hà Nội, Việt Nam",
+    "phone": "024 3822 5555",
+    "email": "info@hiephoi.vn",
+    "website": "",
+    "taxCode": "Đã xác thực pháp nhân B2B",
+    "establishedYear": "2005",
+    "businessType": "Hội / Hiệp hội ngành nghề",
+    "president": "Ban Thường Vụ Hiệp Hội",
+    "presidentRole": "Chủ tịch / Đại diện Ban Thường Vụ",
+    "membersCount": 816,
+    "chaptersCount": 5,
+    "status": "Đang hoạt động",
+    "description": "Hiệp Hội Công Nghiệp Kỹ Thuật Điện Việt Nam là tổ chức hiệp hội ngành nghề chính thức, đại diện và bảo vệ quyền lợi hợp pháp của cộng đồng doanh nghiệp thành viên tại Việt Nam. Tổ chức đóng vai trò cầu nối xúc tiến thương mại, hỗ trợ pháp lý, kết nối chuỗi cung ứng công nghiệp và tham gia đóng góp chính sách phát triển bền vững.",
+    "keyPersonnel": [
+      {
+        "initials": "HH",
+        "name": "Ban Thường Vụ Hiệp Hội",
+        "role": "Chủ tịch / Đại diện Ban Thường Vụ",
+        "phone": "024 3822 5555",
+        "zalo": "https://zalo.me/02438225555",
+        "email": "info@hiephoi.vn"
+      }
+    ],
+    "galleryGroups": []
+  }
+]

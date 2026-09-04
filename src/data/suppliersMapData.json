@@ -1,0 +1,182 @@
+[
+  {
+    "id": "s-01",
+    "name": "Tập đoàn Hòa Phát",
+    "category": "Thép & Kim loại",
+    "province": "Hà Nội",
+    "type": "Tư nhân",
+    "employees": "30.000+",
+    "founded": "1992"
+  },
+  {
+    "id": "s-02",
+    "name": "Công ty Dây cáp điện CADIVI",
+    "category": "Điện & Cáp công nghiệp",
+    "province": "TP. Hồ Chí Minh",
+    "type": "Tư nhân",
+    "employees": "2.500+",
+    "founded": "1975"
+  },
+  {
+    "id": "s-03",
+    "name": "Tập đoàn Eurowindow",
+    "category": "Cửa & Nhôm kính công nghiệp",
+    "province": "Hà Nội",
+    "type": "Tư nhân",
+    "employees": "5.000+",
+    "founded": "2002"
+  },
+  {
+    "id": "s-04",
+    "name": "Bóng đèn Phích nước Rạng Đông",
+    "category": "Chiếu sáng & Smart Factory",
+    "province": "Hà Nội",
+    "type": "Tư nhân",
+    "employees": "2.800+",
+    "founded": "1961"
+  },
+  {
+    "id": "s-05",
+    "name": "An Phát Holdings",
+    "category": "Bao bì sinh học & Hạt nhựa",
+    "province": "Hải Dương",
+    "type": "Tư nhân",
+    "employees": "4.500+",
+    "founded": "2002"
+  },
+  {
+    "id": "s-06",
+    "name": "FPT Software",
+    "category": "Chuyển đổi số & MES/ERP",
+    "province": "TP. Hồ Chí Minh",
+    "type": "Tư nhân",
+    "employees": "32.000+",
+    "founded": "1999"
+  },
+  {
+    "id": "s-07",
+    "name": "Gemadept Logistics",
+    "category": "Vận tải & Cảng biển",
+    "province": "Hải Phòng",
+    "type": "Tư nhân",
+    "employees": "3.000+",
+    "founded": "1990"
+  },
+  {
+    "id": "s-08",
+    "name": "Sơn Hà SSI",
+    "category": "Bồn inox & Cơ khí công nghiệp",
+    "province": "Bắc Ninh",
+    "type": "Tư nhân",
+    "employees": "3.500+",
+    "founded": "1998"
+  },
+  {
+    "id": "s-09",
+    "name": "Tân Phát Etek",
+    "category": "Thiết bị nâng hạ & Cơ khí",
+    "province": "Hà Nội",
+    "type": "Tư nhân",
+    "employees": "1.200+",
+    "founded": "1999"
+  },
+  {
+    "id": "s-10",
+    "name": "System Fan Global",
+    "category": "Quạt công nghiệp & Hút bụi",
+    "province": "Hải Dương",
+    "type": "Tư nhân",
+    "employees": "800+",
+    "founded": "2012"
+  },
+  {
+    "id": "s-11",
+    "name": "Việt Tín Cleanroom",
+    "category": "Phòng sạch & HVAC",
+    "province": "Bắc Ninh",
+    "type": "Tư nhân",
+    "employees": "600+",
+    "founded": "2015"
+  },
+  {
+    "id": "s-12",
+    "name": "Nhựa Tiền Phong",
+    "category": "Ống nhựa & Cấp thoát nước",
+    "province": "Hải Phòng",
+    "type": "Tư nhân",
+    "employees": "2.000+",
+    "founded": "1960"
+  },
+  {
+    "id": "s-13",
+    "name": "Tôn Hoa Sen",
+    "category": "Tôn mạ & Xà gồ kết cấu",
+    "province": "Bình Dương",
+    "type": "Tư nhân",
+    "employees": "7.000+",
+    "founded": "2001"
+  },
+  {
+    "id": "s-14",
+    "name": "Gỗ An Cường",
+    "category": "Vật liệu nội thất xưởng",
+    "province": "Bình Dương",
+    "type": "Tư nhân",
+    "employees": "3.000+",
+    "founded": "1994"
+  },
+  {
+    "id": "s-15",
+    "name": "Cơ khí Đại Dũng",
+    "category": "Kết cấu thép & Nhà tiền chế",
+    "province": "TP. Hồ Chí Minh",
+    "type": "Tư nhân",
+    "employees": "2.800+",
+    "founded": "1995"
+  },
+  {
+    "id": "s-16",
+    "name": "Viconship Logistics",
+    "category": "Kho bãi & Cảng cạn ICD",
+    "province": "Hải Phòng",
+    "type": "Tư nhân",
+    "employees": "1.500+",
+    "founded": "1985"
+  },
+  {
+    "id": "s-17",
+    "name": "Xi măng Vicem Hà Tiên",
+    "category": "Vật liệu xây dựng",
+    "province": "Kiên Giang",
+    "type": "Nhà nước",
+    "employees": "4.000+",
+    "founded": "1964"
+  },
+  {
+    "id": "s-18",
+    "name": "Đạm Cà Mau (PVCFC)",
+    "category": "Hóa chất & Khí công nghiệp",
+    "province": "Cà Mau",
+    "type": "Nhà nước",
+    "employees": "1.800+",
+    "founded": "2011"
+  },
+  {
+    "id": "s-19",
+    "name": "Đạm Phú Mỹ (PVFCCo)",
+    "category": "Hóa chất & Dung môi",
+    "province": "Bà Rịa – Vũng Tàu",
+    "type": "Nhà nước",
+    "employees": "2.200+",
+    "founded": "2003"
+  },
+  {
+    "id": "s-20",
+    "name": "Thép Pomina",
+    "category": "Phôi thép & Thép xây dựng",
+    "province": "Bà Rịa – Vũng Tàu",
+    "type": "Tư nhân",
+    "employees": "2.000+",
+    "founded": "1999"
+  }
+]

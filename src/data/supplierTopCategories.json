@@ -1,0 +1,602 @@
+[
+  {
+    "name": "Xây Dựng - Nhà Thầu Xây Dựng",
+    "count": 40
+  },
+  {
+    "name": "Khách Sạn",
+    "count": 38
+  },
+  {
+    "name": "Thương Mại - Các Công Ty",
+    "count": 38
+  },
+  {
+    "name": "Bất Động Sản - Các Công Ty Bất Động Sản",
+    "count": 38
+  },
+  {
+    "name": "Phần Mềm",
+    "count": 38
+  },
+  {
+    "name": "Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm",
+    "count": 38
+  },
+  {
+    "name": "Hóa Chất - Sản Xuất, Nhập Khẩu Và Phân Phối Hóa Chất",
+    "count": 38
+  },
+  {
+    "name": "Thép - Công Ty Thép (Sản Xuất, Kinh Doanh Và Phân Phối)",
+    "count": 38
+  },
+  {
+    "name": "Thiết Bị Y Tế - Sản Xuất, Kinh Doanh Và Phân Phối",
+    "count": 38
+  },
+  {
+    "name": "Thủy Hải Sản - Chế Biến Và Kinh Doanh",
+    "count": 38
+  },
+  {
+    "name": "Công Nghiệp - Máy Móc Và Thiết Bị Công Nghiệp",
+    "count": 38
+  },
+  {
+    "name": "Nhựa - Các Công Ty Nhựa",
+    "count": 38
+  },
+  {
+    "name": "Luật - Văn Phòng Luật Sư, Công Ty Tư Vấn Pháp Luật",
+    "count": 38
+  },
+  {
+    "name": "Quà Tặng - Các Công Ty Quà Tặng",
+    "count": 38
+  },
+  {
+    "name": "Dầu Nhớt, Dầu Nhờn",
+    "count": 38
+  },
+  {
+    "name": "May Mặc - Nguyên, Phụ Liệu May Mặc",
+    "count": 38
+  },
+  {
+    "name": "Cửa - Nhà Sản Xuất Và Kinh Doanh",
+    "count": 38
+  },
+  {
+    "name": "Quần Áo - Bán Buôn, Bán Sỉ Quần Áo",
+    "count": 38
+  },
+  {
+    "name": "Điện Lạnh Công Nghiệp - Thiết Bị Và Hệ Thống Điện Lạnh Công Nghiệp",
+    "count": 38
+  },
+  {
+    "name": "Vải Sợi - Sản Xuất Và Kinh Doanh",
+    "count": 38
+  },
+  {
+    "name": "Balo, Túi Xách, Cặp, Giỏ, Vali - Công Ty May Và Sản Xuất Balo, Túi Xách",
+    "count": 38
+  },
+  {
+    "name": "Xe Máy - Bán Buôn Và Bán Lẻ",
+    "count": 38
+  },
+  {
+    "name": "Pallet Gỗ - Sản Xuất Và Cung Cấp",
+    "count": 38
+  },
+  {
+    "name": "Phân Bón - Công Ty Phân Bón, Sản Xuất Và Bán Buôn",
+    "count": 38
+  },
+  {
+    "name": "Chăn Ga Gối Đệm - Sản Xuất Và Bán Buôn",
+    "count": 38
+  },
+  {
+    "name": "Vật Liệu Xây Dựng",
+    "count": 37
+  },
+  {
+    "name": "Cơ Khí - Gia Công Và Chế Tạo",
+    "count": 37
+  },
+  {
+    "name": "Thiết Bị Điện - Nhập Khẩu Và Phân Phối Thiết Bị Điện",
+    "count": 37
+  },
+  {
+    "name": "Quảng Cáo - Công Ty Quảng Cáo",
+    "count": 37
+  },
+  {
+    "name": "Ngân Hàng",
+    "count": 37
+  },
+  {
+    "name": "Vi Tính Và Tin Học - Các Công Ty Tin Học",
+    "count": 37
+  },
+  {
+    "name": "Nông Sản",
+    "count": 37
+  },
+  {
+    "name": "Vật Liệu Trang Trí Nội Thất",
+    "count": 37
+  },
+  {
+    "name": "Vàng Bạc, Đồ Trang Sức Cao Cấp - Chế Tác Và Kinh Doanh",
+    "count": 37
+  },
+  {
+    "name": "Xăng Dầu - Bán Buôn Và Phân Phối",
+    "count": 37
+  },
+  {
+    "name": "Xây Dựng - Máy Móc Và Thiết Bị Xây Dựng",
+    "count": 37
+  },
+  {
+    "name": "Đào Tạo - Các Công Ty Đào Tạo",
+    "count": 37
+  },
+  {
+    "name": "Máy Móc - Các Loại",
+    "count": 37
+  },
+  {
+    "name": "Cà Phê - Sản Xuất Và Bán Buôn",
+    "count": 37
+  },
+  {
+    "name": "Van Công Nghiệp",
+    "count": 37
+  },
+  {
+    "name": "Đèn LED",
+    "count": 37
+  },
+  {
+    "name": "Giày Dép, Giày Da - Sản Xuất Và Bán Buôn",
+    "count": 37
+  },
+  {
+    "name": "Đá Ốp Lát (Đá Granite, Đá Marble, Đá Hoa Cương..)",
+    "count": 37
+  },
+  {
+    "name": "Ván Ép - Sản Xuất Và Cung Cấp Ván Ép",
+    "count": 37
+  },
+  {
+    "name": "Nước Uống Đóng Chai, Đóng Bình - Sản Xuất Và Phân Phối",
+    "count": 37
+  },
+  {
+    "name": "Máy Nén Khí",
+    "count": 37
+  },
+  {
+    "name": "Gỗ - Chế Biến Và Cung Cấp (Gỗ Xẻ Và Sấy, Phôi, Dăm,..)",
+    "count": 37
+  },
+  {
+    "name": "Máy Bơm, Máy Bơm Nước - Công Ty Sản Xuất Và Phân Phối",
+    "count": 37
+  },
+  {
+    "name": "Du Lịch - Công Ty Du Lịch Và Đại Lý",
+    "count": 36
+  },
+  {
+    "name": "May Mặc - Các Công Ty May Mặc",
+    "count": 36
+  },
+  {
+    "name": "Thiết Bị Văn Phòng",
+    "count": 36
+  },
+  {
+    "name": "Phòng Cháy Chữa Cháy - Thiết Bị Phòng Cháy Chữa Cháy",
+    "count": 36
+  },
+  {
+    "name": "Thủ Công Mỹ Nghệ",
+    "count": 36
+  },
+  {
+    "name": "Băng Keo, Băng Dính",
+    "count": 36
+  },
+  {
+    "name": "Bảo Vệ - Công Ty Bảo Vệ, Dịch Vụ Bảo Vệ (Uy Tín, Chuyên Nghiệp)",
+    "count": 36
+  },
+  {
+    "name": "Khuôn Mẫu",
+    "count": 36
+  },
+  {
+    "name": "Thiết Bị Vệ Sinh - Phân Phối Và Kinh Doanh",
+    "count": 36
+  },
+  {
+    "name": "Bảo Hộ Lao Động",
+    "count": 35
+  },
+  {
+    "name": "Máy Vi Tính - Phần Cứng Máy Vi Tính",
+    "count": 35
+  },
+  {
+    "name": "Phụ Tùng Ô Tô, Phụ Tùng Xe Hơi",
+    "count": 35
+  },
+  {
+    "name": "Bao Bì Nhựa",
+    "count": 35
+  },
+  {
+    "name": "Thực Phẩm - Nhập Khẩu Và Phân Phối",
+    "count": 35
+  },
+  {
+    "name": "Tổ Chức Sự Kiện - Công Ty Tổ Chức Sự Kiện, Event",
+    "count": 35
+  },
+  {
+    "name": "Inox, Thép Không Gỉ",
+    "count": 35
+  },
+  {
+    "name": "Xử Lý Nước, Xử Lý Nước Thải - Hệ Thống Xử Lý Nước, Nước Thải",
+    "count": 35
+  },
+  {
+    "name": "Kế Toán Và Kiểm Toán",
+    "count": 35
+  },
+  {
+    "name": "Ô Tô Các Loại - Nhà Phân Phối Ô Tô",
+    "count": 35
+  },
+  {
+    "name": "Vận Tải - Công Ty Vận Tải Và Đại Lý Vận Tải",
+    "count": 34
+  },
+  {
+    "name": "Viễn Thông - Thiết Bị Và Hệ Thống Viễn Thông",
+    "count": 34
+  },
+  {
+    "name": "Đại Lý Vé Máy Bay",
+    "count": 34
+  },
+  {
+    "name": "Ốc, Vít, Bù Loong",
+    "count": 34
+  },
+  {
+    "name": "Máy Móc Cơ Khí, Thiết Bị Cơ Khí",
+    "count": 34
+  },
+  {
+    "name": "Linh Kiện Điện Tử",
+    "count": 34
+  },
+  {
+    "name": "Xe Nâng Hàng",
+    "count": 34
+  },
+  {
+    "name": "In Ấn - Công Ty In Ấn Và Thiết Kế (In Offset, In Flexo)",
+    "count": 33
+  },
+  {
+    "name": "Đồ Gỗ Nội Thất - Sản Xuất Và Kinh Doanh Đồ Gỗ Nội Thất",
+    "count": 33
+  },
+  {
+    "name": "Xuất Nhập Khẩu - Các Công Ty Xuất Nhập Khẩu",
+    "count": 33
+  },
+  {
+    "name": "Thùng Carton, Thùng Giấy",
+    "count": 33
+  },
+  {
+    "name": "Cơ Khí - Gia Công Cơ Khí Theo Yêu Cầu",
+    "count": 33
+  },
+  {
+    "name": "Máy Phát Điện",
+    "count": 33
+  },
+  {
+    "name": "Nước Giải Khát - Sản Xuất Và Phân Phối",
+    "count": 33
+  },
+  {
+    "name": "Inox - Sản Xuất Và Gia Công Inox",
+    "count": 33
+  },
+  {
+    "name": "Thiết Kế Nội Thất - Công Ty Thiết Kế Và Thi Công Nội Thất",
+    "count": 32
+  },
+  {
+    "name": "Website - Thiết Kế Trang Web",
+    "count": 32
+  },
+  {
+    "name": "Điện - Nhà Thầu Thi Công Điện",
+    "count": 32
+  },
+  {
+    "name": "Sơn - Công Ty Sản Xuất Và Cung Cấp Sơn",
+    "count": 32
+  },
+  {
+    "name": "Mực Máy In (Canon, HP, Epson,..) - Kinh Doanh Và Phân Phối",
+    "count": 32
+  },
+  {
+    "name": "Trà, Chè - Sản Xuất Và Kinh Doanh",
+    "count": 32
+  },
+  {
+    "name": "Nhà Thép Tiền Chế",
+    "count": 32
+  },
+  {
+    "name": "Nhà Hàng",
+    "count": 31
+  },
+  {
+    "name": "Camera Quan Sát - Phân Phối Và Lắp Đặt Hệ Thống Camera",
+    "count": 31
+  },
+  {
+    "name": "May Đồng Phục - Công Ty May Đồng Phục",
+    "count": 31
+  },
+  {
+    "name": "Vệ Sinh Công Nghiệp - Công Ty Vệ Sinh Công Nghiệp",
+    "count": 31
+  },
+  {
+    "name": "Công Nghiệp - Vật Tư Và Thiết Bị Công Nghiệp",
+    "count": 31
+  },
+  {
+    "name": "Vật Liệu Đóng Gói",
+    "count": 31
+  },
+  {
+    "name": "Băng Tải - Các Công Ty Băng Tải",
+    "count": 31
+  },
+  {
+    "name": "Cơ Khí Chính Xác - Gia Công Chi Tiết, Linh Kiện, Phụ Tùng Theo Yêu Cầu",
+    "count": 30
+  },
+  {
+    "name": "An Ninh, An Toàn - Hệ Thống Và Thiết Bị An Ninh, An Toàn",
+    "count": 30
+  },
+  {
+    "name": "Vận Chuyển Hàng Hóa, Giao Nhận Vận Chuyển Hàng Hóa",
+    "count": 29
+  },
+  {
+    "name": "In Ấn - Catalogue, Tờ Rơi, Brochure..Các Loại",
+    "count": 29
+  },
+  {
+    "name": "Bao Bì - Nhà Sản Xuất Và Kinh Doanh",
+    "count": 29
+  },
+  {
+    "name": "Tự Động Hóa - Hệ Thống Và Thiết Bị Tự Động Hóa",
+    "count": 29
+  },
+  {
+    "name": "In Bao Bì - Công Ty Thiết Kế Và In Ấn Bao Bì",
+    "count": 29
+  },
+  {
+    "name": "Hóa Chất Công Nghiệp",
+    "count": 29
+  },
+  {
+    "name": "Tủ Bảng Điện",
+    "count": 29
+  },
+  {
+    "name": "Phế Liệu - Thu Mua Phế Liệu",
+    "count": 28
+  },
+  {
+    "name": "In Tem Nhãn, Nhãn Mác, Label",
+    "count": 28
+  },
+  {
+    "name": "Túi Nilon PE, Túi PP, Túi HDPE,..",
+    "count": 28
+  },
+  {
+    "name": "Sửa Chữa Ô Tô, Xe Tải - Dịch Vụ",
+    "count": 28
+  },
+  {
+    "name": "Vận Tải Đường Bộ",
+    "count": 27
+  },
+  {
+    "name": "Cho Thuê Xe Du Lịch",
+    "count": 26
+  },
+  {
+    "name": "Mỹ Phẩm - Nhập Khẩu Và Phân Phối",
+    "count": 26
+  },
+  {
+    "name": "Quần Áo Bảo Hộ Lao Động",
+    "count": 26
+  },
+  {
+    "name": "Thực Phẩm - Cung Cấp Thực Phẩm, Công Ty Thực Phẩm",
+    "count": 26
+  },
+  {
+    "name": "Cửa Nhôm, Cửa Nhôm Kính",
+    "count": 26
+  },
+  {
+    "name": "Bao Bì Carton",
+    "count": 26
+  },
+  {
+    "name": "Cho Thuê Xe Ô Tô, Cho Thuê Xe Tháng, Xe Tự Lái,..",
+    "count": 26
+  },
+  {
+    "name": "Phụ Tùng Xe Máy, Linh Phụ Kiện Xe Máy",
+    "count": 26
+  },
+  {
+    "name": "Hệ Thống PCCC - Thi Công Lắp Đặt Hệ Thống Báo Cháy, Chữa Cháy Tự Động",
+    "count": 26
+  },
+  {
+    "name": "Dụng Cụ Cầm Tay",
+    "count": 26
+  },
+  {
+    "name": "In Bao Bì Giấy (In Túi Giấy, Thùng Giấy, Hộp Giấy)",
+    "count": 25
+  },
+  {
+    "name": "Bảng Hiệu Quảng Cáo",
+    "count": 25
+  },
+  {
+    "name": "Màng PE, Màng Chít - Nhà Sản Xuất",
+    "count": 25
+  },
+  {
+    "name": "Bao Bì Giấy",
+    "count": 25
+  },
+  {
+    "name": "Áo Thun Đồng Phục - Công Ty May Áo Thun, Áo Phông Đồng Phục",
+    "count": 25
+  },
+  {
+    "name": "Quảng Cáo - Thiết Kế Và Thi Công Quảng Cáo (Bảng, Biển, Đèn)",
+    "count": 24
+  },
+  {
+    "name": "Vật Tư Ngành Nước, Phụ Kiện Ngành Nước",
+    "count": 24
+  },
+  {
+    "name": "Máy Văn Phòng",
+    "count": 23
+  },
+  {
+    "name": "Du Lịch - Các Dịch Vụ",
+    "count": 22
+  },
+  {
+    "name": "Thiết Bị Điện Công Nghiệp",
+    "count": 22
+  },
+  {
+    "name": "Dịch Vụ Bảo Vệ Mục Tiêu Cố Định (Công Ty, Trường Học, Bệnh Viện..)",
+    "count": 22
+  },
+  {
+    "name": "Xây Dựng Dân Dụng",
+    "count": 21
+  },
+  {
+    "name": "Du Lịch - Tour Du Lịch",
+    "count": 21
+  },
+  {
+    "name": "Nhà Thầu Cơ Điện, Cơ Điện Công Trình",
+    "count": 21
+  },
+  {
+    "name": "Dây Cáp Điện - Dây Điện Và Cáp Điện",
+    "count": 20
+  },
+  {
+    "name": "Xây Dựng Công Trình",
+    "count": 20
+  },
+  {
+    "name": "Kiến Trúc - Thiết Kế Kiến Trúc",
+    "count": 20
+  },
+  {
+    "name": "Gỗ Nguyên Liệu",
+    "count": 20
+  },
+  {
+    "name": "Hải Quan - Dịch Vụ Hải Quan, Khai Thuê Hải Quan",
+    "count": 19
+  },
+  {
+    "name": "Quảng Cáo - Thiết Kế Và In Ấn Quảng Cáo (In Kỹ Thuật Số, Poster, Hiflex, Banner)",
+    "count": 19
+  },
+  {
+    "name": "Vận Tải Biển",
+    "count": 18
+  },
+  {
+    "name": "Tour Du Lịch Nội Địa",
+    "count": 18
+  },
+  {
+    "name": "Thiết Kế Xây Dựng - Công Ty Tư Vấn Thiết Kế Xây Dựng",
+    "count": 16
+  },
+  {
+    "name": "Đồ Nội Thất - Thiết Kế Và Sản Xuất, Lắp Đặt Đồ Nội Thất",
+    "count": 16
+  },
+  {
+    "name": "Logistics - Dịch Vụ Logistics",
+    "count": 16
+  },
+  {
+    "name": "Phế Liệu Đồng, Nhôm, Sắt, Thép",
+    "count": 16
+  },
+  {
+    "name": "Dược Phẩm - Công Ty Dược Phẩm",
+    "count": 14
+  },
+  {
+    "name": "Nhà Xưởng, Nhà Công Nghiệp - Thi Công Nhà Xưởng, Nhà Công Nghiệp",
+    "count": 13
+  },
+  {
+    "name": "Xây Dựng - Công Ty Xây Dựng",
+    "count": 12
+  },
+  {
+    "name": "Đồng Phục Công Sở, Đồng Phục Văn Phòng, Công Ty,.",
+    "count": 8
+  }
+]

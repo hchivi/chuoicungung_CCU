@@ -1,0 +1,1564 @@
+{
+  "1.1": {
+    "B": [
+      {
+        "name": "Báo Cáo Nghiên Cứu Khả Thi (FS)",
+        "count": 28
+      },
+      {
+        "name": "Bản Đồ Địa Chính & Quy Hoạch Chi Tiết",
+        "count": 15
+      },
+      {
+        "name": "Bảo Hiểm Rủi Ro Dự Án Đầu Tư",
+        "count": 8
+      }
+    ],
+    "D": [
+      {
+        "name": "Đo Đạc Trắc Địa & Địa Hình Dự Án",
+        "count": 42
+      },
+      {
+        "name": "Định Hướng Chiến Lược Đầu Tư Công Nghiệp",
+        "count": 35
+      },
+      {
+        "name": "Định Giá & Thẩm Định Tài Sản KCN",
+        "count": 24
+      },
+      {
+        "name": "Đánh Giá Hiện Trạng Môi Trường Sơ Bộ",
+        "count": 18
+      }
+    ],
+    "K": [
+      {
+        "name": "Khảo Sát Địa Chất Công Trình & Thủy Văn",
+        "count": 56
+      },
+      {
+        "name": "Khảo Sát Hiện Trạng Khu Vực & Hạ Tầng KCN",
+        "count": 38
+      },
+      {
+        "name": "Khảo Sát Nhu Cầu Chuỗi Cung Ứng & Phụ Trợ",
+        "count": 22
+      }
+    ],
+    "N": [
+      {
+        "name": "Nghiên Cứu Thị Trường Công Nghiệp & FDI",
+        "count": 45
+      },
+      {
+        "name": "Nghiên Cứu Khả Thi Dự Án Nhà Máy",
+        "count": 30
+      }
+    ],
+    "Q": [
+      {
+        "name": "Quy Hoạch Chi Tiết 1/500 & 1/2000",
+        "count": 32
+      },
+      {
+        "name": "Quản Lý Rủi Ro Dự Án Đầu Tư FDI",
+        "count": 14
+      }
+    ],
+    "T": [
+      {
+        "name": "Tư Vấn Đầu Tư FDI & Trong Nước",
+        "count": 68
+      },
+      {
+        "name": "Tư Vấn Chiến Lược Phát Triển Nhà Máy",
+        "count": 40
+      },
+      {
+        "name": "Thẩm Định Dự Án & Dự Toán Ngân Sách",
+        "count": 25
+      }
+    ]
+  },
+  "1.2": {
+    "B": [
+      {
+        "name": "Báo Cáo Đánh Giá Tác Động Môi Trường (ĐTM)",
+        "count": 65
+      },
+      {
+        "name": "Bảo Vệ Quyền Sở Hữu Trí Tuệ & Nhãn Hiệu",
+        "count": 18
+      }
+    ],
+    "C": [
+      {
+        "name": "Cấp Giấy Phép Xây Dựng Nhà Xưởng",
+        "count": 48
+      },
+      {
+        "name": "Công Chứng & Hợp Pháp Hóa Lãnh Sự",
+        "count": 22
+      },
+      {
+        "name": "Chứng Nhận Đăng Ký Doanh Nghiệp (ERC)",
+        "count": 35
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Luật & Pháp Lý Doanh Nghiệp FDI",
+        "count": 75
+      },
+      {
+        "name": "Dịch Vụ Xin Giấy Phép Môi Trường (GPMT)",
+        "count": 52
+      },
+      {
+        "name": "Đăng Ký Quyền Sở Hữu Đất Đai & Mặt Bằng KCN",
+        "count": 28
+      },
+      {
+        "name": "Đánh Giá Pháp Lý Rủi Ro Dự Án",
+        "count": 20
+      }
+    ],
+    "G": [
+      {
+        "name": "Giấy Phép Đầu Tư (IRC) Cho Doanh Nghiệp FDI",
+        "count": 82
+      },
+      {
+        "name": "Giấy Phép Lao Động Cho Chuyên Gia Nước Ngoài (Work Permit)",
+        "count": 44
+      }
+    ],
+    "L": [
+      {
+        "name": "Luật Doanh Nghiệp & Đầu Tư Công Nghiệp",
+        "count": 60
+      },
+      {
+        "name": "Lập Hồ Sơ Dự Án ĐTM & Thẩm Duyệt",
+        "count": 40
+      }
+    ],
+    "P": [
+      {
+        "name": "Pháp Lý Dự Án & Bất Động Sản KCN",
+        "count": 55
+      }
+    ],
+    "T": [
+      {
+        "name": "Thẩm Duyệt Thiết Kế PCCC Cơ Sở & Nhà Xưởng",
+        "count": 70
+      },
+      {
+        "name": "Tư Vấn Thuế & Ưu Đãi Đầu Tư FDI",
+        "count": 48
+      },
+      {
+        "name": "Thủ Tục Chấp Thuận Chủ Trương Đầu Tư",
+        "count": 36
+      }
+    ],
+    "X": [
+      {
+        "name": "Xin Giấy Phép Xây Dựng Công Trình Công Nghiệp",
+        "count": 58
+      },
+      {
+        "name": "Xin Giấy Phép Môi Trường GPMT Cấp Tỉnh/Bộ",
+        "count": 42
+      }
+    ]
+  },
+  "1.3": {
+    "B": [
+      {
+        "name": "Bất Động Sản Công Nghiệp Toàn Quốc",
+        "count": 85
+      },
+      {
+        "name": "Bản Đồ Quy Hoạch Hạ Tầng KCN Trọng Điểm",
+        "count": 30
+      }
+    ],
+    "C": [
+      {
+        "name": "Cho Thuê Đất Công Nghiệp KCN 50 Năm",
+        "count": 92
+      },
+      {
+        "name": "Cho Thuê Nhà Xưởng Xây Sẵn (RBF)",
+        "count": 110
+      },
+      {
+        "name": "Cho Thuê Nhà Kho Xây Sẵn (RBW)",
+        "count": 78
+      },
+      {
+        "name": "Chuyển Nhượng Quyền Sử Dụng Đất KCN",
+        "count": 45
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Môi Giới BĐS Công Nghiệp",
+        "count": 64
+      },
+      {
+        "name": "Địa Điểm Đầu Tư FDI Vùng Kinh Tế Trọng Điểm",
+        "count": 50
+      },
+      {
+        "name": "Đất Khu Công Nghiệp & Cụm Công Nghiệp",
+        "count": 120
+      },
+      {
+        "name": "Đo Đạc & Định Ranh Giới Lô Đất Nhà Máy",
+        "count": 35
+      }
+    ],
+    "K": [
+      {
+        "name": "Khu Công Nghiệp (KCN) Miền Nam & Miền Bắc",
+        "count": 140
+      },
+      {
+        "name": "Khu Chế Xuất & Khu Kinh Tế Mở",
+        "count": 38
+      },
+      {
+        "name": "Khu Công Nghệ Cao (High-Tech Park)",
+        "count": 25
+      }
+    ],
+    "M": [
+      {
+        "name": "Mặt Bằng Sản Xuất Công Nghiệp Sạch",
+        "count": 72
+      },
+      {
+        "name": "Môi Giới Đất Công Nghiệp Bình Dương, Đồng Nai, Bắc Ninh",
+        "count": 60
+      }
+    ],
+    "N": [
+      {
+        "name": "Nhà Xưởng Xây Sẵn (Ready-Built Factory)",
+        "count": 115
+      },
+      {
+        "name": "Nhà Kho Xây Sẵn (Ready-Built Warehouse)",
+        "count": 82
+      },
+      {
+        "name": "Nhà Xưởng Cao Tầng Đa Năng",
+        "count": 28
+      }
+    ],
+    "T": [
+      {
+        "name": "Thuê Đất KCN Có Hạ Tầng Hoàn Chỉnh",
+        "count": 95
+      },
+      {
+        "name": "Tư Vấn Lựa Chọn Địa Điểm KCN Theo Ngành Nghề",
+        "count": 52
+      }
+    ]
+  },
+  "2.1": {
+    "B": [
+      {
+        "name": "Bản Vẽ Thiết Kế Cơ Điện MEP Nhà Máy",
+        "count": 45
+      },
+      {
+        "name": "BIM 3D & Mô Hình Hóa Công Trình Công Nghiệp",
+        "count": 32
+      }
+    ],
+    "K": [
+      {
+        "name": "Kiến Trúc Nhà Máy & Văn Phòng Điều Hành",
+        "count": 58
+      },
+      {
+        "name": "Kết Cấu Khung Nhà Xưởng Công Nghiệp",
+        "count": 64
+      }
+    ],
+    "M": [
+      {
+        "name": "Mô Hình Thông Tin Xây Dựng (BIM 3D/4D)",
+        "count": 36
+      },
+      {
+        "name": "Mặt Bằng Tổng Thể Dây Chuyền Sản Xuất",
+        "count": 40
+      }
+    ],
+    "P": [
+      {
+        "name": "Phòng Sạch Cleanroom - Thiết Kế & Quy Hoạch",
+        "count": 48
+      }
+    ],
+    "T": [
+      {
+        "name": "Thiết Kế Kiến Trúc Nhà Xưởng Công Nghiệp",
+        "count": 75
+      },
+      {
+        "name": "Thiết Kế Kết Cấu Thép & Móng Cọc Công Trình",
+        "count": 82
+      },
+      {
+        "name": "Thiết Kế Cơ Điện MEP & Hệ Thống HVAC",
+        "count": 70
+      },
+      {
+        "name": "Thiết Kế Hệ Thống PCCC & Báo Cháy Tự Động",
+        "count": 62
+      },
+      {
+        "name": "Thiết Kế Trạm Biến Áp & Cấp Thoát Nước KCN",
+        "count": 45
+      }
+    ]
+  },
+  "2.2": {
+    "B": [
+      {
+        "name": "Bê Tông Thương Phẩm & Ép Cọc Móng Nhà Xưởng",
+        "count": 88
+      },
+      {
+        "name": "Bê Tông Xoa Nền Hardener Tăng Cứng",
+        "count": 55
+      }
+    ],
+    "C": [
+      {
+        "name": "Cửa Chống Cháy & Cửa Cuốn Tốc Độ Cao",
+        "count": 62
+      },
+      {
+        "name": "Chống Thấm Nhà Xưởng & Xử Lý Dột Mái Tôn",
+        "count": 40
+      }
+    ],
+    "E": [
+      {
+        "name": "Epoxy - Thi Công Sơn Sàn Kháng Hóa Chất",
+        "count": 72
+      }
+    ],
+    "G": [
+      {
+        "name": "Gia Công Kết Cấu Thép Nhà Xưởng",
+        "count": 110
+      },
+      {
+        "name": "Gạch & Vật Liệu Xây Dựng Công Nghiệp",
+        "count": 50
+      }
+    ],
+    "K": [
+      {
+        "name": "Kết Cấu Thép & Nhà Thép Tiền Chế (PEB)",
+        "count": 135
+      },
+      {
+        "name": "Khung Kèo Thép & Xà Gồ Mạ Kẽm C, Z",
+        "count": 78
+      }
+    ],
+    "M": [
+      {
+        "name": "Móng Băng & Ép Cọc Bê Tông Dự Ứng Lực",
+        "count": 65
+      },
+      {
+        "name": "Mái Tôn Cách Nhiệt Seamlock / Kliplok",
+        "count": 70
+      }
+    ],
+    "P": [
+      {
+        "name": "Panel EPS, PU, Rockwool Cách Nhiệt Chống Cháy",
+        "count": 95
+      }
+    ],
+    "S": [
+      {
+        "name": "Sơn Sàn Epoxy Tự San Phẳng & Chống Tĩnh Điện",
+        "count": 80
+      },
+      {
+        "name": "San Lấp Mặt Bằng & Thi Công Đường Nội Bộ",
+        "count": 58
+      }
+    ],
+    "T": [
+      {
+        "name": "Tổng Thầu Xây Dựng Công Nghiệp (EPC)",
+        "count": 125
+      },
+      {
+        "name": "Thi Công Nhà Xưởng Tiền Chế Trọn Gói",
+        "count": 118
+      },
+      {
+        "name": "Thi Công Sàn Bê Tông Đánh Bóng Siêu Phẳng",
+        "count": 48
+      }
+    ],
+    "V": [
+      {
+        "name": "Vách Panel Cách Âm Cách Nhiệt",
+        "count": 82
+      },
+      {
+        "name": "Vật Liệu Xây Dựng & Thép Xây Dựng",
+        "count": 90
+      }
+    ],
+    "X": [
+      {
+        "name": "Xoa Nền Bê Tông Đạt Chuẩn Công Nghiệp",
+        "count": 60
+      }
+    ]
+  },
+  "2.3": {
+    "B": [
+      {
+        "name": "Biến Áp - Trạm Biến Áp 22kV / 110kV KCN",
+        "count": 68
+      },
+      {
+        "name": "Bơm Công Nghiệp & Hệ Thống Cấp Nước Tự Động",
+        "count": 54
+      }
+    ],
+    "C": [
+      {
+        "name": "Cơ Điện Lạnh MEP Công Nghiệp Trọn Gói",
+        "count": 95
+      },
+      {
+        "name": "Cáp Điện Trung Thế & Hạ Thế Công Nghiệp",
+        "count": 72
+      },
+      {
+        "name": "Cấp Thoát Nước & Đường Ống Kỹ Thuật Nhà Xưởng",
+        "count": 60
+      }
+    ],
+    "D": [
+      {
+        "name": "Điện Công Nghiệp & Tủ Bảng Điện MSB, MDB, DB",
+        "count": 105
+      },
+      {
+        "name": "Đèn Chiếu Sáng Công Nghiệp Highbay LED Tiết Kiệm Điện",
+        "count": 48
+      }
+    ],
+    "H": [
+      {
+        "name": "Hệ Thống Thông Gió & Điều Hòa Không Khí HVAC",
+        "count": 88
+      },
+      {
+        "name": "Hệ Thống PCCC Tự Động (Sprinkler, FM200, Drencher)",
+        "count": 92
+      }
+    ],
+    "K": [
+      {
+        "name": "Khí Nén Công Nghiệp & Đường Ống Khí Nén Áp Lực",
+        "count": 65
+      },
+      {
+        "name": "Kim Thu Sét Tia Tiên Đạo & Tiếp Địa An Toàn",
+        "count": 42
+      }
+    ],
+    "M": [
+      {
+        "name": "Máy Phát Điện Dự Phòng Công Suất Lớn (100kVA - 2500kVA)",
+        "count": 74
+      },
+      {
+        "name": "Máy Làm Lạnh Nước Chiller Giải Nhiệt Gió/Nước",
+        "count": 58
+      }
+    ],
+    "P": [
+      {
+        "name": "PCCC - Thi Công & Thẩm Duyệt Hệ Thống Báo Cháy Tự Động",
+        "count": 98
+      }
+    ],
+    "T": [
+      {
+        "name": "Trạm Biến Áp & Tủ Điện Phân Phối",
+        "count": 85
+      },
+      {
+        "name": "Thông Gió & Hút Lọc Bụi Công Nghiệp",
+        "count": 62
+      },
+      {
+        "name": "Trạm Xử Lý Nước Thải & Nước Cấp Sản Xuất",
+        "count": 70
+      }
+    ],
+    "X": [
+      {
+        "name": "Xử Lý Nước Thải Sản Xuất Đạt Chuẩn Cột A/B",
+        "count": 75
+      },
+      {
+        "name": "Xử Lý Khí Thải & Bụi Sơn Công Nghiệp",
+        "count": 46
+      }
+    ]
+  },
+  "3.1": {
+    "B": [
+      {
+        "name": "Băng Tải, Băng Chuyền Con Lăn Tự Động",
+        "count": 68
+      },
+      {
+        "name": "Bàn Nâng Thủy Lực & Cầu Nâng Hạ Hàng",
+        "count": 35
+      }
+    ],
+    "C": [
+      {
+        "name": "Cẩu Kéo & Nâng Hạ Máy Móc Nặng Siêu Trường Siêu Trọng",
+        "count": 72
+      },
+      {
+        "name": "Cắt Gọt Kim Loại - Máy Tiện, Máy Phay CNC",
+        "count": 85
+      }
+    ],
+    "D": [
+      {
+        "name": "Dây Chuyền Sản Xuất & Lắp Ráp Tự Động Hóa",
+        "count": 90
+      },
+      {
+        "name": "Dây Chuyền Sơn Tĩnh Điện & Sấy Tự Động",
+        "count": 48
+      },
+      {
+        "name": "Đấu Nối Tín Hiệu & Lắp Đặt Tủ Điện Điều Khiển Máy",
+        "count": 52
+      }
+    ],
+    "G": [
+      {
+        "name": "Gia Công Lắp Đặt Máy Móc Cơ Khí Nặng",
+        "count": 64
+      }
+    ],
+    "L": [
+      {
+        "name": "Lắp Đặt Dây Chuyền Chiết Rót & Đóng Gói Tự Động",
+        "count": 45
+      },
+      {
+        "name": "Laser Fiber - Máy Cắt Khắc Kim Loại Tấm/Ống",
+        "count": 58
+      }
+    ],
+    "M": [
+      {
+        "name": "Máy Phay CNC, Máy Tiện CNC 3-5 Trục",
+        "count": 115
+      },
+      {
+        "name": "Máy Ép Nhựa & Khuôn Ép Nhựa Công Nghiệp",
+        "count": 92
+      },
+      {
+        "name": "Máy Đột Dập Thủy Lực & Chấn Gấp Kim Loại",
+        "count": 68
+      },
+      {
+        "name": "Máy Móc & Dây Chuyền Chế Biến Thực Phẩm",
+        "count": 45
+      }
+    ],
+    "N": [
+      {
+        "name": "Nâng Hạ, Di Dời & Định Vị Máy Móc Nhà Xưởng",
+        "count": 78
+      }
+    ],
+    "R": [
+      {
+        "name": "Robot Công Nghiệp Phục Vụ Gắp Phôi & Hàn Tự Động",
+        "count": 54
+      }
+    ],
+    "T": [
+      {
+        "name": "Thiết Bị Nâng Cẩu, Palang & Cầu Trục Dầm Đơn/Đôi",
+        "count": 80
+      }
+    ]
+  },
+  "3.2": {
+    "A": [
+      {
+        "name": "AHU & Hệ Thống Xử Lý Không Khí Phòng Sạch",
+        "count": 45
+      }
+    ],
+    "B": [
+      {
+        "name": "Bàn Thao Tác Chống Tĩnh Điện Inox ESD",
+        "count": 68
+      },
+      {
+        "name": "Bảng Biển Nhà Xưởng & Biển Báo An Toàn 5S",
+        "count": 42
+      }
+    ],
+    "C": [
+      {
+        "name": "Cleanroom - Thi Công Phòng Sạch Class 100 Đến 100.000",
+        "count": 75
+      },
+      {
+        "name": "Cửa Cuốn Tốc Độ Cao (High Speed Door) Kháng Bụi",
+        "count": 38
+      }
+    ],
+    "D": [
+      {
+        "name": "Đường Ống Khí Nén Áp Lực & Đường Ống Gas",
+        "count": 50
+      },
+      {
+        "name": "Đèn Phòng Sạch LED Chống Bụi & Chống Ẩm",
+        "count": 35
+      }
+    ],
+    "G": [
+      {
+        "name": "Giá Kệ Kho Hàng & Kệ Chứa Pallet Heavy Duty",
+        "count": 82
+      }
+    ],
+    "H": [
+      {
+        "name": "Hệ Thống Khí Nén Trục Vít Công Nghiệp",
+        "count": 70
+      },
+      {
+        "name": "Hệ Thống Hút Lọc Khói Hàn & Khử Mùi Xưởng",
+        "count": 45
+      }
+    ],
+    "K": [
+      {
+        "name": "Kệ Chứa Hàng Công Nghiệp & Pallet Racking",
+        "count": 88
+      },
+      {
+        "name": "Kho Lạnh & Phòng Lạnh Bảo Quản Cấp Đông",
+        "count": 55
+      }
+    ],
+    "M": [
+      {
+        "name": "Máy Nén Khí Trục Vít & Bình Tích Áp Suất",
+        "count": 78
+      },
+      {
+        "name": "Màn Nhựa PVC Ngăn Lạnh & Chống Côn Trùng",
+        "count": 42
+      }
+    ],
+    "N": [
+      {
+        "name": "Nội Thất Nhà Xưởng & Tủ Locker Công Nhân",
+        "count": 58
+      }
+    ],
+    "P": [
+      {
+        "name": "Phòng Sạch Điện Tử, Dược Phẩm (GMP/ISO 14644)",
+        "count": 80
+      }
+    ],
+    "S": [
+      {
+        "name": "Sơn Kẻ Vạch Phân Luồng Layout 5S Nhà Xưởng",
+        "count": 62
+      }
+    ],
+    "T": [
+      {
+        "name": "Thi Công Panel Phòng Sạch EPS/PU/Rockwool",
+        "count": 85
+      }
+    ],
+    "V": [
+      {
+        "name": "Vạch Kẻ 5S & Bảng Chỉ Dẫn Quy Trình Xưởng",
+        "count": 50
+      }
+    ]
+  },
+  "3.3": {
+    "C": [
+      {
+        "name": "Cân Điện Tử & Hệ Thống Cân Đo Công Nghiệp",
+        "count": 48
+      },
+      {
+        "name": "Cấp Chứng Chỉ Hiệu Chuẩn Phòng Thí Nghiệm",
+        "count": 35
+      }
+    ],
+    "D": [
+      {
+        "name": "Đo Kiểm An Toàn Môi Trường Lao Động & Vi Khí Hậu",
+        "count": 52
+      },
+      {
+        "name": "Đo Điện Trở Tiếp Địa & Hệ Thống Chống Sét",
+        "count": 45
+      }
+    ],
+    "H": [
+      {
+        "name": "Hiệu Chuẩn Cảm Biến, Áp Kế, Nhiệt Kế",
+        "count": 58
+      },
+      {
+        "name": "Hiệu Chuẩn Thiết Bị Đo Lường VILAS (ISO/IEC 17025)",
+        "count": 64
+      }
+    ],
+    "K": [
+      {
+        "name": "Kiểm Định Xe Nâng, Cầu Trục & Thiết Bị Nâng Hạ",
+        "count": 82
+      },
+      {
+        "name": "Kiểm Định Bình Chịu Áp Lực & Nồi Hơi Công Nghiệp",
+        "count": 70
+      },
+      {
+        "name": "Kiểm Định An Toàn Kỹ Thuật Máy Móc Công Nghiệp",
+        "count": 75
+      }
+    ],
+    "N": [
+      {
+        "name": "Nghiệm Thu PCCC & Đạt Chuẩn Môi Trường Bàn Giao",
+        "count": 68
+      },
+      {
+        "name": "Nghiệm Thu Bàn Giao Hồ Sơ Hoàn Công Nhà Máy",
+        "count": 40
+      }
+    ],
+    "P": [
+      {
+        "name": "Phòng Thí Nghiệm & Kiểm Tra Cơ Lý Hóa Vật Liệu",
+        "count": 48
+      }
+    ],
+    "Q": [
+      {
+        "name": "Quan Trắc Môi Trường Định Kỳ",
+        "count": 55
+      }
+    ],
+    "T": [
+      {
+        "name": "Thử Tải Tĩnh & Thử Tải Động Kết Cấu Sàn Xưởng",
+        "count": 42
+      },
+      {
+        "name": "Trung Tâm Kiểm Định & Đo Lường Chất Lượng",
+        "count": 60
+      }
+    ]
+  },
+  "4.1": {
+    "B": [
+      {
+        "name": "Bao Bì Carton 3-5-7 Lớp Sóng In Flexo/Offset",
+        "count": 120
+      },
+      {
+        "name": "Bao Bì Màng Ghép, Màng Co & Túi Zipper",
+        "count": 85
+      },
+      {
+        "name": "Bu Lông, Ốc Vít & Đai Ốc Cấp Bền 8.8, 10.9, 12.9",
+        "count": 95
+      }
+    ],
+    "D": [
+      {
+        "name": "Dung Môi Công Nghiệp (Toluen, Acetone, IPA, Xylene)",
+        "count": 65
+      },
+      {
+        "name": "Dây Đai Đóng Đai Nhựa PP, PET & Băng Keo Dán Thùng",
+        "count": 78
+      },
+      {
+        "name": "Đồng Đỏ, Đồng Thau & Nhôm Thanh Định Hình",
+        "count": 70
+      },
+      {
+        "name": "Đột Dập Kim Loại Tấm & Linh Kiện Dập",
+        "count": 88
+      }
+    ],
+    "H": [
+      {
+        "name": "Hạt Nhựa Nguyên Sinh (PP, ABS, PC, POM, PA66)",
+        "count": 140
+      },
+      {
+        "name": "Hạt Nhựa Tái Sinh & Masterbatch Màu",
+        "count": 92
+      },
+      {
+        "name": "Hóa Chất Công Nghiệp Cơ Bản & Dung Môi Xi Mạ",
+        "count": 110
+      }
+    ],
+    "I": [
+      {
+        "name": "Inox 304, 316, 201 Dạng Tấm, Cuộn, Ống, Hộp",
+        "count": 130
+      }
+    ],
+    "K": [
+      {
+        "name": "Kim Loại Màu & Hợp Kim Công Nghiệp",
+        "count": 75
+      },
+      {
+        "name": "Khuôn Mẫu Ép Nhựa & Phôi Thép Làm Khuôn",
+        "count": 85
+      }
+    ],
+    "L": [
+      {
+        "name": "Linh Kiện Điện Tử & Phụ Tùng Bán Dẫn",
+        "count": 62
+      }
+    ],
+    "M": [
+      {
+        "name": "Màng PE Quấn Pallet (Stretch Film) 17-25 Micron",
+        "count": 98
+      },
+      {
+        "name": "Mút Xốp EVA, Foam Chống Sốc Chống Tĩnh Điện",
+        "count": 64
+      }
+    ],
+    "P": [
+      {
+        "name": "Pallet Gỗ Thông Xuất Khẩu Chuẩn ISPM 15",
+        "count": 115
+      },
+      {
+        "name": "Pallet Nhựa Liền Khối Chịu Tải Nặng",
+        "count": 88
+      },
+      {
+        "name": "Phụ Gia Nhựa & Chất Trợ Cháy, Tăng Dai",
+        "count": 55
+      }
+    ],
+    "T": [
+      {
+        "name": "Thép Tấm, Thép Cuộn Cán Nóng, Cán Nguội (SS400, Q235)",
+        "count": 150
+      },
+      {
+        "name": "Thùng Phuy Sắt, Phuy Nhựa & Thùng IBC 1000L",
+        "count": 68
+      }
+    ]
+  },
+  "4.2": {
+    "C": [
+      {
+        "name": "Cơ Khí Chính Xác - Phay & Tiện CNC Chi Tiết",
+        "count": 160
+      },
+      {
+        "name": "Cắt Dây Moly, Cắt Dây Đồng & Tia Nước Waterjet",
+        "count": 65
+      },
+      {
+        "name": "Cảm Biến Công Nghiệp & Bộ Điều Khiển PLC",
+        "count": 80
+      }
+    ],
+    "D": [
+      {
+        "name": "Dầu Thủy Lực 32, 46, 68 Shell, Castrol, Total",
+        "count": 92
+      },
+      {
+        "name": "Dầu Cắt Gọt Kim Loại & Dầu Máy Nén Khí",
+        "count": 70
+      },
+      {
+        "name": "Dụng Cụ Cắt Gọt CNC (Dao Phay, Mũi Khoan, Chíp Tiện)",
+        "count": 85
+      },
+      {
+        "name": "Đo Lường Kiểm Tra Kích Thước QA/QC (Thước Cặp, Panme, CMM)",
+        "count": 78
+      }
+    ],
+    "G": [
+      {
+        "name": "Gia Công Chi Tiết Máy & Đồ Gá JIG Theo Yêu Cầu",
+        "count": 145
+      },
+      {
+        "name": "Gia Công Khuôn Ép Nhựa & Khuôn Dập Kim Loại",
+        "count": 110
+      },
+      {
+        "name": "Gia Công Xử Lý Bề Mặt Kim Loại",
+        "count": 82
+      }
+    ],
+    "M": [
+      {
+        "name": "Mỡ Bôi Trơn Chịu Nhiệt & Chịu Cực Áp Công Nghiệp",
+        "count": 64
+      },
+      {
+        "name": "Mài Mặt Phẳng, Mài Tròn & Mài Vô Tâm Chi Tiết",
+        "count": 55
+      }
+    ],
+    "N": [
+      {
+        "name": "Nhiệt Luyện Kim Loại & Tôi Thấm Carbon Chân Không",
+        "count": 68
+      }
+    ],
+    "S": [
+      {
+        "name": "Sơn Tĩnh Điện Bột & Phun Cát Làm Sạch Bề Mặt",
+        "count": 88
+      },
+      {
+        "name": "Sửa Chữa, Bảo Trì & Bảo Dưỡng Máy Móc Công Nghiệp",
+        "count": 95
+      }
+    ],
+    "T": [
+      {
+        "name": "Thiết Bị Đo CMM 3D & Máy Đo Quang Học Mitutoyo",
+        "count": 58
+      }
+    ],
+    "X": [
+      {
+        "name": "Xi Mạ Kẽm, Mạ Niken, Mạ Crom Cứng Chống Mài Mòn",
+        "count": 90
+      },
+      {
+        "name": "Xử Lý Bề Mặt Anodized Nhôm & Nhuộm Màu",
+        "count": 62
+      }
+    ]
+  },
+  "4.3": {
+    "C": [
+      {
+        "name": "Cảng Biển & Dịch Vụ Cảng Cạn ICD",
+        "count": 68
+      },
+      {
+        "name": "Cho Thuê Kho Ngoại Quan & Kho Lạnh",
+        "count": 85
+      },
+      {
+        "name": "Cước Tàu Biển Quốc Tế (FCL / LCL)",
+        "count": 110
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Khai Báo Hải Quan Xuất Nhập Khẩu",
+        "count": 135
+      },
+      {
+        "name": "Dịch Vụ Hun Trùng & Kiểm Dịch Hàng Xuất Khẩu",
+        "count": 52
+      },
+      {
+        "name": "Đại Lý Thủ Tục Hải Quan Điện Tử Trọn Gói",
+        "count": 98
+      },
+      {
+        "name": "Đóng Thùng Gỗ Chống Ẩm Cho Máy Móc Xuất Khẩu",
+        "count": 64
+      }
+    ],
+    "F": [
+      {
+        "name": "Forwarder - Đại Lý Giao Nhận Vận Tải Quốc Tế",
+        "count": 125
+      }
+    ],
+    "G": [
+      {
+        "name": "Giao Nhận Vận Tải Đa Phương Thức (Đường Bộ, Biển, Không)",
+        "count": 115
+      }
+    ],
+    "K": [
+      {
+        "name": "Kho Ngoại Quan & Kho Bãi Phân Phối 3PL/4PL",
+        "count": 92
+      },
+      {
+        "name": "Khai Thuê Hải Quan Nhanh Tại Các Cửa Khẩu & Sân Bay",
+        "count": 80
+      }
+    ],
+    "L": [
+      {
+        "name": "Logistics Chuỗi Cung Ứng Nội Địa & Quốc Tế",
+        "count": 145
+      }
+    ],
+    "T": [
+      {
+        "name": "Thuê Xe Nâng Hàng (Forklift) Điện, Dầu 1.5 - 10 Tấn",
+        "count": 105
+      },
+      {
+        "name": "Trucking - Vận Tải Hàng Hóa Đường Bộ Bằng Xe Tải & Container",
+        "count": 130
+      }
+    ],
+    "V": [
+      {
+        "name": "Vận Tải Container Đường Bộ Tuyến Bắc Nam",
+        "count": 120
+      },
+      {
+        "name": "Vận Tải Hàng Không Quốc Tế (Air Cargo)",
+        "count": 75
+      },
+      {
+        "name": "Vận Tải Thủy Nội Địa & Xà Lan Trung Chuyển",
+        "count": 48
+      }
+    ]
+  },
+  "5.1": {
+    "B": [
+      {
+        "name": "Bảo Vệ Nhà Máy & An Ninh Công Nghiệp 24/7",
+        "count": 95
+      },
+      {
+        "name": "BPO - Dịch Vụ Tính Lương & Quản Trị Nhân Sự Thuê Ngoài",
+        "count": 48
+      }
+    ],
+    "C": [
+      {
+        "name": "Cung Ứng Nhân Lực & Lao Động Thời Vụ KCN",
+        "count": 140
+      },
+      {
+        "name": "Cho Thuê Lại Lao Động Phổ Thông Sản Xuất",
+        "count": 125
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Tuyển Dụng & Săn Đầu Người (Headhunter)",
+        "count": 88
+      },
+      {
+        "name": "Dịch Vụ Đào Tạo Nghề Cơ Khí, Điện, Vận Hành Máy",
+        "count": 55
+      },
+      {
+        "name": "Dịch Vụ Bốc Xếp, Bốc Dỡ Hàng Hóa Nhà Xưởng",
+        "count": 62
+      },
+      {
+        "name": "Đào Tạo An Toàn Vệ Sinh Lao Động (Nhóm 1 Đến 6)",
+        "count": 110
+      },
+      {
+        "name": "Đào Tạo Kỹ Năng Vận Hành Xe Nâng & Cầu Trục",
+        "count": 65
+      }
+    ],
+    "H": [
+      {
+        "name": "Headhunter - Tuyển Dụng Kỹ Sư & Quản Lý Cấp Cao",
+        "count": 78
+      }
+    ],
+    "N": [
+      {
+        "name": "Nhân Lực Kỹ Thuật & Cung Ứng Lao Động Lắp Ráp Điện Tử",
+        "count": 85
+      }
+    ],
+    "T": [
+      {
+        "name": "Tuyển Dụng Nhân Sự Sản Xuất Khối Lượng Lớn",
+        "count": 92
+      },
+      {
+        "name": "Tư Vấn Luật Lao Động & Xây Dựng Thang Bảng Lương",
+        "count": 45
+      }
+    ]
+  },
+  "5.2": {
+    "C": [
+      {
+        "name": "Căn Tin Nhà Máy & Cung Cấp Thực Phẩm Sạch",
+        "count": 75
+      },
+      {
+        "name": "Cung Cấp Nước Uống Đóng Bình & Máy Lọc Nước RO",
+        "count": 60
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Khám Sức Khỏe Định Kỳ Doanh Nghiệp",
+        "count": 95
+      },
+      {
+        "name": "Dịch Vụ Giặt Ủi Công Nghiệp Cho Nhà Máy",
+        "count": 52
+      }
+    ],
+    "G": [
+      {
+        "name": "Giặt Ủi Đồ Phòng Sạch & Quần Áo Công Nhân",
+        "count": 48
+      }
+    ],
+    "K": [
+      {
+        "name": "Ký Túc Xá & Nội Thất Phòng Nghỉ Công Nhân",
+        "count": 42
+      },
+      {
+        "name": "Khám Bệnh Nghề Nghiệp & Đo Kiểm Thính Lực",
+        "count": 55
+      }
+    ],
+    "N": [
+      {
+        "name": "Nước Uống Công Nghiệp & Hệ Thống Lọc Nước Nhà Xưởng",
+        "count": 58
+      }
+    ],
+    "P": [
+      {
+        "name": "Phòng Y Tế Nhà Máy & Vật Tư Sơ Cấp Cứu",
+        "count": 45
+      }
+    ],
+    "S": [
+      {
+        "name": "Suất Ăn Công Nghiệp Đạt Chuẩn HACCP / ISO 22000",
+        "count": 135
+      }
+    ],
+    "T": [
+      {
+        "name": "Thuê Xe Đưa Rước Cán Bộ Công Nhân Viên (16 - 45 Chỗ)",
+        "count": 110
+      }
+    ],
+    "V": [
+      {
+        "name": "Vệ Sinh Công Nghiệp & Quét Rác Trần Sàn Xưởng",
+        "count": 88
+      },
+      {
+        "name": "Vệ Sinh Khử Khuẩn & Diệt Côn Trùng Nhà Máy",
+        "count": 64
+      }
+    ],
+    "X": [
+      {
+        "name": "Xe Đưa Đón Chuyên Gia & Công Nhân Hàng Ngày",
+        "count": 92
+      }
+    ]
+  },
+  "5.3": {
+    "A": [
+      {
+        "name": "Áo Bảo Hộ Lao Động Phản Quang",
+        "count": 85
+      },
+      {
+        "name": "Áo Khoác Gió Đồng Phục Nhà Máy",
+        "count": 62
+      },
+      {
+        "name": "Áo Thun Đồng Phục Doanh Nghiệp & Công Nhân",
+        "count": 110
+      }
+    ],
+    "B": [
+      {
+        "name": "Bảo Hộ Lao Động - Thiết Bị PPE Tiêu Chuẩn",
+        "count": 145
+      },
+      {
+        "name": "Bọc Giày Phòng Sạch & Dép Chống Tĩnh Điện",
+        "count": 55
+      }
+    ],
+    "D": [
+      {
+        "name": "Dây Đai An Toàn Trên Cao Toàn Thân (Full Body)",
+        "count": 68
+      },
+      {
+        "name": "Dép Phòng Sạch ESD Chống Tĩnh Điện",
+        "count": 48
+      },
+      {
+        "name": "Đồng Phục Công Nhân Nhà Xưởng May Đo Sẵn",
+        "count": 165
+      },
+      {
+        "name": "Đồng Phục Phòng Sạch Chống Tĩnh Điện ESD",
+        "count": 95
+      },
+      {
+        "name": "Đồng Phục Bảo Vệ & Tạp Dề Chống Hóa Chất",
+        "count": 72
+      }
+    ],
+    "G": [
+      {
+        "name": "Giày Bảo Hộ Lao Động Mũi Thép Chống Đinh (Jogger, King)",
+        "count": 130
+      },
+      {
+        "name": "Găng Tay Phòng Sạch ESD Phủ PU Đầu Ngón",
+        "count": 88
+      },
+      {
+        "name": "Găng Tay Cao Su Chống Axit, Hóa Chất",
+        "count": 75
+      },
+      {
+        "name": "Găng Tay Da Hàn Chịu Nhiệt Cho Thợ Cơ Khí",
+        "count": 64
+      }
+    ],
+    "K": [
+      {
+        "name": "Kính Bảo Hộ Chống Bụi & Chống Hóa Chất Văng Bắn",
+        "count": 82
+      },
+      {
+        "name": "Khẩu Trang Than Hoạt Tính 3M & Khẩu Trang N95",
+        "count": 105
+      }
+    ],
+    "M": [
+      {
+        "name": "May Đo Đồng Phục Công Nhân & Kỹ Sư Nhà Máy",
+        "count": 150
+      },
+      {
+        "name": "Mũ Bảo Hộ Lao Động Tiêu Chuẩn Có Núm Vặn",
+        "count": 98
+      },
+      {
+        "name": "Mặt Nạ Phòng Độc 2 Phin Lọc Khí Độc 3M",
+        "count": 70
+      }
+    ],
+    "N": [
+      {
+        "name": "Nón Bảo Hộ Lao Động & Nút Bịt Tai Chống Ồn 3M",
+        "count": 80
+      }
+    ],
+    "Q": [
+      {
+        "name": "Quần Áo Chống Hóa Chất Tyvek & Quần Áo Chịu Nhiệt",
+        "count": 65
+      }
+    ],
+    "T": [
+      {
+        "name": "Trang Thiết Bị Bảo Hộ Lao Động Cá Nhân (PPE)",
+        "count": 140
+      },
+      {
+        "name": "Tạp Dề Chống Thấm Nước & Chống Dầu Mỡ",
+        "count": 52
+      }
+    ],
+    "V": [
+      {
+        "name": "Vải May Đồng Phục Kaki Nam Định, Pangrim Hàn Quốc",
+        "count": 78
+      },
+      {
+        "name": "Vật Tư Chống Tĩnh Điện & Phòng Sạch",
+        "count": 68
+      }
+    ]
+  },
+  "6.1": {
+    "B": [
+      {
+        "name": "Báo Cáo Điều Chỉnh Quy Hoạch & Mở Rộng Dự Án",
+        "count": 35
+      }
+    ],
+    "C": [
+      {
+        "name": "Cải Tạo, Nâng Tầng & Mở Rộng Nhà Xưởng",
+        "count": 75
+      },
+      {
+        "name": "Chuyển Nhượng Dự Án & Mua Bán Nhà Máy (M&A)",
+        "count": 52
+      }
+    ],
+    "D": [
+      {
+        "name": "Dịch Vụ Tư Vấn Tăng Vốn Đầu Tư FDI",
+        "count": 48
+      },
+      {
+        "name": "Đầu Tư Mở Rộng Giai Đoạn 2 (Phase 2)",
+        "count": 65
+      }
+    ],
+    "M": [
+      {
+        "name": "M&A Bất Động Sản Công Nghiệp & Mua Lại Nhà Máy",
+        "count": 58
+      },
+      {
+        "name": "Mở Rộng Dây Chuyền Sản Xuất Mới",
+        "count": 70
+      }
+    ],
+    "N": [
+      {
+        "name": "Nâng Cấp Công Suất Trạm Biến Áp & Hệ Thống Năng Lượng",
+        "count": 62
+      }
+    ],
+    "T": [
+      {
+        "name": "Thuê Thêm Quỹ Đất Liền Kề KCN",
+        "count": 55
+      },
+      {
+        "name": "Tư Vấn Điều Chỉnh Giấy Chứng Nhận Đầu Tư IRC",
+        "count": 42
+      }
+    ]
+  },
+  "6.2": {
+    "B": [
+      {
+        "name": "BSCI - Đánh Giá Tuân Thủ Trách Nhiệm Xã Hội",
+        "count": 68
+      },
+      {
+        "name": "Báo Cáo Kiểm Toán Năng Lượng & Môi Trường",
+        "count": 55
+      }
+    ],
+    "C": [
+      {
+        "name": "Chứng Nhận ISO 9001 (Hệ Thống Quản Lý Chất Lượng)",
+        "count": 120
+      },
+      {
+        "name": "Chứng Nhận ISO 14001 (Quản Lý Môi Trường)",
+        "count": 95
+      },
+      {
+        "name": "Chứng Nhận ISO 45001 (An Toàn Sức Khỏe Nghề Nghiệp)",
+        "count": 82
+      },
+      {
+        "name": "Chứng Chỉ Công Trình Xanh LEED / LOTUS / EDGE",
+        "count": 50
+      }
+    ],
+    "D": [
+      {
+        "name": "Đo Kiểm Môi Trường & Quan Trắc Khí Thải Định Kỳ",
+        "count": 78
+      },
+      {
+        "name": "Đánh Giá Tiêu Chuẩn Nhà Máy Xanh & Bền Vững",
+        "count": 45
+      }
+    ],
+    "K": [
+      {
+        "name": "Kiểm Toán Năng Lượng Bắt Buộc Theo Luật",
+        "count": 62
+      },
+      {
+        "name": "Kiểm Toán Khí Nhà Kính & Phát Thải Carbon Scope 1-2-3",
+        "count": 48
+      }
+    ],
+    "S": [
+      {
+        "name": "SMETA - Tiêu Chuẩn Đạo Đức Kinh Doanh & Lao Động",
+        "count": 58
+      }
+    ],
+    "T": [
+      {
+        "name": "Tư Vấn Chứng Nhận Tiêu Chuẩn Quốc Tế ISO Trọn Gói",
+        "count": 115
+      },
+      {
+        "name": "Tư Vấn Tiêu Chuẩn Thực Phẩm HACCP / FSSC 22000",
+        "count": 70
+      },
+      {
+        "name": "Tính Toán Dấu Chân Carbon (Carbon Footprint)",
+        "count": 42
+      }
+    ],
+    "W": [
+      {
+        "name": "WRAP - Tiêu Chuẩn Trách Nhiệm Xã Hội Ngành Dệt May",
+        "count": 38
+      }
+    ]
+  },
+  "6.3": {
+    "A": [
+      {
+        "name": "AGV - Robot Tự Hành Vận Chuyển Hàng Nhà Xưởng",
+        "count": 65
+      },
+      {
+        "name": "AS/RS - Hệ Thống Kho Tự Động Thông Minh",
+        "count": 48
+      }
+    ],
+    "C": [
+      {
+        "name": "Chuyển Đổi Số Nhà Máy & Smart Factory 4.0",
+        "count": 85
+      },
+      {
+        "name": "Cảm Biến IoT Giám Sát Nhiệt Độ, Áp Suất, Rung Động",
+        "count": 72
+      }
+    ],
+    "D": [
+      {
+        "name": "Điện Mặt Trời Mái Nhà Xưởng (Rooftop Solar 1MWp+)",
+        "count": 98
+      },
+      {
+        "name": "Đồng Hồ Đo Đếm Năng Lượng Thông Minh (Smart Metering)",
+        "count": 55
+      }
+    ],
+    "E": [
+      {
+        "name": "ERP - Hệ Thống Hoạch Định Nguồn Lực Doanh Nghiệp",
+        "count": 78
+      },
+      {
+        "name": "ESG - Giải Pháp Giảm Phát Thải & Bền Vững",
+        "count": 64
+      }
+    ],
+    "M": [
+      {
+        "name": "MES - Phần Mềm Quản Lý Thực Thi Sản Xuất",
+        "count": 80
+      },
+      {
+        "name": "Mô Phỏng Nhà Máy Số (Digital Twin)",
+        "count": 35
+      }
+    ],
+    "P": [
+      {
+        "name": "Phần Mềm Quản Trị Bảo Trì Máy Móc (CMMS)",
+        "count": 52
+      },
+      {
+        "name": "Pin Lưu Trữ Năng Lượng BESS Công Nghiệp",
+        "count": 30
+      }
+    ],
+    "R": [
+      {
+        "name": "Robot Công Nghiệp Tự Động Hóa & Tay Gắp Robotic",
+        "count": 70
+      },
+      {
+        "name": "Rooftop Solar PPA - Mô Hình Không Đồng Vốn",
+        "count": 45
+      }
+    ],
+    "S": [
+      {
+        "name": "SCADA - Hệ Thống Giám Sát Thu Thập Dữ Liệu Thời Gian Thực",
+        "count": 75
+      }
+    ],
+    "T": [
+      {
+        "name": "Tự Động Hóa Dây Chuyền & Trí Tuệ Nhân Tạo (AI Vision)",
+        "count": 68
+      }
+    ]
+  }
+}

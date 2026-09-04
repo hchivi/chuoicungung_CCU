@@ -1,0 +1,110 @@
+[
+  {
+    "id": "d-01",
+    "title": "Cung cấp 5.000 bộ đồng phục & giày bảo hộ lao động",
+    "company": "Samsung Electronics",
+    "province": "Bắc Ninh",
+    "budget": "1.2 - 1.5 tỷ VND",
+    "deadline": "Còn 25 ngày",
+    "category": "Bảo hộ & May mặc"
+  },
+  {
+    "id": "d-02",
+    "title": "Tìm nhà cung cấp bao bì carton 3-5 lớp in Flexo định kỳ",
+    "company": "Nestlé Việt Nam",
+    "province": "Đồng Nai",
+    "budget": "800 triệu - 1.2 tỷ VND/tháng",
+    "deadline": "Còn 18 ngày",
+    "category": "Bao bì & In ấn"
+  },
+  {
+    "id": "d-03",
+    "title": "Vận chuyển quốc tế đường biển 50 container/tháng",
+    "company": "Vinamilk Bình Dương",
+    "province": "Bình Dương",
+    "budget": "3 - 5 tỷ VND/quý",
+    "deadline": "Còn 12 ngày",
+    "category": "Logistics"
+  },
+  {
+    "id": "d-04",
+    "title": "Hệ thống xử lý nước thải công nghiệp 1.000 m³/ngày",
+    "company": "THACO Chu Lai",
+    "province": "Quảng Nam",
+    "budget": "7 - 10 tỷ VND",
+    "deadline": "Còn 30 ngày",
+    "category": "Môi trường & Nước thải"
+  },
+  {
+    "id": "d-05",
+    "title": "Gia công linh kiện dập khuôn kim loại chính xác",
+    "company": "Intel Products Vietnam",
+    "province": "TP. Hồ Chí Minh",
+    "budget": "2 - 4 tỷ VND",
+    "deadline": "Còn 40 ngày",
+    "category": "Cơ khí chính xác"
+  },
+  {
+    "id": "d-06",
+    "title": "Lắp đặt hệ thống PCCC tự động Sprinkler xưởng 15.000m²",
+    "company": "Amkor Technology",
+    "province": "Bắc Ninh",
+    "budget": "4 - 6 tỷ VND",
+    "deadline": "Còn 15 ngày",
+    "category": "MEP & PCCC"
+  },
+  {
+    "id": "d-07",
+    "title": "Thuê kho ngoại quan & dịch vụ thủ tục hải quan",
+    "company": "Foxconn Vietnam",
+    "province": "Bắc Giang",
+    "budget": "1.5 - 2 tỷ VND",
+    "deadline": "Còn 22 ngày",
+    "category": "Kho bãi & Hải quan"
+  },
+  {
+    "id": "d-08",
+    "title": "Thi công lắp đặt trạm biến áp 2x2500kVA",
+    "company": "Pegatron Vietnam",
+    "province": "Hải Phòng",
+    "budget": "3.5 - 4.5 tỷ VND",
+    "deadline": "Còn 19 ngày",
+    "category": "Điện trung thế"
+  },
+  {
+    "id": "d-09",
+    "title": "Cung cấp hạt nhựa nguyên sinh PP, PE 500 tấn/tháng",
+    "company": "Lego Manufacturing",
+    "province": "Bình Dương",
+    "budget": "15 - 20 tỷ VND",
+    "deadline": "Còn 35 ngày",
+    "category": "Nguyên vật liệu"
+  },
+  {
+    "id": "d-10",
+    "title": "Bảo trì định kỳ hệ thống máy nén khí & chiller",
+    "company": "Bosch Vietnam",
+    "province": "Đồng Nai",
+    "budget": "600 - 900 triệu VND",
+    "deadline": "Còn 14 ngày",
+    "category": "Bảo trì thiết bị"
+  },
+  {
+    "id": "d-11",
+    "title": "Suất ăn công nghiệp 3.000 phần/ngày đạt chuẩn ISO 22000",
+    "company": "VinFast",
+    "province": "Hải Phòng",
+    "budget": "2.5 - 3 tỷ VND/tháng",
+    "deadline": "Còn 28 ngày",
+    "category": "Hậu cần & Suất ăn"
+  },
+  {
+    "id": "d-12",
+    "title": "Triển khai phần mềm MES & Quản trị kho thông minh",
+    "company": "Hyosung Vietnam",
+    "province": "Đồng Nai",
+    "budget": "2.5 - 4 tỷ VND",
+    "deadline": "Còn 32 ngày",
+    "category": "Chuyển đổi số"
+  }
+]
