@@ -183,33 +183,75 @@ export default function DemandsPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5 STATS CARDS & FAST-RFQ BOX (Cleanly spaced container) */}
+      {/* 2. REALTIME MACRO METRIC DASHBOARD (Đặt CHÍNH GIỮA LINE ở trên)          */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-6 sm:space-y-8">
-        
-        {/* 5 Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
-            <span className="text-xl font-black text-[#0052cc] font-mono">1.256+</span>
-            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Open Demands' : 'Nhu cầu đang mở'}</p>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
-            <span className="text-xl font-black text-emerald-600 font-mono">368</span>
-            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Posting Plants/Corps' : 'Nhà máy / DN đăng tin'}</p>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
-            <span className="text-xl font-black text-amber-600 font-mono">28</span>
-            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Sectors' : 'Nhóm ngành sản xuất'}</p>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
-            <span className="text-xl font-black text-purple-600 font-mono">356,8 Tỷ</span>
-            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Total Est. Value' : 'Tổng giá trị đơn hàng'}</p>
-          </div>
-          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition col-span-2 sm:col-span-1">
-            <span className="text-xl font-black text-sky-600 font-mono">4.875+</span>
-            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Bidding Suppliers' : 'Lượt NCC quan tâm'}</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-12 sm:-mt-14 lg:-mt-16">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+            
+            {/* Metric 1 */}
+            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
+                <ShoppingBag className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">1.256+</div>
+                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Open Demands' : 'Nhu cầu đang mở'}</p>
+              </div>
+            </div>
+
+            {/* Metric 2 */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Building2 className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">368</div>
+                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Posting Plants/Corps' : 'Nhà máy / DN đăng tin'}</p>
+              </div>
+            </div>
+
+            {/* Metric 3 */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Layers className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">28</div>
+                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Manufacturing Sectors' : 'Nhóm ngành sản xuất'}</p>
+              </div>
+            </div>
+
+            {/* Metric 4 */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">356,8 Tỷ</div>
+                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Total Order Value' : 'Tổng giá trị đơn hàng'}</p>
+              </div>
+            </div>
+
+            {/* Metric 5 */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6 col-span-2 sm:col-span-1">
+              <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Users className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">4.875+</div>
+                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Supplier Interests' : 'Lượt NCC quan tâm'}</p>
+              </div>
+            </div>
+
           </div>
         </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. FAST-RFQ BOX & MAIN CONTENT                                            */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 space-y-6 sm:space-y-8">
 
         {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
         <div className="rounded-3xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] text-white p-5 sm:p-7 shadow-xl shadow-blue-900/20 border-2 border-blue-400/40 relative overflow-hidden">
