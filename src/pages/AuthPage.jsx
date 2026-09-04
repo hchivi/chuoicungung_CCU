@@ -155,7 +155,7 @@ export default function AuthPage() {
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-tr from-blue-400/20 via-indigo-300/10 to-transparent rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+      <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
         
         {/* Left Intro Banner (B2G FDI Infrastructure) */}
         <div className="lg:col-span-5 space-y-6 hidden lg:block">
@@ -215,7 +215,7 @@ export default function AuthPage() {
           </div>
 
           {/* Toggle Switch */}
-          <div className="relative bg-slate-100 p-1 rounded-2xl flex items-center text-xs font-bold font-heading">
+          <div className="max-w-md mx-auto bg-slate-100 p-1.5 rounded-2xl flex items-center text-xs font-bold font-heading">
             <button
               type="button"
               onClick={() => { setTab('login'); navigate('/dang-nhap'); }}
@@ -245,45 +245,45 @@ export default function AuthPage() {
 
           {/* SSO Options */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 font-heading">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 font-heading px-1">
               <span>Đăng nhập nhanh qua hệ thống quản trị:</span>
               <span className="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-mono font-bold">
                 ✓ KYC Cấp 2
               </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-xs">
+            <div className="grid grid-cols-3 gap-2.5 text-xs">
               <button
                 type="button"
                 onClick={() => handleSSOLogin('Odoo ERP')}
-                className="p-2.5 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/50 bg-slate-50 text-slate-800 font-bold transition flex flex-col items-center justify-center text-center gap-1 group cursor-pointer"
+                className="p-2.5 rounded-xl border border-slate-200 hover:border-purple-300 hover:bg-purple-50/60 bg-slate-50/80 text-slate-800 font-bold transition flex items-center justify-center space-x-2 group cursor-pointer"
               >
-                <div className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center text-[10px] font-black">
+                <div className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs font-black shrink-0">
                   O
                 </div>
-                <span className="text-[10.5px] font-heading leading-tight group-hover:text-purple-700">Odoo ERP</span>
+                <span className="text-[11px] font-heading font-black group-hover:text-purple-700 truncate">Odoo ERP</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleSSOLogin('BNI Connect')}
-                className="p-2.5 rounded-xl border border-slate-200 hover:border-rose-300 hover:bg-rose-50/50 bg-slate-50 text-slate-800 font-bold transition flex flex-col items-center justify-center text-center gap-1 group cursor-pointer"
+                className="p-2.5 rounded-xl border border-slate-200 hover:border-rose-300 hover:bg-rose-50/60 bg-slate-50/80 text-slate-800 font-bold transition flex items-center justify-center space-x-2 group cursor-pointer"
               >
-                <div className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center text-[10px] font-black">
+                <div className="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center text-xs font-black shrink-0">
                   BNI
                 </div>
-                <span className="text-[10.5px] font-heading leading-tight group-hover:text-rose-700">BNI Connect</span>
+                <span className="text-[11px] font-heading font-black group-hover:text-rose-700 truncate">BNI Connect</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleSSOLogin('Microsoft Azure AD')}
-                className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 bg-slate-50 text-slate-800 font-bold transition flex flex-col items-center justify-center text-center gap-1 group cursor-pointer"
+                className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/60 bg-slate-50/80 text-slate-800 font-bold transition flex items-center justify-center space-x-2 group cursor-pointer"
               >
-                <div className="w-6 h-6 rounded-lg bg-[#0078D4] text-white flex items-center justify-center text-[10px] font-black">
+                <div className="w-6 h-6 rounded-lg bg-[#0078D4] text-white flex items-center justify-center text-xs font-black shrink-0">
                   MS
                 </div>
-                <span className="text-[10.5px] font-heading leading-tight group-hover:text-[#0078D4]">Azure AD</span>
+                <span className="text-[11px] font-heading font-black group-hover:text-[#0078D4] truncate">Azure AD</span>
               </button>
             </div>
 
@@ -301,12 +301,12 @@ export default function AuthPage() {
                 Chọn tư cách tham gia hệ sinh thái:
               </label>
               
-              <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                 {[
-                  { role: 'Nhà máy / Chủ đầu tư', title: 'Nhà máy / Chủ đầu tư', desc: 'FDI, Nhà máy KCN', icon: Factory, color: 'text-blue-600' },
-                  { role: 'Nhà cung ứng', title: 'Nhà cung ứng 18 Pha', desc: 'Xưởng, Vật tư, M&E', icon: Layers, color: 'text-emerald-600' },
-                  { role: 'Hội / Hiệp hội', title: 'Hội / Hiệp hội', desc: 'Tổ chức xúc tiến B2B', icon: Users, color: 'text-indigo-600' },
-                  { role: 'Khu công nghiệp', title: 'Khu công nghiệp', desc: 'Chủ đầu tư quỹ đất', icon: MapPin, color: 'text-amber-600' }
+                  { role: 'Nhà máy / Chủ đầu tư', title: 'Nhà máy FDI', desc: 'Chủ đầu tư KCN', icon: Factory, color: 'text-blue-600' },
+                  { role: 'Nhà cung ứng', title: 'Nhà cung ứng', desc: '18 Pha kỹ thuật', icon: Layers, color: 'text-emerald-600' },
+                  { role: 'Hội / Hiệp hội', title: 'Hội / Hiệp hội', desc: 'Xúc tiến B2B', icon: Users, color: 'text-indigo-600' },
+                  { role: 'Khu công nghiệp', title: 'Khu công nghiệp', desc: 'Quỹ đất KCN', icon: MapPin, color: 'text-amber-600' }
                 ].map((item) => {
                   const IconComponent = item.icon;
                   const isSelected = formData.role === item.role;
@@ -315,23 +315,23 @@ export default function AuthPage() {
                       key={item.role}
                       type="button"
                       onClick={() => setFormData({ ...formData, role: item.role })}
-                      className={`p-3 rounded-2xl border text-left transition flex items-start space-x-2.5 cursor-pointer ${
+                      className={`p-2.5 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${
                         isSelected
                           ? 'bg-blue-50/90 border-[#0052cc] ring-2 ring-blue-500/20 shadow-xs'
                           : 'bg-slate-50/80 border-slate-200 text-slate-600 hover:bg-slate-100/80'
                       }`}
                     >
-                      <div className={`p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs shrink-0 ${item.color}`}>
-                        <IconComponent className="w-4 h-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className={`text-xs font-bold font-heading truncate ${isSelected ? 'text-[#0052cc]' : 'text-slate-800'}`}>
+                      <div className="flex items-center space-x-1.5">
+                        <div className={`p-1 rounded-lg bg-white border border-slate-200/80 shadow-2xs shrink-0 ${item.color}`}>
+                          <IconComponent className="w-3.5 h-3.5" />
+                        </div>
+                        <p className={`text-[11.5px] font-bold font-heading truncate ${isSelected ? 'text-[#0052cc]' : 'text-slate-800'}`}>
                           {item.title}
                         </p>
-                        <p className="text-[10px] text-slate-500 truncate mt-0.5">
-                          {item.desc}
-                        </p>
                       </div>
+                      <p className="text-[10px] text-slate-500 truncate mt-1">
+                        {item.desc}
+                      </p>
                     </button>
                   );
                 })}
@@ -344,7 +344,7 @@ export default function AuthPage() {
             
             {/* Auto-fill MST */}
             {tab === 'register' && (
-              <div className="space-y-3 p-3.5 bg-blue-50/40 rounded-2xl border border-blue-100">
+              <div className="space-y-2.5 p-3.5 bg-blue-50/40 rounded-2xl border border-blue-100">
                 <div className="flex items-center justify-between">
                   <label className="font-bold text-slate-800 block text-xs font-heading">
                     Nhập Mã Số Thuế Doanh Nghiệp (MST) *
@@ -380,7 +380,7 @@ export default function AuthPage() {
                 </div>
 
                 {taxLookupSuccess && (
-                  <div className="space-y-2 pt-1 text-[11px] animate-in fade-in">
+                  <div className="space-y-1.5 pt-1 text-[11px] animate-in fade-in bg-white p-2.5 rounded-xl border border-blue-100">
                     <div>
                       <span className="font-bold text-slate-700">Tên Doanh nghiệp: </span>
                       <strong className="text-slate-900">{formData.companyName}</strong>
@@ -416,7 +416,7 @@ export default function AuthPage() {
                   placeholder="Email doanh nghiệp hoặc SĐT (VD: hr@samsung.vn)"
                   value={formData.emailOrPhone}
                   onChange={(e) => setFormData({ ...formData, emailOrPhone: e.target.value })}
-                  className={`w-full pl-3.5 pr-10 py-3 bg-slate-50 border rounded-xl focus:outline-none focus:bg-white text-xs sm:text-sm transition ${
+                  className={`w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border rounded-xl focus:outline-none focus:bg-white text-xs sm:text-sm transition ${
                     isCorporateEmail(formData.emailOrPhone)
                       ? 'border-emerald-500 ring-1 ring-emerald-500/20'
                       : 'border-slate-200 focus:ring-2 focus:ring-[#0052cc]'
@@ -459,7 +459,7 @@ export default function AuthPage() {
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="w-full pl-3.5 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052cc] focus:bg-white text-xs sm:text-sm transition"
+                  className="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0052cc] focus:bg-white text-xs sm:text-sm transition"
                 />
                 <button
                   type="button"
