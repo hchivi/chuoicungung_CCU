@@ -213,7 +213,7 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
       {/* ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 relative z-20">
         <div className="rounded-3xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] text-white p-5 sm:p-7 shadow-xl shadow-blue-900/20 border-2 border-blue-400/40 relative overflow-hidden">
           
           <div className="relative z-10 space-y-4">
