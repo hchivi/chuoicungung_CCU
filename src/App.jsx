@@ -218,6 +218,12 @@ export default function App() {
                 
                 <Route path="/khu-cong-nghiep" element={<IndustrialParksPage />} />
                 <Route path="/khu-cong-nghiep/:id" element={<IndustrialParkDetailPage />} />
+                <Route path="/ban-do-khu-cong-nghiep-viet-nam" element={<IndustrialParksPage />} />
+                <Route path="/ban-do-khu-cong-nghiep-viet-nam/:id" element={<IndustrialParkDetailPage />} />
+                <Route path="/industrial-zones-vietnam" element={<IndustrialParksPage />} />
+                <Route path="/industrial-zones-vietnam/:id" element={<IndustrialParkDetailPage />} />
+                <Route path="/ban-do-quy-hoach-kcn" element={<IndustrialParksPage />} />
+                <Route path="/quy-hoach-kcn" element={<IndustrialParksPage />} />
                 
                 <Route path="/nha-may" element={<FactoriesPage />} />
                 <Route path="/nha-may/:id" element={<FactoryDetailPage />} />
