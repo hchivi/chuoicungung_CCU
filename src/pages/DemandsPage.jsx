@@ -108,7 +108,7 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-24 sm:pb-28 lg:pb-36">
 
         {/* Right Half Sourcing Photo with Smooth Gradient Blend */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
@@ -185,7 +185,7 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 2. REALTIME MACRO METRIC DASHBOARD (Đặt CHÍNH GIỮA LINE ở trên)          */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-12 sm:-mt-14 lg:-mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-10 sm:-mt-12 lg:-mt-14">
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
