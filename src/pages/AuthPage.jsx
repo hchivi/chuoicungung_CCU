@@ -197,19 +197,23 @@ export default function AuthPage() {
         {/* Right Form Card */}
         <div className="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-9 shadow-2xl border border-slate-200/90 space-y-5">
           
-          <div className="text-center space-y-2">
+          <div className="flex flex-col items-center justify-center text-center space-y-3 border-b border-slate-100 pb-5">
             <div className="flex justify-center">
               <BrandLogo variant="light" size="md" />
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5 flex flex-col items-center max-w-lg mx-auto">
+              <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blue-50 text-[#0052cc] text-[11px] font-mono font-bold tracking-wide border border-blue-100 shadow-2xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#0052cc]" />
+                <span>BẢO TRỢ BỞI VCCI & HIỆP HỘI B2B</span>
+              </div>
               <h2 className="text-xl sm:text-2xl font-black text-[#072348] font-heading tracking-tight">
                 Cổng Định Danh Chuỗi Cung Ứng Quốc Gia
               </h2>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
                 {tab === 'login' 
-                  ? 'Đăng nhập bảo mật vào mạng lưới 620+ nhà máy FDI' 
-                  : 'Đăng ký nhanh tài khoản doanh nghiệp B2B xác thực'}
+                  ? 'Đăng nhập vào mạng lưới 620+ nhà máy FDI & 18 pha cung ứng' 
+                  : 'Đăng ký nhanh tài khoản doanh nghiệp B2B xác thực trong 10 giây'}
               </p>
             </div>
           </div>

@@ -176,21 +176,21 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
           ✕
         </button>
 
-        {/* 1. Header & Brand Title */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 border-b border-slate-100 pb-4 pr-8">
-          <div className="flex items-center space-x-3">
+        {/* 1. Header & Brand Title (Centered as requested) */}
+        <div className="flex flex-col items-center justify-center text-center space-y-3 border-b border-slate-100 pb-5">
+          <div className="flex justify-center">
             <BrandLogo variant="light" size="md" />
           </div>
 
-          <div className="text-center sm:text-right space-y-1">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-[#0052cc] text-[10.5px] font-mono font-bold tracking-wide border border-blue-100">
+          <div className="space-y-1.5 flex flex-col items-center max-w-lg mx-auto">
+            <div className="inline-flex items-center space-x-1.5 px-3.5 py-1 rounded-full bg-blue-50 text-[#0052cc] text-[11px] font-mono font-bold tracking-wide border border-blue-100 shadow-2xs">
               <ShieldCheck className="w-3.5 h-3.5 text-[#0052cc]" />
               <span>BẢO TRỢ BỞI VCCI & HIỆP HỘI B2B</span>
             </div>
-            <h2 className="text-lg sm:text-xl font-black text-[#072348] font-heading tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-[#072348] font-heading tracking-tight">
               Cổng Định Danh Chuỗi Cung Ứng Quốc Gia
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-slate-500 font-medium leading-relaxed">
               {tab === 'login' 
                 ? 'Đăng nhập vào mạng lưới 620+ nhà máy FDI & 18 pha cung ứng' 
                 : 'Đăng ký nhanh tài khoản doanh nghiệp B2B xác thực trong 10 giây'}
