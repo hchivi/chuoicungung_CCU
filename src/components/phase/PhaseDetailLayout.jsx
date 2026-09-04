@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   CheckCircle2, ArrowRight, Download, FileText, Building2, 
   Factory, Users, ShieldCheck, MapPin, Sparkles, ChevronRight,
@@ -7,33 +7,22 @@ import {
   Send, Lock, RotateCcw, Award, CheckSquare, Square, Layers,
   Compass, Wrench, FileCheck, ExternalLink, Shield
 } from 'lucide-react';
-import { stagesData } from '../data/mockData';
-import { stageSuppliers } from '../data/stageSuppliersData';
-import { useLanguage } from '../contexts/LanguageContext';
-import StageSupplierCard from '../components/stage/StageSupplierCard';
-import StageRequestQuoteModal from '../components/stage/StageRequestQuoteModal';
+import { stagesData } from '../../data/mockData';
+import { stageSuppliers } from '../../data/stageSuppliersData';
+import { useLanguage } from '../../contexts/LanguageContext';
+import StageSupplierCard from '../stage/StageSupplierCard';
+import StageRequestQuoteModal from '../stage/StageRequestQuoteModal';
 
-export default function PhaseDetailPage() {
+export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle = null }) {
   const { t, lang } = useLanguage();
-  const { id } = useParams();
   const navigate = useNavigate();
-
-  // Parse Phase ID (e.g. "1.1", "1-1-khao-sat-thue-dat", "2.2", "GD-1.1" -> "1.1")
-  const parsedPhaseId = useMemo(() => {
-    if (!id) return "1.1";
-    const dotMatch = id.match(/(\d\.\d)/);
-    if (dotMatch) return dotMatch[1];
-    const dashMatch = id.match(/(\d)-(\d)/);
-    if (dashMatch) return `${dashMatch[1]}.${dashMatch[2]}`;
-    return "1.1";
-  }, [id]);
 
   // Find current stage & phase
   let currentStage = stagesData[0];
   let currentPhase = stagesData[0].phases[0];
 
   for (const s of stagesData) {
-    const found = s.phases.find(p => p.id === parsedPhaseId);
+    const found = s.phases.find(p => p.id === phaseId);
     if (found) {
       currentStage = s;
       currentPhase = found;
@@ -56,7 +45,7 @@ export default function PhaseDetailPage() {
   // Filters State
   const [filters, setFilters] = useState({
     search: '',
-    region: 'all', // all, north, central, south
+    region: 'all',
     kycTiers: [],
     erpOnly: false,
     standards: []
@@ -67,7 +56,6 @@ export default function PhaseDetailPage() {
   const [selectedSupplierForRfq, setSelectedSupplierForRfq] = useState(null);
   const [isPrivateBiddingMode, setIsPrivateBiddingMode] = useState(false);
 
-  // Reset filters when phase changes
   useEffect(() => {
     setFilters({
       search: '',
@@ -76,9 +64,8 @@ export default function PhaseDetailPage() {
       erpOnly: false,
       standards: []
     });
-  }, [parsedPhaseId]);
+  }, [phaseId]);
 
-  // Loading transition
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => setIsLoading(false), 180);
@@ -105,7 +92,6 @@ export default function PhaseDetailPage() {
   const phaseSuppliers = useMemo(() => {
     let list = stageSuppliers.filter(s => s.phaseId === currentPhase.id || (s.stageId === currentStage.id && !s.phaseId));
     
-    // If fewer than 2 in this exact phase, include related suppliers from this stage
     if (list.length < 2) {
       list = stageSuppliers.filter(s => s.stageId === currentStage.id);
     }
@@ -288,7 +274,6 @@ export default function PhaseDetailPage() {
     })));
   }, []);
 
-  // Find next and prev phases
   const currentIndex = all18Phases.findIndex(p => p.id === currentPhase.id);
   const prevPhase = currentIndex > 0 ? all18Phases[currentIndex - 1] : null;
   const nextPhase = currentIndex < all18Phases.length - 1 ? all18Phases[currentIndex + 1] : null;
@@ -313,20 +298,17 @@ export default function PhaseDetailPage() {
         </div>
       </div>
 
-      {/* 2. BLOCK 1: HERO SECTION (MẶT TIỀN CỦA PHA - BRIGHT WHITE CARD, CRISP FACTORY PHOTO, REALTIME METRICS) */}
+      {/* 2. BLOCK 1: HERO SECTION */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden">
           
-          {/* Right-Side High-Res Factory Photo */}
           <div 
             className="absolute right-0 top-0 bottom-0 w-full sm:w-[58%] lg:w-[55%] bg-cover bg-center"
             style={{ backgroundImage: `url('${theme.heroImg}')` }}
           ></div>
 
-          {/* Left Gradient Fade */}
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-[42%] sm:via-white/90 sm:via-[45%] to-transparent pointer-events-none"></div>
 
-          {/* Left Content */}
           <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl space-y-5">
             
             <div className="flex items-center space-x-2.5">
@@ -346,7 +328,7 @@ export default function PhaseDetailPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-              {currentPhase.summary}
+              {customHeroSubtitle || currentPhase.summary}
             </p>
 
             {/* 3 Realtime Metric Highlights */}
@@ -401,7 +383,7 @@ export default function PhaseDetailPage() {
 
           </div>
 
-          {/* Bottom 3-Phase Switcher of this Stage */}
+          {/* Bottom 3-Phase Switcher */}
           <div className="relative z-10 border-t border-slate-100 bg-white/85 backdrop-blur-md px-4 sm:px-8 py-3 overflow-x-auto">
             <div className="flex items-center space-x-2 sm:space-x-3 min-w-max">
               <span className="text-xs font-bold text-slate-400 uppercase font-heading mr-2">
@@ -438,7 +420,7 @@ export default function PhaseDetailPage() {
         </div>
       </div>
 
-      {/* 3. BLOCK 2: TIÊU CHUẨN & QUY CHUẨN PHÁP LÝ (COMPLIANCE BOX) */}
+      {/* 3. BLOCK 2: COMPLIANCE BOX */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-6 sm:p-7 text-white shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
@@ -451,7 +433,6 @@ export default function PhaseDetailPage() {
             <p className="text-xs text-slate-300 leading-relaxed">
               Mọi quy trình và hồ sơ kỹ thuật trong Pha {currentPhase.id} đều tuân thủ nghiêm ngặt hệ thống pháp luật Việt Nam và các tiêu chuẩn kiểm định quốc tế.
             </p>
-            {/* Tags */}
             <div className="flex flex-wrap gap-2 pt-1">
               {complianceData.tags.map((tag, tIdx) => (
                 <span 
@@ -476,7 +457,7 @@ export default function PhaseDetailPage() {
         </div>
       </section>
 
-      {/* 4. BLOCK 3: PHÂN LUỒNG MATCHMAKING CORE (2 CỘT 3:7) */}
+      {/* 4. BLOCK 3: MATCHMAKING CORE (2 CỘT 3:7) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           
@@ -526,7 +507,7 @@ export default function PhaseDetailPage() {
                 />
               </div>
 
-              {/* Vị trí địa lý (Bắc - Trung - Nam) */}
+              {/* Vị trí địa lý */}
               <div className="space-y-2 pt-2 border-t border-slate-100">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider font-heading flex items-center space-x-1.5">
                   <MapPin className="w-3.5 h-3.5 text-blue-600" />
@@ -706,7 +687,7 @@ export default function PhaseDetailPage() {
         </div>
       </section>
 
-      {/* 5. BLOCK 4: PRIVATE BIDDING (KHỐI ĐĂNG NHU CẦU ẨN DANH) */}
+      {/* 5. BLOCK 4: PRIVATE BIDDING */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
           
@@ -740,7 +721,7 @@ export default function PhaseDetailPage() {
         </div>
       </section>
 
-      {/* 6. BLOCK 5: RELATED PHASES (ĐIỀU HƯỚNG 18 PHA LIỀN KỀ) */}
+      {/* 6. BLOCK 5: RELATED PHASES */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -762,7 +743,6 @@ export default function PhaseDetailPage() {
           </Link>
         </div>
 
-        {/* Phase Navigator Horizontal Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {prevPhase && (
             <Link

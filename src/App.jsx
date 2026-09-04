@@ -10,6 +10,26 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const SixStagesMapPage = lazy(() => import('./pages/SixStagesMapPage'));
 const StageDetailPage = lazy(() => import('./pages/StageDetailPage'));
 const PhaseDetailPage = lazy(() => import('./pages/PhaseDetailPage'));
+
+// Dedicated Standalone Pages for all 18 Phases
+const Phase1_1Page = lazy(() => import('./pages/phases/Phase1_1Page'));
+const Phase1_2Page = lazy(() => import('./pages/phases/Phase1_2Page'));
+const Phase1_3Page = lazy(() => import('./pages/phases/Phase1_3Page'));
+const Phase2_1Page = lazy(() => import('./pages/phases/Phase2_1Page'));
+const Phase2_2Page = lazy(() => import('./pages/phases/Phase2_2Page'));
+const Phase2_3Page = lazy(() => import('./pages/phases/Phase2_3Page'));
+const Phase3_1Page = lazy(() => import('./pages/phases/Phase3_1Page'));
+const Phase3_2Page = lazy(() => import('./pages/phases/Phase3_2Page'));
+const Phase3_3Page = lazy(() => import('./pages/phases/Phase3_3Page'));
+const Phase4_1Page = lazy(() => import('./pages/phases/Phase4_1Page'));
+const Phase4_2Page = lazy(() => import('./pages/phases/Phase4_2Page'));
+const Phase4_3Page = lazy(() => import('./pages/phases/Phase4_3Page'));
+const Phase5_1Page = lazy(() => import('./pages/phases/Phase5_1Page'));
+const Phase5_2Page = lazy(() => import('./pages/phases/Phase5_2Page'));
+const Phase5_3Page = lazy(() => import('./pages/phases/Phase5_3Page'));
+const Phase6_1Page = lazy(() => import('./pages/phases/Phase6_1Page'));
+const Phase6_2Page = lazy(() => import('./pages/phases/Phase6_2Page'));
+const Phase6_3Page = lazy(() => import('./pages/phases/Phase6_3Page'));
 const EnterprisesPage = lazy(() => import('./pages/EnterprisesPage'));
 const EnterpriseDetailPage = lazy(() => import('./pages/EnterpriseDetailPage'));
 const IndustrialParksPage = lazy(() => import('./pages/IndustrialParksPage'));
@@ -134,10 +154,59 @@ export default function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/ban-do-6-giai-doan" element={<SixStagesMapPage />} />
                 <Route path="/giai-doan/:id" element={<StageDetailPage />} />
+                
+                {/* 18 Dedicated Phase Routes */}
+                <Route path="/pha/1.1" element={<Phase1_1Page />} />
+                <Route path="/pha/1-1" element={<Phase1_1Page />} />
+                <Route path="/pha/1-1-khao-sat-thue-dat-khu-cong-nghiep" element={<Phase1_1Page />} />
+                <Route path="/pha/1.2" element={<Phase1_2Page />} />
+                <Route path="/pha/1-2" element={<Phase1_2Page />} />
+                <Route path="/pha/1-2-phap-ly-thu-tuc-dau-tu" element={<Phase1_2Page />} />
+                <Route path="/pha/1.3" element={<Phase1_3Page />} />
+                <Route path="/pha/1-3" element={<Phase1_3Page />} />
+                <Route path="/pha/1-3-chon-dia-diem-mat-bang" element={<Phase1_3Page />} />
+
+                <Route path="/pha/2.1" element={<Phase2_1Page />} />
+                <Route path="/pha/2-1" element={<Phase2_1Page />} />
+                <Route path="/pha/2.2" element={<Phase2_2Page />} />
+                <Route path="/pha/2-2" element={<Phase2_2Page />} />
+                <Route path="/pha/2.3" element={<Phase2_3Page />} />
+                <Route path="/pha/2-3" element={<Phase2_3Page />} />
+
+                <Route path="/pha/3.1" element={<Phase3_1Page />} />
+                <Route path="/pha/3-1" element={<Phase3_1Page />} />
+                <Route path="/pha/3.2" element={<Phase3_2Page />} />
+                <Route path="/pha/3-2" element={<Phase3_2Page />} />
+                <Route path="/pha/3.3" element={<Phase3_3Page />} />
+                <Route path="/pha/3-3" element={<Phase3_3Page />} />
+
+                <Route path="/pha/4.1" element={<Phase4_1Page />} />
+                <Route path="/pha/4-1" element={<Phase4_1Page />} />
+                <Route path="/pha/4.2" element={<Phase4_2Page />} />
+                <Route path="/pha/4-2" element={<Phase4_2Page />} />
+                <Route path="/pha/4.3" element={<Phase4_3Page />} />
+                <Route path="/pha/4-3" element={<Phase4_3Page />} />
+
+                <Route path="/pha/5.1" element={<Phase5_1Page />} />
+                <Route path="/pha/5-1" element={<Phase5_1Page />} />
+                <Route path="/pha/5.2" element={<Phase5_2Page />} />
+                <Route path="/pha/5-2" element={<Phase5_2Page />} />
+                <Route path="/pha/5.3" element={<Phase5_3Page />} />
+                <Route path="/pha/5-3" element={<Phase5_3Page />} />
+
+                <Route path="/pha/6.1" element={<Phase6_1Page />} />
+                <Route path="/pha/6-1" element={<Phase6_1Page />} />
+                <Route path="/pha/6.2" element={<Phase6_2Page />} />
+                <Route path="/pha/6-2" element={<Phase6_2Page />} />
+                <Route path="/pha/6.3" element={<Phase6_3Page />} />
+                <Route path="/pha/6-3" element={<Phase6_3Page />} />
                 <Route path="/pha/:id" element={<PhaseDetailPage />} />
                 
                 <Route path="/doanh-nghiep" element={<EnterprisesPage />} />
                 <Route path="/doanh-nghiep/:id" element={<EnterpriseDetailPage />} />
+                <Route path="/danh-ba-nha-cung-cap-xac-thuc" element={<EnterprisesPage />} />
+                <Route path="/danh-ba-nha-cung-cap-xac-thuc/:id" element={<EnterpriseDetailPage />} />
+                <Route path="/nha-cung-cap-xac-thuc" element={<EnterprisesPage />} />
                 <Route path="/nha-cung-ung" element={<EnterprisesPage />} />
                 <Route path="/nha-cung-ung/:id" element={<EnterpriseDetailPage />} />
                 <Route path="/nganh-nghe/:slug" element={<IndustryCategoryPage />} />
@@ -152,6 +221,10 @@ export default function App() {
                 
                 <Route path="/nha-may" element={<FactoriesPage />} />
                 <Route path="/nha-may/:id" element={<FactoryDetailPage />} />
+                <Route path="/mang-luoi-nha-may-fdi" element={<FactoriesPage />} />
+                <Route path="/mang-luoi-nha-may-fdi/:id" element={<FactoryDetailPage />} />
+                <Route path="/chu-dau-tu-kcn" element={<FactoriesPage />} />
+                <Route path="/chu-dau-tu-kcn/:id" element={<FactoryDetailPage />} />
                 
                 <Route path="/hoi-hiep-hoi" element={<AssociationsPage />} />
                 <Route path="/hoi-hiep-hoi/:id" element={<AssociationDetailPage />} />
@@ -159,6 +232,8 @@ export default function App() {
                 <Route path="/hoi-hiep-hoi-to-chuc/:id" element={<AssociationDetailPage />} />
                 <Route path="/hiep-hoi" element={<AssociationsPage />} />
                 <Route path="/hiep-hoi/:id" element={<AssociationDetailPage />} />
+                <Route path="/mang-luoi-hiep-hoi-bao-chung" element={<AssociationsPage />} />
+                <Route path="/mang-luoi-hiep-hoi-bao-chung/:id" element={<AssociationDetailPage />} />
                 
                 <Route path="/san-nhu-cau" element={<DemandsPage />} />
                 <Route path="/san-nhu-cau/:id" element={<DemandDetailPage />} />

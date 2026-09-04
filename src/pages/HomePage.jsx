@@ -107,7 +107,7 @@ export default function HomePage() {
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>Hệ sinh thái sản xuất</span>
             </div>
-            <div className="text-base font-black text-[#072348] font-heading">63 Tỉnh Thành VN</div>
+            <div className="text-base font-black text-[#072348] font-heading">34 Tỉnh Thành VN</div>
           </div>
         </div>
 

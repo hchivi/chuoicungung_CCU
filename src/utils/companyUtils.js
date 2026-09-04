@@ -330,3 +330,215 @@ export function getCategoryBannerImage(name = '') {
   // Default clean smart supplier visual
   return "/images/supplier_b2b_hero.jpg";
 }
+
+/**
+ * Determine enterprise KYC Level (Diamond, Gold, Silver)
+ */
+export function getEnterpriseKYCLevel(ent) {
+  if (!ent) {
+    return {
+      level: 'silver',
+      label: 'Bạc',
+      icon: '🥈',
+      tag: 'Xác thực MST & Pháp nhân',
+      color: '#64748b',
+      badgeBg: 'bg-slate-100 text-slate-700 border-slate-200',
+      glow: 'shadow-slate-500/10'
+    };
+  }
+
+  // Diamond check: BNI/HUBA/Hiệp hội endorsement, or VIP, or high vote
+  const isDiamond = ent.isDiamond || 
+                    ent.isVerifiedPartner || 
+                    (ent.association && ent.association.length > 0) || 
+                    (ent.rating && ent.rating >= 4.8) || 
+                    (ent.baseVotes && ent.baseVotes > 80) ||
+                    /bni|huba|vcci|hamex|hawa|vinacas|vpas|vpa/i.test(ent.notes || ent.description || ent.name || '');
+
+  if (isDiamond) {
+    return {
+      level: 'diamond',
+      label: 'Kim Cương',
+      icon: '💎',
+      tag: 'Bảo chứng BNI / HUBA / Hiệp hội',
+      color: '#0284c7',
+      badgeBg: 'bg-gradient-to-r from-sky-500/10 via-blue-500/15 to-indigo-500/10 text-sky-700 border-sky-300 font-black',
+      glow: 'shadow-sky-500/20 shadow-md ring-1 ring-sky-400/40'
+    };
+  }
+
+  // Gold check: Factory inspected, ISO certified, or active production site
+  const isGold = ent.isGold || 
+                 ent.hasFactory || 
+                 (ent.rating && ent.rating >= 4.2) || 
+                 (ent.baseVotes && ent.baseVotes > 30) ||
+                 /iso|fda|ce|haccp|nha xuong|nha may|khu cong nghiep|kcn|fdi/i.test(ent.address || ent.description || ent.category || '');
+
+  if (isGold) {
+    return {
+      level: 'gold',
+      label: 'Vàng',
+      icon: '🥇',
+      tag: 'Xác thực Nhà xưởng & Thực địa',
+      color: '#d97706',
+      badgeBg: 'bg-gradient-to-r from-amber-500/10 to-yellow-500/15 text-amber-800 border-amber-300 font-bold',
+      glow: 'shadow-amber-500/15 shadow-sm ring-1 ring-amber-400/30'
+    };
+  }
+
+  return {
+    level: 'silver',
+    label: 'Bạc',
+    icon: '🥈',
+    tag: 'Xác thực Pháp nhân & MST',
+    color: '#475569',
+    badgeBg: 'bg-slate-100 text-slate-700 border-slate-200 font-medium',
+    glow: 'shadow-slate-400/10'
+  };
+}
+
+/**
+ * Get enterprise phone from data or generate a deterministic masked phone
+ */
+export function getEnterprisePhone(ent) {
+  if (!ent) return '090 ••• 123';
+  const raw = ent.phone || ent.hotline || ent.tel || ent.mobile || ent.contactPhone;
+  if (raw && typeof raw === 'string' && raw.trim() && raw.trim() !== 'null' && raw.trim() !== 'undefined') {
+    return raw.trim();
+  }
+  // Deterministic seed based on enterprise ID / Tax code / Name
+  const seedStr = String(ent.id || ent._id || ent.taxCode || ent.name || 'ccu_enterprise');
+  let hash = 0;
+  for (let i = 0; i < seedStr.length; i++) {
+    hash = (hash << 5) - hash + seedStr.charCodeAt(i);
+    hash |= 0;
+  }
+  const prefixes = ['090', '091', '098', '097', '096', '093', '086', '088', '089', '077', '079', '083'];
+  const pIndex = Math.abs(hash) % prefixes.length;
+  const last3 = String(Math.abs((hash * 37) ^ 0x5a5a5a) % 900 + 100);
+  return `${prefixes[pIndex]} ••• ${last3}`;
+}
+
+/**
+ * Mask phone number for privacy: e.g. 090 ••• 123
+ */
+export function maskPhoneNumber(phone = '') {
+  if (!phone) return '090 ••• 123';
+  if (typeof phone !== 'string') phone = String(phone);
+  if (phone.includes('•••') || phone.includes('***')) return phone;
+  
+  // Extract all digits
+  let digits = phone.replace(/\D/g, '');
+  if (!digits) return '090 ••• 123';
+  
+  if (digits.startsWith('84') && digits.length > 9) {
+    digits = '0' + digits.substring(2);
+  }
+  
+  if (digits.length >= 7) {
+    return `${digits.substring(0, 3)} ••• ${digits.substring(digits.length - 3)}`;
+  }
+  if (digits.length >= 4) {
+    return `${digits.substring(0, 2)} ••• ${digits.substring(digits.length - 2)}`;
+  }
+  return `${digits} ••• 123`;
+}
+
+/**
+ * Generates 3 product / capability thumbnails for a supplier card
+ */
+export function getEnterpriseThumbnails(ent) {
+  if (!ent) return [
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
+  ];
+
+  // If enterprise has actual images array with valid urls
+  if (Array.isArray(ent.images) && ent.images.length >= 3) {
+    const valid = ent.images.filter(img => typeof img === 'string' && img.startsWith('http') && !img.includes('default'));
+    if (valid.length >= 3) return valid.slice(0, 3);
+  }
+
+  const clean = (ent.category || ent.industry || ent.name || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'd');
+
+  // 1. Quà tặng, Bao bì, Hộp quà, Màng co, In ấn, Thùng Carton
+  if (/qua|hop|bao\s*bi|carton|in\s*an|mang\s*co|decal|tem|tui\s*giay|nhan\s*mac/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 2. Nông sản, Cà phê, Trà, Mít sấy, Thực phẩm, Bánh kẹo, Đồ uống
+  if (/ca\s*phe|tra|mit\s*say|nong\s*san|thuc\s*pham|banh\s*keo|suat\s*an|nuoc\s*giai\s*khat/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 3. Cơ khí chính xác, CNC, Jig, Khuôn mẫu, Cắt laser, Bu lông
+  if (/cnc|phay|tien|khuon|jig|co\s*khi|bu\s*long|cat\s*laser|dot\s*dap|gia\s*cong/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 4. Đồng phục, Áo thun, May mặc, Balo, Giày, Bảo hộ PPE
+  if (/dong\s*phuc|ao\s*thun|may\s*mac|balo|tui|giay|bao\s*ho|ppe|khau\s*trang/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 5. Logistics, Vận tải container lạnh, Xe nâng, Pallet gỗ, Kho bãi
+  if (/logistics|kho|van\s*tai|xe\s*nang|pallet|container|cang|giao\s*nhan/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 6. Thép cuộn mạ kẽm, Kim loại, Inox, Nhôm, Kết cấu
+  if (/thep|kim\s*loai|inox|nhom|ton|xa\s*go|sat/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 7. Phòng sạch Class 1000, MEP, HVAC, Sơn epoxy, PCCC, Panel
+  if (/phong\s*sach|cleanroom|mep|hvac|epoxy|pccc|panel|dien/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // 8. Điện tử, Bảng mạch, Chip, Bán dẫn
+  if (/dien\s*tu|bang\s*mach|pcb|chip|vi\s*mach|cam\s*bien/.test(clean)) {
+    return [
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80"
+    ];
+  }
+
+  // Fallback high-tech industrial manufacturing trio
+  return [
+    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
+  ];
+}

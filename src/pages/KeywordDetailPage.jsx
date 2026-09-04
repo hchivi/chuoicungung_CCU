@@ -244,7 +244,7 @@ export default function KeywordDetailPage() {
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer font-sans"
               >
                 {PROVINCES.map(p => (
-                  <option key={p} value={p}>{p === "Toàn quốc" ? "📍 Toàn quốc (63 Tỉnh thành)" : `📍 ${p}`}</option>
+                  <option key={p} value={p}>{p === "Toàn quốc" ? "📍 Toàn quốc (34 Tỉnh thành)" : `📍 ${p}`}</option>
                 ))}
               </select>
             </div>
