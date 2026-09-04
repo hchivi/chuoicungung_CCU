@@ -108,7 +108,7 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-24 sm:pb-28 lg:pb-36">
+      <section className="relative overflow-hidden bg-[#F4F8FA] border-b border-slate-200/80 pb-12 sm:pb-16">
 
         {/* Right Half Sourcing Photo with Smooth Gradient Blend */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
@@ -183,10 +183,10 @@ export default function DemandsPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. REALTIME MACRO METRIC DASHBOARD (Đặt CHÍNH GIỮA LINE ở trên)          */}
+      {/* 2. REALTIME MACRO METRIC DASHBOARD (Khối Thống Kê 5 Cột Rộng Rãi, Độc Lập) */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-10 sm:-mt-12 lg:-mt-14">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-4">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 p-5 sm:p-6 lg:p-7">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
             {/* Metric 1 */}
@@ -251,7 +251,7 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 3. FAST-RFQ BOX & MAIN CONTENT                                            */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 space-y-6 sm:space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6 sm:space-y-8">
 
         {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
         <div className="rounded-3xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] text-white p-5 sm:p-7 shadow-xl shadow-blue-900/20 border-2 border-blue-400/40 relative overflow-hidden">
