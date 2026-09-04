@@ -6,7 +6,8 @@ import {
   DollarSign, CheckCircle2, Sparkles, Award, Users, Eye, 
   Lock, ShieldCheck, Heart, Share2, Layers, Phone, Mail, 
   X, Check, FileText, Send, UserCheck, Flame, Compass, ChevronDown,
-  GraduationCap, UserPlus, Star, BadgeCheck, Zap, Brain, User, UploadCloud
+  GraduationCap, UserPlus, Star, BadgeCheck, Zap, Brain, User, UploadCloud,
+  Navigation, CheckCircle, SlidersHorizontal, Activity
 } from 'lucide-react';
 import { recruitmentJobsData, recruitmentCandidatesData, recruitmentStats } from '../data/recruitmentData';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -39,15 +40,16 @@ export default function RecruitmentPage({ defaultTab }) {
   const [provinceFilter, setProvinceFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
   const [salaryFilter, setSalaryFilter] = useState('all');
-  const [numerologyFilter, setNumerologyFilter] = useState('all');
+  const [discFilter, setDiscFilter] = useState('all'); // 'all' | 'D' | 'I' | 'S' | 'C'
+  const [radiusFilter, setRadiusFilter] = useState('all'); // 'all' | '5' | '10' | '20'
 
-  // Numerology Modal state
+  // Numerology & DISC Modal state
   const [numerologyModal, setNumerologyModal] = useState({
     isOpen: false,
     tab: 'candidate' // 'candidate' | 'recruiter'
   });
 
-  // Smart CV & Recruitment Matching Modal State (AI & Numerology & Location)
+  // Smart CV & Recruitment Matching Modal State (AI & DISC & Location)
   const [cvMatchingModal, setCvMatchingModal] = useState({
     isOpen: false,
     mode: 'candidate' // 'candidate' (Upload CV & Match Factory Logos) | 'factory' (Post Job & Match Candidate Avatars)
@@ -91,7 +93,8 @@ export default function RecruitmentPage({ defaultTab }) {
       const matchText = (j.title || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                         (j.company || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                         (j.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (j.numerologyHint || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (j.kcnName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (j.discBadge || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                         (j.tags || []).some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchIndustry = industryFilter === 'all' || j.industry === industryFilter;
@@ -107,15 +110,20 @@ export default function RecruitmentPage({ defaultTab }) {
         matchSalary = j.salary.includes('25') || j.salary.includes('30') || j.salary.includes('32') || j.salary.includes('35') || j.salary.includes('45');
       }
 
-      let matchNumerology = true;
-      if (numerologyFilter !== 'all') {
-        const num = parseInt(numerologyFilter, 10);
-        matchNumerology = (j.idealNumbers || []).includes(num);
+      let matchDisc = true;
+      if (discFilter !== 'all') {
+        matchDisc = j.targetDisc === discFilter || (j.discProfile && (j.discProfile.primary === discFilter || j.discProfile.secondary === discFilter));
       }
 
-      return matchText && matchIndustry && matchProvince && matchLevel && matchSalary && matchNumerology;
+      let matchRadius = true;
+      if (radiusFilter !== 'all') {
+        const maxKm = parseFloat(radiusFilter);
+        matchRadius = (j.distanceKm || 5) <= maxKm;
+      }
+
+      return matchText && matchIndustry && matchProvince && matchLevel && matchSalary && matchDisc && matchRadius;
     });
-  }, [searchTerm, industryFilter, provinceFilter, levelFilter, salaryFilter, numerologyFilter]);
+  }, [searchTerm, industryFilter, provinceFilter, levelFilter, salaryFilter, discFilter, radiusFilter]);
 
   // Filter candidates
   const filteredCandidates = useMemo(() => {
@@ -123,8 +131,9 @@ export default function RecruitmentPage({ defaultTab }) {
       const matchText = (c.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                         (c.headline || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                         (c.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (c.kcnNearby || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                         (c.degree || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (c.numerologyTitle || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (c.discBadge || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
                         (c.tags || []).some(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchIndustry = industryFilter === 'all' || c.industry === industryFilter;
@@ -140,15 +149,20 @@ export default function RecruitmentPage({ defaultTab }) {
         matchSalary = c.desiredSalary.includes('25') || c.desiredSalary.includes('28') || c.desiredSalary.includes('32') || c.desiredSalary.includes('35') || c.desiredSalary.includes('45');
       }
 
-      let matchNumerology = true;
-      if (numerologyFilter !== 'all') {
-        const num = parseInt(numerologyFilter, 10);
-        matchNumerology = c.lifePathNumber === num;
+      let matchDisc = true;
+      if (discFilter !== 'all') {
+        matchDisc = c.discType === discFilter || (c.discProfile && (c.discProfile.primary === discFilter || c.discProfile.secondary === discFilter));
       }
 
-      return matchText && matchIndustry && matchProvince && matchLevel && matchSalary && matchNumerology;
+      let matchRadius = true;
+      if (radiusFilter !== 'all') {
+        const maxKm = parseFloat(radiusFilter);
+        matchRadius = (c.distanceKm || 5) <= maxKm;
+      }
+
+      return matchText && matchIndustry && matchProvince && matchLevel && matchSalary && matchDisc && matchRadius;
     });
-  }, [searchTerm, industryFilter, provinceFilter, levelFilter, salaryFilter, numerologyFilter]);
+  }, [searchTerm, industryFilter, provinceFilter, levelFilter, salaryFilter, discFilter, radiusFilter]);
 
   const handleApplySubmit = (e) => {
     e.preventDefault();
@@ -156,7 +170,7 @@ export default function RecruitmentPage({ defaultTab }) {
     setTimeout(() => {
       setApplySubmitted(false);
       setApplyModal({ isOpen: false, job: null });
-      alert('Ứng tuyển thành công! Nhà máy / Doanh nghiệp sẽ liên hệ với bạn trong thời gian sớm nhất.');
+      alert('Ứng tuyển thành công! Nhà máy / Doanh nghiệp sẽ liên hệ với bạn trong thời gian sớm nhất qua ATS.');
     }, 1200);
   };
 
@@ -166,19 +180,30 @@ export default function RecruitmentPage({ defaultTab }) {
     setTimeout(() => {
       setCandidateSubmitted(false);
       setCandidateModal({ isOpen: false, candidate: null });
-      alert(`Đã gửi lời mời phỏng vấn đến ứng viên ${candidateModal.candidate?.fullName}! Bộ phận tuyển dụng CCU sẽ kết nối hai bên trong 24h.`);
+      alert(`Đã gửi lời mời phỏng vấn đến ứng viên ${candidateModal.candidate?.fullName}! Bộ phận tuyển dụng CCU & ATS sẽ kết nối hai bên trong 24h.`);
     }, 1200);
+  };
+
+  // Helper for DISC color style
+  const getDiscBadgeStyle = (discCode) => {
+    switch(discCode) {
+      case 'D': return 'bg-rose-50 text-rose-700 border-rose-200';
+      case 'I': return 'bg-amber-50 text-amber-700 border-amber-200';
+      case 'S': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      case 'C': return 'bg-sky-50 text-sky-700 border-sky-200';
+      default: return 'bg-purple-50 text-purple-700 border-purple-200';
+    }
   };
 
   return (
     <div className="space-y-10 pb-20 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION (Seamless Panoramic Industrial Recruitment Visual) */}
+      {/* 1. HERO SECTION (Identical to Image 1) */}
       {/* ========================================================================= */}
       <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
         
-        {/* Right Half Career Photo with Smooth Gradient Blend */}
+        {/* Right Half Industrial Panoramic Visual with Seamless Gradient Fade */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
             src="/images/recruitment_hero.jpg" 
@@ -213,36 +238,34 @@ export default function RecruitmentPage({ defaultTab }) {
             {/* Headline */}
             <div className="space-y-1">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                {activeTab === 'jobs' ? 'Việc Tìm Người' : 'Người Tìm Việc'}
+                Việc Tìm Người
               </h1>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
-                {activeTab === 'jobs' ? 'Kết Nối Nhà Máy & Xưởng Toàn Quốc' : 'Hồ Sơ Chuyên Gia & Kỹ Sư KCN'}
+                Kết Nối Nhà Máy & Xưởng Toàn Quốc
               </h2>
             </div>
 
             {/* Subtitle */}
             <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
-              {activeTab === 'jobs'
-                ? 'Cổng thông tin việc làm chuyên ngành dành riêng cho Kỹ sư sản xuất, Trưởng phòng QA/QC, Chuyên viên XNK Logistics, Thợ kỹ thuật và Lao động tại hơn 400+ Khu Công Nghiệp toàn quốc.'
-                : 'Ngân hàng dữ liệu hồ sơ nhân sự kỹ thuật cao, kỹ sư vận hành SMT/CNC, quản lý chuỗi cung ứng và chuyên gia QA/QC may mặc đã xác thực năng lực sẵn sàng nhận việc.'}
+              Cổng thông tin việc làm chuyên ngành dành riêng cho Kỹ sư sản xuất, Trưởng phòng QA/QC, Chuyên viên XNK Logistics, Thợ kỹ thuật và Lao động tại hơn 400+ Khu Công Nghiệp toàn quốc.
             </p>
 
             {/* Dual Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <button
                 onClick={() => setPostModal(true)}
-                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5"
+                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>{activeTab === 'jobs' ? 'Đăng Tin Tuyển Dụng' : 'Tạo Hồ Sơ Tìm Việc'}</span>
+                <span>Đăng Tin Tuyển Dụng</span>
               </button>
 
               <button
                 onClick={() => setNumerologyModal({ isOpen: true, tab: activeTab === 'jobs' ? 'candidate' : 'recruiter' })}
-                className="px-6 py-3.5 bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 hover:from-purple-800 hover:to-indigo-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-indigo-900/25 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5"
+                className="px-6 py-3.5 bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 hover:from-purple-800 hover:to-indigo-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-indigo-900/25 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Phân Tích Thần Số Học {activeTab === 'jobs' ? 'Chọn Việc' : 'Chọn Người'}</span>
+                <span>Phân Tích Thần Số Học Chọn Việc</span>
               </button>
             </div>
 
@@ -251,50 +274,50 @@ export default function RecruitmentPage({ defaultTab }) {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. STATS & SEGMENTED 2-TAB SWITCHER & FILTER BAR */}
+      {/* 2. STATS (5 Cards from Image 1) & SEGMENTED 2-TAB SWITCHER & FILTER BAR */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-6">
         
-        {/* 5 Stats Chips */}
+        {/* 5 Stats Chips (Identical to Image 1) */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md">
-            <span className="text-xl font-black text-[#0052cc] font-mono">{recruitmentStats.totalJobs}</span>
+            <span className="text-xl font-black text-[#0052cc] font-mono">4.320+</span>
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">Việc làm đang tuyển</p>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md">
-            <span className="text-xl font-black text-emerald-600 font-mono">{recruitmentStats.totalCandidates}</span>
+            <span className="text-xl font-black text-emerald-600 font-mono">1.850+</span>
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">Hồ sơ ứng viên KCN</p>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md">
-            <span className="text-xl font-black text-indigo-600 font-mono">{recruitmentStats.totalCompanies}</span>
+            <span className="text-xl font-black text-indigo-600 font-mono">620+</span>
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">Nhà máy & DN KCN</p>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md">
-            <span className="text-xl font-black text-amber-600 font-mono">{recruitmentStats.totalIndustries}</span>
+            <span className="text-xl font-black text-amber-600 font-mono">18+</span>
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">Nhóm ngành sản xuất</p>
           </div>
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md col-span-2 sm:col-span-1">
-            <span className="text-xl font-black text-sky-600 font-mono">{recruitmentStats.verifiedPercentage}</span>
+            <span className="text-xl font-black text-sky-600 font-mono">100%</span>
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">Xác thực hồ sơ</p>
           </div>
         </div>
 
         {/* 2-TAB SEGMENTED CONTROLLER (Việc Tìm Người & Người Tìm Việc) */}
-        <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="grid grid-cols-2 w-full sm:w-auto gap-2">
+        <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-3">
+          <div className="grid grid-cols-2 w-full lg:w-auto gap-2">
             <button
               onClick={() => {
                 setActiveTab('jobs');
                 navigate('/tuyen-dung/viec-tim-nguoi');
               }}
-              className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-black font-heading transition-all flex items-center justify-center space-x-2 ${
+              className={`px-6 py-3 rounded-xl text-xs sm:text-sm font-black font-heading transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                 activeTab === 'jobs'
                   ? 'bg-gradient-to-r from-[#0052cc] to-blue-600 text-white shadow-md shadow-blue-500/20'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
               }`}
             >
               <Briefcase className="w-4 h-4" />
-              <span>VIỆC TÌM NGƯỜI ({recruitmentStats.totalJobs})</span>
+              <span>VIỆC TÌM NGƯỜI (4.320+)</span>
             </button>
 
             <button
@@ -302,80 +325,86 @@ export default function RecruitmentPage({ defaultTab }) {
                 setActiveTab('candidates');
                 navigate('/tuyen-dung/nguoi-tim-viec');
               }}
-              className={`px-5 py-3 rounded-xl text-xs sm:text-sm font-black font-heading transition-all flex items-center justify-center space-x-2 ${
+              className={`px-6 py-3 rounded-xl text-xs sm:text-sm font-black font-heading transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                 activeTab === 'candidates'
                   ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-500/20'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
               }`}
             >
               <UserCheck className="w-4 h-4" />
-              <span>NGƯỜI TÌM VIỆC ({recruitmentStats.totalCandidates})</span>
+              <span>NGƯỜI TÌM VIỆC (1.850+)</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          {/* Quick Action Bar for Smart AI Matching */}
+          <div className="flex items-center gap-2 flex-wrap w-full lg:w-auto justify-end">
+            <button
+              onClick={() => setCvMatchingModal({ isOpen: true, mode: activeTab === 'jobs' ? 'candidate' : 'factory' })}
+              className="px-4 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black rounded-xl text-xs font-heading transition flex items-center space-x-1.5 shadow-md shadow-orange-500/20 cursor-pointer animate-pulse"
+            >
+              <Zap className="w-3.5 h-3.5 fill-slate-950" />
+              <span>AI Khớp Lệnh Nhanh</span>
+            </button>
+
             <button
               onClick={() => setCvMatchingModal({ isOpen: true, mode: 'candidate' })}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold font-heading transition flex items-center space-x-1.5 shadow-md shadow-blue-500/20 cursor-pointer"
+              className="px-3.5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold font-heading transition flex items-center space-x-1.5 shadow-sm cursor-pointer"
             >
               <UploadCloud className="w-3.5 h-3.5" />
-              <span>Tải CV Khớp Nhà Máy</span>
+              <span>Quét CV Khớp Nhà Máy</span>
             </button>
 
             <button
-              onClick={() => setCvMatchingModal({ isOpen: true, mode: 'factory' })}
-              className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold font-heading transition flex items-center space-x-1.5 shadow-md shadow-purple-500/20 cursor-pointer"
+              onClick={() => setNumerologyModal({ isOpen: true, tab: activeTab === 'jobs' ? 'candidate' : 'recruiter' })}
+              className="px-3.5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200/80 rounded-xl text-xs font-bold font-heading transition flex items-center space-x-1.5 shadow-2xs cursor-pointer"
             >
-              <Building2 className="w-3.5 h-3.5" />
-              <span>Nhà Máy Post Tìm Người</span>
-            </button>
-
-            <button
-              onClick={() => setNumerologyModal({ isOpen: true, tab: 'candidate' })}
-              className="px-3.5 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 hover:from-indigo-100 hover:to-purple-100 text-indigo-900 border border-indigo-200/80 rounded-xl text-xs font-bold font-heading transition flex items-center space-x-1.5 shadow-2xs cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-spin" style={{ animationDuration: '6s' }} />
-              <span>Thần Số Học Tra Cứu</span>
+              <Brain className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Trắc Nghiệm DISC & MBTI</span>
             </button>
           </div>
         </div>
 
-        {/* PROMINENT NUMEROLOGY & SMART CV MATCHING CALLOUT BANNER */}
-        <div className="bg-gradient-to-r from-[#072348] via-[#1e1b4b] to-[#312e81] rounded-3xl p-5 sm:p-6 text-white border border-indigo-500/30 shadow-lg relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5">
-          <div className="space-y-1.5 max-w-2xl relative z-10">
-            <div className="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10.5px] font-mono font-bold uppercase tracking-wider border border-amber-400/30">
-              <Sparkles className="w-3 h-3" />
-              <span>TÍNH NĂNG ĐỘT PHÁ • CV AI & INDUSTRIAL NUMEROLOGY MATCHING</span>
+        {/* PROMINENT SMART MATCHING & DISC BANNER (SPEC B2B FDI STANDARD) */}
+        <div className="bg-gradient-to-r from-[#072348] via-[#111c4e] to-[#1e1b4b] rounded-3xl p-5 sm:p-6 text-white border border-indigo-500/30 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5">
+          <div className="space-y-2 max-w-2xl relative z-10">
+            <div className="inline-flex items-center space-x-2 px-3 py-0.5 rounded-full bg-blue-500/20 text-sky-300 text-[10.5px] font-mono font-bold uppercase tracking-wider border border-blue-400/30">
+              <Sparkles className="w-3 h-3 text-amber-300" />
+              <span>SMART MATCHING: RIGHT PERSON - RIGHT SEAT - RIGHT LOCATION</span>
             </div>
             <h3 className="text-lg sm:text-xl font-black font-heading text-white tracking-tight">
-              Tải CV Tự Động Phân Tích & Match Nhà Máy Theo Location Bằng Thần Số Học
+              Phân Tích Tính Cách DISC & Tự Động Khớp Nhân Lực KCN Trong Bán Kính 5 - 20KM
             </h3>
-            <p className="text-xs text-indigo-200 leading-relaxed">
-              Ứng viên tải CV → Tự động tính Con số chủ đạo & Đổ ra danh sách <strong>Logo Nhà Máy</strong> cùng Location. Nhà máy đăng tin → Tự động quét và <strong>Đổ ra Avatar Ứng viên</strong> tương thích cao nhất.
+            <p className="text-xs text-indigo-200/90 leading-relaxed">
+              Thuật toán AI đối soát <strong>Kỹ năng chuyên môn (Skill Match %)</strong> + <strong>Tính cách tổ chức (DISC D-I-S-C Culture Match)</strong> + <strong>Vị trí GIS KCN</strong> giúp doanh nghiệp tuyển đúng người, giảm 65% tỷ lệ nghỉ việc.
             </p>
+            <div className="flex items-center gap-3 pt-1 text-[11px] text-slate-300 font-mono">
+              <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Powered by ATS & TopCV Partner</span>
+              <span>•</span>
+              <span className="flex items-center gap-1"><Layers className="w-3.5 h-3.5 text-sky-400" /> Odoo HR Integration API</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0 relative z-10 w-full sm:w-auto flex-wrap">
             <button
               onClick={() => setCvMatchingModal({ isOpen: true, mode: 'candidate' })}
-              className="flex-1 sm:flex-none px-4 py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-xs font-heading shadow-md transition flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="flex-1 sm:flex-none px-5 py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-xs font-heading shadow-md transition flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <UploadCloud className="w-3.5 h-3.5 text-slate-950" />
-              <span>Tải CV & Quét Nhà Máy</span>
+              <span>Tải CV Quét Nhà Máy Gần Bạn</span>
             </button>
 
             <button
               onClick={() => setCvMatchingModal({ isOpen: true, mode: 'factory' })}
-              className="flex-1 sm:flex-none px-4 py-3 bg-white hover:bg-slate-100 text-[#072348] font-black rounded-xl text-xs font-heading shadow-md transition flex items-center justify-center space-x-1.5 cursor-pointer"
+              className="flex-1 sm:flex-none px-5 py-3 bg-white hover:bg-slate-100 text-[#072348] font-black rounded-xl text-xs font-heading shadow-md transition flex items-center justify-center space-x-1.5 cursor-pointer"
             >
               <Building2 className="w-3.5 h-3.5 text-[#0052cc]" />
-              <span>Nhà Máy Đăng Tin</span>
+              <span>Nhà Máy Khớp Ứng Viên Top 10</span>
             </button>
           </div>
         </div>
 
-        {/* Search & Multi-criteria Filter Bar */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+        {/* Search & Multi-criteria Filter Bar with GIS Radius & DISC Traits */}
+        <div className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3.5">
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
@@ -384,31 +413,58 @@ export default function RecruitmentPage({ defaultTab }) {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={
                 activeTab === 'jobs'
-                  ? "Tìm vị trí tuyển dụng, tên nhà máy, kỹ năng (VD: Kỹ sư SMT, QA/QC, CNC, Cơ điện, Logistics...)..."
-                  : "Tìm ứng viên theo tên, vị trí chuyên môn, kỹ năng kỹ thuật (VD: SMT, QA may mặc, SCADA, Mastercam, VNACCS...)..."
+                  ? "Tìm theo chức danh, nhà máy FDI, KCN (VD: Kỹ sư SMT, QA/QC May mặc, KCN Yên Phong, Long Thành...)..."
+                  : "Tìm ứng viên theo chuyên môn, kỹ năng, KCN cư trú (VD: PLC Siemens, ISO 9001, Mastercam, KCN VSIP...)..."
               }
               className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#0052cc] focus:bg-white transition"
             />
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
+            {/* GIS Radius Filter */}
+            <select
+              value={radiusFilter}
+              onChange={(e) => setRadiusFilter(e.target.value)}
+              className="bg-blue-50/70 border border-blue-200 rounded-xl px-3 py-2.5 text-[#0047a5] font-bold focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+            >
+              <option value="all">📍 Bán kính KCN (Tất cả)</option>
+              <option value="5">&lt; 5km (Gần KCN / Đi bộ)</option>
+              <option value="10">&lt; 10km (Xe máy 15-20p)</option>
+              <option value="20">&lt; 20km (Có xe đưa đón KCN)</option>
+            </select>
+
+            {/* DISC Personality Profile Filter */}
+            <select
+              value={discFilter}
+              onChange={(e) => setDiscFilter(e.target.value)}
+              className="bg-purple-50/80 border border-purple-200 rounded-xl px-3 py-2.5 text-purple-950 font-bold focus:outline-none focus:ring-2 focus:ring-purple-500"
+            >
+              <option value="all">🧠 Nhóm tính cách DISC</option>
+              <option value="D">Nhóm D (Quyết đoán / Lãnh đạo)</option>
+              <option value="I">Nhóm I (Giao tiếp / Sourcing)</option>
+              <option value="S">Nhóm S (Kiên định / QA-QC)</option>
+              <option value="C">Nhóm C (Tuân thủ / Kỹ thuật)</option>
+            </select>
+
+            {/* Industry Filter */}
             <select
               value={industryFilter}
               onChange={(e) => setIndustryFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
             >
-              <option value="all">Tất cả ngành nghề</option>
-              <option value="Cơ khí & Chế tạo">Cơ khí & Chế tạo</option>
-              <option value="Điện & Điện tử">Điện & Điện tử</option>
-              <option value="Dệt may & Da giày">Dệt may & Da giày</option>
-              <option value="Logistics & Kho vận">Logistics & Kho vận</option>
-              <option value="Hóa chất & Môi trường">Hóa chất & Môi trường</option>
+              <option value="all">Tất cả ngành nghề (18 nhóm)</option>
+              <option value="Điện & Điện tử">Điện & Điện tử (SMT/PCB)</option>
+              <option value="Cơ khí & Chế tạo">Cơ khí chính xác & CNC</option>
+              <option value="Dệt may & Da giày">Dệt may & Đồng phục</option>
+              <option value="Logistics & Kho vận">Logistics & Xuất nhập khẩu</option>
+              <option value="Hóa chất & Môi trường">Hóa chất & HSE Nhà máy</option>
             </select>
 
+            {/* Province & KCN Filter */}
             <select
               value={provinceFilter}
               onChange={(e) => setProvinceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
             >
               <option value="all">Tất cả tỉnh thành / KCN</option>
               <option value="Bắc Ninh">Bắc Ninh (Yên Phong, Quế Võ)</option>
@@ -420,52 +476,43 @@ export default function RecruitmentPage({ defaultTab }) {
               <option value="Hà Nam">Hà Nam (Đồng Văn)</option>
             </select>
 
+            {/* Level Filter */}
             <select
               value={levelFilter}
               onChange={(e) => setLevelFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
             >
               <option value="all">Tất cả cấp bậc</option>
               <option value="Công nhân / Kỹ thuật viên">Công nhân / Kỹ thuật viên</option>
               <option value="Chuyên viên / Kỹ sư">Chuyên viên / Kỹ sư</option>
-              <option value="Trưởng nhóm / Giám sát">Trưởng nhóm / Giám sát</option>
-              <option value="Trưởng phòng / Quản lý">Trưởng phòng / Quản lý</option>
+              <option value="Trưởng nhóm / Giám sát">Trưởng nhóm / Giám sát chuyền</option>
+              <option value="Trưởng phòng / Quản lý">Trưởng phòng / Quản lý nhà máy</option>
             </select>
 
-            <select
-              value={numerologyFilter}
-              onChange={(e) => setNumerologyFilter(e.target.value)}
-              className="bg-purple-50 border border-purple-200 rounded-xl px-3 py-2.5 text-purple-900 font-semibold focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="all">🔮 Thần số học (Tất cả)</option>
-              <option value="1">Số 1 (Tiên phong & Lãnh đạo)</option>
-              <option value="2">Số 2 (Hòa giải & Ngoại giao)</option>
-              <option value="3">Số 3 (Sáng tạo & Kaizen)</option>
-              <option value="4">Số 4 (Kỷ luật & QA/QC)</option>
-              <option value="5">Số 5 (Linh hoạt & Sourcing)</option>
-              <option value="6">Số 6 (Trách nhiệm & HSE)</option>
-              <option value="7">Số 7 (Nghiên cứu & R&D)</option>
-              <option value="8">Số 8 (Điều hành & SCM)</option>
-              <option value="9">Số 9 (ESG & Bền vững)</option>
-              <option value="11">Số 11 (Trực giác đột phá)</option>
-              <option value="22">Số 22 (Kiến tạo vĩ mô)</option>
-            </select>
-
-            <div className="flex items-center gap-2 justify-end">
+            {/* Salary & Reset */}
+            <div className="flex items-center gap-1.5">
               <select
                 value={salaryFilter}
                 onChange={(e) => setSalaryFilter(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc] flex-1"
+                className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc] flex-1 text-xs"
               >
                 <option value="all">Mức lương</option>
-                <option value="under15">&lt; 15 Triệu</option>
-                <option value="15to25">15 - 25 Triệu</option>
-                <option value="above25">&gt; 25 Triệu</option>
+                <option value="under15">&lt; 15 Tr</option>
+                <option value="15to25">15 - 25 Tr</option>
+                <option value="above25">&gt; 25 Tr</option>
               </select>
 
               <button 
-                onClick={() => { setSearchTerm(''); setIndustryFilter('all'); setProvinceFilter('all'); setLevelFilter('all'); setSalaryFilter('all'); setNumerologyFilter('all'); }}
-                className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1 transition shrink-0"
+                onClick={() => { 
+                  setSearchTerm(''); 
+                  setIndustryFilter('all'); 
+                  setProvinceFilter('all'); 
+                  setLevelFilter('all'); 
+                  setSalaryFilter('all'); 
+                  setDiscFilter('all'); 
+                  setRadiusFilter('all'); 
+                }}
+                className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center justify-center transition shrink-0 cursor-pointer"
                 title="Đặt lại bộ lọc"
               >
                 <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
@@ -479,46 +526,26 @@ export default function RecruitmentPage({ defaultTab }) {
       {/* ========================================================================= */}
       {/* 3. CONTENT AREA: JOBS TAB OR CANDIDATES TAB */}
       {/* ========================================================================= */}
-      <div id="danh-sach-noi-dung" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-2">
+      <div id="danh-sach-noi-dung" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4">
 
         {/* TAB 1: VIỆC TÌM NGƯỜI */}
         {activeTab === 'jobs' && (
           <div className="space-y-6">
 
-            {/* Smart Feature Banner: Tải CV & Tự Động Match Nhà Máy Theo Location */}
-            <div className="bg-gradient-to-r from-blue-900 via-[#0047a5] to-indigo-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-blue-400/30 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5">
-              <div className="space-y-2 max-w-2xl relative z-10">
-                <div className="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-yellow-400/20 text-yellow-300 text-[10.5px] font-mono font-black uppercase tracking-wider border border-yellow-400/30">
-                  <UploadCloud className="w-3.5 h-3.5" />
-                  <span>DÀNH CHO ỨNG VIÊN • AI & THẦN SỐ HỌC CV SCANNER</span>
-                </div>
-                <h3 className="text-base sm:text-xl font-black font-heading text-white tracking-tight">
-                  Tải CV Lên – Tự Động Phân Tích & Đổ Ra Logo Doanh Nghiệp Cùng Location
-                </h3>
-                <p className="text-xs text-blue-100/90 leading-relaxed">
-                  Kéo thả tệp CV của bạn để hệ thống tự động bóc tách kỹ năng, tính Con số chủ đạo (Life Path) và lọc ra danh sách các Nhà máy KCN đang tuyển dụng tương thích cao nhất.
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+              <div>
+                <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading uppercase flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[#0052cc]" />
+                  <span>Danh sách vị trí việc làm KCN đang tuyển dụng ({filteredJobs.length})</span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Khớp nối trực tiếp nhà máy FDI & Xưởng chuỗi cung ứng • Không qua trung gian thu phí
                 </p>
               </div>
-
-              <div className="flex items-center gap-3 shrink-0 relative z-10 w-full sm:w-auto">
-                <button
-                  onClick={() => setCvMatchingModal({ isOpen: true, mode: 'candidate' })}
-                  className="w-full sm:w-auto px-5 py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-xs sm:text-sm font-heading shadow-md transition flex items-center justify-center space-x-2 cursor-pointer hover:scale-105"
-                >
-                  <UploadCloud className="w-4 h-4" />
-                  <span>Tải CV & Khớp Lệnh Ngay</span>
-                </button>
+              <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Cập nhật mới 5 phút trước</span>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading uppercase flex items-center gap-2">
-                <Briefcase className="w-5 h-5 text-[#0052cc]" />
-                <span>Danh sách vị trí việc làm KCN đang tuyển dụng ({filteredJobs.length})</span>
-              </h2>
-              <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                Ứng tuyển trực tiếp vào nhà máy, không qua trung gian
-              </span>
             </div>
 
             {/* Jobs Grid */}
@@ -544,8 +571,10 @@ export default function RecruitmentPage({ defaultTab }) {
 
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                       <div className="space-y-3 flex-1 min-w-0">
+                        
+                        {/* Company & Meta info */}
                         <div className="flex flex-wrap items-center gap-2 text-xs">
-                          <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                          <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 p-1 flex items-center justify-center shrink-0">
                             {job.logo ? (
                               <img 
                                 src={job.logo} 
@@ -561,46 +590,68 @@ export default function RecruitmentPage({ defaultTab }) {
                             )}
                           </div>
 
-                          <span className="font-extrabold text-slate-900 font-heading">
-                            {job.company}
-                          </span>
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-extrabold text-slate-900 font-heading">
+                                {job.company}
+                              </span>
 
-                          {job.isFoundingPartner && (
-                            <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold flex items-center gap-0.5">
-                              <Award className="w-3 h-3 text-amber-600" />
-                              Founding Partner
+                              {job.isFoundingPartner && (
+                                <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold flex items-center gap-0.5">
+                                  <Award className="w-3 h-3 text-amber-600" />
+                                  Founding Partner
+                                </span>
+                              )}
+
+                              <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#0052cc] text-[10px] font-mono font-bold border border-blue-100">
+                                {job.industry}
+                              </span>
+
+                              <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
+                                {job.level}
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-slate-400 font-mono">
+                              {job.atsSystem || 'TopCV / Odoo ATS Integrated'}
                             </span>
-                          )}
-
-                          <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#0052cc] text-[10px] font-mono font-bold border border-blue-100">
-                            {job.industry}
-                          </span>
-
-                          <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
-                            {job.level}
-                          </span>
+                          </div>
                         </div>
 
+                        {/* Job Title */}
                         <h3 className="text-base sm:text-lg font-black text-slate-900 font-heading leading-snug group-hover:text-blue-600 transition-colors">
                           {job.title}
                         </h3>
 
+                        {/* Description */}
                         <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
                           {job.description}
                         </p>
 
-                        {/* Numerology Hint Badge */}
-                        {job.numerologyHint && (
+                        {/* Match Indicator Pill & DISC Badge */}
+                        <div className="flex flex-wrap items-center gap-2 pt-0.5">
+                          {/* DISC Badge */}
                           <div 
                             onClick={() => setNumerologyModal({ isOpen: true, tab: 'candidate' })}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-50 via-indigo-50 to-blue-50 border border-purple-200/80 rounded-xl text-purple-900 text-xs font-semibold cursor-pointer hover:border-purple-400 transition"
+                            className={`inline-flex items-center gap-1.5 px-3 py-1 border rounded-xl text-xs font-semibold cursor-pointer hover:shadow-xs transition ${getDiscBadgeStyle(job.targetDisc || 'D')}`}
                           >
-                            <Sparkles className="w-3.5 h-3.5 text-purple-600 shrink-0" />
-                            <span className="font-heading font-bold text-[11.5px]">{job.numerologyHint}</span>
-                            <span className="text-[10px] text-purple-600 underline font-mono ml-1">Kiểm tra ngay →</span>
+                            <Brain className="w-3.5 h-3.5 shrink-0" />
+                            <span className="font-heading font-bold text-[11.5px]">{job.discBadge || `DISC: Nhóm ${job.targetDisc || 'D'}`}</span>
                           </div>
-                        )}
 
+                          {/* Skill Match & Culture Match Badges */}
+                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold font-mono">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Độ khớp kỹ năng: {job.skillMatchPercent || 92}%</span>
+                          </div>
+
+                          {/* GIS Radius distance badge */}
+                          <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 text-xs font-mono font-semibold">
+                            <Navigation className="w-3 h-3 text-[#0052cc]" />
+                            <span>Bán kính {job.distanceKm || '3.5'}km ({job.kcnName || job.location})</span>
+                          </div>
+                        </div>
+
+                        {/* Meta Specs Row */}
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-600 pt-1">
                           <div className="flex items-center gap-1.5 font-mono">
                             <DollarSign className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -618,6 +669,7 @@ export default function RecruitmentPage({ defaultTab }) {
                           </div>
                         </div>
 
+                        {/* Tags */}
                         {job.tags && (
                           <div className="flex flex-wrap items-center gap-1.5 pt-1">
                             {job.tags.map((tg, idx) => (
@@ -629,17 +681,18 @@ export default function RecruitmentPage({ defaultTab }) {
                         )}
                       </div>
 
+                      {/* Right Action CTA */}
                       <div className="lg:self-center shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 pt-2 lg:pt-0">
                         <button
                           onClick={() => setApplyModal({ isOpen: true, job })}
-                          className="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02]"
+                          className="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
                         >
                           <Send className="w-3.5 h-3.5" />
                           <span>Nộp Hồ Sơ Ứng Tuyển</span>
                         </button>
                         
                         <span className="text-[11px] text-center text-slate-400 font-medium">
-                          Đăng {job.postedDate} • Phản hồi trong 24h
+                          Đăng {job.postedDate} • Phản hồi qua ATS
                         </span>
                       </div>
                     </div>
@@ -654,40 +707,20 @@ export default function RecruitmentPage({ defaultTab }) {
         {activeTab === 'candidates' && (
           <div className="space-y-6">
 
-            {/* Smart Feature Banner: Nhà Máy Post Tìm Người & Đổ Ra Avatar Ứng Viên */}
-            <div className="bg-gradient-to-r from-[#1e1b4b] via-purple-900 to-[#312e81] rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-purple-400/30 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5">
-              <div className="space-y-2 max-w-2xl relative z-10">
-                <div className="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-yellow-400/20 text-yellow-300 text-[10.5px] font-mono font-black uppercase tracking-wider border border-yellow-400/30">
-                  <Building2 className="w-3.5 h-3.5" />
-                  <span>DÀNH CHO NHÀ MÁY • AUTO RECRUITMENT MATCHING</span>
-                </div>
-                <h3 className="text-base sm:text-xl font-black font-heading text-white tracking-tight">
-                  Nhà Máy Post Tin Tìm Người – Tự Động Quét & Đổ Ra Avatar Ứng Viên Phù Hợp
-                </h3>
-                <p className="text-xs text-purple-100/90 leading-relaxed">
-                  Nhập thông tin vị trí nhà máy cần tuyển dụng, hệ thống AI sẽ tự động phân tích độ tương thích Thần số học và đổ ra danh sách Avatar nhân sự sẵn sàng làm việc tại cùng Location.
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3">
+              <div>
+                <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading uppercase flex items-center gap-2">
+                  <UserCheck className="w-5 h-5 text-emerald-600" />
+                  <span>Hồ sơ Chuyên gia & Kỹ sư KCN đang tìm việc ({filteredCandidates.length})</span>
+                </h2>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Nhân sự kỹ thuật cao đã xác thực CCCD, bằng cấp & kinh nghiệm thực chiến tại các nhà máy
                 </p>
               </div>
-
-              <div className="flex items-center gap-3 shrink-0 relative z-10 w-full sm:w-auto">
-                <button
-                  onClick={() => setCvMatchingModal({ isOpen: true, mode: 'factory' })}
-                  className="w-full sm:w-auto px-5 py-3 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-xl text-xs sm:text-sm font-heading shadow-md transition flex items-center justify-center space-x-2 cursor-pointer hover:scale-105"
-                >
-                  <Building2 className="w-4 h-4" />
-                  <span>Post Tin & Quét Avatar Ứng Viên</span>
-                </button>
+              <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>{recruitmentStats.verifiedPercentage} hồ sơ đạt chuẩn</span>
               </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading uppercase flex items-center gap-2">
-                <UserCheck className="w-5 h-5 text-emerald-600" />
-                <span>Hồ sơ Chuyên gia & Kỹ sư KCN đang tìm việc ({filteredCandidates.length})</span>
-              </h2>
-              <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                Hồ sơ ứng viên đã xác thực bằng cấp & kinh nghiệm thực chiến
-              </span>
             </div>
 
             {/* Candidates Grid */}
@@ -716,7 +749,7 @@ export default function RecruitmentPage({ defaultTab }) {
                         />
 
                         <div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="text-base sm:text-lg font-black text-slate-900 font-heading">
                               {cand.fullName}
                             </h3>
@@ -726,6 +759,9 @@ export default function RecruitmentPage({ defaultTab }) {
                             <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
                               {cand.level}
                             </span>
+                            <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold font-mono">
+                              ✓ Đã xác thực
+                            </span>
                           </div>
 
                           <p className="text-xs font-bold text-blue-700 font-heading mt-0.5">
@@ -734,17 +770,26 @@ export default function RecruitmentPage({ defaultTab }) {
                         </div>
                       </div>
 
-                      {/* Numerology Profile Badge */}
-                      {cand.numerologyTitle && (
+                      {/* DISC Profile & Match Indicators */}
+                      <div className="flex flex-wrap items-center gap-2 pt-0.5">
                         <div 
                           onClick={() => setNumerologyModal({ isOpen: true, tab: 'recruiter' })}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-amber-50 to-indigo-50 border border-amber-200/80 rounded-xl text-slate-800 text-xs font-semibold cursor-pointer hover:border-amber-400 transition"
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 border rounded-xl text-xs font-semibold cursor-pointer hover:shadow-xs transition ${getDiscBadgeStyle(cand.discType || 'D')}`}
                         >
-                          <Brain className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                          <span className="font-heading font-bold text-[11.5px]">{cand.numerologyTitle}</span>
-                          <span className="text-[10px] text-amber-700 underline font-mono ml-1">Đánh giá độ khớp →</span>
+                          <Brain className="w-3.5 h-3.5 shrink-0" />
+                          <span className="font-heading font-bold text-[11.5px]">{cand.discBadge || `DISC: Nhóm ${cand.discType}`}</span>
                         </div>
-                      )}
+
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold font-mono">
+                          <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Tương thích văn hóa: {cand.cultureMatchPercent || 94}%</span>
+                        </div>
+
+                        <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 text-xs font-mono font-semibold">
+                          <Navigation className="w-3 h-3 text-[#0052cc]" />
+                          <span>Cư trú cách {cand.kcnNearby || cand.location} {cand.distanceKm || '4.2'}km</span>
+                        </div>
+                      </div>
 
                       {/* Summary */}
                       <p className="text-xs text-slate-600 leading-relaxed line-clamp-2">
@@ -778,7 +823,7 @@ export default function RecruitmentPage({ defaultTab }) {
                         ))}
                       </div>
 
-                      {/* Masked Contact Pills */}
+                      {/* Contact Info */}
                       <div className="flex flex-wrap items-center gap-2 pt-1">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-700 text-xs font-mono font-bold rounded-lg border border-slate-200">
                           <Phone className="w-3.5 h-3.5 text-slate-400" />
@@ -796,10 +841,10 @@ export default function RecruitmentPage({ defaultTab }) {
                     <div className="lg:self-center shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 pt-2 lg:pt-0">
                       <button
                         onClick={() => setCandidateModal({ isOpen: true, candidate: cand })}
-                        className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02]"
+                        className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
                       >
                         <UserPlus className="w-4 h-4" />
-                        <span>Liên Hệ Phỏng Vấn</span>
+                        <span>Mời Phỏng Vấn Ngay</span>
                       </button>
                       
                       <span className="text-[11px] text-center text-slate-400 font-medium">
@@ -814,6 +859,41 @@ export default function RecruitmentPage({ defaultTab }) {
           </div>
         )}
 
+        {/* ========================================================================= */}
+        {/* CROSS-SELL ECOSYSTEM BANNER (KHÉP KÍN CHUỖI CUNG ỨNG) */}
+        {/* ========================================================================= */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-slate-800 relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-mono font-bold border border-blue-400/30">
+              <Award className="w-3.5 h-3.5 text-amber-400" />
+              <span>HỆ SINH THÁI KHÉP KÍN CHUOICUNGUNG.COM</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black font-heading tracking-tight">
+              Giải Pháp Đồng Phục Bảo Hộ & Đào Tạo Nhân Lực Nhà Máy Chuẩn KCN
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Bạn đang setup nhà máy mới hoặc mở rộng quy mô xưởng sản xuất? Kết nối ngay với <strong>Chuyên Gia Đồng Phục Proser</strong> để may đo trang phục bảo hộ PPE đạt chuẩn ISO, cùng chương trình đào tạo kỹ năng 5S/Kaizen cho công nhân.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0 flex-wrap w-full lg:w-auto">
+            <Link
+              to="/doanh-nghiep"
+              className="px-5 py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-slate-950 font-black rounded-xl text-xs font-heading shadow-md transition flex items-center justify-center space-x-2"
+            >
+              <span>Kết Nối Xưởng May Proser</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              to="/san-nhu-cau"
+              className="px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs font-heading border border-white/20 transition flex items-center justify-center space-x-2"
+            >
+              <span>Đăng Nhu Cầu Tuyển Dụng Lớn</span>
+            </Link>
+          </div>
+        </div>
+
       </div>
 
       {/* ========================================================================= */}
@@ -824,7 +904,7 @@ export default function RecruitmentPage({ defaultTab }) {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative space-y-5 animate-in zoom-in-95 max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setApplyModal({ isOpen: false, job: null })}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition cursor-pointer"
             >
               ✕
             </button>
@@ -931,10 +1011,10 @@ export default function RecruitmentPage({ defaultTab }) {
               <button
                 type="submit"
                 disabled={applySubmitted}
-                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-blue-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider"
+                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-blue-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider cursor-pointer"
               >
                 {applySubmitted ? (
-                  <span>Đang gửi hồ sơ...</span>
+                  <span>Đang gửi hồ sơ qua ATS...</span>
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
@@ -955,7 +1035,7 @@ export default function RecruitmentPage({ defaultTab }) {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative space-y-5 animate-in zoom-in-95 max-h-[90vh] overflow-y-auto">
             <button
               onClick={() => setCandidateModal({ isOpen: false, candidate: null })}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition cursor-pointer"
             >
               ✕
             </button>
@@ -1048,7 +1128,7 @@ export default function RecruitmentPage({ defaultTab }) {
               <button
                 type="submit"
                 disabled={candidateSubmitted}
-                className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-emerald-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider"
+                className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-emerald-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider cursor-pointer"
               >
                 {candidateSubmitted ? (
                   <span>Đang gửi thư mời phỏng vấn...</span>
@@ -1072,7 +1152,7 @@ export default function RecruitmentPage({ defaultTab }) {
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative space-y-5 animate-in zoom-in-95">
             <button
               onClick={() => setPostModal(false)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm transition cursor-pointer"
             >
               ✕
             </button>
@@ -1097,7 +1177,7 @@ export default function RecruitmentPage({ defaultTab }) {
               </p>
               <ul className="list-disc pl-4 space-y-1 text-slate-600 text-[11.5px]">
                 <li>Đăng tin miễn phí tiếp cận toàn bộ mạng lưới 18 pha kỹ thuật</li>
-                <li>Tự động gắn thẻ Khu Công Nghiệp & Nhóm ngành nghề liên kết</li>
+                <li>Tự động bóc tách DISC Profile & gắn thẻ Khu Công Nghiệp</li>
                 <li>Nhận thông báo phản hồi trực tiếp qua Email & Hotline hỗ trợ 24/7</li>
               </ul>
             </div>
@@ -1108,7 +1188,7 @@ export default function RecruitmentPage({ defaultTab }) {
                   setPostModal(false);
                   alert('Vui lòng liên hệ Hotline B2B: 1900 8686 hoặc gửi email: hr-partners@chuoicungung.com để được hỗ trợ đăng tin & kích hoạt tài khoản miễn phí!');
                 }}
-                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-blue-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider"
+                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-xs sm:text-sm font-black shadow-lg shadow-blue-500/25 transition flex items-center justify-center space-x-2 font-heading uppercase tracking-wider cursor-pointer"
               >
                 <span>Liên Hệ Hỗ Trợ Đăng Tin Ngay</span>
               </button>
@@ -1118,7 +1198,7 @@ export default function RecruitmentPage({ defaultTab }) {
       )}
 
       {/* ========================================================================= */}
-      {/* 7. NUMEROLOGY MODAL (CANDIDATE & RECRUITER CAREER AI MATCHING) */}
+      {/* 7. NUMEROLOGY & DISC MODAL (CANDIDATE & RECRUITER CAREER AI MATCHING) */}
       {/* ========================================================================= */}
       <NumerologyModal
         isOpen={numerologyModal.isOpen}

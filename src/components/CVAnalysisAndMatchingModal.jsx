@@ -214,21 +214,21 @@ export default function CVAnalysisAndMatchingModal({
 
           <div className="flex items-center space-x-2 text-yellow-400 font-mono text-xs font-black uppercase tracking-wider mb-2">
             <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '3s' }} />
-            <span>HỆ THỐNG KHỚP NỐI TUYỂN DỤNG THÔNG MINH (AI & THẦN SỐ HỌC B2B)</span>
+            <span>HỆ THỐNG SMART MATCHING AI &amp; CHUẨN TÍNH CÁCH DISC QUỐC TẾ (B2B FDI)</span>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-xl sm:text-2xl font-black font-heading tracking-tight leading-tight">
                 {activeMode === 'candidate' 
-                  ? 'Tải CV Lên Hệ Thống & Tự Động Match Nhà Máy Theo Location'
-                  : 'Nhà Máy Post Tin Tìm Người & Tự Động Quét Avatar Ứng Viên Phù Hợp'
+                  ? 'Tải CV Quét AI Semantic DISC & Khớp Lệnh Nhà Máy Theo Bán Kính GIS'
+                  : 'HR Nhà Máy FDI Quét AI Khớp Lệnh Ứng Viên Chuẩn DISC & Location'
                 }
               </h2>
               <p className="text-xs sm:text-sm text-blue-100/90 font-medium mt-1">
                 {activeMode === 'candidate'
-                  ? 'Công nghệ quét CV trích xuất Kỹ năng, Con số chủ đạo & Đổ ra danh sách Logo Doanh nghiệp cùng Location'
-                  : 'Quét toàn bộ kho nhân sự KCN, phân tích độ hợp Thần số học và Đổ ra Avatar ứng viên có tỷ lệ match cao nhất'
+                  ? 'Bóc tách từ ngữ CV, phân tích 4 nhóm tính cách DISC (D-I-S-C) & tự động khớp lệnh với 400+ KCN toàn quốc.'
+                  : 'Quét toàn bộ kho nhân sự KCN, phân tích độ khớp văn hóa DISC (85%+) & định vị ứng viên bán kính < 10km.'
                 }
               </p>
             </div>
@@ -244,7 +244,7 @@ export default function CVAnalysisAndMatchingModal({
                 }`}
               >
                 <UploadCloud className="w-3.5 h-3.5" />
-                <span>1. Ứng Viên Tải CV</span>
+                <span>1. Ứng Viên Quét CV (DISC)</span>
               </button>
 
               <button
