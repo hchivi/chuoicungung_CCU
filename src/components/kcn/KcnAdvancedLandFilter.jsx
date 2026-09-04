@@ -1,8 +1,7 @@
 import React from 'react';
 import { 
   Search, Filter, RotateCcw, MapPin, Building2, Sparkles, 
-  Layers, LayoutGrid, Table as TableIcon, Map as MapIcon, SlidersHorizontal,
-  ChevronDown
+  Layers, LayoutGrid, Table as TableIcon, Map as MapIcon, ChevronDown
 } from 'lucide-react';
 
 export default function KcnAdvancedLandFilter({
@@ -10,8 +9,6 @@ export default function KcnAdvancedLandFilter({
   setSearchTerm,
   selectedSegment,
   setSelectedSegment,
-  selectedAreaRange,
-  setSelectedAreaRange,
   selectedIndustry,
   setSelectedIndustry,
   selectedProvince,
@@ -30,13 +27,6 @@ export default function KcnAdvancedLandFilter({
     { id: 'ccn', label: '🏢 Cụm Công nghiệp (CCN)' },
   ];
 
-  const areaRanges = [
-    { id: 'all', label: 'Mọi diện tích' },
-    { id: '1-5', label: '1 - 5 Ha (Vừa & nhỏ)' },
-    { id: '5-15', label: '5 - 15 Ha (Tiêu chuẩn)' },
-    { id: '15+', label: '15 - 50 Ha+ (Quy mô lớn)' },
-  ];
-
   const industries = [
     { id: 'all', label: 'Tất cả ngành nghề thu hút' },
     { id: 'semiconductor', label: 'Điện tử & Bán dẫn (Semiconductor)' },
@@ -48,22 +38,22 @@ export default function KcnAdvancedLandFilter({
     { id: 'logistics', label: 'Logistics & Kho bãi 3PL/4PL' },
   ];
 
-  const hasActiveFilters = searchTerm || selectedSegment !== 'all' || selectedAreaRange !== 'all' || selectedIndustry !== 'all' || selectedProvince !== 'all';
+  const hasActiveFilters = searchTerm || selectedSegment !== 'all' || selectedIndustry !== 'all' || selectedProvince !== 'all';
 
   return (
     <div className="sticky top-16 z-30 bg-white/95 backdrop-blur-md rounded-3xl border border-slate-200/90 shadow-md p-4 sm:p-5 space-y-4 font-sans">
       
-      {/* Row 1: Search & Dropdown Selectors */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-2.5">
+      {/* Row 1: Search & Dropdown Selectors (3 Clean Columns) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
         
-        {/* Search Bar (4 cols) */}
-        <div className="lg:col-span-4 relative">
+        {/* Search Bar (5 cols) */}
+        <div className="lg:col-span-5 relative">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Tìm theo tên KCN, tỉnh thành, cảng biển..."
+            placeholder="Tìm theo tên KCN, vị trí, cảng biển..."
             className="w-full pl-10 pr-8 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium"
           />
           {searchTerm && (
@@ -76,8 +66,8 @@ export default function KcnAdvancedLandFilter({
           )}
         </div>
 
-        {/* 34 Provinces Selector (3 cols) */}
-        <div className="lg:col-span-3">
+        {/* 34 Provinces Selector (4 cols) */}
+        <div className="lg:col-span-4">
           <div className="relative">
             <MapPin className="w-3.5 h-3.5 text-rose-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <select
@@ -108,25 +98,6 @@ export default function KcnAdvancedLandFilter({
               {industries.map((ind) => (
                 <option key={ind.id} value={ind.id}>
                   {ind.label}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
-        </div>
-
-        {/* Ready Land Area Selector (2 cols) */}
-        <div className="lg:col-span-2">
-          <div className="relative">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-600 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-            <select
-              value={selectedAreaRange}
-              onChange={(e) => setSelectedAreaRange(e.target.value)}
-              className="w-full pl-9 pr-7 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-800 font-bold focus:outline-none focus:border-blue-500 appearance-none cursor-pointer truncate"
-            >
-              {areaRanges.map((ar) => (
-                <option key={ar.id} value={ar.id}>
-                  {ar.label}
                 </option>
               ))}
             </select>

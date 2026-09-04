@@ -388,8 +388,6 @@ export default function IndustrialParksPage() {
           setSearchTerm={setSearchTerm}
           selectedSegment={selectedSegment}
           setSelectedSegment={setSelectedSegment}
-          selectedAreaRange={selectedAreaRange}
-          setSelectedAreaRange={setSelectedAreaRange}
           selectedIndustry={selectedIndustry}
           setSelectedIndustry={setSelectedIndustry}
           selectedProvince={selectedProvince}
@@ -518,16 +516,15 @@ export default function IndustrialParksPage() {
                     <th className="py-3.5 px-3 w-14 text-center font-mono shrink-0">STT</th>
                     <th className="py-3.5 px-5 min-w-[200px]">TÊN KHU CÔNG NGHIỆP</th>
                     <th className="py-3.5 px-4 min-w-[130px]">TỈNH THÀNH</th>
-                    <th className="py-3.5 px-4 min-w-[140px]">LOGISTICS CẢNG / SÂN BAY</th>
-                    <th className="py-3.5 px-4 text-center min-w-[110px]">ĐẤT TRỐNG</th>
-                    <th className="py-3.5 px-4 text-center min-w-[110px]">SỐ NHÀ MÁY</th>
+                    <th className="py-3.5 px-4 min-w-[160px]">LOGISTICS CẢNG / SÂN BAY</th>
+                    <th className="py-3.5 px-4 text-center min-w-[120px]">SỐ NHÀ MÁY</th>
                     <th className="py-3.5 px-4 text-right min-w-[160px] shrink-0">HÀNH ĐỘNG</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {paginatedKCN.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-12 text-center text-slate-400">
+                      <td colSpan={6} className="py-12 text-center text-slate-400">
                         Không tìm thấy khu công nghiệp nào phù hợp với bộ lọc.
                       </td>
                     </tr>
@@ -551,7 +548,7 @@ export default function IndustrialParksPage() {
                               <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition text-[#0052cc] shrink-0" />
                             </Link>
                             <span className="text-[10px] text-slate-400 block mt-0.5 font-medium">
-                              {logistics.segment} • {logistics.rentPrice}
+                              {logistics.segment}
                             </span>
                           </td>
                           <td className="py-3.5 px-4 whitespace-nowrap">
@@ -565,11 +562,6 @@ export default function IndustrialParksPage() {
                             <div>🚢 Cảng ({logistics.seaport.distanceKm}km)</div>
                           </td>
                           <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                            <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-mono font-bold text-[11px]">
-                              {logistics.readyLandHa} Ha
-                            </span>
-                          </td>
-                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
                             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-mono font-bold border border-slate-200 whitespace-nowrap">
                               <Factory className="w-3 h-3 mr-1 text-slate-500 shrink-0" />
                               <span>{kcn.totalFactories || (kcn.factories ? kcn.factories.length : 0)} NM</span>
@@ -578,13 +570,13 @@ export default function IndustrialParksPage() {
                           <td className="py-3.5 px-4 text-right whitespace-nowrap shrink-0 space-x-1.5">
                             <button
                               onClick={() => handleOpenSiteVisit(kcn, logistics)}
-                              className="px-2.5 py-1 bg-gradient-to-r from-[#003d8f] to-[#0052cc] text-white rounded-lg text-xs font-bold transition font-heading uppercase"
+                              className="px-2.5 py-1 bg-gradient-to-r from-[#003d8f] to-[#0052cc] text-white rounded-lg text-xs font-bold transition font-heading uppercase cursor-pointer"
                             >
                               Thực địa
                             </button>
                             <Link
                               to={`/khu-cong-nghiep/${kcn.id}`}
-                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition font-heading uppercase inline-block"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition font-heading uppercase inline-block cursor-pointer"
                             >
                               Chi tiết
                             </Link>

@@ -37,23 +37,6 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
             {kcn.province}
           </span>
         </div>
-
-        {/* Bottom Metrics on Image */}
-        <div className="absolute bottom-3 inset-x-3 flex items-end justify-between gap-2 text-white">
-          <div>
-            <span className="text-[10px] text-slate-300 block font-medium">Giá thuê tham khảo</span>
-            <strong className="text-base sm:text-lg font-black font-mono text-amber-300 drop-shadow-sm">
-              {logistics.rentPrice}
-            </strong>
-          </div>
-
-          <div className="text-right">
-            <span className="text-[10px] text-slate-300 block font-medium">Đất trống sẵn sàng</span>
-            <span className="px-2 py-0.5 rounded-md bg-emerald-500 text-white font-bold font-mono text-xs shadow-sm">
-              Còn trống {logistics.readyLandHa} Ha
-            </span>
-          </div>
-        </div>
       </div>
 
       {/* 2. Card Body */}
