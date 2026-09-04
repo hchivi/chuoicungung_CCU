@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Search, Filter, ShoppingBag, MapPin, Building2, Calendar, 
-  Clock, PlusCircle, ArrowRight, ChevronRight, RotateCcw, 
+import {
+  Search, Filter, ShoppingBag, MapPin, Building2, Calendar,
+  Clock, PlusCircle, ArrowRight, ChevronRight, RotateCcw,
   DollarSign, CheckCircle2, AlertCircle, Sparkles, Award,
   Users, Eye, Lock, ShieldCheck, Heart, Share2, Layers,
   Phone, Mail, MessageSquare, X, LogIn, UserPlus, Zap,
@@ -40,7 +40,7 @@ export default function DemandsPage() {
   const filteredDemands = useMemo(() => {
     return demandsMarketplaceData.filter(d => {
       // Search term filter
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         d.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         d.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (d.anonymousBuyerName && d.anonymousBuyerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -49,8 +49,8 @@ export default function DemandsPage() {
         (d.location && d.location.toLowerCase().includes(searchTerm.toLowerCase()));
 
       // Phase filter
-      const matchesPhase = selectedPhase === 'all' || 
-        d.phaseId === selectedPhase || 
+      const matchesPhase = selectedPhase === 'all' ||
+        d.phaseId === selectedPhase ||
         String(d.stageId) === selectedPhase;
 
       // Budget tier filter
@@ -74,7 +74,7 @@ export default function DemandsPage() {
       }
 
       // Location filter
-      const matchesLocation = selectedLocation === 'all' || 
+      const matchesLocation = selectedLocation === 'all' ||
         (d.location && d.location.toLowerCase().includes(selectedLocation.toLowerCase()));
 
       return matchesSearch && matchesPhase && matchesBudget && matchesStatus && matchesLocation;
@@ -104,16 +104,16 @@ export default function DemandsPage() {
 
   return (
     <div className="space-y-0 pb-20 font-sans bg-[#F8FAFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
-      
+
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual) */}
       {/* ========================================================================= */}
       <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
-        
+
         {/* Right Half Sourcing Photo with Smooth Gradient Blend */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
-          <img 
-            src="/images/b2b_sourcing_demand_hero.jpg" 
+          <img
+            src="/images/b2b_sourcing_demand_hero.jpg"
             alt="B2B Sourcing Demands Marketplace"
             className="w-full h-full object-cover object-center scale-105"
           />
@@ -124,7 +124,7 @@ export default function DemandsPage() {
         {/* Top Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
           <div className="max-w-2xl space-y-5">
-            
+
             {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
               <Link to="/" className="hover:text-[#0052cc] transition">
@@ -183,9 +183,11 @@ export default function DemandsPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5 STATS CARDS (Overlapping smoothly) */}
+      {/* 5 STATS CARDS & FAST-RFQ BOX (Cleanly spaced container) */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-6 sm:space-y-8">
+        
+        {/* 5 Stats Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
           <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
             <span className="text-xl font-black text-[#0052cc] font-mono">1.256+</span>
@@ -208,16 +210,12 @@ export default function DemandsPage() {
             <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Bidding Suppliers' : 'Lượt NCC quan tâm'}</p>
           </div>
         </div>
-      </div>
 
-      {/* ========================================================================= */}
-      {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
-      {/* ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 relative z-20">
+        {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
         <div className="rounded-3xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] text-white p-5 sm:p-7 shadow-xl shadow-blue-900/20 border-2 border-blue-400/40 relative overflow-hidden">
-          
+
           <div className="relative z-10 space-y-4">
-            
+
             {/* Header Text */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="space-y-0.5">
@@ -237,7 +235,7 @@ export default function DemandsPage() {
 
             {/* Fast-RFQ Interactive Form */}
             <form onSubmit={handleQuickRfqSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-              
+
               {/* Big Text Input */}
               <div className="md:col-span-5 relative">
                 <input
@@ -298,21 +296,22 @@ export default function DemandsPage() {
 
           </div>
         </div>
-      </section>
+
+      </div>
 
       {/* ========================================================================= */}
       {/* MAIN CONTENT AREA: 2-COLUMN LAYOUT (Sidebar Filter 25% | Bidding Feed 75%) */}
       {/* ========================================================================= */}
       <section id="bidding-feed" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* ========================================================================= */}
           {/* 3. BỘ LỌC SÀN GIAO DỊCH (Smart Bidding Filter - Cột Trái Sticky 25% ~ 3 Cols) */}
           {/* ========================================================================= */}
           <aside className="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-24 space-y-5">
-            
+
             <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-5">
-              
+
               {/* Sidebar Header */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center space-x-2">
@@ -390,11 +389,10 @@ export default function DemandsPage() {
                   ].map((tier) => (
                     <label
                       key={tier.id}
-                      className={`flex items-center space-x-2 p-2 rounded-xl border transition cursor-pointer ${
-                        selectedBudgetTier === tier.id 
-                          ? 'bg-blue-50 border-blue-300 text-[#0052cc] font-bold' 
-                          : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                      }`}
+                      className={`flex items-center space-x-2 p-2 rounded-xl border transition cursor-pointer ${selectedBudgetTier === tier.id
+                        ? 'bg-blue-50 border-blue-300 text-[#0052cc] font-bold'
+                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                        }`}
                     >
                       <input
                         type="radio"
@@ -417,22 +415,20 @@ export default function DemandsPage() {
                   <button
                     type="button"
                     onClick={() => setSelectedStatus(selectedStatus === 'urgent' ? 'all' : 'urgent')}
-                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${
-                      selectedStatus === 'urgent'
-                        ? 'bg-rose-50 border-rose-400 text-rose-700 font-bold'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                    }`}
+                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${selectedStatus === 'urgent'
+                      ? 'bg-rose-50 border-rose-400 text-rose-700 font-bold'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                      }`}
                   >
                     ⏳ Sắp đóng (Khẩn)
                   </button>
                   <button
                     type="button"
                     onClick={() => setSelectedStatus(selectedStatus === 'anonymous' ? 'all' : 'anonymous')}
-                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${
-                      selectedStatus === 'anonymous'
-                        ? 'bg-indigo-50 border-indigo-400 text-indigo-700 font-bold'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                    }`}
+                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${selectedStatus === 'anonymous'
+                      ? 'bg-indigo-50 border-indigo-400 text-indigo-700 font-bold'
+                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                      }`}
                   >
                     🛡️ FDI Ẩn danh
                   </button>
@@ -476,18 +472,15 @@ export default function DemandsPage() {
           {/* 4. LIVE BIDDING FEED (Bảng Tin Đấu Thầu Thực Chiến - Cột Phải 75% ~ 9 Cols) */}
           {/* ========================================================================= */}
           <main className="lg:col-span-8 xl:col-span-9 space-y-4">
-            
+
             {/* Feed Header */}
             <div className="flex items-center justify-between pb-2 border-b border-slate-200">
               <div className="flex items-center space-x-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                 <h2 className="text-base sm:text-lg font-black font-heading text-slate-900 uppercase">
-                  Bảng Tin Đấu Thầu Thực Chiến ({filteredDemands.length} gói thầu)
+                  Bảng Tin Nhu Cầu
                 </h2>
               </div>
-              <span className="text-xs text-slate-500 font-mono hidden sm:inline">
-                Tự động cập nhật thời gian thực
-              </span>
             </div>
 
             {/* If no demands match */}
@@ -515,7 +508,7 @@ export default function DemandsPage() {
                 {filteredDemands.map((demand) => {
                   const percentFilled = demand.progressPercent || Math.round(((demand.currentBids || 3) / (demand.maxBids || 10)) * 100);
                   const isUrgent = demand.isUrgent || demand.timeRemaining?.includes('Khẩn') || demand.timeRemaining?.includes('24h');
-                  
+
                   return (
                     <div
                       key={demand.id}
@@ -523,7 +516,7 @@ export default function DemandsPage() {
                     >
                       {/* Top Badges & Meta */}
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        
+
                         <div className="flex items-center space-x-2">
                           <span className="px-3 py-1 rounded-full bg-blue-50 text-[#0052cc] border border-blue-200 text-xs font-mono font-bold">
                             {demand.phaseBadge || `Pha ${demand.phaseId}`}
@@ -542,11 +535,10 @@ export default function DemandsPage() {
                         </div>
 
                         {/* Countdown Tag */}
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold font-mono flex items-center space-x-1.5 ${
-                          isUrgent 
-                            ? 'bg-rose-50 text-rose-700 border border-rose-200 animate-pulse' 
-                            : 'bg-slate-100 text-slate-700 border border-slate-200'
-                        }`}>
+                        <div className={`px-3 py-1 rounded-full text-xs font-bold font-mono flex items-center space-x-1.5 ${isUrgent
+                          ? 'bg-rose-50 text-rose-700 border border-rose-200 animate-pulse'
+                          : 'bg-slate-100 text-slate-700 border border-slate-200'
+                          }`}>
                           <Timer className="w-3.5 h-3.5" />
                           <span>{demand.timeRemaining || demand.deadline}</span>
                         </div>
@@ -584,7 +576,7 @@ export default function DemandsPage() {
 
                       {/* 5. FOMO Progress Bar & Dual Smart CTA */}
                       <div className="pt-3 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        
+
                         {/* Left: FOMO Progress & Budget */}
                         <div className="space-y-1.5 flex-1 max-w-md">
                           <div className="flex items-center justify-between text-xs">
@@ -602,9 +594,8 @@ export default function DemandsPage() {
                           {/* Progress bar */}
                           <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
                             <div
-                              className={`h-full rounded-full transition-all duration-500 ${
-                                percentFilled >= 70 ? 'bg-rose-500' : percentFilled >= 40 ? 'bg-amber-500' : 'bg-blue-500'
-                              }`}
+                              className={`h-full rounded-full transition-all duration-500 ${percentFilled >= 70 ? 'bg-rose-500' : percentFilled >= 40 ? 'bg-amber-500' : 'bg-blue-500'
+                                }`}
                               style={{ width: `${percentFilled}%` }}
                             />
                           </div>
@@ -612,7 +603,7 @@ export default function DemandsPage() {
 
                         {/* Right: Dual CTA Smart Paywall */}
                         <div className="flex items-center space-x-2 shrink-0">
-                          
+
                           {/* Button 1: 1-Click Apply */}
                           <button
                             onClick={() => handleOpenApply(demand)}

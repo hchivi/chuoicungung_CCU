@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Database, RefreshCw, Cpu, Gem, CheckCircle2, ShieldCheck, 
+import {
+  Database, RefreshCw, Cpu, Gem, CheckCircle2, ShieldCheck,
   Zap, ArrowRight, Play, Sparkles, Layers, Activity, Lock
 } from 'lucide-react';
 
@@ -40,7 +40,7 @@ export default function AssociationApiMotionGraphic3D() {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -73,7 +73,7 @@ export default function AssociationApiMotionGraphic3D() {
       {/* ========================================================================= */}
       {/* 3D MOTION GRAPHIC VIEWPORT */}
       {/* ========================================================================= */}
-      <div 
+      <div
         className="relative z-20 py-4 transition-transform duration-200 ease-out"
         style={{
           transform: `rotateY(${mouseOffset.x}deg) rotateX(${mouseOffset.y}deg)`,
@@ -81,17 +81,16 @@ export default function AssociationApiMotionGraphic3D() {
         }}
       >
         <div className="grid grid-cols-1 lg:grid-cols-11 gap-6 lg:gap-3 items-center">
-          
+
           {/* ===================================================================== */}
           {/* NODE 1: [Database Của Hiệp Hội (CRM/ERP)] - 3 COLS */}
           {/* ===================================================================== */}
-          <div 
+          <div
             onClick={() => setActiveStep(1)}
-            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group ${
-              activeStep === 1 
-                ? 'bg-white border-2 border-[#0052cc] shadow-2xl shadow-blue-500/20 scale-102 ring-4 ring-blue-500/10' 
-                : 'bg-white/90 border border-slate-200/90 shadow-sm hover:border-blue-300 hover:shadow-md'
-            }`}
+            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group ${activeStep === 1
+              ? 'bg-white border-2 border-[#0052cc] shadow-2xl shadow-blue-500/20 scale-102 ring-4 ring-blue-500/10'
+              : 'bg-white/90 border border-slate-200/90 shadow-sm hover:border-blue-300 hover:shadow-md'
+              }`}
             style={{
               transform: activeStep === 1 ? 'translateZ(30px)' : 'translateZ(0px)',
               transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
@@ -166,13 +165,12 @@ export default function AssociationApiMotionGraphic3D() {
           {/* ===================================================================== */}
           {/* NODE 2: [logo_only.png] CENTER HUB - 3 COLS */}
           {/* ===================================================================== */}
-          <div 
+          <div
             onClick={() => setActiveStep(2)}
-            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group text-center flex flex-col items-center justify-between ${
-              activeStep === 2
-                ? 'bg-gradient-to-b from-white via-blue-50/50 to-white border-2 border-[#0052cc] shadow-2xl shadow-blue-600/30 scale-105 ring-4 ring-blue-500/20'
-                : 'bg-white/95 border border-blue-200 shadow-sm hover:border-[#0052cc]/70 hover:shadow-md'
-            }`}
+            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group text-center flex flex-col items-center justify-between ${activeStep === 2
+              ? 'bg-gradient-to-b from-white via-blue-50/50 to-white border-2 border-[#0052cc] shadow-2xl shadow-blue-600/30 scale-105 ring-4 ring-blue-500/20'
+              : 'bg-white/95 border border-blue-200 shadow-sm hover:border-[#0052cc]/70 hover:shadow-md'
+              }`}
             style={{
               transform: activeStep === 2 ? 'translateZ(45px)' : 'translateZ(10px)',
               transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
@@ -197,9 +195,9 @@ export default function AssociationApiMotionGraphic3D() {
 
               {/* Center logo_only.png without border box */}
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 p-1 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <img 
-                  src="/logo_only.png" 
-                  alt="Chuỗi Cung Ứng Core Matchmaking" 
+                <img
+                  src="/logo_only.png"
+                  alt="Chuỗi Cung Ứng Core Matchmaking"
                   className="w-full h-full object-contain filter drop-shadow-lg"
                 />
               </div>
@@ -208,11 +206,8 @@ export default function AssociationApiMotionGraphic3D() {
             {/* Title & Core Subtitle */}
             <div className="space-y-1 mt-2">
               <h4 className="text-sm sm:text-base font-black font-heading text-slate-950">
-                ChuoiCungUng.vn Core
+                ChuoiCungUng.com
               </h4>
-              <p className="text-[11px] text-[#0052cc] font-bold font-mono">
-                AI Cross-Check Engine
-              </p>
             </div>
 
             {/* 3 Checks Realtime Badges */}
@@ -255,13 +250,12 @@ export default function AssociationApiMotionGraphic3D() {
           {/* ===================================================================== */}
           {/* NODE 3: [Huy hiệu Kim Cương tự động cấp cho Member] - 3 COLS */}
           {/* ===================================================================== */}
-          <div 
+          <div
             onClick={() => setActiveStep(3)}
-            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group ${
-              activeStep === 3
-                ? 'bg-gradient-to-br from-white via-amber-50/70 to-yellow-50/50 border-2 border-amber-400 shadow-2xl shadow-amber-500/20 scale-102 ring-4 ring-amber-500/10'
-                : 'bg-white/90 border border-slate-200/90 shadow-sm hover:border-amber-300 hover:shadow-md'
-            }`}
+            className={`lg:col-span-3 rounded-3xl p-5 sm:p-6 transition-all duration-500 relative cursor-pointer group ${activeStep === 3
+              ? 'bg-gradient-to-br from-white via-amber-50/70 to-yellow-50/50 border-2 border-amber-400 shadow-2xl shadow-amber-500/20 scale-102 ring-4 ring-amber-500/10'
+              : 'bg-white/90 border border-slate-200/90 shadow-sm hover:border-amber-300 hover:shadow-md'
+              }`}
             style={{
               transform: activeStep === 3 ? 'translateZ(30px)' : 'translateZ(0px)',
               transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
