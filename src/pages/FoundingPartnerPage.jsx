@@ -5,7 +5,7 @@ import {
   ArrowRight, Users, Building2, Globe, HeartHandshake, FileText, Check,
   Search, Filter, MapPin, Eye, PhoneCall, Send, Star, X, Layers,
   ChevronRight, ArrowUpRight, Zap, Factory, CheckCircle, Lock, ShieldCheck,
-  RotateCcw, SlidersHorizontal, ArrowLeftRight, CheckCheck
+  RotateCcw, SlidersHorizontal, ArrowLeftRight, CheckCheck, ExternalLink
 } from 'lucide-react';
 import { foundingPartnersData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
