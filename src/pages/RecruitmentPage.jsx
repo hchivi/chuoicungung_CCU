@@ -7,12 +7,52 @@ import {
   Lock, ShieldCheck, Heart, Share2, Layers, Phone, Mail, 
   X, Check, FileText, Send, UserCheck, Flame, Compass, ChevronDown,
   GraduationCap, UserPlus, Star, BadgeCheck, Zap, Brain, User, UploadCloud,
-  Navigation, CheckCircle, SlidersHorizontal, Activity
+  Navigation, CheckCircle, SlidersHorizontal, Activity, Target
 } from 'lucide-react';
 import { recruitmentJobsData, recruitmentCandidatesData, recruitmentStats } from '../data/recruitmentData';
 import { useLanguage } from '../contexts/LanguageContext';
 import NumerologyModal from '../components/NumerologyModal';
 import CVAnalysisAndMatchingModal from '../components/CVAnalysisAndMatchingModal';
+
+// Reusable SVG Circular Progress Ring Component as specified in Doc
+function MiniProgressRing({ percentage, label, color = '#0052cc', size = 44, strokeWidth = 4 }) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="flex flex-col items-center justify-center text-center">
+      <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+        <svg className="transform -rotate-90" width={size} height={size}>
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke="#E2E8F0"
+            strokeWidth={strokeWidth}
+            fill="transparent"
+          />
+          <circle
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke={color}
+            strokeWidth={strokeWidth}
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            fill="transparent"
+            className="transition-all duration-700 ease-out"
+          />
+        </svg>
+        <span className="absolute font-mono font-black text-[10.5px] text-slate-800">
+          {percentage}%
+        </span>
+      </div>
+      {label && <span className="text-[9.5px] font-bold text-slate-500 mt-0.5 leading-tight">{label}</span>}
+    </div>
+  );
+}
 
 export default function RecruitmentPage({ defaultTab }) {
   const { t, lang } = useLanguage();
@@ -539,7 +579,7 @@ export default function RecruitmentPage({ defaultTab }) {
                   <span>Danh sách vị trí việc làm KCN đang tuyển dụng ({filteredJobs.length})</span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Khớp nối trực tiếp nhà máy FDI & Xưởng chuỗi cung ứng • Không qua trung gian thu phí
+                  Khớp nối trực tiếp nhà máy FDI & Xưởng chuỗi cung ứng • Tích hợp Progress Ring đo độ tương thích
                 </p>
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
@@ -638,12 +678,6 @@ export default function RecruitmentPage({ defaultTab }) {
                             <span className="font-heading font-bold text-[11.5px]">{job.discBadge || `DISC: Nhóm ${job.targetDisc || 'D'}`}</span>
                           </div>
 
-                          {/* Skill Match & Culture Match Badges */}
-                          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold font-mono">
-                            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Độ khớp kỹ năng: {job.skillMatchPercent || 92}%</span>
-                          </div>
-
                           {/* GIS Radius distance badge */}
                           <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 text-xs font-mono font-semibold">
                             <Navigation className="w-3 h-3 text-[#0052cc]" />
@@ -681,19 +715,39 @@ export default function RecruitmentPage({ defaultTab }) {
                         )}
                       </div>
 
-                      {/* Right Action CTA */}
-                      <div className="lg:self-center shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 pt-2 lg:pt-0">
-                        <button
-                          onClick={() => setApplyModal({ isOpen: true, job })}
-                          className="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
-                        >
-                          <Send className="w-3.5 h-3.5" />
-                          <span>Nộp Hồ Sơ Ứng Tuyển</span>
-                        </button>
+                      {/* Right Area: Progress Rings & CTA Button as in Google Doc */}
+                      <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col items-center lg:items-end justify-between gap-4 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 lg:pl-4">
                         
-                        <span className="text-[11px] text-center text-slate-400 font-medium">
-                          Đăng {job.postedDate} • Phản hồi qua ATS
-                        </span>
+                        {/* Progress Rings Pair (Skill Match % & DISC Match %) */}
+                        <div className="flex items-center gap-3 bg-slate-50/80 p-2 rounded-2xl border border-slate-100">
+                          <MiniProgressRing 
+                            percentage={job.skillMatchPercent || 94} 
+                            label="Khớp Kỹ Năng" 
+                            color="#0052cc" 
+                            size={44} 
+                          />
+                          <div className="w-px h-8 bg-slate-200"></div>
+                          <MiniProgressRing 
+                            percentage={job.discMatchPercent || 88} 
+                            label="Khớp DISC" 
+                            color="#7c3aed" 
+                            size={44} 
+                          />
+                        </div>
+
+                        <div className="w-full sm:w-auto flex flex-col gap-1.5">
+                          <button
+                            onClick={() => setApplyModal({ isOpen: true, job })}
+                            className="w-full px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
+                          >
+                            <Send className="w-3.5 h-3.5" />
+                            <span>Nộp Hồ Sơ Ứng Tuyển</span>
+                          </button>
+                          
+                          <span className="text-[10.5px] text-center text-slate-400 font-medium">
+                            Đăng {job.postedDate} • Phản hồi qua ATS
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -714,7 +768,7 @@ export default function RecruitmentPage({ defaultTab }) {
                   <span>Hồ sơ Chuyên gia & Kỹ sư KCN đang tìm việc ({filteredCandidates.length})</span>
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Nhân sự kỹ thuật cao đã xác thực CCCD, bằng cấp & kinh nghiệm thực chiến tại các nhà máy
+                  Hồ sơ nhân sự đa chiều kèm Vòng tròn đo lường Skill Match & DISC Culture Match
                 </p>
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
@@ -780,11 +834,6 @@ export default function RecruitmentPage({ defaultTab }) {
                           <span className="font-heading font-bold text-[11.5px]">{cand.discBadge || `DISC: Nhóm ${cand.discType}`}</span>
                         </div>
 
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-bold font-mono">
-                          <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>Tương thích văn hóa: {cand.cultureMatchPercent || 94}%</span>
-                        </div>
-
                         <div className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 text-xs font-mono font-semibold">
                           <Navigation className="w-3 h-3 text-[#0052cc]" />
                           <span>Cư trú cách {cand.kcnNearby || cand.location} {cand.distanceKm || '4.2'}km</span>
@@ -837,19 +886,40 @@ export default function RecruitmentPage({ defaultTab }) {
 
                     </div>
 
-                    {/* Right Actions */}
-                    <div className="lg:self-center shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 pt-2 lg:pt-0">
-                      <button
-                        onClick={() => setCandidateModal({ isOpen: true, candidate: cand })}
-                        className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
-                      >
-                        <UserPlus className="w-4 h-4" />
-                        <span>Mời Phỏng Vấn Ngay</span>
-                      </button>
+                    {/* Right Area: Progress Rings & Invite Action as specified in Doc */}
+                    <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col items-center lg:items-end justify-between gap-4 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 lg:pl-4">
                       
-                      <span className="text-[11px] text-center text-slate-400 font-medium">
-                        Kinh nghiệm: {cand.experience}
-                      </span>
+                      {/* Candidate Card Progress Rings: Skill Match 90% | Culture Match (DISC) 85% */}
+                      <div className="flex items-center gap-3 bg-emerald-50/50 p-2 rounded-2xl border border-emerald-100">
+                        <MiniProgressRing 
+                          percentage={cand.skillMatchPercent || 92} 
+                          label="Khớp Kỹ Năng" 
+                          color="#059669" 
+                          size={44} 
+                        />
+                        <div className="w-px h-8 bg-emerald-200"></div>
+                        <MiniProgressRing 
+                          percentage={cand.cultureMatchPercent || 88} 
+                          label="Khớp Văn Hóa" 
+                          color="#7c3aed" 
+                          size={44} 
+                        />
+                      </div>
+
+                      <div className="w-full sm:w-auto flex flex-col gap-1.5">
+                        <button
+                          onClick={() => setCandidateModal({ isOpen: true, candidate: cand })}
+                          className="w-full px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs font-black shadow-md shadow-emerald-500/20 flex items-center justify-center space-x-2 font-heading uppercase tracking-wider transition group-hover:scale-[1.02] cursor-pointer"
+                        >
+                          <UserPlus className="w-4 h-4" />
+                          <span>Mời Phỏng Vấn Ngay</span>
+                        </button>
+                        
+                        <span className="text-[10.5px] text-center text-slate-400 font-medium">
+                          Kinh nghiệm: {cand.experience}
+                        </span>
+                      </div>
+
                     </div>
 
                   </div>
