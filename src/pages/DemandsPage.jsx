@@ -106,120 +106,109 @@ export default function DemandsPage() {
     <div className="space-y-0 pb-20 font-sans bg-[#F8FAFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
-      {/* 1. HERO DASHBOARD (Nhịp Đập Giao Thương - Sàn Chứng Khoán B2B Dark Mode) */}
+      {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[#060D1A] via-[#0A1628] to-[#0D1E38] text-white pt-6 pb-12 sm:pb-16 border-b border-blue-900/40">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
         
-        {/* Decorative Grid Matrices */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -left-32 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Right Half Sourcing Photo with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+          <img 
+            src="/images/b2b_sourcing_demand_hero.jpg" 
+            alt="B2B Sourcing Demands Marketplace"
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
-          
-          {/* Breadcrumb */}
-          <nav className="flex items-center space-x-2 text-xs text-slate-400 font-medium">
-            <Link to="/" className="hover:text-blue-400 transition">
-              {lang === 'en' ? 'Home' : 'Trang chủ'}
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-            <span className="text-blue-400 font-bold">
-              {lang === 'en' ? 'B2B Procurement Trading Floor' : 'Sàn Giao dịch B2B & Đấu thầu'}
-            </span>
-          </nav>
+        {/* Top Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
+          <div className="max-w-2xl space-y-5">
+            
+            {/* Breadcrumb */}
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
+              <Link to="/" className="hover:text-[#0052cc] transition">
+                {lang === 'en' ? 'Home' : 'Trang chủ'}
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="text-[#0052cc] font-bold">
+                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn B2B2C'}
+              </span>
+            </nav>
 
-          {/* Top Title & Subtitle */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-            <div className="space-y-3 max-w-3xl">
-              <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-500/20 backdrop-blur-md border border-blue-400/30 text-blue-300 text-[11px] font-bold font-mono tracking-wide shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>B2B PROCUREMENT TRADING FLOOR • KHÉP KÍN CHUỖI CUNG ỨNG 18 PHA</span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-white leading-tight">
-                Sàn Giao Dịch B2B &amp; Đấu Thầu Mua Sắm Nhà Máy FDI
-              </h1>
-
-              <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
-                Nơi diễn ra các phiên đấu thầu mua sắm trực tiếp từ các Nhà máy &amp; Tập đoàn FDI tại các KCN Việt Nam. Bảo chứng giao dịch qua 3 Lớp KYC B2B &amp; Thuật toán Đóng gói 1-Click Apply.
-              </p>
+            {/* Tagline Badge */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
+              <span>{lang === 'en' ? 'B2B2C SOURCING & PROCUREMENT HUB • 1,250+ PLANTS' : 'SÀN B2B2C • NGUỒN CUNG & NHU CẦU TOÀN DIỆN'}</span>
             </div>
 
-            {/* Quick Action Buttons */}
-            <div className="flex items-center gap-3 shrink-0">
+            {/* Headline */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
+                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn Nhu Cầu B2B2C'}
+              </h1>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
+                {lang === 'en' ? 'Connecting Enterprise Trade' : 'Kết Nối Giao Thương Toàn Diện'}
+              </h2>
+            </div>
+
+            {/* Subtitle */}
+            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
+              {lang === 'en'
+                ? 'Directly connect manufacturing plants & enterprise corporations with certified industrial suppliers across Vietnam 18 phases.'
+                : 'Quy tụ nhu cầu tìm nguồn cung từ các nhà máy, tập đoàn & đối tác sáng lập — Đăng tải hỏi hàng nguyên phụ liệu, bao bì, linh kiện và giải pháp công nghiệp trực tiếp.'}
+            </p>
+
+            {/* Dual Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <button
                 onClick={() => setFastRfqModalOpen(true)}
-                className="px-5 py-3 bg-gradient-to-r from-amber-500 via-orange-600 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white text-xs font-black rounded-xl shadow-lg shadow-orange-600/30 transition flex items-center space-x-2 font-heading tracking-wide uppercase cursor-pointer"
+                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <Zap className="w-4 h-4" />
-                <span>Phát Lệnh Thu Mua</span>
+                <PlusCircle className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Post Sourcing Demand' : 'Đăng Nhu Cầu Ngay'}</span>
               </button>
 
               <a
                 href="#bidding-feed"
-                className="px-5 py-3 bg-slate-800/80 hover:bg-slate-700 text-white text-xs font-bold rounded-xl border border-slate-700 transition flex items-center space-x-1.5 font-heading"
+                className="px-6 py-3.5 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group cursor-pointer"
               >
-                <Radio className="w-4 h-4 text-emerald-400 animate-pulse" />
-                <span>Bidding Feed Trực Tiếp</span>
+                <ShoppingBag className="w-4 h-4 text-[#0052cc] group-hover:scale-110 transition-transform" />
+                <span>{lang === 'en' ? 'Explore Demands' : 'Xem Nhu Cầu Mở'}</span>
               </a>
             </div>
-          </div>
-
-          {/* 4 Electronic Financial Counters */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-            
-            {/* Counter 1 */}
-            <div className="p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-blue-500/20 shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition">
-              <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-                <span>Số Gói Thầu Đang Mở</span>
-                <ShoppingBag className="w-4 h-4 text-blue-400" />
-              </div>
-              <div className="mt-2 text-2xl lg:text-3xl font-black font-mono text-blue-400 tracking-tight flex items-baseline space-x-1">
-                <span>1.256+</span>
-                <span className="text-xs text-emerald-400 font-sans font-semibold">+18 gói hôm nay</span>
-              </div>
-            </div>
-
-            {/* Counter 2 */}
-            <div className="p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-emerald-500/20 shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition">
-              <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-                <span>Tổng Giá Trị Ước Tính</span>
-                <DollarSign className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="mt-2 text-2xl lg:text-3xl font-black font-mono text-emerald-400 tracking-tight flex items-baseline space-x-1">
-                <span>356,8 Tỷ</span>
-                <span className="text-xs text-slate-400 font-sans">VNĐ</span>
-              </div>
-            </div>
-
-            {/* Counter 3 */}
-            <div className="p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-amber-500/20 shadow-lg relative overflow-hidden group hover:border-amber-500/50 transition">
-              <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-                <span>Thời Gian Khớp Lệnh TB</span>
-                <Timer className="w-4 h-4 text-amber-400" />
-              </div>
-              <div className="mt-2 text-2xl lg:text-3xl font-black font-mono text-amber-400 tracking-tight flex items-baseline space-x-1">
-                <span>4.5 Giờ</span>
-                <span className="text-xs text-slate-400 font-sans">Auto-match 15p</span>
-              </div>
-            </div>
-
-            {/* Counter 4 */}
-            <div className="p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-purple-500/20 shadow-lg relative overflow-hidden group hover:border-purple-500/50 transition">
-              <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
-                <span>Bảo Chứng 3 Lớp KYC</span>
-                <ShieldCheck className="w-4 h-4 text-purple-400" />
-              </div>
-              <div className="mt-2 text-2xl lg:text-3xl font-black font-mono text-purple-300 tracking-tight flex items-baseline space-x-1">
-                <span>100%</span>
-                <span className="text-xs text-slate-400 font-sans">Chặn 100% Spam</span>
-              </div>
-            </div>
 
           </div>
-
         </div>
       </section>
+
+      {/* ========================================================================= */}
+      {/* 5 STATS CARDS (Overlapping smoothly) */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-14 relative z-20 space-y-4">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
+            <span className="text-xl font-black text-[#0052cc] font-mono">1.256+</span>
+            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Open Demands' : 'Nhu cầu đang mở'}</p>
+          </div>
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
+            <span className="text-xl font-black text-emerald-600 font-mono">368</span>
+            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Posting Plants/Corps' : 'Nhà máy / DN đăng tin'}</p>
+          </div>
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
+            <span className="text-xl font-black text-amber-600 font-mono">28</span>
+            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Sectors' : 'Nhóm ngành sản xuất'}</p>
+          </div>
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition">
+            <span className="text-xl font-black text-purple-600 font-mono">356,8 Tỷ</span>
+            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Total Est. Value' : 'Tổng giá trị đơn hàng'}</p>
+          </div>
+          <div className="bg-white/95 backdrop-blur-md p-4 rounded-2xl border border-slate-200/90 shadow-md hover:shadow-lg transition col-span-2 sm:col-span-1">
+            <span className="text-xl font-black text-sky-600 font-mono">4.875+</span>
+            <p className="text-[10px] sm:text-[11px] font-semibold text-slate-500 mt-0.5">{lang === 'en' ? 'Bidding Suppliers' : 'Lượt NCC quan tâm'}</p>
+          </div>
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
