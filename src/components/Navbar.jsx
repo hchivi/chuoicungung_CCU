@@ -66,33 +66,36 @@ export default function Navbar() {
         className="sticky top-0 z-[1000] bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-xs transition-all w-full overflow-visible"
       >
 
-        {/* Top Micro Announcement Bar - CENTERED, FLUID SPACING, POPPINS, MOBILE OPTIMIZED WITH LANGUAGE SWITCHER */}
-        <div className="bg-[#072348] text-white py-1 sm:py-1.5 px-3 sm:px-6 flex justify-between items-center w-full font-poppins border-b border-white/5 relative z-40 overflow-visible">
-          <div className="max-w-7xl mx-auto w-full flex items-center justify-between relative overflow-visible">
-            <div className="flex items-center justify-center flex-wrap gap-x-2 sm:gap-x-6 md:gap-x-8 gap-y-0.5 text-[10px] sm:text-[11.5px] md:text-[12px] font-poppins">
-              <Link to="/dinh-vi-doanh-nghiep" className="text-amber-300 hover:text-white flex items-center font-semibold transition whitespace-nowrap">
-                <Compass className="w-3 h-3 mr-1 flex-shrink-0" />
+        {/* Top Micro Announcement Bar - CENTER ALIGNED, FLUID SPACING, POPPINS */}
+        <div className="bg-[#072348] text-white py-1 sm:py-1.5 px-3 sm:px-6 w-full font-poppins border-b border-white/5 relative z-40 overflow-visible">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-center relative overflow-visible">
+            
+            {/* Center Content Links & Support Info */}
+            <div className="flex items-center justify-center overflow-x-auto no-scrollbar touch-scroll py-0.5 space-x-3 sm:space-x-4 md:space-x-6 text-[10.5px] sm:text-[11.5px] md:text-[12px] font-poppins text-center pr-16 sm:pr-20 md:pr-0">
+              <Link to="/dinh-vi-doanh-nghiep" className="text-amber-300 hover:text-white flex items-center font-semibold transition shrink-0 whitespace-nowrap">
+                <Compass className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
                 <span>{t('topbar.diagnostic')}</span>
               </Link>
-              <span className="text-slate-600/80">|</span>
-              <Link to="/ban-do-viet-nam" className="text-sky-200 hover:text-white flex items-center font-medium transition whitespace-nowrap">
-                <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
+              <span className="text-slate-600/80 shrink-0">|</span>
+              <Link to="/ban-do-viet-nam" className="text-sky-200 hover:text-white flex items-center font-medium transition shrink-0 whitespace-nowrap">
+                <MapPin className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
                 <span>{t('topbar.map')}</span>
               </Link>
-              <span className="text-slate-600/80">|</span>
-              <Link to="/dang-nhu-cau" className="text-emerald-300 hover:text-white flex items-center transition font-semibold whitespace-nowrap">
+              <span className="text-slate-600/80 shrink-0">|</span>
+              <Link to="/dang-nhu-cau" className="text-emerald-300 hover:text-white flex items-center transition font-semibold shrink-0 whitespace-nowrap">
                 <span>{t('topbar.postDemand')}</span>
               </Link>
-              <span className="text-slate-600/80 hidden md:inline">|</span>
-              <span className="text-slate-300 font-medium hidden md:inline whitespace-nowrap">
+              <span className="text-slate-600/80 hidden md:inline shrink-0">|</span>
+              <span className="text-slate-300 font-medium hidden md:inline whitespace-nowrap shrink-0">
                 {t('topbar.support')} <strong className="text-white font-semibold">1900 8686</strong> – <a href="mailto:hotro@chuoicungung.com" className="text-slate-300 hover:text-white transition">hotro@chuoicungung.com</a>
               </span>
             </div>
 
-            {/* Right: Language Switcher Button on Top Bar */}
-            <div className="flex items-center pl-2 relative z-50">
+            {/* Right: Language Switcher Button */}
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center shrink-0 z-50">
               <LanguageSwitcher variant="topbar" />
             </div>
+
           </div>
         </div>
 
@@ -312,27 +315,50 @@ export default function Navbar() {
 
         {/* Mobile Navigation Drawer */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3 shadow-xl">
-            <div className="space-y-1">
+          <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-8 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto touch-scroll">
+            
+            {/* Quick Action Banner on Mobile */}
+            <div className="grid grid-cols-2 gap-2 pb-1">
+              <Link
+                to="/dang-nhu-cau"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-3 bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-2xl flex flex-col justify-between shadow-sm active:scale-95 transition-transform"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-100">B2B Sourcing</span>
+                <span className="text-xs font-black font-heading mt-2">Đăng Nhu Cầu</span>
+              </Link>
+              <Link
+                to="/ban-do-viet-nam"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-3 bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl flex flex-col justify-between shadow-sm active:scale-95 transition-transform"
+              >
+                <span className="text-[10px] font-bold uppercase tracking-wider text-blue-200">GIS 63 Tỉnh</span>
+                <span className="text-xs font-black font-heading mt-2">Bản Đồ KCN</span>
+              </Link>
+            </div>
+
+            {/* Main Navigation Links */}
+            <div className="space-y-1 divide-y divide-slate-100/80">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block px-3.5 py-3 rounded-xl text-sm font-bold whitespace-nowrap ${isActive(link.path)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-slate-700 hover:bg-slate-50'
+                  className={`flex items-center justify-between px-3 py-3 rounded-xl text-sm font-extrabold transition font-heading ${isActive(link.path)
+                    ? 'text-[#0052cc] bg-blue-50/90'
+                    : 'text-slate-800 hover:bg-slate-50'
                     }`}
                 >
                   <span>{link.name}</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
                 </Link>
               ))}
             </div>
 
             {/* Quick 6 Stages Navigation in Mobile */}
-            <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                {lang === 'en' ? '6 LIFECYCLE STAGES' : '6 GIAI ĐOẠN VÒNG ĐỜI'}
+            <div className="p-3.5 bg-slate-50/90 rounded-2xl border border-slate-200/90 space-y-2.5">
+              <span className="text-[10.5px] font-extrabold text-slate-500 uppercase tracking-wider block font-heading">
+                {lang === 'en' ? '6 LIFECYCLE STAGES' : 'SA BÀN 6 GIAI ĐOẠN CHUỖI CUNG ỨNG'}
               </span>
               <div className="grid grid-cols-2 gap-2 text-xs">
                 {stagesData.map(stg => (
@@ -340,15 +366,15 @@ export default function Navbar() {
                     key={stg.id}
                     to={`/giai-doan/${stg.id}`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 bg-white rounded-xl border border-slate-100 flex items-center space-x-2 font-bold text-slate-700 whitespace-nowrap"
+                    className="p-2.5 bg-white rounded-xl border border-slate-200/70 flex items-center space-x-2 font-bold text-slate-800 active:bg-blue-50 transition shadow-2xs"
                   >
                     <span
                       style={{ backgroundColor: stg.color }}
-                      className="w-4 h-4 rounded-full text-white text-[9px] font-black flex items-center justify-center flex-shrink-0"
+                      className="w-5 h-5 rounded-full text-white text-[10px] font-black flex items-center justify-center shrink-0 shadow-2xs"
                     >
                       {stg.id}
                     </span>
-                    <span className="truncate">{lang === 'en' ? `Stage ${stg.id}` : `GD ${stg.id}`}</span>
+                    <span className="truncate text-[11.5px] font-heading">{lang === 'en' ? `Stage ${stg.id}` : `GD ${stg.id}`}</span>
                   </Link>
                 ))}
               </div>
@@ -363,10 +389,10 @@ export default function Navbar() {
             <div className="pt-2">
               <button
                 onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ isOpen: true, tab: 'login' }); }}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl text-sm font-bold text-center shadow-xs whitespace-nowrap flex items-center justify-center space-x-2"
+                className="w-full py-3.5 bg-gradient-to-r from-[#0047a5] to-[#0052cc] text-white rounded-xl text-sm font-extrabold text-center shadow-md shadow-blue-500/20 whitespace-nowrap flex items-center justify-center space-x-2 font-heading active:scale-[0.98] transition-transform"
               >
                 <LogIn className="w-4 h-4" />
-                <span>{lang === 'en' ? 'Login / Register' : 'Đăng nhập / Đăng ký'}</span>
+                <span>{lang === 'en' ? 'Login / Register' : 'Đăng nhập / Đăng ký Doanh nghiệp'}</span>
               </button>
             </div>
           </div>

@@ -16,7 +16,9 @@ export default function EcosystemOverviewPage() {
       {/* Breadcrumb & Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <div className="text-xs text-slate-500 flex items-center space-x-2">
-          <Link to="/" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <span className="text-blue-600 font-bold font-heading">{lang === 'en' ? 'Supply Chain Ecosystem Map' : 'Bản đồ Hệ sinh thái Tổng thể'}</span>
         </div>

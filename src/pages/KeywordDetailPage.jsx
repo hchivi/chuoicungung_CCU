@@ -165,7 +165,9 @@ export default function KeywordDetailPage() {
             {/* Breadcrumbs & Quick Return */}
             <div className="flex items-center justify-between flex-wrap gap-2">
               <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-                <Link to="/" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+                <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                  <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+                </Link>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <Link to="/nha-cung-ung" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Suppliers Directory' : 'Nhà Cung Ứng & Phụ Trợ'}</Link>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />

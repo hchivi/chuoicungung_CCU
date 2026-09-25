@@ -68,8 +68,13 @@ export default function IndustrialParkDetailPage() {
 
   if (!kcn) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-20 text-center space-y-4 font-sans">
-        <h2 className="text-xl font-bold text-slate-700">{lang === 'en' ? 'Loading Industrial Park details...' : 'Đang tải dữ liệu Khu công nghiệp...'}</h2>
+      <div className="max-w-7xl mx-auto px-4 py-24 text-center font-sans flex flex-col items-center justify-center">
+        <img 
+          src="/logo_only.png" 
+          alt="Logo Chuỗi Cung Ứng" 
+          className="w-12 h-12 object-contain animate-spin"
+          style={{ animationDuration: '2s' }}
+        />
       </div>
     );
   }
@@ -90,7 +95,9 @@ export default function IndustrialParkDetailPage() {
       {/* 1. Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-          <Link to="/" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <Link to="/khu-cong-nghiep" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Industrial Parks Directory' : 'Danh mục Khu công nghiệp'}</Link>
           <span>&gt;</span>

@@ -5,7 +5,7 @@ import {
   Building2, Factory, Users, MapPin, Sparkles, Layers,
   Compass, Check, Shield, Wrench, RefreshCw, Briefcase, 
   FileCheck, Download, ExternalLink, HelpCircle, Send,
-  Filter, Zap, Star, Clock, PlusCircle
+  Filter, Zap, Star, Clock, PlusCircle, X
 } from 'lucide-react';
 import { stagesData } from '../data/mockData';
 import { stageSuppliers } from '../data/stageSuppliersData';
@@ -86,6 +86,7 @@ export default function StageDetailPage() {
 
   // Micro-Tabs State: selected phase id ("all" or "1.1", "1.2", "1.3")
   const [selectedPhase, setSelectedPhase] = useState("all");
+  const [isBottomBarClosed, setIsBottomBarClosed] = useState(false);
 
   // Filters State
   const [filters, setFilters] = useState({
@@ -290,7 +291,9 @@ export default function StageDetailPage() {
       {/* 1. BREADCRUMB */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-          <Link to="/" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
           <span>&gt;</span>
@@ -792,47 +795,59 @@ export default function StageDetailPage() {
       </section>
 
       {/* 7. BOTTOM STICKY FLOATING ACTION BAR */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-3 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          
-          <div className="flex items-center space-x-3 text-center sm:text-left">
-            <div 
-              style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
-              className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 font-bold"
-            >
-              🚀
+      {!isBottomBarClosed && (
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-3 px-4 sm:px-8 transition-all">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            
+            <div className="flex items-center space-x-3 text-center sm:text-left">
+              <div 
+                style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
+                className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 font-bold"
+              >
+                🚀
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-black text-slate-900 font-heading">
+                  Bạn đang tìm kiếm hoặc cung cấp giải pháp trong {stage.title}?
+                </h4>
+                <p className="text-[11px] text-slate-500 hidden sm:block">
+                  Hơn 250+ doanh nghiệp đã được xác thực KYC và sẵn sàng kết nối giao thương.
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-black text-slate-900 font-heading">
-                Bạn đang tìm kiếm hoặc cung cấp giải pháp trong {stage.title}?
-              </h4>
-              <p className="text-[11px] text-slate-500 hidden sm:block">
-                Hơn 250+ doanh nghiệp đã được xác thực KYC và sẵn sàng kết nối giao thương.
-              </p>
+
+            <div className="flex items-center space-x-2.5 w-full sm:w-auto">
+              <button
+                onClick={() => handleOpenRfq(null)}
+                style={{ backgroundColor: theme.color }}
+                className="flex-1 sm:flex-none px-5 py-2.5 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                <span>Tạo Nhu Cầu Báo Giá (RFQ)</span>
+              </button>
+
+              <Link
+                to="/dang-nhu-cau"
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
+              >
+                <Shield className="w-4 h-4 text-amber-400" />
+                <span>Xác Thực Hồ Sơ Nhận Lead</span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setIsBottomBarClosed(true)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-400 flex items-center justify-center transition cursor-pointer shrink-0 ml-1"
+                title="Đóng thanh tiện ích"
+                aria-label="Đóng thanh tiện ích"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
+
           </div>
-
-          <div className="flex items-center space-x-2.5 w-full sm:w-auto">
-            <button
-              onClick={() => handleOpenRfq(null)}
-              style={{ backgroundColor: theme.color }}
-              className="flex-1 sm:flex-none px-5 py-2.5 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase"
-            >
-              <Send className="w-4 h-4" />
-              <span>Tạo Nhu Cầu Báo Giá (RFQ)</span>
-            </button>
-
-            <Link
-              to="/dang-nhu-cau"
-              className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center justify-center space-x-1.5 uppercase"
-            >
-              <Shield className="w-4 h-4 text-amber-400" />
-              <span>Xác Thực Hồ Sơ Nhận Lead</span>
-            </Link>
-          </div>
-
         </div>
-      </div>
+      )}
 
       {/* 8. REQUEST QUOTE MODAL */}
       <StageRequestQuoteModal

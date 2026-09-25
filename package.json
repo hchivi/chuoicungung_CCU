@@ -6,20 +6,24 @@
   "scripts": {
     "dev": "vite",
     "server": "node server/index.js",
-    "build": "vite build",
+    "build": "vite build && node server/scripts/generateTodzungHtml.js",
+    "build:zip": "npm run build && rm -f deploy_inet.zip && cd dist && zip -r ../deploy_inet.zip .",
     "preview": "vite preview"
   },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "gsap": "^3.15.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.475.0",
     "mongoose": "^9.9.4",
+    "page-mascot": "^0.1.0",
     "puppeteer-core": "^25.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.1"
+    "react-router-dom": "^6.28.1",
+    "three": "^0.186.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

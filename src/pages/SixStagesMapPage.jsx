@@ -120,7 +120,7 @@ const STAGE_THEMES = {
   6: {
     name: 'rose',
     primary: '#e11d48',
-    activeTabClass: 'bg-gradient-to-r from-rose-600 to-pink-700 text-white shadow-lg shadow-rose-900/25 ring-2 ring-rose-400 scale-[1.02]',
+    activeTabClass: 'bg-gradient-to-r from-rose-600 to-red-700 text-white shadow-lg shadow-rose-900/25 ring-2 ring-rose-400 scale-[1.02]',
     inactiveTabClass: 'bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-900',
     tabBadgeActive: 'bg-white text-rose-950 font-black',
     tabBadgeInactive: 'bg-rose-100 text-rose-800 font-bold',
@@ -139,6 +139,95 @@ const STAGE_THEMES = {
   }
 };
 
+// Helper slugify function for keyword detail links
+const slugify = (text) => {
+  if (!text) return '';
+  return text
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[đĐ]/g, 'd')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
+// Từ khóa sản phẩm / dịch vụ nổi bật 2 dòng theo 18 Pha kỹ thuật (chữ thường, chuẩn B2B)
+export const PHASE_ORIENTATION_KEYWORDS = {
+  "1.1": [
+    ["khảo sát địa chất", "báo cáo khả thi FS", "nghiên cứu thị trường", "định hướng đầu tư", "tư vấn tiền khả thi", "quy hoạch dự án"],
+    ["đánh giá tác động", "khảo sát hiện trạng", "tư vấn cấu trúc vốn", "định vị KCN phù hợp", "phân tích chuỗi cung ứng"]
+  ],
+  "1.2": [
+    ["pháp lý đầu tư IRC/ERC", "hồ sơ ĐTM môi trường", "giấy phép xây dựng", "thẩm duyệt PCCC", "pháp lý KCN", "thủ tục hải quan"],
+    ["tư vấn luật FDI", "chứng nhận phòng cháy", "hồ sơ cấp phép xưởng", "thẩm định quy hoạch 1/500", "đăng ký doanh nghiệp"]
+  ],
+  "1.3": [
+    ["thuê đất KCN", "nhà xưởng xây sẵn RBF", "hạ tầng kỹ thuật KCN", "mặt bằng sản xuất", "kho xưởng RBW", "đất công nghiệp"],
+    ["nhà xưởng cao tầng", "đất KCN sinh thái", "hạ tầng điện nước 22kV", "kho bãi ngoại quan", "thuê xưởng tiêu chuẩn"]
+  ],
+  "2.1": [
+    ["thiết kế quy hoạch 1/500", "mô hình BIM", "kiến trúc công nghiệp", "công trình xanh LEED", "thiết kế kết cấu", "quy hoạch mặt bằng"],
+    ["tính toán tải trọng", "bản vẽ thi công MEP", "tư vấn LOTUS", "mô phỏng năng lượng", "thiết kế kết cấu thép"]
+  ],
+  "2.2": [
+    ["nhà thép tiền chế", "sàn bê tông Hardener", "thi công xây dựng", "kết cấu chịu lực", "móng cọc xưởng", "khung giàn thép"],
+    ["ép cọc bê tông", "lợp mái tôn chống nóng", "sơn chống rỉ kết cấu", "thi công tường bao Panel", "đổ sàn bê tông cốt thép"]
+  ],
+  "2.3": [
+    ["trạm biến áp 22kV", "cơ điện MEP", "PCCC tự động", "điều hòa HVAC", "xử lý nước thải WWTP", "cấp thoát nước xưởng"],
+    ["tủ điện phân phối MSB", "hệ thống Sprinkler", "đường ống dẫn khí nén", "chiếu sáng nhà xưởng", "trạm bơm PCCC"]
+  ],
+  "3.1": [
+    ["phòng sạch Cleanroom", "sơn sàn Epoxy", "panel cách nhiệt", "cửa trượt tự động", "hệ thống lọc HEPA", "sàn vinyl ESD"],
+    ["phòng sạch Class 1000", "sơn Epoxy tự phẳng", "panel bông khoáng PIR", "buồng thổi khí Air Shower", "hộp trung chuyển Pass Box"]
+  ],
+  "3.2": [
+    ["lắp đặt cẩu trục", "dây chuyền tự động SMT", "căn chỉnh máy CNC", "rigging & line setup", "lắp đặt robot", "băng tải công nghiệp"],
+    ["cẩu trục dầm đôi 10T", "định vị máy chính xác", "cân chỉnh laser máy móc", "băng chuyền con lăn", "lắp đặt hệ thống khí nén"]
+  ],
+  "3.3": [
+    ["chạy thử tải SAT/FAT", "đo kiểm rung động", "kiểm định an toàn máy", "nghiệm thu bàn giao", "hiệu chuẩn Quatest", "test áp lực ống"],
+    ["kiểm tra không tải", "hiệu chỉnh sensor", "đo độ ồn công nghiệp", "nghiệm thu chạy thử", "biên bản bàn giao thiết bị"]
+  ],
+  "4.1": [
+    ["NVL kim loại & thép", "hạt nhựa & phụ gia", "linh kiện bu lông", "thùng carton 5 lớp", "bao bì màng co", "hóa chất công nghiệp"],
+    ["thép tấm SS400", "nhựa nguyên sinh ABS/PP", "ốc vít inox 304", "pallet gỗ ván ép", "màng PE quấn hàng", "hạt hút ẩm"]
+  ],
+  "4.2": [
+    ["gia công CNC chính xác", "khuôn mẫu & đồ gá Jig", "phần mềm MES/SCADA", "bảo trì định kỳ TPM", "lắp ráp linh kiện", "đo kiểm CMM 3D"],
+    ["phay tiện CNC 5 trục", "khuôn ép nhựa chính xác", "gia công chi tiết máy", "bảo dưỡng phòng ngừa", "lắp ráp cụm SMT"]
+  ],
+  "4.3": [
+    ["logistics cảng biển", "vận tải container", "cho thuê kho bãi", "pallet gỗ xuất khẩu", "khai báo hải quan", "fulfillment KCN"],
+    ["vận chuyển xe tải lạnh", "kho ngoại quan KCN", "cước tàu quốc tế", "dịch vụ bốc xếp hàng hóa", "thủ tục C/O xuất khẩu"]
+  ],
+  "5.1": [
+    ["tuyển dụng lao động KCN", "cung ứng lao động thời vụ", "kỹ sư tự động hóa", "headhunt cấp cao", "đào tạo an toàn", "cung ứng nhân sự"],
+    ["tuyển công nhân may", "lao động phổ thông KCN", "đào tạo kỹ năng 5S", "kỹ sư cơ điện MEP", "dịch vụ tính lương Payroll"]
+  ],
+  "5.2": [
+    ["suất ăn công nghiệp", "xe đưa đón công nhân", "quà tặng doanh nghiệp", "văn phòng phẩm", "vệ sinh công nghiệp", "dịch vụ giặt ủi KCN"],
+    ["catering chuẩn HACCP", "xe buýt 45 chỗ đưa đón", "cung ứng nước uống văn phòng", "dịch vụ bảo vệ nhà máy", "cây xanh cảnh quan xưởng"]
+  ],
+  "5.3": [
+    ["may đồng phục công nhân", "quần áo ESD phòng sạch", "giày bảo hộ PPE", "nón bảo hộ lao động", "găng tay chống cắt", "kính bảo hộ chuẩn EN"],
+    ["đồng phục kỹ sư cao cấp", "áo thun polo công ty", "ủng bảo hộ mũi thép", "dây đai an toàn trên cao", "khẩu trang than hoạt tính"]
+  ],
+  "6.1": [
+    ["mở rộng nhà máy Pha 2", "nâng cấp dây chuyền", "cải tạo công suất", "tăng vốn đầu tư", "xây thêm phân xưởng", "lắp thêm máy móc"],
+    ["cơi nới xưởng sản xuất", "tối ưu hóa layout xưởng", "nâng cấp trạm điện xưởng", "tái cấu trúc sản xuất", "mở rộng diện tích kho"]
+  ],
+  "6.2": [
+    ["tư vấn ISO 9001/14001", "tiêu chuẩn ESG xanh", "kiểm kê khí nhà kính", "audit nhà máy FDI", "chứng chỉ CBAM", "chứng nhận RoHS/REACH"],
+    ["chứng chỉ IATF 16949", "báo cáo bền vững ESG", "chứng nhận ISO 45001", "kiểm toán năng lượng", "tư vấn tín chỉ Carbon"]
+  ],
+  "6.3": [
+    ["robot tự hành AGV/AMR", "kho thông minh AS/RS", "điện mặt trời 1MWp", "tự động hóa SCADA", "chuyển đổi số IoT", "hệ thống AI Factory"],
+    ["hệ thống tay gắp Robot", "cảm biến IoT giám sát", "điện mặt trời áp mái PPA", "phần mềm ERP Cloud", "bảo trì dự đoán AI"]
+  ]
+};
+
 export default function SixStagesMapPage() {
   const { t, lang } = useLanguage();
   
@@ -146,6 +235,7 @@ export default function SixStagesMapPage() {
   const [selectedStageId, setSelectedStageId] = useState(() => {
     try {
       const saved = localStorage.getItem('ccu_selected_stage');
+      if (saved === 'all') return 'all';
       return saved ? parseInt(saved, 10) : 1;
     } catch {
       return 1;
@@ -173,25 +263,37 @@ export default function SixStagesMapPage() {
     }
   }, [selectedStageId, selectedPhaseId]);
 
-  const currentStage = stagesData.find(s => s.id === selectedStageId) || stagesData[0];
-  const currentTheme = STAGE_THEMES[currentStage.id] || STAGE_THEMES[1];
-  
-  // Find current phase object
+  // Find parent stage of selected phase
   let currentPhase = null;
+  let parentStageOfPhase = stagesData[0];
   for (const s of stagesData) {
     const found = s.phases.find(p => p.id === selectedPhaseId);
     if (found) {
       currentPhase = found;
+      parentStageOfPhase = s;
       break;
     }
   }
-  if (!currentPhase) currentPhase = currentStage.phases[0];
+  if (!currentPhase) {
+    currentPhase = stagesData[0].phases[0];
+    parentStageOfPhase = stagesData[0];
+  }
+
+  const currentStage = selectedStageId === 'all' 
+    ? parentStageOfPhase 
+    : (stagesData.find(s => s.id === selectedStageId) || stagesData[0]);
+
+  const currentTheme = STAGE_THEMES[currentStage.id] || STAGE_THEMES[1];
 
   const handleStageChange = (stageId) => {
     setSelectedStageId(stageId);
+    if (stageId === 'all') return;
     const targetStage = stagesData.find(s => s.id === stageId);
     if (targetStage && targetStage.phases.length > 0) {
-      setSelectedPhaseId(targetStage.phases[0].id);
+      const phaseInStage = targetStage.phases.some(p => p.id === selectedPhaseId);
+      if (!phaseInStage) {
+        setSelectedPhaseId(targetStage.phases[0].id);
+      }
     }
   };
 
@@ -226,8 +328,7 @@ export default function SixStagesMapPage() {
     ],
     "3.1": [
       { code: "ISO 14644-1", name: "Tiêu chuẩn Phòng Sạch Cleanroom Class 100-1000", req: "Bắt buộc" },
-      { code: "ASHRAE 90.1", name: "Tiêu chuẩn Hiệu quả Năng lượng Hệ thống HVAC", req: "Khuyến nghị" },
-      { code: "QCVN 09:2017", name: "Công trình Sử dụng Năng lượng Hiệu quả", req: "Bắt buộc" }
+      { code: "ASHRAE 90.1", name: "Tiêu chuẩn Hiệu quả Năng lượng Hệ thống HVAC", req: "Khuyến nghị" }
     ],
     "3.2": [
       { code: "JIS / DIN / ASTM", name: "Dung sai Lắp đặt & Căn chỉnh Máy móc", req: "Bắt buộc" },
@@ -332,25 +433,142 @@ export default function SixStagesMapPage() {
     }
   ];
 
+  // Render individual Phase Card with 2-row Marquee Animation
+  const renderPhaseCard = (phase, stageTheme) => {
+    const isSelected = phase.id === selectedPhaseId;
+    const rawKeywords = PHASE_ORIENTATION_KEYWORDS[phase.id] || [];
+    const row1 = Array.isArray(rawKeywords[0]) ? rawKeywords[0] : rawKeywords.slice(0, Math.ceil(rawKeywords.length / 2));
+    const row2 = Array.isArray(rawKeywords[1]) ? rawKeywords[1] : rawKeywords.slice(Math.ceil(rawKeywords.length / 2));
+
+    const repeatedRow1 = [...row1, ...row1, ...row1];
+    const repeatedRow2 = [...row2, ...row2, ...row2];
+
+    return (
+      <div
+        key={phase.id}
+        onClick={() => setSelectedPhaseId(phase.id)}
+        className={`p-4 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3.5 group ${
+          isSelected
+            ? stageTheme.phaseCardSelected
+            : 'bg-white hover:bg-slate-50/80 border-slate-200/90 shadow-xs hover:border-slate-300'
+        }`}
+      >
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className={`font-mono font-black text-xs px-2.5 py-1 rounded shadow-xs ${
+              isSelected ? stageTheme.phaseBadgeSelected : stageTheme.phaseBadge
+            }`}>
+              Pha {phase.id}
+            </span>
+            <span className={`text-[10.5px] font-bold px-2 py-0.5 rounded-full ${
+              isSelected ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+            }`}>
+              {phase.totalEnterprises || 80}+ DN Xác Thực
+            </span>
+          </div>
+
+          <h3 className="text-sm sm:text-base font-black text-[#072348] uppercase font-heading leading-snug">
+            {lang === 'en' ? phase.titleEn : phase.title}
+          </h3>
+
+          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+            {lang === 'en' ? phase.summaryEn : phase.summary}
+          </p>
+
+          {/* TỪ KHÓA SẢN PHẨM / DỊCH VỤ NỔI BẬT - 2 DÒNG MARQUEE CHẠY CHẬM MƯỢT CÓ HOVER VÀ LINK DATABASE */}
+          <div className="pt-2 border-t border-slate-100/90 space-y-1.5">
+            <div className="text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-slate-500 font-heading text-center">
+              {lang === 'en' ? 'FEATURED PRODUCTS / SERVICES:' : 'TỪ KHÓA SẢN PHẨM / DỊCH VỤ NỔI BẬT:'}
+            </div>
+
+            <div className="relative overflow-hidden w-full space-y-1.5 py-0.5">
+              {/* Left & Right Edge Blur Fade Overlays */}
+              <div className={`pointer-events-none absolute inset-y-0 left-0 w-5 z-10 bg-gradient-to-r ${isSelected ? 'from-purple-50/90' : 'from-white'} to-transparent`} />
+              <div className={`pointer-events-none absolute inset-y-0 right-0 w-5 z-10 bg-gradient-to-l ${isSelected ? 'from-purple-50/90' : 'from-white'} to-transparent`} />
+
+              {/* Marquee Row 1 (Slow Left) */}
+              <div className="flex overflow-hidden py-0.5">
+                <div className="animate-marquee-slow-left flex items-center space-x-1.5">
+                  {repeatedRow1.map((kw, kwIdx) => {
+                    const kwSlug = slugify(kw);
+                    return (
+                      <Link
+                        key={`r1-${kwIdx}`}
+                        to={`/tu-khoa/${kwSlug}?q=${encodeURIComponent(kw)}`}
+                        onClick={(e) => e.stopPropagation()}
+                        title={`Tra cứu doanh nghiệp & tiêu chuẩn: ${kw}`}
+                        className={`text-[9.5px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all duration-200 inline-flex items-center shadow-2xs hover:scale-105 active:scale-95 flex-shrink-0 ${
+                          isSelected
+                            ? 'bg-purple-100/90 text-purple-900 border border-purple-200/90 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600'
+                            : 'bg-slate-100 text-slate-700 border border-slate-200/80 hover:bg-blue-600 hover:text-white hover:border-blue-600'
+                        }`}
+                      >
+                        #{kw}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Marquee Row 2 (Slow Right) */}
+              <div className="flex overflow-hidden py-0.5">
+                <div className="animate-marquee-slow-right flex items-center space-x-1.5">
+                  {repeatedRow2.map((kw, kwIdx) => {
+                    const kwSlug = slugify(kw);
+                    return (
+                      <Link
+                        key={`r2-${kwIdx}`}
+                        to={`/tu-khoa/${kwSlug}?q=${encodeURIComponent(kw)}`}
+                        onClick={(e) => e.stopPropagation()}
+                        title={`Tra cứu doanh nghiệp & tiêu chuẩn: ${kw}`}
+                        className={`text-[9.5px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all duration-200 inline-flex items-center shadow-2xs hover:scale-105 active:scale-95 flex-shrink-0 ${
+                          isSelected
+                            ? 'bg-purple-100/90 text-purple-900 border border-purple-200/90 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600'
+                            : 'bg-slate-100 text-slate-700 border border-slate-200/80 hover:bg-blue-600 hover:text-white hover:border-blue-600'
+                        }`}
+                      >
+                        #{kw}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
+          <span className={isSelected ? stageTheme.phaseActiveText : 'text-slate-400'}>
+            {isSelected ? '● Đang mở dòng khớp lệnh' : 'Bấm để tra cứu chi tiết'}
+          </span>
+          <ChevronRight className={`w-4 h-4 transition-transform ${isSelected ? `${stageTheme.phaseActiveChevron} rotate-90` : 'text-slate-400'}`} />
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="space-y-12 sm:space-y-16 pb-28 bg-slate-50/70 font-sans overflow-x-hidden">
+    <div className="space-y-10 sm:space-y-12 pb-28 bg-slate-50/70 font-sans overflow-x-hidden">
       
       {/* 0. LIVE MATCH TICKER STREAM */}
       <LiveMatchTicker />
 
       {/* 1. HERO HEADER (BẢNG CHỈ HUY QUỐC GIA) */}
-      <section className="relative overflow-hidden pt-8 pb-10 bg-gradient-to-b from-white via-slate-50/80 to-slate-100/60 border-b border-slate-200">
+      <section className="relative overflow-hidden pt-6 pb-6 sm:pt-8 sm:pb-8 bg-gradient-to-b from-white via-slate-50/80 to-slate-100/60 border-b border-slate-200">
         
         {/* Ambient Glows */}
         <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
         <div className="absolute bottom-0 right-10 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6 sm:space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-5 sm:space-y-6">
           
           {/* Breadcrumb & National Badge */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-              <Link to="/" className="hover:text-blue-600 font-medium">Trang chủ</Link>
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
               <span>&gt;</span>
               <span className="text-[#072348] font-black font-heading uppercase">Sa Bàn 6 Giai Đoạn & 18 Pha</span>
             </div>
@@ -362,7 +580,7 @@ export default function SixStagesMapPage() {
           </div>
 
           {/* Main Title */}
-          <div className="text-center max-w-4xl mx-auto space-y-3">
+          <div className="text-center max-w-4xl mx-auto space-y-2.5">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] tracking-normal uppercase font-heading leading-tight">
               <span>BẢN ĐỒ CHUỖI CUNG ỨNG QUỐC GIA </span>
               <span className="text-rainbow-gradient">THEO 6 GIAI ĐOẠN & 18 PHA</span>
@@ -374,56 +592,51 @@ export default function SixStagesMapPage() {
 
           {/* 3 COUNTER ANIMATION METRIC CARDS */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <div className="bg-white p-5 rounded-2xl border-2 border-purple-200/80 shadow-md text-center space-y-1 hover:border-purple-400 transition">
+            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-purple-200/80 shadow-md text-center space-y-1 hover:border-purple-400 transition">
               <span className="text-3xl sm:text-4xl font-black text-purple-700 font-mono">6</span>
               <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Giai Đoạn Vòng Đời</div>
               <div className="text-[11px] text-slate-500">Chuẩn hóa tuần tự khép kín</div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border-2 border-emerald-200/80 shadow-md text-center space-y-1 hover:border-emerald-400 transition">
+            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-200/80 shadow-md text-center space-y-1 hover:border-emerald-400 transition">
               <span className="text-3xl sm:text-4xl font-black text-emerald-600 font-mono">18</span>
               <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Pha Kỹ Thuật</div>
               <div className="text-[11px] text-slate-500">Định vị rõ ràng đầu ra & chuẩn ISO</div>
             </div>
 
-            <div className="bg-white p-5 rounded-2xl border-2 border-blue-200/80 shadow-md text-center space-y-1 hover:border-blue-400 transition">
+            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-blue-200/80 shadow-md text-center space-y-1 hover:border-blue-400 transition">
               <span className="text-3xl sm:text-4xl font-black text-blue-600 font-mono">24.000+</span>
               <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Doanh Nghiệp Đã Xác Thực</div>
               <div className="text-[11px] text-slate-500">Thẩm định qua 3 Lớp KYC B2B</div>
             </div>
           </div>
 
-          {/* HỘI ĐỒNG ĐỊNH HƯỚNG & BẢO TRỢ CHUYÊN MÔN (MONOCHROME LOGOS + MOU POPUP BUTTON) */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-slate-200/90 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4 max-w-5xl mx-auto">
-            <div className="flex items-center space-x-3 text-center md:text-left">
-              <ShieldCheck className="w-6 h-6 text-amber-500 flex-shrink-0" />
-              <div>
-                <div className="text-[11px] font-black text-slate-900 uppercase font-heading">
-                  Hội Đồng Định Hướng & Bảo Trợ Chuyên Môn
-                </div>
-                <div className="text-xs text-slate-500 font-semibold">
-                  VCCI (Liên đoàn Thương mại & CN VN) • VIDE • BỘ CÔNG THƯƠNG • VAMI • VINASME
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setIsMoUOpen(true)}
-              className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-blue-900 text-amber-300 font-bold text-xs uppercase font-heading tracking-wide transition flex items-center space-x-1.5 shadow-sm whitespace-nowrap cursor-pointer"
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Xem Văn Bản Bảo Trợ / MoU Mộc Đỏ</span>
-            </button>
-          </div>
-
         </div>
       </section>
 
-      {/* 2. MACRO VIEW (STICKY HORIZONTAL PROCESS FLOW - 6 GIAI ĐOẠN) */}
+      {/* 2. MACRO VIEW (STICKY HORIZONTAL PROCESS FLOW - TAB TẤT CẢ(6 GĐ) + 6 GIAI ĐOẠN) */}
       <section className="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-sm py-3 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-1">
+            
+            {/* TAB TẤT CẢ (18 PHA) */}
+            <button
+              type="button"
+              onClick={() => handleStageChange('all')}
+              className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-[12.5px] font-black uppercase font-heading whitespace-nowrap transition-all duration-200 cursor-pointer flex-shrink-0 ${
+                selectedStageId === 'all'
+                  ? 'bg-gradient-to-r from-slate-900 to-blue-950 text-amber-300 shadow-md shadow-slate-900/25 ring-2 ring-amber-400 scale-[1.02]'
+                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-lg flex items-center justify-center font-mono text-[10px] ${
+                selectedStageId === 'all' ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-200 text-slate-700 font-bold'
+              }`}>
+                ★
+              </span>
+              <span>{lang === 'en' ? 'ALL (6 STAGES)' : 'TẤT CẢ(6 GĐ)'}</span>
+            </button>
+
             {stagesData.map((stage) => {
               const isSelected = stage.id === selectedStageId;
               const theme = STAGE_THEMES[stage.id] || STAGE_THEMES[1];
@@ -457,64 +670,49 @@ export default function SixStagesMapPage() {
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <span className={`text-[11px] font-black uppercase tracking-wider font-heading ${currentTheme.feedSubTitle}`}>
-              Giai Đoạn {currentStage.id}: {lang === 'en' ? currentStage.titleEn : currentStage.title}
+              {selectedStageId === 'all' ? 'Toàn Cảnh 6 Giai Đoạn & 18 Pha Kỹ Thuật' : `Giai Đoạn ${currentStage.id}: ${lang === 'en' ? currentStage.titleEn : currentStage.title}`}
             </span>
             <h2 className="text-base sm:text-lg font-black text-[#072348] uppercase font-heading">
               Chọn Pha Kỹ Thuật Để Tra Cứu Bộ Tiêu Chuẩn & Doanh Nghiệp Khớp Lệnh
             </h2>
           </div>
           <span className="text-xs font-bold text-slate-500 hidden sm:block">
-            3 Pha Kỹ Thuật Phân Cấp
+            {selectedStageId === 'all' ? '18 Pha Kỹ Thuật Khép Kín' : '3 Pha Kỹ Thuật Phân Cấp'}
           </span>
         </div>
 
-        {/* 3 Phase Cards with Active Stage Color Theme */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {currentStage.phases.map((phase) => {
-            const isSelected = phase.id === selectedPhaseId;
-            return (
-              <div
-                key={phase.id}
-                onClick={() => setSelectedPhaseId(phase.id)}
-                className={`p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3 ${
-                  isSelected
-                    ? currentTheme.phaseCardSelected
-                    : 'bg-white hover:bg-slate-50/80 border-slate-200/90 shadow-xs hover:border-slate-300'
-                }`}
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className={`font-mono font-black text-xs px-2.5 py-1 rounded shadow-xs ${
-                      isSelected ? currentTheme.phaseBadgeSelected : currentTheme.phaseBadge
-                    }`}>
-                      Pha {phase.id}
-                    </span>
-                    <span className={`text-[10.5px] font-bold px-2 py-0.5 rounded-full ${
-                      isSelected ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {phase.totalEnterprises || 80}+ DN Xác Thực
+        {/* Phase Cards View: Render All 6 Stages or Single Stage */}
+        {selectedStageId === 'all' ? (
+          <div className="space-y-8">
+            {stagesData.map((stage) => {
+              const stageTheme = STAGE_THEMES[stage.id] || STAGE_THEMES[1];
+              return (
+                <div key={stage.id} className="space-y-3 bg-white/60 p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-xs">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <div className="flex items-center space-x-2.5">
+                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center font-mono text-xs font-black text-white ${stageTheme.phaseBadge}`}>
+                        {stage.id}
+                      </span>
+                      <h3 className="text-sm sm:text-base font-black text-[#072348] uppercase font-heading">
+                        Giai Đoạn {stage.id}: {lang === 'en' ? stage.titleEn : stage.title}
+                      </h3>
+                    </div>
+                    <span className="text-[11px] font-bold text-slate-400">
+                      3 Pha Kỹ Thuật
                     </span>
                   </div>
-
-                  <h3 className="text-sm sm:text-base font-black text-[#072348] uppercase font-heading leading-snug">
-                    {lang === 'en' ? phase.titleEn : phase.title}
-                  </h3>
-
-                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-                    {lang === 'en' ? phase.summaryEn : phase.summary}
-                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {stage.phases.map((phase) => renderPhaseCard(phase, stageTheme))}
+                  </div>
                 </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
-                  <span className={isSelected ? currentTheme.phaseActiveText : 'text-slate-400'}>
-                    {isSelected ? '● Đang mở dòng khớp lệnh' : 'Bấm để tra cứu chi tiết'}
-                  </span>
-                  <ChevronRight className={`w-4 h-4 transition-transform ${isSelected ? `${currentTheme.phaseActiveChevron} rotate-90` : 'text-slate-400'}`} />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {currentStage.phases.map((phase) => renderPhaseCard(phase, currentTheme))}
+          </div>
+        )}
 
       </section>
 

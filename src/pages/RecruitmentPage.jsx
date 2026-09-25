@@ -13,6 +13,7 @@ import { recruitmentJobsData, recruitmentCandidatesData, recruitmentStats } from
 import { useLanguage } from '../contexts/LanguageContext';
 import NumerologyModal from '../components/NumerologyModal';
 import CVAnalysisAndMatchingModal from '../components/CVAnalysisAndMatchingModal';
+import RecruitmentCareerNetworkCanvas from '../components/recruitment/RecruitmentCareerNetworkCanvas';
 
 // Reusable SVG Circular Progress Ring Component as specified in Doc
 function MiniProgressRing({ percentage, label, color = '#0052cc', size = 44, strokeWidth = 4 }) {
@@ -243,15 +244,18 @@ export default function RecruitmentPage({ defaultTab }) {
       {/* ========================================================================= */}
       <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
         
-        {/* Right Half Industrial Panoramic Visual with Seamless Gradient Fade */}
+        {/* Right Half Industrial Panoramic Visual with Seamless Gradient Fade & Dynamic Live Career Network Overlay */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
             src="/images/recruitment_hero.jpg" 
-            alt="Vietnam Industrial Careers & Factory Recruitment Hub"
+            alt="Trung Tâm Tuyển Dụng & Kết Nối Nhân Lực Quốc Gia Việt Nam"
             className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+          {/* Live Industrial Automation & Career Matching Canvas Overlay */}
+          <RecruitmentCareerNetworkCanvas className="z-[2] opacity-75" />
+
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
         {/* Top Content */}
@@ -259,8 +263,10 @@ export default function RecruitmentPage({ defaultTab }) {
           <div className="max-w-2xl space-y-5">
             
             {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <Link to="/tuyen-dung" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Recruitment' : 'Tuyển Dụng'}</Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -865,7 +871,7 @@ export default function RecruitmentPage({ defaultTab }) {
 
                       {/* Skills & Tags */}
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        {cand.tags.map((tg, idx) => (
+                        {(cand.tags || cand.skills || []).map((tg, idx) => (
                           <span key={idx} className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-medium rounded-lg transition border border-emerald-100">
                             ✓ {tg}
                           </span>

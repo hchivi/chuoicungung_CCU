@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Search, Filter, Users, MapPin, Globe, Calendar, 
+import {
+  Search, Filter, Users, MapPin, Globe, Calendar,
   ArrowRight, ChevronRight, PlusCircle, RotateCcw, Sparkles,
   Building2, Phone, Mail, ShieldCheck, CheckCircle2, Award,
   Compass, Play, Layers, ExternalLink, Briefcase, ChevronDown,
@@ -13,6 +13,7 @@ import {
 import associationsList from '../data/associations.json';
 import { useLanguage } from '../contexts/LanguageContext';
 import AssociationApiMotionGraphic3D from '../components/association/AssociationApiMotionGraphic3D';
+import AssociationConstellationCanvas from '../components/association/AssociationConstellationCanvas';
 
 // Helper for association top sectors & KYC attributes
 const associationSectorMap = {
@@ -82,12 +83,12 @@ export default function AssociationsPage() {
 
   const filtered = useMemo(() => {
     return associationsList.filter(a => {
-      const matchText = (a.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        (a.address || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (a.tagline || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (a.president || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (a.description || '').toLowerCase().includes(searchTerm.toLowerCase());
-      
+      const matchText = (a.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (a.address || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (a.tagline || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (a.president || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (a.description || '').toLowerCase().includes(searchTerm.toLowerCase());
+
       const matchRegion = selectedRegion === 'all' || a.region === selectedRegion;
 
       let matchSector = true;
@@ -146,30 +147,62 @@ export default function AssociationsPage() {
 
   return (
     <div className="space-y-12 pb-24 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
-      
+
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Seamless Panoramic Summit Visual - Image 1 Exact Layout) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
-        
-        {/* Right Half Summit Photo with Smooth Gradient Blend */}
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
-          <img 
-            src="/images/association_summit_hero.jpg" 
-            alt="Vietnam International Trade Summit"
-            className="w-full h-full object-cover object-center scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
+
+        {/* Right Half Summit Video & Network Nodes Constellation with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+            poster="/images/association_summit_hero.jpg"
+            ref={(el) => {
+              if (el) {
+                el.muted = true;
+                el.play().catch(() => { });
+              }
+            }}
+            onLoadedMetadata={(e) => {
+              try {
+                e.currentTarget.currentTime = 50;
+              } catch (err) { }
+            }}
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+          >
+            <source src="/images/vietnam_financial_centers_flycam_1080p.webm" type="video/webm" />
+            <source src="/images/vietnam_financial_centers_flycam_480p.webm" type="video/webm" />
+            <img
+              src="/images/association_summit_hero.jpg"
+              alt="Flycam quay trên cao toàn cảnh trung tâm TP. Hồ Chí Minh không có logo"
+              className="w-full h-full object-cover object-center scale-105"
+            />
+          </video>
+
+          {/* Dynamic Connected Network Nodes & Constellation Canvas Overlay (Live Particles & Data Pulses) */}
+          <AssociationConstellationCanvas className="opacity-75 z-[2]" />
+
+          {/* Smooth Light Mode Gradient Masking */}
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
         {/* Top Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
-          <div className="max-w-2xl space-y-5">
-            
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
+          <div className="max-w-2xl space-y-5 sm:space-y-6">
+
             {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">{lang === 'en' ? 'Trade Associations' : 'Hội / Hiệp Hội / Tổ Chức'}</span>
             </nav>
@@ -226,7 +259,7 @@ export default function AssociationsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20">
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
-            
+
             <div className="flex items-center space-x-3.5 p-1 sm:p-0">
               <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
                 <Users className="w-5 h-5" />
@@ -275,7 +308,7 @@ export default function AssociationsPage() {
       {/* 2. BLOCK 2: CORE VALUE (Giải Mã Quyền Lợi Kép - Split-Screen UI) */}
       {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4">
-        
+
         {/* Section Header */}
         <div className="text-center space-y-2 max-w-3xl mx-auto">
           <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#0052cc] text-xs font-bold font-heading uppercase tracking-wider">
@@ -292,11 +325,11 @@ export default function AssociationsPage() {
 
         {/* 2 Symmetric Columns (Split-Screen UI) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          
+
           {/* CỘT TRÁI: DÀNH CHO BAN ĐIỀU HÀNH HỘI */}
           <div className="bg-white rounded-3xl border border-blue-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
             <div className="absolute -top-12 -right-12 w-36 h-36 bg-blue-100/50 rounded-full blur-2xl pointer-events-none group-hover:bg-blue-200/50 transition"></div>
-            
+
             <div className="space-y-6 relative z-10">
               {/* Pillar Header */}
               <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -394,7 +427,7 @@ export default function AssociationsPage() {
           {/* CỘT PHẢI: DÀNH CHO DOANH NGHIỆP HỘI VIÊN */}
           <div className="bg-white rounded-3xl border border-amber-200/80 p-6 sm:p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group">
             <div className="absolute -top-12 -right-12 w-36 h-36 bg-amber-100/50 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-200/50 transition"></div>
-            
+
             <div className="space-y-6 relative z-10">
               {/* Pillar Header */}
               <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -505,7 +538,7 @@ export default function AssociationsPage() {
       {/* 4. BLOCK 4: ASSOCIATION GRID & SMART SEARCH (Danh Mục Hiệp Hội VIP) */}
       {/* ========================================================================= */}
       <section id="danh-sach-hiep-hoi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4">
-        
+
         {/* Header Title */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 border-b border-slate-200 pb-3">
           <div className="space-y-1">
@@ -524,7 +557,7 @@ export default function AssociationsPage() {
 
         {/* Smart Search & Dual Filtering Bar */}
         <div className="bg-white rounded-3xl border border-slate-200/90 p-4 sm:p-5 shadow-sm space-y-4">
-          
+
           {/* Search Box */}
           <div className="relative">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -536,7 +569,7 @@ export default function AssociationsPage() {
               className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200/90 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] transition"
             />
             {searchTerm && (
-              <button 
+              <button
                 onClick={() => setSearchTerm('')}
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full"
               >
@@ -556,11 +589,10 @@ export default function AssociationsPage() {
                 <button
                   key={sec.id}
                   onClick={() => setSelectedSector(sec.id)}
-                  className={`px-3 py-1.5 rounded-xl font-bold transition text-[11px] font-heading cursor-pointer ${
-                    selectedSector === sec.id
-                      ? 'bg-[#0052cc] text-white shadow-2xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                  className={`px-3 py-1.5 rounded-xl font-bold transition text-[11px] font-heading cursor-pointer ${selectedSector === sec.id
+                    ? 'bg-[#0052cc] text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
                 >
                   {sec.label}
                 </button>
@@ -576,11 +608,10 @@ export default function AssociationsPage() {
                 <button
                   key={reg}
                   onClick={() => setSelectedRegion(reg)}
-                  className={`px-3 py-1 rounded-lg font-bold transition text-[11px] cursor-pointer ${
-                    selectedRegion === reg
-                      ? 'bg-slate-900 text-white shadow-2xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                  className={`px-3 py-1 rounded-lg font-bold transition text-[11px] cursor-pointer ${selectedRegion === reg
+                    ? 'bg-slate-900 text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    }`}
                 >
                   {reg === 'all' ? 'Tất cả vùng miền' : reg}
                 </button>
@@ -619,28 +650,28 @@ export default function AssociationsPage() {
                 key={assoc.id}
                 className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs hover:shadow-xl hover:border-[#0052cc]/60 transition-all duration-300 flex flex-col justify-between space-y-4 group relative will-change-transform hover:-translate-y-1.5"
               >
-                
+
                 {/* Top Header */}
                 <div className="space-y-3">
-                  
+
                   {/* Logo + Name + Region Badge */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                       {/* Logo Box */}
                       <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center p-1.5 shrink-0 overflow-hidden shadow-2xs group-hover:border-[#0052cc]/50 transition-colors">
                         {assoc.logo ? (
-                          <img 
-                            src={assoc.logo} 
-                            alt={assoc.name} 
+                          <img
+                            src={assoc.logo}
+                            alt={assoc.name}
                             referrerPolicy="no-referrer"
-                            className="w-full h-full object-contain" 
+                            className="w-full h-full object-contain"
                             onError={(e) => {
                               e.target.style.display = 'none';
                               if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
                             }}
                           />
                         ) : null}
-                        <span 
+                        <span
                           style={{ display: assoc.logo ? 'none' : 'flex' }}
                           className="w-full h-full rounded-xl bg-gradient-to-br from-[#0047a5] to-[#0052cc] text-white font-black text-base items-center justify-center font-heading"
                         >
@@ -650,7 +681,7 @@ export default function AssociationsPage() {
 
                       {/* Association Title */}
                       <div className="min-w-0 flex-1">
-                        <Link 
+                        <Link
                           to={`/hoi-hiep-hoi/${assoc.id}`}
                           className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-snug"
                           title={assoc.name}
@@ -687,7 +718,7 @@ export default function AssociationsPage() {
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {topSectors.map((sec, sIdx) => (
-                        <span 
+                        <span
                           key={sIdx}
                           className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-[10px] font-medium border border-slate-200/70"
                         >
@@ -701,7 +732,7 @@ export default function AssociationsPage() {
 
                 {/* Footer Metrics & Actions */}
                 <div className="space-y-3 pt-3 border-t border-slate-100">
-                  
+
                   {/* Stats Row */}
                   <div className="flex items-center justify-between text-xs text-slate-600">
                     <div className="flex items-center space-x-1.5">
@@ -749,11 +780,11 @@ export default function AssociationsPage() {
       {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-          
+
           {/* Cánh cửa 1: Dành cho Ban Lãnh Đạo Hội */}
           <div className="bg-gradient-to-br from-[#072348] via-[#0047a5] to-[#0052cc] rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden group">
             <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            
+
             <div className="space-y-3 relative z-10">
               <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold font-heading">
                 <Building2 className="w-3.5 h-3.5 text-sky-300" />
@@ -781,7 +812,7 @@ export default function AssociationsPage() {
           {/* Cánh cửa 2: Dành cho Doanh Nghiệp Thành Viên */}
           <div className="bg-gradient-to-br from-amber-700 via-amber-600 to-yellow-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col justify-between space-y-6 relative overflow-hidden group">
             <div className="absolute -bottom-10 -right-10 w-44 h-44 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-            
+
             <div className="space-y-3 relative z-10">
               <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold font-heading">
                 <Gem className="w-3.5 h-3.5 text-yellow-200" />
@@ -836,7 +867,7 @@ export default function AssociationsPage() {
       {showVideoModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-xl w-full shadow-2xl space-y-4 relative">
-            <button 
+            <button
               onClick={() => setShowVideoModal(false)}
               className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition"
             >
@@ -849,11 +880,11 @@ export default function AssociationsPage() {
             </div>
 
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Mạng lưới Hội / Hiệp Hội trên ChuoiCungUng.vn đóng vai trò là hạt nhân của Lớp KYC số 3 (Bảo chứng thực địa). Nền tảng hỗ trợ các tổ chức số hóa danh bạ hội viên, kết nối cơ hội giao thương B2B tự động qua API và tham vấn chính sách phát triển chuỗi cung ứng công nghiệp bền vững.
+              Mạng lưới Hội / Hiệp Hội trên ChuoiCungUng.com đóng vai trò là hạt nhân của Lớp KYC số 3 (Bảo chứng thực địa). Nền tảng hỗ trợ các tổ chức số hóa danh bạ hội viên, kết nối cơ hội giao thương B2B tự động qua API và tham vấn chính sách phát triển chuỗi cung ứng công nghiệp bền vững.
             </p>
 
             <div className="pt-2 flex justify-end">
-              <button 
+              <button
                 onClick={() => setShowVideoModal(false)}
                 className="px-5 py-2.5 bg-gradient-to-r from-[#0047a5] to-[#0052cc] text-white text-xs font-bold rounded-xl transition shadow-md shadow-blue-900/20 cursor-pointer"
               >
@@ -870,7 +901,7 @@ export default function AssociationsPage() {
       {showApiModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-xl w-full shadow-2xl space-y-5 relative max-h-[90vh] overflow-y-auto">
-            <button 
+            <button
               onClick={() => setShowApiModal(false)}
               className="absolute top-4 right-4 p-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
             >
@@ -899,7 +930,7 @@ export default function AssociationsPage() {
                   Đăng Ký Tích Hợp Thành Công!
                 </h5>
                 <p className="text-xs text-slate-600">
-                  Đội ngũ Kỹ thuật ChuoiCungUng.vn sẽ liên hệ trực tiếp trong vòng 2 giờ làm việc để cấp API Key và hướng dẫn tài liệu SSO / API.
+                  Đội ngũ Kỹ thuật ChuoiCungUng.com sẽ liên hệ trực tiếp trong vòng 2 giờ làm việc để cấp API Key và hướng dẫn tài liệu SSO / API.
                 </p>
               </div>
             ) : (
@@ -911,7 +942,7 @@ export default function AssociationsPage() {
                     required
                     placeholder="VD: Hội Doanh Nghiệp Cơ Khí - Điện TP.HCM"
                     value={apiFormData.orgName}
-                    onChange={(e) => setApiFormData({...apiFormData, orgName: e.target.value})}
+                    onChange={(e) => setApiFormData({ ...apiFormData, orgName: e.target.value })}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                   />
                 </div>
@@ -924,7 +955,7 @@ export default function AssociationsPage() {
                       required
                       placeholder="VD: Ông Nguyễn Văn An"
                       value={apiFormData.repName}
-                      onChange={(e) => setApiFormData({...apiFormData, repName: e.target.value})}
+                      onChange={(e) => setApiFormData({ ...apiFormData, repName: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                     />
                   </div>
@@ -936,7 +967,7 @@ export default function AssociationsPage() {
                       required
                       placeholder="VD: 0909 123 456"
                       value={apiFormData.phone}
-                      onChange={(e) => setApiFormData({...apiFormData, phone: e.target.value})}
+                      onChange={(e) => setApiFormData({ ...apiFormData, phone: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                     />
                   </div>
@@ -950,7 +981,7 @@ export default function AssociationsPage() {
                       required
                       placeholder="vanphong@hiephoi.vn"
                       value={apiFormData.email}
-                      onChange={(e) => setApiFormData({...apiFormData, email: e.target.value})}
+                      onChange={(e) => setApiFormData({ ...apiFormData, email: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                     />
                   </div>
@@ -959,7 +990,7 @@ export default function AssociationsPage() {
                     <label className="text-xs font-bold text-slate-700">Hệ thống đang sử dụng</label>
                     <select
                       value={apiFormData.systemType}
-                      onChange={(e) => setApiFormData({...apiFormData, systemType: e.target.value})}
+                      onChange={(e) => setApiFormData({ ...apiFormData, systemType: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                     >
                       <option value="ERP/CRM">Hệ thống ERP / CRM Doanh nghiệp</option>
@@ -978,7 +1009,7 @@ export default function AssociationsPage() {
                     rows={2}
                     placeholder="Mô tả số lượng hội viên cần đồng bộ hoặc yêu cầu SSO..."
                     value={apiFormData.notes}
-                    onChange={(e) => setApiFormData({...apiFormData, notes: e.target.value})}
+                    onChange={(e) => setApiFormData({ ...apiFormData, notes: e.target.value })}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-blue-500/20 focus:border-[#0052cc] outline-none"
                   ></textarea>
                 </div>
@@ -1011,7 +1042,7 @@ export default function AssociationsPage() {
       {showVerifyModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-xl w-full shadow-2xl space-y-5 relative max-h-[90vh] overflow-y-auto">
-            <button 
+            <button
               onClick={() => {
                 setShowVerifyModal(false);
                 setVerifyResult(null);

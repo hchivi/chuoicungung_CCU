@@ -94,7 +94,7 @@ function generateOriginalDescription(ent) {
   const name = ent.name || "Doanh nghiệp";
   const year = ent.establishedYear || 2018;
   const area = ent.province || "Việt Nam";
-  
+
   return `${name} là đối tác cung ứng công nghiệp hàng đầu tại ${area}, chuyên sâu trong lĩnh vực ${cat}. Được thành lập và phát triển từ năm ${year}, đơn vị sở hữu hạ tầng kỹ thuật hiện đại cùng quy trình kiểm soát chất lượng đạt chuẩn, đáp ứng các đơn hàng quy mô lớn và yêu cầu kỹ thuật khắt khe của các nhà máy FDI và doanh nghiệp sản xuất trên toàn quốc.`;
 }
 
@@ -129,12 +129,12 @@ const enrichedList = enterprises.map(ent => {
     const prods = Array.isArray(ent.products) && ent.products.length > 0
       ? ent.products
       : [
-          `Gia công & Cung ứng ${cleanCategory}`,
-          `Giải pháp kỹ thuật chuyên ngành ${cleanCategory}`,
-          `Vật tư phụ trợ cho nhà máy KCN`,
-          `Sản xuất đơn hàng B2B theo yêu cầu`
-        ];
-    
+        `Gia công & Cung ứng ${cleanCategory}`,
+        `Giải pháp kỹ thuật chuyên ngành ${cleanCategory}`,
+        `Vật tư phụ trợ cho nhà máy KCN`,
+        `Sản xuất đơn hàng B2B theo yêu cầu`
+      ];
+
     productGroups = [
       {
         groupName: cleanCategory,

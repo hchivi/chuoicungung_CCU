@@ -5,6 +5,7 @@ import {
   Eye, Navigation, Plane, Anchor, Sparkles, TrendingUp, Layers, CheckCircle2
 } from 'lucide-react';
 import { calculateKcnLogistics } from '../../utils/kcnLogisticsUtils';
+import { slugify } from '../../pages/IndustryCategoryPage';
 
 export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
   if (!kcn) return null;
@@ -96,12 +97,15 @@ export default function KcnCard({ kcn, onOpenSiteVisit, onOpenBrochure }) {
           </span>
           <div className="flex flex-wrap gap-1">
             {logistics.priorityIndustries.map((ind, idx) => (
-              <span
+              <Link
                 key={idx}
-                className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 text-[10.5px] font-medium border border-blue-100/80"
+                to={`/nganh-nghe/${slugify(ind)}?name=${encodeURIComponent(ind)}`}
+                onClick={(e) => e.stopPropagation()}
+                className="px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-800 text-[10.5px] font-medium border border-blue-100/80 transition inline-block cursor-pointer"
+                title={`Xem nhà cung ứng ngành: ${ind}`}
               >
                 {ind}
-              </span>
+              </Link>
             ))}
           </div>
         </div>

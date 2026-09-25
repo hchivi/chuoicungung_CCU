@@ -14,6 +14,7 @@ import OneClickApplyModal from '../components/demands/OneClickApplyModal';
 import KycPaywallModal from '../components/demands/KycPaywallModal';
 import FastRfqModal from '../components/demands/FastRfqModal';
 import LiveDemandToast from '../components/demands/LiveDemandToast';
+import B2bTradeNetworkCanvas from '../components/demands/B2bTradeNetworkCanvas';
 
 export default function DemandsPage() {
   const { t, lang } = useLanguage();
@@ -110,15 +111,18 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       <section className="relative overflow-hidden bg-[#F4F8FA] border-b border-slate-200/80 pb-12 sm:pb-16">
 
-        {/* Right Half Sourcing Photo with Smooth Gradient Blend */}
+        {/* Right Half Sourcing Photo with Smooth Gradient Blend & Dynamic Live Trade Network Overlay */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img
             src="/images/b2b_sourcing_demand_hero.jpg"
             alt="B2B Sourcing Demands Marketplace"
             className="w-full h-full object-cover object-center scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+          {/* Live Global Supply Chain Arc & RFQ Pulse Canvas */}
+          <B2bTradeNetworkCanvas className="z-[2] opacity-80" />
+          
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
         {/* Top Content */}
@@ -126,9 +130,9 @@ export default function DemandsPage() {
           <div className="max-w-2xl space-y-5">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition">
-                {lang === 'en' ? 'Home' : 'Trang chủ'}
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">
@@ -294,16 +298,26 @@ export default function DemandsPage() {
                 <select
                   value={quickRfqPhase}
                   onChange={(e) => setQuickRfqPhase(e.target.value)}
-                  className="w-full px-3.5 py-3 bg-white text-slate-900 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
+                  className="w-full px-3.5 py-3 bg-white text-slate-900 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
                 >
-                  <option value="1.1">Pha 1.1 - Logistics Siêu trường</option>
-                  <option value="2.1">Pha 2.1 - Tổng thầu Xây dựng EPC &amp; M&amp;E</option>
-                  <option value="2.3">Pha 2.3 - Môi trường &amp; PCCC</option>
-                  <option value="4.1">Pha 4.1 - Bao bì, Thùng Carton &amp; In ấn</option>
-                  <option value="5.1">Pha 5.1 - Tuyển dụng &amp; Nhân sự</option>
-                  <option value="5.3">Pha 5.3 - Đồng phục &amp; Bảo hộ (PPE)</option>
-                  <option value="6.1">Pha 6.1 - Quà tặng, Bao bì &amp; Văn phòng phẩm</option>
-                  <option value="6.3">Pha 6.3 - Số hóa, MES &amp; Tự động hóa</option>
+                  <option value="1.1">Pha 1.1 - Khảo sát địa chất & Báo cáo FS</option>
+                  <option value="1.2">Pha 1.2 - Pháp lý đầu tư, ĐTM & Giấy phép</option>
+                  <option value="1.3">Pha 1.3 - Thuê đất KCN & Nhà xưởng xây sẵn</option>
+                  <option value="2.1">Pha 2.1 - Thiết kế quy hoạch 1/500 & BIM</option>
+                  <option value="2.2">Pha 2.2 - Thi công nhà thép tiền chế & Sàn</option>
+                  <option value="2.3">Pha 2.3 - Trạm biến áp 22kV, MEP & PCCC</option>
+                  <option value="3.1">Pha 3.1 - Lắp đặt cẩu trục 10T & Dây chuyền</option>
+                  <option value="3.2">Pha 3.2 - Phòng sạch Class 1000 & Sơn Epoxy</option>
+                  <option value="3.3">Pha 3.3 - Kiểm định an toàn & Nghiệm thu máy</option>
+                  <option value="4.1">Pha 4.1 - NVL kim loại, Linh kiện & Bao bì</option>
+                  <option value="4.2">Pha 4.2 - Gia công CNC, Khuôn mẫu & MES</option>
+                  <option value="4.3">Pha 4.3 - Logistics, Vận tải & Kho bãi KCN</option>
+                  <option value="5.1">Pha 5.1 - Tuyển dụng & Cung ứng lao động</option>
+                  <option value="5.2">Pha 5.2 - Suất ăn công nghiệp HACCP & Phúc lợi</option>
+                  <option value="5.3">Pha 5.3 - Đồng phục công nhân & Bảo hộ PPE</option>
+                  <option value="6.1">Pha 6.1 - Mở rộng nhà máy Pha 2 & Cải tạo</option>
+                  <option value="6.2">Pha 6.2 - Tư vấn ISO 9001 & Tiêu chuẩn ESG</option>
+                  <option value="6.3">Pha 6.3 - Robot AGV, Số hóa & Điện mặt trời</option>
                 </select>
               </div>
 

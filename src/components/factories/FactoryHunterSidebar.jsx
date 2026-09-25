@@ -24,16 +24,25 @@ const INDUSTRIES = [
 ];
 
 const PROCUREMENT_PHASES = [
-  { id: "all", label: "Tất cả các Pha Nhu Cầu" },
+  { id: "all", label: "Tất cả các Pha Nhu Cầu", color: "blue" },
+  { id: "1.1", label: "Pha 1.1: Khảo sát địa chất & Báo cáo FS", color: "purple" },
+  { id: "1.2", label: "Pha 1.2: Pháp lý đầu tư, ĐTM & Giấy phép", color: "purple" },
+  { id: "1.3", label: "Pha 1.3: Thuê đất KCN & Nhà xưởng xây sẵn", color: "purple" },
+  { id: "2.1", label: "Pha 2.1: Thiết kế quy hoạch 1/500 & BIM", color: "sky" },
+  { id: "2.2", label: "Pha 2.2: Thi công nhà thép tiền chế & Sàn", color: "sky" },
+  { id: "2.3", label: "Pha 2.3: Cơ điện MEP & PCCC nhà máy", color: "sky" },
+  { id: "3.1", label: "Pha 3.1: Lắp đặt cẩu trục 10T & Dây chuyền", color: "cyan" },
+  { id: "3.2", label: "Pha 3.2: Hoàn thiện Phòng sạch & Sơn Epoxy", color: "cyan" },
+  { id: "3.3", label: "Pha 3.3: Kiểm định an toàn & Nghiệm thu máy", color: "cyan" },
   { id: "4.1", label: "Pha 4.1: Cung ứng NVL & Bao bì, Carton", color: "indigo" },
-  { id: "4.2", label: "Pha 4.2: Gia công CNC & Xử lý bề mặt", color: "amber" },
+  { id: "4.2", label: "Pha 4.2: Gia công CNC & Xử lý bề mặt", color: "indigo" },
   { id: "4.3", label: "Pha 4.3: Logistics Kho bãi & Vận tải KCN", color: "blue" },
-  { id: "5.1", label: "Pha 5.1: Tuyển dụng & Đào tạo nhân lực", color: "purple" },
+  { id: "5.1", label: "Pha 5.1: Tuyển dụng & Đào tạo nhân lực", color: "amber" },
   { id: "5.2", label: "Pha 5.2: Suất ăn công nghiệp & Phúc lợi", color: "amber" },
   { id: "5.3", label: "Pha 5.3: Đồng phục & Bảo hộ lao động (PPE)", color: "emerald" },
-  { id: "2.3", label: "Pha 2.3: Cơ điện MEP & PCCC nhà máy", color: "sky" },
-  { id: "3.2", label: "Pha 3.2: Hoàn thiện Phòng sạch & Sơn Epoxy", color: "purple" },
-  { id: "6.3", label: "Pha 6.3: Tự động hóa & Robot AGV", color: "teal" }
+  { id: "6.1", label: "Pha 6.1: Mở rộng nhà máy Pha 2 & Cải tạo", color: "rose" },
+  { id: "6.2", label: "Pha 6.2: Tư vấn chứng nhận ISO & Chuẩn ESG", color: "rose" },
+  { id: "6.3", label: "Pha 6.3: Tự động hóa, MES & Robot AGV", color: "violet" }
 ];
 
 const FACTORY_TYPES = [

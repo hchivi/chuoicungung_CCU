@@ -1,9 +1,25 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+function forcePdfDownloadPlugin() {
+  return {
+    name: 'force-pdf-download',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url && (req.url.includes('/catalogues/') || req.url.includes('.pdf') || req.url.includes('.vcf'))) {
+          const filename = req.url.split('/').pop().split('?')[0];
+          res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+          res.setHeader('Content-Type', 'application/octet-stream');
+        }
+        next();
+      });
+    }
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), forcePdfDownloadPlugin()],
   build: {
     chunkSizeWarningLimit: 2000,
     rollupOptions: {

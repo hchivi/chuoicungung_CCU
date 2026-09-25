@@ -369,6 +369,7 @@ export const recruitmentCandidatesData = [
     degree: "Đại học Bách Khoa TP.HCM (Cơ điện tử)",
     status: "Sẵn sàng nhận offer mới",
     availableNow: false,
+    tags: ["PLC Siemens / HMI", "Biến tần ABB / Yaskawa", "Hệ thống SCADA", "Bảo trì ME Nhà máy"],
     summary: "Thành thạo lập trình PLC Siemens, biến tần ABB/Yaskawa và tích hợp hệ thống SCADA giám sát năng lượng nhà máy. Có kinh nghiệm triển khai dự án lắp đặt dây chuyền đóng gói tự động.",
     skills: ["Lập trình PLC & HMI", "Thiết kế tủ điện công nghiệp", "Bảo trì dự đoán PdM", "AutoCAD Electrical"],
     contactPhone: "•••• ••• •••",

@@ -125,14 +125,24 @@ export default function FastRfqModal({ isOpen, onClose, initialData = {} }) {
                   onChange={(e) => setFormData({ ...formData, phaseId: e.target.value })}
                   className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
                 >
-                  <option value="1.1">Pha 1.1 - Logistics Siêu trường & Hải quan</option>
-                  <option value="2.1">Pha 2.1 - Tổng thầu Xây dựng EPC & M&E</option>
-                  <option value="2.3">Pha 2.3 - Môi trường & PCCC</option>
-                  <option value="4.1">Pha 4.1 - Bao bì, Thùng Carton & In ấn</option>
-                  <option value="5.1">Pha 5.1 - Tuyển dụng & Đào tạo lao động</option>
-                  <option value="5.3">Pha 5.3 - Đồng phục & Bảo hộ (PPE)</option>
-                  <option value="6.1">Pha 6.1 - Quà tặng, Bao bì & Phúc lợi</option>
-                  <option value="6.3">Pha 6.3 - Số hóa, Phần mềm MES & Tự động hóa</option>
+                  <option value="1.1">Pha 1.1 - Khảo sát địa chất & Báo cáo FS</option>
+                  <option value="1.2">Pha 1.2 - Pháp lý đầu tư, ĐTM & Giấy phép</option>
+                  <option value="1.3">Pha 1.3 - Thuê đất KCN & Nhà xưởng xây sẵn</option>
+                  <option value="2.1">Pha 2.1 - Thiết kế quy hoạch 1/500 & BIM</option>
+                  <option value="2.2">Pha 2.2 - Thi công nhà thép tiền chế & Sàn</option>
+                  <option value="2.3">Pha 2.3 - Trạm biến áp 22kV, MEP & PCCC</option>
+                  <option value="3.1">Pha 3.1 - Lắp đặt cẩu trục 10T & Dây chuyền</option>
+                  <option value="3.2">Pha 3.2 - Phòng sạch Class 1000 & Sơn Epoxy</option>
+                  <option value="3.3">Pha 3.3 - Kiểm định an toàn & Nghiệm thu máy</option>
+                  <option value="4.1">Pha 4.1 - NVL kim loại, Linh kiện & Bao bì</option>
+                  <option value="4.2">Pha 4.2 - Gia công CNC, Khuôn mẫu & MES</option>
+                  <option value="4.3">Pha 4.3 - Logistics, Vận tải & Kho bãi KCN</option>
+                  <option value="5.1">Pha 5.1 - Tuyển dụng & Cung ứng lao động</option>
+                  <option value="5.2">Pha 5.2 - Suất ăn công nghiệp HACCP & Phúc lợi</option>
+                  <option value="5.3">Pha 5.3 - Đồng phục công nhân & Bảo hộ PPE</option>
+                  <option value="6.1">Pha 6.1 - Mở rộng nhà máy Pha 2 & Cải tạo</option>
+                  <option value="6.2">Pha 6.2 - Tư vấn ISO 9001 & Tiêu chuẩn ESG</option>
+                  <option value="6.3">Pha 6.3 - Robot AGV, Số hóa & Điện mặt trời</option>
                 </select>
               </div>
 

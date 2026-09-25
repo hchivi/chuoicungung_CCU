@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import fullKcnFallback from '../data/industrialParksFull.json';
 import InteractiveVietnamMap from '../components/InteractiveVietnamMap';
+import KcnGisMap from '../components/kcn/KcnGisMap';
 import { vietnamMapRegions } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
 import { calculateKcnLogistics } from '../utils/kcnLogisticsUtils';
@@ -249,26 +250,42 @@ export default function IndustrialParksPage() {
       {/* ========================================================================= */}
       {/* 1. HERO DASHBOARD (Trung tâm Chỉ huy Vĩ mô - The Billion-Dollar Gateway)  */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
         
-        {/* Right Half Modern Industrial Photo with Smooth Gradient Blend */}
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
-          <img 
-            src="/images/industrial_park_hero.jpg" 
-            alt="Vietnam Modern Eco Industrial Parks GIS Map"
-            className="w-full h-full object-cover object-center scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+        {/* Right Half Modern Industrial & Port Flycam Video with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+            poster="/images/industrial_park_hero.jpg"
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+          >
+            <source src="/images/industrial_drone_flycam.webm" type="video/webm" />
+            <source src="/images/industrial_drone_flycam_480p.webm" type="video/webm" />
+            <img 
+              src="/images/industrial_park_hero.jpg" 
+              alt="Vietnam Modern Eco Industrial Parks GIS Map Flycam"
+              className="w-full h-full object-cover object-center scale-105"
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
         {/* Top Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
-          <div className="max-w-3xl space-y-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
+          <div className="max-w-3xl space-y-5 sm:space-y-6">
             
             {/* Breadcrumb as per Doc Requirements */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">
                 {lang === 'en' ? 'Vietnam Industrial Parks & Zones Map' : 'Bản Đồ Khu Công Nghiệp & Cụm Công Nghiệp'}
@@ -677,9 +694,9 @@ export default function IndustrialParksPage() {
         {/* 2-Column Equal-Height Map Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
-          {/* Main Leaflet Map with 4 Switchable Tabs (8 cols on lg, 9 on xl) */}
-          <div className="lg:col-span-8 xl:col-span-9 h-full min-h-[820px]">
-            <InteractiveVietnamMap 
+          {/* Main GIS Leaflet Map with Floating Controls, Infrastructure Layers & Drawer */}
+          <div className="lg:col-span-8 xl:col-span-9 h-full min-h-[820px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+            <KcnGisMap 
               height="100%" 
               externalFlyTo={mapFlyToTarget}
             />

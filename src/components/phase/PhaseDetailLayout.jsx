@@ -5,7 +5,7 @@ import {
   Factory, Users, ShieldCheck, MapPin, Sparkles, ChevronRight,
   HelpCircle, PlusCircle, Check, Filter, Zap, Star, Clock, 
   Send, Lock, RotateCcw, Award, CheckSquare, Square, Layers,
-  Compass, Wrench, FileCheck, ExternalLink, Shield
+  Compass, Wrench, FileCheck, ExternalLink, Shield, X
 } from 'lucide-react';
 import { stagesData } from '../../data/mockData';
 import { stageSuppliers } from '../../data/stageSuppliersData';
@@ -55,6 +55,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
   const [isRfqModalOpen, setIsRfqModalOpen] = useState(false);
   const [selectedSupplierForRfq, setSelectedSupplierForRfq] = useState(null);
   const [isPrivateBiddingMode, setIsPrivateBiddingMode] = useState(false);
+  const [isBottomBarClosed, setIsBottomBarClosed] = useState(false);
 
   useEffect(() => {
     setFilters({
@@ -284,7 +285,9 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
       {/* 1. BREADCRUMBS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2 flex-wrap gap-y-1">
-          <Link to="/" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
           <span>&gt;</span>
@@ -800,47 +803,59 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
       </section>
 
       {/* 7. BOTTOM STICKY FLOATING ACTION BAR */}
-      <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-3 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          
-          <div className="flex items-center space-x-3 text-center sm:text-left">
-            <div 
-              style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
-              className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 font-bold"
-            >
-              ⚡
+      {!isBottomBarClosed && (
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-3 px-4 sm:px-8 transition-all">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            
+            <div className="flex items-center space-x-3 text-center sm:text-left">
+              <div 
+                style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
+                className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 font-bold"
+              >
+                ⚡
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-black text-slate-900 font-heading">
+                  Bạn đang tìm kiếm giải pháp cho Pha {currentPhase.id}: {currentPhase.title}?
+                </h4>
+                <p className="text-[11px] text-slate-500 hidden sm:block">
+                  Hơn {currentPhase.totalEnterprises || 85}+ doanh nghiệp đã được xác thực KYC và sẵn sàng kết nối.
+                </p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-black text-slate-900 font-heading">
-                Bạn đang tìm kiếm giải pháp cho Pha {currentPhase.id}: {currentPhase.title}?
-              </h4>
-              <p className="text-[11px] text-slate-500 hidden sm:block">
-                Hơn {currentPhase.totalEnterprises || 85}+ doanh nghiệp đã được xác thực KYC và sẵn sàng kết nối.
-              </p>
+
+            <div className="flex items-center space-x-2.5 w-full sm:w-auto">
+              <button
+                onClick={() => handleOpenRfq(null, false)}
+                style={{ backgroundColor: theme.color }}
+                className="flex-1 sm:flex-none px-5 py-2.5 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
+              >
+                <Send className="w-4 h-4" />
+                <span>Tạo Nhu Cầu Báo Giá</span>
+              </button>
+
+              <button
+                onClick={() => handleOpenRfq(null, true)}
+                className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
+              >
+                <Lock className="w-4 h-4 text-amber-400" />
+                <span>Bidding Ẩn Danh</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsBottomBarClosed(true)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-400 flex items-center justify-center transition cursor-pointer shrink-0 ml-1"
+                title="Đóng thanh tiện ích"
+                aria-label="Đóng thanh tiện ích"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
+
           </div>
-
-          <div className="flex items-center space-x-2.5 w-full sm:w-auto">
-            <button
-              onClick={() => handleOpenRfq(null, false)}
-              style={{ backgroundColor: theme.color }}
-              className="flex-1 sm:flex-none px-5 py-2.5 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase"
-            >
-              <Send className="w-4 h-4" />
-              <span>Tạo Nhu Cầu Báo Giá</span>
-            </button>
-
-            <button
-              onClick={() => handleOpenRfq(null, true)}
-              className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center justify-center space-x-1.5 uppercase"
-            >
-              <Lock className="w-4 h-4 text-amber-400" />
-              <span>Bidding Ẩn Danh</span>
-            </button>
-          </div>
-
         </div>
-      </div>
+      )}
 
       {/* 8. RFQ MODAL */}
       <StageRequestQuoteModal

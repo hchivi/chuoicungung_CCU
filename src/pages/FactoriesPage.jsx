@@ -15,42 +15,147 @@ import FactoryHunterSidebar from '../components/factories/FactoryHunterSidebar';
 import FactoryKycPaywallModal from '../components/factories/FactoryKycPaywallModal';
 import FactorySubmitRfqModal from '../components/factories/FactorySubmitRfqModal';
 
+// Master 18-Phase Procurement Demand Catalog for Realistic Random Mapping
+const ALL_18_PHASES_DEMANDS = {
+  "1.1": [
+    { phaseId: '1.1', title: 'Cần Khảo sát địa chất công trình & Báo cáo khả thi FS mở rộng', phaseName: 'Khảo sát FS', color: 'purple' },
+    { phaseId: '1.1', title: 'Cần Tư vấn nghiên cứu thị trường & Đánh giá chuỗi cung ứng', phaseName: 'Khảo sát Thị trường', color: 'purple' }
+  ],
+  "1.2": [
+    { phaseId: '1.2', title: 'Cần Đơn vị tư vấn lập hồ sơ ĐTM & Giấy phép môi trường KCN', phaseName: 'ĐTM Môi trường', color: 'purple' },
+    { phaseId: '1.2', title: 'Cần Hoàn thiện hồ sơ xin cấp phép đầu tư & Giấy phép xây dựng', phaseName: 'Pháp lý Đầu tư', color: 'purple' }
+  ],
+  "1.3": [
+    { phaseId: '1.3', title: 'Cần Tìm thuê 2-5 ha đất KCN hoặc Nhà xưởng xây sẵn đạt chuẩn', phaseName: 'Quỹ đất & Xưởng', color: 'purple' },
+    { phaseId: '1.3', title: 'Cần Thuê nhà xưởng có sẵn trạm điện 1000kVA tại KCN', phaseName: 'Thuê Xưởng KCN', color: 'purple' }
+  ],
+  "2.1": [
+    { phaseId: '2.1', title: 'Cần Tư vấn thiết kế quy hoạch 1/500 & Triển khai mô hình BIM', phaseName: 'Thiết kế & BIM', color: 'sky' },
+    { phaseId: '2.1', title: 'Cần Thiết kế kiến trúc tổng thể & Kết cấu nhà máy phụ trợ', phaseName: 'Thiết kế Nhà máy', color: 'sky' }
+  ],
+  "2.2": [
+    { phaseId: '2.2', title: 'Cần Tổng thầu thi công nhà thép tiền chế & Khung kèo nhịp lớn', phaseName: 'Nhà thép tiền chế', color: 'sky' },
+    { phaseId: '2.2', title: 'Cần Thi công sàn bê tông mài tăng cứng Hardener & Chống nứt', phaseName: 'Sàn Bê tông', color: 'sky' }
+  ],
+  "2.3": [
+    { phaseId: '2.3', title: 'Cần Bảo trì trạm biến áp 22kV, Cơ điện MEP & PCCC tự động', phaseName: 'Cơ điện MEP & PCCC', color: 'sky' },
+    { phaseId: '2.3', title: 'Cần Lắp đặt hệ thống điều hòa thông gió công nghiệp HVAC', phaseName: 'Hệ thống HVAC', color: 'sky' }
+  ],
+  "3.1": [
+    { phaseId: '3.1', title: 'Cần Lắp đặt cẩu trục dầm đôi 10T & Dây chuyền sản xuất tự động', phaseName: 'Cẩu trục & Rigging', color: 'cyan' },
+    { phaseId: '3.1', title: 'Cần Đội ngũ căn chỉnh, lắp ráp máy móc chính xác CNC', phaseName: 'Lắp đặt Máy móc', color: 'cyan' }
+  ],
+  "3.2": [
+    { phaseId: '3.2', title: 'Cần Hoàn thiện phòng sạch GMP / Class 1000 & Panel cách nhiệt', phaseName: 'Phòng sạch Cleanroom', color: 'cyan' },
+    { phaseId: '3.2', title: 'Cần Thi công sơn sàn Epoxy chống tĩnh điện ESD & Chịu lực', phaseName: 'Sơn sàn Epoxy', color: 'cyan' }
+  ],
+  "3.3": [
+    { phaseId: '3.3', title: 'Cần Chạy thử có tải, Đo kiểm rung động & Kiểm định an toàn', phaseName: 'Kiểm định An toàn', color: 'cyan' },
+    { phaseId: '3.3', title: 'Cần Đơn vị đánh giá nghiệm thu kỹ thuật dây chuyền sản xuất', phaseName: 'Nghiệm thu Máy', color: 'cyan' }
+  ],
+  "4.1": [
+    { phaseId: '4.1', title: 'Cần Cung ứng NVL kim loại, Thép cuộn mạ kẽm & Nhôm định hình', phaseName: 'NVL Kim loại', color: 'indigo' },
+    { phaseId: '4.1', title: 'Cần Cung ứng Bao bì Carton 5 lớp, Màng co & Khay nhựa định hình', phaseName: 'Bao bì & Đóng gói', color: 'indigo' },
+    { phaseId: '4.1', title: 'Cần Cung ứng Bu lông ốc vít cấp bền, Phụ tùng cơ khí & Jig', phaseName: 'Bu lông & Linh kiện', color: 'indigo' }
+  ],
+  "4.2": [
+    { phaseId: '4.2', title: 'Cần Gia công cơ khí chính xác CNC, Phay tiện 5 trục & Khuôn mẫu', phaseName: 'Gia công CNC', color: 'indigo' },
+    { phaseId: '4.2', title: 'Cần Triển khai phần mềm Quản lý sản xuất MES & Kiểm soát QA/QC', phaseName: 'Quản lý MES', color: 'indigo' },
+    { phaseId: '4.2', title: 'Cần Dịch vụ bảo trì, đại tu máy móc công nghiệp định kỳ', phaseName: 'Bảo trì Nhà máy', color: 'indigo' }
+  ],
+  "4.3": [
+    { phaseId: '4.3', title: 'Cần Logistics, Thuê xe container lạnh & Vận chuyển cảng biển', phaseName: 'Logistics Cảng biển', color: 'blue' },
+    { phaseId: '4.3', title: 'Cần Thuê kho bãi ngoại quan & Pallet gỗ xuất khẩu tại KCN', phaseName: 'Kho bãi KCN', color: 'blue' }
+  ],
+  "5.1": [
+    { phaseId: '5.1', title: 'Cần Tuyển dụng 200+ lao động phổ thông & Cung ứng thời vụ KCN', phaseName: 'Tuyển dụng Lao động', color: 'amber' },
+    { phaseId: '5.1', title: 'Cần Tuyển dụng kỹ sư tự động hóa, QA/QC & Quản đốc xưởng', phaseName: 'Nhân sự Kỹ thuật', color: 'amber' }
+  ],
+  "5.2": [
+    { phaseId: '5.2', title: 'Cần Cung ứng 1.500 suất ăn công nghiệp tiêu chuẩn HACCP', phaseName: 'Suất ăn HACCP', color: 'amber' },
+    { phaseId: '5.2', title: 'Cần Dịch vụ xe đưa đón công nhân & Quà tặng doanh nghiệp', phaseName: 'Phúc lợi & Đưa đón', color: 'amber' }
+  ],
+  "5.3": [
+    { phaseId: '5.3', title: 'Cần May 3.000 bộ đồng phục công nhân & Quần áo ESD Cleanroom', phaseName: 'Đồng phục ESD', color: 'emerald' },
+    { phaseId: '5.3', title: 'Cần Cung ứng giày bảo hộ lao động, Nón PPE & Kính an toàn', phaseName: 'Bảo hộ Lao động', color: 'emerald' }
+  ],
+  "6.1": [
+    { phaseId: '6.1', title: 'Cần Tổng thầu mở rộng công suất nhà xưởng Pha 2 & Cải tạo kho', phaseName: 'Mở rộng Nhà máy', color: 'rose' },
+    { phaseId: '6.1', title: 'Cần Cải tạo, nâng cấp sàn xưởng & Mở rộng phân xưởng sản xuất', phaseName: 'Nâng cấp Xưởng', color: 'rose' }
+  ],
+  "6.2": [
+    { phaseId: '6.2', title: 'Cần Tư vấn đánh giá chứng nhận ISO 9001, ISO 14001 & ISO 45001', phaseName: 'Chứng nhận ISO', color: 'rose' },
+    { phaseId: '6.2', title: 'Cần Tư vấn chuẩn hóa báo cáo ESG xanh & Kiểm kê khí nhà kính', phaseName: 'Tiêu chuẩn ESG', color: 'rose' }
+  ],
+  "6.3": [
+    { phaseId: '6.3', title: 'Cần Triển khai hệ thống Robot tự hành AGV & Kho tự động AS/RS', phaseName: 'Robot AGV & AS/RS', color: 'violet' },
+    { phaseId: '6.3', title: 'Cần Lắp đặt hệ thống Điện mặt trời áp mái 1MWp EPC theo PPA', phaseName: 'Điện mặt trời Áp mái', color: 'violet' }
+  ]
+};
+
+// Deterministic hash code generator for stable variety
+function stringHashCode(str) {
+  let hash = 0;
+  if (!str || str.length === 0) return hash;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 export function getFactoryActiveDemands(factory) {
   if (!factory) return [];
   const ind = (factory.industry || factory.name || '').toLowerCase();
-  
+  const hashSeed = stringHashCode(`${factory.id || factory.name || 'ccu'}-${factory.province || 'vn'}`);
+
+  // Sector-specific priority phase groups
+  let candidatePhases = ['4.1', '4.3', '5.3'];
+
   if (/dien\s*tu|ban\s*dan|chip|vi\s*mach|pcb/i.test(ind)) {
-    return [
-      { phaseId: '5.3', title: 'Cần Đồng phục & BHLĐ chống tĩnh điện (Nhóm Chuyên Gia Đồng Phục)', phaseName: 'Đồng phục ESD', color: 'emerald' },
-      { phaseId: '3.2', title: 'Cần Hoàn thiện Phòng sạch GMP Cleanroom Class 1000', phaseName: 'Phòng sạch', color: 'purple' },
-      { phaseId: '4.1', title: 'Cần Bao bì Carton 5 lớp & Khay nhựa định hình ESD', phaseName: 'Bao bì Carton', color: 'indigo' }
-    ];
+    candidatePhases = ['5.3', '3.2', '4.1', '4.2', '6.3', '2.3'];
+  } else if (/may\s*mac|det|giay|da\s*giay|vai|soi/i.test(ind)) {
+    candidatePhases = ['4.1', '5.2', '4.3', '5.1', '5.3', '6.2'];
+  } else if (/co\s*khi|kim\s*loai|thep|o\s*to|xe\s*may|gia\s*cong/i.test(ind)) {
+    candidatePhases = ['4.2', '4.1', '2.3', '3.1', '6.3', '4.3'];
+  } else if (/thuc\s*pham|do\s*uong|banh\s*keo|nong\s*san|thuy\s*san/i.test(ind)) {
+    candidatePhases = ['4.1', '4.3', '5.3', '5.2', '6.2', '3.2'];
+  } else if (/bao\s*bi|carton|giay|in\s*an/i.test(ind)) {
+    candidatePhases = ['4.1', '4.3', '3.1', '5.1', '6.1', '2.3'];
+  } else if (/nhua|cao\s*su|hoa\s*chat/i.test(ind)) {
+    candidatePhases = ['4.1', '1.2', '2.3', '4.3', '6.2', '5.3'];
+  } else if (/duoc|y\s*te|thuoc/i.test(ind)) {
+    candidatePhases = ['3.2', '6.2', '4.1', '5.3', '2.3', '1.2'];
+  } else if (/go|noi\s*that/i.test(ind)) {
+    candidatePhases = ['4.1', '4.3', '5.1', '4.2', '5.3', '6.1'];
+  } else {
+    // General manufacturing - select across diverse phases
+    const allPhaseIds = Object.keys(ALL_18_PHASES_DEMANDS);
+    const p1 = allPhaseIds[hashSeed % allPhaseIds.length];
+    const p2 = allPhaseIds[(hashSeed + 5) % allPhaseIds.length];
+    const p3 = allPhaseIds[(hashSeed + 11) % allPhaseIds.length];
+    candidatePhases = [p1, p2, p3];
   }
-  if (/may\s*mac|det|giay|da\s*giay|vai|soi/i.test(ind)) {
-    return [
-      { phaseId: '4.1', title: 'Cần Bao bì màng co, Thùng Carton xuất khẩu (Nhóm Cung Ứng Bao Bì)', phaseName: 'Thùng Carton', color: 'indigo' },
-      { phaseId: '5.2', title: 'Cần Cung ứng Suất ăn công nghiệp (1.800 suất/ngày)', phaseName: 'Suất ăn', color: 'amber' },
-      { phaseId: '4.3', title: 'Cần Logistics Vận tải Container xuất khẩu (Nhóm PORTALINK)', phaseName: 'Logistics', color: 'blue' }
-    ];
+
+  // Pick 2-3 deterministic demands
+  const demands = [];
+  const pickedPhases = new Set();
+  
+  for (let i = 0; i < candidatePhases.length; i++) {
+    const pId = candidatePhases[(hashSeed + i) % candidatePhases.length];
+    if (pickedPhases.has(pId)) continue;
+    pickedPhases.add(pId);
+    
+    const pool = ALL_18_PHASES_DEMANDS[pId] || ALL_18_PHASES_DEMANDS['4.1'];
+    const item = pool[(hashSeed + i) % pool.length];
+    demands.push(item);
+    if (demands.length >= 3) break;
   }
-  if (/co\s*khi|kim\s*loai|thep|o\s*to|xe\s*may|gia\s*cong/i.test(ind)) {
-    return [
-      { phaseId: '4.2', title: 'Cần Gia công CNC, Khuôn mẫu chính xác & Xử lý bề mặt', phaseName: 'Gia công CNC', color: 'amber' },
-      { phaseId: '4.1', title: 'Cần Cung ứng Bu lông, ốc vít & Thép cuộn mạ kẽm', phaseName: 'NVL Kim loại', color: 'indigo' },
-      { phaseId: '2.3', title: 'Cần Bảo trì Trạm biến áp 22kV & Cơ điện MEP', phaseName: 'Cơ điện MEP', color: 'sky' }
-    ];
-  }
-  if (/thuc\s*pham|do\s*uong|banh\s*keo|nong\s*san|thuy\s*san/i.test(ind)) {
-    return [
-      { phaseId: '4.1', title: 'Cần Bao bì màng ghép & Thùng carton lạnh', phaseName: 'Bao bì Thực phẩm', color: 'indigo' },
-      { phaseId: '4.3', title: 'Cần Logistics Kho lạnh & Vận tải xe tải 5 tấn (Nhóm PORTALINK)', phaseName: 'Kho lạnh', color: 'blue' },
-      { phaseId: '5.3', title: 'Cần Đồng phục & Nón trùm thực phẩm VSATTP', phaseName: 'Đồng phục VSATTP', color: 'emerald' }
-    ];
-  }
-  return [
-    { phaseId: '4.3', title: 'Cần Logistics & Vận tải KCN (Nhóm PORTALINK)', phaseName: 'Logistics', color: 'blue' },
-    { phaseId: '5.3', title: 'Cần Bao bì màng co, Đồng phục (Nhóm Chuyên Gia Đồng Phục)', phaseName: 'Đồng phục & BHLĐ', color: 'emerald' },
-    { phaseId: '4.1', title: 'Cần Vật tư đóng gói & Thùng carton 5 lớp', phaseName: 'Bao bì Carton', color: 'indigo' }
+
+  return demands.length > 0 ? demands : [
+    ALL_18_PHASES_DEMANDS['4.1'][0],
+    ALL_18_PHASES_DEMANDS['4.3'][0]
   ];
 }
 
@@ -246,26 +351,43 @@ export default function FactoriesPage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Seamless Panoramic Smart Factory Visual - EXACT IMAGE 1) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
         
-        {/* Right Half Smart Factory Photo with Smooth Gradient Blend */}
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
-          <img 
-            src="/images/smart_factory_hero.jpg" 
-            alt="Vietnam Smart Manufacturing Plant"
-            className="w-full h-full object-cover object-center scale-105"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+        {/* Right Half Smart Factory & Illuminated Industrial Park Flycam Video with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+            poster="/images/smart_factory_hero.jpg"
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+          >
+            <source src="/images/factory_illuminated_drone_1080p.webm" type="video/webm" />
+            <source src="/images/factory_illuminated_drone_480p.webm" type="video/webm" />
+            <source src="/images/industrial_drone_flycam.webm" type="video/webm" />
+            <img 
+              src="/images/smart_factory_hero.jpg" 
+              alt="Vietnam Smart Manufacturing Plant Flycam"
+              className="w-full h-full object-cover object-center scale-105"
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
         {/* Top Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
-          <div className="max-w-2xl space-y-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
+          <div className="max-w-2xl space-y-5 sm:space-y-6">
             
             {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">{lang === 'en' ? 'FDI Factories Network' : 'Nhà Máy & Cơ Sở Sản Xuất'}</span>
             </nav>
@@ -516,31 +638,34 @@ export default function FactoriesPage() {
                       key={fac.id || fac._id || `fac-${idx}`}
                       className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xs hover:shadow-xl hover:border-[#0052cc]/50 transition-all duration-300 flex flex-col justify-between space-y-4 group relative"
                     >
-                      <div className="space-y-3.5">
-                        {/* Header: Monogram Avatar + Name + Province */}
-                        <div className="flex items-start gap-3">
-                          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-[#0047a5] to-[#0052cc] text-white font-black text-base flex items-center justify-center shrink-0 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                            {initial}
-                          </div>
-
-                          <div className="flex-1 min-w-0">
-                            <Link
-                              to={detailUrl}
-                              className="font-black text-xs sm:text-[13px] text-slate-950 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-snug"
-                              title={fac.name}
-                            >
-                              <span>{fac.name}</span>
-                              {fac.province && (
-                                <span className="text-slate-500 font-bold ml-1">
-                                  ({fac.province})
-                                </span>
-                              )}
-                            </Link>
-
-                            <div className="flex items-center gap-1 text-[10.5px] text-slate-500 font-medium mt-0.5">
+                      <div className="space-y-3">
+                        {/* Header: Prominent Company Name without circular "C" icon */}
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-[#0052cc] font-mono font-bold text-[10px] border border-blue-100 flex items-center gap-1">
+                              <Factory className="w-3 h-3 text-[#0052cc]" />
                               <span>{fac.type || "Doanh nghiệp sản xuất"}</span>
-                            </div>
+                            </span>
+                            {fac.province && (
+                              <span className="text-[11px] font-bold text-slate-500 flex items-center gap-0.5 shrink-0 font-sans">
+                                <MapPin className="w-3 h-3 text-rose-500" />
+                                {fac.province}
+                              </span>
+                            )}
                           </div>
+
+                          <Link
+                            to={detailUrl}
+                            className="block font-black text-sm sm:text-[14.5px] text-slate-950 group-hover:text-[#0052cc] transition font-heading leading-snug line-clamp-2"
+                            title={fac.name}
+                          >
+                            <span>{fac.name}</span>
+                            {fac.province && (
+                              <span className="text-slate-500 font-bold ml-1 text-xs">
+                                ({fac.province})
+                              </span>
+                            )}
+                          </Link>
                         </div>
 
                         {/* KCN Link Badge */}
@@ -598,7 +723,7 @@ export default function FactoriesPage() {
                         <div className="grid grid-cols-2 gap-1.5">
                           <button
                             onClick={() => handleOpenSubmitRfq(fac)}
-                            className="py-2 px-2 bg-gradient-to-r from-[#0047a5] to-[#0052cc] hover:from-[#003d8f] hover:to-[#0047a5] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center space-x-1 font-heading cursor-pointer"
+                            className="py-2 px-2 bg-gradient-to-r from-[#0047a5] to-[#0052cc] hover:from-[#003d8f] hover:to-[#0047a5] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center space-x-1 font-heading cursor-pointer whitespace-nowrap"
                           >
                             <Send className="w-3 h-3" />
                             <span>Gửi Hồ Sơ</span>
@@ -607,7 +732,7 @@ export default function FactoriesPage() {
                           {/* Paywall Locked Contact Button */}
                           <button
                             onClick={() => handleOpenPaywall(fac)}
-                            className="py-2 px-2 bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-300 font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1 cursor-pointer"
+                            className="py-2 px-2 bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-300 font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1 cursor-pointer whitespace-nowrap"
                             title="Thông tin liên hệ được bảo vệ chống spam. Bấm để đẩy hồ sơ năng lực vào Dashboard Mua Hàng"
                           >
                             <Lock className="w-3 h-3 text-amber-600" />
@@ -629,19 +754,28 @@ export default function FactoriesPage() {
                 })}
               </div>
             ) : (
-              /* TABLE VIEW */
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead className="bg-slate-900 text-white uppercase text-[11px] font-heading tracking-wider">
+              /* TABLE VIEW: STRICT TABLE-FIXED WITH 0 HORIZONTAL SCROLL */
+              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+                <div className="w-full overflow-hidden">
+                  <table className="w-full table-fixed text-left text-xs border-collapse">
+                    <colgroup>
+                      <col className="w-[5%]" />
+                      <col className="w-[28%]" />
+                      <col className="w-[15%]" />
+                      <col className="w-[9%]" />
+                      <col className="w-[9%]" />
+                      <col className="w-[18%]" />
+                      <col className="w-[16%]" />
+                    </colgroup>
+                    <thead className="bg-slate-900 text-white uppercase text-[10.5px] font-heading tracking-wider">
                       <tr>
-                        <th className="p-3.5 text-center w-12">STT</th>
-                        <th className="p-3.5 min-w-[220px]">Tên Nhà Máy & Vị Trí</th>
-                        <th className="p-3.5 min-w-[180px]">Thuộc Khu Công Nghiệp</th>
-                        <th className="p-3.5 min-w-[100px]">Tỉnh / Thành</th>
-                        <th className="p-3.5 min-w-[220px]">Nhu Cầu Thu Mua Đang Mở</th>
-                        <th className="p-3.5 min-w-[140px]">Ngành Sản Xuất</th>
-                        <th className="p-3.5 text-center min-w-[140px]">Hồ Sơ Năng Lực</th>
+                        <th className="py-3 pl-3 pr-1 text-center whitespace-nowrap">STT</th>
+                        <th className="py-3 px-2">Tên Nhà Máy & Vị Trí</th>
+                        <th className="py-3 px-2">KCN</th>
+                        <th className="py-3 px-2">Tỉnh/TP</th>
+                        <th className="py-3 px-1 text-center whitespace-nowrap">Pha</th>
+                        <th className="py-3 px-2">Ngành</th>
+                        <th className="py-3 pr-3 pl-1 text-center whitespace-nowrap">Hồ Sơ</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-medium">
@@ -649,54 +783,63 @@ export default function FactoriesPage() {
                         if (!fac) return null;
                         const demands = getFactoryActiveDemands(fac);
                         const detailUrl = `/nha-may/${fac.id || fac._id || `factory-${fac.no || idx}`}`;
+                        const shortKcnName = fac.kcnName ? fac.kcnName.replace(/^Khu [cC]ông [nN]ghiệp\s+/i, 'KCN ') : '';
+                        const shortAddress = fac.address ? fac.address.replace(/Khu [cC]ông [nN]ghiệp/gi, 'KCN') : '';
 
                         return (
                           <tr key={fac.id || fac._id || `factr-${idx}`} className="hover:bg-blue-50/40 transition">
-                            <td className="p-3.5 text-center text-slate-500 font-bold font-mono">
+                            <td className="py-2.5 pl-3 pr-1 text-center text-slate-500 font-bold font-mono whitespace-nowrap">
                               {(currentPage - 1) * 24 + idx + 1}
                             </td>
-                            <td className="p-3.5">
-                              <Link to={detailUrl} className="font-extrabold text-slate-900 text-sm hover:text-[#0052cc] transition block">
-                                {fac.name} {fac.province && `(${fac.province})`}
+                            <td className="py-2.5 px-2 overflow-hidden">
+                              <Link to={detailUrl} className="font-extrabold text-slate-950 text-xs hover:text-[#0052cc] transition block truncate font-heading" title={fac.name}>
+                                {fac.name}
                               </Link>
-                              <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{fac.address}</div>
+                              <div className="text-[10.5px] text-slate-500 truncate mt-0.5" title={shortAddress}>{shortAddress}</div>
                             </td>
-                            <td className="p-3.5">
+                            <td className="py-2.5 px-2 overflow-hidden">
                               <Link 
                                 to={`/khu-cong-nghiep/${fac.kcnId}`}
-                                className="font-bold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                                className="font-bold text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 text-xs truncate"
+                                title={fac.kcnName}
                               >
                                 <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                                <span className="line-clamp-1">{fac.kcnName}</span>
+                                <span className="truncate">{shortKcnName}</span>
                               </Link>
                             </td>
-                            <td className="p-3.5 font-bold text-slate-700">
+                            <td className="py-2.5 px-2 font-bold text-slate-700 text-xs truncate">
                               {fac.province}
                             </td>
-                            <td className="p-3.5">
-                              <div className="space-y-1">
+                            <td className="py-2.5 px-1 text-center whitespace-nowrap">
+                              <div className="flex items-center justify-center">
                                 {demands.slice(0, 1).map((d, dIdx) => (
-                                  <span key={dIdx} className="inline-flex items-center gap-1 text-[11px] text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold border border-emerald-200">
-                                    ⚡ Pha {d.phaseId}: {d.title}
-                                  </span>
+                                  <Link 
+                                    key={dIdx} 
+                                    to={`/giai-doan-cung-ung/pha/${d.phaseId}`}
+                                    className="inline-flex items-center gap-1 text-[11px] text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded-lg font-bold font-mono border border-emerald-200 transition shadow-2xs" 
+                                    title={d.title}
+                                  >
+                                    <span>Pha {d.phaseId}</span>
+                                  </Link>
                                 ))}
                               </div>
                             </td>
-                            <td className="p-3.5 text-slate-700">
-                              <span className="line-clamp-1">{fac.industry}</span>
+                            <td className="py-2.5 px-2 overflow-hidden">
+                              <span className="text-slate-700 text-xs truncate block" title={fac.industry}>{fac.industry}</span>
                             </td>
-                            <td className="p-3.5 text-center">
-                              <div className="flex items-center justify-center gap-1.5">
+                            <td className="py-2.5 pr-3 pl-1 text-center whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5 whitespace-nowrap">
                                 <button
                                   onClick={() => handleOpenSubmitRfq(fac)}
-                                  className="px-2.5 py-1 bg-[#0052cc] hover:bg-[#0041a8] text-white rounded-lg text-xs font-bold transition inline-flex items-center gap-1 shadow-2xs cursor-pointer"
+                                  className="px-2.5 py-1.5 bg-[#0052cc] hover:bg-[#0041a8] text-white rounded-lg text-[11px] font-bold transition inline-flex items-center gap-1 shadow-2xs cursor-pointer whitespace-nowrap"
+                                  title="Gửi hồ sơ năng lực"
                                 >
-                                  <Send className="w-3 h-3" />
+                                  <Send className="w-3 h-3 shrink-0" />
                                   <span>Gửi Hồ Sơ</span>
                                 </button>
                                 <button
                                   onClick={() => handleOpenPaywall(fac)}
-                                  className="p-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 hover:bg-amber-100 transition cursor-pointer"
+                                  className="p-1.5 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 hover:bg-amber-100 transition cursor-pointer shrink-0"
                                   title="Xem Zalo/Email Mua Hàng 🔒"
                                 >
                                   <Lock className="w-3.5 h-3.5" />

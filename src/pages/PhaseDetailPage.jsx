@@ -299,7 +299,9 @@ export default function PhaseDetailPage() {
       {/* 1. BREADCRUMBS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2 flex-wrap gap-y-1">
-          <Link to="/" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
           <span>&gt;</span>

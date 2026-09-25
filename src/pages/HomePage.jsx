@@ -11,8 +11,11 @@ import NetworkBackground from '../components/NetworkBackground';
 import ClickUpBrainSearchBar from '../components/ClickUpBrainSearchBar';
 import SupplyChainPipelineFlow from '../components/SupplyChainPipelineFlow';
 import InteractiveExplodedFlower3D from '../components/InteractiveExplodedFlower3D';
+import SupplyChainExpoWidget from '../components/SupplyChainExpoWidget';
+import SuppliMascot from '../components/SuppliMascot';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { slugify } from './IndustryCategoryPage';
 
 export default function HomePage() {
   const { t, lang } = useLanguage();
@@ -25,57 +28,66 @@ export default function HomePage() {
   const factoriesCountFormatted = "14.200+";
   const suppliersCountFormatted = "24.000+";
 
-  // Continuous Marquee Sourcing Keywords (like tradeit.global)
+  // Continuous Marquee Sourcing Keywords across all 6 Stages (Full Width Edge-to-Edge)
+  // Row 1: GĐ 1 & 2 (Chuẩn bị, Pháp lý, Thiết kế & Cơ điện)
   const marqueeKeywordsRow1 = [
-    { label: lang === 'en' ? "precision CNC machining" : "gia công cơ khí chính xác", category: "enterprises" },
-    { label: lang === 'en' ? "corporate uniforms" : "đồng phục doanh nghiệp", category: "enterprises" },
-    { label: lang === 'en' ? "occupational safety PPE" : "bảo hộ lao động", category: "enterprises" },
-    { label: lang === 'en' ? "logistics & warehousing" : "logistics & kho bãi", category: "enterprises" },
+    { label: lang === 'en' ? "geological survey & feasibility" : "khảo sát địa chất & báo cáo FS", category: "enterprises" },
+    { label: lang === 'en' ? "legal licensing & IP permits" : "tư vấn pháp lý & giấy phép KCN", category: "enterprises" },
+    { label: lang === 'en' ? "1/500 master planning & BIM" : "thiết kế quy hoạch 1/500 & BIM", category: "enterprises" },
+    { label: lang === 'en' ? "pre-engineered steel factory" : "xây dựng nhà xưởng & thép tiền chế", category: "enterprises" },
+    { label: lang === 'en' ? "floor hardener concrete" : "sàn bê tông mài tăng cứng", category: "enterprises" },
+    { label: lang === 'en' ? "22kV substation & panels" : "trạm biến áp 22kV & tủ điện", category: "enterprises" },
+    { label: lang === 'en' ? "fire fighting & prevention PCCC" : "phòng cháy chữa cháy PCCC", category: "enterprises" },
+    { label: lang === 'en' ? "HVAC & mechanical electrical MEP" : "cơ điện lạnh MEP & HVAC", category: "enterprises" },
     { label: lang === 'en' ? "Northern Industrial Parks" : "khu công nghiệp Miền Bắc", category: "industrial_parks" },
-    { label: lang === 'en' ? "automation & industrial robotics" : "tự động hóa & robot", category: "enterprises" },
-    { label: lang === 'en' ? "corrugated box & packaging" : "đóng gói & thùng carton", category: "enterprises" },
-    { label: lang === 'en' ? "HVAC & cleanroom systems" : "thiết bị HVAC & phòng sạch", category: "enterprises" },
-    { label: lang === 'en' ? "molds & plastic injection" : "khuôn mẫu & ép nhựa", category: "enterprises" },
-    { label: lang === 'en' ? "water treatment & environmental" : "xử lý nước & môi trường", category: "enterprises" },
-    { label: lang === 'en' ? "CNC laser cutting & bending" : "cắt laser CNC & chấn gấp", category: "enterprises" },
-    { label: lang === 'en' ? "wooden & plastic pallets" : "pallet gỗ & nhựa công nghiệp", category: "enterprises" },
+    { label: lang === 'en' ? "ready-built factory for lease" : "nhà xưởng xây sẵn KCN", category: "industrial_parks" },
   ];
 
+  // Row 2: GĐ 3 & 4 (Lắp đặt máy, Phòng sạch, CNC, Vật liệu, Logistics)
   const marqueeKeywordsRow2 = [
-    { label: lang === 'en' ? "industrial catering service" : "cung ứng suất ăn công nghiệp", category: "enterprises" },
-    { label: lang === 'en' ? "pre-engineered steel & factory EPC" : "xây dựng nhà xưởng & thép tiền chế", category: "enterprises" },
-    { label: lang === 'en' ? "insulation materials & PU panels" : "vật liệu cách nhiệt & panel PU", category: "enterprises" },
-    { label: lang === 'en' ? "surface treatment chemicals" : "hóa chất xử lý bề mặt", category: "enterprises" },
-    { label: lang === 'en' ? "forklifts & lifting equipment" : "xe nâng & thiết bị nâng hạ", category: "enterprises" },
-    { label: lang === 'en' ? "legal licensing & IP permits" : "tư vấn pháp lý & giấy phép KCN", category: "enterprises" },
-    { label: lang === 'en' ? "fire fighting & prevention PCCC" : "phòng cháy chữa cháy PCCC", category: "enterprises" },
-    { label: lang === 'en' ? "HVAC mechanical electrical MEP" : "cơ điện lạnh MEP", category: "enterprises" },
-    { label: lang === 'en' ? "industrial inverters & panels" : "biến tần & tủ điện công nghiệp", category: "enterprises" },
-    { label: lang === 'en' ? "security & facility protection" : "dịch vụ bảo vệ & an ninh KCN", category: "enterprises" },
+    { label: lang === 'en' ? "overhead crane & rigging" : "cẩu trục 10T & lắp đặt dây chuyền", category: "enterprises" },
+    { label: lang === 'en' ? "Class 1000 cleanroom fit-out" : "thi công phòng sạch Class 1000", category: "enterprises" },
+    { label: lang === 'en' ? "antistatic Epoxy coating" : "sơn sàn Epoxy chống tĩnh điện", category: "enterprises" },
+    { label: lang === 'en' ? "trial runs & machine safety" : "chạy thử & kiểm định máy móc", category: "enterprises" },
+    { label: lang === 'en' ? "precision CNC machining" : "gia công cơ khí chính xác CNC", category: "enterprises" },
+    { label: lang === 'en' ? "galvanized steel coils" : "thép cuộn mạ kẽm & nhôm định hình", category: "enterprises" },
+    { label: lang === 'en' ? "high-tensile fasteners & jigs" : "bu lông ốc vít & khuôn mẫu Jig", category: "enterprises" },
+    { label: lang === 'en' ? "production MES software" : "quản lý sản xuất MES & ERP", category: "enterprises" },
+    { label: lang === 'en' ? "reefer container & forwarding" : "vận tải container lạnh & logistics", category: "enterprises" },
+    { label: lang === 'en' ? "bonded warehousing for lease" : "cho thuê kho bãi KCN", category: "industrial_parks" },
     { label: lang === 'en' ? "Southern Industrial Parks" : "khu công nghiệp Miền Nam", category: "industrial_parks" },
-    { label: lang === 'en' ? "powder coating subcontracting" : "gia công sơn tĩnh điện", category: "enterprises" },
+  ];
+
+  // Row 3: GĐ 5 & 6 (Nhân sự, Hậu cần, ISO, Tự động hóa, Năng lượng xanh)
+  const marqueeKeywordsRow3 = [
+    { label: lang === 'en' ? "industrial labor staffing" : "tuyển dụng & cung ứng lao động KCN", category: "enterprises" },
+    { label: lang === 'en' ? "industrial catering HACCP" : "suất ăn công nghiệp HACCP", category: "enterprises" },
+    { label: lang === 'en' ? "corporate gifts & packaging" : "quà tặng doanh nghiệp & bao bì carton", category: "enterprises" },
+    { label: lang === 'en' ? "worker uniforms & PPE safety" : "áo thun đồng phục & bảo hộ PPE", category: "enterprises" },
+    { label: lang === 'en' ? "Phase 2 factory expansion" : "mở rộng nhà máy & nâng cấp xưởng", category: "enterprises" },
+    { label: lang === 'en' ? "ISO 9001 & ESG green audit" : "tư vấn chứng nhận ISO & chuẩn ESG", category: "enterprises" },
+    { label: lang === 'en' ? "autonomous mobile robot AGV" : "tự động hóa & robot tự hành AGV", category: "enterprises" },
+    { label: lang === 'en' ? "rooftop solar power 1MWp" : "điện mặt trời áp mái 1MWp", category: "enterprises" },
+    { label: lang === 'en' ? "Central Vietnam Industrial Parks" : "khu công nghiệp Miền Trung", category: "industrial_parks" },
   ];
 
   const handleSearchSubmit = (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (!searchQuery.trim()) {
       navigate('/ban-do-6-giai-doan');
       return;
     }
     
-    // Redirect based on selected category or search across directory
-    if (searchCategory === 'enterprises') {
-      navigate(`/doanh-nghiep?q=${encodeURIComponent(searchQuery)}`);
+    if (searchCategory === 'industrial_parks') {
+      navigate(`/khu-cong-nghiep?q=${encodeURIComponent(searchQuery)}`);
     } else if (searchCategory === 'factories') {
       navigate(`/nha-may?q=${encodeURIComponent(searchQuery)}`);
-    } else if (searchCategory === 'industrial_parks') {
-      navigate(`/khu-cong-nghiep?q=${encodeURIComponent(searchQuery)}`);
     } else if (searchCategory === 'associations') {
       navigate(`/hoi-hiep-hoi?q=${encodeURIComponent(searchQuery)}`);
     } else if (searchCategory === 'stages') {
       navigate(`/ban-do-6-giai-doan?q=${encodeURIComponent(searchQuery)}`);
     } else {
-      navigate(`/doanh-nghiep?q=${encodeURIComponent(searchQuery)}`);
+      navigate(`/tu-khoa/${slugify(searchQuery)}?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -84,7 +96,7 @@ export default function HomePage() {
     if (category === 'industrial_parks') {
       navigate(`/khu-cong-nghiep?q=${encodeURIComponent(tagLabel)}`);
     } else {
-      navigate(`/doanh-nghiep?q=${encodeURIComponent(tagLabel)}`);
+      navigate(`/tu-khoa/${slugify(tagLabel)}?q=${encodeURIComponent(tagLabel)}`);
     }
   };
 
@@ -100,16 +112,8 @@ export default function HomePage() {
         {/* Soft Background Canvas Glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-gradient-to-tr from-blue-100/20 via-indigo-50/30 to-teal-50/20 rounded-full blur-3xl pointer-events-none -z-10" />
 
-        {/* Floating Trust Metrics Chips on Outer Canvas */}
-        <div className="hidden 2xl:block absolute top-10 left-8 z-10 pointer-events-none">
-          <div className="p-3 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/80 shadow-md space-y-1">
-            <div className="flex items-center space-x-2 text-[11px] font-bold text-slate-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>Hệ sinh thái sản xuất</span>
-            </div>
-            <div className="text-base font-black text-[#072348] font-heading">34 Tỉnh Thành VN</div>
-          </div>
-        </div>
+        {/* Collapsible Window at Right Edge: Ngày Hội Chuỗi Cung Ứng */}
+        <SupplyChainExpoWidget />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8 sm:space-y-10">
           
@@ -138,8 +142,7 @@ export default function HomePage() {
           </div>
 
           {/* 2. CLICKUP BRAIN SEARCH BAR WITH 6-COLOR GRADIENT RUNNING SHEEN (IMAGE 2) */}
-          <div className="max-w-4xl mx-auto space-y-4 relative z-20">
-            
+          <div className="max-w-4xl mx-auto relative z-20">
             <ClickUpBrainSearchBar
               searchCategory={searchCategory}
               setSearchCategory={setSearchCategory}
@@ -147,48 +150,68 @@ export default function HomePage() {
               setSearchQuery={setSearchQuery}
               handleSearchSubmit={handleSearchSubmit}
             />
-
-            {/* Sourcing Marquee Tags (2 Horizontal Rows Scrolling in Opposite Directions) */}
-            <div className="space-y-2 pt-2">
-              
-              {/* Track 1: Scrolling Left */}
-              <div className="flex overflow-hidden py-0.5">
-                <div className="animate-marquee-left flex items-center space-x-2.5">
-                  {[...marqueeKeywordsRow1, ...marqueeKeywordsRow1].map((kw, i) => (
-                    <button
-                      key={`row1-${i}`}
-                      type="button"
-                      onClick={() => handleTagClick(kw.label, kw.category)}
-                      className="px-3.5 py-1.5 bg-white hover:bg-blue-600 border border-slate-200 hover:border-blue-600 text-slate-700 hover:text-white rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0"
-                    >
-                      {kw.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Track 2: Scrolling Right */}
-              <div className="flex overflow-hidden py-0.5">
-                <div className="animate-marquee-right flex items-center space-x-2.5">
-                  {[...marqueeKeywordsRow2, ...marqueeKeywordsRow2].map((kw, i) => (
-                    <button
-                      key={`row2-${i}`}
-                      type="button"
-                      onClick={() => handleTagClick(kw.label, kw.category)}
-                      className="px-3.5 py-1.5 bg-white hover:bg-blue-600 border border-slate-200 hover:border-blue-600 text-slate-700 hover:text-white rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0"
-                    >
-                      {kw.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
           </div>
 
-          {/* 3. LIFECYCLE POSTER SECTION (6-STAGE FLOWER ON LOGO_ONLY.PNG) WITH ARTISTIC LUXURY DESIGN */}
-          <div className="pt-6 relative">
+        </div>
+
+        {/* Sourcing Marquee Tags (3 Full-Width Horizontal Rows Scrolling Edge-to-Edge with Left/Right Fade Masks) */}
+        <div className="w-full mt-6 relative overflow-hidden space-y-2.5 z-10">
+          {/* Subtle Left & Right Edge Blur Fade Overlay */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-28 bg-gradient-to-r from-white via-white/80 to-transparent z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-28 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent z-20" />
+
+          {/* Track 1: GĐ 1 & 2 (Pháp lý, Quy hoạch, Xây dựng, Cơ điện) - Scrolling Left */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-left flex items-center space-x-2.5">
+              {[...marqueeKeywordsRow1, ...marqueeKeywordsRow1, ...marqueeKeywordsRow1].map((kw, i) => (
+                <button
+                  key={`row1-${i}`}
+                  type="button"
+                  onClick={() => handleTagClick(kw.label, kw.category)}
+                  className="px-3.5 py-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0"
+                >
+                  {kw.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Track 2: GĐ 3 & 4 (Lắp đặt máy, Phòng sạch, CNC, Vật liệu, Logistics) - Scrolling Right */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-right flex items-center space-x-2.5">
+              {[...marqueeKeywordsRow2, ...marqueeKeywordsRow2, ...marqueeKeywordsRow2].map((kw, i) => (
+                <button
+                  key={`row2-${i}`}
+                  type="button"
+                  onClick={() => handleTagClick(kw.label, kw.category)}
+                  className="px-3.5 py-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0"
+                >
+                  {kw.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Track 3: GĐ 5 & 6 (Nhân sự, Suất ăn, Đồng phục, ISO, Robot AGV, Năng lượng) - Scrolling Left Slow */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-left-slow flex items-center space-x-2.5">
+              {[...marqueeKeywordsRow3, ...marqueeKeywordsRow3, ...marqueeKeywordsRow3].map((kw, i) => (
+                <button
+                  key={`row3-${i}`}
+                  type="button"
+                  onClick={() => handleTagClick(kw.label, kw.category)}
+                  className="px-3.5 py-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0"
+                >
+                  {kw.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* 3. LIFECYCLE POSTER SECTION (6-STAGE FLOWER ON LOGO_ONLY.PNG) WITH ARTISTIC LUXURY DESIGN */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-6">
+          <div className="relative">
             
             {/* Outer Artistic Multi-Chromatic Crystal Gradient Aura Border */}
             <div className="relative p-[1.5px] rounded-[36px] bg-gradient-to-br from-blue-600/30 via-indigo-500/25 via-sky-400/20 to-emerald-400/25 shadow-[0_25px_70px_-15px_rgba(7,35,72,0.09)] transition-all duration-700">
@@ -631,6 +654,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* 7. FLOATING INTERACTIVE MASCOT SUPPLI */}
+      <SuppliMascot />
 
     </div>
   );

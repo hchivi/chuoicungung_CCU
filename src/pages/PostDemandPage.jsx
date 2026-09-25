@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  PlusCircle, CheckCircle2, ArrowRight, ArrowLeft, Shield, 
-  Clock, DollarSign, HelpCircle, Phone, Mail, MessageSquare, 
+import {
+  PlusCircle, CheckCircle2, ArrowRight, ArrowLeft, Shield,
+  Clock, DollarSign, HelpCircle, Phone, Mail, MessageSquare,
   FileText, Upload, Sparkles, Building2, Factory
 } from 'lucide-react';
 import { stagesData } from '../data/mockData';
@@ -95,11 +95,13 @@ export default function PostDemandPage() {
 
   return (
     <div className="space-y-8 pb-20 pt-6 font-sans">
-      
+
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
         <div className="text-xs text-slate-500 flex items-center space-x-2">
-          <Link to="/" className="hover:text-blue-600">{lang === 'en' ? 'Home' : 'Trang chủ'}</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <span>&gt;</span>
           <Link to="/nhu-cau" className="hover:text-blue-600">{lang === 'en' ? 'Demands' : 'Nhu cầu'}</Link>
           <span>&gt;</span>
@@ -111,8 +113,8 @@ export default function PostDemandPage() {
             {lang === 'en' ? 'Post Sourcing & Procurement Demand' : 'Đăng nhu cầu tìm kiếm nhà cung cấp'}
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            {lang === 'en' 
-              ? 'Post your procurement needs for industrial products, MEP, machinery, or services and receive qualified quotes within 24 hours.' 
+            {lang === 'en'
+              ? 'Post your procurement needs for industrial products, MEP, machinery, or services and receive qualified quotes within 24 hours.'
               : 'Đăng tải nhu cầu tìm kiếm nhà cung cấp sản phẩm, dịch vụ, giải pháp phù hợp và nhận báo giá trong 24h.'}
           </p>
         </div>
@@ -121,23 +123,21 @@ export default function PostDemandPage() {
         <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
             {steps.map(s => (
-              <div 
+              <div
                 key={s.num}
-                className={`flex items-center space-x-2 p-2 rounded-xl text-xs transition ${
-                  currentStep === s.num
-                    ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
-                    : currentStep > s.num
+                className={`flex items-center space-x-2 p-2 rounded-xl text-xs transition ${currentStep === s.num
+                  ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200'
+                  : currentStep > s.num
                     ? 'text-emerald-700 font-medium'
                     : 'text-slate-400'
-                }`}
+                  }`}
               >
-                <span className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${
-                  currentStep === s.num
-                    ? 'bg-blue-600 text-white'
-                    : currentStep > s.num
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs ${currentStep === s.num
+                  ? 'bg-blue-600 text-white'
+                  : currentStep > s.num
                     ? 'bg-emerald-100 text-emerald-700'
                     : 'bg-slate-100 text-slate-400'
-                }`}>
+                  }`}>
                   {currentStep > s.num ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : s.num}
                 </span>
                 <span className="truncate font-heading">{s.label}</span>
@@ -150,10 +150,10 @@ export default function PostDemandPage() {
       {/* Main Layout: Form (8 cols) + Helper Sidebar (4 cols) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Left Form Area */}
           <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-8">
-            
+
             {currentStep === 6 ? (
               /* Success View */
               <div className="text-center py-12 space-y-4">
@@ -162,8 +162,8 @@ export default function PostDemandPage() {
                 </div>
                 <h3 className="text-2xl font-black text-slate-900 font-heading">{lang === 'en' ? 'Demand Published Successfully!' : 'Đăng nhu cầu thành công!'}</h3>
                 <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                  {lang === 'en' 
-                    ? 'Your demand has been received. Our team will review and distribute it to qualified industrial suppliers within 24 hours.' 
+                  {lang === 'en'
+                    ? 'Your demand has been received. Our team will review and distribute it to qualified industrial suppliers within 24 hours.'
                     : 'Nhu cầu của bạn đã được tiếp nhận. Đội ngũ kiểm duyệt Chuỗi Cung Ứng.vn sẽ duyệt và thông báo tới các nhà cung cấp phù hợp trong vòng 24h.'}
                 </p>
                 <div className="pt-4 flex justify-center space-x-3">
@@ -177,7 +177,7 @@ export default function PostDemandPage() {
               </div>
             ) : (
               <form onSubmit={handleNext} className="space-y-8 text-xs">
-                
+
                 {/* Step 1 Content */}
                 {currentStep === 1 && (
                   <div className="space-y-6">
@@ -219,7 +219,7 @@ export default function PostDemandPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Demand Category *' : 'Loại nhu cầu *'}</label>
-                          <select 
+                          <select
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
@@ -233,7 +233,7 @@ export default function PostDemandPage() {
 
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Industry Group *' : 'Nhóm ngành *'}</label>
-                          <select 
+                          <select
                             name="industry"
                             value={formData.industry}
                             onChange={handleChange}
@@ -249,7 +249,7 @@ export default function PostDemandPage() {
 
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Sourcing Method' : 'Hình thức tìm kiếm'}</label>
-                          <select 
+                          <select
                             name="searchType"
                             value={formData.searchType}
                             onChange={handleChange}
@@ -265,7 +265,7 @@ export default function PostDemandPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Province / City *' : 'Tỉnh / Thành phố *'}</label>
-                          <select 
+                          <select
                             name="location"
                             value={formData.location}
                             onChange={handleChange}
@@ -312,13 +312,13 @@ export default function PostDemandPage() {
                             { key: "Cá nhân", label: lang === 'en' ? "Individual" : "Cá nhân" }
                           ].map(type => (
                             <label key={type.key} className="flex items-center space-x-2 cursor-pointer font-heading">
-                              <input 
-                                type="radio" 
-                                name="orgType" 
+                              <input
+                                type="radio"
+                                name="orgType"
                                 value={type.key}
                                 checked={formData.orgType === type.key}
                                 onChange={handleChange}
-                                className="text-blue-600 focus:ring-0" 
+                                className="text-blue-600 focus:ring-0"
                               />
                               <span className="font-medium text-slate-700">{type.label}</span>
                             </label>
@@ -407,7 +407,7 @@ export default function PostDemandPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Supply Stage *' : 'Giai đoạn *'}</label>
-                          <select 
+                          <select
                             name="stageId"
                             value={formData.stageId}
                             onChange={handleChange}
@@ -421,7 +421,7 @@ export default function PostDemandPage() {
 
                         <div>
                           <label className="font-bold text-slate-800 block mb-1 font-heading">{lang === 'en' ? 'Specific Phase' : 'Pha cụ thể'}</label>
-                          <select 
+                          <select
                             name="phaseId"
                             value={formData.phaseId}
                             onChange={handleChange}
@@ -462,11 +462,11 @@ export default function PostDemandPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="font-bold text-slate-700 block mb-1 font-heading">{lang === 'en' ? 'Estimated Budget (VND)' : 'Ngân sách dự kiến (VND)'}</label>
-                        <input type="text" value={formData.budgetMin + " - " + formData.budgetMax} onChange={() => {}} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-blue-700 font-mono" />
+                        <input type="text" value={formData.budgetMin + " - " + formData.budgetMax} onChange={() => { }} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-bold text-blue-700 font-mono" />
                       </div>
                       <div>
                         <label className="font-bold text-slate-700 block mb-1 font-heading">{lang === 'en' ? 'Proposal Submission Deadline' : 'Hạn chót nhận báo giá'}</label>
-                        <input type="date" value={formData.deadline} onChange={() => {}} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
+                        <input type="date" value={formData.deadline} onChange={() => { }} className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
                       </div>
                     </div>
                   </div>
@@ -552,7 +552,7 @@ export default function PostDemandPage() {
 
           {/* Right Sidebar Guide & Trust (4 cols) */}
           <div className="lg:col-span-4 space-y-6">
-            
+
             {/* Hướng dẫn đăng nhu cầu */}
             <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4 text-xs">
               <h3 className="font-extrabold text-xs text-slate-400 uppercase tracking-wider font-heading">
@@ -612,7 +612,7 @@ export default function PostDemandPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <Mail className="w-4 h-4 text-blue-600" />
-                  <span className="font-mono">support@chuoicungung.vn</span>
+                  <span className="font-mono">support@chuoicungung.com</span>
                 </div>
               </div>
             </div>

@@ -51,14 +51,23 @@ const IndustryCategoryPage = lazy(() => import('./pages/IndustryCategoryPage'));
 const KeywordDetailPage = lazy(() => import('./pages/KeywordDetailPage'));
 const RecruitmentPage = lazy(() => import('./pages/RecruitmentPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
+const B2bTermsOfServicePage = lazy(() => import('./pages/B2bTermsOfServicePage'));
+const B2bPrivacyPolicyPage = lazy(() => import('./pages/B2bPrivacyPolicyPage'));
+const ToDzungPortfolioPage = lazy(() => import('./pages/ToDzungPortfolioPage'));
+const SupplyChainExpoPage = lazy(() => import('./pages/SupplyChainExpoPage'));
+const SupplyChainExpoRegistrationPage = lazy(() => import('./pages/SupplyChainExpoRegistrationPage'));
 
-// Elegant loading placeholder during route transition
+// Elegant brand loading placeholder with rotating logo_only.png
 function PageLoadingFallback() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-8">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-10 h-10 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase font-mono">Đang tải dữ liệu...</p>
+      <div className="flex items-center justify-center">
+        <img 
+          src="/logo_only.png" 
+          alt="Logo Chuỗi Cung Ứng" 
+          className="w-12 h-12 sm:w-14 sm:h-14 object-contain animate-spin"
+          style={{ animationDuration: '2s' }}
+        />
       </div>
     </div>
   );
@@ -127,14 +136,16 @@ function ScrollToTop() {
 function MainLayout({ children, onOpenSearch }) {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+  const isToDzung = location.pathname.startsWith('/todzung');
+  const hideHeaderFooter = isAdmin || isToDzung;
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isAdmin && <Navbar onOpenSearch={onOpenSearch} />}
+      {!hideHeaderFooter && <Navbar onOpenSearch={onOpenSearch} />}
       <main className="flex-1">
         {children}
       </main>
-      {!isAdmin && <Footer />}
+      {!hideHeaderFooter && <Footer />}
     </div>
   );
 }
@@ -268,8 +279,37 @@ export default function App() {
                 <Route path="/thi-truong" element={<MarketDashboardPage />} />
                 
                 <Route path="/founding-partner" element={<FoundingPartnerPage />} />
-                <Route path="/admin" element={<AdminDashboardPage />} />
                 <Route path="/he-sinh-thai" element={<EcosystemOverviewPage />} />
+                <Route path="/tam-nhin-ha-tang-quoc-gia" element={<EcosystemOverviewPage />} />
+                <Route path="/tam-nhin-chien-luoc-quoc-gia" element={<EcosystemOverviewPage />} />
+                <Route path="/manifesto" element={<EcosystemOverviewPage />} />
+                
+                {/* Supply Chain Expo & Festivals */}
+                <Route path="/ngay-hoi-chuoi-cung-ung" element={<SupplyChainExpoPage />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung/dang-ky" element={<SupplyChainExpoRegistrationPage />} />
+                <Route path="/dang-ky-ngay-hoi" element={<SupplyChainExpoRegistrationPage />} />
+                <Route path="/ngay-hoi" element={<SupplyChainExpoPage />} />
+                <Route path="/hoi-cho-chuoi-cung-ung" element={<SupplyChainExpoPage />} />
+                <Route path="/expo" element={<SupplyChainExpoPage />} />
+                
+                {/* Director Portfolio & Digital Card Routes */}
+                <Route path="/todzung" element={<ToDzungPortfolioPage />} />
+                <Route path="/to-ngoc-dung" element={<ToDzungPortfolioPage />} />
+                <Route path="/ong-to-ngoc-dung" element={<ToDzungPortfolioPage />} />
+                <Route path="/giam-doc" element={<ToDzungPortfolioPage />} />
+                
+                {/* Legal & B2B Service Level Agreement Routes */}
+                <Route path="/phap-ly/thoa-thuan-dich-vu-b2b" element={<B2bTermsOfServicePage />} />
+                <Route path="/thoa-thuan-dich-vu-b2b" element={<B2bTermsOfServicePage />} />
+                <Route path="/dieu-khoan-su-dung" element={<B2bTermsOfServicePage />} />
+                <Route path="/dieu-khoan" element={<B2bTermsOfServicePage />} />
+                <Route path="/terms" element={<B2bTermsOfServicePage />} />
+
+                {/* Privacy Policy Routes */}
+                <Route path="/phap-ly/chinh-sach-bao-mat-du-lieu" element={<B2bPrivacyPolicyPage />} />
+                <Route path="/chinh-sach-bao-mat-du-lieu" element={<B2bPrivacyPolicyPage />} />
+                <Route path="/chinh-sach-bao-mat" element={<B2bPrivacyPolicyPage />} />
+                <Route path="/privacy" element={<B2bPrivacyPolicyPage />} />
                 
                 {/* Auth Routes */}
                 <Route path="/dang-nhap" element={<AuthPage />} />

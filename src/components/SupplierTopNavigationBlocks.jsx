@@ -170,6 +170,14 @@ export const LETTER_KEYWORDS_MAP = {
     { labelVi: "Quan trắc môi trường định kỳ", query: "Quan trắc môi trường", count: 85 },
     { labelVi: "Quản lý chất lượng QA/QC dụng cụ đo", query: "QA/QC", count: 75 }
   ],
+  R: [
+    { labelVi: "Robot hàn & Máy hàn tự động", query: "Robot hàn", count: 77 },
+    { labelVi: "Rơ moóc & Sơ mi rơ moóc", query: "Rơ moóc", count: 71 },
+    { labelVi: "Rơle công nghiệp & Khởi động từ", query: "Rơle", count: 24 },
+    { labelVi: "Rổ nhựa & Sóng nhựa công nghiệp", query: "Rổ nhựa", count: 30 },
+    { labelVi: "Rọ đá mạ kẽm bọc nhựa", query: "Rọ đá", count: 64 },
+    { labelVi: "Rèm hội trường & Rèm nhà xưởng", query: "Rèm hội trường", count: 12 }
+  ],
   S: [
     { labelVi: "Sơn sàn Epoxy tự san phẳng & Chống tĩnh điện", query: "Sơn sàn Epoxy", count: 160 },
     { labelVi: "Sơn tĩnh điện kim loại gia công", query: "Sơn tĩnh điện", count: 140 },
@@ -454,24 +462,60 @@ export default function SupplierTopNavigationBlocks({
     },
   ];
 
+  // Group categories by phase/stage
+  const activeTaxonomyDataset = useMemo(() => {
+    // 1. If a specific phase is selected
+    if (effectivePhase !== 'all' && phaseTaxonomyAlphabetical[effectivePhase]) {
+      return phaseTaxonomyAlphabetical[effectivePhase];
+    }
+    // 2. If a stage is selected (and phase is 'all')
+    if (effectiveStage !== 'all') {
+      const stageObj = stageColumns.find(col => String(col.id) === effectiveStage);
+      if (stageObj && stageObj.phases) {
+        const merged = {};
+        stageObj.phases.forEach(ph => {
+          const phData = phaseTaxonomyAlphabetical[ph.id];
+          if (phData) {
+            Object.entries(phData).forEach(([letter, list]) => {
+              if (Array.isArray(list)) {
+                if (!merged[letter]) merged[letter] = [];
+                merged[letter].push(...list);
+              }
+            });
+          }
+        });
+        if (Object.keys(merged).length > 0) return merged;
+      }
+    }
+    // 3. Fallback to global categoriesAlphabetical
+    return categoriesAlphabetical;
+  }, [effectivePhase, effectiveStage]);
+
   // Dynamic Letter Counts
   const dynamicLetterCounts = useMemo(() => {
     const counts = {};
-    if (effectivePhase !== 'all' && phaseTaxonomyAlphabetical[effectivePhase]?.alphabetCounts) {
-      return phaseTaxonomyAlphabetical[effectivePhase].alphabetCounts;
-    }
-    return DEFAULT_LETTER_COUNTS;
-  }, [effectivePhase]);
+    ALPHABET_LETTERS.forEach(lettr => {
+      const list = activeTaxonomyDataset[lettr];
+      if (Array.isArray(list)) {
+        counts[lettr] = list.reduce((sum, item) => sum + (item.count || 1), 0);
+      } else {
+        counts[lettr] = 0;
+      }
+    });
+    return counts;
+  }, [activeTaxonomyDataset]);
 
   // Categories for active letter
   const categoriesForLetter = useMemo(() => {
     if (selectedLetter === 'TẤT CẢ') {
       const allList = [];
-      Object.values(categoriesAlphabetical).forEach(arr => allList.push(...arr));
+      Object.values(activeTaxonomyDataset).forEach(arr => {
+        if (Array.isArray(arr)) allList.push(...arr);
+      });
       return allList;
     }
-    return categoriesAlphabetical[selectedLetter] || [];
-  }, [selectedLetter]);
+    return activeTaxonomyDataset[selectedLetter] || [];
+  }, [selectedLetter, activeTaxonomyDataset]);
 
   // Current taxonomy keywords matching active phase or active letter
   const keywordsList = useMemo(() => {
@@ -829,23 +873,11 @@ export default function SupplierTopNavigationBlocks({
     </div>
   );
 
-  // Return blocks in the requested order:
-  // If layoutOrder === 'active-first': Founding Partner -> 18 Phases -> A-Z
-  // If layoutOrder === 'default': 18 Phases -> Founding Partner -> A-Z
-  if (layoutOrder === 'active-first') {
-    return (
-      <div className="space-y-8">
-        {renderPartnerBlock()}
-        {renderPhasesBlock()}
-        {renderAlphabetBlock()}
-      </div>
-    );
-  }
-
+  // Return blocks in the requested order: Founding Partner -> 18 Phases -> A-Z Alphabet
   return (
     <div className="space-y-8">
-      {renderPhasesBlock()}
       {renderPartnerBlock()}
+      {renderPhasesBlock()}
       {renderAlphabetBlock()}
     </div>
   );

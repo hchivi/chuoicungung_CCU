@@ -14,6 +14,16 @@ AddDefaultCharset UTF-8
   AddType font/woff2 .woff2
 </IfModule>
 
+# Force direct binary download for PDF catalogues and VCF files (prevents inline preview on iOS/Android)
+<FilesMatch "\.(pdf|PDF|vcf|VCF)$">
+  ForceType application/octet-stream
+  <IfModule mod_headers.c>
+    Header set Content-Disposition "attachment"
+    Header set Content-Type "application/octet-stream"
+    Header set X-Content-Type-Options "nosniff"
+  </IfModule>
+</FilesMatch>
+
 # Enable Gzip / Deflate Compression
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html

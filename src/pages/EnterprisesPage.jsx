@@ -5,7 +5,7 @@ import {
   ChevronRight, ArrowRight, RotateCcw, ShieldCheck, Award, Layers,
   Phone, Globe, Mail, ExternalLink, Factory, Cpu, Wrench, Truck,
   Leaf, Sparkles, Check, ChevronDown, Flame, Zap, Clock, Tag,
-  ChevronLeft, ArrowUp, Plus, LayoutGrid, ArrowUpCircle, ArrowDownCircle,
+  ChevronLeft, ArrowUp, Plus, LayoutGrid, List, ArrowUpCircle, ArrowDownCircle,
   Compass, HardHat, PackageCheck, Boxes, MessageCircle, FileSearch, HelpCircle,
   Users, RefreshCw, BarChart3, Settings, Eye, PhoneCall, Send, Star, X
 } from 'lucide-react';
@@ -67,19 +67,60 @@ const MASTER_18_PHASES = [
   { id: "6.3", stage: 6, title: "6.3 Chuyển đổi số & Tự động hóa", enTitle: "6.3 Digital & Green ESG Transition", icon: Leaf, stageName: "Mở rộng – Tối ưu – Chuyển đổi", color: "#f43f5e" },
 ];
 
-// Trending Niche Keywords from Prompt & Blueprint
-const TRENDING_NICHE_PILLS = [
-  { label: "hộp quà 9:16", query: "hộp quà", tag: "Hot Trend" },
-  { label: "giỏ quà bọc màng co", query: "màng co", tag: "Quà Tết" },
-  { label: "mít sấy Nam Huy", query: "mít sấy", tag: "Nông sản" },
-  { label: "trà ô long Cozy", query: "trà ô long", tag: "Đồ uống" },
-  { label: "áo thun TAHOMART", query: "áo thun", tag: "Đồng phục" },
-  { label: "gia công CNC chính xác", query: "gia công CNC", tag: "Cơ khí" },
-  { label: "phòng sạch Class 1000", query: "phòng sạch", tag: "Phòng sạch" },
-  { label: "pallet gỗ xuất khẩu", query: "pallet gỗ", tag: "Logistics" },
-  { label: "vận tải container lạnh", query: "container lạnh", tag: "Vận tải" },
-  { label: "thép cuộn mạ kẽm", query: "thép cuộn", tag: "Vật liệu" }
+// Highlighted Prominent Keywords (2-3 keywords per phase for ALL 18 phases)
+export const HIGHLIGHT_PHASE_KEYWORDS = [
+  // GĐ 1: Chuẩn bị & Đầu tư
+  { label: "khảo sát địa chất", query: "khảo sát địa chất", phase: "1.1", tag: "Địa chất" },
+  { label: "báo cáo khả thi FS", query: "báo cáo khả thi", phase: "1.1", tag: "FS" },
+  { label: "lập hồ sơ ĐTM", query: "đánh giá tác động môi trường", phase: "1.2", tag: "ĐTM" },
+  { label: "giấy phép xây dựng", query: "giấy phép xây dựng", phase: "1.2", tag: "Pháp lý" },
+  { label: "thuê đất KCN", query: "thuê đất khu công nghiệp", phase: "1.3", tag: "Quỹ đất" },
+  { label: "nhà xưởng xây sẵn", query: "nhà xưởng cho thuê", phase: "1.3", tag: "Xưởng KCN" },
+
+  // GĐ 2: Thiết kế & Xây dựng
+  { label: "thiết kế quy hoạch 1/500", query: "thiết kế quy hoạch", phase: "2.1", tag: "Quy hoạch" },
+  { label: "mô hình BIM nhà máy", query: "mô hình BIM", phase: "2.1", tag: "BIM" },
+  { label: "thi công nhà thép tiền chế", query: "nhà thép tiền chế", phase: "2.2", tag: "Xây dựng" },
+  { label: "sàn bê tông mài tăng cứng", query: "sàn bê tông", phase: "2.2", tag: "Sàn xưởng" },
+  { label: "trạm biến áp 22kV", query: "trạm biến áp 22kV", phase: "2.3", tag: "Cơ điện" },
+  { label: "hệ thống PCCC tự động", query: "PCCC tự động", phase: "2.3", tag: "PCCC" },
+  { label: "điều hòa thông gió HVAC", query: "điều hòa thông gió", phase: "2.3", tag: "HVAC" },
+
+  // GĐ 3: Lắp đặt & Hoàn thiện
+  { label: "lắp đặt cẩu trục 10T", query: "cẩu trục", phase: "3.1", tag: "Cẩu trục" },
+  { label: "lắp đặt dây chuyền máy", query: "dây chuyền sản xuất", phase: "3.1", tag: "Dây chuyền" },
+  { label: "phòng sạch Class 1000", query: "phòng sạch", phase: "3.2", tag: "Phòng sạch" },
+  { label: "sơn sàn Epoxy chống tĩnh điện", query: "sơn sàn Epoxy", phase: "3.2", tag: "Epoxy" },
+  { label: "chạy thử & nghiệm thu", query: "nghiệm thu", phase: "3.3", tag: "Nghiệm thu" },
+  { label: "kiểm định an toàn máy móc", query: "kiểm định", phase: "3.3", tag: "Kiểm định" },
+
+  // GĐ 4: Vận hành Sản xuất
+  { label: "thép cuộn mạ kẽm", query: "thép cuộn", phase: "4.1", tag: "Vật liệu" },
+  { label: "gia công CNC chính xác", query: "gia công CNC", phase: "4.1", tag: "Cơ khí" },
+  { label: "bu lông ốc vít cấp bền", query: "bu lông ốc vít", phase: "4.1", tag: "Linh kiện" },
+  { label: "quản lý sản xuất MES", query: "phần mềm MES", phase: "4.2", tag: "MES" },
+  { label: "bảo trì máy công nghiệp", query: "bảo trì", phase: "4.2", tag: "Bảo trì" },
+  { label: "vận tải container lạnh", query: "container lạnh", phase: "4.3", tag: "Vận tải" },
+  { label: "pallet gỗ xuất khẩu", query: "pallet gỗ", phase: "4.3", tag: "Logistics" },
+  { label: "cho thuê kho bãi KCN", query: "cho thuê kho bãi", phase: "4.3", tag: "Kho bãi" },
+
+  // GĐ 5: Nhân sự & Hậu cần
+  { label: "tuyển dụng lao động KCN", query: "tuyển dụng lao động", phase: "5.1", tag: "Nhân sự" },
+  { label: "cung ứng lao động thời vụ", query: "lao động thời vụ", phase: "5.1", tag: "Lao động" },
+  { label: "suất ăn công nghiệp HACCP", query: "suất ăn công nghiệp", phase: "5.2", tag: "Suất ăn" },
+  { label: "quà tặng doanh nghiệp Tết", query: "quà tặng", phase: "5.2", tag: "Quà tặng" },
+  { label: "áo thun đồng phục công nhân", query: "áo thun", phase: "5.3", tag: "Đồng phục" },
+  { label: "giày bảo hộ & nón PPE", query: "bảo hộ lao động", phase: "5.3", tag: "Bảo hộ" },
+
+  // GĐ 6: Mở rộng – Tối ưu – Chuyển đổi
+  { label: "mở rộng nhà máy Pha 2", query: "mở rộng nhà máy", phase: "6.1", tag: "Mở rộng" },
+  { label: "cải tạo nâng cấp xưởng", query: "nâng cấp nhà máy", phase: "6.1", tag: "Nâng cấp" },
+  { label: "tư vấn chứng nhận ISO 9001", query: "chứng nhận ISO", phase: "6.2", tag: "ISO Audit" },
+  { label: "chứng chỉ xanh ESG", query: "tiêu chuẩn ESG", phase: "6.2", tag: "ESG" },
+  { label: "robot tự hành AGV", query: "robot tự hành AGV", phase: "6.3", tag: "Robot AGV" },
+  { label: "điện mặt trời áp mái 1MWp", query: "điện mặt trời áp mái", phase: "6.3", tag: "Năng lượng" }
 ];
+export const TRENDING_NICHE_PILLS = HIGHLIGHT_PHASE_KEYWORDS;
 
 // Top Trending Spotlight Topics
 const SPOTLIGHT_TOPICS = [
@@ -168,18 +209,33 @@ function filterAllEnterprises(allData, {
   if (!allData || !Array.isArray(allData)) return [];
   let filtered = [...allData];
 
-  // 1. Filter by Multi-term Search Query
+  // 1. Filter by Multi-term Search Query with smart multi-word fallback
   if (searchTerm && searchTerm.trim()) {
     const qClean = searchTerm.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').trim();
     const queryTokens = qClean.split(/\s+/).filter(Boolean);
 
-    filtered = filtered.filter(e => {
+    const strictMatches = filtered.filter(e => {
       const tokens = e._searchTokens || (
         `${e.name || ''} ${e.category || ''} ${e.industry || ''} ${e.province || ''} ${Array.isArray(e.products) ? e.products.join(' ') : ''} ${e.taxCode || ''}`
       ).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
 
       return queryTokens.every(tok => tokens.includes(tok));
     });
+
+    if (strictMatches.length > 0) {
+      filtered = strictMatches;
+    } else if (queryTokens.length > 1) {
+      // Smart fallback: match any key tokens so searches never return empty unexpectedly
+      filtered = filtered.filter(e => {
+        const tokens = e._searchTokens || (
+          `${e.name || ''} ${e.category || ''} ${e.industry || ''} ${e.province || ''} ${Array.isArray(e.products) ? e.products.join(' ') : ''} ${e.taxCode || ''}`
+        ).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+
+        return queryTokens.some(tok => tokens.includes(tok));
+      });
+    } else {
+      filtered = strictMatches;
+    }
   }
 
   // 2. Filter by 6 Stages
@@ -277,6 +333,7 @@ export default function EnterprisesPage() {
   const selectedKyc = queryParams.get('kyc') || 'all';
 
   const [selectedLetter, setSelectedLetter] = useState(() => queryParams.get('letter') || 'TẤT CẢ');
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
   const [filterApiReady, setFilterApiReady] = useState(false);
   const [filterFastQuote, setFilterFastQuote] = useState(false);
   const [filterIsoCertified, setFilterIsoCertified] = useState(false);
@@ -414,17 +471,18 @@ export default function EnterprisesPage() {
 
   // Instant Search Suggestions Matching
   const instantSuggestions = useMemo(() => {
-    if (!searchTerm || searchTerm.trim().length < 2) return [];
+    if (!searchTerm || searchTerm.trim().length < 2) return { pills: [], phases: [], categories: [] };
     const cleanQ = searchTerm.toLowerCase().trim();
 
     // Check trending niche pills
-    const matchedPills = TRENDING_NICHE_PILLS.filter(p => p.label.toLowerCase().includes(cleanQ) || p.query.toLowerCase().includes(cleanQ));
+    const matchedPills = (HIGHLIGHT_PHASE_KEYWORDS || []).filter(p => (p.label && p.label.toLowerCase().includes(cleanQ)) || (p.query && p.query.toLowerCase().includes(cleanQ)));
 
     // Check matching phases
-    const matchedPhases = MASTER_18_PHASES.filter(p => p.title.toLowerCase().includes(cleanQ) || p.id.includes(cleanQ));
+    const matchedPhases = (MASTER_18_PHASES || []).filter(p => (p.title && p.title.toLowerCase().includes(cleanQ)) || (p.id && p.id.includes(cleanQ)));
 
-    // Check matching categories
-    const matchedCats = categoriesAlphabetical.filter(c => c.name.toLowerCase().includes(cleanQ)).slice(0, 4);
+    // Check matching categories - Flatten categoriesAlphabetical safely
+    const allCategoriesList = Object.values(categoriesAlphabetical || {}).flat();
+    const matchedCats = allCategoriesList.filter(c => c && c.name && c.name.toLowerCase().includes(cleanQ)).slice(0, 4);
 
     return { pills: matchedPills, phases: matchedPhases, categories: matchedCats };
   }, [searchTerm]);
@@ -458,10 +516,9 @@ export default function EnterprisesPage() {
           <div className="max-w-3xl mx-auto text-center space-y-4">
 
             {/* Breadcrumb */}
-            <nav className="flex items-center justify-center space-x-2 text-xs text-slate-500 font-medium">
-              <Link to="/" className="hover:text-[#0052cc] transition flex items-center gap-1">
-                <Building2 className="w-3.5 h-3.5" />
-                {lang === 'en' ? 'Home' : 'Trang chủ'}
+            <nav className="flex items-center justify-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5 max-w-full">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">
@@ -485,36 +542,74 @@ export default function EnterprisesPage() {
               </p>
             </div>
 
-            {/* Giant Global Search Box with Instant Suggestions */}
-            <div className="pt-2 relative max-w-2xl mx-auto">
-              <div className="relative flex items-center shadow-xl shadow-blue-900/5 rounded-2xl bg-white border-2 border-[#0052cc]/30 focus-within:border-[#0052cc] focus-within:ring-4 focus-within:ring-blue-500/15 transition-all">
-                <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchTerm}
-                  onFocus={() => setSearchFocused(true)}
-                  onChange={(e) => updateFilterUrl({ q: e.target.value })}
-                  placeholder={lang === 'en' ? "Search 24,000+ suppliers, CNC machining, packaging, raw materials..." : "Tìm nhà cung ứng, gia công CNC, màng co, bao bì, phòng sạch, logistics..."}
-                  className="w-full pl-12 pr-28 py-3.5 sm:py-4 bg-transparent rounded-2xl text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-400 outline-none"
-                />
-
-                {searchTerm && (
-                  <button
-                    onClick={() => updateFilterUrl({ q: '' })}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 mr-2 cursor-pointer"
-                    title="Xóa tìm kiếm"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-
-                <button
-                  onClick={() => searchInputRef.current?.focus()}
-                  className="mr-2 px-4 py-2 bg-gradient-to-r from-[#0047a5] to-[#0052cc] text-white text-xs font-bold rounded-xl shadow-md transition hover:from-[#003d8f] hover:to-[#0047a5] shrink-0 font-heading"
+            {/* ClickUp Style Search Bar with Revolving Rainbow Conic Border (Exact Image 1 Style) */}
+            <div className="pt-2 relative max-w-4xl mx-auto group">
+              <div className="clickup-search-border shadow-lg shadow-blue-950/10 transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-blue-500/20">
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (searchTerm && searchTerm.trim()) {
+                      navigate(`/tu-khoa/${slugify(searchTerm)}?q=${encodeURIComponent(searchTerm)}`);
+                    }
+                    setSearchFocused(false);
+                  }}
+                  className="relative z-10 bg-white p-1 sm:p-1.5 rounded-[24px] flex flex-col sm:flex-row items-stretch gap-1.5 sm:gap-2"
                 >
-                  Tìm kiếm
-                </button>
+                  {/* Category Selector Dropdown */}
+                  <div className="relative sm:w-52 flex-shrink-0">
+                    <select
+                      value={selectedCategory}
+                      onChange={(e) => updateFilterUrl({ category: e.target.value })}
+                      className="w-full h-10 sm:h-12 px-3.5 sm:px-4 py-2 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 appearance-none cursor-pointer pr-9 font-sans transition"
+                    >
+                      <option value="all">Tất cả danh mục</option>
+                      <option value="Cơ khí & Chế tạo">Cơ khí & Chế tạo</option>
+                      <option value="Điện tử & Bán dẫn">Điện tử & Bán dẫn</option>
+                      <option value="Xây dựng & Nhà xưởng">Xây dựng & Nhà xưởng</option>
+                      <option value="Cơ điện & MEP">Cơ điện & MEP</option>
+                      <option value="Phòng sạch & Vật tư">Phòng sạch & Vật tư</option>
+                      <option value="Bao bì & In ấn">Bao bì & In ấn</option>
+                      <option value="Logistics & Vận tải">Logistics & Vận tải</option>
+                      <option value="Đồng phục & PPE">Đồng phục & PPE</option>
+                      <option value="Nhân sự & Lao động">Nhân sự & Lao động</option>
+                      <option value="Tự động hóa & ESG">Tự động hóa & ESG</option>
+                    </select>
+                    <Filter className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+
+                  {/* Search Keyword Input */}
+                  <div className="relative flex-1 flex items-center">
+                    <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 absolute left-3.5 pointer-events-none" />
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchTerm}
+                      onFocus={() => setSearchFocused(true)}
+                      onChange={(e) => updateFilterUrl({ q: e.target.value })}
+                      placeholder={lang === 'en' ? "Search suppliers, materials, equipment, industrial parks..." : "Tìm nhà cung cấp, vật tư, thiết bị, KCN..."}
+                      className="w-full h-10 sm:h-12 pl-10 sm:pl-11 pr-8 bg-transparent text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none font-sans"
+                    />
+                    {searchTerm && (
+                      <button
+                        type="button"
+                        onClick={() => updateFilterUrl({ q: '' })}
+                        className="p-1 rounded-lg text-slate-400 hover:text-slate-600 mr-2 cursor-pointer"
+                        title="Xóa tìm kiếm"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Submit CTA Button */}
+                  <button
+                    type="submit"
+                    className="h-10 sm:h-12 px-6 sm:px-9 bg-[#0052cc] hover:bg-[#0041a8] text-white rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition flex items-center justify-center space-x-2 whitespace-nowrap font-heading uppercase tracking-wide cursor-pointer flex-shrink-0"
+                  >
+                    <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <span>TÌM KIẾM</span>
+                  </button>
+                </form>
               </div>
 
               {/* Elastic Instant Autocomplete Dropdown */}
@@ -532,7 +627,7 @@ export default function EnterprisesPage() {
                           <button
                             key={idx}
                             onClick={() => {
-                              updateFilterUrl({ q: pill.query });
+                              navigate(`/tu-khoa/${slugify(pill.label || pill.query)}?q=${encodeURIComponent(pill.query || pill.label)}`);
                               setSearchFocused(false);
                             }}
                             className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-[#0052cc] rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
@@ -554,7 +649,7 @@ export default function EnterprisesPage() {
                           <button
                             key={idx}
                             onClick={() => {
-                              updateFilterUrl({ category: cat.name, q: '' });
+                              navigate(`/nganh-nghe/${slugify(cat.name)}?name=${encodeURIComponent(cat.name)}`);
                               setSearchFocused(false);
                             }}
                             className="p-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-[#0052cc] rounded-xl text-xs font-semibold text-left transition flex items-center justify-between cursor-pointer"
@@ -591,33 +686,91 @@ export default function EnterprisesPage() {
               )}
             </div>
 
-            {/* Clickable Trending Niche Pills */}
-            <div className="pt-2 flex flex-wrap items-center justify-center gap-2 max-w-4xl mx-auto">
-              <span className="text-xs text-slate-500 font-bold flex items-center gap-1 mr-1">
-                <Flame className="w-3.5 h-3.5 text-rose-500" />
-                Tìm kiếm phổ biến:
-              </span>
-              {TRENDING_NICHE_PILLS.map((pill, idx) => {
-                const isSelected = searchTerm.toLowerCase() === pill.query.toLowerCase();
+          </div>
+        </div>
+
+        {/* Sourcing Marquee Tags (3 Full-Width Horizontal Rows Scrolling Edge-to-Edge with Left/Right Fade Masks) */}
+        <div className="w-full mt-6 relative overflow-hidden space-y-2.5">
+          {/* Subtle Left & Right Edge Blur Fade Overlay */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-28 bg-gradient-to-r from-[#F0F6FF] via-[#F0F6FF]/80 to-transparent z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-28 bg-gradient-to-l from-[#F8FAFC] via-[#F8FAFC]/80 to-transparent z-20" />
+
+          {/* Track 1: GĐ 1 & 2 (Pháp lý, Quy hoạch, Xây dựng, Cơ điện) - Scrolling Left */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-left flex items-center space-x-2.5">
+              {[
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(0, 13),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(0, 13),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(0, 13)
+              ].map((kw, i) => {
                 return (
                   <button
-                    key={idx}
-                    onClick={() => updateFilterUrl({ q: isSelected ? '' : pill.query })}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-1.5 cursor-pointer ${isSelected
-                        ? 'bg-[#0052cc] text-white shadow-md shadow-blue-500/20 scale-105'
-                        : 'bg-white text-slate-700 border border-slate-200/90 hover:border-blue-400 hover:text-[#0052cc] hover:bg-blue-50/50 shadow-2xs'
-                      }`}
+                    key={`row1-${i}`}
+                    type="button"
+                    onClick={() => navigate(`/tu-khoa/${slugify(kw.label || kw.query)}?q=${encodeURIComponent(kw.query || kw.label)}`)}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white"
+                    title={`Xem chi tiết từ khóa "${kw.label}" (Pha ${kw.phase})`}
                   >
-                    <span>"{pill.label}"</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono ${isSelected ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-500'
-                      }`}>
-                      {pill.tag}
+                    <span>{kw.label}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono bg-slate-100 text-slate-500">
+                      {kw.tag}
                     </span>
                   </button>
                 );
               })}
             </div>
+          </div>
 
+          {/* Track 2: GĐ 3 & 4 (Lắp đặt máy, Phòng sạch, CNC, Vật liệu, Kho bãi) - Scrolling Right */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-right flex items-center space-x-2.5">
+              {[
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(13, 26),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(13, 26),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(13, 26)
+              ].map((kw, i) => {
+                return (
+                  <button
+                    key={`row2-${i}`}
+                    type="button"
+                    onClick={() => navigate(`/tu-khoa/${slugify(kw.label || kw.query)}?q=${encodeURIComponent(kw.query || kw.label)}`)}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white"
+                    title={`Xem chi tiết từ khóa "${kw.label}" (Pha ${kw.phase})`}
+                  >
+                    <span>{kw.label}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono bg-slate-100 text-slate-500">
+                      {kw.tag}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Track 3: GĐ 5 & 6 (Nhân sự, Suất ăn, Đồng phục, ISO, Robot AGV, Năng lượng) - Scrolling Left Slow */}
+          <div className="flex overflow-hidden py-0.5">
+            <div className="animate-marquee-left-slow flex items-center space-x-2.5">
+              {[
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(26),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(26),
+                ...HIGHLIGHT_PHASE_KEYWORDS.slice(26)
+              ].map((kw, i) => {
+                return (
+                  <button
+                    key={`row3-${i}`}
+                    type="button"
+                    onClick={() => navigate(`/tu-khoa/${slugify(kw.label || kw.query)}?q=${encodeURIComponent(kw.query || kw.label)}`)}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 shadow-2xs whitespace-nowrap hover:scale-105 cursor-pointer flex-shrink-0 flex items-center gap-1.5 bg-white hover:bg-blue-600 border border-slate-200/90 hover:border-blue-600 text-slate-700 hover:text-white"
+                    title={`Xem chi tiết từ khóa "${kw.label}" (Pha ${kw.phase})`}
+                  >
+                    <span>{kw.label}</span>
+                    <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono bg-slate-100 text-slate-500">
+                      {kw.tag}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
@@ -941,32 +1094,61 @@ export default function EnterprisesPage() {
                 </span>
               </div>
 
-              {/* Active Filter Badges */}
-              <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-                {selectedPhase !== 'all' && (
-                  <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-200 font-bold shrink-0">
-                    Pha {selectedPhase}
-                  </span>
-                )}
-                {selectedCategory !== 'all' && (
-                  <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md border border-blue-200 font-bold shrink-0">
-                    Ngành: {selectedCategory}
-                  </span>
-                )}
-                {selectedKyc !== 'all' && (
-                  <span className="px-2 py-0.5 bg-sky-50 text-sky-800 rounded-md border border-sky-200 font-bold shrink-0">
-                    KYC: {selectedKyc.toUpperCase()}
-                  </span>
-                )}
-                {selectedProvince !== 'Toàn quốc' && (
-                  <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md border border-slate-200 font-bold shrink-0">
-                    📍 {selectedProvince}
-                  </span>
-                )}
+              {/* Right: View Mode Toggle & Active Filter Badges */}
+              <div className="flex items-center gap-3 flex-wrap">
+                {/* View Mode: Grid vs List */}
+                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-2xs">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                      viewMode === 'grid'
+                        ? 'bg-white text-[#0052cc] shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                    title="Chế độ xem dạng ô (Grid)"
+                  >
+                    <LayoutGrid className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                      viewMode === 'list'
+                        ? 'bg-white text-[#0052cc] shadow-xs font-bold'
+                        : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                    title="Chế độ xem dạng hàng (List)"
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Active Filter Badges */}
+                <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                  {selectedPhase !== 'all' && (
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-md border border-emerald-200 font-bold shrink-0">
+                      Pha {selectedPhase}
+                    </span>
+                  )}
+                  {selectedCategory !== 'all' && (
+                    <span className="px-2 py-0.5 bg-blue-50 text-blue-700 rounded-md border border-blue-200 font-bold shrink-0">
+                      Ngành: {selectedCategory}
+                    </span>
+                  )}
+                  {selectedKyc !== 'all' && (
+                    <span className="px-2 py-0.5 bg-sky-50 text-sky-800 rounded-md border border-sky-200 font-bold shrink-0">
+                      KYC: {selectedKyc.toUpperCase()}
+                    </span>
+                  )}
+                  {selectedProvince !== 'Toàn quốc' && (
+                    <span className="px-2 py-0.5 bg-slate-100 text-slate-700 rounded-md border border-slate-200 font-bold shrink-0">
+                      📍 {selectedProvince}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Supplier Cards Grid */}
+            {/* Supplier Cards (Grid or List View Mode) */}
             {displayedEnterprises.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
                 <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">
@@ -992,7 +1174,7 @@ export default function EnterprisesPage() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" : "space-y-4"}>
                 {displayedEnterprises.map((ent) => {
                   const entId = ent.id || ent._id || ent.taxCode || ent.name;
                   const totalVotes = getEnterpriseBaseVotes(ent) + (votes[String(entId)] || 0);
@@ -1007,16 +1189,34 @@ export default function EnterprisesPage() {
                   const hasProvinceInName = provinceStr && ent.name.toLowerCase().includes(provinceStr.toLowerCase());
                   const displayName = provinceStr && !hasProvinceInName ? `${ent.name} (${provinceStr})` : ent.name;
 
+                  const entKeywords = Array.from(new Set([
+                    ...(Array.isArray(ent.products) ? ent.products : []),
+                    ...(Array.isArray(ent.productGroups) ? ent.productGroups.flatMap(g => g.items || []) : []),
+                    ...(Array.isArray(ent.keywords) ? ent.keywords : []),
+                    ent.category,
+                    ent.industry
+                  ].filter(Boolean))).slice(0, 3);
+
+                  const websiteUrl = ent.website 
+                    ? (ent.website.startsWith('http') ? ent.website : `https://${ent.website}`) 
+                    : (ent.sourceUrl || ent.url || `https://www.google.com/search?q=${encodeURIComponent(ent.name + ' ' + (ent.province || ''))}`);
+
+                  // Render single enterprise card
                   return (
                     <div
                       key={entId}
-                      className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs hover:shadow-xl hover:border-[#0052cc]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 group relative"
+                      className={`bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs hover:shadow-xl hover:border-[#0052cc]/50 hover:-translate-y-0.5 transition-all duration-300 flex ${
+                        viewMode === 'list' 
+                          ? 'flex-col lg:flex-row lg:items-center justify-between gap-6' 
+                          : 'flex-col justify-between space-y-4'
+                      } group relative`}
                     >
-                      {/* Top Header: Monogram/Avatar (Left), Phase Button + KYC Badge (Right) */}
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between gap-2.5">
-
-                          {/* Left: Avatar */}
+                      {/* Left / Top Header: Logo on Left + Company Name next to Logo */}
+                      <div className={viewMode === 'list' ? "flex-1 space-y-3" : "space-y-3"}>
+                        
+                        {/* Row 1: Logo & Company Name side-by-side */}
+                        <div className="flex items-start gap-3">
+                          {/* Avatar / Logo */}
                           <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-[#0052cc]/50 transition-colors">
                             <img
                               src={getEnterpriseAvatarImage(ent)}
@@ -1033,8 +1233,31 @@ export default function EnterprisesPage() {
                             />
                           </div>
 
-                          {/* Right: Phase Badge & Glowing KYC Badge balanced on top header */}
-                          <div className="flex items-center gap-1.5 shrink-0">
+                          {/* Company Name + Category */}
+                          <div className="min-w-0 flex-1">
+                            <Link
+                              to={detailUrl}
+                              className="font-black text-xs sm:text-[13px] text-slate-950 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-snug block"
+                              title={displayName}
+                            >
+                              <span>{ent.name}</span>
+                              {provinceStr && !hasProvinceInName && (
+                                <span className="text-slate-600 font-bold ml-1">
+                                  ({provinceStr})
+                                </span>
+                              )}
+                            </Link>
+
+                            <div className="text-[11px] text-slate-500 truncate mt-0.5" title={ent.category || ent.industry}>
+                              {ent.category || ent.industry || "Chế tạo & Cung ứng"}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 2: Phase Badge & KYC Level moved down, with Vote button on the same line */}
+                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100/80">
+                          {/* Phase & KYC Badges */}
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <Link
                               to={`/giai-doan-cung-ung/pha/${phaseId}`}
                               className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-xl font-mono border border-emerald-200 shadow-2xs transition-colors flex items-center gap-1"
@@ -1052,32 +1275,52 @@ export default function EnterprisesPage() {
                             </div>
                           </div>
 
+                          {/* Prominent Vote Button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleVote(ent, userAction === 1 ? -1 : 1);
+                            }}
+                            className={`px-2.5 py-1 rounded-xl font-mono font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer ${
+                              userAction === 1
+                                ? 'bg-emerald-600 text-white shadow-emerald-500/20 ring-2 ring-emerald-400/40 scale-105'
+                                : 'bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-800 border border-emerald-200'
+                            }`}
+                            title={userAction === 1 ? "Bỏ bình chọn (+1)" : "Bình chọn tín nhiệm (+1)"}
+                          >
+                            <ArrowUp className="w-3.5 h-3.5 stroke-[2.5]" />
+                            <span>{totalVotes}</span>
+                          </button>
                         </div>
 
-                        {/* Company Name + Location (e.g. Bắc Giang, TPHCM) */}
-                        <Link
-                          to={detailUrl}
-                          className="font-black text-xs sm:text-[13px] text-slate-950 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-tight block pt-0.5 min-h-[36px]"
-                          title={displayName}
-                        >
-                          <span>{ent.name}</span>
-                          {provinceStr && !hasProvinceInName && (
-                            <span className="text-slate-600 font-bold ml-1">
-                              ({provinceStr})
+                        {/* SHOWCASE PRODUCT THUMBNAILS & KEYWORDS */}
+                        <div className="space-y-1.5 pt-1">
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-bold text-slate-700 flex items-center gap-1">
+                              <Sparkles className="w-3 h-3 text-amber-500" />
+                              Từ khóa nhà cung cấp nổi bật
                             </span>
+                          </div>
+
+                          {/* Actual Supplier Keywords Pills */}
+                          {entKeywords.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {entKeywords.map((kw, kIdx) => (
+                                <Link
+                                  key={kIdx}
+                                  to={`/tu-khoa/${slugify(kw)}?q=${encodeURIComponent(kw)}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[10.5px] font-medium transition max-w-full truncate"
+                                  title={`Tìm kiếm từ khóa: ${kw}`}
+                                >
+                                  <Tag className="w-2.5 h-2.5 text-amber-600 shrink-0" />
+                                  <span className="truncate">{kw}</span>
+                                </Link>
+                              ))}
+                            </div>
                           )}
-                        </Link>
 
-                        {/* Category / Sub-industry tag */}
-                        <div className="flex items-center">
-                          <span className="text-[11px] text-slate-500 truncate" title={ent.category || ent.industry}>
-                            {ent.category || ent.industry || "Chế tạo & Cung ứng"}
-                          </span>
-                        </div>
-
-                        {/* SHOWCASE 3 PRODUCT THUMBNAILS (HOVER ZOOM EFFECT) */}
-                        <div className="space-y-1 pt-1">
-                          <div className="grid grid-cols-3 gap-1.5">
+                          <div className="grid grid-cols-3 gap-1.5 pt-0.5">
                             {thumbnails.map((imgUrl, tIdx) => (
                               <div
                                 key={tIdx}
@@ -1097,61 +1340,64 @@ export default function EnterprisesPage() {
                           </p>
                         </div>
 
-                        {/* Upvote & Downvote System */}
-                        <div className="flex items-center justify-between pt-1">
-                          <span className="text-[11px] text-slate-400 font-medium">Bảo chứng tín nhiệm:</span>
-                          <div className="flex items-center rounded-lg border border-slate-200/90 bg-slate-50/80 p-0.5 shadow-2xs shrink-0">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(ent, 1);
-                              }}
-                              className={`p-1 rounded-md transition-all cursor-pointer ${userAction === 1
-                                  ? 'bg-emerald-600 text-white shadow-2xs scale-105'
-                                  : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'
-                                }`}
-                              title={userAction === 1 ? "Bỏ bình chọn (+1)" : "Bình chọn uy tín (+1)"}
-                            >
-                              <ArrowUp className="w-3 h-3 stroke-[2.5]" />
-                            </button>
-
-                            <span className={`px-1.5 text-[11px] font-mono font-bold select-none min-w-[20px] text-center ${userAction === 1
-                                ? 'text-emerald-700 font-black'
-                                : userAction === -1
-                                  ? 'text-rose-600 font-black'
-                                  : 'text-slate-700'
-                              }`}>
-                              {totalVotes}
-                            </span>
-
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(ent, -1);
-                              }}
-                              className={`p-1 rounded-md transition-all cursor-pointer ${userAction === -1
-                                  ? 'bg-rose-600 text-white shadow-2xs scale-105'
-                                  : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50'
-                                }`}
-                              title={userAction === -1 ? "Bỏ đánh giá (-1)" : "Đánh giá thấp (-1)"}
-                            >
-                              <ChevronDown className="w-3 h-3 stroke-[2.5]" />
-                            </button>
-                          </div>
-                        </div>
-
                       </div>
 
-                      {/* Bottom Section: Clean Masked Phone & Action CTAs */}
-                      <div className="pt-3 border-t border-slate-100 space-y-2.5">
+                      {/* Bottom / Right Section: Masked Phone & Quick Contact Icons (Zalo, WhatsApp, Email, Web) + CTAs */}
+                      <div className={`pt-3 border-t border-slate-100 space-y-2.5 ${viewMode === 'list' ? 'lg:border-t-0 lg:border-l lg:pl-6 lg:w-72 lg:pt-0 shrink-0' : ''}`}>
 
-                        {/* Masked Phone display (Default masked, no reveal button) */}
-                        <div className="flex items-center justify-center bg-slate-50/90 rounded-xl py-2 px-3 border border-slate-200/80">
-                          <div className="flex items-center space-x-2 text-xs">
+                        {/* Masked Phone with direct Contact Icons */}
+                        <div className="flex items-center justify-between bg-slate-50/90 rounded-xl py-1.5 px-3 border border-slate-200/80">
+                          <div className="flex items-center space-x-1.5 text-xs min-w-0">
                             <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <span className="font-mono font-bold text-slate-800 text-[11px] tracking-wide">
+                            <span className="font-mono font-bold text-slate-800 text-[11px] tracking-wide truncate">
                               {maskedPhone}
                             </span>
+                          </div>
+
+                          {/* Quick Contact Icons (Zalo, WhatsApp, Email, Web) */}
+                          <div className="flex items-center gap-1 shrink-0">
+                            {/* Zalo Icon */}
+                            <a
+                              href={`https://zalo.me/${rawPhone ? rawPhone.replace(/\D/g, '') : '0582877799'}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-6 h-6 rounded-lg bg-blue-50 hover:bg-blue-100 p-0.5 border border-blue-200/60 shadow-2xs transition flex items-center justify-center overflow-hidden"
+                              title="Nhắn tin Zalo"
+                            >
+                              <img src="/images/icons/zalo-icon.png" alt="Zalo" className="w-full h-full object-contain rounded-xs" />
+                            </a>
+                            {/* WhatsApp */}
+                            <a
+                              href={`https://wa.me/84${rawPhone ? rawPhone.replace(/\D/g, '').replace(/^0/, '') : '912345678'}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-6 h-6 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
+                              title="WhatsApp"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5" />
+                            </a>
+                            {/* Email */}
+                            <a
+                              href={`mailto:${ent.email || 'hotro@chuoicungung.com'}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-6 h-6 rounded-lg bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
+                              title="Gửi Email"
+                            >
+                              <Mail className="w-3.5 h-3.5" />
+                            </a>
+                            {/* Website */}
+                            <a
+                              href={websiteUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="w-6 h-6 rounded-lg bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
+                              title={ent.website ? `Truy cập Website: ${ent.website}` : `Tra cứu thông tin ${ent.name}`}
+                            >
+                              <Globe className="w-3.5 h-3.5" />
+                            </a>
                           </div>
                         </div>
 

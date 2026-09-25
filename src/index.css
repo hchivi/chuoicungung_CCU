@@ -246,6 +246,33 @@ html {
   animation: rainbowFlow 6s ease infinite;
 }
 
+@keyframes rainbowFlowVertical {
+  0% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
+}
+
+.animate-rainbow-vertical {
+  background: linear-gradient(
+    180deg,
+    #8b5cf6, /* Purple - Stage 1 */
+    #10b981, /* Green - Stage 2 */
+    #f97316, /* Orange - Stage 3 */
+    #0284c7, /* Blue - Stage 4 */
+    #eab308, /* Yellow - Stage 5 */
+    #ef4444, /* Red - Stage 6 */
+    #8b5cf6  /* Loop back */
+  );
+  background-size: 100% 300%;
+  animation: rainbowFlowVertical 5s ease infinite;
+}
+
 .text-rainbow-gradient {
   background: linear-gradient(
     90deg,
@@ -489,18 +516,62 @@ html {
 .animate-marquee-left {
   display: flex;
   width: max-content;
-  animation: marqueeLeft 38s linear infinite;
+  animation: marqueeLeft 120s linear infinite;
 }
 
 .animate-marquee-right {
   display: flex;
   width: max-content;
-  animation: marqueeRight 38s linear infinite;
+  animation: marqueeRight 110s linear infinite;
+}
+
+.animate-marquee-left-slow {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 130s linear infinite;
+}
+
+.animate-marquee-slow-left {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 150s linear infinite;
+}
+
+.animate-marquee-slow-right {
+  display: flex;
+  width: max-content;
+  animation: marqueeRight 140s linear infinite;
 }
 
 .animate-marquee-left:hover,
-.animate-marquee-right:hover {
+.animate-marquee-right:hover,
+.animate-marquee-left-slow:hover,
+.animate-marquee-slow-left:hover,
+.animate-marquee-slow-right:hover {
   animation-play-state: paused;
+}
+
+/* Mobile Bank Logos Continuous Marquee */
+.animate-marquee-banks {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 18s linear infinite;
+  will-change: transform;
+}
+
+/* Bottom Legal Info Running Continuous Marquee */
+.animate-marquee-legal {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 18s linear infinite;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .animate-marquee-banks:hover,
+  .animate-marquee-legal:hover {
+    animation-play-state: paused;
+  }
 }
 
 /* Completely suppress any Google Translate banner/bar from browser extensions or scripts */
@@ -640,4 +711,136 @@ body {
   );
   animation: rotateGlow 4.5s linear infinite;
   z-index: 0;
+}
+
+.clickup-revolving-border {
+  overflow: hidden;
+  background: #cbd5e1;
+}
+
+.clickup-revolving-border::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 180deg,
+    #ff007f 230deg,
+    #7b2cbf 265deg,
+    #3a86ff 300deg,
+    #00f2fe 335deg,
+    #ffbe0b 360deg
+  );
+  animation: rotateGlow 4.5s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* =========================================================
+   Completely Disable Browser Native Picture-in-Picture (PiP)
+   & Media Control Overlay Buttons Across All Browsers
+   ========================================================= */
+video::-webkit-media-controls,
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-picture-in-picture-button,
+video::-webkit-media-controls-fullscreen-button,
+video::-webkit-media-controls-toggle-closed-captions-button,
+video::-internal-media-controls-overlay-cast-button,
+video::-internal-media-controls-picture-in-picture-button {
+  display: none !important;
+  -webkit-appearance: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* =========================================================
+   Mobile Optimization Utilities (Smooth Touch, No Scrollbar)
+   ========================================================= */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.touch-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   6-Color Animated Underline (Tím, Xanh Lá, Cam, Xanh Dương, Vàng, Đỏ)
+   Hiệu ứng chạy đi ra và đi vào (In & Out) liên tục
+   ========================================================= */
+.animated-underline-6colors {
+  position: relative;
+  display: inline-block;
+}
+
+.animated-underline-6colors::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    #8b5cf6 0%,  /* Tím */
+    #22c55e 17%, /* Xanh lá */
+    #f97316 34%, /* Cam */
+    #0284c7 51%, /* Xanh dương */
+    #eab308 68%, /* Vàng */
+    #ef4444 85%, /* Đỏ */
+    #8b5cf6 100% /* Tím */
+  );
+  background-size: 300% 100%;
+  animation:
+    animatedUnderlineInOut 3.5s cubic-bezier(0.65, 0, 0.35, 1) infinite,
+    animatedUnderlineGradient 4s linear infinite;
+  box-shadow: 0 2px 10px rgba(14, 165, 233, 0.4);
+}
+
+@keyframes animatedUnderlineInOut {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0.1;
+  }
+  42% {
+    transform: scaleX(1);
+    transform-origin: left;
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(1);
+    transform-origin: right;
+    opacity: 1;
+  }
+  92% {
+    transform: scaleX(0);
+    transform-origin: right;
+    opacity: 0.1;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0.1;
+  }
+}
+
+@keyframes animatedUnderlineGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
 }

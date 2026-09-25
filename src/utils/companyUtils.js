@@ -447,23 +447,71 @@ export function maskPhoneNumber(phone = '') {
 /**
  * Generates 3 product / capability thumbnails for a supplier card
  */
+/**
+ * Generates 3 realistic, high-quality product / capability thumbnails for a supplier card based on phase & industry
+ */
 export function getEnterpriseThumbnails(ent) {
   if (!ent) return [
     "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
+    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
   ];
-
-  // If enterprise has actual images array with valid urls
-  if (Array.isArray(ent.images) && ent.images.length >= 3) {
-    const valid = ent.images.filter(img => typeof img === 'string' && img.startsWith('http') && !img.includes('default'));
-    if (valid.length >= 3) return valid.slice(0, 3);
-  }
 
   const clean = (ent.category || ent.industry || ent.name || '').toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'd');
 
-  // 1. Quà tặng, Bao bì, Hộp quà, Màng co, In ấn, Thùng Carton
+  const isCutterOrBlade = /dao\s*bam|dao\s*cat|luoi\s*dao|cat\s*got|co\s*khi\s*cat/.test(clean);
+
+  // If enterprise has actual images array with valid urls (exclude repetitive cutter test urls if not cutter)
+  if (Array.isArray(ent.images) && ent.images.length >= 3) {
+    const valid = ent.images.filter(img => {
+      if (typeof img !== 'string' || !img.startsWith('http') || img.includes('default')) return false;
+      if (!isCutterOrBlade && (img.includes('dao-bam') || img.includes('dao-cat') || img.includes('395771076'))) return false;
+      return true;
+    });
+    if (valid.length >= 3) return valid.slice(0, 3);
+  }
+
+  const primaryCatImage = getCategoryBannerImage(ent.category || ent.industry || ent.name || '');
+  const phaseStr = Array.isArray(ent.phases) ? ent.phases.join(' ') : (ent.phase || '');
+
+  // 1. Pháp lý, ĐTM, Thủ tục, Khảo sát địa chất, Giấy phép, Quy hoạch, Đầu tư (Pha 1.1, 1.2, 1.3)
+  if (/dtm|moi\s*truong|tham\s*duyet|phap\s*ly|giay\s*phep|khao\s*sat|dia\s*chat|trac\s*dia|quy\s*hoach|tu\s*van|dau\s*tu|ho\s*so|fdi|bat\s*dong\s*san|thue\s*dat/.test(clean) || /1\.1|1\.2|1\.3/.test(phaseStr)) {
+    return [
+      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80", // Environmental / Document assessment
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=400&q=80", // Blueprint architectural planning
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80"  // Modern Industrial Park campus
+    ];
+  }
+
+  // 2. Thiết kế, Thi công xây dựng nhà xưởng, Kết cấu thép tiền chế, Móng, Cọc (Pha 2.1, 2.2)
+  if (/xay\s*dung|nha\s*thep|tien\s*che|ep\s*coc|be\s*tong|thi\s*cong|kien\s*truc|ket\s*cau|san\s*mai|mong/.test(clean) || /2\.1|2\.2/.test(phaseStr)) {
+    return [
+      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80", // Steel construction
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80", // Industrial site erection
+      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80"  // Factory frame building
+    ];
+  }
+
+  // 3. Cơ điện, MEP, PCCC, Trạm biến áp, HVAC, Chiller, Xử lý nước thải (Pha 2.3)
+  if (/mep|co\s*dien|pccc|bien\s*ap|hvac|chiller|nuoc\s*thai|khi\s*nen|cap\s*dien|ong\s*gio|thong\s*gio/.test(clean) || /2\.3/.test(phaseStr)) {
+    return [
+      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80", // Electrical panel / Substation
+      "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=400&q=80", // Industrial HVAC duct & pipes
+      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80"  // Industrial engineering facility
+    ];
+  }
+
+  // 4. Lắp đặt máy, Cẩu trục, Phòng sạch Class 1000, Sơn sàn Epoxy, Panel, Nghiệm thu (Pha 3.1, 3.2, 3.3)
+  if (/phong\s*sach|cleanroom|epoxy|cau\s*truc|lap\s*dat|nghiem\s*thu|chay\s*thu|kiem\s*dinh|panel|san\s*epoxy/.test(clean) || /3\.1|3\.2|3\.3/.test(phaseStr)) {
+    return [
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80", // Clean high-tech room / line
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80", // Machine rigging installation
+      "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=400&q=80"  // Precision trial run QA
+    ];
+  }
+
+  // 5. Quà tặng, Bao bì, Hộp quà, Màng co, In ấn, Thùng Carton
   if (/qua|hop|bao\s*bi|carton|in\s*an|mang\s*co|decal|tem|tui\s*giay|nhan\s*mac/.test(clean)) {
     return [
       "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80",
@@ -472,73 +520,71 @@ export function getEnterpriseThumbnails(ent) {
     ];
   }
 
-  // 2. Nông sản, Cà phê, Trà, Mít sấy, Thực phẩm, Bánh kẹo, Đồ uống
-  if (/ca\s*phe|tra|mit\s*say|nong\s*san|thuc\s*pham|banh\s*keo|suat\s*an|nuoc\s*giai\s*khat/.test(clean)) {
+  // 6. Nông sản, Cà phê, Trà, Mít sấy, Thực phẩm, Bánh kẹo, Đồ uống, Suất ăn (Pha 5.2)
+  if (/ca\s*phe|tra|mit\s*say|nong\s*san|thuc\s*pham|banh\s*keo|suat\s*an|can\s*tin|nuoc\s*giai\s*khat/.test(clean) || /5\.2/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80", // Industrial catering kitchen
+      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80", // Food preparation line
+      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"  // Packaged beverage & food
     ];
   }
 
-  // 3. Cơ khí chính xác, CNC, Jig, Khuôn mẫu, Cắt laser, Bu lông
-  if (/cnc|phay|tien|khuon|jig|co\s*khi|bu\s*long|cat\s*laser|dot\s*dap|gia\s*cong/.test(clean)) {
+  // 7. Đồng phục, Áo thun, May mặc, Balo, Giày, Bảo hộ PPE (Pha 5.3)
+  if (/dong\s*phuc|ao\s*thun|may\s*mac|balo|tui|giay|bao\s*ho|ppe|khau\s*trang|gang\s*tay|non\s*bao\s*ho/.test(clean) || /5\.3/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=400&q=80", // Textile & uniform tailoring
+      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80", // PPE Safety gear helmets
+      "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&w=400&q=80"  // Backpacks & apparel production
     ];
   }
 
-  // 4. Đồng phục, Áo thun, May mặc, Balo, Giày, Bảo hộ PPE
-  if (/dong\s*phuc|ao\s*thun|may\s*mac|balo|tui|giay|bao\s*ho|ppe|khau\s*trang/.test(clean)) {
+  // 8. Tuyển dụng, Nhân sự, Lao động KCN (Pha 5.1)
+  if (/tuyen\s*dung|nhan\s*su|lao\s*dong|cung\s*ung\s*lao\s*dong|dao\s*tao/.test(clean) || /5\.1/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=400&q=80",
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
     ];
   }
 
-  // 5. Logistics, Vận tải container lạnh, Xe nâng, Pallet gỗ, Kho bãi
-  if (/logistics|kho|van\s*tai|xe\s*nang|pallet|container|cang|giao\s*nhan/.test(clean)) {
+  // 9. Logistics, Vận tải container lạnh, Xe nâng, Pallet gỗ, Kho bãi, Cảng biển (Pha 4.3)
+  if (/logistics|kho|van\s*tai|xe\s*nang|pallet|container|cang|giao\s*nhan|mooc|forwarding/.test(clean) || /4\.3/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80", // Warehouse & pallet racking
+      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=400&q=80", // Container port shipping
+      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=400&q=80"  // Forklift loading operations
     ];
   }
 
-  // 6. Thép cuộn mạ kẽm, Kim loại, Inox, Nhôm, Kết cấu
-  if (/thep|kim\s*loai|inox|nhom|ton|xa\s*go|sat/.test(clean)) {
+  // 10. Cơ khí chính xác, CNC, Jig, Khuôn mẫu, Cắt laser, Bu lông, Thép cuộn mạ kẽm (Pha 4.1, 4.2)
+  if (/cnc|phay|tien|khuon|jig|co\s*khi|bu\s*long|cat\s*laser|dot\s*dap|gia\s*cong|thep|inox|nhom|ton|sat|bao\s*tri|mes/.test(clean) || /4\.1|4\.2/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80", // CNC 5-axis metal machining
+      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80", // Sheet metal laser cutting & sparks
+      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80"  // Precision machine inspection
     ];
   }
 
-  // 7. Phòng sạch Class 1000, MEP, HVAC, Sơn epoxy, PCCC, Panel
-  if (/phong\s*sach|cleanroom|mep|hvac|epoxy|pccc|panel|dien/.test(clean)) {
+  // 11. Chuyển đổi số, Robot AGV, Điện mặt trời, Tối ưu ESG, ISO Audit (Pha 6.1, 6.2, 6.3)
+  if (/robot|agv|tu\s*dong\s*hoa|chuyen\s*doi\s*so|dien\s*mat\s*troi|esg|iso|audit|mo\s*rong/.test(clean) || /6\.1|6\.2|6\.3/.test(phaseStr)) {
     return [
-      "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80"
-    ];
-  }
-
-  // 8. Điện tử, Bảng mạch, Chip, Bán dẫn
-  if (/dien\s*tu|bang\s*mach|pcb|chip|vi\s*mach|cam\s*bien/.test(clean)) {
-    return [
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80"
+      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80", // Automated electronics & IoT
+      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=400&q=80", // Rooftop Solar PV panels
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80"  // Green ISO certified factory
     ];
   }
 
   // Fallback high-tech industrial manufacturing trio
-  return [
+  const fallback = [
     "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
     "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
   ];
+
+  if (primaryCatImage && primaryCatImage !== '/images/supplier_b2b_hero.jpg') {
+    return [primaryCatImage, fallback[1], fallback[2]];
+  }
+
+  return fallback;
 }
+

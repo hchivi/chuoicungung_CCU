@@ -253,7 +253,9 @@ export default function EnterpriseDetailPage() {
       {/* 1. Breadcrumb Bar */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto py-2">
-          <Link to="/" className="hover:text-blue-600 transition shrink-0">Trang chủ</Link>
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <Link to="/doanh-nghiep" className="hover:text-blue-600 transition shrink-0">Hồ sơ nhà cung ứng B2B</Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -348,7 +350,7 @@ export default function EnterpriseDetailPage() {
                     rel="noopener noreferrer"
                     className="py-2.5 px-3 bg-[#0068FF] hover:bg-[#0052cc] text-white rounded-xl text-xs font-bold shadow-md transition flex items-center justify-center space-x-1.5 font-heading"
                   >
-                    <span className="font-black text-xs bg-white text-[#0068FF] px-1 rounded-xs">Z</span>
+                    <img src="/images/icons/zalo-icon.png" alt="Zalo" className="w-4 h-4 object-contain rounded-xs" />
                     <span>Chat Zalo</span>
                   </a>
                 )}
@@ -783,7 +785,7 @@ export default function EnterpriseDetailPage() {
                     className="p-4 bg-[#0068FF]/20 hover:bg-[#0068FF]/30 rounded-2xl border border-[#0068FF]/40 space-y-2 transition block"
                   >
                     <span className="text-[11px] font-bold text-blue-300 uppercase font-heading flex items-center gap-1.5">
-                      <span className="bg-white text-[#0068FF] px-1 rounded-xs font-black text-[9px]">Z</span>
+                      <img src="/images/icons/zalo-icon.png" alt="Zalo" className="w-4 h-4 object-contain rounded-xs" />
                       ZALO OFFICIAL
                     </span>
                     <p className="text-xs font-black text-white font-heading">Chat Zalo Ngay</p>
