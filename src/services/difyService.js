@@ -29,17 +29,18 @@ export async function sendDifyMessage({
 }) {
   if (!query || !query.trim()) return null;
 
-  // Nếu chưa cấu hình Dify API Key, tự động fallback sang Gemini Sourcing Engine đã tích hợp sẵn
+  // Nếu ưu tiên dùng Direct Gemini hoặc chưa cấu hình Dify Key
   if (!DIFY_API_KEY) {
-    console.info('[DifyService] VITE_DIFY_API_KEY chưa cấu hình. Tự động chuyển tiếp qua Gemini Engine.');
+    console.info('[DifyService] Tự động chuyển tiếp qua Direct Gemini Engine.');
     const geminiRes = await askGeminiSourcingAgent({
       query,
-      userRole: mode === 'SUPPI' ? 'Nhà máy / Người mua tìm nguồn' : 'Điều phối viên giao thương'
+      userRole: mode === 'SUPPI' ? 'Nhà máy / Người mua tìm nguồn' : 'Điều phối viên giao thương',
+      mode
     });
     return {
-      answer: geminiRes?.markdown || 'Hệ thống đang xử lý yêu cầu kết nối của bạn.',
+      answer: typeof geminiRes === 'string' ? geminiRes : (geminiRes?.markdown || 'Đã ghi nhận yêu cầu. SUPPI & CHAINY đang xử lý dữ liệu...'),
       conversation_id: conversationId || `conv-local-${Date.now()}`,
-      metadata: { engine: 'gemini-fallback', mode }
+      metadata: { engine: 'direct-gemini', mode }
     };
   }
 
