@@ -320,7 +320,7 @@ export default function ProgramRegistrationPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
-      
+
       {/* ========================================================
           1. HEADER & PROGRAM SUMMARY (SECTION 2)
       ======================================================== */}
@@ -383,10 +383,10 @@ export default function ProgramRegistrationPage() {
               <div
                 onClick={() => setCurrentStep(1)}
                 className={`flex items-center gap-2 p-2 rounded-xl transition cursor-pointer ${currentStep === 1
-                    ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
-                    : currentStep > 1
-                      ? 'text-emerald-700 font-medium'
-                      : 'text-slate-400'
+                  ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
+                  : currentStep > 1
+                    ? 'text-emerald-700 font-medium'
+                    : 'text-slate-400'
                   }`}
               >
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold ${currentStep === 1 ? 'bg-[#0052cc] text-white' : currentStep > 1 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'
@@ -400,10 +400,10 @@ export default function ProgramRegistrationPage() {
               <div
                 onClick={() => { if (validateStep1()) setCurrentStep(2); }}
                 className={`flex items-center gap-2 p-2 rounded-xl transition cursor-pointer ${currentStep === 2
-                    ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
-                    : currentStep > 2
-                      ? 'text-emerald-700 font-medium'
-                      : 'text-slate-400'
+                  ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
+                  : currentStep > 2
+                    ? 'text-emerald-700 font-medium'
+                    : 'text-slate-400'
                   }`}
               >
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold ${currentStep === 2 ? 'bg-[#0052cc] text-white' : currentStep > 2 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'
@@ -417,8 +417,8 @@ export default function ProgramRegistrationPage() {
               <div
                 onClick={() => { if (validateStep1() && validateStep2()) setCurrentStep(3); }}
                 className={`flex items-center gap-2 p-2 rounded-xl transition cursor-pointer ${currentStep === 3
-                    ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
-                    : 'text-slate-400'
+                  ? 'bg-blue-50 text-blue-900 font-bold border border-blue-200'
+                  : 'text-slate-400'
                   }`}
               >
                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] font-bold ${currentStep === 3 ? 'bg-[#0052cc] text-white' : 'bg-slate-200 text-slate-600'
@@ -546,8 +546,8 @@ export default function ProgramRegistrationPage() {
                     <div
                       onClick={() => handleFormChange({ role: TARGET_ROLES_ENUM.BUYER })}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-2 ${formData.role === TARGET_ROLES_ENUM.BUYER
-                          ? 'border-emerald-500 bg-emerald-50/50 ring-2 ring-emerald-500/20 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                        ? 'border-emerald-500 bg-emerald-50/50 ring-2 ring-emerald-500/20 shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 bg-white'
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -565,8 +565,8 @@ export default function ProgramRegistrationPage() {
                     <div
                       onClick={() => handleFormChange({ role: TARGET_ROLES_ENUM.SUPPLIER })}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-2 ${formData.role === TARGET_ROLES_ENUM.SUPPLIER
-                          ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                        ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 bg-white'
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -584,8 +584,8 @@ export default function ProgramRegistrationPage() {
                     <div
                       onClick={() => handleFormChange({ role: TARGET_ROLES_ENUM.SPONSOR })}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between space-y-2 ${formData.role === TARGET_ROLES_ENUM.SPONSOR
-                          ? 'border-purple-500 bg-purple-50/50 ring-2 ring-purple-500/20 shadow-sm'
-                          : 'border-slate-200 hover:border-slate-300 bg-white'
+                        ? 'border-purple-500 bg-purple-50/50 ring-2 ring-purple-500/20 shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 bg-white'
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -717,8 +717,8 @@ export default function ProgramRegistrationPage() {
                             key={opt.id}
                             onClick={() => handleFormChange({ participationOptionId: opt.id })}
                             className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${isSelected
-                                ? 'border-[#0052cc] bg-blue-50/40 ring-2 ring-blue-500/20 shadow-xs'
-                                : 'border-slate-200 hover:border-slate-300 bg-white'
+                              ? 'border-[#0052cc] bg-blue-50/40 ring-2 ring-blue-500/20 shadow-xs'
+                              : 'border-slate-200 hover:border-slate-300 bg-white'
                               }`}
                           >
                             <div className="space-y-1">
