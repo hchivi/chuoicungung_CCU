@@ -550,9 +550,6 @@ export default function SixStagesMapPage() {
 
   return (
     <div className="space-y-10 sm:space-y-12 pb-28 bg-slate-50/70 font-sans overflow-x-hidden">
-      
-      {/* 0. LIVE MATCH TICKER STREAM */}
-      <LiveMatchTicker />
 
       {/* 1. HERO HEADER (BẢNG CHỈ HUY QUỐC GIA) */}
       <section className="relative overflow-hidden pt-6 pb-6 sm:pt-8 sm:pb-8 bg-gradient-to-b from-white via-slate-50/80 to-slate-100/60 border-b border-slate-200">
@@ -563,27 +560,20 @@ export default function SixStagesMapPage() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-5 sm:space-y-6">
           
-          {/* Breadcrumb & National Badge */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-              </Link>
-              <span>&gt;</span>
-              <span className="text-[#072348] font-black font-heading uppercase">Sa Bàn 6 Giai Đoạn & 18 Pha</span>
-            </div>
-
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-900 text-amber-300 text-xs font-black uppercase font-heading border border-amber-400/40 shadow-xs">
-              <Landmark className="w-3.5 h-3.5 text-amber-400" />
-              <span>Sa Bàn Chuỗi Cung Ứng Chuẩn ISO Quốc Gia</span>
-            </div>
+          {/* Breadcrumb */}
+          <div className="flex items-center space-x-2 text-xs sm:text-sm text-slate-500">
+            <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+            </Link>
+            <span>&gt;</span>
+            <span className="text-[#072348] font-black font-heading uppercase">Sa Bàn 6 Giai Đoạn &amp; 18 Pha</span>
           </div>
 
           {/* Main Title */}
           <div className="text-center max-w-4xl mx-auto space-y-2.5">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] tracking-normal uppercase font-heading leading-tight">
               <span>BẢN ĐỒ CHUỖI CUNG ỨNG QUỐC GIA </span>
-              <span className="text-rainbow-gradient">THEO 6 GIAI ĐOẠN & 18 PHA</span>
+              <span className="text-rainbow-gradient">THEO 6 GIAI ĐOẠN &amp; 18 PHA</span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
               Hệ thống sa bàn điều phối dòng chảy năng lực sản xuất, kết nối chính xác Nhà máy FDI, KCN và Nhà cung cấp B2B đã qua thẩm định 3 Lớp.
@@ -601,7 +591,7 @@ export default function SixStagesMapPage() {
             <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-200/80 shadow-md text-center space-y-1 hover:border-emerald-400 transition">
               <span className="text-3xl sm:text-4xl font-black text-emerald-600 font-mono">18</span>
               <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Pha Kỹ Thuật</div>
-              <div className="text-[11px] text-slate-500">Định vị rõ ràng đầu ra & chuẩn ISO</div>
+              <div className="text-[11px] text-slate-500">Định vị rõ ràng đầu ra &amp; chuẩn ISO</div>
             </div>
 
             <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-blue-200/80 shadow-md text-center space-y-1 hover:border-blue-400 transition">
@@ -632,9 +622,9 @@ export default function SixStagesMapPage() {
               <span className={`w-5 h-5 rounded-lg flex items-center justify-center font-mono text-[10px] ${
                 selectedStageId === 'all' ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-200 text-slate-700 font-bold'
               }`}>
-                ★
+                6
               </span>
-              <span>{lang === 'en' ? 'ALL (6 STAGES)' : 'TẤT CẢ(6 GĐ)'}</span>
+              <span>{lang === 'en' ? 'ALL (6 STAGES)' : 'TẤT CẢ (6 GĐ)'}</span>
             </button>
 
             {stagesData.map((stage) => {

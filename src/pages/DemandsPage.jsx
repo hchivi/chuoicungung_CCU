@@ -158,25 +158,25 @@ export default function DemandsPage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Light Premium Sourcing Command Deck with Visual Panorama)  */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/90 to-[#eef2f6] border-b border-slate-200/80 pb-12 sm:pb-16 text-slate-900">
+      <section className="relative overflow-hidden bg-gradient-to-b from-[#F4F8FA] via-white to-[#F1F5F9] border-b border-slate-200/90 pb-14 sm:pb-18 text-slate-900">
 
-        {/* Right Half Sourcing Photo with Smooth Light Blend & Dynamic Network Canvas */}
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+        {/* Right Half Sourcing Photo with Vibrant Color & Interactive Supply Canvas */}
+        <div className="absolute top-0 right-0 w-full lg:w-[62%] h-full pointer-events-none overflow-hidden z-0">
           <img
             src="/images/b2b_sourcing_demand_hero.jpg"
             alt="B2B Sourcing Demands Marketplace"
-            className="w-full h-full object-cover object-center scale-105 opacity-20 mix-blend-multiply"
+            className="w-full h-full object-cover object-center scale-105 opacity-80 lg:opacity-90"
           />
           {/* Live Global Supply Chain Arc & RFQ Pulse Canvas */}
-          <B2bTradeNetworkCanvas className="absolute inset-0 z-[2] opacity-45" />
+          <B2bTradeNetworkCanvas className="absolute inset-0 z-[2] opacity-75" />
           
-          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-white via-white/85 lg:via-white/60 to-transparent"></div>
-          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-white via-transparent to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/55 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
-        {/* Subtle Optical Ambient Glows */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl pointer-events-none z-0" />
-        <div className="absolute top-1/2 right-1/4 w-[500px] h-[300px] bg-slate-200/40 rounded-full blur-3xl pointer-events-none z-0" />
+        {/* Optical Ambient Color Glows */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none z-0" />
+        <div className="absolute top-1/2 right-1/4 w-[500px] h-[300px] bg-sky-400/20 rounded-full blur-3xl pointer-events-none z-0" />
 
         {/* Top Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
@@ -194,16 +194,21 @@ export default function DemandsPage() {
               </span>
             </nav>
 
-            {/* Eyebrow Capsule */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#0052cc] text-xs font-mono font-bold tracking-wider uppercase shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            {/* Eyebrow Capsule with Vibrant Blue Theme */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/90 text-[#0047a5] text-xs font-mono font-bold tracking-wider uppercase shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse" />
               <span>CỔNG GIAO DỊCH NHU CẦU &amp; TÌM NGUỒN CUNG ỨNG B2B</span>
             </div>
 
-            {/* Exact H1 Title: Nhu cầu mua hàng và tìm nhà cung ứng */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[48px] font-black tracking-tight text-slate-950 leading-[1.14] font-heading">
-              Nhu cầu mua hàng và tìm nhà cung ứng
-            </h1>
+            {/* Exact H1 Title with Colorful Brand Gradient Accent like Image 5 */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[48px] font-black tracking-tight text-slate-950 leading-[1.14] font-heading">
+                Nhu cầu mua hàng
+              </h1>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] xl:text-[48px] font-black tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.14] font-heading">
+                và tìm nhà cung ứng
+              </h2>
+            </div>
 
             {/* Exact Description */}
             <p className="text-sm sm:text-base md:text-[16px] text-slate-600 leading-relaxed font-normal max-w-2xl">
@@ -214,7 +219,7 @@ export default function DemandsPage() {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 to="/dang-nhu-cau"
-                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-700/25 hover:shadow-blue-700/40 hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer font-heading"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-900/25 hover:shadow-blue-800/40 hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer font-heading"
               >
                 <PlusCircle className="w-4 h-4 text-sky-200" />
                 <span>Đăng nhu cầu / Tìm cơ hội</span>

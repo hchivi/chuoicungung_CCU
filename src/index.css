@@ -873,3 +873,9 @@ video::-internal-media-controls-picture-in-picture-button {
     background-position: 300% 50%;
   }
 }
+
+/* User directive: remove all star/sparkles icons matching Image 3 across the entire website */
+.lucide-sparkles,
+svg.lucide-sparkles {
+  display: none !important;
+}
