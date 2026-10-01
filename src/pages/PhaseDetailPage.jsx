@@ -80,28 +80,6 @@ export default function PhaseDetailPage() {
     });
   }, [parsedPhaseId]);
 
-  // SEO setup (URLs 096-113)
-  useEffect(() => {
-    const phaseSlug = currentPhase.slug || PHASE_ID_TO_SLUG_MAP[currentPhase.id] || id;
-    document.title = `${currentPhase.title} – Pha triển khai nhà máy | CHUOICUNGUNG.COM`;
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `https://chuoicungung.com/pha/${phaseSlug}`;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = `Tìm hiểu Pha ${currentPhase.title} trong giai đoạn ${currentStage.title} vòng đời nhà máy: nhà cung ứng, tiêu chuẩn, deliverable và đăng nhu cầu kết nối.`;
-  }, [currentPhase, currentStage, id]);
-
   // Loading transition
   useEffect(() => {
     setIsLoading(true);
@@ -318,7 +296,7 @@ export default function PhaseDetailPage() {
   const nextPhase = currentIndex < all18Phases.length - 1 ? all18Phases[currentIndex + 1] : null;
 
   return (
-    <main className={`min-h-screen bg-gradient-to-b ${theme.bgPage} space-y-8 pb-32 pt-4 transition-all duration-300 font-sans`}>
+    <div className={`min-h-screen bg-gradient-to-b ${theme.bgPage} space-y-8 pb-32 pt-4 transition-all duration-300 font-sans`}>
       
       {/* 1. BREADCRUMBS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -368,7 +346,7 @@ export default function PhaseDetailPage() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] tracking-tight leading-tight uppercase font-heading">
-              Pha {currentPhase.title}
+              Pha {currentPhase.id}: {currentPhase.title}
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
@@ -407,22 +385,21 @@ export default function PhaseDetailPage() {
 
             {/* Hero CTAs */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <a
-                href="#danh-sach-don-vi"
+              <button
+                onClick={() => handleOpenRfq(null, false)}
                 style={{ backgroundColor: theme.color }}
-                className="px-6 py-3 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center space-x-2 uppercase cursor-pointer"
+                className="px-6 py-3 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center space-x-2 uppercase"
               >
-                <Factory className="w-4 h-4" />
-                <span>Tìm đơn vị theo pha</span>
-              </a>
+                <Send className="w-4 h-4" />
+                <span>Yêu Cầu Báo Giá Pha {currentPhase.id}</span>
+              </button>
 
               <button
-                type="button"
-                onClick={() => handleOpenRfq(null, false)}
-                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center space-x-2 uppercase cursor-pointer"
+                onClick={() => handleOpenRfq(null, true)}
+                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center space-x-2 uppercase"
               >
-                <Send className="w-4 h-4 text-amber-400" />
-                <span>Đăng nhu cầu</span>
+                <Lock className="w-4 h-4 text-amber-400" />
+                <span>Bidding Ẩn Danh</span>
               </button>
             </div>
 
@@ -504,7 +481,7 @@ export default function PhaseDetailPage() {
       </section>
 
       {/* 4. BLOCK 3: PHÂN LUỒNG MATCHMAKING CORE (2 CỘT 3:7) */}
-      <section id="danh-sach-don-vi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           
           {/* CỘT TRÁI: ADVANCED FILTER (280px) */}
@@ -899,6 +876,6 @@ export default function PhaseDetailPage() {
         themeColor={theme.color}
       />
 
-    </main>
+    </div>
   );
 }

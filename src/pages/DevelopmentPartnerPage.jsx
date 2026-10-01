@@ -37,7 +37,7 @@ export default function DevelopmentPartnerPage() {
 
   // SEO & Head title (Section 55)
   useEffect(() => {
-    document.title = "Đối tác phát triển | CHUOICUNGUNG.COM";
+    document.title = "Đối Tác Phát Triển | CHUOICUNGUNG.COM";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute(
@@ -45,14 +45,6 @@ export default function DevelopmentPartnerPage() {
         'Phối hợp giới thiệu dịch vụ, phát triển nhóm doanh nghiệp tham gia chương trình và kết nối đơn vị có nhu cầu tổ chức với cơ chế ghi nhận, theo dõi và đối soát rõ ràng.'
       );
     }
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', 'https://chuoicungung.com/doi-tac-phat-trien');
 
     // JSON-LD Structured Data
     let scriptTag = document.getElementById('dev-partner-jsonld');
@@ -65,7 +57,7 @@ export default function DevelopmentPartnerPage() {
     scriptTag.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "WebPage",
-      "name": "Đối tác phát triển | CHUOICUNGUNG.COM",
+      "name": "Đối Tác Phát Triển & Hợp Tác B2B",
       "description": "Cùng phát triển chương trình và dịch vụ cho doanh nghiệp với cơ chế ghi nhận minh bạch.",
       "url": "https://chuoicungung.com/doi-tac-phat-trien",
       "publisher": {
@@ -165,7 +157,7 @@ export default function DevelopmentPartnerPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* ---------------------------------------------------------------------- */}
       {/* BREADCRUMB */}
       {/* ---------------------------------------------------------------------- */}
@@ -192,32 +184,29 @@ export default function DevelopmentPartnerPage() {
               <span>Chương Trình Đối Tác Phát Triển B2B</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-4 leading-tight">
-              Đối tác phát triển
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-6 leading-tight">
+              CÙNG PHÁT TRIỂN CHƯƠNG TRÌNH VÀ DỊCH VỤ CHO DOANH NGHIỆP
             </h1>
-            <p className="text-xl sm:text-2xl font-bold text-blue-200 mb-6">
-              Cùng phát triển chương trình và dịch vụ cho doanh nghiệp
-            </p>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed mb-8">
-              <strong>CHUOICUNGUNG.COM</strong> tìm đối tác có mạng lưới doanh nghiệp và mong muốn phối hợp giới thiệu dịch vụ phù hợp. Phạm vi giới thiệu, trách nhiệm hỗ trợ và cơ chế ghi nhận được thống nhất trước khi triển khai. Hợp tác phát triển không ảnh hưởng đến tính trung lập, thuật toán matching và kết quả KYC của nhà cung ứng.
+              <strong>CHUOICUNGUNG.COM</strong> tìm đối tác có mạng lưới doanh nghiệp và mong muốn phối hợp giới thiệu dịch vụ phù hợp. Phạm vi giới thiệu, trách nhiệm hỗ trợ và cơ chế ghi nhận được thống nhất trước khi triển khai.
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
-              <button
-                onClick={() => workflowRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-6 py-3.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold rounded-xl transition flex items-center gap-2"
-              >
-                <span>XEM NGUYÊN TẮC</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-
               <button
                 onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center gap-2"
               >
                 <Send className="w-4 h-4" />
-                <span>GỬI ĐỀ NGHỊ</span>
+                <span>ĐĂNG KÝ TRAO ĐỔI HỢP TÁC</span>
+              </button>
+
+              <button
+                onClick={() => typesRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 py-3.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold rounded-xl transition flex items-center gap-2"
+              >
+                <span>XEM HÌNH THỨC PHỐI HỢP</span>
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
@@ -682,11 +671,10 @@ export default function DevelopmentPartnerPage() {
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
-                      <label htmlFor="dev-partner-applicant-name" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Tên tổ chức hoặc cá nhân *
                       </label>
                       <input
-                        id="dev-partner-applicant-name"
                         type="text"
                         required
                         placeholder="Hiệp hội / Doanh nghiệp tư vấn / Họ và tên chuyên gia..."
@@ -697,11 +685,10 @@ export default function DevelopmentPartnerPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="dev-partner-partner-type" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Vai trò / Lĩnh vực hoạt động *
                       </label>
                       <select
-                        id="dev-partner-partner-type"
                         value={formData.partnerType}
                         onChange={(e) => setFormData(prev => ({ ...prev, partnerType: e.target.value }))}
                         className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:bg-white focus:border-blue-600 focus:outline-none"
@@ -713,11 +700,10 @@ export default function DevelopmentPartnerPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="dev-partner-website" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Website / Trang thông tin (Tùy chọn)
                       </label>
                       <input
-                        id="dev-partner-website"
                         type="url"
                         placeholder="https://..."
                         value={formData.website}
@@ -735,11 +721,10 @@ export default function DevelopmentPartnerPage() {
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="dev-partner-contact-person" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Người đại diện liên hệ *
                       </label>
                       <input
-                        id="dev-partner-contact-person"
                         type="text"
                         required
                         placeholder="Họ và tên..."
@@ -750,11 +735,10 @@ export default function DevelopmentPartnerPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="dev-partner-role" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Chức vụ / Vị trí
                       </label>
                       <input
-                        id="dev-partner-role"
                         type="text"
                         placeholder="Phó Chủ Tịch / Giám Đốc / Chuyên gia..."
                         value={formData.role}
@@ -764,11 +748,10 @@ export default function DevelopmentPartnerPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="dev-partner-email" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Email làm việc *
                       </label>
                       <input
-                        id="dev-partner-email"
                         type="email"
                         required
                         placeholder="email@company.com"
@@ -779,11 +762,10 @@ export default function DevelopmentPartnerPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="dev-partner-phone" className="block text-xs text-slate-700 font-medium mb-1">
+                      <label className="block text-xs text-slate-700 font-medium mb-1">
                         Số điện thoại liên hệ *
                       </label>
                       <input
-                        id="dev-partner-phone"
                         type="tel"
                         required
                         placeholder="09xx xxx xxx"
@@ -826,11 +808,10 @@ export default function DevelopmentPartnerPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="dev-partner-target-desc" className="block text-xs text-slate-700 font-medium mb-1">
+                    <label className="block text-xs text-slate-700 font-medium mb-1">
                       Mô tả ngắn gọn nhóm doanh nghiệp bạn có thể tiếp cận *
                     </label>
                     <textarea
-                      id="dev-partner-target-desc"
                       rows={3}
                       required
                       placeholder="Ví dụ: Khoảng 150 nhà máy gia công cơ khí chính xác tại KCN Sóng Thần & Đồng Nai; hoặc 50 doanh nghiệp dệt may xuất khẩu..."
@@ -846,9 +827,8 @@ export default function DevelopmentPartnerPage() {
 
                 {/* 4. Đồng thuận */}
                 <div className="pt-2">
-                  <label htmlFor="dev-partner-consent" className="flex items-start gap-2 cursor-pointer text-xs text-slate-600">
+                  <label className="flex items-start gap-2 cursor-pointer text-xs text-slate-600">
                     <input
-                      id="dev-partner-consent"
                       type="checkbox"
                       required
                       checked={formData.consentAccepted}
@@ -937,6 +917,6 @@ export default function DevelopmentPartnerPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

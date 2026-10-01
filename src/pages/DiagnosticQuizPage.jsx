@@ -74,27 +74,6 @@ export default function DiagnosticQuizPage() {
     }
   }, [currentStep, answers, isCompleted]);
 
-  // SEO setup (URL 089)
-  useEffect(() => {
-    document.title = 'Định vị doanh nghiệp | CHUOICUNGUNG.COM';
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = 'https://chuoicungung.com/dinh-vi-doanh-nghiep';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Định vị vị thế doanh nghiệp trong chuỗi cung ứng, xác định giai đoạn vòng đời và kết nối nhu cầu phù hợp.';
-  }, []);
-
   // AI Progress messages for Gamification
   const aiProgressMessages = {
     1: { pct: 20, msg: 'Đang phân tích vị thế cốt lõi của doanh nghiệp trong chuỗi cung ứng...' },
@@ -337,7 +316,7 @@ export default function DiagnosticQuizPage() {
   const matchedStage = stagesData.find(s => s.id === answers.stageId) || stagesData[5];
 
   return (
-    <main className="space-y-8 pb-24 pt-6 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
+    <div className="space-y-8 pb-24 pt-6 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* 1. TOP HEADER & GAMIFICATION PROGRESS BAR */}
@@ -363,42 +342,22 @@ export default function DiagnosticQuizPage() {
               <span>{lang === 'en' ? 'STEP-BY-STEP AI POSITIONING ENGINE' : 'CÔNG CỤ ĐỊNH VỊ VỊ THẾ & KHỚP LỆNH THẦU B2B'}</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-950 font-heading tracking-tight">
-              Định vị doanh nghiệp trong chuỗi cung ứng
+              Tôi Đang Ở Giai Đoạn Nào?
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 font-normal">
               Chẩn đoán chuyên sâu vị thế doanh nghiệp để kết nối trực tiếp các gói thầu từ 400+ KCN, Odoo TAHOMART và HDBank.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
-            {!isCompleted ? (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(1)}
-                  className="px-4 py-2 bg-[#0052cc] hover:bg-blue-600 text-white font-bold rounded-xl text-xs flex items-center space-x-1.5 transition font-heading cursor-pointer shadow-xs"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Bắt đầu</span>
-                </button>
-                <Link
-                  to="/ban-do-6-giai-doan"
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center space-x-1.5 transition font-heading"
-                >
-                  <Layers className="w-3.5 h-3.5" />
-                  <span>Xem gợi ý</span>
-                </Link>
-              </>
-            ) : (
-              <button
-                onClick={handleResetQuiz}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center space-x-1.5 transition font-heading cursor-pointer shrink-0"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Làm Lại Bài Đánh Giá</span>
-              </button>
-            )}
-          </div>
+          {isCompleted && (
+            <button
+              onClick={handleResetQuiz}
+              className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center space-x-1.5 transition self-start sm:self-center font-heading cursor-pointer shrink-0"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Làm Lại Bài Đánh Giá</span>
+            </button>
+          )}
         </div>
 
         {/* Gamified Giant AI Progress Bar (If not completed) */}
@@ -1077,6 +1036,6 @@ export default function DiagnosticQuizPage() {
         </div>
       )}
 
-    </main>
+    </div>
   );
 }

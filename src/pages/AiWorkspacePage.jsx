@@ -2423,25 +2423,6 @@ export default function AiWorkspacePage() {
     }
   }, [location.search]);
 
-  useEffect(() => {
-    document.title = "SUPPI AI | CHUOICUNGUNG.COM";
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute(
-        'content',
-        'SUPPI – Trợ lý tìm nguồn cung và đối soát chuỗi cung ứng B2B: tìm kiếm nhà cung ứng, phân tích RFQ và khởi tạo bản thảo nhu cầu có xác thực.'
-      );
-    }
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', 'https://chuoicungung.com/tro-ly-ai');
-  }, []);
-
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAFC] font-sans antialiased text-slate-800">
 
@@ -2735,18 +2716,14 @@ export default function AiWorkspacePage() {
               <Menu className="w-5 h-5" />
             </button>
 
-            {/* Breadcrumb */}
-            <nav className="flex items-center text-xs text-slate-500 space-x-1.5 font-medium">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#0052cc] transition py-1 px-2 rounded-lg hover:bg-slate-100"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Trang chủ</span>
-              </Link>
-              <ChevronRight className="w-3 h-3 text-slate-400" />
-              <span className="text-slate-900 font-bold">SUPPI – Trợ lý tìm nguồn cung</span>
-            </nav>
+            {/* Back to Home Button */}
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-[#0052cc] transition py-1 px-2.5 rounded-lg hover:bg-slate-100"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Trang chủ</span>
+            </Link>
 
             {/* Dynamic Conversation Entity Link Indicator */}
             {conversation.entityType && (
@@ -2872,16 +2849,10 @@ export default function AiWorkspacePage() {
                 </div>
 
                 {/* HEADLINE */}
-                <div className="pt-0 max-w-2xl mx-auto space-y-2">
+                <div className="pt-0 max-w-2xl mx-auto">
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight uppercase leading-snug">
-                    SUPPI – Trợ lý tìm nguồn cung
+                    <span className="text-rainbow-gradient">“CHỈ CẦN NÓI BẠN ĐANG CẦN GÌ.”</span>
                   </h1>
-                  <p className="text-sm sm:text-base font-bold text-rainbow-gradient uppercase">
-                    “CHỈ CẦN NÓI BẠN ĐANG CẦN GÌ.”
-                  </p>
-                  <p className="text-xs text-slate-500 max-w-lg mx-auto">
-                    Dữ liệu đối soát trực tiếp từ mạng lưới 400+ KCN và nhà cung ứng đã xác minh. Mọi thông tin chỉ tạo bản thảo (draft) trước khi bạn xác nhận gửi.
-                  </p>
                 </div>
 
                 {/* 4. BIG SEARCH / CHAT INPUT BOX (Ô CHAT LỚN VỚI VIỀN ĐA SẮC CHUYỂN ĐỘNG) */}
@@ -2890,15 +2861,13 @@ export default function AiWorkspacePage() {
                     <div className="relative z-10 bg-white rounded-[25.5px] p-3.5 sm:p-4 text-left">
 
                       {/* Textarea */}
-                      <label htmlFor="ai-prompt-input" className="sr-only">Mô tả nhu cầu của anh/chị</label>
                       <textarea
-                        id="ai-prompt-input"
                         ref={inputRef}
                         rows={3}
                         value={inputPrompt}
                         onChange={(e) => setInputPrompt(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        placeholder="Mô tả nhu cầu của anh/chị (Ví dụ: Cần tìm nhà máy gia công tiện CNC tại Đồng Nai, giao trong 10 ngày)..."
+                        placeholder="Hãy mô tả nhu cầu, năng lực hoặc công việc bạn đang muốn giải quyết..."
                         className="w-full bg-transparent resize-none border-0 focus:outline-none text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 leading-relaxed"
                       />
 
@@ -2936,7 +2905,7 @@ export default function AiWorkspacePage() {
                               : 'bg-slate-100 text-slate-400 cursor-not-allowed'
                             }`}
                         >
-                          <span className="font-heading hidden sm:inline">Mô tả nhu cầu của anh/chị</span>
+                          <span className="font-heading hidden sm:inline">Gửi yêu cầu</span>
                           <ArrowUp className="w-4 h-4" />
                         </button>
                       </div>

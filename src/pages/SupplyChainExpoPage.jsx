@@ -86,28 +86,12 @@ export default function SupplyChainExpoPage() {
     if (selectedEvent) {
       document.title = `${selectedEvent.title || selectedEvent.name} | CHUOICUNGUNG.COM`;
     } else {
-      document.title = 'Chương trình | CHUOICUNGUNG.COM';
+      document.title = 'Chương Trình Kết Nối Doanh Nghiệp | CHUOICUNGUNG.COM';
     }
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', 'Khám phá các chương trình kết nối nhà máy, người mua và nhà cung ứng theo nhu cầu, ngành, địa bàn và hình thức tham gia.');
     }
-    metaDesc.content = selectedEvent 
-      ? (selectedEvent.highlight || selectedEvent.description || 'Chi tiết chương trình kết nối doanh nghiệp B2B.')
-      : 'Khám phá các chương trình kết nối nhà máy, người mua và nhà cung ứng theo nhu cầu, ngành, địa bàn và hình thức tham gia.';
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = selectedEvent 
-      ? `https://chuoicungung.com/chuong-trinh/${selectedEvent.slug || selectedEvent.id}`
-      : 'https://chuoicungung.com/chuong-trinh';
   }, [selectedEvent]);
 
   // Filtered Programs Logic
@@ -334,7 +318,7 @@ export default function SupplyChainExpoPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50/60 pb-24 font-sans space-y-10 sm:space-y-12">
+    <div className="min-h-screen bg-slate-50/60 pb-24 font-sans space-y-10 sm:space-y-12">
       
       {/* ========================================================
           1. HERO HEADER SECTION (Matching exact panoramic banner)
@@ -345,7 +329,7 @@ export default function SupplyChainExpoPage() {
         <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
           <img 
             src="/images/supply_chain_expo_hero.jpg" 
-            alt="Chương trình kết nối chuỗi cung ứng B2B & Ngày hội Chuỗi Cung Ứng" 
+            alt="Chương trình kết nối doanh nghiệp B2B & Ngày hội Chuỗi Cung Ứng" 
             className="w-full h-full object-cover object-center scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/30 to-transparent"></div>
@@ -366,7 +350,7 @@ export default function SupplyChainExpoPage() {
                 to="/chuong-trinh" 
                 className={`hover:text-[#0052cc] transition ${selectedEvent ? 'text-slate-600' : 'text-[#0052cc] font-bold'}`}
               >
-                Chương trình kết nối chuỗi cung ứng
+                Chương trình kết nối doanh nghiệp
               </Link>
               {selectedEvent && (
                 <>
@@ -388,22 +372,22 @@ export default function SupplyChainExpoPage() {
               <span>SỰ KIỆN KẾT NỐI B2B HÀNG ĐẦU VIỆT NAM 2026 - 2027</span>
             </div>
 
-            {/* Headline H1 (Requested: "Chương trình kết nối chuỗi cung ứng") */}
+            {/* Headline H1 (Requested: "Chương trình kết nối doanh nghiệp") */}
             <div className="space-y-1">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                Chương trình kết nối chuỗi cung ứng
+                Chương trình kết nối doanh nghiệp
               </h1>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.2]">
                 Khớp lệnh Cung - Cầu tại các KCN trọng điểm
               </h2>
             </div>
 
-            {/* Lead text */}
+            {/* Lead text (Requested by user) */}
             <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
               Khám phá ngày hội chuỗi cung ứng, buổi gặp nhà cung ứng, gian hàng và hoạt động dành cho cộng đồng doanh nghiệp. Chọn chương trình phù hợp để đăng ký, chuẩn bị hồ sơ và trao đổi nhu cầu.
             </p>
 
-            {/* Dual Action Buttons CTA: "Xem chương trình / Đăng ký" */}
+            {/* Dual Action Buttons (Requested: Nút chính "Tìm chương trình", Nút phụ "Đề xuất tổ chức chương trình" -> /dich-vu/to-chuc-ket-noi) */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <button
                 type="button"
@@ -411,15 +395,15 @@ export default function SupplyChainExpoPage() {
                 className="px-6 py-3 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
                 <Search className="w-4 h-4" />
-                <span>Xem chương trình</span>
+                <span>Tìm chương trình</span>
               </button>
 
               <Link
-                to="/ngay-hoi-chuoi-cung-ung/dang-ky"
+                to="/dich-vu/to-chuc-ket-noi"
                 className="px-6 py-3 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group"
               >
                 <Handshake className="w-3.5 h-3.5 text-[#0052cc] group-hover:scale-110 transition-transform" />
-                <span>Đăng ký tham gia</span>
+                <span>Đề xuất tổ chức chương trình</span>
               </Link>
             </div>
 
@@ -862,10 +846,8 @@ export default function SupplyChainExpoPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               {/* Search input: Name, Industry, Need */}
               <div className="md:col-span-2 relative">
-                <label htmlFor="program-search-kw" className="sr-only">Tìm tên chương trình, KCN, ngành hàng...</label>
                 <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  id="program-search-kw"
                   type="text"
                   placeholder="Tìm tên chương trình, KCN, ngành hàng hoặc nhóm nhu cầu mua sắm..."
                   value={searchKw}
@@ -884,9 +866,7 @@ export default function SupplyChainExpoPage() {
 
               {/* Status Filter */}
               <div>
-                <label htmlFor="program-filter-status" className="sr-only">Lọc theo trạng thái</label>
                 <select
-                  id="program-filter-status"
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
                   className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
@@ -904,12 +884,11 @@ export default function SupplyChainExpoPage() {
               
               {/* 1. Zone Filter */}
               <div>
-                <label htmlFor="program-filter-zone" className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
                   <MapPin className="w-3 h-3 text-orange-500" />
                   <span>Địa bàn / KCN</span>
                 </label>
                 <select
-                  id="program-filter-zone"
                   value={filterZone}
                   onChange={(e) => setFilterZone(e.target.value)}
                   className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
@@ -922,12 +901,11 @@ export default function SupplyChainExpoPage() {
 
               {/* 2. Industry / Need Filter */}
               <div>
-                <label htmlFor="program-filter-industry" className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
                   <Tag className="w-3 h-3 text-emerald-500" />
                   <span>Ngành hàng / Nhu cầu</span>
                 </label>
                 <select
-                  id="program-filter-industry"
                   value={filterIndustry}
                   onChange={(e) => setFilterIndustry(e.target.value)}
                   className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium truncate"
@@ -940,12 +918,11 @@ export default function SupplyChainExpoPage() {
 
               {/* 3. Role Filter (Buyer, Supplier, Partner) */}
               <div>
-                <label htmlFor="program-filter-role" className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
                   <Users className="w-3 h-3 text-blue-500" />
                   <span>Vai trò tham gia</span>
                 </label>
                 <select
-                  id="program-filter-role"
                   value={filterRole}
                   onChange={(e) => setFilterRole(e.target.value)}
                   className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
@@ -958,12 +935,11 @@ export default function SupplyChainExpoPage() {
 
               {/* 4. Format Filter (In-person, Online, Hybrid) */}
               <div>
-                <label htmlFor="program-filter-format" className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
                   <Globe className="w-3 h-3 text-indigo-500" />
                   <span>Hình thức tổ chức</span>
                 </label>
                 <select
-                  id="program-filter-format"
                   value={filterFormat}
                   onChange={(e) => setFilterFormat(e.target.value)}
                   className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
@@ -976,12 +952,11 @@ export default function SupplyChainExpoPage() {
 
               {/* 5. Time Filter */}
               <div>
-                <label htmlFor="program-filter-time" className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
+                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
                   <Clock className="w-3 h-3 text-purple-500" />
                   <span>Thời gian</span>
                 </label>
                 <select
-                  id="program-filter-time"
                   value={filterTime}
                   onChange={(e) => setFilterTime(e.target.value)}
                   className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
@@ -1097,9 +1072,8 @@ export default function SupplyChainExpoPage() {
               <form onSubmit={handleBottomSubSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-slate-900">
                   <div>
-                    <label htmlFor="sub-name" className="block text-[11px] font-bold text-blue-100 mb-1">Họ và tên *</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Họ và tên *</label>
                     <input 
-                      id="sub-name"
                       type="text" 
                       required
                       placeholder="Nguyễn Văn A" 
@@ -1109,9 +1083,8 @@ export default function SupplyChainExpoPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="sub-company" className="block text-[11px] font-bold text-blue-100 mb-1">Tên công ty / Nhà máy *</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Tên công ty / Nhà máy *</label>
                     <input 
-                      id="sub-company"
                       type="text" 
                       required
                       placeholder="Công ty TNHH Sản Xuất..." 
@@ -1121,9 +1094,8 @@ export default function SupplyChainExpoPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="sub-email" className="block text-[11px] font-bold text-blue-100 mb-1">Email nhận thư mời *</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Email nhận thư mời *</label>
                     <input 
-                      id="sub-email"
                       type="email" 
                       required
                       placeholder="purchasing@company.vn" 
@@ -1133,9 +1105,8 @@ export default function SupplyChainExpoPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="sub-phone" className="block text-[11px] font-bold text-blue-100 mb-1">Số điện thoại / Zalo *</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Số điện thoại / Zalo *</label>
                     <input 
-                      id="sub-phone"
                       type="tel" 
                       required
                       placeholder="0912 345 678" 
@@ -1148,9 +1119,8 @@ export default function SupplyChainExpoPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-900">
                   <div>
-                    <label htmlFor="sub-zone" className="block text-[11px] font-bold text-blue-100 mb-1">Địa bàn / KCN mong muốn</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Địa bàn / KCN mong muốn</label>
                     <select
-                      id="sub-zone"
                       value={subFormData.zone}
                       onChange={(e) => setSubFormData({ ...subFormData, zone: e.target.value })}
                       className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
@@ -1162,9 +1132,8 @@ export default function SupplyChainExpoPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="sub-industry" className="block text-[11px] font-bold text-blue-100 mb-1">Chuyên mục / Ngành hàng</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Chuyên mục / Ngành hàng</label>
                     <select
-                      id="sub-industry"
                       value={subFormData.industry}
                       onChange={(e) => setSubFormData({ ...subFormData, industry: e.target.value })}
                       className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
@@ -1176,9 +1145,8 @@ export default function SupplyChainExpoPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="sub-role" className="block text-[11px] font-bold text-blue-100 mb-1">Vai trò của bạn</label>
+                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Vai trò của bạn</label>
                     <select
-                      id="sub-role"
                       value={subFormData.role}
                       onChange={(e) => setSubFormData({ ...subFormData, role: e.target.value })}
                       className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
@@ -1192,9 +1160,8 @@ export default function SupplyChainExpoPage() {
 
                 {/* Consent checkbox (Stored separately per requirements) */}
                 <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <label htmlFor="sub-consent" className="flex items-start gap-2.5 text-xs text-blue-100 cursor-pointer">
+                  <label className="flex items-start gap-2.5 text-xs text-blue-100 cursor-pointer">
                     <input 
-                      id="sub-consent"
                       type="checkbox" 
                       required
                       checked={subFormData.consent}
@@ -1270,9 +1237,8 @@ export default function SupplyChainExpoPage() {
             ) : (
               <form onSubmit={handleInterestSubmit} className="space-y-3 pt-1 text-xs">
                 <div>
-                  <label htmlFor="interest-rep-name" className="block font-bold text-slate-700 mb-1">Họ và tên người đại diện *</label>
+                  <label className="block font-bold text-slate-700 mb-1">Họ và tên người đại diện *</label>
                   <input 
-                    id="interest-rep-name"
                     type="text" 
                     required
                     placeholder="Nguyễn Văn A" 
@@ -1283,9 +1249,8 @@ export default function SupplyChainExpoPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="interest-rep-company" className="block font-bold text-slate-700 mb-1">Tên công ty / Doanh nghiệp *</label>
+                  <label className="block font-bold text-slate-700 mb-1">Tên công ty / Doanh nghiệp *</label>
                   <input 
-                    id="interest-rep-company"
                     type="text" 
                     required
                     placeholder="Công ty TNHH Cơ Khí & Tự Động Hóa..." 
@@ -1297,9 +1262,8 @@ export default function SupplyChainExpoPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label htmlFor="interest-rep-email" className="block font-bold text-slate-700 mb-1">Email *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Email *</label>
                     <input 
-                      id="interest-rep-email"
                       type="email" 
                       required
                       placeholder="info@company.vn" 
@@ -1309,9 +1273,8 @@ export default function SupplyChainExpoPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="interest-rep-phone" className="block font-bold text-slate-700 mb-1">Số điện thoại *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Số điện thoại *</label>
                     <input 
-                      id="interest-rep-phone"
                       type="tel" 
                       required
                       placeholder="0901 234 567" 
@@ -1323,9 +1286,8 @@ export default function SupplyChainExpoPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="interest-rep-needs" className="block font-bold text-slate-700 mb-1">Nhu cầu / Sản phẩm muốn kết nối</label>
+                  <label className="block font-bold text-slate-700 mb-1">Nhu cầu / Sản phẩm muốn kết nối</label>
                   <input 
-                    id="interest-rep-needs"
                     type="text" 
                     placeholder="Ví dụ: Cung ứng bu lông ốc vít Inox, Tìm đối tác bao bì..." 
                     value={interestFormData.needs}
@@ -1334,9 +1296,8 @@ export default function SupplyChainExpoPage() {
                   />
                 </div>
 
-                <label htmlFor="interest-rep-consent" className="flex items-start gap-2 pt-1 cursor-pointer text-slate-600 text-[11px]">
+                <label className="flex items-start gap-2 pt-1 cursor-pointer text-slate-600 text-[11px]">
                   <input 
-                    id="interest-rep-consent"
                     type="checkbox" 
                     required
                     checked={interestFormData.hasConsent}
@@ -1408,6 +1369,6 @@ export default function SupplyChainExpoPage() {
         </button>
       </div>
 
-    </main>
+    </div>
   );
 }

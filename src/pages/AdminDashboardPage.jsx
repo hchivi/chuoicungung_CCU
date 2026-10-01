@@ -11,7 +11,7 @@ import {
   FileText, FolderOpen, UserCheck, Handshake, Image, BarChart3, 
   Settings, History, ChevronLeft, ChevronRight, Search, Bell, 
   CheckCircle2, Clock, MoreVertical, ArrowUpRight, TrendingUp, Filter, FolderTree, Key, ShoppingBag,
-  ShieldCheck, Briefcase, Zap, DollarSign, ShieldAlert, Award, Bot, X, Check, Calendar
+  ShieldCheck, Briefcase, Zap, DollarSign, ShieldAlert, Award, Bot, X, Check
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import BrandLogo from '../components/BrandLogo';
@@ -99,48 +99,8 @@ export default function AdminDashboardPage({ defaultMenu = 'overview' }) {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-  const ADMIN_MENU_TITLES = {
-    overview: 'Admin',
-    categories: 'Danh Muc',
-    keywords: 'Tu Khoa',
-    stages: 'Giai Doan',
-    demands: 'Nhu Cau',
-    services: 'Dich Vu',
-    claims: 'Yeu Cau Quan Ly Ho So',
-    enterprises: 'To Chuc',
-    partners: 'Founding Partner',
-    pipeline: 'Pipeline',
-    connections: 'Connections',
-    programs: 'Chuong Trinh',
-    industrial_parks: 'Khu Cong Nghiep',
-    factories: 'Nha May',
-    catalogues: 'Catalogue',
-    sponsorships: 'Tai Tro',
-    development_partners: 'Doi Tac Phat Trien',
-    partnership_hub: 'Hop Tac',
-    hop_tac: 'Hop Tac',
-    remote_presence: 'Hien Dien Tu Xa',
-    sourcing_dossiers: 'Bo Ho So',
-    tasks: 'Tasks',
-    'tai-chinh': 'Tai Chinh',
-    finance: 'Tai Chinh',
-    logs: 'Logs'
-  };
-
-  const currentTitle = ADMIN_MENU_TITLES[activeMenu] || 'Admin';
-
-  // SEO & Private Workspace Protection
-  useEffect(() => {
-    document.title = `${currentTitle} | CHUOICUNGUNG.COM`;
-
-    let robotsMeta = document.querySelector('meta[name="robots"]');
-    if (!robotsMeta) {
-      robotsMeta = document.createElement('meta');
-      robotsMeta.name = 'robots';
-      document.head.appendChild(robotsMeta);
-    }
-    robotsMeta.setAttribute('content', 'noindex, nofollow');
-  }, [activeMenu, currentTitle]);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col font-sans antialiased text-slate-900">
@@ -343,7 +303,6 @@ export default function AdminDashboardPage({ defaultMenu = 'overview' }) {
 
         {/* 3. Main Admin View Container */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
-          <h1 className="sr-only">{currentTitle}</h1>
           
           {/* View 1: Unified Command Overview (Section 2, 18, 41) */}
           {activeMenu === 'overview' ? (

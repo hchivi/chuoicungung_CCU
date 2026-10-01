@@ -40,25 +40,9 @@ export default function PartnershipHubPage() {
   const [submitResult, setSubmitResult] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // SEO & Schema (URL 114)
+  // SEO & Schema
   useEffect(() => {
-    document.title = 'Hợp tác | CHUOICUNGUNG.COM';
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = 'https://chuoicungung.com/hop-tac';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Cổng hợp tác hệ sinh thái CHUOICUNGUNG.COM: nguyên tắc minh bạch, phân định rõ phạm vi, tài trợ không can thiệp matching hay xếp hạng.';
+    document.title = 'Hợp Tác Hệ Sinh Thái | CHUOICUNGUNG.COM';
 
     const schemaData = {
       "@context": "https://schema.org",
@@ -122,7 +106,7 @@ export default function PartnershipHubPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 antialiased pb-24 overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 antialiased pb-24 overflow-hidden font-sans">
       
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (SECTION 2 SPEC 37.TXT)                                   */}
@@ -141,11 +125,8 @@ export default function PartnershipHubPage() {
           </div>
 
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight max-w-4xl font-heading">
-            Hợp tác
+            HỢP TÁC CÙNG HỆ SINH THÁI CHUỖI CUNG ỨNG
           </h1>
-          <p className="text-sm font-semibold text-blue-700 uppercase tracking-wide">
-            Hợp tác cùng hệ sinh thái chuỗi cung ứng
-          </p>
 
           <p className="text-xs sm:text-sm md:text-base text-slate-600 max-w-3xl leading-relaxed">
             Chọn hình thức phù hợp với vai trò và nguồn lực của bạn. Mỗi quan hệ hợp tác được xác định rõ phạm vi, trách nhiệm, quyền truy cập, quyền lợi và cách ghi nhận trước khi triển khai.
@@ -154,18 +135,18 @@ export default function PartnershipHubPage() {
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <button
               onClick={scrollToSelector}
-              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition inline-flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-sm transition inline-flex items-center gap-2"
             >
-              <span>XEM NGUYÊN TẮC</span>
+              <span>CHỌN HÌNH THỨC HỢP TÁC</span>
               <ChevronRight className="w-4 h-4" />
             </button>
 
             <button
               onClick={() => scrollToForm()}
-              className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm border border-slate-300 transition inline-flex items-center gap-2 cursor-pointer"
+              className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm border border-slate-300 transition inline-flex items-center gap-2"
             >
-              <Send className="w-4 h-4 text-slate-600" />
-              <span>GỬI ĐỀ NGHỊ</span>
+              <Mail className="w-4 h-4 text-slate-600" />
+              <span>TRAO ĐỔI VỚI ĐỘI ĐIỀU PHỐI</span>
             </button>
           </div>
 
@@ -173,7 +154,7 @@ export default function PartnershipHubPage() {
           <div className="p-3.5 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-start gap-2.5 max-w-3xl mt-2">
             <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
             <span className="leading-snug">
-              <strong>Nguyên tắc minh bạch & độc lập:</strong> CHUOICUNGUNG.COM không gom tất cả thành danh xưng mơ hồ &ldquo;Đối tác chiến lược&rdquo;. Mọi quan hệ đều được phân định rạch ròi theo hợp đồng chuyên biệt. Tài trợ hoặc hợp tác thương mại <strong>hoàn toàn không can thiệp, không làm thay đổi kết quả matching, xếp hạng hoặc quy trình xác minh KYC</strong> của nhà cung ứng.
+              <strong>Nguyên tắc minh bạch:</strong> CHUOICUNGUNG.COM không gom tất cả thành danh xưng mơ hồ &ldquo;Đối tác chiến lược&rdquo;. Mọi quan hệ đều được phân định rạch ròi theo hợp đồng chuyên biệt, quyền lợi bàn giao và chuẩn mực hạch toán tài chính.
             </span>
           </div>
         </div>
@@ -598,6 +579,6 @@ export default function PartnershipHubPage() {
         </section>
 
       </div>
-    </main>
+    </div>
   );
 }

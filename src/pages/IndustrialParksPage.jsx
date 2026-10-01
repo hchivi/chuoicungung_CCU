@@ -303,11 +303,6 @@ export default function IndustrialParksPage() {
 
       </section>
 
-          </div>
-        </div>
-
-      </section>
-
       {/* ========================================================================= */}
       {/* 2. ECOSYSTEM MACRO METRIC BANNER (Section 8, 9 - Không số liệu BĐS)       */}
       {/* ========================================================================= */}

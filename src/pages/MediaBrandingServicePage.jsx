@@ -40,28 +40,12 @@ export default function MediaBrandingServicePage() {
 
   // SEO Setup (Section 16 Spec 15.txt)
   useEffect(() => {
-    document.title = 'Truyen Thong Doanh Nghiep | CHUOICUNGUNG.COM';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Chuẩn hóa hồ sơ năng lực, video giới thiệu 1 phút, ảnh thực tế nhà xưởng và nội dung catalogue để doanh nghiệp sử dụng trên website và trong các chương trình kết nối.';
-
-    let canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      canonicalTag = document.createElement('link');
-      canonicalTag.rel = 'canonical';
-      document.head.appendChild(canonicalTag);
-    }
-    canonicalTag.setAttribute('href', 'https://chuoicungung.com/dich-vu/truyen-thong-doanh-nghiep');
+    document.title = 'Hồ Sơ, Video & Truyền Thông Doanh Nghiệp | CHUOICUNGUNG.COM';
 
     const schemaData = {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Truyen Thong Doanh Nghiep | CHUOICUNGUNG.COM",
+      "name": "Hồ Sơ, Video & Truyền Thông Doanh Nghiệp B2B",
       "description": "Chuẩn hóa hồ sơ năng lực, video giới thiệu 1 phút, ảnh thực tế nhà xưởng và nội dung catalogue để doanh nghiệp sử dụng trên website và trong các chương trình kết nối.",
       "provider": {
         "@type": "Organization",
@@ -96,7 +80,7 @@ export default function MediaBrandingServicePage() {
   const allReviewed = Object.values(simReviewedItems).every(Boolean);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* SECTION 02: HERO (SPEC 15.TXT)                                            */}
@@ -127,7 +111,7 @@ export default function MediaBrandingServicePage() {
             </div>
 
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight leading-tight text-white">
-              Truyen Thong Doanh Nghiep
+              GIỚI THIỆU RÕ NĂNG LỰC ĐỂ NGƯỜI MUA DỄ TÌM HIỂU VÀ LIÊN HỆ
             </h1>
 
             <p className="text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed font-normal">
@@ -146,18 +130,18 @@ export default function MediaBrandingServicePage() {
             <div className="flex flex-wrap items-center gap-3 pt-4">
               <Link
                 to="/yeu-cau-dich-vu?service=truyen-thong-doanh-nghiep"
-                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition transform active:scale-95 font-heading cursor-pointer"
+                className="inline-flex items-center space-x-2 px-6 py-3 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-500/25 transition transform active:scale-95 font-heading"
               >
-                <span>YÊU CẦU TƯ VẤN</span>
+                <span>NHẬN TƯ VẤN NỘI DUNG</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
 
-              <a
-                href="#quy-trinh"
-                className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/10 text-xs sm:text-sm font-semibold transition font-heading cursor-pointer"
+              <button
+                onClick={scrollToDeliverables}
+                className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white border border-white/10 text-xs sm:text-sm font-semibold transition font-heading"
               >
-                <span>XEM QUY TRÌNH</span>
-              </a>
+                <span>XEM HẠNG MỤC BÀN GIAO</span>
+              </button>
             </div>
 
             {/* Core Anti-Ad Disclaimer */}
@@ -618,7 +602,7 @@ export default function MediaBrandingServicePage() {
       {/* ========================================================================= */}
       {/* SECTION 07 & 08: WORKFLOW SẢN XUẤT & QUY TRÌNH DUYỆT (SPEC 15.TXT)        */}
       {/* ========================================================================= */}
-      <section id="quy-trinh" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 scroll-mt-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
         
         <div className="space-y-2 max-w-3xl">
           <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#0052cc] uppercase tracking-wider font-heading">
@@ -912,6 +896,6 @@ export default function MediaBrandingServicePage() {
         </div>
       </section>
 
-    </main>
+    </div>
   );
 }

@@ -74,7 +74,7 @@ export default function ProgramDetailPage() {
       title: program.title
     });
 
-    // Document Title & Meta Description & Canonical
+    // Document Title & Meta Description
     document.title = `${program.title} | CHUOICUNGUNG.COM`;
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
@@ -83,14 +83,6 @@ export default function ProgramDetailPage() {
         `${program.title} kết nối doanh nghiệp theo nhóm nhu cầu ${program.needGroup?.slice(0, 3).join(', ') || program.industry} tại ${program.provinceName || program.location}. Xem đối tượng phù hợp, hình thức tham gia, lịch trình và thông tin đăng ký.`
       );
     }
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `https://chuoicungung.com/chuong-trinh/${program.slug || program.id}`;
 
     // Dynamic Schema.org Event & Breadcrumb
     const schemaScriptId = 'program-jsonld-schema';
@@ -250,7 +242,7 @@ export default function ProgramDetailPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
       
       {/* ========================================================
           1. BREADCRUMB & TOP NAV
@@ -395,13 +387,7 @@ export default function ProgramDetailPage() {
                   </span>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <Link
-                    to={`/chuong-trinh/${program.slug || program.id}/dang-ky`}
-                    className="px-5 py-2 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-sm transition cursor-pointer"
-                  >
-                    Đăng ký tham dự
-                  </Link>
+                <div className="flex items-center gap-2">
                   <button
                     onClick={handleBuyerReg}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition cursor-pointer"
@@ -1821,7 +1807,7 @@ export default function ProgramDetailPage() {
         </div>
       )}
 
-    </main>
+    </div>
   );
 }
 

@@ -58,7 +58,7 @@ export default function CataloguesPage() {
 
   // SEO & Native DOM Metadata (Section 51 & 52)
   useEffect(() => {
-    document.title = 'Catalogue công nghiệp | CHUOICUNGUNG.COM';
+    document.title = 'Catalogue Nhà Cung Ứng | CHUOICUNGUNG.COM';
     
     // Meta Description
     let metaDesc = document.querySelector('meta[name="description"]');
@@ -170,7 +170,7 @@ export default function CataloguesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
       
       {/* 1. Breadcrumbs */}
       <div className="bg-white border-b border-slate-200">
@@ -199,20 +199,17 @@ export default function CataloguesPage() {
               <span>Hạ Tầng Ấn Phẩm & Hồ Sơ Số Chuỗi Cung Ứng</span>
             </div>
 
-            {/* H1 Title */}
+            {/* H1 Title (Section 2) */}
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading leading-tight tracking-tight text-white">
-              Catalogue công nghiệp
+              CATALOGUE NHÀ CUNG ỨNG THEO NHU CẦU DOANH NGHIỆP
             </h1>
-            <p className="text-sm font-semibold text-blue-200 uppercase tracking-wide">
-              Ấn phẩm nhà cung ứng theo nhu cầu doanh nghiệp
-            </p>
 
-            {/* Subtitle */}
+            {/* Subtitle (Section 2) */}
             <p className="text-sm sm:text-base md:text-lg text-blue-100 leading-relaxed max-w-2xl font-normal">
               Tìm hồ sơ nhà cung ứng theo chuyên mục, địa bàn hoặc chương trình kết nối. Mỗi ấn phẩm có thời điểm phát hành và mã QR dẫn trực tiếp về thông tin doanh nghiệp đang được cập nhật trên CHUOICUNGUNG.COM.
             </p>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons (Section 2) */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
               {/* Primary CTA */}
               <button
@@ -225,13 +222,14 @@ export default function CataloguesPage() {
               </button>
 
               {/* Secondary CTA */}
-              <Link
-                to="/nha-cung-ung"
+              <button
+                onClick={() => handleOpenParticipation()}
+                type="button"
                 className="py-3 px-6 bg-white/15 hover:bg-white/25 active:bg-white/30 border border-white/30 text-white font-bold text-xs sm:text-sm rounded-xl transition flex items-center space-x-2 backdrop-blur-xs cursor-pointer"
               >
-                <Search className="w-4 h-4 text-amber-300" />
-                <span>TÌM NHÀ CUNG ỨNG</span>
-              </Link>
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>ĐĂNG KÝ GIỚI THIỆU DOANH NGHIỆP</span>
+              </button>
             </div>
 
           </div>
@@ -301,9 +299,7 @@ export default function CataloguesPage() {
           
           <div className="relative flex-1 w-full">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <label htmlFor="catalogue-search-input" className="sr-only">Tìm theo tên catalogue, chuyên mục, KCN, tỉnh thành</label>
             <input 
-              id="catalogue-search-input"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -401,52 +397,40 @@ export default function CataloguesPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
             
             {/* Category Dropdown */}
-            <div>
-              <label htmlFor="catalogue-category-select" className="sr-only">Chuyên mục ngành</label>
-              <select
-                id="catalogue-category-select"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-              >
-                <option value="ALL">Mọi chuyên mục ngành</option>
-                {uniqueCategories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-            </div>
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
+            >
+              <option value="ALL">Mọi chuyên mục ngành</option>
+              {uniqueCategories.map(cat => (
+                <option key={cat.id} value={cat.id}>{cat.name}</option>
+              ))}
+            </select>
 
             {/* Province Dropdown */}
-            <div>
-              <label htmlFor="catalogue-province-select" className="sr-only">Địa bàn / KCN</label>
-              <select
-                id="catalogue-province-select"
-                value={selectedProvince}
-                onChange={(e) => setSelectedProvince(e.target.value)}
-                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-              >
-                <option value="ALL">Mọi địa bàn / KCN</option>
-                {uniqueProvinces.map(p => (
-                  <option key={p.id} value={p.id}>{p.name}</option>
-                ))}
-              </select>
-            </div>
+            <select
+              value={selectedProvince}
+              onChange={(e) => setSelectedProvince(e.target.value)}
+              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
+            >
+              <option value="ALL">Mọi địa bàn / KCN</option>
+              {uniqueProvinces.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
 
             {/* Format Dropdown (Online / Print / Both) */}
-            <div>
-              <label htmlFor="catalogue-format-select" className="sr-only">Định dạng phát hành</label>
-              <select
-                id="catalogue-format-select"
-                value={selectedFormat}
-                onChange={(e) => setSelectedFormat(e.target.value)}
-                className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-              >
-                <option value="ALL">Mọi định dạng phát hành</option>
-                <option value="ONLINE_ONLY">Bản số trực tuyến</option>
-                <option value="PRINT_CONFIRMED">Bản in phát tay</option>
-                <option value="BOTH">Song hành (Số & Bản in)</option>
-              </select>
-            </div>
+            <select
+              value={selectedFormat}
+              onChange={(e) => setSelectedFormat(e.target.value)}
+              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
+            >
+              <option value="ALL">Mọi định dạng phát hành</option>
+              <option value="ONLINE_ONLY">Bản số trực tuyến</option>
+              <option value="PRINT_CONFIRMED">Bản in phát tay</option>
+              <option value="BOTH">Song hành (Số & Bản in)</option>
+            </select>
 
             {/* Total Results Summary */}
             <div className="p-2.5 bg-slate-100/80 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center justify-between">
@@ -461,7 +445,7 @@ export default function CataloguesPage() {
       </div>
 
       {/* 5. Catalogue Cards Listing Grid (Section 9) */}
-      <div id="danh-sach-catalogue" className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
         
         {filteredCatalogues.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -502,7 +486,7 @@ export default function CataloguesPage() {
           </div>
         )}
 
-      </div>
+      </main>
 
       {/* 6. Block: THAM GIA ẤN PHẨM TIẾP THEO (Section 25 Spec 30.txt) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-16">
@@ -668,6 +652,6 @@ export default function CataloguesPage() {
         catalogue={selectedCatalogueForViewer}
       />
 
-    </main>
+    </div>
   );
 }

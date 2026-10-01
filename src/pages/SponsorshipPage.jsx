@@ -41,25 +41,16 @@ export default function SponsorshipPage() {
   const typesRef = useRef(null);
   const opportunitiesRef = useRef(null);
 
-  // SEO & Head title (Section 55 & URL 116)
+  // SEO & Head title (Section 55)
   useEffect(() => {
-    document.title = "Tài trợ | CHUOICUNGUNG.COM";
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
+    document.title = "Tài Trợ Chương Trình & Hoạt Động Doanh Nghiệp | CHUOICUNGUNG.COM";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Đồng hành cùng chương trình kết nối, catalogue, nội dung, thư viện ảnh và vật phẩm doanh nghiệp với phạm vi, quyền lợi, thời hạn và báo cáo được thống nhất rõ.'
+      );
     }
-    canonical.href = 'https://chuoicungung.com/tai-tro';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Chương trình tài trợ và đồng hành B2B tại CHUOICUNGUNG.COM: minh bạch phạm vi, tài trợ không ảnh hưởng matching, xếp hạng hay kết quả tìm kiếm.';
 
     // Structured Data JSON-LD
     let scriptTag = document.getElementById('sponsorship-jsonld');
@@ -247,7 +238,7 @@ export default function SponsorshipPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-slate-50 text-slate-800">
       {/* ---------------------------------------------------------------------- */}
       {/* BREADCRUMB & CONTEXT BANNER */}
       {/* ---------------------------------------------------------------------- */}
@@ -274,12 +265,9 @@ export default function SponsorshipPage() {
               <span>Chương Trình Đồng Hành B2B Minh Bạch</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-2 leading-tight">
-              Tài trợ
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-6 leading-tight">
+              ĐỒNG HÀNH CÙNG CHƯƠNG TRÌNH PHỤC VỤ DOANH NGHIỆP
             </h1>
-            <p className="text-sm font-semibold text-blue-300 uppercase tracking-wide mb-6">
-              Đồng hành cùng chương trình phục vụ doanh nghiệp
-            </p>
 
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed mb-8">
               Lựa chọn chương trình, chuyên mục hoặc hoạt động phù hợp để đồng hành cùng <strong>CHUOICUNGUNG.COM</strong>. Mỗi gói thống nhất phạm vi hiện diện, nội dung, thời hạn và báo cáo quyền lợi đã bàn giao.
@@ -287,19 +275,19 @@ export default function SponsorshipPage() {
 
             <div className="flex flex-wrap items-center gap-4">
               <button
-                onClick={() => typesRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center gap-2 cursor-pointer"
+                onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 transition flex items-center gap-2"
               >
-                <span>XEM NGUYÊN TẮC</span>
-                <ChevronRight className="w-4 h-4" />
+                <Send className="w-4 h-4" />
+                <span>GỬI ĐỀ XUẤT TÀI TRỢ</span>
               </button>
 
               <button
-                onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                className="px-6 py-3.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold rounded-xl transition flex items-center gap-2 cursor-pointer"
+                onClick={() => typesRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                className="px-6 py-3.5 bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 font-semibold rounded-xl transition flex items-center gap-2"
               >
-                <Send className="w-4 h-4 text-slate-400" />
-                <span>GỬI ĐỀ NGHỊ</span>
+                <span>XEM CÁC HÌNH THỨC ĐỒNG HÀNH</span>
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
@@ -1249,6 +1237,6 @@ export default function SponsorshipPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

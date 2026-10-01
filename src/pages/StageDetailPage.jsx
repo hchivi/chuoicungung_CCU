@@ -76,25 +76,9 @@ export default function StageDetailPage() {
   };
   const theme = stageThemeMap[currentStage.id] || stageThemeMap[1];
 
-  // SEO & Schema (Section 51, 52, 53, 54 & URLs 090-095)
+  // SEO & Schema (Section 51, 52, 53, 54)
   useEffect(() => {
-    document.title = `${currentStage.name} trong vòng đời nhà máy | CHUOICUNGUNG.COM`;
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `https://chuoicungung.com/giai-doan/${currentStage.slug}`;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = `Tìm hiểu giai đoạn ${currentStage.name} trong vòng đời nhà máy: các nhóm nhu cầu, bên tham gia, sản phẩm, dịch vụ và nhà cung ứng phù hợp.`;
+    document.title = `${currentStage.name} – Nhu Cầu & Nguồn Cung | CHUOICUNGUNG.COM`;
 
     const schemaData = {
       "@context": "https://schema.org",
@@ -151,7 +135,7 @@ export default function StageDetailPage() {
   }, [currentStage]);
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 antialiased pb-24 overflow-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-800 antialiased pb-24 overflow-hidden">
       {/* 1. HERO SECTION (Section 9) */}
       <section className="bg-white border-b border-slate-200 pt-8 pb-10 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
@@ -179,7 +163,7 @@ export default function StageDetailPage() {
               </div>
 
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-                Giai đoạn {currentStage.name}
+                GIAI ĐOẠN 0{currentStage.id} — {currentStage.name.toUpperCase()}
               </h1>
 
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -197,20 +181,20 @@ export default function StageDetailPage() {
 
             {/* CTA Group */}
             <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
-              <a
-                href="#nhom-nhu-cau"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-colors text-center cursor-pointer"
+              <Link
+                to={`/dang-nhu-cau?stageId=${currentStage.id}&needGroupId=${selectedNeedGroup.phaseId}`}
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-colors text-center"
               >
-                <span>XEM NHU CẦU THEO GIAI ĐOẠN</span>
+                <span>TÔI ĐANG CÓ NHU CẦU</span>
                 <ArrowRight className="w-4 h-4" />
-              </a>
+              </Link>
 
               <Link
-                to={`/nha-cung-ung?stage=${currentStage.id}`}
+                to="/ban-do-6-giai-doan"
                 className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-300 transition-colors text-center"
               >
-                <Factory className="w-4 h-4 text-slate-500" />
-                <span>TÌM ĐƠN VỊ PHÙ HỢP</span>
+                <Compass className="w-4 h-4 text-slate-500" />
+                <span>XEM BẢN ĐỒ 6 GIAI ĐOẠN</span>
               </Link>
             </div>
           </div>
@@ -250,7 +234,7 @@ export default function StageDetailPage() {
       {/* MAIN CONTAINER */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
         {/* 3. KHỐI 3 NHÓM CÔNG VIỆC CỐT LÕI (Section 11, 12) */}
-        <section id="nhom-nhu-cau" className="space-y-4">
+        <section className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Cấu trúc công việc</span>
@@ -548,6 +532,6 @@ export default function StageDetailPage() {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

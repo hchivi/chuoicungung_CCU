@@ -63,29 +63,12 @@ export default function RemotePresenceServicePage() {
 
   // SEO Setup (Section 65)
   useEffect(() => {
-    document.title = 'Hien Dien Tu Xa | CHUOICUNGUNG.COM';
-
-    // Meta description & canonical
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Dịch vụ hiện diện từ xa tại sự kiện chuỗi cung ứng: giới thiệu hồ sơ năng lực, video, catalogue, mẫu thử theo kịch bản được duyệt khi doanh nghiệp chưa thể có mặt trực tiếp.';
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = 'https://chuoicungung.com/dich-vu/hien-dien-tu-xa';
+    document.title = 'Hiện Diện Từ Xa Tại Chương Trình | CHUOICUNGUNG.COM';
 
     const schemaData = {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Hien Dien Tu Xa",
+      "name": "Hiện Diện Từ Xa Tại Sự Kiện Chuỗi Cung Ứng",
       "description": "Giới thiệu hồ sơ, video, catalogue hoặc mẫu sản phẩm tại chương trình phù hợp khi doanh nghiệp chưa thể có mặt trực tiếp; phạm vi đại diện và quyền lợi được thống nhất rõ.",
       "provider": {
         "@type": "Organization",
@@ -191,20 +174,9 @@ export default function RemotePresenceServicePage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 antialiased">
-      {/* Breadcrumbs */}
-      <div className="bg-slate-900 border-b border-slate-800 text-xs text-slate-400 py-3 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto flex items-center gap-2">
-          <Link to="/" className="hover:text-white transition-colors">Trang chủ</Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-          <Link to="/dich-vu" className="hover:text-white transition-colors">Dịch vụ B2B</Link>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-          <span className="text-blue-400 font-medium">Hien Dien Tu Xa</span>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-slate-50 text-slate-800 antialiased">
       {/* 1. HERO SECTION (Section 2) */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-850 to-blue-950 text-white pt-16 pb-20 px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-850 to-blue-950 text-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold uppercase tracking-wider mb-6">
@@ -213,30 +185,27 @@ export default function RemotePresenceServicePage() {
           </div>
           
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white max-w-4xl leading-tight">
-            Hien Dien Tu Xa
+            GIỚI THIỆU DOANH NGHIỆP TẠI CHƯƠNG TRÌNH DÙ BẠN CHƯA THỂ CÓ MẶT
           </h1>
-          <p className="mt-3 text-lg sm:text-xl font-bold text-blue-200 uppercase tracking-wide">
-            Giới thiệu doanh nghiệp tại chương trình dù bạn chưa thể có mặt
-          </p>
           
-          <p className="mt-4 text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed">
+          <p className="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
             Đưa hồ sơ, video, catalogue hoặc mẫu sản phẩm của doanh nghiệp đến chương trình phù hợp. Đội điều phối giới thiệu nội dung đã được duyệt, ghi nhận yêu cầu liên hệ và chuyển lại đầu việc theo phạm vi thỏa thuận.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
             <a
-              href="#dang-ky-hien-dien"
+              href="#danh-sach-chuong-trinh"
               className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-base shadow-lg shadow-blue-600/30 transition-all gap-2"
             >
-              <span>Yêu cầu tư vấn</span>
-              <Send className="w-4 h-4 text-blue-200" />
+              <span>Tìm Chương Trình Có Thể Tham Gia Từ Xa</span>
+              <ChevronRight className="w-5 h-5" />
             </a>
             <a
-              href="#quy-trinh"
+              href="#dang-ky-hien-dien"
               className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-base transition-all gap-2"
             >
-              <span>Xem quy trình</span>
-              <ChevronRight className="w-5 h-5" />
+              <span>Gửi Hồ Sơ Để Được Tư Vấn</span>
+              <Send className="w-4 h-4 text-blue-400" />
             </a>
           </div>
 
@@ -411,7 +380,7 @@ export default function RemotePresenceServicePage() {
       </section>
 
       {/* 4. PHẦN VIỆC ĐƯỢC THỰC HIỆN & PHẠM VI ĐẠI DIỆN (Section 10, 11, 12, 13) */}
-      <section id="quy-trinh" className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* Cột trái: Phần việc được thực hiện */}
           <div>
@@ -557,11 +526,10 @@ export default function RemotePresenceServicePage() {
 
               {/* 1. Chọn chương trình */}
               <div>
-                <label htmlFor="remote-program-select" className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
                   1. Chương trình tham gia từ xa <span className="text-rose-500">*</span>
                 </label>
                 <select
-                  id="remote-program-select"
                   value={selectedProgramId}
                   onChange={(e) => setSelectedProgramId(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -577,11 +545,10 @@ export default function RemotePresenceServicePage() {
               {/* 2. Thông tin doanh nghiệp */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="remote-company-name" className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
                     2. Tên doanh nghiệp <span className="text-rose-500">*</span>
                   </label>
                   <input
-                    id="remote-company-name"
                     type="text"
                     required
                     placeholder="VD: Công ty Cơ khí Chính xác ABC"
@@ -591,11 +558,10 @@ export default function RemotePresenceServicePage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="remote-tax-code" className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                  <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
                     Mã số thuế (Tùy chọn)
                   </label>
                   <input
-                    id="remote-tax-code"
                     type="text"
                     placeholder="VD: 0312345678"
                     value={taxCode}
@@ -608,13 +574,12 @@ export default function RemotePresenceServicePage() {
               {/* 3. Sản phẩm trọng tâm (1-3 sản phẩm) */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label htmlFor="remote-products-text" className="block text-xs font-bold text-slate-700 uppercase">
+                  <label className="block text-xs font-bold text-slate-700 uppercase">
                     3. Sản phẩm / Năng lực cốt lõi muốn giới thiệu (Tối đa 3) <span className="text-rose-500">*</span>
                   </label>
                   <span className="text-xs text-slate-500">Mỗi sản phẩm cách nhau bởi dấu phẩy hoặc xuống dòng</span>
                 </div>
                 <textarea
-                  id="remote-products-text"
                   rows={2}
                   required
                   placeholder="VD: Gia công đồ gá Jig kiểm tra; Tiện chi tiết nhôm chính xác; Đúc áp lực vỏ động cơ"
@@ -646,9 +611,8 @@ export default function RemotePresenceServicePage() {
                   <div className="mt-4 pt-4 border-t border-slate-200 space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div className="sm:col-span-2">
-                        <label htmlFor="remote-sample-details" className="block text-xs font-semibold text-slate-600 mb-1">Mô tả mẫu sản phẩm</label>
+                        <label className="block text-xs font-semibold text-slate-600 mb-1">Mô tả mẫu sản phẩm</label>
                         <input
-                          id="remote-sample-details"
                           type="text"
                           placeholder="VD: 02 chi tiết trục tiện mẫu kích thước 15x5cm"
                           value={sampleDetails}
@@ -657,9 +621,8 @@ export default function RemotePresenceServicePage() {
                         />
                       </div>
                       <div>
-                        <label htmlFor="remote-sample-quantity" className="block text-xs font-semibold text-slate-600 mb-1">Số lượng mẫu</label>
+                        <label className="block text-xs font-semibold text-slate-600 mb-1">Số lượng mẫu</label>
                         <input
-                          id="remote-sample-quantity"
                           type="number"
                           min={1}
                           max={5}
@@ -671,9 +634,8 @@ export default function RemotePresenceServicePage() {
                     </div>
 
                     <div>
-                      <label htmlFor="remote-sample-return" className="block text-xs font-semibold text-slate-600 mb-1">Phương án xử lý mẫu sau sự kiện</label>
+                      <label className="block text-xs font-semibold text-slate-600 mb-1">Phương án xử lý mẫu sau sự kiện</label>
                       <select
-                        id="remote-sample-return"
                         value={returnOption}
                         onChange={(e) => setReturnOption(e.target.value)}
                         className="w-full px-3 py-2 bg-white border border-slate-300 rounded text-xs text-slate-800"
@@ -694,14 +656,13 @@ export default function RemotePresenceServicePage() {
 
               {/* 5. Đầu mối phản hồi của doanh nghiệp */}
               <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
-                <div className="block text-xs font-bold text-slate-800 uppercase mb-3">
+                <label className="block text-xs font-bold text-slate-800 uppercase mb-3">
                   5. Đầu Mối Tiếp Nhận Câu Hỏi & Báo Giá (Responder) <span className="text-rose-500">*</span>
-                </div>
+                </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="remote-responder-name" className="block text-xs font-semibold text-slate-600 mb-1">Họ tên người phụ trách</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Họ tên người phụ trách</label>
                     <input
-                      id="remote-responder-name"
                       type="text"
                       required
                       placeholder="VD: Trần Văn Minh"
@@ -711,9 +672,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="remote-responder-role" className="block text-xs font-semibold text-slate-600 mb-1">Chức vụ / Vai trò</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Chức vụ / Vai trò</label>
                     <input
-                      id="remote-responder-role"
                       type="text"
                       placeholder="VD: Giám đốc Kỹ thuật / Trưởng phòng Kinh doanh"
                       value={responderRole}
@@ -722,9 +682,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="remote-responder-phone" className="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại liên hệ</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại liên hệ</label>
                     <input
-                      id="remote-responder-phone"
                       type="tel"
                       required
                       placeholder="VD: 0912 345 678"
@@ -734,9 +693,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="remote-responder-email" className="block text-xs font-semibold text-slate-600 mb-1">Email nhận câu hỏi Buyer</label>
+                    <label className="block text-xs font-semibold text-slate-600 mb-1">Email nhận câu hỏi Buyer</label>
                     <input
-                      id="remote-responder-email"
                       type="email"
                       required
                       placeholder="VD: minh.tv@congty.com"
@@ -748,9 +706,8 @@ export default function RemotePresenceServicePage() {
                 </div>
 
                 <div className="mt-3 flex items-center justify-between text-xs text-slate-600">
-                  <label htmlFor="remote-sla-hours">Thời gian phản hồi cam kết (SLA):</label>
+                  <span>Thời gian phản hồi cam kết (SLA):</span>
                   <select
-                    id="remote-sla-hours"
                     value={slaHours}
                     onChange={(e) => setSlaHours(Number(e.target.value))}
                     className="bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
@@ -764,18 +721,16 @@ export default function RemotePresenceServicePage() {
 
               {/* 6. Phạm vi đại diện */}
               <div>
-                <span className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
                   6. Phạm vi cho phép điều phối viên đại diện (Section 12)
-                </span>
+                </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   {Object.values(REPRESENTATION_SCOPE_FLAGS).map((scope) => (
                     <label
                       key={scope.key}
-                      htmlFor={`scope-${scope.key}`}
                       className="flex items-start gap-2 p-2.5 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 cursor-pointer"
                     >
                       <input
-                        id={`scope-${scope.key}`}
                         type="checkbox"
                         checked={selectedScopes.includes(scope.key)}
                         onChange={() => handleScopeToggle(scope.key)}
@@ -792,9 +747,8 @@ export default function RemotePresenceServicePage() {
 
               {/* 7. Đồng ý điều khoản & Submit */}
               <div className="pt-4 border-t border-slate-200">
-                <label htmlFor="remote-consent-check" className="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
+                <label className="flex items-start gap-2 text-xs text-slate-700 cursor-pointer">
                   <input
-                    id="remote-consent-check"
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
@@ -891,9 +845,8 @@ export default function RemotePresenceServicePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="interest-org-input" className="block text-xs font-semibold text-slate-700 mb-1">Tên doanh nghiệp</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Tên doanh nghiệp</label>
                   <input
-                    id="interest-org-input"
                     type="text"
                     required
                     placeholder="VD: Công ty Cơ khí Việt Hàn"
@@ -904,9 +857,8 @@ export default function RemotePresenceServicePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="interest-contact-input" className="block text-xs font-semibold text-slate-700 mb-1">Người liên hệ</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Người liên hệ</label>
                   <input
-                    id="interest-contact-input"
                     type="text"
                     required
                     placeholder="VD: Nguyễn Văn Nam"
@@ -917,9 +869,8 @@ export default function RemotePresenceServicePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="interest-phone-input" className="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại Zalo</label>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại Zalo</label>
                   <input
-                    id="interest-phone-input"
                     type="tel"
                     required
                     placeholder="VD: 0987 654 321"
@@ -942,6 +893,6 @@ export default function RemotePresenceServicePage() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

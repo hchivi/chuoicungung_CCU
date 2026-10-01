@@ -25,28 +25,12 @@ export default function MatchmakingServicePage() {
 
   // SEO Setup (Section 15 Spec 14.txt)
   useEffect(() => {
-    document.title = 'To Chuc Ket Noi | CHUOICUNGUNG.COM';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Dịch vụ tổ chức chương trình kết nối doanh nghiệp B2B theo nhu cầu thật: tiếp nhận đề bài, sàng lọc đối tác cung ứng, tổ chức gặp gỡ 1:1 và theo dõi chuyển giao kết quả.';
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = 'https://chuoicungung.com/dich-vu/to-chuc-ket-noi';
+    document.title = 'Tổ Chức Kết Nối Doanh Nghiệp | CHUOICUNGUNG.COM';
 
     const schemaData = {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "To Chuc Ket Noi",
+      "name": "Tổ Chức Chương Trình Kết Nối Doanh Nghiệp Theo Nhu Cầu Thật",
       "description": "Dịch vụ tiếp nhận nhu cầu, tìm nhà cung ứng, tổ chức cuộc gặp và theo dõi đầu việc cho nhà máy, Hội và KCN.",
       "provider": {
         "@type": "Organization",
@@ -72,7 +56,7 @@ export default function MatchmakingServicePage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* SECTION 02: HERO (SPEC 14.TXT)                                            */}
@@ -92,7 +76,7 @@ export default function MatchmakingServicePage() {
             <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
             <Link to="/dich-vu" className="hover:text-white transition">Trung Tâm Dịch Vụ</Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
-            <span className="text-blue-400 font-bold">To Chuc Ket Noi</span>
+            <span className="text-blue-400 font-bold">Tổ Chức Kết Nối B2B</span>
           </nav>
 
           <div className="max-w-3xl space-y-4">
@@ -103,11 +87,8 @@ export default function MatchmakingServicePage() {
             </div>
 
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight leading-tight text-white">
-              To Chuc Ket Noi
+              TỔ CHỨC CHƯƠNG TRÌNH KẾT NỐI THEO NHU CẦU DOANH NGHIỆP
             </h1>
-            <p className="mt-2 text-lg sm:text-xl font-bold text-blue-200 uppercase tracking-wide">
-              Tổ chức chương trình kết nối theo nhu cầu doanh nghiệp
-            </p>
 
             <p className="text-xs sm:text-sm md:text-base text-slate-300 leading-relaxed font-normal">
               CHUOICUNGUNG.COM phối hợp cùng đơn vị tổ chức để tiếp nhận nhu cầu, chuẩn bị hồ sơ, sắp xếp cuộc gặp và theo dõi đầu việc sau chương trình. Phạm vi triển khai được thống nhất theo mục tiêu, địa bàn và nguồn lực của từng hoạt động.
@@ -129,16 +110,16 @@ export default function MatchmakingServicePage() {
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/30 transition transform hover:-translate-y-0.5"
               >
                 <Send className="w-4 h-4" />
-                <span>YÊU CẦU TƯ VẤN</span>
+                <span>GỬI ĐỀ BÀI CHƯƠNG TRÌNH</span>
               </Link>
 
-              <a
-                href="#quy-trinh"
+              <Link
+                to="/chuong-trinh"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-bold transition"
               >
                 <Calendar className="w-4 h-4 text-blue-300" />
-                <span>XEM QUY TRÌNH</span>
-              </a>
+                <span>XEM CHƯƠNG TRÌNH ĐANG MỞ</span>
+              </Link>
             </div>
 
           </div>
@@ -161,7 +142,7 @@ export default function MatchmakingServicePage() {
       {/* ========================================================================= */}
       {/* SECTION 03: HÌNH THỨC TRIỂN KHAI (4 CARDS - SPEC 14.TXT)                 */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20 space-y-12">
         
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6">
           <div className="space-y-1.5">
@@ -232,7 +213,7 @@ export default function MatchmakingServicePage() {
         {/* ======================================================================= */}
         {/* SECTION 04 & 11: QUY TRÌNH DỊCH VỤ 3 GIAI ĐOẠN & VAI TRÒ AI            */}
         {/* ======================================================================= */}
-        <div id="quy-trinh" className="space-y-6">
+        <div className="space-y-6">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="px-3 py-1 bg-blue-100 text-blue-800 text-[10px] font-bold rounded-full uppercase tracking-wider">
               Khép kín vòng đời giao thương
@@ -527,8 +508,8 @@ export default function MatchmakingServicePage() {
           </div>
         </div>
 
-      </div>
+      </main>
 
-    </main>
+    </div>
   );
 }

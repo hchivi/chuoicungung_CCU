@@ -257,11 +257,6 @@ export default function AssociationsPage() {
 
       </section>
 
-          </div>
-        </div>
-
-      </section>
-
       {/* ========================================================================= */}
       {/* 2. STATS BAR (REAL DATA SOURCE COMPLIANT - SECTION 7 & 14) */}
       {/* ========================================================================= */}

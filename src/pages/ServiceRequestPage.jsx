@@ -205,7 +205,7 @@ export default function ServiceRequestPage() {
 
   // SEO Setup (Section 23 Spec 17.txt)
   useEffect(() => {
-    document.title = 'Yêu cầu dịch vụ | CHUOICUNGUNG.COM';
+    document.title = 'Gửi Yêu Cầu Dịch Vụ | CHUOICUNGUNG.COM';
     
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
@@ -382,7 +382,7 @@ export default function ServiceRequestPage() {
   const currentServiceMeta = SERVICE_ENGINE_TYPES[formData.serviceType] || SERVICE_ENGINE_TYPES.TO_CHUC_KET_NOI;
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-28 antialiased selection:bg-[#0052cc] selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-28 antialiased selection:bg-[#0052cc] selection:text-white overflow-x-hidden">
       
       {/* ==================================================================== */}
       {/* HERO SECTION (SECTION 2 SPEC 17.TXT) */}
@@ -404,7 +404,7 @@ export default function ServiceRequestPage() {
 
             {/* Exact H1 & Subtitle per Section 2 Spec 17.txt */}
             <h1 className="text-2xl sm:text-4xl font-black font-heading tracking-tight text-white leading-tight">
-              Gửi yêu cầu dịch vụ
+              BẠN ĐANG CẦN TRIỂN KHAI CÔNG VIỆC GÌ?
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl font-normal">
@@ -501,7 +501,7 @@ export default function ServiceRequestPage() {
       {/* ==================================================================== */}
       {/* MAIN CONTAINER */}
       {/* ==================================================================== */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-6">
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-10 space-y-8">
 
           {/* SUCCESS CONFIRMATION SCREEN (SECTION 8 SPEC 17.TXT) */}
@@ -645,9 +645,8 @@ export default function ServiceRequestPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                       <div className="space-y-1.5">
-                        <label htmlFor="req-company-name" className="font-bold text-slate-700">Tên Doanh nghiệp / Tổ chức / Hiệp hội <span className="text-red-500">*</span></label>
+                        <label className="font-bold text-slate-700">Tên Doanh nghiệp / Tổ chức / Hiệp hội <span className="text-red-500">*</span></label>
                         <input
-                          id="req-company-name"
                           type="text"
                           required
                           value={formData.companyName}
@@ -658,9 +657,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label htmlFor="req-customer-name" className="font-bold text-slate-700">Họ và tên người liên hệ <span className="text-red-500">*</span></label>
+                        <label className="font-bold text-slate-700">Họ và tên người liên hệ <span className="text-red-500">*</span></label>
                         <input
-                          id="req-customer-name"
                           type="text"
                           required
                           value={formData.customerName}
@@ -671,9 +669,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label htmlFor="req-role-title" className="font-bold text-slate-700">Chức vụ (Optional)</label>
+                        <label className="font-bold text-slate-700">Chức vụ (Optional)</label>
                         <input
-                          id="req-role-title"
                           type="text"
                           value={formData.roleTitle}
                           onChange={e => setFormData({ ...formData, roleTitle: e.target.value })}
@@ -683,9 +680,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label htmlFor="req-phone" className="font-bold text-slate-700">Số điện thoại liên hệ <span className="text-red-500">*</span></label>
+                        <label className="font-bold text-slate-700">Số điện thoại liên hệ <span className="text-red-500">*</span></label>
                         <input
-                          id="req-phone"
                           type="tel"
                           required
                           value={formData.phone}
@@ -696,9 +692,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5 sm:col-span-2">
-                        <label htmlFor="req-email" className="font-bold text-slate-700">Email công việc <span className="text-red-500">*</span></label>
+                        <label className="font-bold text-slate-700">Email công việc <span className="text-red-500">*</span></label>
                         <input
-                          id="req-email"
                           type="email"
                           required
                           value={formData.email}
@@ -717,9 +712,8 @@ export default function ServiceRequestPage() {
                     </label>
 
                     <div className="space-y-1.5 text-xs">
-                      <label htmlFor="req-description" className="font-bold text-slate-700">Nội dung công việc cần triển khai <span className="text-red-500">*</span></label>
+                      <label className="font-bold text-slate-700">Nội dung công việc cần triển khai <span className="text-red-500">*</span></label>
                       <textarea
-                        id="req-description"
                         required
                         rows={3}
                         value={formData.description}
@@ -731,9 +725,8 @@ export default function ServiceRequestPage() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
                       <div className="space-y-1.5">
-                        <label htmlFor="req-location" className="font-bold text-slate-700">Địa bàn / Khu công nghiệp</label>
+                        <label className="font-bold text-slate-700">Địa bàn / Khu công nghiệp</label>
                         <input
-                          id="req-location"
                           type="text"
                           value={formData.location}
                           onChange={e => setFormData({ ...formData, location: e.target.value })}
@@ -743,9 +736,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label htmlFor="req-desired-date" className="font-bold text-slate-700">Thời gian mong muốn hoàn tất</label>
+                        <label className="font-bold text-slate-700">Thời gian mong muốn hoàn tất</label>
                         <input
-                          id="req-desired-date"
                           type="text"
                           value={formData.desiredDate}
                           onChange={e => setFormData({ ...formData, desiredDate: e.target.value })}
@@ -755,9 +747,8 @@ export default function ServiceRequestPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <label htmlFor="req-budget" className="font-bold text-slate-700">Ngân sách dự kiến (Optional)</label>
+                        <label className="font-bold text-slate-700">Ngân sách dự kiến (Optional)</label>
                         <input
-                          id="req-budget"
                           type="text"
                           value={formData.budget}
                           onChange={e => setFormData({ ...formData, budget: e.target.value })}
@@ -768,9 +759,8 @@ export default function ServiceRequestPage() {
                     </div>
 
                     <div className="space-y-1.5 text-xs">
-                      <label htmlFor="req-attached-files-note" className="font-bold text-slate-700">Tệp đính kèm / Link Google Drive (Optional)</label>
+                      <label className="font-bold text-slate-700">Tệp đính kèm / Link Google Drive (Optional)</label>
                       <input
-                        id="req-attached-files-note"
                         type="text"
                         value={formData.attachedFilesNote}
                         onChange={e => setFormData({ ...formData, attachedFilesNote: e.target.value })}
@@ -781,21 +771,11 @@ export default function ServiceRequestPage() {
                   </div>
 
                   {/* Button chuyển bước 2 */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        saveServiceRequestDraft(formData);
-                        alert('Đã lưu bản nháp yêu cầu dịch vụ vào trình duyệt.');
-                      }}
-                      className="py-2.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 transition cursor-pointer"
-                    >
-                      LƯU NHÁP
-                    </button>
+                  <div className="flex items-center justify-end pt-4 border-t border-slate-100">
                     <button
                       type="button"
                       onClick={handleNextToStep2}
-                      className="py-3 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2 cursor-pointer"
+                      className="py-3 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2"
                     >
                       <span>TIẾP TỤC: ĐẶC TẢ NGHIỆP VỤ</span>
                       <ArrowRight className="w-4 h-4" />
@@ -1336,41 +1316,28 @@ export default function ServiceRequestPage() {
                     <button
                       type="button"
                       onClick={() => setCurrentStep(2)}
-                      className="py-2.5 px-5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition cursor-pointer"
+                      className="py-2.5 px-5 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition"
                     >
                       ← Quay lại Bước 2
                     </button>
 
-                    <div className="flex items-center gap-2.5">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          saveServiceRequestDraft(formData);
-                          alert('Đã lưu bản nháp yêu cầu dịch vụ vào trình duyệt.');
-                        }}
-                        className="py-3 px-5 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 transition cursor-pointer"
-                      >
-                        LƯU NHÁP
-                      </button>
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="py-3 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2 disabled:opacity-50 cursor-pointer"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            <span>Đang tạo mã yêu cầu...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4" />
-                            <span>XÁC NHẬN GỬI</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="py-3 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 transition flex items-center gap-2 disabled:opacity-50"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Đang tạo mã yêu cầu...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>GỬI YÊU CẦU TƯ VẤN</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               )}
@@ -1379,7 +1346,7 @@ export default function ServiceRequestPage() {
           )}
 
         </div>
-      </div>
+      </main>
 
       {/* ==================================================================== */}
       {/* STICKY MOBILE CTA BAR (SECTION 22 SPEC 17.TXT) */}
@@ -1396,7 +1363,7 @@ export default function ServiceRequestPage() {
             <button
               type="button"
               onClick={handleNextToStep2}
-              className="py-2.5 px-5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-md transition cursor-pointer"
+              className="py-2.5 px-5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-md transition"
             >
               TIẾP TỤC BƯỚC 2 →
             </button>
@@ -1406,7 +1373,7 @@ export default function ServiceRequestPage() {
             <button
               type="button"
               onClick={handleNextToStep3}
-              className="py-2.5 px-5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-md transition cursor-pointer"
+              className="py-2.5 px-5 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-md transition"
             >
               XEM LẠI BƯỚC 3 →
             </button>
@@ -1417,14 +1384,14 @@ export default function ServiceRequestPage() {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="py-2.5 px-5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md transition cursor-pointer"
+              className="py-2.5 px-5 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md transition"
             >
-              XÁC NHẬN GỬI
+              GỬI YÊU CẦU TƯ VẤN
             </button>
           )}
         </div>
       )}
 
-    </main>
+    </div>
   );
 }

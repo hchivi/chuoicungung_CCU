@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Building2, Factory, ExternalLink, ChevronRight, Globe, Layers, MapPin, Users, ShoppingBag, Check,
@@ -12,25 +12,6 @@ export default function VietnamMapPage() {
   const { t, lang } = useLanguage();
   const [activeSelection, setActiveSelection] = useState({ type: 'region', name: 'Toàn quốc' });
   const [flyToTarget, setFlyToTarget] = useState(null);
-
-  useEffect(() => {
-    document.title = "Bản đồ Việt Nam | CHUOICUNGUNG.COM";
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute(
-        'content',
-        'Bản đồ hệ sinh thái chuỗi cung ứng Việt Nam: tích hợp 480+ khu công nghiệp, 14.237 nhà máy FDI và mạng lưới nhà cung ứng phụ trợ trên 34 tỉnh thành.'
-      );
-    }
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute('href', 'https://chuoicungung.com/ban-do-viet-nam');
-  }, []);
 
   // Full list of regions including "Toàn quốc"
   const allRegionsList = [
@@ -55,7 +36,7 @@ export default function VietnamMapPage() {
   };
 
   return (
-    <main className="space-y-6 sm:space-y-8 pb-20 pt-3 sm:pt-5 bg-[#F8FAFC] min-h-screen font-sans text-slate-900 selection:bg-[#0052cc] selection:text-white">
+    <div className="space-y-6 sm:space-y-8 pb-20 pt-3 sm:pt-5 bg-[#F8FAFC] min-h-screen font-sans text-slate-900 selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* 1. TOP MACRO COMMAND BAR & BREADCRUMB                                     */}
@@ -71,7 +52,7 @@ export default function VietnamMapPage() {
           <Link to="/khu-cong-nghiep" className="hover:text-blue-600 font-medium">Khu công nghiệp</Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
           <span className="text-blue-700 font-bold uppercase font-heading">
-            Bản đồ hệ sinh thái chuỗi cung ứng Việt Nam
+            Sa Bàn Số GIS &amp; Hạ Tầng Vĩ Mô Quốc Gia
           </span>
         </div>
 
@@ -84,30 +65,12 @@ export default function VietnamMapPage() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading uppercase tracking-tight">
-              Bản đồ hệ sinh thái chuỗi cung ứng Việt Nam
+              Sa Bàn Quỹ Đất &amp; Hạ Tầng Công Nghiệp Việt Nam
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed">
               Tích hợp 480+ Khu công nghiệp, cụm công nghiệp sinh thái, 14.237 nhà máy FDI và toàn bộ mạng lưới logistics cảng biển nước sâu, sân bay quốc tế, tuyến cao tốc huyết mạch.
             </p>
-
-            {/* CTAs: Chọn tỉnh/thành / Xem dữ liệu */}
-            <div className="flex flex-wrap items-center gap-2.5 pt-2">
-              <a
-                href="#vung-kinh-te"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center space-x-1.5 font-heading cursor-pointer"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span>Chọn tỉnh/thành</span>
-              </a>
-              <Link
-                to="/thi-truong"
-                className="px-4 py-2 bg-white border border-slate-300 hover:border-blue-500 text-slate-800 hover:text-blue-600 rounded-xl text-xs font-bold shadow-sm transition flex items-center space-x-1.5 font-heading cursor-pointer"
-              >
-                <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
-                <span>Xem dữ liệu</span>
-              </Link>
-            </div>
           </div>
 
           {/* 4 Prominent Macro Stats */}
@@ -149,7 +112,7 @@ export default function VietnamMapPage() {
       {/* ========================================================================= */}
       {/* 3. 5 KEY ECONOMIC REGIONS STRATEGIC PERSPECTIVE                           */}
       {/* ========================================================================= */}
-      <section id="vung-kinh-te" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 pt-4">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 pt-4">
         <div className="flex items-center justify-between">
           <h3 className="font-extrabold text-sm text-slate-900 uppercase tracking-wide font-heading">
             Khám Phá Chi Tiết 5 Vùng Kinh Tế Trọng Điểm
@@ -161,15 +124,7 @@ export default function VietnamMapPage() {
           {vietnamMapRegions.map((reg, idx) => (
             <div 
               key={idx} 
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleSelectRegion(reg.name);
-                }
-              }}
-              className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition group cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm space-y-3 flex flex-col justify-between hover:border-blue-400 hover:shadow-md transition group cursor-pointer"
               onClick={() => handleSelectRegion(reg.name)}
             >
               <div className="space-y-1.5">
@@ -235,6 +190,6 @@ export default function VietnamMapPage() {
         </div>
       </section>
 
-    </main>
+    </div>
   );
 }

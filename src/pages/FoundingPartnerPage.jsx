@@ -12,7 +12,7 @@ import {
   X, Layers, ChevronRight, ArrowUpRight, Zap, Factory, CheckCircle,
   Lock, ShieldCheck, RotateCcw, SlidersHorizontal, ArrowLeftRight,
   AlertTriangle, Video, Download, HelpCircle, AlertCircle, Info,
-  ExternalLink, Calendar, Users, Briefcase, Award, FolderTree, Key, Clock
+  ExternalLink, Calendar, Users, Briefcase, Award, FolderTree, Key
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
@@ -195,29 +195,8 @@ export default function FoundingPartnerPage() {
     return allPartners.filter(p => p.status === 'ACTIVE');
   }, [allPartners]);
 
-  // SEO & Head Setup
-  useEffect(() => {
-    document.title = 'Founding Partner | CHUOICUNGUNG.COM';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = 'Gói Founding Partner dành cho đối tác tiên phong tài trợ một phạm vi chuyên mục được xác định rõ. Minh bạch thương mại, không ảnh hưởng matching, xếp hạng và xác minh.';
-
-    let canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      canonicalTag = document.createElement('link');
-      canonicalTag.rel = 'canonical';
-      document.head.appendChild(canonicalTag);
-    }
-    canonicalTag.setAttribute('href', 'https://chuoicungung.com/founding-partner');
-  }, []);
-
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950">
+    <div className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950">
       
       {/* ==================================================================== */}
       {/* 1. HERO SECTION (Exact Spec Section 2) */}
@@ -245,7 +224,7 @@ export default function FoundingPartnerPage() {
 
           {/* Exact H1 */}
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading tracking-tight text-white max-w-4xl mx-auto leading-tight sm:leading-snug">
-            Founding Partner
+            ĐỒNG HÀNH PHÁT TRIỂN CHUYÊN MỤC PHÙ HỢP VỚI NĂNG LỰC DOANH NGHIỆP
           </h1>
 
           {/* Exact Sub */}
@@ -259,20 +238,16 @@ export default function FoundingPartnerPage() {
               onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm font-heading uppercase tracking-wide shadow-lg shadow-amber-500/20 transition cursor-pointer flex items-center justify-center space-x-2"
             >
-              <span>ĐĂNG KÝ ĐỒNG HÀNH</span>
+              <span>TRAO ĐỔI PHẠM VI ĐỒNG HÀNH</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
             <button
-              onClick={() => {
-                const el = document.getElementById('quyen-loi');
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                else howItWorksRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }}
+              onClick={() => howItWorksRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs sm:text-sm font-heading transition cursor-pointer flex items-center justify-center space-x-2"
             >
-              <Award className="w-4 h-4 text-amber-400" />
-              <span>XEM QUYỀN LỢI</span>
+              <HelpCircle className="w-4 h-4 text-slate-400" />
+              <span>XEM CÁCH FOUNDING PARTNER HOẠT ĐỘNG</span>
             </button>
           </div>
 
@@ -627,7 +602,7 @@ export default function FoundingPartnerPage() {
         {/* ==================================================================== */}
         {/* 4. QUYỀN LỢI CÓ THỂ CÓ (01 ĐẾN 07 MODULES - Section 6) */}
         {/* ==================================================================== */}
-        <section id="quyen-loi" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6 scroll-mt-24">
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
           <div className="border-b border-slate-100 pb-4">
             <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-1.5">
               <Award className="w-3.5 h-3.5 text-amber-600" />
@@ -1276,6 +1251,6 @@ export default function FoundingPartnerPage() {
         </section>
 
       </div>
-    </main>
+    </div>
   );
 }

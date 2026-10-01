@@ -173,26 +173,9 @@ export default function ProgramRegistrationPage() {
     });
   };
 
-  // SEO: Self-canonical and Title (Section 51)
+  // SEO: NOINDEX on Registration Form (Section 51)
   useEffect(() => {
-    document.title = 'Dang Ky | CHUOICUNGUNG.COM';
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = `Đăng ký tham gia chương trình kết nối giao thương chuỗi cung ứng B2B: ${program?.title || ''}`;
-
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
-    }
-    canonical.href = `https://chuoicungung.com/chuong-trinh/${program?.slug || slug}/dang-ky`;
-
+    document.title = `Đăng Ký Tham Gia: ${program?.shortName || program?.title || 'Chương trình'} | CHUOICUNGUNG.COM`;
     let metaRobots = document.querySelector('meta[name="robots"]');
     if (!metaRobots) {
       metaRobots = document.createElement('meta');
@@ -204,7 +187,7 @@ export default function ProgramRegistrationPage() {
     return () => {
       if (metaRobots) metaRobots.setAttribute('content', 'index, follow');
     };
-  }, [program, slug]);
+  }, [program]);
 
   // Validation before step transition
   const validateStep1 = () => {
@@ -336,26 +319,13 @@ export default function ProgramRegistrationPage() {
   ) || program.participationOptions?.[0];
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
-
+    <div className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
+      
       {/* ========================================================
           1. HEADER & PROGRAM SUMMARY (SECTION 2)
       ======================================================== */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-4">
-          {/* Breadcrumb */}
-          <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar whitespace-nowrap">
-            <Link to="/" className="hover:text-blue-600 transition">Trang chủ</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <Link to="/chuong-trinh" className="hover:text-blue-600 transition">Chương trình kết nối</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <Link to={`/chuong-trinh/${program.slug || program.id}`} className="hover:text-blue-600 transition truncate max-w-[200px]">
-              {program.shortName || program.title}
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="text-[#0052cc] font-bold">Dang Ky</span>
-          </nav>
-
           <div className="flex items-center justify-between">
             <Link
               to={`/chuong-trinh/${program.slug || program.id}`}
@@ -378,12 +348,9 @@ export default function ProgramRegistrationPage() {
               {program.publicCode} • {program.typeName}
             </span>
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-black font-heading text-slate-950 tracking-tight">
-              Dang Ky
+              ĐĂNG KÝ THAM GIA: {program.title}
             </h1>
-            <p className="text-sm font-bold text-blue-700 uppercase">
-              Đăng ký tham gia: {program.title}
-            </p>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
               Chọn vai trò và cho biết nhu cầu hoặc năng lực của doanh nghiệp. Thông tin giúp đội điều phối chuẩn bị hình thức tham gia và bàn kết nối phù hợp.
             </p>
           </div>
@@ -1251,7 +1218,7 @@ export default function ProgramRegistrationPage() {
                       <span>Đang Gửi Hồ Sơ...</span>
                     ) : (
                       <>
-                        <span>XÁC NHẬN ĐĂNG KÝ</span>
+                        <span>GỬI ĐĂNG KÝ THAM GIA</span>
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
@@ -1305,7 +1272,7 @@ export default function ProgramRegistrationPage() {
                   disabled={isSubmitting}
                   className="px-5 py-2 rounded-xl bg-orange-600 text-white font-bold text-xs shadow-sm"
                 >
-                  {isSubmitting ? 'Đang gửi...' : 'Xác nhận đăng ký'}
+                  {isSubmitting ? 'Đang gửi...' : 'Gửi đăng ký'}
                 </button>
               )}
             </div>
@@ -1358,6 +1325,6 @@ export default function ProgramRegistrationPage() {
         </div>
       )}
 
-    </main>
+    </div>
   );
 }

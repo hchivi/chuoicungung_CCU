@@ -33,7 +33,7 @@ export default function MerchandiseEventServicePage() {
 
   // SEO Setup (Section 16 Spec 16.txt)
   useEffect(() => {
-    document.title = 'Vat Pham Su Kien | CHUOICUNGUNG.COM';
+    document.title = 'Vật Phẩm Doanh Nghiệp & Sự Kiện | CHUOICUNGUNG.COM';
     
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
@@ -61,7 +61,7 @@ export default function MerchandiseEventServicePage() {
   const relatedPrograms = (PROGRAMS_DATA || []).slice(0, 2);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-28 antialiased selection:bg-[#0052cc] selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-28 antialiased selection:bg-[#0052cc] selection:text-white overflow-x-hidden">
       
       {/* ==================================================================== */}
       {/* 1. HERO SECTION (SECTION 2 SPEC 16.TXT) */}
@@ -86,7 +86,7 @@ export default function MerchandiseEventServicePage() {
           {/* Exact H1 & Subtitle per Section 2 Spec 16.txt */}
           <div className="max-w-3xl space-y-4">
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading tracking-tight text-white leading-[1.15]">
-              Vat Pham Su Kien
+              CHUẨN BỊ VẬT PHẨM THEO NHẬN DIỆN DOANH NGHIỆP VÀ CHƯƠNG TRÌNH
             </h1>
 
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl font-normal">
@@ -105,19 +105,20 @@ export default function MerchandiseEventServicePage() {
             {/* CTA Chính */}
             <Link
               to="/yeu-cau-dich-vu?service=vat-pham-su-kien"
-              className="py-3 px-6 sm:px-8 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-teal-700/30 transition flex items-center gap-2 group cursor-pointer"
+              className="py-3 px-6 sm:px-8 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-teal-700/30 transition flex items-center gap-2 group"
             >
-              <span>YÊU CẦU TƯ VẤN</span>
+              <span>GỬI YÊU CẦU BÁO GIÁ</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
 
             {/* CTA Phụ */}
-            <a
-              href="#quy-trinh"
-              className="py-3 px-5 sm:px-6 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-900/40 text-slate-200 text-xs sm:text-sm font-semibold transition cursor-pointer"
+            <button
+              type="button"
+              onClick={scrollToKits}
+              className="py-3 px-5 sm:px-6 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-900/40 text-slate-200 text-xs sm:text-sm font-semibold transition"
             >
-              XEM QUY TRÌNH
-            </a>
+              XEM CÁC BỘ VẬT PHẨM
+            </button>
           </div>
 
           {/* Target Audience Badges */}

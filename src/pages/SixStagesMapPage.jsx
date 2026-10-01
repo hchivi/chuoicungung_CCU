@@ -69,7 +69,7 @@ export default function SixStagesMapPage() {
 
   // SEO Setup
   useEffect(() => {
-    document.title = "Bản đồ 6 giai đoạn | CHUOICUNGUNG.COM";
+    document.title = "Bản Đồ 6 Giai Đoạn Chuỗi Cung Ứng | CHUOICUNGUNG.COM";
 
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
@@ -147,7 +147,7 @@ export default function SixStagesMapPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FBFBFC] pb-24 font-sans text-slate-900 antialiased space-y-12">
+    <div className="min-h-screen bg-[#FBFBFC] pb-24 font-sans text-slate-900 antialiased space-y-12">
       
       {/* Container Layout */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-12">
@@ -163,7 +163,7 @@ export default function SixStagesMapPage() {
 
           <div className="max-w-3xl mx-auto space-y-3">
             <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-tight">
-              Bản đồ 6 giai đoạn vòng đời doanh nghiệp
+              BẢN ĐỒ 6 GIAI ĐOẠN CHUỖI CUNG ỨNG
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto">
               Khám phá nhu cầu, nguồn cung và chương trình theo từng giai đoạn trong vòng đời của nhà máy.
@@ -176,23 +176,32 @@ export default function SixStagesMapPage() {
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold rounded-2xl shadow-sm flex items-center space-x-2 transition hover:-translate-y-0.5 cursor-pointer"
             >
               <Compass className="w-4 h-4" />
-              <span>XÁC ĐỊNH GIAI ĐOẠN</span>
+              <span>XÁC ĐỊNH GIAI ĐOẠN CỦA TÔI</span>
             </button>
 
-            <a
-              href="#timeline-18-pha"
+            <button
+              onClick={() => {
+                const draftId = `req-${Date.now()}`;
+                localStorage.setItem('ccu_current_requirement_draft', JSON.stringify({
+                  id: draftId,
+                  stageId: selectedStage.id,
+                  stageName: selectedStage.name,
+                  sourcePage: 'SIX_STAGES_MAP'
+                }));
+                navigate(`/dang-nhu-cau?draft=${draftId}`);
+              }}
               className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-bold rounded-2xl border border-slate-200 flex items-center space-x-2 transition cursor-pointer"
             >
-              <Layers className="w-4 h-4 text-slate-600" />
-              <span>XEM 18 PHA</span>
-            </a>
+              <Send className="w-4 h-4 text-slate-600" />
+              <span>ĐĂNG NHU CẦU</span>
+            </button>
           </div>
         </section>
 
         {/* =========================================================================
             SECTION 02 — VISUAL 6 GIAI ĐOẠN (LIGHTWEIGHT SVG & CSS TIMELINE)
            ========================================================================= */}
-        <section id="timeline-18-pha" className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6">
+        <section className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">
               VÒNG ĐỜI 6 GIAI ĐOẠN PHÁT TRIỂN NHÀ MÁY
@@ -801,6 +810,6 @@ export default function SixStagesMapPage() {
         </div>
       </div>
 
-    </main>
+    </div>
   );
 }

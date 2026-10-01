@@ -84,28 +84,14 @@ export default function ProgramLibraryPage() {
     }, userContext);
   }, [program, searchKeyword, selectedType, selectedAlbum, selectedSession, userContext]);
 
-  // SEO setup (Section 38 & URL 084)
+  // SEO setup (Section 38)
   useEffect(() => {
-    document.title = 'Thu Vien | CHUOICUNGUNG.COM';
-    
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement('link');
-      canonical.rel = 'canonical';
-      document.head.appendChild(canonical);
+    if (program) {
+      document.title = `Ảnh & Tài Liệu ${program.title || program.name} | CHUOICUNGUNG.COM`;
+    } else {
+      document.title = 'Thư Viện Ảnh & Tài Liệu Chương Trình | CHUOICUNGUNG.COM';
     }
-    canonical.href = `https://chuoicungung.com/chuong-trinh/${program?.slug || slug}/thu-vien`;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = program 
-      ? `Thư viện hình ảnh, tài liệu và ấn phẩm chính thức từ chương trình ${program.title || program.name}.`
-      : 'Thư viện ảnh và tài liệu chương trình chuỗi cung ứng.';
-  }, [program, slug]);
+  }, [program]);
 
   // Sync tab with URL
   const handleTabChange = (tabId) => {
@@ -183,7 +169,7 @@ export default function ProgramLibraryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 font-sans pb-24 text-slate-900">
+    <div className="min-h-screen bg-slate-50 font-sans pb-24 text-slate-900">
       
       {/* ========================================================
           1. HERO BANNER (SECTION 2 SPEC)
@@ -212,11 +198,8 @@ export default function ProgramLibraryPage() {
               </div>
 
               <h1 className="text-2xl sm:text-4xl font-black font-heading tracking-tight text-white leading-tight">
-                Thu Vien
+                ẢNH VÀ TÀI LIỆU TỪ {program.title || program.name}
               </h1>
-              <p className="text-sm font-semibold text-blue-300 uppercase tracking-wide">
-                Ảnh và tài liệu từ {program.title || program.name}
-              </p>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
                 Tìm hình ảnh, nội dung giới thiệu và tài liệu được chia sẻ trong chương trình. Bạn có thể xem lại hồ sơ doanh nghiệp hoặc gửi yêu cầu trao đổi tiếp theo.
@@ -239,22 +222,21 @@ export default function ProgramLibraryPage() {
               </div>
             </div>
 
-            {/* Contextual CTAs (Xem tài liệu / Quay lại) */}
+            {/* Back CTA Button (Section 2) */}
             <div className="flex sm:flex-col gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={() => handleTabChange('documents')}
-                className="px-5 py-2.5 rounded-xl bg-[#0052cc] hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center space-x-2 transition shadow-md cursor-pointer"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Xem tài liệu</span>
-              </button>
               <Link
                 to={`/chuong-trinh/${program.slug || program.id}`}
                 className="px-5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs flex items-center justify-center space-x-2 transition shadow-md"
               >
                 <ArrowLeft className="w-4 h-4 text-blue-700" />
-                <span>Quay lại</span>
+                <span>Xem Chi Tiết Chương Trình</span>
+              </Link>
+              <Link
+                to={`/chuong-trinh/${program.slug || program.id}/dang-ky`}
+                className="px-5 py-2.5 rounded-xl bg-[#0052cc] hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center space-x-2 transition shadow-md"
+              >
+                <span>Hồ Sơ Đăng Ký Của Tôi</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -1017,6 +999,6 @@ export default function ProgramLibraryPage() {
         </div>
       )}
 
-    </main>
+    </div>
   );
 }
