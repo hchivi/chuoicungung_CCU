@@ -156,186 +156,86 @@ export default function DemandsPage() {
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
-      {/* SECTION 01 — HERO (HIGH-TECH B2B SOURCING COMMAND DECK)                    */}
+      {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual - Image 1 Style) */}
       {/* ========================================================================= */}
-      <section className="bg-[#051124] relative overflow-hidden text-white border-b border-slate-800/80">
-        
-        {/* Dynamic Live Supply Chain Arc & RFQ Canvas Background */}
-        <B2bTradeNetworkCanvas className="absolute inset-0 pointer-events-none opacity-45 z-0" />
+      <section className="relative overflow-hidden bg-[#F4F8FA] border-b border-slate-200/80 pb-12 sm:pb-16">
 
-        {/* Ambient Optics, Depth Accents & Blueprint Grid */}
-        <div className="absolute inset-0 bg-[radial-gradient(#1e3a5f_1px,transparent_1px)] [background-size:28px_28px] opacity-25 pointer-events-none z-0" />
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none z-0" />
-        <div className="absolute top-1/2 right-1/4 w-[500px] h-[300px] bg-sky-500/15 rounded-full blur-3xl pointer-events-none z-0" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-14 sm:pb-16 lg:pb-20 relative z-10">
+        {/* Right Half Sourcing Photo with Smooth Gradient Blend & Dynamic Live Trade Network Overlay */}
+        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+          <img
+            src="/images/b2b_sourcing_demand_hero.jpg"
+            alt="B2B Sourcing Demands Marketplace"
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          {/* Live Global Supply Chain Arc & RFQ Pulse Canvas */}
+          <B2bTradeNetworkCanvas className="z-[2] opacity-80" />
           
-          {/* High-contrast Clean Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-xs text-slate-400 font-medium mb-6">
-            <Link to="/" title="Trang chủ" className="inline-flex items-center hover:text-white transition group">
-              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain brightness-110 group-hover:scale-110 transition-transform" />
-              <span className="ml-1.5 text-slate-300 group-hover:text-white">Trang chủ</span>
-            </Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-sky-300 font-semibold">Sàn nhu cầu mua sắm B2B</span>
-          </nav>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+        </div>
 
-          {/* Main 2-Column Hero Deck */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
-            {/* Left 7 Cols: Exact Titles, Context, Actions & Trust Signals */}
-            <div className="lg:col-span-7 space-y-5">
-              
-              {/* Context Eyebrow Capsule */}
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-blue-500/15 via-sky-500/10 to-indigo-500/15 border border-sky-400/30 text-sky-300 text-xs font-mono font-bold tracking-wider uppercase shadow-xs backdrop-blur-md">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                </span>
-                <span>CỔNG GIAO DỊCH NHU CẦU &amp; TÌM NGUỒN CUNG ỨNG B2B</span>
-              </div>
+        {/* Top Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
+          <div className="max-w-2xl space-y-4 sm:space-y-5">
 
-              {/* Exact H1: Nhu cầu mua hàng và tìm nhà cung ứng */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] xl:text-[48px] font-black tracking-tight text-white leading-[1.14] font-heading">
-                Nhu cầu mua hàng và tìm nhà cung ứng
-              </h1>
+            {/* Breadcrumb */}
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="text-[#0052cc] font-bold">
+                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn B2B2C'}
+              </span>
+            </nav>
 
-              {/* Description */}
-              <p className="text-sm sm:text-base md:text-[16px] text-slate-300 leading-relaxed font-normal max-w-2xl">
-                Điều phối đơn hàng công nghiệp trực tiếp giữa các Nhà máy, Bên mua FDI và mạng lưới Nhà cung ứng phụ trợ tại 480+ KCN trên toàn quốc. Tiêu chuẩn kỹ thuật minh bạch, bảo mật danh tính doanh nghiệp cho đến khi phê duyệt Shortlist.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  to="/dang-nhu-cau"
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#0052cc] via-[#0060e6] to-[#0284c7] hover:from-[#0047a5] hover:to-[#0275b1] text-white text-xs sm:text-sm font-bold shadow-xl shadow-blue-900/40 hover:shadow-blue-800/60 hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer font-heading"
-                >
-                  <PlusCircle className="w-4 h-4 text-sky-200" />
-                  <span>Đăng nhu cầu / Tìm cơ hội</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (!currentUser?.isLoggedIn) {
-                      setAuthModalOpen(true);
-                    } else {
-                      navigate('/tao-ho-so');
-                    }
-                  }}
-                  className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 hover:text-white border border-white/20 hover:border-white/35 font-semibold text-xs sm:text-sm hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer backdrop-blur-md"
-                >
-                  <Building2 className="w-4 h-4 text-sky-300" />
-                  <span>Hoàn thiện hồ sơ năng lực</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSuppiModal({ isOpen: true, requirement: null })}
-                  className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:border-amber-500/50 font-semibold text-xs sm:text-sm hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer"
-                  title="Hỏi trợ lý AI SUPPI về thông tin gói thầu"
-                >
-                  <Bot className="w-4 h-4 text-amber-400" />
-                  <span className="hidden sm:inline">Trợ lý</span> SUPPI
-                </button>
-              </div>
-
-              {/* Micro-Trust Signals — Minimalist & Executive */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 pt-4 text-xs text-slate-400 font-medium border-t border-white/10 mt-6">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Bảo mật danh tính &amp; giá thầu 100%</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-sky-400 shrink-0" />
-                  <span>Xác thực MST &amp; năng lực xưởng thực tế</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span>Bóc tách bản vẽ &amp; phản hồi trong 24h</span>
-                </div>
-              </div>
-
+            {/* Tagline Badge */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
+              <span>{lang === 'en' ? 'B2B2C SOURCING & PROCUREMENT HUB • 1,250+ PLANTS' : 'SÀN B2B2C • NGUỒN CUNG & NHU CẦU TOÀN DIỆN'}</span>
             </div>
 
-            {/* Right 5 Cols: Live B2B RFQ Radar & Live Telemetry Stream */}
-            <div className="lg:col-span-5 hidden lg:block">
-              <div className="relative rounded-3xl bg-slate-900/80 border border-slate-700/80 backdrop-blur-xl p-5 shadow-2xl shadow-blue-950/70 overflow-hidden space-y-4">
-                
-                {/* Background Radar Arc Accent */}
-                <div className="absolute -top-12 -right-12 w-48 h-48 bg-blue-500/15 rounded-full blur-2xl pointer-events-none" />
+            {/* Headline */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
+                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn Nhu Cầu B2B2C'}
+              </h1>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
+                {lang === 'en' ? 'Connecting Enterprise Trade' : 'Kết Nối Giao Thương Toàn Diện'}
+              </h2>
+            </div>
 
-                {/* Radar Header */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center gap-2.5">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
-                      Live Sourcing Stream
-                    </span>
-                  </div>
-                  <span className="text-[11px] font-mono text-sky-400 font-bold bg-sky-950/70 border border-sky-800/60 px-2.5 py-0.5 rounded-full">
-                    {publicDemands.length} Nhu cầu công bố
-                  </span>
-                </div>
+            {/* Subtitle */}
+            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
+              {lang === 'en'
+                ? 'Directly connect manufacturing plants & enterprise corporations with certified industrial suppliers across Vietnam 18 phases.'
+                : 'Quy tụ nhu cầu tìm nguồn cung từ các nhà máy, tập đoàn & đối tác sáng lập — Đăng tải hỏi hàng nguyên phụ liệu, bao bì, linh kiện và giải pháp công nghiệp trực tiếp.'}
+            </p>
 
-                {/* Live Demand Micro Stream */}
-                <div className="space-y-2.5">
-                  {publicDemands.slice(0, 3).map((item) => (
-                    <div
-                      key={item.id}
-                      onClick={() => setDetailModal({ isOpen: true, requirement: item })}
-                      className="group p-3 rounded-2xl bg-slate-800/50 hover:bg-slate-800/90 border border-slate-700/60 hover:border-blue-500/50 transition cursor-pointer"
-                    >
-                      <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono mb-1">
-                        <span className="font-bold text-sky-300 group-hover:text-sky-200">
-                          {item.id}
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/20">
-                          {item.statusLabel || 'Đang tìm nguồn'}
-                        </span>
-                      </div>
-                      <h4 className="text-xs font-bold text-white group-hover:text-sky-200 line-clamp-1">
-                        {item.title}
-                      </h4>
-                      <div className="flex items-center justify-between pt-1.5 text-[11px] text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-slate-500" />
-                          {item.province || 'Toàn quốc'}
-                        </span>
-                        <span className="text-amber-300 font-mono font-semibold">
-                          {item.scopeOfWork || item.quantityNote || 'Chi tiết trong RFQ'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* Dual Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+              <Link
+                to="/dang-nhu-cau"
+                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>{lang === 'en' ? 'Post Sourcing Demand' : 'Đăng Nhu Cầu Ngay'}</span>
+              </Link>
 
-                {/* Radar Footer Stats */}
-                <div className="pt-2 border-t border-slate-800/80 grid grid-cols-3 gap-2 text-center">
-                  <div className="p-2 rounded-xl bg-slate-800/40 border border-slate-800">
-                    <div className="text-sm font-black font-mono text-white">480+</div>
-                    <div className="text-[10px] text-slate-400 font-medium">KCN kết nối</div>
-                  </div>
-                  <div className="p-2 rounded-xl bg-slate-800/40 border border-slate-800">
-                    <div className="text-sm font-black font-mono text-emerald-400">100%</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Bảo mật MST</div>
-                  </div>
-                  <div className="p-2 rounded-xl bg-slate-800/40 border border-slate-800">
-                    <div className="text-sm font-black font-mono text-sky-400">&lt; 24h</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Bóc tách RFQ</div>
-                  </div>
-                </div>
-
-              </div>
+              <a
+                href="#demand-search-input"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('demand-search-input')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-6 py-3.5 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group cursor-pointer"
+              >
+                <ShoppingBag className="w-4 h-4 text-[#0052cc] group-hover:scale-110 transition-transform" />
+                <span>{lang === 'en' ? 'Explore Demands' : 'Xem Nhu Cầu Mở'}</span>
+              </a>
             </div>
 
           </div>
-
         </div>
       </section>
 
