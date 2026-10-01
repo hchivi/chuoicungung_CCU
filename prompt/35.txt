@@ -1,0 +1,1579 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 35: BỘ HỒ SƠ TUYỂN CHỌN
+ROUTE: /bo-ho-so/[slug]
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /bo-ho-so/[slug] thành một SOURCING DOSSIER
+được chuẩn bị cho:
+
+- một nhóm nhu cầu phổ biến;
+- một Buyer cụ thể;
+- một Requirement;
+- một Program;
+- một Association;
+- một Industrial Park;
+- một đề bài sourcing cụ thể.
+
+Đây KHÔNG phải:
+
+- catalogue quảng cáo;
+- directory Supplier;
+- bảng xếp hạng;
+- “Top 10 nhà cung ứng tốt nhất”;
+- Supplier recommendation không có tiêu chí;
+- nơi Sponsor mua vị trí để thay thế tiêu chí sourcing.
+
+Luồng:
+
+ĐỀ BÀI
+→ TIÊU CHÍ
+→ CANDIDATE SUPPLIERS
+→ LÝ DO ĐƯA VÀO
+→ BẰNG CHỨNG
+→ THÔNG TIN CÒN THIẾU
+→ BUYER REVIEW
+→ YÊU CẦU ĐIỀU CHỈNH
+→ MATCH / CONNECTION
+→ FOLLOW-UP
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/bo-ho-so/[slug]
+
+Reuse:
+
+Requirement
+RequirementVersion
+
+Organization
+SupplierProfile
+ProductService
+Capability
+ServiceArea
+Evidence
+
+SupplierMatch
+SupplierResponse
+Connection
+
+Program
+Association
+IndustrialPark
+
+MediaAsset
+Catalogue
+
+Task
+AuditLog
+Permission/Consent
+
+Không tạo duplicate:
+
+Supplier
+SupplierProfile
+Requirement
+Evidence.
+
+==================================================
+2. CORE CONCEPT
+==================================================
+
+Một Bộ hồ sơ = một danh sách có chủ đích.
+
+Ví dụ:
+
+“Chuẩn bị đồng phục và bảo hộ cho nhà máy mới”
+
+“Nguồn cung bao bì cho doanh nghiệp thực phẩm”
+
+“Nhà cung ứng tham gia ngày hội tại cụm KCN”
+
+“Các lựa chọn đã được mời phản hồi cho nhu cầu NC-2026-00125”
+
+Mỗi Dossier phải trả lời:
+
+1. Bộ hồ sơ này phục vụ việc gì?
+2. Tiêu chí tuyển chọn là gì?
+3. Những Supplier nào đang được xem xét?
+4. Tại sao Supplier đó xuất hiện?
+5. Có bằng chứng nào?
+6. Còn thiếu thông tin gì?
+7. Buyer cần làm gì tiếp theo?
+
+==================================================
+3. DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+SourcingDossier {
+ id
+ slug
+
+ title
+ purpose
+
+ dossierType
+
+ requirementId?
+ programId?
+ associationOrganizationId?
+ industrialParkId?
+
+ categoryId?
+ keywordClusterId?
+ locationId?
+
+ visibility
+
+ status
+
+ preparedByUserId
+ ownerUserId?
+
+ updatedAt
+ publishedAt?
+
+ createdAt
+}
+
+Không copy Requirement content
+nếu đã relation tới Requirement.
+
+==================================================
+4. DOSSIER TYPE
+==================================================
+
+Có thể hỗ trợ:
+
+GENERAL_BUYER_GUIDE
+
+REQUIREMENT_SHORTLIST
+
+PROGRAM_SHORTLIST
+
+INDUSTRIAL_PARK_SHORTLIST
+
+ASSOCIATION_SHORTLIST
+
+CATEGORY_SHORTLIST
+
+CUSTOM_SOURCING
+
+Không tạo table riêng cho từng type.
+
+==================================================
+5. VISIBILITY
+==================================================
+
+Hai chế độ bắt buộc theo source:
+
+PUBLIC
+
+PRIVATE
+
+Có thể mở rộng kỹ thuật:
+
+PUBLIC
+
+AUTHORIZED_PARTICIPANTS
+
+ORGANIZATION_PRIVATE
+
+SPECIFIC_USERS
+
+INTERNAL
+
+Nhưng UI chính phải vẫn phản ánh:
+
+CÔNG KHAI
+
+vs
+
+RIÊNG TƯ.
+
+==================================================
+6. PUBLIC DOSSIER
+==================================================
+
+Dùng cho:
+
+nhóm nhu cầu phổ biến
+
+buyer guide
+
+category sourcing guide
+
+program public preparation
+
+Ví dụ:
+
+“Nhà cung ứng đồng phục cho nhà máy mới”
+
+Không được chứa:
+
+Buyer private name
+
+contact
+
+budget
+
+target price
+
+confidential specification
+
+Supplier quotation
+
+private evaluation.
+
+==================================================
+7. PRIVATE DOSSIER
+==================================================
+
+Dùng cho:
+
+Buyer cụ thể
+
+Requirement cụ thể
+
+Program được phân quyền
+
+Internal sourcing.
+
+Access phải check:
+
+user
+organization
+requirement relationship
+program permission
+explicit share.
+
+Không dùng:
+secret URL = authorization.
+
+==================================================
+8. HERO
+==================================================
+
+H1:
+
+[TÊN BỘ HỒ SƠ]
+
+Hiển thị:
+
+Purpose
+
+Category
+
+Location
+
+Requirement code nếu được phép
+
+Program nếu có
+
+Prepared by
+
+Last updated
+
+Visibility
+
+Status
+
+Không hiển thị internal author/private Buyer
+nếu visibility không cho phép.
+
+==================================================
+9. MỤC ĐÍCH
+==================================================
+
+Block:
+
+“MỤC ĐÍCH BỘ HỒ SƠ”
+
+Ví dụ:
+
+“Chuẩn bị danh sách nhà cung ứng đồng phục và PPE có khả năng phục vụ nhà máy mới tại Đồng Nai.”
+
+Nếu từ Requirement:
+derive từ confirmed Requirement summary.
+
+Không invent requirement.
+
+==================================================
+10. TIÊU CHÍ LỰA CHỌN
+==================================================
+
+Block:
+
+“TIÊU CHÍ LỰA CHỌN”
+
+Tiêu chí phải structured.
+
+Ví dụ:
+
+Category
+
+Product/Service
+
+Capability
+
+Location / Service Area
+
+Order size
+
+Timeline
+
+Sample availability
+
+Survey availability
+
+Certifications nếu cần
+
+Evidence
+
+Program eligibility
+
+Không dùng tiêu chí mơ hồ:
+
+“uy tín”
+
+“hàng đầu”
+
+“tốt nhất”
+
+nếu không có định nghĩa.
+
+==================================================
+11. CRITERIA MODEL
+==================================================
+
+SourcingDossierCriterion {
+ id
+ dossierId
+
+ criterionType
+
+ label
+
+ expectedValue?
+
+ source
+
+ required
+
+ displayOrder
+
+ createdAt
+}
+
+Nếu criterion sinh từ Requirement:
+giữ source relation.
+
+==================================================
+12. CANDIDATE LIST
+==================================================
+
+Block:
+
+“NHÀ CUNG ỨNG ĐƯỢC XEM XÉT”
+
+Mỗi candidate:
+
+Organization
+
+SupplierProfile
+
+Relevant ProductService
+
+Relevant Capability
+
+Service Area
+
+Match reasons
+
+Evidence summary
+
+Missing information
+
+Current response status
+
+Next action nếu authorized.
+
+==================================================
+13. DOSSIER ENTRY
+==================================================
+
+SourcingDossierEntry {
+ id
+ dossierId
+
+ supplierOrganizationId
+ supplierProfileId
+
+ supplierMatchId?
+
+ status
+
+ displayOrder?
+
+ inclusionReason
+
+ missingInformation?
+
+ internalNote?
+
+ publicNote?
+
+ addedByUserId
+
+ addedAt
+ updatedAt
+}
+
+Không duplicate Supplier data.
+
+==================================================
+14. ENTRY STATUS
+==================================================
+
+Có thể dùng:
+
+CONSIDERED
+
+INVITED
+
+RESPONDED
+
+NEED_MORE_INFO
+
+SHORTLISTED
+
+NOT_SUITABLE
+
+WITHDRAWN
+
+CONNECTED
+
+ARCHIVED
+
+Không dùng:
+
+WINNER
+
+BEST
+
+TOP_1
+
+nếu Buyer chưa có kết quả xác nhận.
+
+==================================================
+15. “LÝ DO ĐƯA VÀO”
+==================================================
+
+Đây là block bắt buộc.
+
+Ví dụ:
+
+“Có năng lực may đồng phục công nhân.”
+
+“Phục vụ Đồng Nai.”
+
+“Có thông tin MOQ phù hợp.”
+
+“Có thể làm mẫu theo hồ sơ doanh nghiệp.”
+
+“Đã phản hồi nhu cầu NC-...”
+
+Không dùng:
+
+“AI đánh giá tốt”.
+
+Lý do phải explainable.
+
+==================================================
+16. MATCH REASONS
+==================================================
+
+Reuse SupplierMatch reasons nếu có.
+
+Các reason có thể gồm:
+
+CAPABILITY_MATCH
+
+PRODUCT_MATCH
+
+SERVICE_AREA_MATCH
+
+ORDER_SIZE_MATCH
+
+TIMELINE_MATCH
+
+CERTIFICATION_MATCH
+
+SAMPLE_AVAILABLE
+
+PROGRAM_ELIGIBLE
+
+MANUAL_RESEARCH
+
+Mỗi reason nên có source.
+
+==================================================
+17. KHÔNG CÓ OPAQUE SCORE
+==================================================
+
+Không render:
+
+92% phù hợp
+
+8.7/10
+
+A+
+
+nếu không có phương pháp rõ ràng và ổn định.
+
+Ưu tiên:
+
+✓ Phục vụ Đồng Nai
+✓ Có năng lực PPE
+✓ Có thể làm mẫu
+? Chưa xác nhận lead time
+
+==================================================
+18. THÔNG TIN CÒN THIẾU
+==================================================
+
+Block:
+
+“THÔNG TIN CẦN XÁC NHẬN”
+
+Per Supplier:
+
+Lead time
+
+MOQ
+
+Availability
+
+Sample cost
+
+Survey capability
+
+Certification validity
+
+Capacity
+
+Delivery area
+
+Contact responder
+
+Other technical condition.
+
+Không biến missing field
+thành đánh giá tiêu cực.
+
+==================================================
+19. INFORMATION STATUS
+==================================================
+
+Có thể hiển thị:
+
+ĐÃ CÓ THÔNG TIN
+
+CẦN XÁC NHẬN
+
+CHỜ NCC PHẢN HỒI
+
+HẾT HẠN
+
+KHÔNG ÁP DỤNG
+
+==================================================
+20. EVIDENCE
+==================================================
+
+Block:
+
+“BẰNG CHỨNG / TÀI LIỆU LIÊN QUAN”
+
+Reuse:
+
+Evidence
+MediaAsset
+Catalogue
+SupplierProfile data.
+
+Có thể gồm:
+
+Factory photos
+
+Product photos
+
+Certificates
+
+Catalogue
+
+Video
+
+Case references
+
+Sample record.
+
+Phân biệt:
+
+REAL_EVIDENCE
+
+SUPPLIER_DECLARED
+
+ILLUSTRATION
+
+AI/MASCOT.
+
+==================================================
+21. PAID CONTENT ≠ EVIDENCE
+==================================================
+
+Supplier trả phí để có:
+
+profile
+video
+catalogue
+
+KHÔNG tự biến nội dung đó thành
+Verified Evidence.
+
+Source/status phải giữ nguyên.
+
+==================================================
+22. REQUIREMENT DOSSIER
+==================================================
+
+Nếu dossier relation Requirement:
+
+hiển thị:
+
+Requirement public/authorized summary
+
+Current version
+
+Criteria derived
+
+Supplier matches
+
+Responses
+
+Missing info
+
+Buyer adjustment requests.
+
+Không copy Need sang dossier.
+
+==================================================
+23. PROGRAM DOSSIER
+==================================================
+
+Nếu dossier relation Program:
+
+có thể dùng cho:
+
+Buyer preparation
+
+Supplier shortlist
+
+Meeting preparation
+
+Program supplier set.
+
+Nhưng:
+
+Program participation
+≠ shortlist.
+
+Program sponsor
+≠ shortlist.
+
+Supplier trả phí
+≠ shortlist.
+
+==================================================
+24. KCN / ASSOCIATION DOSSIER
+==================================================
+
+Có thể có:
+
+“Nhà cung ứng phục vụ KCN ABC”
+
+“Nhóm NCC cơ khí cho chương trình Hội XYZ”
+
+Nhưng relation Association/KCN
+không được suy thành:
+
+approved vendor
+member
+endorsed supplier
+
+nếu chưa có evidence/relation.
+
+==================================================
+25. PUBLIC SPONSORSHIP
+==================================================
+
+Nếu dossier có Sponsored/Founding content:
+
+phải tách block rõ:
+
+“ĐỐI TÁC TÀI TRỢ”
+
+hoặc
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+Không chèn Sponsor
+vào candidate list như một match.
+
+==================================================
+26. SPONSORSHIP KHÔNG THAY TIÊU CHÍ
+==================================================
+
+Hard rule:
+
+SponsorshipAmount
+
+FoundingPartnerStatus
+
+CommercialTier
+
+không được:
+
+- tăng match score;
+- tự thêm Supplier vào shortlist;
+- thay tiêu chí;
+- xóa Supplier khác;
+- tạo Buyer recommendation.
+
+==================================================
+27. CTA GỬI YÊU CẦU
+==================================================
+
+Public dossier:
+
+CTA:
+
+[GỬI NHU CẦU]
+
+→ /dang-nhu-cau
+
+Prefill:
+
+category
+keywordCluster
+location
+sourceDossierId.
+
+User phải review trước submit.
+
+==================================================
+28. CTA YÊU CẦU ĐIỀU CHỈNH
+==================================================
+
+Private dossier:
+
+CTA:
+
+[YÊU CẦU ĐIỀU CHỈNH BỘ HỒ SƠ]
+
+Cho Buyer yêu cầu:
+
+Add criterion
+
+Remove criterion
+
+Clarify requirement
+
+Ask supplier info
+
+Add supplier for consideration
+
+Remove candidate
+
+Request sample
+
+Request meeting
+
+Không chỉnh DB trực tiếp từ public frontend.
+
+==================================================
+29. ADJUSTMENT REQUEST
+==================================================
+
+DossierAdjustmentRequest {
+ id
+ dossierId
+
+ requestedByUserId
+
+ type
+
+ description
+
+ status
+
+ ownerUserId
+
+ createdAt
+ resolvedAt?
+}
+
+Statuses:
+
+NEW
+UNDER_REVIEW
+APPLIED
+PARTIALLY_APPLIED
+REJECTED
+CANCELLED
+
+==================================================
+30. BUYER FEEDBACK ≠ SUPPLIER OUTCOME
+==================================================
+
+Buyer nói:
+
+“Không cần xem NCC này nữa”
+
+không đồng nghĩa:
+
+Supplier = NOT_CAPABLE.
+
+Có thể status:
+
+NOT_SELECTED_FOR_THIS_REQUIREMENT.
+
+Outcome phải context-specific.
+
+==================================================
+31. ACTIONS PER SUPPLIER
+==================================================
+
+Authorized user có thể:
+
+[YÊU CẦU THÊM THÔNG TIN]
+
+[YÊU CẦU MẪU]
+
+[ĐỀ NGHỊ CUỘC GẶP]
+
+[YÊU CẦU BÁO GIÁ]
+
+[ĐƯA VÀO SHORTLIST]
+
+[KHÔNG TIẾP TỤC]
+
+Tất cả action reuse domain workflow hiện có.
+
+==================================================
+32. KHÔNG TẠO ACTION TRÙNG
+==================================================
+
+Request sample
+→ Sample workflow.
+
+Request quote
+→ Quotation workflow.
+
+Meeting
+→ Meeting.
+
+Connection
+→ Connection.
+
+Không tạo:
+
+DossierSample
+DossierQuote
+DossierMeeting
+
+nếu core entity đã có.
+
+==================================================
+33. VERSIONING
+==================================================
+
+Dossier cần history.
+
+Ví dụ:
+
+v1:
+5 Supplier
+
+v2:
+Buyer thêm tiêu chí ISO
+
+v3:
+2 Supplier bổ sung evidence
+
+v4:
+Buyer shortlist 3.
+
+Không overwrite lịch sử.
+
+==================================================
+34. DOSSIER VERSION
+==================================================
+
+SourcingDossierVersion {
+ id
+ dossierId
+
+ version
+
+ summary
+
+ criteriaSnapshot
+ entrySnapshot
+
+ createdBy
+ createdAt
+}
+
+Snapshot chỉ phục vụ history/report.
+
+Live relations vẫn canonical.
+
+==================================================
+35. UPDATED DATE
+==================================================
+
+Hiển thị rõ:
+
+“Cập nhật ngày…”
+
+Không trình bày Dossier cũ
+như current sourcing truth.
+
+Nếu Supplier data đã thay đổi:
+flag:
+
+“Thông tin Supplier đã được cập nhật sau lần lập bộ hồ sơ.”
+
+==================================================
+36. PREPARED BY
+==================================================
+
+Nguồn yêu cầu có:
+
+“Người chuẩn bị”.
+
+Có thể là:
+
+Coordinator
+
+Sourcing team
+
+Program team.
+
+Public dossier chỉ hiển thị:
+team/role nếu phù hợp.
+
+Private admin lưu user cụ thể.
+
+==================================================
+37. OWNER
+==================================================
+
+Dossier active phải có:
+
+ownerUserId
+
+nextAction
+
+nextActionAt
+
+nếu là operational/private dossier.
+
+Public evergreen dossier
+không bắt buộc nextAction
+nếu không có workflow active.
+
+==================================================
+38. SUPPI
+==================================================
+
+SUPPI có thể hỗ trợ:
+
+extract criteria
+
+compare supplier structured fields
+
+detect missing information
+
+draft inclusion reasons
+
+suggest questions cần xác nhận.
+
+SUPPI output phải là:
+
+DRAFT.
+
+Không tự:
+
+approve Supplier
+
+verify capability
+
+publish shortlist
+
+mark outcome.
+
+==================================================
+39. CHAINY
+==================================================
+
+CHAINY bắt đầu khi:
+
+Supplier được mời
+
+Connection tạo
+
+Meeting/Sample/Quote phát sinh.
+
+Trong private dossier có thể hiển thị:
+
+Next Action
+
+Response status
+
+Meeting
+
+Sample
+
+Quote
+
+Follow-up.
+
+Không public CRM timeline.
+
+==================================================
+40. PUBLIC DOSSIER SEO
+==================================================
+
+Chỉ PUBLIC dossier đủ nội dung mới index.
+
+Title:
+
+[Tên bộ hồ sơ] | CHUOICUNGUNG.COM
+
+Meta:
+
+Bộ hồ sơ tuyển chọn nhà cung ứng theo [mục đích/chuyên mục], gồm tiêu chí, các lựa chọn được xem xét, lý do đưa vào và thông tin cần xác nhận.
+
+Canonical:
+
+/bo-ho-so/[slug]
+
+==================================================
+41. PRIVATE DOSSIER
+==================================================
+
+PRIVATE:
+
+NOINDEX
+
+không sitemap
+
+không SEO payload
+
+không public structured data.
+
+==================================================
+42. SHARE LINK
+==================================================
+
+Private dossier có thể share
+nếu architecture hỗ trợ explicit access.
+
+Nhưng:
+
+link token
+≠ permission vĩnh viễn.
+
+Share access cần:
+
+scope
+recipient
+expiry optional
+revocation
+audit.
+
+==================================================
+43. EXPORT
+==================================================
+
+Authorized Buyer có thể export:
+
+PDF / document summary
+
+nếu feature cần.
+
+Export phải giữ:
+
+title
+purpose
+criteria
+entries
+reasons
+missing info
+updated date
+
+và không vô tình thêm internal notes.
+
+Export permission riêng.
+
+==================================================
+44. CATALOGUE ≠ DOSSIER
+==================================================
+
+Catalogue:
+
+phục vụ giới thiệu nhiều doanh nghiệp / ấn phẩm.
+
+Dossier:
+
+phục vụ một đề bài / tiêu chí cụ thể.
+
+Không reuse CatalogueEntry
+thay cho SourcingDossierEntry.
+
+Nhưng dossier có thể link Catalogue.
+
+==================================================
+45. SUPPLIER SEARCH ≠ DOSSIER
+==================================================
+
+Supplier Search:
+
+user tự tìm/filter.
+
+Dossier:
+
+một danh sách đã được chuẩn bị
+với mục đích + tiêu chí + lý do.
+
+Không tạo dossier tự động
+cho mọi search query.
+
+==================================================
+46. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/bo-ho-so
+
+Listing:
+
+Dossier code/title
+
+Purpose
+
+Type
+
+Requirement
+
+Program
+
+Visibility
+
+Entries
+
+Owner
+
+Status
+
+Updated
+
+Next action
+
+==================================================
+47. ADMIN DETAIL
+==================================================
+
+/admin/bo-ho-so/[id]
+
+Tabs:
+
+OVERVIEW
+
+PURPOSE
+
+CRITERIA
+
+CANDIDATES
+
+EVIDENCE
+
+MISSING INFO
+
+BUYER FEEDBACK
+
+ADJUSTMENTS
+
+CONNECTIONS
+
+SAMPLES
+
+MEETINGS
+
+QUOTES
+
+VERSIONS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+48. DOSSIER STATUS
+==================================================
+
+Có thể dùng:
+
+DRAFT
+
+IN_RESEARCH
+
+READY_FOR_REVIEW
+
+SHARED
+
+NEED_ADJUSTMENT
+
+UPDATED
+
+CLOSED
+
+ARCHIVED
+
+CANCELLED
+
+Public dossier thêm:
+
+PUBLISHED
+
+Không dùng:
+SUCCESS
+chỉ vì dossier được share.
+
+==================================================
+49. ENTRY ADDITION
+==================================================
+
+Khi Admin thêm Supplier:
+
+phải có:
+
+inclusionReason
+
+source / match reason
+
+Không cho:
+“Add Supplier”
+mà không có context.
+
+==================================================
+50. ENTRY REMOVAL
+==================================================
+
+Không hard delete lịch sử.
+
+Use:
+
+ARCHIVED
+NOT_SUITABLE
+REMOVED_FROM_CURRENT_VERSION
+
+với reason.
+
+Audit.
+
+==================================================
+51. SHORTLIST
+==================================================
+
+SHORTLISTED
+nghĩa:
+
+Buyer/Coordinator muốn tiếp tục xem xét
+cho đề bài này.
+
+Không nghĩa:
+
+best supplier
+recommended overall
+verified supplier.
+
+==================================================
+52. BUYER PERMISSIONS
+==================================================
+
+Buyer được phép:
+
+view dossier thuộc Organization mình
+
+comment/request adjustment
+
+select candidates
+
+request actions
+
+Không xem:
+
+Supplier internal admin notes
+
+other Buyer dossiers
+
+commercial sponsorship terms.
+
+==================================================
+53. SUPPLIER PERMISSIONS
+==================================================
+
+Supplier không mặc định xem:
+
+toàn bộ dossier
+
+other suppliers
+
+Buyer evaluation
+
+competitor reasons
+
+competitor quotations.
+
+Supplier chỉ thấy:
+request/connection liên quan tới mình.
+
+==================================================
+54. ASSOCIATION / KCN PERMISSION
+==================================================
+
+Nếu dossier thuộc Program/Hội/KCN:
+
+Organization chỉ xem
+trong phạm vi Agreement.
+
+Không mặc định xem Buyer private criteria
+hoặc Supplier private quote.
+
+==================================================
+55. AUDIT
+==================================================
+
+Audit:
+
+Dossier created
+
+Criterion changed
+
+Supplier added
+
+Supplier removed
+
+Reason changed
+
+Visibility changed
+
+Shared
+
+Adjustment requested
+
+Version created
+
+Shortlisted
+
+Connection created
+
+Dossier closed.
+
+==================================================
+56. DATA QUALITY
+==================================================
+
+Warn:
+
+Candidate missing inclusion reason
+
+Criterion no source
+
+Supplier profile outdated
+
+Evidence expired
+
+Missing info unresolved
+
+Private data in public dossier
+
+Sponsor embedded as organic candidate
+
+No owner on active private dossier.
+
+==================================================
+57. RESPONSIVE
+==================================================
+
+Desktop:
+
+Hero
+Purpose
+Criteria
+Candidate comparison/list
+Missing info
+Actions
+
+Mobile:
+
+Hero
+Purpose
+Criteria chips
+Supplier cards
+Missing info
+CTA
+
+Không ép wide comparison table trên 390px.
+
+Có thể chuyển table → cards.
+
+==================================================
+58. ANALYTICS
+==================================================
+
+Track:
+
+dossier_view
+
+criterion_expand
+
+supplier_profile_click
+
+evidence_view
+
+submit_need_from_dossier
+
+adjustment_request_start
+
+adjustment_request_submit
+
+supplier_action_request
+
+Không gọi:
+dossier_view = Buyer lead.
+
+==================================================
+59. SECURITY
+==================================================
+
+Test:
+
+Private dossier direct URL
+
+Cross-organization access
+
+Share token expiry/revoke
+
+Private Requirement leakage
+
+Supplier competitor data
+
+Internal notes
+
+Export bypass
+
+Unauthorized version access.
+
+Backend enforce.
+
+==================================================
+60. QA
+==================================================
+
+Test tối thiểu:
+
+1. Public/private visibility hoạt động.
+2. Dossier reuse Requirement/Supplier data.
+3. Candidate có inclusion reason.
+4. Criteria có source.
+5. Missing information hiển thị riêng.
+6. Sponsor không thay shortlist.
+7. Supplier payment không tăng priority.
+8. Private Buyer data không public.
+9. Supplier không thấy competitor data.
+10. Adjustment request tạo workflow thật.
+11. Sample/Meeting/Quote reuse core entity.
+12. Versions không overwrite.
+13. Public dossier có updated date.
+14. Private dossier noindex.
+15. Export enforce permission.
+16. Admin mutations có AuditLog.
+17. Mobile 390px hoạt động.
+
+==================================================
+61. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- SourcingDossier model
+- Criteria model
+- DossierEntry model
+- Versioning
+- Public/private visibility
+- Requirement integration
+- SupplierMatch integration
+- Evidence integration
+- Missing information workflow
+- Buyer adjustment workflow
+- Sample/Meeting/Quote integration
+- SUPPI/CHAINY integration
+- Admin implementation
+- RBAC/security
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+ĐỀ BÀI
+→ MỤC ĐÍCH
+→ TIÊU CHÍ
+→ CANDIDATES
+→ LÝ DO ĐƯA VÀO
+→ EVIDENCE
+→ THÔNG TIN CÒN THIẾU
+→ BUYER REVIEW
+→ ADJUSTMENT
+→ SHORTLIST
+→ CONNECTION
+→ FOLLOW-UP
+
+BỘ HỒ SƠ TUYỂN CHỌN
+KHÔNG PHẢI CATALOGUE QUẢNG CÁO.
+
+Nó phải là một
+SOURCING DOCUMENT CÓ GIẢI THÍCH,
+có nguồn dữ liệu,
+có ngày cập nhật,
+và có thể tiếp tục đi vào workflow thực tế.

@@ -1,0 +1,809 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 06: HỒ SƠ NHÀ CUNG ỨNG
+ROUTE: /doanh-nghiep/[slug]
+
+MỤC TIÊU:
+Biến trang hồ sơ doanh nghiệp hiện tại thành Supplier Profile đủ dữ liệu để Buyer trả lời được:
+
+“Doanh nghiệp này có phù hợp để tôi gửi nhu cầu hoặc kết nối hay không?”
+
+QUAN TRỌNG:
+- Reuse cấu trúc database hiện tại.
+- Không tạo duplicate Organization/Supplier.
+- Một doanh nghiệp chỉ có 1 Organization record, có thể mang nhiều role.
+- Không dùng fake rating.
+- Không dùng “Top Supplier” nếu không có cơ sở.
+- Không tạo global boolean kiểu verifiedSupplier=true.
+- Không để tài trợ/Founding Partner ảnh hưởng trạng thái xác minh hoặc matching.
+- Không public dữ liệu private/internal.
+
+==================================================
+1. AUDIT TRƯỚC KHI CODE
+==================================================
+
+Trước tiên audit route hiện tại:
+
+/doanh-nghiep/[slug]
+
+Kiểm tra:
+
+- file/component hiện tại
+- slug hiện tại
+- SEO
+- data source
+- Organization model
+- SupplierProfile
+- capabilities
+- products/services
+- service area
+- facilities
+- certifications
+- evidence
+- video
+- catalogue
+- CTA
+- login
+- admin supplier profile
+
+Nếu đã có entity tương đương thì REUSE.
+Không tạo table/function duplicate.
+
+==================================================
+2. SLUG
+==================================================
+
+Slug chuẩn:
+
+- lowercase
+- không dấu
+- dùng dấu "-"
+- unique
+
+Ví dụ:
+
+/doanh-nghiep/cong-ty-tnhh-abc
+
+Database vẫn dùng UUID nội bộ.
+
+Nếu slug thay đổi:
+phải redirect slug cũ sang slug mới.
+
+Canonical:
+
+https://chuoicungung.com/doanh-nghiep/[slug]
+
+==================================================
+3. DATA MODEL
+==================================================
+
+Organization là master identity.
+
+Supplier data là extension của Organization.
+
+Reuse hoặc chuẩn hóa:
+
+organizations
+organization_roles
+
+supplier_profiles
+
+capabilities
+supplier_capabilities
+
+products_services
+
+categories
+
+supplier_service_areas
+
+facilities
+
+certifications
+evidence
+
+media_assets
+catalogues
+
+programs
+
+SupplierProfile cần hỗ trợ:
+
+organizationId
+
+headline
+
+profileStatus
+
+availabilityStatus
+availabilityCheckedAt
+
+sampleAvailable
+surveyAvailable
+
+profileCompleteness
+
+publishable
+
+publishedAt
+updatedAt
+
+==================================================
+4. CAPABILITY DATA
+==================================================
+
+Không chỉ lưu paragraph marketing.
+
+Capability cần structured data:
+
+- title
+- category
+- description
+- capacity
+- MOQ / order range
+- lead time
+- service area
+- evidence status
+- updated date
+
+Ví dụ:
+
+“May đồng phục công nhân”
+
+Capacity:
+20.000 sản phẩm/tháng
+
+MOQ:
+300 sản phẩm
+
+Lead time:
+15–25 ngày
+
+Không khẳng định dữ liệu nếu chưa có nguồn.
+
+==================================================
+5. PRODUCT / SERVICE
+==================================================
+
+Một Supplier có thể có nhiều Product/Service.
+
+Mỗi ProductService cần:
+
+id
+organizationId
+slug
+title
+categoryId
+description
+specs
+suitableBuyer
+moq
+leadTime
+serviceArea
+attachments
+evidence
+status
+updatedAt
+
+Link:
+
+/san-pham-dich-vu/[slug]
+
+==================================================
+6. SERVICE AREA
+==================================================
+
+Không lấy office address để suy ra service area.
+
+Phải phân biệt:
+
+- địa chỉ văn phòng
+- nhà máy/xưởng
+- kho
+- service area
+- delivery area
+- KCN phục vụ
+
+Service area phải là dữ liệu riêng.
+
+==================================================
+7. EVIDENCE
+==================================================
+
+Evidence phải hỗ trợ:
+
+type
+title
+source
+status
+issuedAt
+expiresAt
+checkedAt
+visibility
+
+Evidence type:
+
+BUSINESS_DOCUMENT
+CERTIFICATION
+FACTORY_IMAGE
+MACHINE_IMAGE
+PROJECT
+CLIENT_REFERENCE
+AUDIT
+VIDEO
+CATALOGUE
+OTHER
+
+Evidence status:
+
+SELF_DECLARED
+DOCUMENT_PROVIDED
+REVIEWED
+CONFIRMED
+NEEDS_UPDATE
+EXPIRED
+CONFLICT
+REJECTED
+
+Không được biến SELF_DECLARED thành “Đã xác minh”.
+
+==================================================
+8. UX/UI PAGE
+==================================================
+
+Thiết kế trang theo thứ tự:
+
+01. HEADER
+
+Logo
+
+Tên doanh nghiệp
+
+Địa bàn
+
+Ngày cập nhật
+
+Capability chips
+
+CTA:
+
+[XEM / GỬI NHU CẦU]
+
+[LƯU NHÀ CUNG ỨNG]
+
+--------------------------------------------------
+
+02. NĂNG LỰC CHÍNH
+
+Hiển thị dạng structured cards/chips.
+
+Không dùng paragraph marketing dài.
+
+--------------------------------------------------
+
+03. SẢN PHẨM / DỊCH VỤ
+
+Product cards.
+
+Mỗi card dẫn:
+
+/san-pham-dich-vu/[slug]
+
+--------------------------------------------------
+
+04. PHẠM VI PHỤC VỤ
+
+Hiển thị:
+
+Tỉnh/thành
+KCN
+khu vực phục vụ
+
+Không suy luận từ địa chỉ văn phòng.
+
+--------------------------------------------------
+
+05. ĐIỀU KIỆN NHẬN VIỆC
+
+Hiển thị:
+
+MOQ / quy mô đơn hàng
+
+Lead time
+
+Có làm mẫu?
+
+Có khảo sát?
+
+Availability hiện tại
+
+Ngày availability được cập nhật
+
+Nếu dữ liệu cũ:
+
+hiển thị:
+“Cần xác nhận lại”
+
+--------------------------------------------------
+
+06. CƠ SỞ & NĂNG LỰC SẢN XUẤT
+
+Nhà xưởng
+
+Cơ sở
+
+Máy móc
+
+Công suất
+
+Ảnh thực tế
+
+Chỉ dùng dữ liệu được phép công bố.
+
+--------------------------------------------------
+
+07. BẰNG CHỨNG
+
+Chứng nhận
+
+Dự án
+
+Tài liệu
+
+Ảnh xưởng
+
+Máy móc
+
+Video
+
+Mỗi evidence phải hiển thị:
+
+Nguồn
+Trạng thái
+Ngày cập nhật
+Ngày hết hạn nếu có
+
+--------------------------------------------------
+
+08. VIDEO + CATALOGUE
+
+Video giới thiệu 1 phút nếu có.
+
+Catalogue liên quan.
+
+Không tạo dữ liệu giả.
+
+--------------------------------------------------
+
+09. THÔNG TIN CẦN XÁC NHẬN
+
+Đây là block BẮT BUỘC.
+
+Ví dụ:
+
+Nội dung:
+Có thể giao trước 15/11
+
+Trạng thái:
+Cần xác nhận
+
+Nội dung:
+Phục vụ Đồng Nai
+
+Trạng thái:
+Đã có dữ liệu xác nhận
+
+Nội dung:
+Chất liệu phù hợp
+
+Trạng thái:
+Chờ Buyer đánh giá
+
+Không dùng một điểm uy tín chung để thay thế block này.
+
+--------------------------------------------------
+
+10. CHƯƠNG TRÌNH LIÊN QUAN
+
+Chương trình Supplier đang/đã tham gia.
+
+Chỉ hiển thị dữ liệu thật.
+
+--------------------------------------------------
+
+11. FINAL CTA
+
+“GỬI YÊU CẦU CHO NHÀ CUNG ỨNG NÀY”
+
+==================================================
+9. CTA GỬI YÊU CẦU
+==================================================
+
+Khi Buyer click:
+
+“GỬI YÊU CẦU”
+
+Nếu Buyer đã có Requirement:
+
+hiển thị:
+
+“Chọn nhu cầu hiện có”
+
+hoặc:
+
+“Tạo nhu cầu mới”
+
+Nếu chưa có Requirement:
+
+tạo Requirement Draft
+và dẫn sang flow:
+
+/dang-nhu-cau
+
+Nếu chưa login:
+
+login trước bước lưu/gửi.
+
+Không mặc định mở số điện thoại NCC trực tiếp.
+
+Luồng chuẩn:
+
+Buyer request
+→ Requirement
+→ Supplier confirmation
+→ Connection
+→ CHAINY follow-up
+
+==================================================
+10. SUPPI TRÊN SUPPLIER PROFILE
+==================================================
+
+SUPPI phải có thể trả lời dựa trên dữ liệu có cấu trúc của profile.
+
+Ví dụ:
+
+“NCC này cung cấp gì?”
+
+“Có phục vụ Đồng Nai không?”
+
+“MOQ bao nhiêu?”
+
+“Có làm mẫu không?”
+
+“Lead time hiện tại bao nhiêu?”
+
+“Có chứng nhận nào?”
+
+“Thông tin nào vẫn cần xác nhận?”
+
+SUPPI chỉ được trả lời từ:
+
+Organization
+SupplierProfile
+Capability
+ProductService
+ServiceArea
+Evidence
+Requirement context
+
+Nếu không có dữ liệu:
+
+SUPPI phải nói:
+
+“Thông tin này chưa được xác nhận.”
+
+Không invent.
+
+==================================================
+11. MATCHING CONTEXT
+==================================================
+
+Nếu user mở Supplier Profile từ Requirement:
+
+ví dụ:
+
+?requirement=NC-2026-00125
+
+hiển thị block:
+
+“VÌ SAO NHÀ CUNG ỨNG NÀY ĐƯỢC ĐỀ XUẤT?”
+
+Ví dụ:
+
+✓ Đúng nhóm sản phẩm
+
+✓ Phục vụ Đồng Nai
+
+✓ MOQ phù hợp
+
+✓ Có thể làm mẫu
+
+? Lead time cần xác nhận
+
+Không hiển thị internal score.
+
+Không ghi:
+
+“92% chắc chắn phù hợp”.
+
+==================================================
+12. FOUNDING PARTNER
+==================================================
+
+Nếu Supplier là Founding Partner:
+
+có thể hiển thị label:
+
+“ĐỐI TÁC ĐỒNG HÀNH CHUYÊN MỤC”
+
+Nhưng:
+
+- không thay verification
+- không tự động đứng đầu matching
+- không làm profile thành “được chứng nhận”
+- không được che block dữ liệu quan trọng
+
+Commercial relationship phải tách riêng data quality.
+
+==================================================
+13. ADMIN
+==================================================
+
+Reuse:
+
+/admin/to-chuc/[id]
+
+Supplier profile tabs:
+
+Tổng quan
+
+Năng lực
+
+Sản phẩm / Dịch vụ
+
+Địa bàn
+
+Cơ sở
+
+Máy móc
+
+Chứng nhận
+
+Bằng chứng
+
+Media
+
+Catalogue
+
+Nhu cầu đã nhận
+
+Matching
+
+Kết nối
+
+Chương trình
+
+Tasks
+
+Timeline
+
+Audit
+
+Admin phải làm được:
+
+- thêm/sửa capability
+- cập nhật MOQ
+- cập nhật lead time
+- cập nhật availability
+- cập nhật service area
+- thêm facility
+- thêm machine info
+- thêm certificate
+- thêm evidence
+- review evidence
+- đánh dấu evidence hết hạn
+- cập nhật publish state
+- cập nhật profile completeness
+- assign owner
+
+Mọi mutation phải ghi AuditLog.
+
+==================================================
+14. PROFILE COMPLETENESS
+==================================================
+
+Không tính chỉ bằng số field.
+
+Profile completeness nên dựa trên các nhóm:
+
+Identity
+
+Capabilities
+
+Products / Services
+
+Service Area
+
+Order Conditions
+
+Evidence
+
+Contact
+
+Media
+
+Ví dụ nếu thiếu:
+
+Lead time
+
+Service area
+
+Evidence
+
+Admin phải thấy:
+
+“Profile còn thiếu dữ liệu quan trọng”.
+
+==================================================
+15. PUBLISH RULE
+==================================================
+
+Supplier Profile chỉ public khi:
+
+organization.status = ACTIVE
+
+supplier_profile.status = ACTIVE
+
+supplier_profile.publishable = true
+
+Nếu suspended/unpublished:
+
+route public không được hiển thị dữ liệu.
+
+==================================================
+16. SEO
+==================================================
+
+Title:
+
+[Tên doanh nghiệp] | Năng lực Nhà Cung Ứng | CHUOICUNGUNG.COM
+
+Meta Description:
+
+[Tên doanh nghiệp] cung cấp [năng lực chính], phục vụ [địa bàn]. Xem sản phẩm, điều kiện nhận đơn, bằng chứng năng lực và gửi nhu cầu kết nối.
+
+Schema:
+
+Organization
+
+Product / Service khi phù hợp
+
+Không tạo:
+
+fake rating
+AggregateRating giả
+fake review
+
+==================================================
+17. MOBILE
+==================================================
+
+Mobile ưu tiên:
+
+Tên NCC
+
+Năng lực chính
+
+Địa bàn
+
+Điều kiện nhận việc
+
+Thông tin cần xác nhận
+
+Evidence
+
+CTA
+
+Không nhồi toàn bộ desktop vào mobile.
+
+CTA:
+
+“GỬI YÊU CẦU”
+
+có thể sticky bottom.
+
+Mascot SUPPI không được che CTA.
+
+==================================================
+18. SECURITY / PRIVACY
+==================================================
+
+Không public:
+
+internal notes
+
+private contact
+
+buyer information
+
+private client references
+
+private certificate
+
+confidential documents
+
+admin matching score
+
+supplier commercial notes
+
+Kiểm tra permission ở backend.
+
+==================================================
+19. QA
+==================================================
+
+Test:
+
+1. Slug unique hoạt động.
+
+2. Canonical đúng.
+
+3. Đổi slug có redirect.
+
+4. Supplier chỉ có một Organization dù có nhiều role.
+
+5. Capability lấy DB thật.
+
+6. Service area không lấy nhầm office address.
+
+7. Expired certificate hiển thị EXPIRED.
+
+8. SELF_DECLARED không hiển thị như CONFIRMED.
+
+9. Thông tin thiếu hiển thị:
+“Cần xác nhận”.
+
+10. Private evidence không public.
+
+11. CTA “Gửi yêu cầu” đi đúng Requirement flow.
+
+12. Requirement context hiển thị match explanation.
+
+13. SUPPI không invent dữ liệu.
+
+14. Admin update tạo AuditLog.
+
+15. Unpublished Supplier không public.
+
+16. Founding Partner không thay verification.
+
+17. Mobile 390px không overflow.
+
+==================================================
+20. OUTPUT SAU KHI HOÀN THÀNH
+==================================================
+
+Cuối cùng báo cáo:
+
+1. Files đã thay đổi
+2. Database/model đã reuse
+3. Migration đã tạo
+4. API/server actions đã tạo
+5. Component mới
+6. Phần nào lấy dữ liệu thật
+7. Phần nào còn thiếu dữ liệu
+8. Phần nào đang mock
+9. QA PASS / FAIL / BLOCKED
+
+Không tuyên bố tính năng hoàn thiện nếu còn dùng mock data.
+
+MỤC TIÊU CUỐI:
+
+Buyer mở một Supplier Profile và phải hiểu được:
+
+NCC LÀM ĐƯỢC GÌ
+→ PHỤC VỤ Ở ĐÂU
+→ NHẬN ĐƠN CỠ NÀO
+→ ĐIỀU KIỆN RA SAO
+→ CÓ BẰNG CHỨNG GÌ
+→ THÔNG TIN GÌ CẦN XÁC NHẬN
+→ CÓ NÊN GỬI YÊU CẦU / KẾT NỐI HAY KHÔNG.

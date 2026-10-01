@@ -7,17 +7,25 @@ export default function InteractiveExplodedFlower3D() {
   const { t, lang } = useLanguage();
   const navigate = useNavigate();
   const [activeStageId, setActiveStageId] = useState(1);
-  const [explodeFactor, setExplodeFactor] = useState(0.85);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   const [showGuide, setShowGuide] = useState(true);
   const containerRef = useRef(null);
+  const sceneRootRef = useRef(null);
 
-  // Responsive Screen Listener
+  // Responsive Screen Listener (debounced/infrequent)
   useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setWindowWidth(window.innerWidth);
+      }, 150);
+    };
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   const isMobile = windowWidth < 640;
@@ -28,15 +36,14 @@ export default function InteractiveExplodedFlower3D() {
   const coordScale = isMobile ? 0.44 : (isTablet ? 0.72 : (isWide ? 1.15 : 1.0));
   const cardScale = isMobile ? 0.76 : (isTablet ? 0.88 : (isWide ? 1.04 : 1.0));
 
-  // 6 Petal Stages with GIANT Exploded Coordinates (Expanded wide across the viewport)
+  // 6 Petal Stages with Wider Exploded Coordinates for generous breathing room
   const petalStages = [
     {
       id: 1,
       num: '01',
       title: lang === 'en' ? 'PREPARATION & INVESTMENT' : 'CHUẨN BỊ & ĐẦU TƯ',
       color: '#8b5cf6',
-      exploded: { x: 0, y: -240, z: 60, rotX: 14, rotY: 0, rotZ: 0 },
-      assembled: { x: 0, y: -80, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
+      exploded: { x: 0, y: -290, z: 60, rotX: 14, rotY: 0, rotZ: 0 },
       phases: lang === 'en' 
         ? ['Market Research & Site Selection', 'Legal Procedures & Investment Licensing', 'Master Planning & Feasibility Study']
         : ['Nghiên cứu thị trường & Lựa chọn địa điểm', 'Thủ tục pháp lý & Cấp phép đầu tư', 'Quy hoạch sơ bộ & Đánh giá khả thi'],
@@ -47,9 +54,8 @@ export default function InteractiveExplodedFlower3D() {
       num: '02',
       title: lang === 'en' ? 'DESIGN & CONSTRUCTION' : 'THIẾT KẾ & XÂY DỰNG',
       color: '#10b981',
-      exploded: { x: 360, y: -130, z: 45, rotX: 10, rotY: -16, rotZ: 8 },
-      assembled: { x: 80, y: -42, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
-      phases: lang === 'en'
+      exploded: { x: 440, y: -150, z: 45, rotX: 10, rotY: -16, rotZ: 8 },
+      phases: lang === 'en' 
         ? ['Architectural, Structural & MEP Design', 'Civil Construction & Industrial Workshops', 'Cleanrooms & Industrial Utilities']
         : ['Thiết kế kiến trúc, kết cấu & Cơ điện MEP', 'Thi công xây dựng hạ tầng thô & Nhà xưởng', 'Hoàn thiện hệ thống phòng sạch & Tiện ích'],
       metric: lang === 'en' ? '180+ Contractors' : '180+ Nhà thầu thi công',
@@ -59,9 +65,8 @@ export default function InteractiveExplodedFlower3D() {
       num: '03',
       title: lang === 'en' ? 'INSTALLATION & COMPLETION' : 'LẮP ĐẶT & HOÀN THIỆN',
       color: '#f97316',
-      exploded: { x: 360, y: 130, z: 50, rotX: -10, rotY: -16, rotZ: -8 },
-      assembled: { x: 80, y: 42, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
-      phases: lang === 'en'
+      exploded: { x: 440, y: 150, z: 50, rotX: -10, rotY: -16, rotZ: -8 },
+      phases: lang === 'en' 
         ? ['Machinery Import & Transportation', 'Specialized Equipment & Fire Safety Setup', 'Unit & Coupled Commissioning & Acceptance']
         : ['Nhập khẩu & Vận chuyển dây chuyền máy móc', 'Lắp đặt thiết bị chuyên dụng & Hệ thống PCCC', 'Chạy thử đơn động, liên động & Nghiệm thu'],
       metric: lang === 'en' ? '250+ Equipment Vendors' : '250+ Nhà cung cấp thiết bị',
@@ -71,9 +76,8 @@ export default function InteractiveExplodedFlower3D() {
       num: '04',
       title: lang === 'en' ? 'PRODUCTION & OPERATION' : 'VẬN HÀNH SẢN XUẤT',
       color: '#0284c7',
-      exploded: { x: 0, y: 240, z: 65, rotX: -16, rotY: 0, rotZ: 0 },
-      assembled: { x: 0, y: 80, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
-      phases: lang === 'en'
+      exploded: { x: 0, y: 290, z: 65, rotX: -16, rotY: 0, rotZ: 0 },
+      phases: lang === 'en' 
         ? ['Raw Materials & Consumables Supply', 'Equipment Maintenance & Energy Optimization', 'Quality Control (QC) & Operational Management']
         : ['Cung ứng nguyên phụ liệu & Vật tư tiêu hao', 'Bảo trì, bảo dưỡng thiết bị & Tiết kiệm năng lượng', 'Kiểm soát chất lượng QC & Quản lý vận hành'],
       metric: lang === 'en' ? '520+ Auxiliary Suppliers' : '520+ Nhà cung ứng phụ trợ',
@@ -83,9 +87,8 @@ export default function InteractiveExplodedFlower3D() {
       num: '05',
       title: lang === 'en' ? 'LOGISTICS & WORKFORCE' : 'NHÂN SỰ & HẬU CẦN',
       color: '#eab308',
-      exploded: { x: -360, y: 130, z: 50, rotX: -10, rotY: 16, rotZ: 8 },
-      assembled: { x: -80, y: 42, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
-      phases: lang === 'en'
+      exploded: { x: -440, y: 150, z: 50, rotX: -10, rotY: 16, rotZ: 8 },
+      phases: lang === 'en' 
         ? ['High-Skill Workforce Recruitment & Training', 'Warehousing, Forklift & Industrial Logistics', 'Industrial Catering & Industrial Park Security']
         : ['Tuyển dụng & Đào tạo nhân sự kỹ thuật cao', 'Dịch vụ logistics kho bãi, xe nâng & Pallet', 'Cung ứng suất ăn công nghiệp & An ninh KCN'],
       metric: lang === 'en' ? '190+ Logistics & Services' : '190+ Đơn vị Logistics & Dịch vụ',
@@ -95,34 +98,31 @@ export default function InteractiveExplodedFlower3D() {
       num: '06',
       title: lang === 'en' ? 'EXPANSION & OPTIMIZATION' : 'MỞ RỘNG – TỐI ƯU',
       color: '#ef4444',
-      exploded: { x: -360, y: -130, z: 45, rotX: 10, rotY: 16, rotZ: -8 },
-      assembled: { x: -80, y: -42, z: 0, rotX: 0, rotY: 0, rotZ: 0 },
-      phases: lang === 'en'
+      exploded: { x: -440, y: -150, z: 45, rotX: 10, rotY: 16, rotZ: -8 },
+      phases: lang === 'en' 
         ? ['Digital Transformation, IoT & Automation', 'Green ESG Certification & ISO Export Standards', 'Workshop Scale-up & Supply Chain Optimization']
         : ['Chuyển đổi số, IoT & Tự động hóa nhà máy', 'Chứng nhận xanh ESG & Tiêu chuẩn xuất khẩu ISO', 'Mở rộng quy mô phân xưởng & Tối ưu hóa chuỗi'],
       metric: lang === 'en' ? '140+ Industry Experts' : '140+ Chuyên gia tư vấn',
     }
   ];
 
-  // Automatic Scroll-Driven Explode & Assemble Animation
+  // Zero-render direct DOM CSS variable update on scroll for 120fps buttery smooth performance
   useEffect(() => {
     let ticking = false;
 
     const handleScroll = () => {
-      if (!containerRef.current) return;
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const rect = containerRef.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-          
-          const containerCenter = rect.top + rect.height / 2;
-          const viewportCenter = windowHeight / 2;
-          const distFromCenter = Math.abs(containerCenter - viewportCenter);
-          const maxDist = windowHeight * 0.85;
-          
-          // Smooth interpolation: When in view, factor reaches 1.0 (GIANT EXPLOSION)
-          const factor = Math.max(0.15, Math.min(1, 1.15 - (distFromCenter / maxDist)));
-          setExplodeFactor(factor);
+          if (sceneRootRef.current && containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            const visibleCenter = rect.top + rect.height * 0.45;
+            const distFromCenter = Math.abs(visibleCenter - windowHeight * 0.5);
+            const maxDist = windowHeight * 0.75;
+            // When centered: 1.0 (fully exploded wide), when far away: 0.35 (retracted)
+            const fraction = Math.max(0.35, Math.min(1.0, 1 - (distFromCenter / maxDist)));
+            sceneRootRef.current.style.setProperty('--bloom', fraction.toFixed(3));
+          }
           ticking = false;
         });
         ticking = true;
@@ -132,31 +132,25 @@ export default function InteractiveExplodedFlower3D() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
+  // Zero-render direct DOM mouse tilt for buttery 60/120fps performance
   const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
+    if (!sceneRootRef.current || !containerRef.current || isMobile) return;
     const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x: x * 18, y: -y * 18 });
-  };
-
-  const handleTouchMove = (e) => {
-    if (!containerRef.current || !e.touches[0]) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const touch = e.touches[0];
-    const x = (touch.clientX - rect.left) / rect.width - 0.5;
-    const y = (touch.clientY - rect.top) / rect.height - 0.5;
-    setMousePos({ x: x * 14, y: -y * 14 });
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+    const y = -((e.clientY - rect.top) / rect.height - 0.5) * 10;
+    sceneRootRef.current.style.transform = `rotateX(${y.toFixed(2)}deg) rotateY(${x.toFixed(2)}deg)`;
   };
 
   const handleMouseLeave = () => {
-    setMousePos({ x: 0, y: 0 });
+    if (sceneRootRef.current) {
+      sceneRootRef.current.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    }
   };
-
-  const lerp = (start, end, t) => start + (end - start) * t;
 
   const currentStage = petalStages.find(s => s.id === activeStageId) || petalStages[0];
 
@@ -164,83 +158,80 @@ export default function InteractiveExplodedFlower3D() {
     <div 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
       onMouseLeave={handleMouseLeave}
       className="relative w-full py-2 select-none overflow-visible space-y-4 sm:space-y-6"
     >
       
-      {/* 3D PERSPECTIVE GIANT ARENA (SCALED FOR BOTH MOBILE & ULTRA-WIDE HIGH-RES SCREENS) */}
+      {/* 3D PERSPECTIVE GIANT ARENA */}
       <div 
-        className="relative w-full min-h-[520px] sm:min-h-[680px] lg:min-h-[780px] xl:min-h-[840px] flex items-center justify-center py-2 sm:py-4"
+        className="relative w-full min-h-[560px] sm:min-h-[720px] lg:min-h-[820px] xl:min-h-[880px] flex items-center justify-center py-2 sm:py-4"
         style={{ perspective: isMobile ? '1200px' : '1800px' }}
       >
         
         {/* 3D Scene Root */}
         <div 
-          className="relative w-full max-w-[1100px] 2xl:max-w-[1360px] 3xl:max-w-[1500px] h-[520px] sm:h-[640px] lg:h-[700px] flex items-center justify-center transition-transform duration-200 ease-out will-change-transform"
+          ref={sceneRootRef}
+          className="relative w-full max-w-[1100px] 2xl:max-w-[1360px] 3xl:max-w-[1500px] h-[540px] sm:h-[660px] lg:h-[720px] flex items-center justify-center transition-transform duration-300 ease-out"
           style={{
             transformStyle: 'preserve-3d',
-            transform: `rotateX(${mousePos.y.toFixed(2)}deg) rotateY(${mousePos.x.toFixed(2)}deg)`
+            transform: 'rotateX(0deg) rotateY(0deg)',
+            '--bloom': '1'
           }}
         >
 
-          {/* 1. CENTRAL LOGO HUB (CLEAN FLOATING 3D CORE - NO TEXT BADGE) */}
+          {/* 1. CENTRAL LOGO HUB */}
           <div 
-            className="absolute z-10 flex flex-col items-center justify-center p-2 text-center transition-transform duration-500 cursor-pointer hover:scale-110"
+            className="absolute z-10 flex flex-col items-center justify-center p-2 text-center transition-transform duration-300 cursor-pointer hover:scale-105"
             style={{
               transform: 'translateZ(20px)'
             }}
             onClick={() => navigate('/ban-do-6-giai-doan')}
           >
             <div className="w-32 h-32 sm:w-40 sm:h-40 xl:w-48 xl:h-48 flex items-center justify-center relative">
-              <div className="absolute inset-0 rounded-full bg-blue-400/10 blur-xl animate-pulse"></div>
+              <div className="absolute inset-0 rounded-full bg-blue-400/10 blur-xl"></div>
               <img 
                 src="/logo_only.png" 
                 alt="Logo Chuỗi Cung Ứng" 
-                className="w-full h-full object-contain filter drop-shadow-2xl animate-spin-slow transition duration-300"
+                className="w-full h-full object-contain filter drop-shadow-md animate-spin-slow"
               />
             </div>
           </div>
 
-          {/* 2. 6 GIANT FLOATING PETAL CARDS IN 3D SPACE */}
+          {/* 2. 6 GIANT FLOATING PETAL CARDS IN STABLE 3D SPACE */}
           {petalStages.map((stg) => {
             const isSelected = activeStageId === stg.id;
 
-            const currX = lerp(stg.assembled.x * coordScale, stg.exploded.x * coordScale, explodeFactor);
-            const currY = lerp(stg.assembled.y * coordScale, stg.exploded.y * coordScale, explodeFactor);
-            const currZ = lerp(stg.assembled.z, stg.exploded.z, explodeFactor) + (isSelected ? (isMobile ? 20 : 35) : 0);
-            const currRotX = lerp(stg.assembled.rotX, stg.exploded.rotX, explodeFactor);
-            const currRotY = lerp(stg.assembled.rotY, stg.exploded.rotY, explodeFactor);
-            const currRotZ = lerp(stg.assembled.rotZ, stg.exploded.rotZ, explodeFactor);
-            const currentScale = isSelected ? cardScale * 1.06 : cardScale;
+            const targetX = (stg.exploded.x * coordScale).toFixed(1);
+            const targetY = (stg.exploded.y * coordScale).toFixed(1);
+            const targetZ = stg.exploded.z;
+            const rotX = stg.exploded.rotX;
+            const rotY = stg.exploded.rotY;
+            const rotZ = stg.exploded.rotZ;
+            const baseScale = cardScale;
 
             return (
               <div
                 key={stg.id}
                 onMouseEnter={() => setActiveStageId(stg.id)}
-                onMouseOver={() => setActiveStageId(stg.id)}
-                onTouchStart={() => setActiveStageId(stg.id)}
                 onClick={() => navigate(`/giai-doan/${stg.id}`)}
-                className={`absolute transition-all duration-300 ease-out cursor-pointer group ${
+                className={`absolute cursor-pointer group transition-all duration-400 ease-out ${
                   isSelected ? 'z-30' : 'z-20'
                 }`}
                 style={{
                   transformStyle: 'preserve-3d',
-                  transform: `translate3d(${currX.toFixed(1)}px, ${currY.toFixed(1)}px, ${currZ.toFixed(1)}px) rotateX(${currRotX.toFixed(1)}deg) rotateY(${currRotY.toFixed(1)}deg) rotateZ(${currRotZ.toFixed(1)}deg) scale(${currentScale.toFixed(2)})`
+                  transform: `translate3d(calc(${targetX}px * var(--bloom, 1)), calc(${targetY}px * var(--bloom, 1)), calc((${targetZ}px * var(--bloom, 1)) + ${isSelected ? (isMobile ? 25 : 45) : 0}px)) rotateX(calc(${rotX}deg * var(--bloom, 1))) rotateY(calc(${rotY}deg * var(--bloom, 1))) rotateZ(calc(${rotZ}deg * var(--bloom, 1))) scale(calc(${baseScale} * (0.85 + 0.15 * var(--bloom, 1)) * ${isSelected ? 1.07 : 1.0}))`
                 }}
               >
                 {/* Petal Card */}
                 <div 
-                  onMouseEnter={() => setActiveStageId(stg.id)}
-                  onTouchStart={() => setActiveStageId(stg.id)}
-                  className={`w-[230px] sm:w-64 md:w-72 p-3 sm:p-4 md:p-5 rounded-3xl bg-white/95 backdrop-blur-xl border-2 transition-all duration-300 shadow-2xl ${
+                  className={`w-[230px] sm:w-64 md:w-72 p-3 sm:p-4 md:p-5 rounded-3xl bg-white border-2 shadow-lg transition-all duration-300 ease-out ${
                     isSelected 
-                      ? 'shadow-2xl scale-[1.02]' 
-                      : 'border-slate-200/90 hover:border-slate-300 shadow-slate-200/80 hover:shadow-2xl'
+                      ? 'shadow-2xl ring-4 ring-offset-2' 
+                      : 'border-slate-200/90 hover:border-slate-300 shadow-slate-200/80 hover:shadow-xl'
                   }`}
                   style={{
                     borderColor: isSelected ? stg.color : undefined,
-                    boxShadow: isSelected ? `0 20px 40px -12px ${stg.color}35, 0 0 0 3px ${stg.color}25` : undefined
+                    boxShadow: isSelected ? `0 20px 48px -10px ${stg.color}45, 0 0 0 2px ${stg.color}30` : undefined
                   }}
                 >
                   {/* Card Header */}
@@ -258,7 +249,7 @@ export default function InteractiveExplodedFlower3D() {
                     </div>
                     <span 
                       style={{ backgroundColor: stg.color }}
-                      className="w-2.5 h-2.5 rounded-full animate-ping"
+                      className="w-2.5 h-2.5 rounded-full ring-2 ring-slate-100"
                     ></span>
                   </div>
 
@@ -301,16 +292,16 @@ export default function InteractiveExplodedFlower3D() {
 
       {/* Floating Bottom Action Dock for Selected Stage */}
       <div 
-        className="max-w-4xl mx-auto mt-4 p-4 sm:p-5 rounded-3xl bg-white/95 backdrop-blur-xl border transition-all duration-300 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 relative z-20"
+        className="max-w-4xl mx-auto mt-4 p-4 sm:p-5 rounded-3xl bg-white border shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4 relative z-20"
         style={{ 
           borderColor: `${currentStage.color}50`, 
-          boxShadow: `0 15px 35px -10px ${currentStage.color}30` 
+          boxShadow: `0 12px 30px -10px ${currentStage.color}25` 
         }}
       >
         <div className="flex items-center space-x-3.5 text-left">
           <span 
             style={{ backgroundColor: currentStage.color }}
-            className="w-12 h-12 rounded-2xl text-white font-black flex items-center justify-center font-mono text-lg shadow-md transition-all duration-300"
+            className="w-12 h-12 rounded-2xl text-white font-black flex items-center justify-center font-mono text-lg shadow-sm"
           >
             {currentStage.num}
           </span>
@@ -320,7 +311,7 @@ export default function InteractiveExplodedFlower3D() {
             </div>
             <div 
               style={{ color: currentStage.color }}
-              className="text-sm sm:text-base font-black font-heading uppercase transition-colors duration-300"
+              className="text-sm sm:text-base font-black font-heading uppercase"
             >
               {currentStage.title}
             </div>
@@ -334,7 +325,7 @@ export default function InteractiveExplodedFlower3D() {
             navigate(`/giai-doan/${currentStage.id}`);
           }}
           style={{ backgroundColor: currentStage.color }}
-          className="px-6 py-3.5 rounded-2xl text-white font-bold text-xs sm:text-sm shadow-lg flex items-center space-x-2 transition-all duration-300 hover:brightness-110 hover:scale-[1.03] font-heading uppercase tracking-wide cursor-pointer whitespace-nowrap"
+          className="px-6 py-3.5 rounded-2xl text-white font-bold text-xs sm:text-sm shadow-md flex items-center space-x-2 transition-all duration-200 hover:brightness-110 hover:scale-[1.02] font-heading uppercase tracking-wide cursor-pointer whitespace-nowrap"
         >
           <span>{lang === 'en' ? `Explore 3 Phases & Suppliers in Stage ${currentStage.num}` : `Khám phá 3 Pha & Doanh nghiệp Giai đoạn ${currentStage.num}`}</span>
           <ArrowRight className="w-4 h-4" />
@@ -344,10 +335,10 @@ export default function InteractiveExplodedFlower3D() {
       {/* 3D FLOATING GUIDE POPUP AT BOTTOM OF HERO SECTION */}
       <div className="max-w-5xl mx-auto px-2 sm:px-4 pt-2 relative z-20">
         {showGuide ? (
-          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-xl shadow-slate-200/60 transition-all duration-300 transform hover:shadow-2xl">
+          <div className="bg-white border border-slate-200/90 rounded-3xl p-4 sm:p-5 shadow-lg">
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
               <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-wider text-slate-500 font-heading">
-                <span className="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span>
+                <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                 <span>{lang === 'en' ? 'HOW TO USE THIS MAP' : 'HƯỚNG DẪN SỬ DỤNG BẢN ĐỒ'}</span>
               </div>
               <button 

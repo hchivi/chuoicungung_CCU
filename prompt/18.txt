@@ -1,0 +1,936 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 18: FOUNDING PARTNER
+ROUTE: /founding-partner
+
+MỤC TIÊU:
+
+Xây /founding-partner thành trang tiếp nhận đề xuất
+“ĐỒNG HÀNH CHUYÊN MỤC / CỤM Ý ĐỊNH TÌM KIẾM”.
+
+Founding Partner là một GÓI THƯƠNG MẠI.
+
+KHÔNG được hiểu là:
+
+- co-founder của công ty;
+- cổ đông;
+- nhà đầu tư;
+- đơn vị bảo trợ;
+- chứng nhận năng lực;
+- NCC được ưu tiên matching;
+- quyền độc quyền mọi lead Buyer.
+
+Luồng:
+
+DOANH NGHIỆP QUAN TÂM
+→ CHỌN PHẠM VI
+→ GỬI ĐỀ XUẤT
+→ REVIEW
+→ XÁC ĐỊNH QUYỀN LỢI
+→ PROPOSAL
+→ CONTRACT
+→ ACTIVE PARTNERSHIP
+→ DELIVERY TRACKING
+→ REPORT
+→ EXPIRY / RENEWAL
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit hiện tại:
+
+/founding-partner
+
+Reuse:
+
+organizations
+categories
+keywords
+keyword_clusters
+locations
+industrial_parks
+supplier_profiles
+media_assets
+catalogues
+programs
+service_requests / partnership_requests
+contracts
+tasks
+activities
+audit_logs
+
+Nếu đã có founding_partner model:
+reuse và migrate an toàn.
+
+Không hard-code logo NCC trực tiếp vào page Category/Keyword.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“ĐỒNG HÀNH PHÁT TRIỂN CHUYÊN MỤC PHÙ HỢP VỚI NĂNG LỰC DOANH NGHIỆP”
+
+Sub:
+
+“Gói Founding Partner dành cho đối tác tiên phong tài trợ một phạm vi chuyên mục được xác định rõ. Quyền lợi có thể gồm khối giới thiệu nổi bật, nội dung doanh nghiệp, video, catalogue và báo cáo theo thỏa thuận.”
+
+CTA chính:
+
+[TRAO ĐỔI PHẠM VI ĐỒNG HÀNH]
+
+CTA phụ:
+
+[XEM CÁCH FOUNDING PARTNER HOẠT ĐỘNG]
+
+==================================================
+3. GIẢI THÍCH FOUNDING PARTNER
+==================================================
+
+Tạo block rõ ràng:
+
+“FOUNDING PARTNER LÀ GÌ?”
+
+Nội dung:
+
+Founding Partner là đối tác tài trợ phát triển một phạm vi chuyên mục hoặc cụm nhu cầu cụ thể trên CHUOICUNGUNG.COM.
+
+Ví dụ phạm vi:
+
+Ngành / Category
++
+Keyword Cluster
++
+Địa bàn nếu có
++
+Thời hạn
++
+Vị trí hiển thị
++
+Quyền lợi theo hợp đồng.
+
+Hiển thị note:
+
+“Founding Partner là gói thương mại. Việc tham gia không tạo quyền sở hữu CHUOICUNGUNG.COM và không đồng nghĩa với bảo trợ hoặc chứng nhận năng lực.”
+
+==================================================
+4. CHỌN PHẠM VI
+==================================================
+
+Block:
+
+“CHỌN PHẠM VI ĐỒNG HÀNH”
+
+Cho user chọn:
+
+Category
+
+Keyword Cluster / Buyer Intent
+
+Location optional
+
+Industrial Park optional
+
+Thời hạn dự kiến
+
+Vị trí/loại hiện diện quan tâm
+
+Các dịch vụ đi kèm
+
+Ví dụ:
+
+Category:
+Đồng phục & Bảo hộ
+
+Keyword Cluster:
+Đồng phục công nhân
+
+Location:
+Đồng Nai
+
+Period:
+theo phạm vi thỏa thuận
+
+Không biến mỗi keyword synonym thành một quyền tài trợ riêng.
+
+==================================================
+5. KEYWORD CLUSTER RULE
+==================================================
+
+Đây là rule bắt buộc.
+
+Ví dụ:
+
+“đồng phục công nhân”
+“áo công nhân nhà máy”
+“đồng phục nhà xưởng”
+
+nếu cùng Buyer Intent:
+phải map vào cùng keywordCluster.
+
+Không bán 3 quyền Founding Partner riêng
+chỉ vì có 3 URL/từ khóa gần giống nhau.
+
+Admin phải nhìn được:
+
+Keyword Cluster
+→ canonical keyword
+→ synonyms
+→ category
+→ active commercial scope.
+
+==================================================
+6. QUYỀN LỢI CÓ THỂ CÓ
+==================================================
+
+Hiển thị dạng module, KHÔNG cam kết mặc định tất cả:
+
+01.
+KHỐI GIỚI THIỆU NỔI BẬT
+
+02.
+HỒ SƠ NĂNG LỰC / PRODUCT SERVICE
+
+03.
+VIDEO GIỚI THIỆU
+
+04.
+CATALOGUE
+
+05.
+NỘI DUNG CHUYÊN MỤC
+
+06.
+HIỆN DIỆN TRONG CHƯƠNG TRÌNH
+nếu hợp đồng có
+
+07.
+BÁO CÁO QUYỀN LỢI
+
+Mỗi hợp đồng quyết định entitlement thực tế.
+
+==================================================
+7. LABEL BẮT BUỘC
+==================================================
+
+Khi Founding Partner xuất hiện trên:
+
+/nganh-nghe/[slug]
+
+hoặc
+
+/tu-khoa/[slug]
+
+phải hiển thị label rõ:
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+Không render như organic supplier result.
+
+Có thể kèm:
+
+Thời hạn đồng hành
+
+hoặc link:
+
+“Tìm hiểu về Founding Partner”
+
+==================================================
+8. FOUNDING PARTNER KHÔNG ĐƯỢC LÀM GÌ
+==================================================
+
+Hard rules:
+
+KHÔNG:
+
+- thay search/filter;
+- che search;
+- tự động đứng #1 Supplier Search;
+- tăng Matching Score;
+- được nhận toàn bộ Buyer Lead;
+- được xem dữ liệu Buyer private;
+- tự thành verified supplier;
+- tự thành recommended supplier;
+- độc quyền kết quả organic;
+- ngăn NCC khác xuất hiện;
+- tạo quyền cổ đông.
+
+SupplierMatchingService tuyệt đối không dùng:
+
+sponsorshipAmount
+foundingPartnerStatus
+commercialTier
+
+làm matching factor.
+
+==================================================
+9. PUBLIC DISPLAY LOGIC
+==================================================
+
+Public block chỉ hiển thị nếu:
+
+partnership.status = ACTIVE
+
+AND currentDate >= startDate
+
+AND currentDate <= endDate
+
+AND scope matches current page.
+
+Ví dụ:
+
+categoryId
+keywordClusterId
+locationId optional
+industrialParkId optional.
+
+Khi hết hạn:
+
+tự dừng paid placement.
+
+Không xóa record.
+
+Giữ history.
+
+==================================================
+10. DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+FoundingPartnership {
+ id
+ organizationId
+
+ categoryId?
+ keywordClusterId?
+
+ locationId?
+ industrialParkId?
+
+ startDate
+ endDate
+
+ displayPosition
+
+ exclusivityScope?
+
+ status
+
+ contractId?
+
+ createdAt
+ updatedAt
+}
+
+Tách entitlements:
+
+FoundingPartnerEntitlement {
+ id
+ partnershipId
+
+ type
+
+ quantity?
+ deliveredQuantity?
+
+ startDate?
+ endDate?
+
+ ownerUserId?
+
+ status
+
+ evidence[]
+
+ acceptedAt?
+ acceptedBy?
+
+ createdAt
+ updatedAt
+}
+
+Không nhét toàn bộ quyền lợi vào một text field duy nhất.
+
+==================================================
+11. STATUS
+==================================================
+
+Phân biệt:
+
+INQUIRY
+PROPOSAL
+NEGOTIATION
+CONTRACT_PENDING
+SCHEDULED
+ACTIVE
+PAUSED
+EXPIRED
+RENEWED
+CANCELLED
+
+Form submit chỉ tạo:
+
+INQUIRY
+
+TUYỆT ĐỐI không tạo ACTIVE Partnership.
+
+==================================================
+12. REQUEST FORM
+==================================================
+
+CTA:
+
+[TRAO ĐỔI PHẠM VI ĐỒNG HÀNH]
+
+Reuse FormEngine / request engine hiện tại.
+
+Fields:
+
+Organization
+
+Người liên hệ
+
+Category quan tâm
+
+Keyword Cluster / Intent
+
+Địa bàn optional
+
+KCN optional
+
+Thời gian dự kiến
+
+Vị trí hiện diện quan tâm
+
+Dịch vụ đi kèm:
+- profile
+- video
+- catalogue
+- program
+- content
+
+Mục tiêu đồng hành
+
+Ngân sách optional
+
+Attachments optional
+
+Consent
+
+Nếu user đi từ Category/Keyword Page:
+prefill context.
+
+==================================================
+13. REQUEST ≠ PARTNERSHIP
+==================================================
+
+Flow bắt buộc:
+
+Partnership Request
+→ Internal Review
+→ Scope Check
+→ Conflict Check
+→ Proposal
+→ Negotiation
+→ Contract
+→ ACTIVE FoundingPartnership
+
+Không cho:
+
+submit form
+→ ACTIVE automatically.
+
+==================================================
+14. SCOPE CONFLICT CHECK
+==================================================
+
+Trước khi proposal/contract:
+
+check:
+
+category
+keywordCluster
+location
+KCN
+period
+displayPosition
+exclusivity terms
+
+Nếu quyền lợi đang active và bị overlap:
+
+flag:
+
+SCOPE_CONFLICT
+
+Không tự bán chồng.
+
+Admin phải review.
+
+==================================================
+15. EXCLUSIVITY
+==================================================
+
+Nếu hợp đồng có độc quyền:
+
+chỉ áp dụng đúng phạm vi entitlement đã ghi.
+
+Ví dụ:
+
+“Độc quyền khối tài trợ chuyên mục
+Đồng phục công nhân tại Đồng Nai
+trong thời hạn X.”
+
+KHÔNG được suy rộng thành:
+
+- độc quyền ngành;
+- độc quyền Buyer;
+- độc quyền NCC;
+- độc quyền organic search;
+- độc quyền matching.
+
+==================================================
+16. CONTRACT
+==================================================
+
+Founding Partnership phải liên kết Contract.
+
+Contract cần xác định:
+
+Partner
+
+Scope
+
+Start/End
+
+Entitlements
+
+Quantity
+
+Display positions
+
+Services included
+
+Price / commercial terms nếu có
+
+Responsible people
+
+Reporting schedule
+
+Renewal terms
+
+Termination rules
+
+Acceptance method
+
+Không trộn hợp đồng Founding Partner
+với Investment Agreement.
+
+==================================================
+17. DELIVERY TRACKING
+==================================================
+
+Mỗi entitlement phải theo dõi:
+
+PLANNED
+IN_PROGRESS
+DELIVERED
+ACCEPTED
+NOT_APPLICABLE
+CANCELLED
+
+Ví dụ:
+
+Khối hiển thị
+Video
+Catalogue
+Program appearance
+Report
+
+Mỗi deliverable cần:
+
+owner
+due date
+evidence
+status.
+
+==================================================
+18. EVIDENCE
+==================================================
+
+Evidence bàn giao có thể gồm:
+
+URL/screenshot của placement
+
+Video đã publish
+
+Catalogue entry
+
+Program participation record
+
+Report file
+
+Không dùng impression/click giả.
+
+Chỉ báo cáo dữ liệu đo được thật.
+
+==================================================
+19. REPORT
+==================================================
+
+Partner report chỉ hiển thị dữ liệu thuộc quyền lợi hợp đồng.
+
+Ví dụ:
+
+Placement delivered
+
+Content published
+
+Video delivered
+
+Catalogue included
+
+Program participation
+
+Aggregated page/activity metrics
+nếu thực sự đo được.
+
+Không mặc định chia sẻ:
+
+Buyer contact
+
+Supplier quotations
+
+Private Requirements
+
+CRM notes
+
+Private conversations
+
+==================================================
+20. CATEGORY / KEYWORD INTEGRATION
+==================================================
+
+Page 08 + Page 09 phải query:
+
+FoundingPartnershipService
+
+Không hard-code Partner.
+
+Logic:
+
+current category/keyword/location
+→ find ACTIVE eligible partnership
+→ render SponsoredCategoryBlock.
+
+Nếu không có Founding Partner:
+page vẫn hoạt động đầy đủ:
+
+Search
+Filter
+Supplier List
+SUPPI
+Buyer Guide
+Programs
+Catalogue
+
+Founding Partner không phải dependency để page tồn tại.
+
+==================================================
+21. PROFILE / MEDIA INTEGRATION
+==================================================
+
+Partner block reuse:
+
+Organization
+SupplierProfile
+Capabilities
+ProductService
+MediaAsset
+
+Không tạo “profile Founding Partner” duplicate.
+
+Nếu partner cũng là Supplier:
+reuse SupplierProfile.
+
+==================================================
+22. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/founding-partner
+
+Admin listing:
+
+Partner
+Category
+Keyword Cluster
+Location
+KCN
+Start
+End
+Status
+Display position
+Contract
+Entitlement progress
+Owner
+
+Filters:
+
+Active
+Expiring
+Expired
+Pending
+Category
+Keyword Cluster
+Location
+Owner
+
+==================================================
+23. ADMIN DETAIL
+==================================================
+
+Tabs:
+
+TỔNG QUAN
+
+PHẠM VI
+
+HỢP ĐỒNG
+
+QUYỀN LỢI
+
+NỘI DUNG
+
+VIDEO
+
+CATALOGUE
+
+PROGRAMS
+
+DELIVERY
+
+REPORT
+
+FINANCE
+nếu user có quyền
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+24. EXPIRY + RENEWAL
+==================================================
+
+System phải theo dõi:
+
+endDate.
+
+Khi hết hạn:
+
+ACTIVE
+→ EXPIRED
+
+Paid placement dừng.
+
+Không xóa:
+content lịch sử
+contract
+evidence
+reports.
+
+Nếu gia hạn:
+
+tạo renewal/version phù hợp.
+
+Không overwrite lịch sử hợp đồng cũ.
+
+==================================================
+25. FINANCE SEPARATION
+==================================================
+
+Nếu hệ thống Finance đã có:
+
+Founding Partner payment/revenue
+phải tách khỏi:
+
+Investment capital
+
+Loan
+
+Collected-on-behalf
+
+Program sponsorship khác
+
+Supplier service fee khác.
+
+Không coi tiền Founding Partner là vốn đầu tư.
+
+==================================================
+26. ADMIN PERMISSIONS
+==================================================
+
+Roles có thể gồm:
+
+Partnership Sales
+Commercial Admin
+Content
+Program Coordinator
+Finance
+Super Admin
+
+Supplier/Partner chỉ xem:
+
+contract/scope/entitlements/report
+thuộc Organization của họ.
+
+Không xem commercial agreement của Partner khác.
+
+==================================================
+27. ANALYTICS
+==================================================
+
+Track:
+
+founding_page_view
+
+scope_selected
+
+founding_inquiry_start
+
+founding_inquiry_submit
+
+proposal_created
+
+contract_activated
+
+entitlement_delivered
+
+partnership_expired
+
+renewal_started
+
+Không dùng số liệu minh họa thành số liệu thật.
+
+==================================================
+28. SEO
+==================================================
+
+Title:
+
+Founding Partner | Đồng Hành Chuyên Mục | CHUOICUNGUNG.COM
+
+Description:
+
+Đồng hành phát triển chuyên mục và cụm nhu cầu phù hợp với năng lực doanh nghiệp thông qua phạm vi hiển thị, nội dung, video, catalogue và chương trình được thống nhất rõ.
+
+Canonical:
+
+/founding-partner
+
+Không cần index:
+contract
+partner workspace
+admin
+report private.
+
+==================================================
+29. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+
+Founding Partner là gì
+
+Chọn phạm vi
+
+Quyền lợi
+
+Nguyên tắc minh bạch
+
+Quy trình
+
+CTA
+
+Không overflow 390px.
+
+Không làm banner sponsor quá lớn che nội dung chính.
+
+==================================================
+30. QA
+==================================================
+
+Test tối thiểu:
+
+1. Submit chỉ tạo Inquiry.
+2. Inquiry không tự thành Active Partner.
+3. Partnership phải có scope rõ.
+4. Keyword synonym không bán thành scope duplicate.
+5. Conflict checker phát hiện overlap.
+6. Expired partnership tự dừng paid placement.
+7. Partner không ảnh hưởng Supplier Matching.
+8. Partner không tự #1 organic search.
+9. Partner không nhận Buyer private data.
+10. Label “ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC” luôn hiển thị.
+11. Category/Keyword page vẫn hoạt động khi không có Partner.
+12. Entitlement có owner/status/evidence.
+13. Contract history không bị overwrite khi renewal.
+14. Founding Partner không được coi là investor/equity.
+15. Admin mutations tạo AuditLog.
+16. Mobile 390px hoạt động.
+
+==================================================
+31. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- FoundingPartnership model
+- Entitlement model
+- Request workflow
+- Scope conflict logic
+- Contract integration
+- Category/Keyword integration
+- Delivery tracking
+- Admin implementation
+- Permissions
+- Analytics
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+DOANH NGHIỆP
+→ CHỌN PHẠM VI
+→ GỬI ĐỀ XUẤT
+→ REVIEW
+→ CHECK SCOPE
+→ PROPOSAL
+→ CONTRACT
+→ ACTIVE FOUNDING PARTNER
+→ BÀN GIAO QUYỀN LỢI
+→ EVIDENCE
+→ REPORT
+→ EXPIRE / RENEW
+
+FOUNDING PARTNER
+KHÔNG ĐƯỢC CAN THIỆP VÀO:
+
+ORGANIC SEARCH
+SUPPLIER MATCHING
+BUYER DECISION
+PRIVATE BUYER DATA.
+
+Đây là gói tài trợ chuyên mục có phạm vi,
+thời hạn và quyền lợi minh bạch,
+không phải cơ chế bán lead.

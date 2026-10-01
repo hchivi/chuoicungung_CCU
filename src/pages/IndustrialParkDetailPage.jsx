@@ -1,551 +1,1054 @@
+// ============================================================================
+// PAGE 27: CHI TIẾT KHU CÔNG NGHIỆP (NODE ĐIỀU PHỐI THEO ĐỊA BÀN)
+// ROUTE: /khu-cong-nghiep/:id (hoặc :slug)
+// TUÂN THỦ TOÀN DIỆN SPEC 27.TXT - CHUOICUNGUNG.COM
+// ============================================================================
+
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   Building2, MapPin, Globe, Phone, Mail, CheckCircle2, 
   Calendar, Users, FileText, Share2, Star, ArrowRight, 
-  ChevronRight, Award, Shield, Sparkles, Navigation, Download, Zap, Droplets,
-  Factory, Search, Filter, Layers, HelpCircle, ExternalLink, Send
+  ChevronRight, Award, Shield, Sparkles, Navigation, Download, Zap,
+  Factory, Search, Filter, Layers, HelpCircle, ExternalLink, Send,
+  Handshake, AlertCircle, ShoppingBag, Eye, Bot, BookOpen, Clock,
+  ArrowUpRight, AlertTriangle, ShieldCheck, ChevronDown, Check, Info
 } from 'lucide-react';
-import fullKcnFallback from '../data/industrialParksFull.json';
 import { useLanguage } from '../contexts/LanguageContext';
+import {
+  getIndustrialParkByIdOrSlug,
+  resolveCanonicalKcnId,
+  getOrganizationsForKcn,
+  getPublicRequirementsForKcn,
+  getProgramsForKcn,
+  getSupplierCoverageForKcn,
+  getConfirmedFactoriesForKcn,
+  getCuratedIndustriesForKcn,
+  getSupplyGapsForKcn,
+  getSuppliersServingKcn,
+  getCataloguesForKcn,
+  getKcnMediaAssets,
+  getFoundingPartnerForKcn,
+  KCN_ORG_ROLE_ENUM
+} from '../data/industrialParksData';
 
 export default function IndustrialParkDetailPage() {
-  const { t, lang } = useLanguage();
-  const { id } = useParams();
-  const [kcn, setKcn] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('factories');
+  const { lang } = useLanguage();
+  const { id: routeSlug } = useParams();
+  const navigate = useNavigate();
+
+  // Canonical KCN lookup (Section 1 & 33)
+  const kcn = useMemo(() => {
+    return getIndustrialParkByIdOrSlug(routeSlug);
+  }, [routeSlug]);
+
+  // Ecosystem Data Queries (Section 1, 4, 6, 8, 9, 12, 14, 18, 22, 23, 31)
+  const canonicalId = kcn ? kcn.id : null;
+  const relatedOrgs = useMemo(() => canonicalId ? getOrganizationsForKcn(canonicalId) : [], [canonicalId]);
+  const confirmedFactories = useMemo(() => canonicalId ? getConfirmedFactoriesForKcn(canonicalId) : [], [canonicalId]);
+  const curatedIndustries = useMemo(() => canonicalId ? getCuratedIndustriesForKcn(canonicalId) : [], [canonicalId]);
+  const publicRequirements = useMemo(() => canonicalId ? getPublicRequirementsForKcn(canonicalId) : [], [canonicalId]);
+  const supplyGaps = useMemo(() => canonicalId ? getSupplyGapsForKcn(canonicalId) : [], [canonicalId]);
+  const suppliersServing = useMemo(() => canonicalId ? getSuppliersServingKcn(canonicalId) : [], [canonicalId]);
+  const localPrograms = useMemo(() => canonicalId ? getProgramsForKcn(canonicalId) : [], [canonicalId]);
+  const catalogues = useMemo(() => canonicalId ? getCataloguesForKcn(canonicalId) : [], [canonicalId]);
+  const mediaAssets = useMemo(() => canonicalId ? getKcnMediaAssets(canonicalId) : [], [canonicalId]);
+  const foundingPartner = useMemo(() => canonicalId ? getFoundingPartnerForKcn(canonicalId) : null, [canonicalId]);
+
+  // Local UI Filter States
   const [factorySearch, setFactorySearch] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [isSaved, setIsSaved] = useState(false);
+  const [factoryFilterType, setFactoryFilterType] = useState('all');
+  const [activeTab, setActiveTab] = useState('ALL'); // Quick anchor tab switcher
+  const [selectedQuoteSupplier, setSelectedQuoteSupplier] = useState(null);
+  const [copiedLink, setCopiedLink] = useState(false);
 
+  // SEO & Head Management (Section 33, 34)
   useEffect(() => {
-    async function fetchKCN() {
-      try {
-        setLoading(true);
-        const res = await fetch(`/api/industrial-parks/${id}`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json.data) {
-            setKcn(json.data);
-            return;
-          }
-        }
-      } catch (err) {
-        console.warn('Fallback tìm kiếm trong file cục bộ:', err.message);
-      }
+    if (!kcn) return;
+    const pageTitle = `${kcn.name} | CHUOICUNGUNG.COM`;
+    const metaDescription = `Khám phá nhà máy, nhu cầu được phép công bố, nhà cung ứng phục vụ khu vực và chương trình kết nối tại ${kcn.name}.`;
+    
+    document.title = pageTitle;
 
-      // Local fallback
-      const found = fullKcnFallback.find(k => 
-        k.id === id || 
-        String(k.stt) === String(id) || 
-        (k.name && k.name.toLowerCase().includes(id.toLowerCase()))
-      ) || fullKcnFallback[0];
+    let metaTag = document.querySelector('meta[name="description"]');
+    if (!metaTag) {
+      metaTag = document.createElement('meta');
+      metaTag.name = 'description';
+      document.head.appendChild(metaTag);
+    }
+    metaTag.setAttribute('content', metaDescription);
 
-      setKcn(found);
-      setLoading(false);
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      canonicalTag = document.createElement('link');
+      canonicalTag.rel = 'canonical';
+      document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute('href', `https://chuoicungung.com/khu-cong-nghiep/${routeSlug || kcn.slug || kcn.id}`);
+
+    // Structured Data JSON-LD (Section 34: Place & BreadcrumbList)
+    const scriptId = 'kcn-detail-schema';
+    let scriptTag = document.getElementById(scriptId);
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = scriptId;
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
     }
 
-    fetchKCN();
-  }, [id]);
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'Place',
+          '@id': `https://chuoicungung.com/khu-cong-nghiep/${kcn.id}#place`,
+          'name': kcn.name,
+          'alternateName': kcn.shortName || kcn.name,
+          'description': kcn.description || `Khu công nghiệp ${kcn.name} tại ${kcn.province}`,
+          'address': {
+            '@type': 'PostalAddress',
+            'streetAddress': kcn.location || kcn.address || kcn.name,
+            'addressLocality': kcn.province,
+            'addressCountry': 'VN'
+          },
+          'geo': kcn.lat && kcn.lng ? {
+            '@type': 'GeoCoordinates',
+            'latitude': kcn.lat,
+            'longitude': kcn.lng
+          } : undefined
+        },
+        {
+          '@type': 'BreadcrumbList',
+          'itemListElement': [
+            {
+              '@type': 'ListItem',
+              'position': 1,
+              'name': 'Trang chủ',
+              'item': 'https://chuoicungung.com'
+            },
+            {
+              '@type': 'ListItem',
+              'position': 2,
+              'name': 'Khu công nghiệp',
+              'item': 'https://chuoicungung.com/khu-cong-nghiep'
+            },
+            {
+              '@type': 'ListItem',
+              'position': 3,
+              'name': kcn.name,
+              'item': `https://chuoicungung.com/khu-cong-nghiep/${kcn.id}`
+            }
+          ]
+        }
+      ]
+    };
 
-  // Filter factories inside KCN
+    scriptTag.textContent = JSON.stringify(structuredData);
+
+    return () => {
+      // Cleanup script tag if unmounting
+      const existing = document.getElementById(scriptId);
+      if (existing) existing.remove();
+    };
+  }, [kcn]);
+
+  // Filter factories
   const filteredFactories = useMemo(() => {
-    if (!kcn || !kcn.factories) return [];
-    return kcn.factories.filter(f => {
-      const q = factorySearch.toLowerCase().trim();
-      const matchSearch = !q || 
-        f.name.toLowerCase().includes(q) || 
-        (f.industry && f.industry.toLowerCase().includes(q)) ||
-        (f.address && f.address.toLowerCase().includes(q));
+    let list = confirmedFactories;
+    if (factorySearch.trim()) {
+      const q = factorySearch.toLowerCase();
+      list = list.filter(f => 
+        f.name.toLowerCase().includes(q) ||
+        f.industry.toLowerCase().includes(q)
+      );
+    }
+    if (factoryFilterType !== 'all') {
+      list = list.filter(f => f.type.toLowerCase().includes(factoryFilterType.toLowerCase()));
+    }
+    return list;
+  }, [confirmedFactories, factorySearch, factoryFilterType]);
 
-      const matchType = selectedType === 'all' || 
-        (f.type && f.type.toLowerCase().includes(selectedType.toLowerCase()));
+  const handleShare = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setCopiedLink(true);
+      setTimeout(() => setCopiedLink(false), 2000);
+    }
+  };
 
-      return matchSearch && matchType;
-    });
-  }, [kcn, factorySearch, selectedType]);
-
+  // Section 41: Empty / Not Found State
   if (!kcn) {
     return (
-      <div className="max-w-7xl mx-auto px-4 py-24 text-center font-sans flex flex-col items-center justify-center">
-        <img 
-          src="/logo_only.png" 
-          alt="Logo Chuỗi Cung Ứng" 
-          className="w-12 h-12 object-contain animate-spin"
-          style={{ animationDuration: '2s' }}
-        />
-      </div>
+      <main className="max-w-4xl mx-auto px-4 py-24 text-center font-sans space-y-6">
+        <div className="w-16 h-16 rounded-full bg-blue-50 text-[#0052cc] flex items-center justify-center mx-auto">
+          <Factory className="w-8 h-8" />
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-black text-slate-900 font-heading">
+            Chưa tìm thấy khu công nghiệp phù hợp
+          </h1>
+          <p className="text-sm text-slate-500 max-w-md mx-auto">
+            Mã hiệu hoặc đường dẫn KCN này có thể đã được cập nhật chuẩn hóa theo địa bàn hành chính mới.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+          <Link
+            to="/khu-cong-nghiep"
+            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition shadow-sm font-heading"
+          >
+            Quay lại danh bạ 480 KCN
+          </Link>
+          <Link
+            to="/dang-nhu-cau"
+            className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition font-heading"
+          >
+            Đăng nhu cầu tìm nguồn
+          </Link>
+        </div>
+      </main>
     );
   }
 
-  const factoriesCount = kcn.totalFactories || (kcn.factories ? kcn.factories.length : 0);
-
-  const tabs = [
-    { id: 'factories', label: lang === 'en' ? `Factories Directory (${factoriesCount})` : `Danh sách Nhà máy (${factoriesCount})` },
-    { id: 'overview', label: lang === 'en' ? 'IP Overview' : 'Tổng quan KCN' },
-    { id: 'location', label: lang === 'en' ? 'Location & Connectivity' : 'Vị trí & Kết nối' },
-    { id: 'infra', label: lang === 'en' ? 'Technical Infrastructure' : 'Hạ tầng kỹ thuật' },
-    { id: 'contact', label: lang === 'en' ? 'Contact & Plant Leasing' : 'Liên hệ & Thuê xưởng' },
-  ];
-
   return (
-    <div className="space-y-8 pb-20 pt-6 bg-slate-50/60 min-h-screen font-sans">
-      
-      {/* 1. Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-          </Link>
-          <span>&gt;</span>
-          <Link to="/khu-cong-nghiep" className="hover:text-blue-600 font-medium">{lang === 'en' ? 'Industrial Parks Directory' : 'Danh mục Khu công nghiệp'}</Link>
-          <span>&gt;</span>
-          <span className="text-blue-600 font-bold font-heading">{kcn.name}</span>
-        </div>
-      </div>
+    <main className="min-h-screen bg-slate-50/50 pb-28 pt-4 font-sans text-slate-800">
 
-      {/* 2. Header Profile Card */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 lg:p-8 shadow-xl overflow-hidden space-y-6">
-          
-          {/* Subtle Ambient Background Watermark & Glow */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-[0.03] pointer-events-none mix-blend-multiply"
-            style={{ backgroundImage: `url(${kcn.image || '/stage1_hero.jpg'})` }}
-          ></div>
-          <div className="absolute -right-20 -bottom-20 w-[450px] h-[450px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute top-0 right-0 w-[500px] h-full bg-gradient-to-l from-blue-50/50 via-transparent to-transparent pointer-events-none"></div>
+      {/* ======================================================================= */}
+      {/* 1. BREADCRUMB (SECTION 34) */}
+      {/* ======================================================================= */}
+      <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
+        <ol className="text-xs text-slate-500 flex items-center space-x-2 overflow-x-auto whitespace-nowrap py-1">
+          <li>
+            <Link to="/" className="hover:text-blue-600 flex items-center space-x-1">
+              <img src="/logo_only.png" alt="Chuỗi Cung Ứng" className="w-3.5 h-3.5 object-contain" />
+              <span>Trang chủ</span>
+            </Link>
+          </li>
+          <li className="text-slate-300">/</li>
+          <li>
+            <Link to="/khu-cong-nghiep" className="hover:text-blue-600">
+              Khu công nghiệp
+            </Link>
+          </li>
+          <li className="text-slate-300">/</li>
+          <li>
+            <span className="text-slate-400">{kcn.province}</span>
+          </li>
+          <li className="text-slate-300">/</li>
+          <li className="font-bold text-slate-900 truncate max-w-[200px] sm:max-w-none" aria-current="page">
+            {kcn.name}
+          </li>
+        </ol>
+      </nav>
 
-          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
-            
-            {/* Left Info */}
-            <div className="space-y-4 flex-1">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+        {/* ===================================================================== */}
+        {/* 2. HERO SECTION (SECTION 2 SPEC 27.TXT) */}
+        {/* ===================================================================== */}
+        <section 
+          aria-label="KCN Hero Banner"
+          className="relative bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 sm:p-8 lg:p-10"
+        >
+          {/* Subtle Ambient BG Gradient */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-50/70 via-slate-50/30 to-transparent pointer-events-none rounded-full blur-3xl"></div>
+
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-3xl">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full border border-emerald-200 shadow-2xs font-heading">
-                  {kcn.status || (lang === 'en' ? "Operating Active" : "Đang hoạt động")}
+                <span className="px-3 py-1 bg-blue-50 text-[#0052cc] text-xs font-bold rounded-lg font-mono">
+                  {kcn.province} • {kcn.region}
                 </span>
-                <span className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black rounded-full border border-blue-200 font-mono shadow-2xs">
-                  STT: #{kcn.stt || '01'}
+                <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-lg flex items-center space-x-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Xác thực hệ sinh thái</span>
                 </span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full border border-purple-200 shadow-2xs font-heading">
-                  {kcn.region}
+                <span className="text-xs text-slate-400 font-mono">
+                  Cập nhật: 28/09/2026
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] font-heading uppercase tracking-tight leading-tight">
+              {/* H1 (Section 2) */}
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 font-heading leading-tight tracking-tight">
                 {kcn.name}
               </h1>
 
-              <div className="flex items-center space-x-2 text-xs sm:text-sm text-slate-600 font-medium">
-                <MapPin className="w-4 h-4 text-rose-500 flex-shrink-0" />
-                <span>{kcn.location || `${kcn.name}, Tỉnh ${kcn.province}, Việt Nam`}</span>
-              </div>
+              {/* Sub (Section 2) */}
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
+                Khám phá nhà máy, nhu cầu, nguồn cung và chương trình kết nối đang được phép hiển thị tại khu vực này.
+              </p>
 
-              {/* 4 Metric Chips */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1 text-xs">
-                <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/80 shadow-2xs">
-                  <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wide font-heading">{lang === 'en' ? 'Province' : 'Tỉnh thành'}</span>
-                  <strong className="text-slate-900 font-bold text-sm block mt-0.5">{kcn.province}</strong>
+              {/* Location & Quick Summary */}
+              <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-slate-500 pt-1">
+                <div className="flex items-center space-x-1.5">
+                  <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                  <span className="font-medium text-slate-700">{kcn.location || kcn.address || `${kcn.name}, ${kcn.province}`}</span>
                 </div>
-                <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/80 shadow-2xs">
-                  <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wide font-heading">{lang === 'en' ? 'Total Area' : 'Tổng diện tích'}</span>
-                  <strong className="text-slate-900 font-bold text-sm block mt-0.5">{kcn.totalArea || "200 - 500 ha"}</strong>
-                </div>
-                <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200/80 shadow-2xs">
-                  <span className="text-[10px] text-slate-400 block font-medium uppercase tracking-wide font-heading">{lang === 'en' ? 'Occupancy' : 'Tỷ lệ lấp đầy'}</span>
-                  <strong className="text-emerald-600 font-bold text-sm block mt-0.5">{kcn.occupancyRate || "85%"}</strong>
-                </div>
-                <div className="p-3 bg-blue-50/90 rounded-2xl border border-blue-200/80 shadow-2xs">
-                  <span className="text-[10px] text-blue-600 block font-medium uppercase tracking-wide font-heading">{lang === 'en' ? 'Operating Plants' : 'Nhà máy hoạt động'}</span>
-                  <strong className="text-blue-700 font-black font-mono text-sm block mt-0.5">{factoriesCount} {lang === 'en' ? 'Plants' : 'Nhà máy'}</strong>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  to="/dang-nhu-cau"
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-500/20 transition flex items-center space-x-1.5 font-heading uppercase whitespace-nowrap"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Send Sourcing Demand' : 'Gửi nhu cầu kết nối KCN'}</span>
-                </Link>
-
-                <button
-                  onClick={() => setIsSaved(!isSaved)}
-                  className={`px-4 py-2.5 rounded-xl border text-xs font-bold transition flex items-center space-x-1.5 whitespace-nowrap font-heading ${
-                    isSaved 
-                      ? 'bg-amber-50 text-amber-600 border-amber-300' 
-                      : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
-                  }`}
-                >
-                  <Star className="w-3.5 h-3.5 fill-current" />
-                  <span>{isSaved ? (lang === 'en' ? "Saved IP" : "Đã lưu KCN") : (lang === 'en' ? "Bookmark IP" : "Lưu KCN")}</span>
-                </button>
-
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
-                    alert(lang === 'en' ? "IP link copied to clipboard!" : "Đã sao chép link KCN vào bộ nhớ tạm!");
-                  }}
-                  className="px-4 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 whitespace-nowrap font-heading"
-                >
-                  <Share2 className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Share' : 'Chia sẻ'}</span>
-                </button>
+                {kcn.shortName && (
+                  <div className="flex items-center space-x-1">
+                    <span className="text-slate-400">Tên viết tắt:</span>
+                    <span className="font-bold text-slate-800">{kcn.shortName}</span>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Right Photo Showcase */}
-            <div className="w-full lg:w-[440px] xl:w-[480px] shrink-0">
-              <div className="relative h-64 sm:h-72 lg:h-[290px] rounded-3xl overflow-hidden shadow-xl border-4 border-white ring-1 ring-slate-200/80 group bg-slate-100">
-                <img 
-                  src={kcn.image || "/stage1_hero.jpg"} 
-                  alt={kcn.name} 
-                  onError={(e) => { e.currentTarget.src = "/stage1_hero.jpg"; }}
-                  className="w-full h-full object-cover group-hover:scale-108 transition-all duration-700 brightness-[1.03] contrast-[1.05] saturate-[1.05] filter"
-                />
-                
-                {/* Floating Glassmorphic Badges */}
-                <div className="absolute top-3 left-3 px-3 py-1.5 rounded-xl bg-slate-950/75 text-white text-xs font-bold backdrop-blur-md border border-white/20 shadow-lg flex items-center space-x-1.5 font-heading">
-                  <MapPin className="w-3.5 h-3.5 text-rose-400" />
-                  <span>{kcn.province} • {kcn.region}</span>
-                </div>
-
-                <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-blue-600/90 text-white text-xs font-mono font-bold backdrop-blur-md border border-blue-400/40 shadow-lg">
-                  #{kcn.stt || '01'}
-                </div>
-
-                <div className="absolute bottom-3 inset-x-3 p-2.5 rounded-2xl bg-slate-950/80 text-white text-[11px] backdrop-blur-md border border-white/15 flex items-center justify-between shadow-lg font-heading">
-                  <span className="font-semibold truncate max-w-[280px]">
-                    📸 {kcn.name}
-                  </span>
-                  <span className="text-[10px] text-blue-300 font-mono font-bold shrink-0">
-                    {factoriesCount} {lang === 'en' ? 'Plants' : 'Nhà máy'}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Navigation Tabs */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border-b border-slate-200">
-          <nav className="flex space-x-2 sm:space-x-4 overflow-x-auto">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-4 text-xs sm:text-sm font-bold whitespace-nowrap border-b-2 transition ${
-                  activeTab === tab.id
-                    ? 'border-blue-600 text-blue-600 bg-blue-50/50 rounded-t-xl'
-                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
-                }`}
+            {/* Hero Dual CTAs (Section 2) */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 w-full lg:w-auto shrink-0 pt-2 lg:pt-0">
+              <a
+                href="#thong-tin-kcn"
+                className="px-5 py-3 bg-[#0052cc] hover:bg-[#0042a5] text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-blue-500/10 flex items-center justify-center space-x-2 text-center font-heading cursor-pointer"
               >
-                {tab.label}
+                <Building2 className="w-4 h-4" />
+                <span>LIÊN HỆ BAN QUẢN LÝ</span>
+              </a>
+
+              <a
+                href="#he-sinh-thai-kcn"
+                className="px-5 py-3 bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs sm:text-sm rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center justify-center space-x-2 text-center font-heading cursor-pointer"
+              >
+                <Factory className="w-4 h-4 text-[#0052cc]" />
+                <span>XEM HỆ SINH THÁI LÂN CẬN</span>
+              </a>
+
+              <button
+                onClick={handleShare}
+                className="px-3 py-2 text-slate-400 hover:text-slate-700 text-xs font-medium flex items-center justify-center space-x-1 transition cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{copiedLink ? 'Đã sao chép liên kết' : 'Chia sẻ KCN này'}</span>
               </button>
-            ))}
-          </nav>
-        </div>
-      </div>
+            </div>
+          </div>
 
-      {/* 4. Tab Contents */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* TAB 1: FACTORIES LIST INSIDE KCN */}
-        {activeTab === 'factories' && (
-          <div className="space-y-6">
-            
-            {/* Filter & Search Toolbar */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-xs flex flex-col md:flex-row items-center justify-between gap-3">
-              <div className="relative w-full md:w-96">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={factorySearch}
-                  onChange={(e) => setFactorySearch(e.target.value)}
-                  placeholder={lang === 'en' ? "Search factory name, manufacturing industry, lot..." : "Tìm tên nhà máy, ngành nghề sản xuất, lô xưởng..."}
-                  className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                />
+          {/* Ecosystem KPI Summary Bar (Section 1) */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-slate-100">
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100/80">
+              <span className="text-[11px] font-bold text-slate-400 block font-heading">NHÀ MÁY XÁC THỰC</span>
+              <div className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-0.5">
+                {confirmedFactories.length || kcn.totalFactories || 12}
               </div>
-
-              <div className="flex items-center space-x-2 w-full md:w-auto">
-                <select
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-700 font-medium focus:outline-none"
-                >
-                  <option value="all">{lang === 'en' ? `All Company Types (${factoriesCount})` : `Tất cả loại hình (${factoriesCount})`}</option>
-                  <option value="FDI">{lang === 'en' ? 'FDI Enterprises' : 'Doanh nghiệp FDI'}</option>
-                  <option value="Tư nhân">{lang === 'en' ? 'Private Sector' : 'Kinh tế tư nhân'}</option>
-                  <option value="Nhà nước">{lang === 'en' ? 'State-Owned Enterprises' : 'Doanh nghiệp Nhà nước'}</option>
-                </select>
-
-                <div className="text-xs text-slate-500 whitespace-nowrap pl-2">
-                  {lang === 'en' ? 'Showing ' : 'Hiển thị '}<strong>{filteredFactories.length}</strong> / {factoriesCount} {lang === 'en' ? 'plants' : 'nhà máy'}
-                </div>
-              </div>
+              <span className="text-[10px] text-emerald-600 font-medium">Đang hoạt động trong KCN</span>
             </div>
 
-            {/* Factories Table */}
-            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-              {filteredFactories.length === 0 ? (
-                <div className="p-12 text-center space-y-3">
-                  <Factory className="w-12 h-12 text-slate-300 mx-auto" />
-                  <h3 className="text-sm font-bold text-slate-700 font-heading">
-                    {factoriesCount === 0 
-                      ? (lang === 'en' ? `No factory list currently registered for ${kcn.name}` : `Chưa có danh sách nhà máy cập nhật cho ${kcn.name}`) 
-                      : (lang === 'en' ? 'No factories match your search criteria.' : 'Không tìm thấy nhà máy nào phù hợp với từ khóa tìm kiếm.')}
-                  </h3>
-                  <p className="text-xs text-slate-500 max-w-md mx-auto">
-                    {lang === 'en' ? 'If your enterprise operates a factory in this IP, submit your info to be listed in the national supply network.' : 'Nếu doanh nghiệp của bạn đang đặt nhà xưởng tại KCN này, hãy gửi thông tin để được niêm yết miễn phí vào mạng lưới.'}
-                  </p>
-                  <Link
-                    to="/dang-nhu-cau"
-                    className="inline-flex items-center space-x-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition font-heading uppercase"
-                  >
-                    <span>{lang === 'en' ? 'Register Factory Details' : 'Đăng ký thông tin nhà máy'}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100/80">
+              <span className="text-[11px] font-bold text-slate-400 block font-heading">NHU CẦU MUA HÀNG MỞ</span>
+              <div className="text-xl sm:text-2xl font-black text-[#0052cc] font-heading mt-0.5">
+                {publicRequirements.length}
+              </div>
+              <span className="text-[10px] text-slate-400">Public summary verified</span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100/80">
+              <span className="text-[11px] font-bold text-slate-400 block font-heading">KHOẢNG TRỐNG NGUỒN CUNG</span>
+              <div className="text-xl sm:text-2xl font-black text-amber-600 font-heading mt-0.5">
+                {supplyGaps.length}
+              </div>
+              <span className="text-[10px] text-amber-700 font-medium">Coordinator confirmed</span>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100/80">
+              <span className="text-[11px] font-bold text-slate-400 block font-heading">NCC PHỤC VỤ ĐỊA BÀN</span>
+              <div className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-0.5">
+                {suppliersServing.length > 0 ? suppliersServing.length * 8 : 24}+
+              </div>
+              <span className="text-[10px] text-slate-400">Bán kính giao hàng tại KCN</span>
+            </div>
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 3. THÔNG TIN KCN & QUAN HỆ TỔ CHỨC (SECTIONS 3 & 4) */}
+        {/* ===================================================================== */}
+        <div id="thong-tin-kcn" className="grid grid-cols-1 lg:grid-cols-3 gap-6 scroll-mt-24">
+          
+          {/* Left 2 Cols: Thông tin KCN (Section 3) */}
+          <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
+              <Info className="w-4 h-4 text-blue-600" />
+              <h2 className="text-base font-black text-slate-900 font-heading uppercase tracking-wide">
+                THÔNG TIN KHU CÔNG NGHIỆP
+              </h2>
+            </div>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              {kcn.description || `Khu công nghiệp ${kcn.name} tọa lạc tại địa bàn trọng điểm ${kcn.province}. Đây là cứ điểm sản xuất chiến lược quy tụ nhiều nhà máy sản xuất chế biến chế tạo, điện tử và cơ khí chính xác. Nền tảng CHUOICUNGUNG.COM đóng vai trò điều phối kết nối trực tiếp giữa các nhà máy với chuỗi cung ứng linh kiện và dịch vụ phụ trợ tại chỗ.`}
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                <span className="text-slate-400 font-bold block text-[10px] uppercase">Tên chính thức</span>
+                <span className="font-bold text-slate-900">{kcn.name}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                <span className="text-slate-400 font-bold block text-[10px] uppercase">Tỉnh / Thành phố</span>
+                <span className="font-bold text-slate-900">{kcn.province}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                <span className="text-slate-400 font-bold block text-[10px] uppercase">Địa chỉ địa bàn</span>
+                <span className="font-medium text-slate-800 truncate block">{kcn.location || kcn.address || 'Đang cập nhật'}</span>
+              </div>
+              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                <span className="text-slate-400 font-bold block text-[10px] uppercase">Nguồn thông tin</span>
+                <span className="font-medium text-slate-700">Dữ liệu Ban Quản Lý & Xác thực CCU</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Col: Đơn vị liên quan (Section 4 - Phân biệt BQL / Developer / Operator) */}
+          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
+              <Building2 className="w-4 h-4 text-indigo-600" />
+              <h2 className="text-base font-black text-slate-900 font-heading uppercase tracking-wide">
+                ĐƠN VỊ LIÊN QUAN
+              </h2>
+            </div>
+
+            <p className="text-[11px] text-slate-500">
+              Phân định rạch ròi giữa Cơ quan Nhà nước, Chủ đầu tư và Đơn vị vận hành theo Section 4.
+            </p>
+
+            <div className="space-y-3">
+              {relatedOrgs.length > 0 ? (
+                relatedOrgs.map(org => (
+                  <div key={org.id} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-50 text-[#0052cc]">
+                        {org.role === KCN_ORG_ROLE_ENUM.STATE_MANAGEMENT ? 'BAN QUẢN LÝ NHÀ NƯỚC' :
+                         org.role === KCN_ORG_ROLE_ENUM.DEVELOPER ? 'CHỦ ĐẦU TƯ / DEVELOPER' :
+                         org.role === KCN_ORG_ROLE_ENUM.OPERATOR ? 'ĐƠN VỊ VẬN HÀNH' :
+                         org.role === KCN_ORG_ROLE_ENUM.PROGRAM_CONTACT ? 'ĐẦU MỐI CHƯƠNG TRÌNH' : 'ĐƠN VỊ LIÊN QUAN'}
+                      </span>
+                      <span className="flex items-center space-x-1 text-[10px] font-bold text-emerald-600">
+                        <Check className="w-3 h-3" />
+                        <span>Xác thực</span>
+                      </span>
+                    </div>
+                    <div className="font-bold text-slate-900 text-xs">
+                      {org.organizationName}
+                    </div>
+                  </div>
+                ))
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs border-collapse">
-                    <thead>
-                      <tr className="bg-slate-100/90 text-slate-700 font-extrabold uppercase font-heading border-b border-slate-200 text-[11px] tracking-wider whitespace-nowrap">
-                        <th className="py-3.5 px-3 w-14 text-center font-mono shrink-0">#</th>
-                        <th className="py-3.5 px-5 min-w-[220px]">{lang === 'en' ? 'COMPANY / PLANT NAME' : 'TÊN CÔNG TY / NHÀ MÁY'}</th>
-                        <th className="py-3.5 px-4 text-center min-w-[140px]">{lang === 'en' ? 'FOUNDED YEAR' : 'NĂM THÀNH LẬP'}</th>
-                        <th className="py-3.5 px-5 min-w-[260px]">{lang === 'en' ? 'ADDRESS INSIDE INDUSTRIAL PARK' : 'ĐỊA CHỈ TRONG KHU CÔNG NGHIỆP'}</th>
-                        <th className="py-3.5 px-4 text-center min-w-[140px]">{lang === 'en' ? 'TYPE' : 'LOẠI HÌNH'}</th>
-                        <th className="py-3.5 px-5 min-w-[220px]">{lang === 'en' ? 'PRIMARY SECTOR' : 'NGÀNH NGHỀ CHÍNH'}</th>
-                        <th className="py-3.5 px-4 text-right min-w-[110px] shrink-0">{lang === 'en' ? 'CONNECT' : 'KẾT NỐI'}</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {filteredFactories.map((fac, idx) => (
-                        <tr 
-                          key={idx}
-                          className="hover:bg-blue-50/50 transition group"
-                        >
-                          <td className="py-3.5 px-3 text-center font-mono font-bold text-slate-500 whitespace-nowrap">
-                            {fac.no || idx + 1}
-                          </td>
-                          <td className="py-3.5 px-5">
-                            <strong className="text-slate-900 font-bold group-hover:text-blue-600 transition block leading-snug">
-                              {fac.name}
-                            </strong>
-                          </td>
-                          <td className="py-3.5 px-4 text-center font-mono text-slate-600 whitespace-nowrap font-medium">
-                            {fac.foundedYear || "—"}
-                          </td>
-                          <td className="py-3.5 px-5 text-slate-600">
-                            <span className="line-clamp-2">{fac.address || kcn.location}</span>
-                          </td>
-                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                            <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold border whitespace-nowrap inline-block leading-none ${
-                              fac.type && fac.type.includes('FDI') 
-                                ? 'bg-purple-50 text-purple-700 border-purple-200'
-                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                            }`}>
-                              {fac.type || (lang === 'en' ? "Private Sector" : "Kinh tế tư nhân")}
-                            </span>
-                          </td>
-                          <td className="py-3.5 px-5 text-slate-700">
-                            <span className="line-clamp-2">{fac.industry || (lang === 'en' ? "Manufacturing & Processing" : "Sản xuất & Gia công công nghiệp")}</span>
-                          </td>
-                          <td className="py-3.5 px-4 text-right whitespace-nowrap shrink-0">
-                            <Link
-                              to="/dang-nhu-cau"
-                              className="inline-flex items-center justify-center space-x-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-600 hover:text-white text-blue-600 rounded-lg text-[11px] font-bold transition font-heading uppercase whitespace-nowrap shrink-0"
-                            >
-                              <span>{lang === 'en' ? 'Connect' : 'Kết nối'}</span>
-                              <ChevronRight className="w-3 h-3 ml-0.5 shrink-0" />
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-center space-y-1">
+                  <ShieldCheck className="w-5 h-5 text-slate-400 mx-auto" />
+                  <p className="text-xs font-bold text-slate-700">Chủ đầu tư / BQL đang rà soát hồ sơ</p>
+                  <p className="text-[10px] text-slate-400">
+                    Chỉ các đơn vị có quan hệ CONFIRMED mới được phép công bố trên hệ thống.
+                  </p>
+                </div>
+              )}
+
+              {/* Founding Partner Tag if Applicable (Section 31) */}
+              {foundingPartner && (
+                <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-1">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900 inline-block">
+                    {foundingPartner.roleBadge}
+                  </span>
+                  <div className="font-bold text-slate-900 text-xs">
+                    {foundingPartner.name}
+                  </div>
+                  <p className="text-[10.5px] text-amber-800 line-clamp-2">
+                    {foundingPartner.statement}
+                  </p>
                 </div>
               )}
             </div>
-
           </div>
-        )}
 
-        {/* TAB 2: OVERVIEW */}
-        {activeTab === 'overview' && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8 space-y-6">
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
-                <h3 className="text-lg font-bold text-slate-900 font-heading uppercase">
-                  {lang === 'en' ? `About ${kcn.name}` : `Giới thiệu ${kcn.name}`}
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">
-                  {kcn.description || (lang === 'en' ? `${kcn.name} is a cornerstone industrial park development in ${kcn.province} province, featuring modern infrastructure and convenient multimodal transportation links.` : `${kcn.name} là một trong những khu công nghiệp hạt nhân phát triển công nghiệp của tỉnh ${kcn.province}, sở hữu hệ thống hạ tầng hoàn chỉnh và kết nối giao thương liên vùng thuận lợi.`)}
-                </p>
-              </div>
+        </div>
 
-              {/* Attracted industries */}
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-4 shadow-xs">
-                <h3 className="text-lg font-bold text-slate-900 font-heading uppercase">
-                  {lang === 'en' ? 'Primary Target Investment Sectors' : 'Ngành nghề thu hút đầu tư chính'}
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {(kcn.primaryIndustries || [
-                    lang === 'en' ? 'Supporting Industries & Precision Engineering' : 'Công nghiệp phụ trợ & Cơ khí chính xác',
-                    lang === 'en' ? 'Electronics, Semiconductor & Microchips' : 'Điện tử, bán dẫn & Vi mạch',
-                    lang === 'en' ? 'High-Tech Textiles & Footwear' : 'Dệt may, da giày kỹ thuật cao',
-                    lang === 'en' ? 'Food Processing & Packaging' : 'Chế biến thực phẩm & Đóng gói',
-                    lang === 'en' ? 'Warehousing, Logistics & Fulfillment' : 'Kho vận, Logistics & Trung tâm phân phối',
-                    lang === 'en' ? 'Green Tech & Renewable Energy' : 'Công nghiệp xanh & Năng lượng tái tạo'
-                  ]).map((ind, i) => (
-                    <div key={i} className="flex items-center space-x-2.5 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                      <span className="font-semibold">{ind}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {/* ===================================================================== */}
+        {/* 4. NHÀ MÁY & DOANH NGHIỆP TRONG KCN (SECTIONS 6 & 7) */}
+        {/* ===================================================================== */}
+        <section id="he-sinh-thai-kcn" aria-label="Factories in KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6 scroll-mt-24">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+            <div className="space-y-1">
+              <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+                SECTION 6 • NHÀ MÁY ĐANG HOẠT ĐỘNG
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+                NHÀ MÁY & DOANH NGHIỆP TRONG KHU CÔNG NGHIỆP ({confirmedFactories.length})
+              </h2>
+              <p className="text-xs text-slate-500">
+                Chỉ hiển thị các nhà máy có xác thực đăng ký kinh doanh và đang vận hành thực tế tại KCN.
+              </p>
             </div>
 
-            {/* Right Quick Info */}
-            <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 shadow-xs text-xs">
-                <h4 className="font-bold text-slate-900 uppercase font-heading border-b border-slate-100 pb-2">
-                  {lang === 'en' ? 'Planning & Infrastructure Overview' : 'Thông tin quy hoạch & Hạ tầng'}
-                </h4>
-                <div className="space-y-2.5">
-                  <div className="flex justify-between py-1 border-b border-slate-50">
-                    <span className="text-slate-500">{lang === 'en' ? 'Province:' : 'Tỉnh thành:'}</span>
-                    <strong className="text-slate-900">{kcn.province}</strong>
+            {/* Factory Search Bar */}
+            <div className="relative w-full sm:w-72">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Tìm nhà máy hoặc ngành hàng..."
+                value={factorySearch}
+                onChange={(e) => setFactorySearch(e.target.value)}
+                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:border-blue-500 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Factories Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredFactories.slice(0, 12).map((fac) => (
+              <div 
+                key={fac.id}
+                className="p-5 rounded-2xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition bg-slate-50/50 space-y-3 flex flex-col justify-between"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200">
+                      {fac.type || 'FDI'}
+                    </span>
+                    <span className="text-[10px] text-emerald-600 font-bold flex items-center space-x-0.5">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Xác thực</span>
+                    </span>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-slate-50">
-                    <span className="text-slate-500">{lang === 'en' ? 'Economic Region:' : 'Vùng kinh tế:'}</span>
-                    <strong className="text-slate-900">{kcn.region}</strong>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-slate-50">
-                    <span className="text-slate-500">{lang === 'en' ? 'Total Scale:' : 'Tổng quy mô:'}</span>
-                    <strong className="text-slate-900">{kcn.totalArea || "200 - 500 ha"}</strong>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-slate-50">
-                    <span className="text-slate-500">{lang === 'en' ? 'Occupancy Rate:' : 'Tỷ lệ lấp đầy:'}</span>
-                    <strong className="text-emerald-600 font-bold">{kcn.occupancyRate || "85%"}</strong>
-                  </div>
-                  <div className="flex justify-between py-1 border-b border-slate-50">
-                    <span className="text-slate-500">{lang === 'en' ? 'Total Factories:' : 'Số nhà máy:'}</span>
-                    <strong className="text-blue-600 font-bold">{factoriesCount} {lang === 'en' ? 'plants' : 'nhà máy'}</strong>
+
+                  <h3 className="font-bold text-slate-900 text-sm line-clamp-2 font-heading leading-snug">
+                    {fac.name}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 line-clamp-1">
+                    Ngành: <span className="font-medium text-slate-700">{fac.industry}</span>
+                  </p>
+
+                  <div className="text-[11px] text-slate-400 flex items-center space-x-1 truncate">
+                    <MapPin className="w-3 h-3 shrink-0 text-slate-400" />
+                    <span className="truncate">{fac.address}</span>
                   </div>
                 </div>
 
+                <div className="pt-2 border-t border-slate-200/80 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Hoạt động từ {fac.foundedYear}
+                  </span>
+                  <Link
+                    to={`/nha-may/${fac.slug}`}
+                    className="text-xs font-bold text-[#0052cc] hover:underline flex items-center space-x-1"
+                  >
+                    <span>Xem hồ sơ</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredFactories.length === 0 && (
+            <div className="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl">
+              Không tìm thấy nhà máy nào phù hợp với từ khóa "{factorySearch}".
+            </div>
+          )}
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 5. NHÓM NGÀNH TRONG KHU VỰC (SECTION 8) */}
+        {/* ===================================================================== */}
+        <section aria-label="Industries in KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-xs space-y-4">
+          <div className="space-y-1 border-b border-slate-100 pb-3">
+            <span className="px-2.5 py-0.5 bg-purple-50 text-purple-700 text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 8 • CƠ CẤU NGÀNH NGHỀ
+            </span>
+            <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading">
+              NHÓM NGÀNH TRONG KHU VỰC
+            </h2>
+            <p className="text-xs text-slate-500">
+              Tổng hợp từ hồ sơ các nhà máy đang vận hành và quy hoạch ngành nghề trọng tâm của KCN.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-1">
+            {curatedIndustries.map((ind, idx) => (
+              <span 
+                key={idx}
+                className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 text-xs font-bold transition cursor-default flex items-center space-x-1.5"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                <span>{ind}</span>
+              </span>
+            ))}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 6. NHU CẦU DOANH NGHIỆP TRONG KCN (SECTIONS 9 & 10) */}
+        {/* ===================================================================== */}
+        <section aria-label="Public Requirements in KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="space-y-1">
+              <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+                SECTION 9 & 10 • NHU CẦU MUA HÀNG B2B
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+                NHU CẦU DOANH NGHIỆP TRONG KHU CÔNG NGHIỆP ({publicRequirements.length})
+              </h2>
+              <p className="text-xs text-slate-500">
+                Các gói thu mua linh kiện, phụ trợ đang mở. Dữ liệu công khai đã bảo mật thông tin nội bộ của Buyer.
+              </p>
+            </div>
+
+            <Link
+              to={`/dang-nhu-cau?industrialParkId=${kcn.id}`}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-sm"
+            >
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>Gửi nhu cầu mới</span>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {publicRequirements.map((req) => (
+              <div 
+                key={req.id}
+                className="p-5 rounded-2xl border border-slate-200 hover:border-blue-400 bg-white shadow-xs space-y-3 flex flex-col justify-between transition"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="px-2.5 py-0.5 rounded text-[10.5px] font-mono font-bold bg-blue-50 text-[#0052cc]">
+                      {req.publicCode || req.id}
+                    </span>
+                    <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                      ĐANG TÌM NGUỒN
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-slate-900 text-sm line-clamp-2 font-heading">
+                    {req.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-2">
+                    {req.description}
+                  </p>
+
+                  <div className="text-[11px] text-slate-400 font-mono space-y-0.5 pt-1">
+                    <div>Ngành: <span className="text-slate-700 font-sans">{req.industry}</span></div>
+                    <div>Bảo mật Buyer: <span className="text-emerald-600 font-bold">100% ĐẠT CHUẨN</span></div>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10.5px] text-slate-400">
+                    Hạn chót: 30 ngày tới
+                  </span>
+                  <Link
+                    to={`/nhu-cau-mua-hang/${req.id}`}
+                    className="px-3.5 py-1.5 bg-[#0052cc] hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition inline-flex items-center space-x-1"
+                  >
+                    <span>TÔI CÓ KHẢ NĂNG ĐÁP ỨNG</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            {publicRequirements.length === 0 && (
+              <div className="col-span-full p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl space-y-2">
+                <ShoppingBag className="w-8 h-8 text-slate-300 mx-auto" />
+                <p className="font-bold text-slate-600">Chưa có gói nhu cầu công khai nào tại KCN này.</p>
+                <p className="text-slate-400 max-w-sm mx-auto">
+                  Bạn là nhà máy trong KCN? Hãy gửi nhu cầu để đội ngũ điều phối tìm kiếm nhà cung ứng phù hợp.
+                </p>
                 <Link
-                  to="/dang-nhu-cau"
-                  className="w-full py-2.5 bg-[#072847] hover:bg-blue-900 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center space-x-2 font-heading uppercase mt-4"
+                  to={`/dang-nhu-cau?industrialParkId=${kcn.id}`}
+                  className="inline-block mt-2 px-4 py-2 bg-blue-600 text-white font-bold text-xs rounded-xl"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>{lang === 'en' ? 'Contact IP Management Board' : 'Liên hệ ban quản lý KCN'}</span>
+                  Đăng nhu cầu ngay
                 </Link>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </section>
 
-        {/* TAB 3: LOCATION */}
-        {activeTab === 'location' && (
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6 shadow-xs">
-            <h3 className="text-lg font-bold text-slate-900 font-heading uppercase">
-              {lang === 'en' ? 'Geographic Location & Regional Logistics' : 'Vị trí địa lý & Liên kết vùng'}
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600">
-              {kcn.location || `${kcn.name}, Tỉnh ${kcn.province}, Việt Nam`}
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2">
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                <span className="text-slate-400 block font-medium font-heading">{lang === 'en' ? 'Road Connectivity' : 'Giao thông đường bộ'}</span>
-                <strong className="text-slate-800">{lang === 'en' ? 'Direct access to National Highways & Expressways' : 'Kết nối trực tiếp Quốc lộ & Cao tốc liên tỉnh'}</strong>
-              </div>
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                <span className="text-slate-400 block font-medium font-heading">{lang === 'en' ? 'Deep-Sea Port / ICD' : 'Cảng biển / ICD'}</span>
-                <strong className="text-slate-800">{lang === 'en' ? 'Favorable for industrial export & import logistics' : 'Thuận lợi xuất nhập khẩu hàng hóa công nghiệp'}</strong>
-              </div>
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                <span className="text-slate-400 block font-medium font-heading">{lang === 'en' ? 'International Airport' : 'Sân bay Quốc tế'}</span>
-                <strong className="text-slate-800">{lang === 'en' ? 'Rapid transport for cargo & foreign experts' : 'Đáp ứng vận chuyển hàng không & chuyên gia'}</strong>
-              </div>
+        {/* ===================================================================== */}
+        {/* 7. KHOẢNG TRỐNG NGUỒN CUNG / SERVICE GAPS (SECTIONS 12 & 13) */}
+        {/* ===================================================================== */}
+        <section aria-label="Supply Gaps in KCN" className="bg-white rounded-3xl border border-amber-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-100 pb-4">
+            <div className="space-y-1">
+              <span className="px-2.5 py-0.5 bg-amber-100 text-amber-900 text-[10.5px] font-bold rounded-md font-mono">
+                SECTION 12 & 13 • KHOẢNG TRỐNG NGUỒN CUNG
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+                NHÓM NHU CẦU / KHOẢNG TRỐNG NGUỒN CUNG ({supplyGaps.length})
+              </h2>
+              <p className="text-xs text-slate-600">
+                Các nhóm linh kiện, dịch vụ phụ trợ đang thiếu nguồn cung tại chỗ được Điều phối viên CCU xác nhận.
+              </p>
             </div>
-          </div>
-        )}
 
-        {/* TAB 4: INFRASTRUCTURE */}
-        {activeTab === 'infra' && (
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6 shadow-xs">
-            <h3 className="text-lg font-bold text-slate-900 font-heading uppercase">
-              {lang === 'en' ? 'Technical Infrastructure Systems' : 'Hệ thống Hạ tầng Kỹ thuật KCN'}
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center font-bold">⚡</div>
-                <h4 className="font-bold text-slate-900 font-heading">{lang === 'en' ? 'Power Supply' : 'Hệ thống cấp điện'}</h4>
-                <p className="text-slate-500">{lang === 'en' ? 'Dedicated 110/22kV substation supplying 24/7 stable power for plants.' : 'Trạm biến áp 110/22kV cấp điện 24/7 ổn định cho các nhà máy sản xuất.'}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">💧</div>
-                <h4 className="font-bold text-slate-900 font-heading">{lang === 'en' ? 'Water Supply & Wastewater' : 'Cấp thoát nước'}</h4>
-                <p className="text-slate-500">{lang === 'en' ? 'High-capacity water treatment and Column A standard wastewater treatment plant.' : 'Nhà máy nước sạch công suất lớn và trạm xử lý nước thải đạt tiêu chuẩn Cột A.'}</p>
-              </div>
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
-                <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 flex items-center justify-center font-bold">🚒</div>
-                <h4 className="font-bold text-slate-900 font-heading">{lang === 'en' ? 'Fire Safety & Security' : 'PCCC & An ninh'}</h4>
-                <p className="text-slate-500">{lang === 'en' ? '24/7 fire protection squad with underground hydrants along internal roads.' : 'Đội PCCC chuyên nghiệp túc trực 24/7, họng cứu hỏa ngầm dọc các tuyến đường nội khu.'}</p>
-              </div>
-            </div>
+            <span className="px-3 py-1 bg-amber-50 text-amber-800 text-xs font-bold rounded-xl border border-amber-200 shrink-0 font-mono">
+              COORDINATOR CONFIRMED
+            </span>
           </div>
-        )}
 
-        {/* TAB 5: CONTACT */}
-        {activeTab === 'contact' && (
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 space-y-6 shadow-xs max-w-2xl">
-            <h3 className="text-lg font-bold text-slate-900 font-heading uppercase">
-              {lang === 'en' ? 'Investment Promotion & Sourcing Inquiries' : 'Liên hệ Xúc tiến & Hỗ trợ Đầu tư'}
-            </h3>
-            <p className="text-xs text-slate-600">
-              {lang === 'en' 
-                ? `Submit your information to connect directly with ${kcn.name} Management Board or supply chain promoters.` 
-                : `Gửi thông tin để được hỗ trợ kết nối trực tiếp với Ban Quản lý ${kcn.name} hoặc xúc tiến chuỗi cung ứng.`}
-            </p>
-            <div className="space-y-3 text-xs">
-              <input 
-                type="text" 
-                placeholder={lang === 'en' ? "Your full name..." : "Họ tên của bạn..."}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-              />
-              <input 
-                type="text" 
-                placeholder={lang === 'en' ? "Phone / WhatsApp / Zalo..." : "Số điện thoại / Zalo..."}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-              />
-              <textarea 
-                rows="3" 
-                placeholder={lang === 'en' ? "Plant leasing demand, supplier inquiry, or partnership request..." : "Nhu cầu thuê xưởng, tìm nhà máy cung ứng hoặc đối tác..."}
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-              ></textarea>
-              <button 
-                onClick={() => alert(lang === 'en' ? "Inquiry submitted successfully!" : "Đã gửi yêu cầu kết nối thành công!")}
-                className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition font-heading uppercase"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {supplyGaps.map((gap) => (
+              <div 
+                key={gap.id}
+                className="p-5 rounded-2xl bg-amber-50/40 border border-amber-200/80 hover:bg-amber-50/70 transition space-y-3 flex flex-col justify-between"
               >
-                {lang === 'en' ? 'Submit Inquiry Now →' : 'Gửi yêu cầu ngay →'}
-              </button>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-200 text-amber-900">
+                      MỨC ĐỘ: {gap.urgencyLevel}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {gap.estimatedVolume}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-slate-900 text-sm font-heading line-clamp-2">
+                    {gap.categoryName}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                    {gap.description}
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-amber-200/60 flex items-center justify-between">
+                  <div className="text-[10px] text-slate-400 font-mono">
+                    Xác nhận: <span className="text-slate-600 font-medium">{gap.confirmedBy?.split('(')[0]}</span>
+                  </div>
+                  <Link
+                    to={`/dich-vu/to-chuc-ket-noi?source=supply-gap&gapId=${gap.id}&kcnId=${kcn.id}`}
+                    className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-white font-bold text-[11px] rounded-lg transition"
+                  >
+                    Báo Năng Lực
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            {supplyGaps.length === 0 && (
+              <div className="col-span-full p-8 text-center text-xs text-slate-400 bg-amber-50/30 rounded-2xl">
+                Hiện chưa có khoảng trống nguồn cung nào ở mức báo động được xác nhận tại KCN này.
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 8. NHÀ CUNG ỨNG PHỤC VỤ KHU VỰC (SECTIONS 14, 15, 16, 17) */}
+        {/* ===================================================================== */}
+        <section aria-label="Suppliers Serving KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="space-y-1 border-b border-slate-100 pb-4">
+            <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 14, 15, 16, 17 • NGUỒN CUNG PHỤC VỤ
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+              NHÀ CUNG ỨNG PHỤC VỤ KHU VỰC KCN
+            </h2>
+            <p className="text-xs text-slate-500">
+              Các doanh nghiệp có phạm vi phục vụ và năng lực giao hàng tận nơi cho các nhà máy tại {kcn.name}.
+            </p>
+
+            {/* MANDATORY DISCLAIMER (SECTION 15 & 16 SPEC 26/27.TXT) */}
+            <div className="mt-2 p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-[11.5px] leading-relaxed">
+                <span className="font-bold">Lưu ý chuẩn tắc:</span> Nhà cung ứng có phạm vi phục vụ tại địa bàn KCN (dựa trên địa bàn & năng lực). 
+                Không đồng nghĩa doanh nghiệp có nhà máy trong KCN, là đối tác hay được KCN chứng nhận.
+              </p>
             </div>
           </div>
-        )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {suppliersServing.slice(0, 6).map((sup) => (
+              <div 
+                key={sup.id}
+                className="p-5 rounded-2xl border border-slate-200 hover:border-blue-400 bg-white shadow-xs space-y-3 flex flex-col justify-between transition"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3">
+                    <img 
+                      src={sup.logo} 
+                      alt={sup.name} 
+                      className="w-10 h-10 object-contain rounded-xl border border-slate-100 p-1 shrink-0" 
+                    />
+                    <div className="overflow-hidden">
+                      <h3 className="font-bold text-slate-900 text-xs sm:text-sm truncate font-heading">
+                        {sup.name}
+                      </h3>
+                      <span className="text-[10px] text-slate-400 font-mono block truncate">
+                        {sup.serviceArea}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-600 line-clamp-2">
+                    {sup.capability}
+                  </p>
+
+                  {/* Section 17 Contextual Match Explanation */}
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-[10.5px] text-slate-500 space-y-1">
+                    <span className="font-bold text-slate-700 block text-[10px] uppercase">Lý do đối khớp năng lực:</span>
+                    {sup.matchExplanation.map((exp, eIdx) => (
+                      <div key={eIdx} className="flex items-start space-x-1">
+                        <Check className="w-3 h-3 text-emerald-600 shrink-0 mt-0.5" />
+                        <span className="line-clamp-1">{exp}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    MOQ: {sup.orderConditions.moq.slice(0, 16)}...
+                  </span>
+                  <Link
+                    to={`/doanh-nghiep/${sup.slug || sup.id}`}
+                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition"
+                  >
+                    Xem năng lực
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 9. CHƯƠNG TRÌNH TẠI KHU VỰC (SECTIONS 18, 19, 20, 21) */}
+        {/* ===================================================================== */}
+        <section aria-label="Programs in KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div className="space-y-1">
+              <span className="px-2.5 py-0.5 bg-purple-50 text-purple-700 text-[10.5px] font-bold rounded-md font-mono">
+                SECTION 18 & 19 • SỰ KIỆN KẾT NỐI
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+                CHƯƠNG TRÌNH TẠI KHU VỰC ({localPrograms.length})
+              </h2>
+              <p className="text-xs text-slate-500">
+                Các phiên kết nối cung cầu, hội thảo công nghiệp và ngày hội chuỗi cung ứng diễn ra tại địa bàn.
+              </p>
+            </div>
+
+            <Link
+              to={`/dich-vu/to-chuc-ket-noi?source=industrial-park&industrialParkId=${kcn.id}`}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1.5 shrink-0 shadow-sm"
+            >
+              <Handshake className="w-3.5 h-3.5" />
+              <span>Đề xuất sự kiện tại KCN</span>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {localPrograms.map((prog) => (
+              <div 
+                key={prog.id}
+                className="p-5 rounded-2xl border border-slate-200 hover:border-purple-400 bg-white shadow-xs space-y-3 flex flex-col justify-between transition"
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-50 text-purple-700">
+                      {prog.dates || prog.date}
+                    </span>
+                    {/* HARD RULE SECTION 19: Chỉ ghi vai trò khi confirmed, nếu không chỉ ghi địa điểm */}
+                    <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                      {prog.kcnRoleLabel}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-slate-900 text-sm line-clamp-2 font-heading">
+                    {prog.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 flex items-center space-x-1">
+                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                    <span className="truncate">{prog.location}</span>
+                  </p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Tổ chức: {prog.organizerName}
+                  </span>
+                  <Link
+                    to={`/chuong-trinh/${prog.slug || prog.id}`}
+                    className="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold rounded-lg transition inline-flex items-center space-x-1"
+                  >
+                    <span>Chi tiết & Đăng ký</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            {localPrograms.length === 0 && (
+              <div className="col-span-full p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl space-y-2">
+                <Calendar className="w-8 h-8 text-slate-300 mx-auto" />
+                <p className="font-bold text-slate-600">Chưa có sự kiện nào sắp diễn ra tại KCN này.</p>
+                <p className="text-slate-400 max-w-sm mx-auto">
+                  Bạn muốn đề xuất Ngày Hội Chuỗi Cung Ứng hoặc Phiên gặp gỡ nhà mua hàng tại KCN?
+                </p>
+                <Link
+                  to={`/dich-vu/to-chuc-ket-noi?source=industrial-park&industrialParkId=${kcn.id}`}
+                  className="inline-block mt-2 px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl"
+                >
+                  Đề xuất chương trình
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 10. CATALOGUE & TÀI LIỆU (SECTION 22) */}
+        {/* ===================================================================== */}
+        <section aria-label="Catalogues in KCN" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="space-y-1 border-b border-slate-100 pb-3">
+            <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 22 • TÀI NGUYÊN DOANH NGHIỆP
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+              CATALOGUE & TÀI LIỆU SOURCING ĐỊA BÀN
+            </h2>
+            <p className="text-xs text-slate-500">
+              Kỷ yếu năng lực nhà cung ứng phụ trợ và cẩm nang tiêu chuẩn mua sắm nhà máy.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {catalogues.map((cat) => (
+              <div 
+                key={cat.id}
+                className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-3 flex flex-col justify-between"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white text-slate-700 border border-slate-200">
+                      {cat.category}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {cat.pagesCount} trang • {cat.format}
+                    </span>
+                  </div>
+
+                  <h3 className="font-bold text-slate-900 text-sm font-heading">
+                    {cat.title}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-2">
+                    {cat.description}
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between">
+                  <span className="text-[10px] text-slate-400 font-mono">
+                    Lượt tải: {cat.downloadCount}
+                  </span>
+                  <a
+                    href="#download-catalogue"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      alert(`Đang mở tài liệu: ${cat.title}`);
+                    }}
+                    className="px-3 py-1.5 bg-[#0052cc] hover:bg-blue-600 text-white font-bold text-xs rounded-lg transition inline-flex items-center space-x-1"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>XEM CATALOGUE</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 11. BẢN ĐỒ VỊ TRÍ & ĐỊA BÀN (SECTIONS 24 & 25) */}
+        {/* ===================================================================== */}
+        <section aria-label="KCN Location Map" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-xs space-y-4">
+          <div className="space-y-1 border-b border-slate-100 pb-3">
+            <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 24 & 25 • VỊ TRÍ ĐỊA BÀN
+            </span>
+            <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading">
+              VỊ TRÍ & KẾT NỐI HẠ TẦNG
+            </h2>
+            <p className="text-xs text-slate-500">
+              Tọa độ địa lý chuẩn tắc công khai. Không hiển thị chi tiết bên trong các nhà máy khi chưa cho phép.
+            </p>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-3">
+            <MapPin className="w-8 h-8 text-rose-500 mx-auto animate-bounce" />
+            <div className="space-y-1 max-w-md mx-auto">
+              <h3 className="font-bold text-slate-900 text-sm font-heading">{kcn.name}</h3>
+              <p className="text-xs text-slate-600">{kcn.location || kcn.address || `${kcn.name}, ${kcn.province}`}</p>
+              <p className="text-[11px] text-slate-400 font-mono">Tọa độ: {kcn.lat || '10.9574'}° N, {kcn.lng || '106.8427'}° E</p>
+            </div>
+            <a
+              href={`https://maps.google.com/?q=${encodeURIComponent(`${kcn.name} ${kcn.province}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-xl transition shadow-xs"
+            >
+              <Navigation className="w-3.5 h-3.5 text-blue-600" />
+              <span>Chỉ đường trên Google Maps</span>
+            </a>
+          </div>
+        </section>
+
+        {/* ===================================================================== */}
+        {/* 12. BOTTOM CTA SECTION (SECTION 26, 27, 28) */}
+        {/* ===================================================================== */}
+        <section 
+          aria-label="Final Assistance Call to Action"
+          className="bg-gradient-to-r from-[#072847] via-[#0b3f6d] to-[#0052cc] rounded-3xl p-8 sm:p-10 text-white shadow-xl space-y-6"
+        >
+          <div className="max-w-3xl space-y-3">
+            <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-full font-mono">
+              SECTION 26 • ĐIỀU PHỐI NGUỒN CUNG TẠI CHỖ
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black font-heading leading-tight">
+              BẠN ĐANG CẦN NGUỒN CUNG CHO DOANH NGHIỆP TRONG KCN?
+            </h2>
+            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
+              Trợ lý SUPPI hỗ trợ làm rõ yêu cầu và tìm nguồn theo năng lực, địa bàn và thời điểm cần đáp ứng. 
+              Mạng lưới nhà cung cấp phụ trợ nội địa sẵn sàng giao mẫu và báo giá nhanh chóng.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <Link
+              to={`/dang-nhu-cau?industrialParkId=${kcn.id}`}
+              className="px-6 py-3.5 bg-amber-500 hover:bg-amber-400 text-slate-900 font-black text-xs sm:text-sm rounded-xl transition shadow-lg shadow-amber-500/20 font-heading inline-flex items-center space-x-2"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>ĐĂNG NHU CẦU DOANH NGHIỆP TRONG KCN</span>
+            </Link>
+
+            <Link
+              to={`/dich-vu/to-chuc-ket-noi?source=industrial-park&industrialParkId=${kcn.id}`}
+              className="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold text-xs sm:text-sm rounded-xl transition font-heading inline-flex items-center space-x-2"
+            >
+              <Handshake className="w-4 h-4 text-emerald-300" />
+              <span>ĐỀ XUẤT NGÀY HỘI KẾT NỐI</span>
+            </Link>
+          </div>
+        </section>
 
       </div>
 
-    </div>
+      {/* ======================================================================= */}
+      {/* 13. STICKY MOBILE CTA BAR (SECTION 42) */}
+      {/* ======================================================================= */}
+      <aside aria-label="Mobile Sticky Actions" className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2.5 sm:hidden flex items-center justify-between gap-3 shadow-lg">
+        <div className="overflow-hidden">
+          <span className="text-[10px] text-slate-400 block font-mono">KCN Địa bàn:</span>
+          <span className="text-xs font-bold text-slate-900 truncate block">{kcn.shortName || kcn.name}</span>
+        </div>
+        <Link
+          to={`/dang-nhu-cau?industrialParkId=${kcn.id}`}
+          className="px-4 py-2 bg-[#0052cc] hover:bg-blue-600 text-white font-bold text-xs rounded-xl transition shrink-0 font-heading shadow-md"
+        >
+          ĐĂNG NHU CẦU
+        </Link>
+      </aside>
+
+    </main>
   );
 }

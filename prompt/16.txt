@@ -1,0 +1,521 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 16: VẬT PHẨM DOANH NGHIỆP & SỰ KIỆN
+ROUTE: /dich-vu/vat-pham-su-kien
+
+MỤC TIÊU:
+
+Xây page tiếp nhận và xử lý nhu cầu vật phẩm doanh nghiệp/sự kiện theo quy trình có thể báo giá, theo dõi và bàn giao.
+
+Không biến page thành shop bán lẻ.
+
+Đối tượng:
+- Ban tổ chức
+- Nhà máy
+- Hội / Hiệp hội
+- KCN
+- Nhà cung ứng
+- Đơn vị tổ chức chương trình
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit route hiện tại:
+
+/dich-vu/vat-pham-su-kien
+
+Reuse:
+
+services
+service_requests
+organizations
+products_services
+suppliers
+attachments
+quotations
+tasks
+activities
+programs
+
+Không tạo hệ order riêng nếu ServiceRequest + Quotation hiện tại đã đáp ứng.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“CHUẨN BỊ VẬT PHẨM THEO NHẬN DIỆN DOANH NGHIỆP VÀ CHƯƠNG TRÌNH”
+
+Sub:
+
+“Từ đồng phục, thẻ QR đến túi, quà tặng và tài liệu, CHUOICUNGUNG.COM tiếp nhận yêu cầu và phối hợp nguồn cung theo số lượng, thiết kế, thời gian và địa điểm bàn giao đã thống nhất.”
+
+CTA chính:
+
+[GỬI YÊU CẦU BÁO GIÁ]
+
+→ /yeu-cau-dich-vu?service=vat-pham-su-kien
+
+CTA phụ:
+
+[XEM CÁC BỘ VẬT PHẨM]
+
+==================================================
+3. CÁC BỘ SẢN PHẨM
+==================================================
+
+CARD 01
+BỘ THAM DỰ NGÀY HỘI
+
+Ví dụ:
+- thẻ tên QR
+- dây đeo
+- túi
+- sổ
+- bút
+- catalogue
+
+Phù hợp:
+Ban tổ chức / Nhà tài trợ / Hội / KCN
+
+--------------------------------------------------
+
+CARD 02
+BỘ NHẬN DIỆN GIAN HÀNG
+
+Ví dụ:
+- áo nhân sự
+- bảng QR
+- standee
+- tài liệu giới thiệu
+- quà tặng
+
+Phù hợp:
+Nhà cung ứng tham gia chương trình.
+
+--------------------------------------------------
+
+CARD 03
+BỘ HOẠT ĐỘNG DOANH NGHIỆP
+
+Ví dụ:
+- áo chương trình
+- nón
+- bình nước
+- huy chương
+- kỷ niệm chương
+- quà tặng
+
+Phù hợp:
+hoạt động nội bộ, sự kiện, phúc lợi, kỷ niệm doanh nghiệp.
+
+--------------------------------------------------
+
+CARD 04
+ĐẶT THEO DANH SÁCH RIÊNG
+
+Cho phép khách gửi file hoặc chọn từng hạng mục.
+
+Không hard-code toàn bộ sản phẩm.
+
+Reuse ProductService / Supplier data nếu phù hợp.
+
+==================================================
+4. FORM YÊU CẦU
+==================================================
+
+Reuse:
+
+/yeu-cau-dich-vu
+
+Preselect:
+
+service = VAT_PHAM_SU_KIEN
+
+Form cần:
+
+Organization
+
+Người liên hệ
+
+Loại sản phẩm
+
+Số lượng
+
+Bảng size nếu có
+
+Quy cách
+
+Yêu cầu in/thêu
+
+Màu sắc
+
+Logo / Brand guideline
+
+File thiết kế nếu có
+
+Yêu cầu đóng gói
+
+Yêu cầu mẫu
+
+Ngày mong muốn nhận hàng
+
+Địa điểm giao
+
+Người duyệt mẫu
+
+Ngân sách optional
+
+Program liên quan nếu có
+
+Attachments
+
+Không bắt nhập lại Organization data nếu user đã login.
+
+==================================================
+5. WORKFLOW
+==================================================
+
+Quy trình bắt buộc:
+
+REQUEST
+→ XÁC NHẬN QUY CÁCH
+→ TÌM / XÁC NHẬN NCC
+→ MẪU / THIẾT KẾ
+→ KHÁCH DUYỆT
+→ BÁO GIÁ
+→ XÁC NHẬN TIẾN ĐỘ
+→ SẢN XUẤT
+→ KIỂM TRA
+→ BÀN GIAO
+→ NGHIỆM THU / KẾT QUẢ
+
+Ngày khách mong muốn:
+KHÔNG được tự coi là ngày giao đã cam kết.
+
+Phải có Supplier/Operator confirm.
+
+==================================================
+6. SERVICE REQUEST
+==================================================
+
+Sau submit tạo ServiceRequest:
+
+serviceType = VAT_PHAM_SU_KIEN
+
+Fields quan trọng:
+
+organizationId
+productTypes[]
+quantities
+specifications
+deliveryLocation
+requestedDate
+sampleRequired
+approvalContact
+budget optional
+
+owner
+status
+nextAction
+nextActionAt
+
+attachments
+
+Mã ví dụ:
+DV-2026-XXXXX
+
+==================================================
+7. BÁO GIÁ
+==================================================
+
+Mỗi báo giá phải ghi rõ:
+
+- Bên bán
+- Hạng mục
+- Số lượng
+- Quy cách
+- Chi phí mẫu
+- Chi phí thiết kế
+- Chi phí sản xuất
+- Vận chuyển
+- Thuế
+- Điều kiện thanh toán
+- Thời gian dự kiến
+- Trách nhiệm bàn giao
+- Chính sách xử lý lỗi
+
+Không gửi báo giá mơ hồ chỉ có tổng tiền.
+
+==================================================
+8. PHÂN BIỆT VAI TRÒ CHUOICUNGUNG.COM
+==================================================
+
+Bắt buộc xác định cho từng request:
+
+MODE A:
+PLATFORM_COORDINATION
+
+CHUOICUNGUNG.COM chỉ điều phối.
+Supplier là bên ký hợp đồng / xuất hóa đơn / chịu trách nhiệm sản phẩm.
+
+MODE B:
+DIRECT_SALE
+
+CHUOICUNGUNG.COM trực tiếp bán.
+Phải có người chịu trách nhiệm:
+- chất lượng;
+- tiến độ;
+- giao hàng;
+- xử lý khiếu nại.
+
+Không để hai mô hình bị nhập nhằng.
+
+==================================================
+9. MẪU + DUYỆT
+==================================================
+
+Nếu sampleRequired = true:
+
+theo dõi:
+
+SAMPLE_REQUESTED
+SAMPLE_PREPARING
+SAMPLE_SENT
+SAMPLE_RECEIVED
+APPROVED
+REVISION_REQUIRED
+REJECTED
+
+Lưu:
+approvedBy
+approvedAt
+version
+
+Không sản xuất đại trà nếu workflow yêu cầu mẫu duyệt nhưng chưa APPROVED.
+
+==================================================
+10. SUPPLIER SOURCING
+==================================================
+
+Nếu cần tìm nguồn:
+
+reuse:
+SupplierSearchService
+SupplierMatchingService
+
+Matching dựa trên:
+
+Product/Service
+Capability
+Location
+MOQ/Capacity
+Lead time
+Sample capability
+Evidence
+
+Không dùng Sponsor / Founding Partner làm match factor.
+
+==================================================
+11. CHƯƠNG TRÌNH
+==================================================
+
+Nếu vật phẩm thuộc Program:
+
+link ServiceRequest với programId.
+
+Ví dụ:
+
+Ngày hội Chuỗi Cung Ứng
+→ thẻ QR
+→ túi
+→ catalogue
+→ áo BTC
+
+Không duplicate Program data.
+
+==================================================
+12. HÌNH ẢNH / CLAIM
+==================================================
+
+Ảnh sản phẩm demo phải phân biệt:
+
+ILLUSTRATION
+SAMPLE
+REAL_PRODUCT
+REAL_DELIVERED_PROJECT
+
+Không dùng ảnh quảng cáo để tuyên bố:
+
+“đạt chuẩn bảo hộ”
+“chống tĩnh điện”
+“chứng nhận XYZ”
+
+nếu không có evidence tương ứng.
+
+==================================================
+13. ADMIN
+==================================================
+
+Reuse:
+
+/admin/dich-vu
+
+ServiceRequest detail cần tabs:
+
+Tổng quan
+Sản phẩm
+Quy cách
+Supplier
+Mẫu
+Báo giá
+Sản xuất
+Giao hàng
+Tasks
+Files
+Timeline
+Audit
+
+Admin phải thấy rõ:
+
+Owner
+Status
+Next Action
+Due Date
+
+Supplier
+
+Buyer approval
+
+Sample state
+
+Quotation
+
+Delivery state
+
+==================================================
+14. STATUS
+==================================================
+
+Reuse service status chung, nhưng operational sub-status có thể gồm:
+
+NEW
+NEED_MORE_INFO
+SOURCING
+SPEC_CONFIRMATION
+SAMPLE
+QUOTATION
+WAITING_APPROVAL
+PRODUCTION
+QUALITY_CHECK
+DELIVERY
+WAITING_ACCEPTANCE
+COMPLETED
+CANCELLED
+
+Không dùng mỗi “đang xử lý”.
+
+==================================================
+15. ADMIN / OPERATIONS
+==================================================
+
+Mọi active request phải có:
+
+owner
+nextAction
+nextActionAt
+
+Mọi thay đổi quan trọng ghi AuditLog.
+
+Ví dụ:
+
+quy cách đổi
+số lượng đổi
+mẫu được duyệt
+giá đổi
+ngày giao đổi
+supplier đổi
+request hủy
+
+==================================================
+16. SEO + MOBILE
+==================================================
+
+SEO Title:
+
+Vật Phẩm Doanh Nghiệp & Sự Kiện | CHUOICUNGUNG.COM
+
+Meta:
+
+Tiếp nhận yêu cầu đồng phục, thẻ QR, túi, quà tặng và vật phẩm chương trình theo số lượng, quy cách, thời gian và địa điểm bàn giao.
+
+Canonical:
+
+/dich-vu/vat-pham-su-kien
+
+Mobile:
+
+Hero
+4 bộ sản phẩm
+Quy trình
+CTA báo giá
+
+Sticky CTA:
+
+[GỬI YÊU CẦU BÁO GIÁ]
+
+Không overflow 390px.
+
+==================================================
+17. QA
+==================================================
+
+Test:
+
+1. CTA giữ service context.
+2. Form hỗ trợ số lượng/quy cách/files.
+3. Requested date không tự thành confirmed date.
+4. Sample approval được lưu version.
+5. Báo giá có đầy đủ thành phần.
+6. Supplier sourcing reuse Search/Matching.
+7. Platform coordination và direct sale được phân biệt.
+8. Program relation không duplicate.
+9. Claim tiêu chuẩn phải có evidence.
+10. Active request có owner + next action.
+11. Admin mutation có AuditLog.
+12. Mobile 390px hoạt động.
+
+==================================================
+18. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- ServiceRequest implementation
+- Sample workflow
+- Quotation workflow
+- Supplier sourcing integration
+- Program integration
+- Admin implementation
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+KHÁCH GỬI ĐỀ BÀI
+→ CHỐT QUY CÁCH
+→ TÌM / CHỐT NCC
+→ MẪU
+→ DUYỆT
+→ BÁO GIÁ
+→ SẢN XUẤT
+→ KIỂM TRA
+→ GIAO HÀNG
+→ NGHIỆM THU
+
+Không biến page này thành một shop ecommerce chung chung.
+Đây là workflow xử lý vật phẩm B2B theo yêu cầu.

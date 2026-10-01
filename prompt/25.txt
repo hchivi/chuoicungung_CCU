@@ -1,0 +1,1071 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 25: CHI TIẾT HỘI / HIỆP HỘI
+ROUTE: /hoi-hiep-hoi/[slug]
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây trang chi tiết một Hội / Hiệp hội / tổ chức kết nối
+theo hướng:
+
+HỘI
+→ LĨNH VỰC
+→ HỘI VIÊN ĐÃ XÁC NHẬN
+→ NHU CẦU
+→ NHÓM NCC
+→ CHƯƠNG TRÌNH
+→ CATALOGUE
+→ CASE KẾT NỐI
+→ FOLLOW-UP / REPORT
+
+Đây KHÔNG phải profile giới thiệu Hội đơn thuần.
+
+Câu hỏi trang phải trả lời được:
+
+1. Tổ chức này hoạt động trong lĩnh vực nào?
+2. Đang có chương trình gì?
+3. Có nhóm nhu cầu nào đang được kết nối?
+4. Có nhóm doanh nghiệp/NCC nào liên quan?
+5. Ai là hội viên đã được xác nhận?
+6. Có catalogue/case nào được phép công bố?
+7. Làm sao đề xuất chương trình cho hội viên?
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/hoi-hiep-hoi/[slug]
+
+Reuse:
+
+Organization
+OrganizationRole
+AssociationProfile
+OrganizationMembership
+Program
+ProgramOrganization
+Requirement
+SupplierProfile
+Category
+Keyword
+Catalogue
+CatalogueEntry
+MediaAsset
+Partnership
+ServiceRequest
+Tasks
+AuditLog
+
+Không tạo duplicate:
+
+Association
+Member company
+Supplier
+Program
+Requirement.
+
+==================================================
+2. ORGANIZATION MASTER
+==================================================
+
+Trang này phải lấy dữ liệu gốc từ:
+
+Organization
+
+với role:
+ASSOCIATION
+
+AssociationProfile chỉ chứa thông tin đặc thù.
+
+Không copy:
+
+organization name
+logo
+website
+address
+public contact
+
+sang nhiều bảng nếu đã có Organization master.
+
+==================================================
+3. HERO
+==================================================
+
+Hero hiển thị:
+
+Logo
+
+Tên Hội / Hiệp hội
+
+Tên viết tắt nếu có
+
+Association type
+
+Lĩnh vực chính
+
+Phạm vi hoạt động
+
+Địa bàn
+
+Ngày cập nhật hồ sơ
+
+Status hồ sơ nếu có
+
+H1:
+
+[TÊN HỘI / HIỆP HỘI]
+
+Sub:
+
+“Hỗ trợ doanh nghiệp trong [lĩnh vực/phạm vi] thông qua các chương trình, hoạt động kết nối và thông tin được xác nhận.”
+
+Không tự viết claim vượt quá dữ liệu Organization cung cấp.
+
+==================================================
+4. CTA HERO
+==================================================
+
+CTA chính:
+
+[TỔ CHỨC CHƯƠNG TRÌNH CHO HỘI VIÊN]
+
+→ /dich-vu/to-chuc-ket-noi
+   ?source=association
+   &organizationId={organizationId}
+
+CTA phụ:
+
+[XEM CHƯƠNG TRÌNH]
+
+scroll tới section Programs.
+
+Nếu user thuộc Association Organization:
+có thể thêm:
+
+[QUẢN LÝ HỒ SƠ]
+
+vào account/admin theo permission.
+
+==================================================
+5. GIỚI THIỆU
+==================================================
+
+Block:
+
+“GIỚI THIỆU TỔ CHỨC”
+
+Hiển thị:
+
+Short description
+
+Scope
+
+Mission/role nếu được Organization cung cấp
+
+Industry focus
+
+Geographic scope
+
+Established year nếu có source
+
+Website
+
+Không tự suy diễn:
+
+quy mô
+uy tín
+số hội viên
+vai trò đại diện
+
+nếu chưa có dữ liệu xác nhận.
+
+==================================================
+6. ĐẦU MỐI HỢP TÁC
+==================================================
+
+Block:
+
+“ĐẦU MỐI HỢP TÁC”
+
+Chỉ hiển thị contact đã được phép public.
+
+Có thể có:
+
+Tên
+Chức danh
+Email công việc
+Phone
+Department
+
+Nếu contact không public:
+hiển thị CTA:
+
+[GỬI YÊU CẦU HỢP TÁC]
+
+qua workflow hệ thống.
+
+Không expose private personal contact.
+
+==================================================
+7. LĨNH VỰC / PHẠM VI HOẠT ĐỘNG
+==================================================
+
+Hiển thị:
+
+Categories
+Industry scope
+Need groups
+Location scope
+
+Reuse taxonomy hiện tại:
+
+Category
+KeywordCluster
+NeedGroup
+Location
+
+Không tạo taxonomy riêng cho Hội.
+
+==================================================
+8. HỘI VIÊN
+==================================================
+
+Block:
+
+“HỘI VIÊN ĐÃ ĐƯỢC XÁC NHẬN”
+
+Chỉ query:
+
+OrganizationMembership.status = CONFIRMED
+
+AND
+
+publicDisplay = true
+
+Không suy luận membership
+từ ProgramRegistration.
+
+==================================================
+9. HARD RULE MEMBERSHIP
+==================================================
+
+Không tự gắn một doanh nghiệp là hội viên nếu:
+
+- từng tham dự chương trình;
+- từng được Hội giới thiệu;
+- cùng ngành;
+- cùng địa phương;
+- có logo trong tài liệu cũ.
+
+Membership phải có record + status phù hợp.
+
+==================================================
+10. MEMBER CARD
+==================================================
+
+Mỗi Member Card có thể hiển thị:
+
+Logo
+
+Tên doanh nghiệp
+
+Role:
+Supplier / Factory / Other
+
+Category
+
+Location
+
+Public Supplier capability nếu có
+
+CTA:
+
+[XEM HỒ SƠ]
+
+Nếu doanh nghiệp là Supplier:
+→ /doanh-nghiep/[slug]
+
+Nếu là Factory:
+→ /nha-may/[slug]
+khi module đã build.
+
+Không hard-code contact.
+
+==================================================
+11. “TÔI LÀ HỘI VIÊN”
+==================================================
+
+Nếu Organization cho phép claim:
+
+CTA:
+
+[TÔI LÀ HỘI VIÊN CỦA TỔ CHỨC NÀY]
+
+Flow:
+
+Login
+→ select Organization
+→ submit membership claim
+→ evidence optional
+→ Association/Admin review
+→ CONFIRMED
+
+Không auto approve.
+
+==================================================
+12. MEMBERSHIP STATUS
+==================================================
+
+Use:
+
+PENDING
+NEED_MORE_INFO
+CONFIRMED
+REJECTED
+ENDED
+
+Không public PENDING.
+
+==================================================
+13. PROGRAMS
+==================================================
+
+Block:
+
+“CHƯƠNG TRÌNH ĐANG TRIỂN KHAI”
+
+Reuse ProgramCard từ Page 20.
+
+Chỉ Program có:
+
+ProgramOrganization relation
+
+AND relationship CONFIRMED
+
+AND publicDisplay = true.
+
+==================================================
+14. PROGRAM ROLE
+==================================================
+
+Hiển thị rõ role:
+
+Đơn vị tổ chức
+
+Đồng tổ chức
+
+Đối tác
+
+Đơn vị hỗ trợ
+
+Nhưng chỉ khi relation đã confirmed.
+
+Không tự gắn label “Đồng tổ chức”.
+
+==================================================
+15. UPCOMING / COMPLETED
+==================================================
+
+Tách:
+
+Đang mở / Sắp diễn ra
+
+Đã diễn ra
+
+Program đã diễn ra có thể dẫn tới:
+
+Detail
+Library
+Confirmed results
+
+Không xóa lịch sử.
+
+==================================================
+16. NHU CẦU
+==================================================
+
+Block:
+
+“NHU CẦU ĐANG ĐƯỢC KẾT NỐI”
+
+Reuse Requirement.
+
+Relation có thể đến từ:
+
+Association
+Program
+Category
+
+Chỉ hiển thị khi:
+
+visibility = PUBLIC_SUMMARY
+
+hoặc explicit permission cho Association page.
+
+==================================================
+17. PUBLIC REQUIREMENT CARD
+==================================================
+
+Hiển thị:
+
+Public code
+
+Need title
+
+Category
+
+Location
+
+Timeline
+
+Conditions public
+
+CTA:
+
+[XEM NHU CẦU]
+
+hoặc
+
+[TÔI CÓ KHẢ NĂNG ĐÁP ỨNG]
+
+theo workflow Page 11.
+
+Không hiển thị:
+
+Buyer private name
+Contact
+Budget
+Price
+Private files
+Internal notes.
+
+==================================================
+18. SUPPLIER GROUPS
+==================================================
+
+Block:
+
+“NHÓM NHÀ CUNG ỨNG LIÊN QUAN”
+
+Mục đích:
+giúp Hội tổ chức nguồn cung theo nhóm năng lực.
+
+Group có thể dựa trên:
+
+Category
+Capability
+Location
+Program participation
+
+Không tạo ranking “NCC uy tín nhất”
+nếu không có phương pháp rõ.
+
+==================================================
+19. SUPPLIER GROUP MODEL
+==================================================
+
+Nếu cần entity riêng:
+
+SupplierGroup {
+ id
+ associationOrganizationId
+
+ title
+ description?
+
+ categoryId?
+ locationId?
+
+ visibility
+
+ status
+
+ createdAt
+ updatedAt
+}
+
+Members dùng relation:
+
+SupplierGroupMember {
+ supplierOrganizationId
+ groupId
+ status
+ source
+}
+
+Không copy SupplierProfile.
+
+==================================================
+20. SUPPLIER GROUP DISPLAY
+==================================================
+
+Ví dụ:
+
+Cơ khí
+
+Bao bì
+
+Logistics
+
+Đồng phục
+
+M&E
+
+Chỉ hiển thị group có dữ liệu thật.
+
+CTA:
+
+[XEM NHÀ CUNG ỨNG]
+
+→ /doanh-nghiep?...
+
+==================================================
+21. CATALOGUE
+==================================================
+
+Block:
+
+“CATALOGUE & ẤN PHẨM”
+
+Reuse:
+
+Catalogue
+CatalogueEntry
+
+Có thể hiển thị:
+
+Catalogue hội viên
+
+Catalogue chương trình
+
+Ấn phẩm theo ngành
+
+CTA:
+
+[XEM CATALOGUE]
+
+Không hard-code PDF.
+
+==================================================
+22. MEDIA
+==================================================
+
+Block:
+
+“HOẠT ĐỘNG & HÌNH ẢNH”
+
+Chỉ media:
+
+usageRights hợp lệ
+
+public visibility
+
+approved/published.
+
+Có thể lấy từ:
+
+Program Library
+Association media
+
+Không dùng ảnh họp/gặp
+để suy ra quan hệ chính thức nếu không có relation.
+
+==================================================
+23. CASE KẾT NỐI
+==================================================
+
+Block:
+
+“CASE KẾT NỐI”
+
+Chỉ hiển thị Case đã có:
+
+consent
+public visibility
+confirmed outcome.
+
+Case structure:
+
+Requirement ban đầu
+→ nguồn được tìm
+→ connection
+→ action
+→ outcome
+
+Không cần công bố giá trị giao dịch
+nếu chưa được phép.
+
+==================================================
+24. CASE DATA
+==================================================
+
+Ưu tiên derive từ:
+
+Requirement
+SupplierMatch
+Connection
+Meeting
+Quotation
+Outcome
+
+Không nhập một “case marketing”
+không có nguồn.
+
+Có thể có editorial summary,
+nhưng phải liên kết source records.
+
+==================================================
+25. BÁO CÁO
+==================================================
+
+Public page chỉ hiển thị:
+
+confirmed aggregate data
+
+nếu được phép.
+
+Báo cáo chi tiết:
+
+Requirement details
+Member data
+Meeting detail
+Quotes
+Outcomes
+Contacts
+
+phải nằm trong:
+
+account/admin workspace.
+
+==================================================
+26. ASSOCIATION PRIVATE REPORT
+==================================================
+
+Association được cấp quyền có thể xem:
+
+Program summary
+
+Confirmed requirements
+
+Meetings
+
+Quotes count
+
+Outcomes
+
+Tasks
+
+nhưng chỉ trong phạm vi thỏa thuận.
+
+Không mặc định xem mọi nhu cầu của hội viên.
+
+==================================================
+27. CTA CUỐI
+==================================================
+
+Section:
+
+“MUỐN TỔ CHỨC CHƯƠNG TRÌNH CHO HỘI VIÊN?”
+
+Text:
+
+“Gửi mục tiêu, nhóm doanh nghiệp, địa bàn và thời gian dự kiến. CHUOICUNGUNG.COM sẽ cùng làm rõ phạm vi và đề xuất cách triển khai.”
+
+CTA:
+
+[TỔ CHỨC CHƯƠNG TRÌNH CHO HỘI VIÊN]
+
+→ /dich-vu/to-chuc-ket-noi
+?source=association
+&organizationId={id}
+
+==================================================
+28. SERVICE REQUEST
+==================================================
+
+CTA phải reuse ServiceRequest.
+
+Không tạo AssociationContactForm riêng.
+
+Flow:
+
+Association
+→ ServiceRequest
+→ owner
+→ scope
+→ proposal
+→ accepted
+→ Program
+
+==================================================
+29. SUPPI
+==================================================
+
+SUPPI có thể trả lời:
+
+“Hội này hoạt động trong ngành gì?”
+
+“Đang có chương trình nào?”
+
+“Có nhóm NCC nào phù hợp?”
+
+“Có nhu cầu public nào?”
+
+Chỉ trả lời từ structured data.
+
+Không tự suy ra membership.
+
+==================================================
+30. CHAINY
+==================================================
+
+Nếu user đã tham gia Program/Connection:
+
+CHAINY có thể hiển thị:
+
+next action
+meeting
+follow-up
+
+Không dùng CHAINY như chat marketing chung trên public page.
+
+==================================================
+31. SEO
+==================================================
+
+Title:
+
+[Tên Hội / Hiệp hội] | CHUOICUNGUNG.COM
+
+Meta:
+
+Thông tin [Tên Hội], lĩnh vực hoạt động, chương trình kết nối, hội viên đã xác nhận, nhu cầu và catalogue được phép công bố.
+
+Canonical:
+
+/hoi-hiep-hoi/[slug]
+
+==================================================
+32. STRUCTURED DATA
+==================================================
+
+Use:
+
+Organization
+BreadcrumbList
+
+Chỉ output:
+
+name
+logo
+url
+address
+contactPoint
+foundingDate
+
+nếu có source/public data.
+
+Không invent membership count.
+
+==================================================
+33. SLUG / CANONICAL
+==================================================
+
+Slug unique.
+
+Nếu URL cũ đã tồn tại:
+giữ hoặc redirect 301.
+
+Không tạo một URL thứ hai
+chỉ vì đổi tên viết tắt.
+
+==================================================
+34. ADMIN
+==================================================
+
+Reuse:
+
+/admin/to-chuc/[id]
+
+hoặc:
+
+/admin/hoi-hiep-hoi/[id]
+
+nhưng master vẫn Organization.
+
+Tabs:
+
+OVERVIEW
+
+PROFILE
+
+CONTACTS
+
+INDUSTRIES
+
+LOCATIONS
+
+MEMBERS
+
+MEMBERSHIP CLAIMS
+
+PROGRAMS
+
+REQUIREMENTS
+
+SUPPLIER GROUPS
+
+CATALOGUES
+
+CASES
+
+MEDIA
+
+PARTNERSHIPS
+
+REPORTS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+35. MEMBERSHIP ADMIN
+==================================================
+
+Admin actions:
+
+Confirm membership
+
+Request evidence
+
+Reject
+
+End membership
+
+Change public display
+
+Mọi mutation tạo AuditLog.
+
+==================================================
+36. PROGRAM ADMIN
+==================================================
+
+Chỉ được public Association role
+sau khi ProgramOrganization confirmed.
+
+Admin có thể:
+
+Confirm
+Reject
+Change role
+Set public display.
+
+==================================================
+37. CASE ADMIN
+==================================================
+
+Case không public mặc định.
+
+Workflow:
+
+Draft
+→ Review
+→ Consent check
+→ Approved
+→ Published
+
+==================================================
+38. DATA QUALITY
+==================================================
+
+Admin warning nếu:
+
+Association thiếu source
+
+Program role chưa confirmed
+
+Membership chưa confirmed
+
+Public contact không có consent
+
+Catalogue outdated
+
+Case thiếu outcome source.
+
+==================================================
+39. OWNER + NEXT ACTION
+==================================================
+
+Các workflow active phải có:
+
+owner
+nextAction
+nextActionAt
+status.
+
+Ví dụ:
+
+Membership claim
+
+Program partnership
+
+Service request
+
+Case approval.
+
+==================================================
+40. PERMISSIONS
+==================================================
+
+Public user:
+chỉ xem public content.
+
+Association member:
+không mặc định xem private Association report.
+
+Association manager:
+xem theo Organization permissions.
+
+Coordinator:
+xem assigned scope.
+
+Admin:
+theo RBAC.
+
+==================================================
+41. EXPORT
+==================================================
+
+Membership export là permission riêng.
+
+Không cho Association user
+tải contact list chỉ vì họ xem được member directory.
+
+Log exports.
+
+==================================================
+42. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+
+Introduction
+
+Industries
+
+Programs
+
+Public needs
+
+Members
+
+Supplier groups
+
+Catalogue
+
+Cases
+
+CTA
+
+Không overflow 390px.
+
+==================================================
+43. ANALYTICS
+==================================================
+
+Track:
+
+association_detail_view
+
+program_click
+
+public_need_click
+
+member_profile_click
+
+supplier_group_click
+
+catalogue_click
+
+membership_claim_start
+
+membership_claim_submit
+
+program_proposal_click
+
+Không gọi page view = lead.
+
+==================================================
+44. QA
+==================================================
+
+Test tối thiểu:
+
+1. Page load đúng slug.
+2. Association reuse Organization.
+3. Unpublished Association không public.
+4. Membership chỉ hiện CONFIRMED.
+5. Event attendance không tạo membership.
+6. Program role chỉ public khi confirmed.
+7. Public Need không lộ private Buyer data.
+8. Supplier groups reuse SupplierProfile.
+9. Catalogue reuse Catalogue model.
+10. Case phải có permission/consent.
+11. Association report private không public.
+12. CTA program giữ organization context.
+13. Admin mutations có AuditLog.
+14. Export enforce permission.
+15. Mobile 390px hoạt động.
+
+==================================================
+45. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Association detail implementation
+- Membership workflow
+- Program relation
+- Requirement integration
+- Supplier group implementation
+- Catalogue integration
+- Case implementation
+- ServiceRequest integration
+- Admin implementation
+- RBAC
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+ASSOCIATION
+→ PROFILE
+→ INDUSTRIES
+→ CONFIRMED MEMBERS
+→ PUBLIC NEEDS
+→ SUPPLIER GROUPS
+→ PROGRAMS
+→ CATALOGUE
+→ CASE
+→ PROPOSE PROGRAM
+→ FOLLOW-UP / REPORT
+
+Không biến trang Hội thành:
+logo + giới thiệu + danh sách hội viên.
+
+Nó phải là một NODE ĐIỀU PHỐI
+trong hệ sinh thái CHUOICUNGUNG.COM.

@@ -1,0 +1,745 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 17: YÊU CẦU DỊCH VỤ
+ROUTE: /yeu-cau-dich-vu
+
+MỤC TIÊU:
+
+Xây một FormEngine dùng chung cho toàn bộ dịch vụ.
+
+Người dùng:
+→ chọn hoặc được preselect dịch vụ
+→ nhập thông tin chung một lần
+→ form mở thêm field theo đúng loại dịch vụ
+→ review
+→ gửi
+→ nhận mã yêu cầu
+→ đội nội bộ tiếp nhận và theo dõi đến kết quả.
+
+Không tạo một form riêng hoàn toàn cho mỗi service.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/yeu-cau-dich-vu
+
+Reuse:
+
+organizations
+users
+services
+service_requests
+attachments
+programs
+tasks
+activities
+quotations
+consents
+audit_logs
+
+Reuse FormEngine hiện tại nếu có.
+
+Không tạo duplicate forms/data model.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“BẠN ĐANG CẦN TRIỂN KHAI CÔNG VIỆC GÌ?”
+
+Sub:
+
+“Chọn dịch vụ và mô tả yêu cầu. Thông tin sẽ được chuyển đến đầu mối phù hợp để làm rõ phạm vi và đề xuất cách thực hiện.”
+
+==================================================
+3. SOURCE CONTEXT
+==================================================
+
+Form phải nhận context từ page nguồn.
+
+Ví dụ:
+
+/yeu-cau-dich-vu?service=to-chuc-ket-noi
+
+/yeu-cau-dich-vu?service=vat-pham-su-kien
+
+/yeu-cau-dich-vu?service=truyen-thong-doanh-nghiep
+
+Nếu có:
+
+programId
+organizationId
+associationId
+industrialParkId
+sourcePage
+
+thì prefill nhưng cho user kiểm tra lại.
+
+Không bắt nhập lại thông tin đã biết.
+
+==================================================
+4. STEP 1 — DỊCH VỤ + THÔNG TIN CHUNG
+==================================================
+
+Fields:
+
+Dịch vụ
+
+Doanh nghiệp / tổ chức
+
+Người liên hệ
+
+Chức vụ optional
+
+Email hoặc điện thoại
+
+Mô tả yêu cầu
+
+Địa bàn
+
+Thời gian mong muốn
+
+Ngân sách optional
+
+Tệp đính kèm optional
+
+Nếu đã login:
+reuse Organization/User data.
+
+Không bắt nhập lại company information.
+
+==================================================
+5. STEP 2 — DYNAMIC FORM
+==================================================
+
+Form thay đổi theo serviceType.
+
+----------------------------------------
+A. TỔ CHỨC KẾT NỐI
+----------------------------------------
+
+Fields:
+
+Mục tiêu chương trình
+
+Đối tượng tham gia
+
+Chuyên mục / nhóm nhu cầu
+
+Địa bàn / KCN
+
+Thời gian dự kiến
+
+Quy mô dự kiến
+
+Nguồn lực đã có
+
+Phần việc cần hỗ trợ
+
+----------------------------------------
+B. VẬT PHẨM
+----------------------------------------
+
+Fields:
+
+Loại sản phẩm
+
+Số lượng
+
+Size nếu có
+
+Quy cách
+
+Màu sắc
+
+In / thêu / nhận diện
+
+Logo / file thiết kế
+
+Yêu cầu mẫu
+
+Đóng gói
+
+Địa điểm giao
+
+Người duyệt
+
+----------------------------------------
+C. TRUYỀN THÔNG
+----------------------------------------
+
+Fields:
+
+Loại nội dung:
+- Profile
+- Video
+- Ảnh
+- Catalogue
+- Nhiều hạng mục
+
+Sản phẩm/năng lực chính
+
+Tài liệu đã có
+
+Địa điểm quay/chụp
+
+Ngôn ngữ
+
+Kênh sử dụng
+
+Người duyệt
+
+Hạn cần
+
+----------------------------------------
+D. HIỆN DIỆN TỪ XA
+----------------------------------------
+
+Fields:
+
+Chương trình quan tâm
+
+Hình thức giới thiệu
+
+Hồ sơ có sẵn
+
+Video/catalogue
+
+Mẫu sản phẩm gửi
+
+Người phản hồi
+
+Phạm vi đại diện mong muốn
+
+----------------------------------------
+E. TÀI TRỢ
+----------------------------------------
+
+Fields:
+
+Program hoặc chuyên mục
+
+Địa bàn
+
+Thời hạn
+
+Quyền lợi quan tâm
+
+Hình thức đóng góp
+
+Ngân sách optional
+
+LƯU Ý:
+Nhánh tài trợ chỉ tạo YÊU CẦU TƯ VẤN.
+Không tự tạo Sponsorship/Founding Partnership active.
+
+==================================================
+6. STEP 3 — REVIEW
+==================================================
+
+Trước submit hiển thị lại:
+
+Service
+Organization
+Contact
+Scope
+Location
+Timeline
+Budget nếu có
+Attachments
+Dynamic fields
+Consent
+
+User có thể quay lại chỉnh sửa.
+
+CTA:
+
+[GỬI YÊU CẦU TƯ VẤN]
+
+==================================================
+7. SUBMIT
+==================================================
+
+Server flow:
+
+VALIDATE
+→ AUTH/CONTACT CHECK
+→ ORGANIZATION RESOLVE
+→ DUPLICATE CHECK
+→ CREATE SERVICE REQUEST
+→ ASSIGN OWNER / QUEUE
+→ CREATE INITIAL TASK
+→ AUDIT LOG
+→ NOTIFICATION
+→ RETURN TRACKING CODE
+
+Không chỉ gửi email.
+
+==================================================
+8. MÃ YÊU CẦU
+==================================================
+
+Sau submit tạo mã:
+
+DV-2026-00125
+
+UUID nội bộ tách riêng.
+
+Success screen:
+
+“Yêu cầu DV-2026-00125 đã được ghi nhận.”
+
+“Bạn có thể theo dõi trạng thái hoặc bổ sung thông tin qua đầu mối được xác nhận.”
+
+Hiển thị:
+
+Service
+Summary
+Status
+Contact channel
+Next action nếu có
+
+Không hứa:
+giá
+lịch giao
+cuộc gặp
+kết quả
+
+trước khi được xác nhận.
+
+==================================================
+9. SERVICE REQUEST MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+ServiceRequest {
+ id
+ publicCode
+
+ serviceType
+ serviceIds[]
+
+ organizationId
+ requesterUserId?
+
+ contactName
+ contactEmail?
+ contactPhone?
+
+ description
+
+ locationId?
+ desiredDate?
+ budgetMin?
+ budgetMax?
+
+ dynamicData
+
+ attachments[]
+
+ sourcePage?
+ sourceProgramId?
+ sourceOrganizationId?
+
+ ownerUserId?
+
+ status
+
+ nextAction?
+ nextActionAt?
+
+ createdAt
+ updatedAt
+}
+
+Không tạo column riêng cho hàng chục field
+nếu chỉ áp dụng cho một service.
+
+Có thể dùng validated dynamicData schema
+theo serviceType.
+
+==================================================
+10. STATUS
+==================================================
+
+Chuẩn hóa:
+
+NEW
+NEED_MORE_INFO
+PREPARING_PROPOSAL
+PROPOSAL_SENT
+ACCEPTED
+IN_PROGRESS
+WAITING_ACCEPTANCE
+COMPLETED
+CANCELLED
+
+Nếu CANCELLED:
+bắt buộc reason.
+
+Lưu status history.
+
+==================================================
+11. OWNER + NEXT ACTION
+==================================================
+
+Mọi ServiceRequest đang active phải có:
+
+owner
+status
+nextAction
+nextActionAt
+
+Không để trạng thái:
+
+“Đang xử lý”
+
+mà không biết:
+ai xử lý
+việc gì
+khi nào.
+
+==================================================
+12. DUPLICATE DETECTION
+==================================================
+
+Check:
+
+same organization
+same service
+similar description
+similar date
+recent submission
+
+Nếu nghi duplicate:
+
+không tự xóa.
+
+Flag:
+POSSIBLE_DUPLICATE
+
+Admin review.
+
+==================================================
+13. DRAFT + ERROR RECOVERY
+==================================================
+
+Form hỗ trợ:
+
+autosave draft nếu user login
+
+temporary draft nếu guest
+
+giữ dữ liệu khi login
+
+retry nếu submit lỗi
+
+Không làm user mất form sau lỗi/network failure.
+
+==================================================
+14. FILES
+==================================================
+
+Attachments:
+
+private by default.
+
+Dùng protected storage / signed URL.
+
+Phân quyền theo:
+
+request owner
+organization member
+authorized admin/operator
+
+Không public file chỉ vì biết URL.
+
+==================================================
+15. CONSENT
+==================================================
+
+Tách riêng:
+
+A.
+Consent cho phép liên hệ về chính ServiceRequest này.
+
+B.
+Marketing consent.
+
+Không gộp hai checkbox thành một.
+
+Marketing phải optional.
+
+==================================================
+16. ACCOUNT WORKSPACE
+==================================================
+
+Chuẩn bị/reuse:
+
+/tai-khoan/yeu-cau-dich-vu
+
+User có thể xem:
+
+Mã
+Dịch vụ
+Ngày gửi
+Status
+Owner/đầu mối nếu được hiển thị
+Next action
+Files
+Proposal/Quotation khi được chia sẻ
+Timeline
+Result
+
+Không expose internal notes.
+
+==================================================
+17. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/yeu-cau-dich-vu
+
+List columns:
+
+Mã
+Organization
+Service
+Location
+Status
+Owner
+Next Action
+Due
+Created
+Updated
+
+Filters:
+
+Service
+Status
+Owner
+Location
+Created date
+Overdue
+Unassigned
+
+Detail tabs:
+
+Tổng quan
+Đề bài
+Organization
+Files
+Proposal / Quote
+Tasks
+Timeline
+Result
+Audit
+
+==================================================
+18. ASSIGNMENT
+==================================================
+
+Có thể routing ban đầu:
+
+TO_CHUC_KET_NOI
+→ Partnership / Program team
+
+VAT_PHAM_SU_KIEN
+→ Commercial / Operations
+
+TRUYEN_THONG_DOANH_NGHIEP
+→ Content / Media
+
+HIEN_DIEN_TU_XA
+→ Program / Partnership
+
+TAI_TRO
+→ Partnership / Sponsorship
+
+Nhưng routing phải config được.
+Không hard-code user ID.
+
+==================================================
+19. QUOTATION / PROPOSAL
+==================================================
+
+ServiceRequest có thể có Proposal/Quotation.
+
+Không đưa quotation vào public profile.
+
+Track:
+
+DRAFT
+INTERNAL_REVIEW
+SENT
+REVISION_REQUESTED
+ACCEPTED
+REJECTED
+EXPIRED
+
+ServiceRequest status và quotation status
+là hai state khác nhau.
+
+==================================================
+20. PRIVACY + SECURITY
+==================================================
+
+Backend phải kiểm tra:
+
+organization membership
+
+request ownership
+
+attachment permission
+
+admin scope
+
+Không tin:
+organizationId
+ownerId
+status
+từ frontend.
+
+Không expose:
+
+budget
+private files
+internal notes
+quotation
+
+cho người không có quyền.
+
+==================================================
+21. ADMIN AUDIT
+==================================================
+
+Audit:
+
+Request created
+Owner assigned
+Status changed
+Scope changed
+Attachment added
+Proposal sent
+Proposal accepted/rejected
+Request cancelled
+Request completed
+
+Lưu:
+actor
+time
+before
+after
+reason nếu cần.
+
+==================================================
+22. MOBILE
+==================================================
+
+Mobile:
+
+Step indicator
+
+Step 1
+Thông tin chung
+
+Step 2
+Thông tin dịch vụ
+
+Step 3
+Review
+
+Sticky CTA:
+[TIẾP TỤC]
+hoặc
+[GỬI YÊU CẦU]
+
+Không hiển thị form 30 field cùng lúc.
+
+Không overflow 390px.
+
+==================================================
+23. SEO
+==================================================
+
+Title:
+
+Gửi Yêu Cầu Dịch Vụ | CHUOICUNGUNG.COM
+
+Description:
+
+Mô tả công việc doanh nghiệp cần triển khai và gửi yêu cầu tư vấn về chương trình kết nối, vật phẩm, truyền thông, hiện diện hoặc tài trợ.
+
+Canonical:
+
+/yeu-cau-dich-vu
+
+Draft/tracking/private request:
+NOINDEX.
+
+==================================================
+24. QA
+==================================================
+
+Test:
+
+1. Service context được prefill đúng.
+2. Dynamic fields đổi đúng service.
+3. Login không làm mất dữ liệu.
+4. Organization data không phải nhập lại.
+5. Submit tạo đúng 1 ServiceRequest.
+6. Duplicate được flag.
+7. Public code DV-* được tạo.
+8. Owner được assign.
+9. Initial task được tạo.
+10. Active request có nextAction.
+11. Marketing consent tách riêng.
+12. Private files không public.
+13. Quotation status tách request status.
+14. Cancelled có reason.
+15. Admin mutation có AuditLog.
+16. Mobile 390px hoạt động.
+
+==================================================
+25. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- FormEngine implementation
+- Dynamic service schemas
+- ServiceRequest backend
+- Assignment logic
+- Account workspace
+- Admin implementation
+- Security/privacy
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+PAGE DỊCH VỤ
+→ /yeu-cau-dich-vu
+→ PREFILL CONTEXT
+→ FORM CHUNG
+→ FORM ĐỘNG THEO DỊCH VỤ
+→ REVIEW
+→ SERVICE REQUEST
+→ OWNER
+→ NEXT ACTION
+→ PROPOSAL / QUOTATION
+→ EXECUTION
+→ ACCEPTANCE
+→ RESULT
+
+Không tạo một form và một CRM riêng cho từng dịch vụ.
+Tất cả phải đi qua cùng Service Request Engine.

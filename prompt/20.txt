@@ -1,0 +1,1115 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 20: DANH SÁCH CHƯƠNG TRÌNH
+ROUTE: /chuong-trinh
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /chuong-trinh thành nơi doanh nghiệp tìm
+CHƯƠNG TRÌNH KẾT NỐI PHÙ HỢP
+theo:
+
+- nhu cầu;
+- ngành/chuyên mục;
+- địa bàn/KCN;
+- thời gian;
+- vai trò;
+- hình thức tham gia.
+
+Đây KHÔNG phải blog sự kiện.
+
+Đây phải giống một BUSINESS PROGRAM / B2B CONNECTION MARKETPLACE,
+nhưng vẫn sử dụng cùng Requirement + Supplier + Matching + Connection workflow của hệ thống.
+
+Program chỉ là một cách tăng tốc:
+
+NHU CẦU
+→ TÌM NGUỒN
+→ KẾT NỐI
+→ MEETING
+→ FOLLOW-UP
+→ KẾT QUẢ
+
+Không xây Program thành một hệ thống tách biệt.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit route:
+
+/chuong-trinh
+
+Audit hiện có:
+
+programs
+program types
+program status
+organizations
+industrial parks
+locations
+categories
+keywords
+requirements
+supplier profiles
+registrations
+meetings
+sponsors
+catalogues
+media
+
+Audit:
+
+/admin/chuong-trinh
+
+nếu Page 19 đã tạo placeholder/module.
+
+REUSE architecture hiện tại.
+
+Không duplicate:
+
+Organization
+Category
+KCN
+Requirement
+Supplier
+Meeting
+Sponsor.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“CHƯƠNG TRÌNH KẾT NỐI DOANH NGHIỆP”
+
+Sub:
+
+“Khám phá ngày hội chuỗi cung ứng, buổi gặp nhà cung ứng, gian hàng và hoạt động dành cho cộng đồng doanh nghiệp. Chọn chương trình phù hợp để đăng ký, chuẩn bị hồ sơ và trao đổi nhu cầu.”
+
+CTA chính:
+
+[TÌM CHƯƠNG TRÌNH]
+
+CTA phụ:
+
+[ĐỀ XUẤT TỔ CHỨC CHƯƠNG TRÌNH]
+
+→ /dich-vu/to-chuc-ket-noi
+
+==================================================
+3. PROGRAM TYPES
+==================================================
+
+Hệ thống phải hỗ trợ tối thiểu các loại:
+
+SUPPLY_CHAIN_DAY
+Ngày hội Chuỗi Cung Ứng
+
+BUYER_SUPPLIER_MEETING
+Gặp nhà cung ứng theo nhu cầu
+
+SHARED_BOOTH
+Gian hàng chung
+
+TRADE_FAIR
+Hội chợ / hoạt động triển lãm
+
+SUPPLIER_PRESENTATION
+Phiên giới thiệu sản phẩm & năng lực
+
+SEMINAR
+Hội thảo / hoạt động chuyên môn
+
+WELFARE_COMMUNITY
+chỉ sử dụng khi dịch vụ này thực sự được triển khai.
+
+Không tạo từng database table cho từng loại Program.
+
+Dùng:
+
+Program
++
+programType.
+
+==================================================
+4. PROGRAM STATUS
+==================================================
+
+Status phải tách rõ:
+
+NEEDS_DISCOVERY
+Đang khảo sát nhu cầu
+
+UPCOMING
+Sắp mở đăng ký
+
+REGISTRATION_OPEN
+Đang nhận đăng ký
+
+REGISTRATION_CLOSED
+Đã đóng đăng ký
+
+COMPLETED
+Đã diễn ra
+
+POSTPONED
+Hoãn
+
+CANCELLED
+Hủy
+
+Nếu schema hiện tại có enum tương đương:
+reuse/map.
+
+Không dùng chung một status:
+
+ACTIVE / INACTIVE
+
+để biểu diễn toàn bộ lifecycle.
+
+==================================================
+5. PROGRAM DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+Program {
+ id
+ publicCode?
+
+ slug
+ title
+ shortDescription
+
+ programType
+ status
+
+ organizerOrganizationId
+
+ locationType
+ venue?
+ provinceId?
+ industrialParkId?
+
+ startAt
+ endAt
+
+ registrationOpenAt?
+ registrationCloseAt?
+
+ modality
+ OFFLINE | ONLINE | HYBRID
+
+ targetRoles[]
+
+ visibility
+
+ coverImageId?
+
+ publishable
+
+ createdAt
+ updatedAt
+}
+
+Relations:
+
+program_categories
+program_keywords
+program_organizations
+program_requirements
+program_partners
+program_sponsors
+program_catalogues
+program_media
+
+Không copy Category/Organization data vào Program.
+
+==================================================
+6. TARGET ROLES
+==================================================
+
+Program có thể phù hợp với:
+
+BUYER
+
+FACTORY
+
+SUPPLIER
+
+ASSOCIATION
+
+INDUSTRIAL_PARK
+
+SPONSOR
+
+PARTNER
+
+Không mặc định mọi Program dành cho mọi role.
+
+Filter và UI phải sử dụng targetRoles thực tế.
+
+==================================================
+7. SEARCH
+==================================================
+
+Search placeholder:
+
+“Tìm chương trình hoặc nhóm nhu cầu...”
+
+Search trên:
+
+Program title
+
+Category
+
+Keyword / Buyer intent
+
+Location
+
+Industrial Park
+
+Không query private Buyer requirement text
+vào public autocomplete.
+
+==================================================
+8. FILTER
+==================================================
+
+Filter chính:
+
+Địa bàn
+
+KCN
+
+Ngành / Category
+
+Nhóm nhu cầu
+
+Thời gian
+
+Vai trò tham gia
+
+Hình thức:
+- Trực tiếp
+- Trực tuyến
+- Kết hợp
+
+Loại chương trình
+
+Trạng thái
+
+Không hiển thị 50 filter ban đầu.
+
+Mobile dùng bottom sheet.
+
+==================================================
+9. DATE FILTER
+==================================================
+
+Có thể hỗ trợ:
+
+Sắp diễn ra
+
+Tháng này
+
+Tháng tới
+
+Đã diễn ra
+
+Custom range
+
+Time filtering phải dùng timezone hợp lệ.
+
+Không chỉ compare date string frontend.
+
+==================================================
+10. PROGRAM CARD
+==================================================
+
+Reuse ProgramCard component.
+
+Mỗi card hiển thị:
+
+Cover image
+
+Program type
+
+Title
+
+Date/time
+
+Location
+
+Industrial Park nếu có
+
+Organizer
+
+Nhóm nhu cầu / Category
+
+Target role
+
+Modality
+
+Status
+
+Fee information phù hợp
+
+CTA:
+
+[XEM CHI TIẾT]
+
+→ /chuong-trinh/[slug]
+
+==================================================
+11. FEE DISPLAY
+==================================================
+
+Không dùng một field:
+
+program.price
+
+cho toàn bộ Program.
+
+Sau này một chương trình có thể có:
+
+Buyer
+→ miễn phí
+
+Supplier
+→ phí tham gia
+
+Sponsor
+→ proposal riêng
+
+Remote presence
+→ mức khác
+
+Do đó chuẩn bị/reuse:
+
+ProgramParticipationOption
+
+Fields:
+
+programId
+role
+participationType
+title
+feeType
+
+FREE
+FIXED
+QUOTE_REQUIRED
+
+amount?
+currency?
+
+status
+
+==================================================
+12. RULE “MIỄN PHÍ”
+==================================================
+
+Chỉ hiển thị:
+
+“MIỄN PHÍ”
+
+khi đúng participation option đang giới thiệu:
+
+feeType = FREE.
+
+Nếu Program có nhiều hình thức:
+
+hiển thị:
+
+“XEM PHÍ THEO HÌNH THỨC”
+
+Không ghi:
+
+“Miễn phí”
+
+chỉ vì Buyer được miễn phí trong khi Supplier phải trả phí.
+
+==================================================
+13. CTA THEO STATUS
+==================================================
+
+NEEDS_DISCOVERY:
+
+[ĐĂNG KÝ QUAN TÂM]
+
+UPCOMING:
+
+[NHẬN THÔNG TIN KHI MỞ ĐĂNG KÝ]
+
+REGISTRATION_OPEN:
+
+[XEM CHI TIẾT]
+
+và trên detail mới đăng ký.
+
+REGISTRATION_CLOSED:
+
+[ XEM CHI TIẾT ]
+
+không cho đăng ký mới.
+
+COMPLETED:
+
+[XEM KẾT QUẢ / THƯ VIỆN]
+
+nếu có dữ liệu public.
+
+POSTPONED:
+
+hiển thị rõ HOÃN.
+
+CANCELLED:
+
+hiển thị rõ HỦY.
+
+Không để CTA đăng ký hoạt động trên program đã đóng/hủy.
+
+==================================================
+14. ĐĂNG KÝ QUAN TÂM ≠ ĐĂNG KÝ THAM GIA
+==================================================
+
+Đây là rule bắt buộc.
+
+ProgramInterest:
+
+user/organization
+
+programId optional
+
+categoryId optional
+
+provinceId optional
+
+role
+
+email/phone
+
+consent
+
+createdAt
+
+Đăng ký quan tâm:
+
+KHÔNG tạo:
+ProgramRegistration
+
+KHÔNG giữ chỗ
+
+KHÔNG tạo Attendance
+
+KHÔNG tạo Payment.
+
+==================================================
+15. “CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP?”
+==================================================
+
+Cuối listing có block:
+
+“CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP?”
+
+Text:
+
+“Đăng ký nhận thông tin khi có chương trình phù hợp với địa bàn và nhóm nhu cầu của doanh nghiệp.”
+
+Fields:
+
+Role
+
+Category
+
+Province/KCN optional
+
+Email/phone
+
+Consent nhận thông tin chương trình
+
+CTA:
+
+[ĐĂNG KÝ NHẬN THÔNG TIN]
+
+Consent này lưu riêng.
+
+Không tự subscribe marketing chung.
+
+==================================================
+16. RELEVANCE
+==================================================
+
+Nếu user đã login:
+
+có thể dùng:
+
+Organization roles
+
+Supplier capabilities
+
+Buyer requirements
+
+Location
+
+để giúp filter chương trình phù hợp.
+
+Nhưng chỉ giải thích:
+
+“Phù hợp với hồ sơ của bạn vì:
+✓ cùng nhóm năng lực
+✓ tại Đồng Nai
+✓ dành cho Nhà cung ứng”
+
+Không hiển thị xác suất giả:
+
+“98% phù hợp”.
+
+==================================================
+17. SUPPI
+==================================================
+
+SUPPI có thể hỗ trợ:
+
+“Tôi nên tham gia chương trình nào?”
+
+“Chương trình nào phù hợp với nhu cầu của nhà máy tôi?”
+
+“Program này cần chuẩn bị gì?”
+
+SUPPI dùng:
+
+Program
+Category
+Role
+Location
+Requirement
+SupplierProfile
+
+nhưng không tự:
+- đăng ký;
+- thanh toán;
+- đảm bảo lịch gặp.
+
+==================================================
+18. CHAINY
+==================================================
+
+CHAINY chỉ trở nên chính hơn sau khi:
+
+user đăng ký
+
+hoặc có Connection/Meeting.
+
+Listing page chỉ có thể giới thiệu:
+
+“CHAINY hỗ trợ theo dõi lịch gặp và đầu việc sau khi kết nối.”
+
+Không tạo meeting từ việc chỉ xem Program Card.
+
+==================================================
+19. SPONSORSHIP
+==================================================
+
+Sponsor/Partner content phải có label rõ.
+
+Không để sponsorship:
+
+- thay đổi organic Program relevance;
+- đẩy chương trình không phù hợp lên vì trả phí;
+- tự cung cấp Buyer contact cho Sponsor.
+
+Nếu có featured sponsored program:
+label phải rõ.
+
+==================================================
+20. PROGRAM ĐÃ DIỄN RA
+==================================================
+
+Không xóa Program sau khi kết thúc.
+
+Program COMPLETED có thể giữ:
+
+Description
+
+Date/location
+
+Public gallery được phép
+
+Public documents
+
+Confirmed aggregate results
+
+Related catalogue
+
+Public case/result nếu có consent
+
+Không công bố:
+
+private Buyer needs
+
+private meetings
+
+quotations
+
+contact list
+
+internal notes.
+
+==================================================
+21. PROGRAM RESULTS
+==================================================
+
+Nếu hiển thị kết quả:
+
+chỉ dùng dữ liệu được xác nhận.
+
+Phân biệt:
+
+Registrations
+
+Attendance
+
+Meetings completed
+
+Requirements confirmed
+
+Quotes recorded
+
+Outcomes confirmed
+
+Không dùng:
+
+Registration = Attendance
+
+Meeting scheduled = Meeting completed
+
+QR scan = Buyer requirement
+
+Quote = Deal.
+
+==================================================
+22. SORTING
+==================================================
+
+Default:
+
+Program đang mở / sắp diễn ra phù hợp
+→ trước.
+
+Có lựa chọn:
+
+Sắp diễn ra
+
+Mới mở đăng ký
+
+Đã diễn ra
+
+Không dùng sponsorshipAmount làm organic sorting factor.
+
+==================================================
+23. URL + SLUG
+==================================================
+
+Canonical:
+
+/chuong-trinh
+
+Detail:
+
+/chuong-trinh/[slug]
+
+Slug:
+
+lowercase
+không dấu
+hyphen
+unique.
+
+Nếu đổi slug:
+redirect URL cũ.
+
+Không tạo URL riêng cho mọi combination filter.
+
+==================================================
+24. SEO
+==================================================
+
+Title:
+
+Chương Trình Kết Nối Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Meta:
+
+Khám phá các chương trình kết nối nhà máy, người mua và nhà cung ứng theo nhu cầu, ngành, địa bàn và hình thức tham gia.
+
+Canonical:
+
+/chuong-trinh
+
+Filter combinations:
+không tự index.
+
+Schema có thể dùng:
+
+CollectionPage
+ItemList
+Event
+
+Event schema chỉ cho Program thực sự đáp ứng Event data.
+
+Không dùng fake attendance/review/rating.
+
+==================================================
+25. ADMIN — /admin/chuong-trinh
+==================================================
+
+Tạo/reuse module đã chuẩn bị ở Page 19.
+
+Listing columns:
+
+Program code
+
+Title
+
+Type
+
+Location
+
+Start date
+
+Organizer
+
+Status
+
+Registration state
+
+Owner
+
+Updated
+
+Filters:
+
+Status
+Type
+Location
+KCN
+Category
+Organizer
+Date
+Owner
+
+==================================================
+26. ADMIN PROGRAM DETAIL
+==================================================
+
+Chuẩn bị cấu trúc:
+
+/admin/chuong-trinh/[id]
+
+Tabs:
+
+TỔNG QUAN
+
+THÔNG TIN
+
+ĐỐI TƯỢNG
+
+NHÓM NHU CẦU
+
+PARTICIPATION OPTIONS
+
+BUYER NEEDS
+
+SUPPLIERS
+
+REGISTRATIONS
+
+MEETINGS
+
+PARTNERS / SPONSORS
+
+CATALOGUE
+
+MEDIA
+
+TASKS
+
+RESULT
+
+TIMELINE
+
+AUDIT
+
+Page 20 chưa cần hoàn thiện tất cả logic registration/meeting;
+nhưng architecture phải sẵn để Page 21–23 nối vào.
+
+==================================================
+27. PROGRAM OWNER
+==================================================
+
+Mỗi Program active phải có:
+
+ownerUserId
+
+status
+
+nextAction
+
+nextActionAt
+
+Nếu program chưa có owner:
+Admin warning.
+
+Program operations phải xuất hiện trong:
+
+Page 19 Admin Daily Work.
+
+==================================================
+28. ORGANIZER
+==================================================
+
+Program phải relation tới Organization thực.
+
+Ví dụ:
+
+Association
+
+Industrial Park
+
+Company
+
+CHUOICUNGUNG.COM
+
+Partner organization
+
+Không nhập organizer name thành text
+nếu Organization đã tồn tại.
+
+Có thể có display name riêng nếu cần,
+nhưng giữ organization relation.
+
+==================================================
+29. PROGRAM + REQUIREMENT
+==================================================
+
+Program có thể là nguồn tạo hoặc xử lý Requirement.
+
+Nhưng:
+
+Requirement vẫn chỉ có một record gốc.
+
+Nếu cùng Requirement tham gia nhiều Program:
+
+dùng relation.
+
+Không duplicate Need chỉ vì đổi chương trình.
+
+==================================================
+30. PROGRAM + SUPPLIER
+==================================================
+
+Supplier tham gia Program:
+
+reuse Organization/SupplierProfile.
+
+Không tạo “Event Supplier Profile” duplicate.
+
+Program-specific info lưu trong relation:
+
+ProgramParticipant
+
+ví dụ:
+
+participation mode
+booth
+meeting preference
+display sample
+status.
+
+==================================================
+31. EMPTY STATES
+==================================================
+
+Nếu chưa có Program:
+
+Không tạo demo card production.
+
+Hiển thị:
+
+“Hiện chưa có chương trình đang mở phù hợp.”
+
+CTA:
+
+[ĐĂNG KÝ NHẬN THÔNG TIN]
+
+[ĐỀ XUẤT TỔ CHỨC CHƯƠNG TRÌNH]
+
+==================================================
+32. RESPONSIVE
+==================================================
+
+Desktop:
+
+Hero
+
+Search/filter
+
+Program grid/list
+
+Interest block
+
+Mobile:
+
+Hero
+
+Search
+
+Filter chips
+
+Program cards stacked
+
+Interest CTA
+
+Filter dùng bottom sheet.
+
+Không overflow 390px.
+
+==================================================
+33. ANALYTICS
+==================================================
+
+Track:
+
+program_listing_view
+
+program_search
+
+program_filter
+
+program_card_view
+
+program_detail_click
+
+program_interest_start
+
+program_interest_submit
+
+program_proposal_click
+
+Không gọi Program Card click là lead.
+
+==================================================
+34. PERMISSIONS
+==================================================
+
+Public page chỉ query:
+
+publishable programs
+
+public organizer data
+
+public participation information
+
+Không expose:
+
+private registrations
+
+attendee contacts
+
+Buyer private needs
+
+meeting schedule private
+
+sponsor contract
+
+internal notes.
+
+==================================================
+35. QA
+==================================================
+
+Test tối thiểu:
+
+1. Search Program hoạt động.
+
+2. Filter địa bàn/KCN đúng.
+
+3. Category filter đúng.
+
+4. Role filter đúng.
+
+5. Offline/Online/Hybrid đúng.
+
+6. Status hiển thị đúng.
+
+7. ProgramCard lấy DB thật.
+
+8. “Miễn phí” chỉ hiện khi đúng role/option.
+
+9. Interest không tạo Registration.
+
+10. Cancelled Program không cho đăng ký.
+
+11. Completed Program vẫn giữ public archive.
+
+12. Private Buyer data không public.
+
+13. Sponsor không ảnh hưởng organic relevance.
+
+14. Organizer reuse Organization.
+
+15. Requirement relation không duplicate Need.
+
+16. Admin edit ghi AuditLog.
+
+17. Program active có owner + next action.
+
+18. Mobile 390px hoạt động.
+
+==================================================
+36. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Program model
+- ProgramType / Status implementation
+- Participation options
+- Search/filter implementation
+- Interest workflow
+- Organization relations
+- Requirement relations
+- Admin implementation
+- SEO
+- Permissions
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+USER
+→ TÌM PROGRAM
+→ FILTER THEO ROLE / NHU CẦU / ĐỊA BÀN
+→ XEM PROGRAM CARD
+→ /chuong-trinh/[slug]
+→ ĐĂNG KÝ ĐÚNG VAI TRÒ
+→ REQUIREMENT / SUPPLIER PROFILE
+→ MATCHING
+→ MEETING
+→ FOLLOW-UP
+→ RESULT
+
+Không biến /chuong-trinh thành một blog sự kiện.
+
+Program phải là một phần của
+B2B WORKFLOW của CHUOICUNGUNG.COM.

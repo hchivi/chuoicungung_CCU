@@ -1,0 +1,1783 @@
+Page 05 sẽ là /doanh-nghiep — Tìm Nhà Cung Ứng, và từ page này ta bắt đầu xây phần Supplier Search + Supplier Data + Admin quản lý nhà cung ứng + nền móng Matching Engine.
+Tài liệu đã chốt rất rõ /doanh-nghiep phải chuyển từ một directory đơn giản thành Supplier Search theo năng lực thực tế, với các bộ lọc theo ngành, sản phẩm/dịch vụ, tỉnh, KCN phục vụ, quy mô đơn hàng, khả năng nhận việc và chứng nhận.   Markdown đã dán (3) Supplier Card cũng không được chỉ có logo + tên công ty + mô tả; phải thể hiện năng lực, địa bàn, quy mô phù hợp và ngày cập nhật để buyer có thể quyết định có nên xem sâu hơn hay không.   Markdown đã dán (3)
+PAGE 05 — TÌM NHÀ CUNG ỨNG
+1. Thông số page
+Hạng mục	Chốt triển khai
+Tên page	Tìm Nhà Cung Ứng
+URL	/doanh-nghiep
+Ưu tiên	P0
+Public	Có
+Login	Không bắt buộc để tìm/xem
+Login bắt buộc khi	Lưu NCC, gửi yêu cầu, kết nối, shortlist riêng
+Đối tượng chính	Nhà máy / Buyer
+Đối tượng phụ	Hội, KCN, FDI, đội sourcing
+Assistant	SUPPI
+Dữ liệu chính	Organization + SupplierProfile + Capability + ProductService
+Admin	/admin/to-chuc, /admin/nha-cung-ung hoặc filter supplier trong /admin/to-chuc
+SEO	Có
+Matching	Có, nhưng phải giải thích lý do phù hợp
+
+
+2. MỤC TIÊU PAGE
+Page này phải trả lời được:
+Tôi đang cần gì?
+Nhà cung ứng nào có năng lực liên quan?
+Họ phục vụ được địa bàn nào?
+Có nhận quy mô đơn hàng của tôi không?
+Thông tin nào đã có bằng chứng?
+Thông tin nào vẫn phải xác nhận?
+Không phải:
+“Danh sách 3.000 doanh nghiệp”.
+
+Mà là:
+“Tìm đúng 3–5 nguồn có khả năng phù hợp.”
+
+Tài liệu cũng nhấn mạnh SUPPI không chỉ search chữ, mà phải đối chiếu Nhu cầu → Năng lực → Địa bàn → Điều kiện nhận việc, sau đó shortlist thay vì trả lại hàng chục NCC không được sàng lọc.   Văn bản đã dán (1)
+3. H1 VÀ ĐỊNH VỊ
+H1
+TÌM NHÀ CUNG ỨNG THEO NĂNG LỰC THỰC TẾ
+Sub:
+Tìm theo sản phẩm, năng lực, địa bàn và điều kiện đáp ứng thay vì chỉ tìm theo tên doanh nghiệp.
+Search lớn:
+Bạn đang cần sản phẩm, dịch vụ hoặc nhà cung ứng gì?
+
+Ví dụ:
+Đồng phục công nhân 500 bộ tại Đồng Nai
+
+CTA:
+TÌM NGUỒN
+Secondary:
+Nhờ SUPPI tìm giúp →
+4. SEARCH KHÔNG CHỈ MATCH COMPANY NAME
+Search phải hiểu:
+"đồng phục 500 công nhân Đồng Nai"
+
+thành:
+Intent      = sourcing
+Category    = đồng phục
+Quantity    = 500
+Location    = Đồng Nai
+Buyer need  = đồng phục công nhân
+
+Không chỉ:
+WHERE company_name LIKE '%đồng phục%'
+
+5. SEARCH FLOW
+User nhập
+↓
+Intent detection
+↓
+Normalize keyword
+↓
+Category / Product / Capability
+↓
+Location
+↓
+Requirement context nếu có
+↓
+Supplier candidate retrieval
+↓
+Rule/filter
+↓
+Ranking / explanation
+↓
+Supplier results
+
+Nếu user đã có Requirement:
+/doanh-nghiep?requirement=NC-2026-00125
+
+thì search phải dùng requirement context.
+6. HERO CÓ 2 MODE
+MODE 1 — GENERAL SEARCH
+User chưa có requirement.
+Tôi cần tìm nhà cung ứng...
+
+MODE 2 — REQUIREMENT CONTEXT
+Nếu từ Workspace Page 04 chuyển sang:
+ĐANG TÌM NGUỒN CHO
+NC-2026-00125 — 500 bộ đồng phục công nhân
+Đồng Nai
+Cần trước 15/11
+Cần mẫu
+
+CTA:
+Quay lại nhu cầu
+Search/filter tự dùng context.
+7. BỘ LỌC
+Tài liệu đề xuất bộ lọc gồm ngành, sản phẩm/dịch vụ, địa bàn, KCN phục vụ, quy mô, chứng nhận và điều kiện nhận việc.   Văn bản đã dán (2)
+Tôi chốt desktop:
+Ngành / Nhóm nhu cầu
+Sản phẩm / Dịch vụ
+Tỉnh / Thành
+KCN phục vụ
+Quy mô đơn hàng
+Khả năng nhận việc
+Mẫu / khảo sát
+Chứng nhận
+
+Không hiển thị 50 filter cùng lúc.
+Button:
+Bộ lọc nâng cao
+8. FILTER — NGÀNH / NHÓM NHU CẦU
+Không free-text hoàn toàn.
+Dùng taxonomy hiện có:
+6 giai đoạn
+↓
+nhóm nhu cầu
+↓
+category
+↓
+product/service
+
+Một NCC có thể thuộc nhiều category.
+9. FILTER — PRODUCT / SERVICE
+Ví dụ:
+Đồng phục công nhân
+Áo polo
+PPE
+Gia công CNC
+Thùng carton
+Solar rooftop
+Logistics
+
+Data từ:
+products_services
+
+Không từ company description.
+10. FILTER — LOCATION
+Cho phép:
+Tỉnh/Thành
+KCN
+Bán kính — để sau nếu chưa có tọa độ chuẩn
+
+Phân biệt:
+office location
+factory location
+service area
+delivery area
+
+Không suy ra NCC phục vụ Đồng Nai chỉ vì văn phòng họ ở TP.HCM.
+11. KCN PHỤC VỤ
+NCC có thể khai:
+Amata
+Long Thành
+Biên Hòa 1
+VSIP
+...
+
+Nhưng nên lưu theo mapping:
+supplier_service_areas
+
+không viết text tự do duy nhất.
+12. QUY MÔ ĐƠN HÀNG
+Không bắt buộc mọi ngành dùng cùng một kiểu.
+Ví dụ may mặc:
+MOQ
+min_quantity
+max_comfortable_quantity
+
+Cơ khí:
+project_value_range
+machine_capacity
+lot_size
+
+Dịch vụ:
+project_scope
+team_capacity
+
+Vì vậy filter UI có thể hiện chung:
+Quy mô phù hợp
+nhưng backend dùng category-specific fields.
+13. KHẢ NĂNG NHẬN VIỆC
+Tôi đề nghị:
+Đang nhận yêu cầu
+Cần xác nhận
+Tạm ngưng
+Không cập nhật
+
+Không lưu:
+“available = true”
+
+mãi mãi.
+Phải có:
+availability_status
+availability_checked_at
+
+14. CHỨNG NHẬN
+Filter chỉ nên dựa trên evidence thực tế.
+Ví dụ:
+ISO 9001
+ISO 14001
+IATF 16949
+WRAP
+BSCI
+...
+
+Nhưng:
+có file certificate ≠ platform xác minh mọi nội dung.
+UI nên phân biệt:
+Doanh nghiệp cung cấp
+Đã đối chiếu
+Cần cập nhật
+Hết hạn
+
+15. RESULT COUNT
+Ví dụ:
+18 NHÀ CUNG ỨNG CÓ DỮ LIỆU LIÊN QUAN
+Nếu query theo requirement:
+5 NGUỒN ĐƯỢC ĐỀ XUẤT CHO NC-2026-00125
+Không dùng:
+18 NCC phù hợp 100%.
+
+16. SORT
+Cho phép:
+Liên quan nhất
+Cập nhật gần đây
+Địa bàn phù hợp
+Khả năng nhận việc
+
+Không có:
+Tài trợ cao nhất
+
+Founding Partner không được dùng làm sort matching mặc định.
+17. SUPPLIER CARD
+Tài liệu yêu cầu hồ sơ đủ để buyer quyết định có nên liên hệ và supplier card phải hiển thị năng lực, địa bàn, bằng chứng, ngày cập nhật và trạng thái hồ sơ.   Văn bản đã dán (2)
+Card đề xuất:
+[Logo]
+
+CÔNG TY TNHH ABC
+
+Năng lực chính
+Đồng phục công nhân · PPE · Áo polo
+
+Địa bàn phục vụ
+TP.HCM · Đồng Nai · Bình Dương
+
+Quy mô phù hợp
+300 – 5.000 sản phẩm
+
+Khả năng
+✓ Có thể làm mẫu
+✓ Có xưởng
+? Lead time cần xác nhận
+
+Hồ sơ cập nhật
+22/09/2026
+
+CTA:
+XEM NĂNG LỰC
+GỬI YÊU CẦU
+18. CARD KHÔNG NÊN HIỂN THỊ
+Không mặc định show:
+Số điện thoại cá nhân
+Email buyer/private
+Internal score
+Admin notes
+Doanh thu
+Dữ liệu tài chính
+Khách hàng confidential
+
+19. VERIFICATION / EVIDENCE CHIPS
+Ví dụ:
+Hồ sơ doanh nghiệp ✓
+
+Ảnh xưởng
+
+Video năng lực
+
+Chứng nhận
+
+Dự án tham chiếu
+
+Nhưng chip phải có trạng thái nguồn.
+Không chỉ icon xanh chung chung.
+20. “THÔNG TIN CẦN XÁC NHẬN”
+Đây là block rất quan trọng.
+Tài liệu đề nghị đánh giá theo từng yêu cầu thay vì một điểm “uy tín” chung thiếu căn cứ.   Văn bản đã dán (1)
+Card:
+Thông tin cần xác nhận
+
+? Có thể giao trước 15/11
+? Có đúng chất liệu yêu cầu
+? Có đủ năng lực cho 500 bộ trong thời gian hiện tại
+
+Điểm này làm NCC card đáng tin hơn.
+21. KHI CÓ REQUIREMENT CONTEXT
+Card có thêm:
+VÌ SAO ĐƯỢC ĐỀ XUẤT?
+✓ Đúng nhóm sản phẩm
+✓ Phục vụ Đồng Nai
+✓ MOQ phù hợp 500 bộ
+✓ Có thể làm mẫu
+? Lead time cần xác nhận
+
+Không hiện explanation khi search general nếu không có context.
+22. MATCH SCORE
+Nếu dùng score nội bộ:
+82
+
+User-facing nên hiển thị:
+Mức độ liên quan cao
+
+hoặc:
+4/5 tiêu chí đã có dữ liệu phù hợp
+
+Tốt hơn:
+“82% phù hợp”
+
+vì score chưa chắc là xác suất thực.
+23. FOUNDING PARTNER TRÊN PAGE
+Founding Partner có thể xuất hiện:
+ĐỐI TÁC ĐỒNG HÀNH CHUYÊN MỤC
+
+ở block riêng.
+Không trộn vào organic search mà không gắn nhãn.
+Không tự lên #1.
+Không nhận toàn bộ lead.
+Đây cũng là nguyên tắc tài liệu đã chốt cho Founding Partner.   Markdown đã dán (3)
+24. EMPTY STATE
+Nếu không tìm thấy:
+CHƯA CÓ NGUỒN PHÙ HỢP TRONG DỮ LIỆU HIỆN TẠI
+SUPPI:
+Tôi có thể giúp bạn tạo nhu cầu để đội sourcing tiếp tục tìm thêm nguồn.
+
+Buttons:
+Đăng nhu cầu
+Nhờ SUPPI tìm thêm
+Không fake supplier.
+25. “NHỜ SUPPI TÌM THÊM”
+Nếu user login:
+tạo sourcing task.
+Nếu chưa login:
+require login.
+Không tự tạo supplier giả từ web search.
+26. PAGINATION
+Desktop:
+24 results/page
+
+Hoặc infinite load nếu stack hiện tại tốt.
+Tôi thích pagination/Load More vì:
+- SEO dễ hơn;
+- kiểm soát request;
+- không scroll vô tận.
+27. QUERY PARAM URL
+Ví dụ:
+/doanh-nghiep?category=dong-phuc&province=dong-nai
+
+SEO-friendly filter canonical phải quản lý cẩn thận.
+Không index hàng nghìn filter combination tự động.
+28. SEARCH STATE
+Shareable state:
+q
+category
+product
+province
+industrialPark
+availability
+certification
+page
+sort
+
+Không đưa confidential requirement data vào URL.
+29. SEO PAGE
+Title:
+Tìm Nhà Cung Ứng Theo Năng Lực | CHUOICUNGUNG.COM
+
+Meta:
+Tìm nhà cung ứng theo sản phẩm, năng lực, địa bàn và điều kiện nhận việc. Gửi nhu cầu để SUPPI hỗ trợ tìm nguồn phù hợp.
+Canonical:
+https://chuoicungung.com/doanh-nghiep
+
+Category landing sẽ xử lý ở page /nganh-nghe/[slug] hoặc /tu-khoa/[slug].
+30. STRUCTURED DATA
+Có thể dùng:
+CollectionPage
+ItemList
+Organization
+
+Nhưng chỉ dùng Organization data có thể công bố.
+Không fake ratings.
+Không dùng AggregateRating nếu không có rating thực.
+31. DATABASE — CORE
+Page 05 cần:
+organizations
+
+supplier_profiles
+
+capabilities
+
+products_services
+
+categories
+
+supplier_categories
+
+supplier_capabilities
+
+supplier_service_areas
+
+locations
+
+industrial_parks
+
+supplier_industrial_park_coverage
+
+evidence
+
+certifications
+
+facilities
+
+media_assets
+
+32. ORGANIZATION VẪN LÀ MASTER
+Không tạo:
+suppliers.name
+
+trùng với:
+organizations.name
+
+organizations = identity.
+supplier_profiles = extension khi org có role SUPPLIER.
+33. SUPPLIER PROFILE
+SupplierProfile {
+  id
+  organizationId
+
+  headline
+
+  profileStatus
+
+  acceptsNewRequests
+
+  availabilityStatus
+  availabilityCheckedAt
+
+  minOrderNotes
+
+  leadTimeNotes
+
+  sampleAvailable
+  surveyAvailable
+
+  profileCompleteness
+
+  publishedAt
+  updatedAt
+}
+
+34. CAPABILITY
+Đừng chỉ lưu:
+"description": "chúng tôi có 20 năm kinh nghiệm"
+
+Capability cần structured:
+Capability {
+  id
+
+  organizationId
+
+  categoryId
+
+  title
+
+  description
+
+  capacityValue?
+  capacityUnit?
+
+  minOrder?
+  maxOrder?
+
+  leadTimeMin?
+  leadTimeMax?
+
+  evidenceStatus
+
+  updatedAt
+}
+
+35. PRODUCT / SERVICE
+Tài liệu đã xác định cần page riêng vì một NCC có nhiều sản phẩm/dịch vụ với điều kiện khác nhau.   Văn bản đã dán (2)
+Schema:
+ProductService {
+  id
+
+  organizationId
+
+  slug
+
+  title
+
+  categoryId
+
+  description
+
+  specs
+
+  suitableBuyer
+
+  moq
+
+  leadTime
+
+  serviceAreas[]
+
+  attachments[]
+
+  evidence[]
+
+  status
+
+  updatedAt
+}
+
+36. SERVICE AREA
+Không lưu string duy nhất:
+"HCM, DN, BD..."
+
+Nên có:
+supplier_service_areas
+
+Fields:
+supplierId
+locationType
+provinceId?
+industrialParkId?
+countryId?
+coverageType
+verifiedAt?
+
+37. FACILITY
+Một Organization có thể có:
+Head Office
+Factory 1
+Factory 2
+Warehouse
+Service center
+
+Dùng:
+facilities
+
+Không nhét factory_address vào supplier profile duy nhất.
+38. EVIDENCE MODEL
+Page này cần foundation tốt.
+Evidence {
+ id
+
+ organizationId
+
+ capabilityId?
+ productServiceId?
+
+ type
+
+ title
+
+ sourceType
+
+ sourceOrganization?
+
+ documentId?
+ mediaId?
+
+ status
+
+ issuedAt?
+ expiresAt?
+
+ checkedBy?
+ checkedAt?
+
+ visibility
+
+ createdAt
+}
+
+39. EVIDENCE TYPE
+BUSINESS_DOCUMENT
+
+CERTIFICATION
+
+FACTORY_IMAGE
+
+MACHINE_IMAGE
+
+PROJECT
+
+CLIENT_REFERENCE
+
+AUDIT
+
+VIDEO
+
+CATALOGUE
+
+OTHER
+
+40. EVIDENCE STATUS
+SELF_DECLARED
+
+DOCUMENT_PROVIDED
+
+REVIEWED
+
+CONFIRMED
+
+NEEDS_UPDATE
+
+EXPIRED
+
+CONFLICT
+
+REJECTED
+
+Không dùng một huy hiệu “Verified Supplier” chung cho mọi trường.
+41. DATA CLAIM
+Tôi còn đề nghị thêm nếu dev đủ sức:
+data_claims
+
+Ví dụ:
+Claim:
+Capacity = 20.000 pcs/month
+
+Source:
+Supplier document
+
+Status:
+SELF_DECLARED
+
+Applicable:
+Factory A
+
+Updated:
+20/09/2026
+
+Đây sẽ giúp SUPPI giải thích dữ liệu.
+42. MATCHING ENGINE — PHASE 1
+Không bắt đầu bằng ML phức tạp.
+Rule-based trước.
+Input:
+Requirement
+
+Candidate pool:
+Supplier Profiles
+Capabilities
+Products
+Service Areas
+Availability
+Evidence
+
+43. MATCHING DIMENSIONS
+Tôi đề nghị:
+1. Category/product
+2. Capability
+3. Location/service area
+4. Quantity/MOQ/capacity
+5. Deadline/lead time
+6. Sample/survey
+7. Certification requirement
+8. Current availability
+
+Không dùng sponsorship làm match factor.
+44. SCORE NỘI BỘ
+Có thể dùng P0:
+Need/Product fit       30
+Capability             20
+Location               15
+Quantity/Capacity      10
+Lead time              10
+Required certification 5
+Sample/Survey           5
+Data freshness          5
+
+Tổng 100.
+Đây chỉ là heuristic implementation suggestion, không phải nội dung đã được nguồn tài liệu xác định như công thức bắt buộc.
+45. HARD FILTER VS SOFT SCORE
+Ví dụ:
+Requirement:
+Certification = bắt buộc
+
+Supplier không có:
+→ exclude hoặc “không đủ dữ liệu”.
+Không cho score khác bù lại.
+46. MATCH EXPLANATION
+Store:
+MatchReason {
+  criterion
+  status
+  source
+  note
+}
+
+Status:
+MATCH
+PARTIAL
+UNKNOWN
+MISMATCH
+
+UI dùng nó để tạo:
+✓ Đúng ngành
+? Lead time chưa xác nhận
+
+47. FRESHNESS
+Thông tin khả năng nhận việc không nên sống vĩnh viễn.
+Ví dụ:
+availability_checked_at
+capacity_checked_at
+
+Nếu quá cũ:
+UI:
+Cần xác nhận lại
+48. ADMIN — SUPPLIER MANAGEMENT
+Page 05 phải mở sâu Admin.
+Tôi đề nghị:
+/admin/to-chuc?role=SUPPLIER
+
+và optional alias:
+/admin/nha-cung-ung
+
+Alias chỉ redirect/filter, không tạo data domain riêng.
+49. ADMIN SUPPLIER LIST
+Columns:
+Tên doanh nghiệp
+MST
+Năng lực chính
+Địa bàn
+Hồ sơ %
+Khả năng nhận việc
+Evidence
+Cập nhật
+Owner
+Status
+
+Filters:
+Category
+Capability
+Province
+KCN
+Availability
+Profile completeness
+Evidence status
+Owner
+Updated date
+
+50. ADMIN SUPPLIER STATUS
+DRAFT
+
+PENDING_PROFILE
+
+ACTIVE
+
+NEEDS_UPDATE
+
+SUSPENDED
+
+ARCHIVED
+
+Không dùng status:
+VERIFIED
+
+cho toàn supplier.
+Verification nằm ở evidence/data claim level.
+51. ADMIN SUPPLIER DETAIL
+Route:
+/admin/to-chuc/[id]?tab=supplier
+
+Hoặc nested UI.
+Tabs:
+Tổng quan
+Năng lực
+Sản phẩm/Dịch vụ
+Địa bàn
+Cơ sở
+Máy móc
+Chứng nhận
+Bằng chứng
+Hình ảnh/Video
+Catalogue
+Nhu cầu đã nhận
+Matching
+Kết nối
+Chương trình
+Tasks
+Timeline
+Audit
+
+52. ADMIN — PROFILE COMPLETENESS
+Ví dụ:
+78%
+
+Không tính theo số field đơn giản.
+Các block trọng yếu:
+Identity
+Capability
+Products
+Service area
+Order conditions
+Evidence
+Contact
+
+Nếu thiếu:
+Capability = missing
+
+admin thấy:
+Thiếu năng lực chính
+53. ADMIN — MISSING DATA QUEUE
+Route/filter:
+/admin/to-chuc?missing=evidence
+
+hoặc:
+/admin/tasks?type=PROFILE_DATA
+
+Ví dụ:
+Công ty ABC
+Thiếu:
+- MOQ
+- lead time
+- chứng chỉ hết hạn
+
+Owner:
+Supplier Development
+54. ADMIN — BULK IMPORT
+Có thể cần sau.
+P0:
+CSV/Excel import supplier.
+Nhưng import phải map:
+Organization
+SupplierProfile
+Capabilities
+Products
+Locations
+
+Không import tất cả vào một JSON/text blob.
+55. DUPLICATE CHECK
+Trước khi tạo NCC mới:
+check:
+tax_code
+domain
+phone
+legal_name
+
+Nếu trùng:
+admin phải attach role SUPPLIER vào org cũ.
+Không tạo org mới.
+56. CLAIM REVIEW
+Admin có queue:
+Data cần kiểm tra
+
+Ví dụ:
+ABC
+"Công suất 50.000 sp/tháng"
+
+Source:
+Supplier self-declared
+
+Status:
+Needs review
+
+Button:
+Đối chiếu
+Yêu cầu bổ sung
+Không công bố
+
+57. PUBLISHING
+Supplier chỉ xuất hiện public khi:
+organization.status = ACTIVE
+supplier_profile.status = ACTIVE
+profile_publishable = true
+
+Không phải cứ có database record là public.
+58. SEARCH INDEX
+Tôi đề nghị dev tạo normalized search document.
+Ví dụ:
+supplier_search_index
+
+hoặc search engine hiện tại nếu có.
+Index:
+organization name
+product names
+capability names
+category synonyms
+locations
+industrial parks
+certifications
+
+Không index private notes.
+59. CATEGORY SYNONYM
+Ví dụ:
+đồng phục công nhân
+quần áo công nhân
+uniform factory
+workwear
+
+Map vào cùng taxonomy.
+Không tạo 4 categories duplicate.
+60. SUPPI SEARCH
+SUPPI dùng cùng SearchService với /doanh-nghiep.
+Không xây search logic riêng:
+SUPPI search
+
+và:
+Supplier page search
+
+thành hai engine.
+Phải là:
+SupplierSearchService
+
+61. SEARCH SERVICE
+Conceptual:
+SupplierSearchService.search({
+ query,
+ category,
+ product,
+ capability,
+ location,
+ industrialPark,
+ quantity,
+ deadline,
+ certification,
+ availability,
+ requirementId
+})
+
+62. MATCHING SERVICE
+Tách:
+SupplierSearchService
+
+= retrieval.
+SupplierMatchingService
+
+= đánh giá theo requirement.
+Hai khái niệm khác nhau.
+63. BACKEND SERVICES
+Page 05:
+OrganizationService
+
+SupplierProfileService
+
+CapabilityService
+
+ProductService
+
+LocationService
+
+EvidenceService
+
+SupplierSearchService
+
+SupplierMatchingService
+
+SupplierPublicationService
+
+SupplierProfileCompletenessService
+
+64. API / SERVER ACTION
+Conceptual:
+GET /api/suppliers
+
+GET /api/suppliers/search
+
+GET /api/categories
+
+GET /api/locations
+
+GET /api/industrial-parks
+
+Nếu có requirement:
+GET /api/requirements/{id}/supplier-candidates
+
+Admin:
+GET /api/admin/suppliers
+
+PATCH /api/admin/suppliers/{id}
+
+POST /api/admin/suppliers/{id}/capabilities
+
+POST /api/admin/suppliers/{id}/evidence
+
+Nhưng nếu project dùng server actions/RPC thì Antigravity giữ convention hiện có.
+65. CTA “GỬI YÊU CẦU”
+Nếu buyer click từ Supplier Card:
+Nếu đã có Requirement:
+Chọn nhu cầu hiện có
+
+hoặc:
+Tạo nhu cầu mới
+
+Nếu chưa login:
+login trước khi gửi.
+66. KHÔNG GỬI DIRECT LEAD NGAY
+CTA không nên:
+mở điện thoại NCC tức thì
+
+trong mọi trường hợp.
+Có thể flow:
+Buyer yêu cầu
+↓
+Requirement/context
+↓
+Supplier permission
+↓
+Connection
+↓
+CHAINY
+
+67. “LƯU NCC”
+Logged-in user:
+saved_suppliers
+
+hoặc generic:
+saved_entities
+
+Không cần tạo giant CRM feature.
+68. ADMIN MATCHING CONNECTION
+Từ Admin Need Detail:
+Button:
+Tìm thêm NCC
+mở Supplier Search trong context requirement.
+Ví dụ:
+/admin/nhu-cau/uuid/matching/search
+
+hoặc modal.
+Reuse cùng SearchService.
+69. ADMIN SHORTLIST
+Admin chọn 5/18 suppliers.
+Tạo:
+supplier_matches
+
+Không copy supplier profile vào match.
+Match chứa:
+requirementId
+supplierId
+score
+reasons
+status
+snapshot metadata if needed
+
+70. MATCH SNAPSHOT
+Một số dữ liệu thay đổi theo thời gian.
+Khi NCC được shortlist:
+có thể lưu:
+evaluated_at
+capability_snapshot
+availability_snapshot
+
+Không cần copy toàn profile.
+71. FOUNDER PARTNER ADMIN
+Nếu supplier là Founding Partner:
+Admin supplier detail có tab:
+Commercial relationships
+
+hiển thị:
+Founding Partnership
+Category
+Area
+Start
+End
+Entitlements
+
+Không trộn vào verification.
+72. ANALYTICS USER
+Track:
+supplier_search_view
+supplier_search_submit
+supplier_filter_applied
+supplier_card_view
+supplier_profile_click
+supplier_save
+supplier_request_clicked
+suppi_search_clicked
+
+Không log confidential requirement text.
+73. ADMIN ANALYTICS
+Track internal operational metrics:
+Supplier records active
+Profiles incomplete
+Evidence needing update
+Supplier availability stale
+Suppliers by category
+Suppliers by province
+Supplier response rate
+
+Không cần public.
+74. MOBILE
+Mobile layout:
+Header
+Search
+Filter chips
+Results
+Supplier cards
+Sticky "Nhờ SUPPI tìm nguồn"
+
+Filter opens bottom sheet.
+Supplier card không nhồi 20 fields.
+Ưu tiên:
+Tên
+Năng lực
+Địa bàn
+2–3 indicators
+Updated
+CTA
+
+75. ACCESSIBILITY
+Search label thật.
+Filter checkbox/radio accessible.
+Supplier status có text.
+Evidence không chỉ màu.
+Cards clickable nhưng CTA vẫn là button/link riêng.
+76. PERFORMANCE
+Search:
+debounce nếu autocomplete.
+Không query toàn table sau mỗi key stroke.
+Pagination.
+Indexes database:
+category
+province
+organization status
+supplier profile status
+updated_at
+
+Search engine nếu dữ liệu lớn mới tối ưu thêm.
+77. CACHING
+Public supplier list có thể cache ngắn.
+Nhưng:
+availability/matching context nên dynamic hơn.
+Không cache private requirement-specific result công khai.
+78. EMPTY / ERROR STATES
+No query
+Bạn đang cần tìm nguồn gì?
+
+No result
+Chưa có nguồn phù hợp trong dữ liệu hiện tại.
+
+Error
+Chưa thể tải danh sách nhà cung ứng. Bộ lọc của bạn đã được giữ lại.
+
+79. ACCEPTANCE TEST — PAGE 05
+Page này chỉ xong khi:
+Search "đồng phục công nhân Đồng Nai"
+↓
+candidate suppliers
+↓
+filter service area
+↓
+filter sample capability
+↓
+see meaningful supplier cards
+↓
+open Supplier Profile
+
+Và với requirement:
+NC-2026-00125
+↓
+Search suppliers
+↓
+5 candidates
+↓
+each has match reasons
+↓
+admin shortlists 3
+↓
+supplier_matches created
+
+80. ACCEPTANCE TEST CHI TIẾT
+TEST A
+General public search hoạt động mà không login.
+TEST B
+Private fields không xuất hiện.
+TEST C
+Filter province dùng service area chứ không chỉ company address.
+TEST D
+Supplier có role khác vẫn chỉ có một Organization record.
+TEST E
+Inactive/unpublished supplier không xuất public.
+TEST F
+Founding Partner không tự lên #1 organic match.
+TEST G
+Expired certificate không hiện như confirmed/current.
+TEST H
+Requirement context sinh match explanation.
+TEST I
+Unknown lead time hiện “Cần xác nhận”.
+TEST J
+Admin shortlist tạo SupplierMatch.
+TEST K
+Admin reject candidate cần reason.
+TEST L
+Search page mobile 390px không overflow.
+TEST M
+No public fake rating.
+TEST N
+No internal notes leak.
+81. ANTIGRAVITY — PAGE 05 CHIA 6 PROMPT
+PROMPT 05-01 — AUDIT /doanh-nghiep
+PROJECT: CHUOICUNGUNG.COM
+PAGE 05
+ROUTE: /doanh-nghiep
+
+SCOPE:
+PUBLIC SUPPLIER SEARCH
++
+ADMIN SUPPLIER MANAGEMENT
++
+MATCHING DATA FOUNDATION
+
+Ở bước này:
+KHÔNG redesign.
+KHÔNG migration.
+
+Audit:
+
+1. Route /doanh-nghiep hiện tại.
+
+2. Current Supplier Card.
+
+3. Current supplier/company data model.
+
+4. Check whether Company/Supplier are duplicate domains.
+
+5. Audit fields:
+- organization identity
+- role
+- categories
+- capabilities
+- products/services
+- service area
+- industrial park coverage
+- MOQ/order range
+- lead time
+- availability
+- certifications
+- evidence
+- factory/facility
+- media
+- updated date
+
+6. Audit current search:
+- text search
+- filters
+- sorting
+- pagination
+- SEO
+- query params.
+
+7. Audit admin supplier/company management.
+
+8. Audit matching logic if any.
+
+9. Audit search indexes or full-text search.
+
+10. Audit current claims like:
+verified
+top supplier
+best supplier
+rating.
+
+11. Generate:
+
+docs/pages/doanh-nghiep/SUPPLIER_SEARCH_CURRENT_AUDIT.md
+
+docs/admin/SUPPLIER_ADMIN_CURRENT_AUDIT.md
+
+Include:
+KEEP
+MODIFY
+MISSING
+DUPLICATE
+RISK
+
+DỪNG SAU AUDIT.
+
+PROMPT 05-02 — SUPPLIER DATA MODEL
+PROJECT: CHUOICUNGUNG.COM
+PAGE 05
+PHASE: SUPPLIER DATA MODEL
+
+Reuse existing entities.
+
+MASTER RULE:
+
+One legal/business entity
+=
+one Organization.
+
+Do not create separate companies for:
+buyer
+supplier
+factory
+sponsor.
+
+Supplier capability is an extension of Organization.
+
+Normalize/reuse:
+
+organizations
+organization_roles
+
+supplier_profiles
+
+capabilities
+supplier_capabilities
+
+products_services
+
+categories
+
+locations
+supplier_service_areas
+
+industrial_parks
+supplier_industrial_park_coverage
+
+facilities
+
+evidence
+certifications
+
+media_assets
+
+SupplierProfile must support:
+
+availabilityStatus
+availabilityCheckedAt
+sampleAvailable
+surveyAvailable
+profileCompleteness
+publishable
+updatedAt
+
+Capability must be structured enough to support:
+category
+capacity
+MOQ/order range
+lead time
+evidence status.
+
+ProductService must support:
+title
+category
+spec
+buyer fit
+MOQ
+lead time
+service area
+attachments
+evidence.
+
+Evidence must support:
+
+type
+source
+status
+issuedAt
+expiresAt
+checkedAt
+visibility.
+
+Evidence statuses:
+
+SELF_DECLARED
+DOCUMENT_PROVIDED
+REVIEWED
+CONFIRMED
+NEEDS_UPDATE
+EXPIRED
+CONFLICT
+REJECTED
+
+Do not create a global "Verified Supplier" boolean.
+
+Create safe migration only.
+
+Output:
+
+docs/pages/doanh-nghiep/SUPPLIER_DATA_MODEL.md
+
+PROMPT 05-03 — SEARCH UX/UI
+PROJECT: CHUOICUNGUNG.COM
+PAGE:
+/doanh-nghiep
+
+PHASE:
+PUBLIC SUPPLIER SEARCH UX/UI
+
+Goal:
+Transform directory into Supplier Search.
+
+H1:
+“TÌM NHÀ CUNG ỨNG THEO NĂNG LỰC THỰC TẾ”
+
+Sub:
+“Tìm theo sản phẩm, năng lực, địa bàn và điều kiện đáp ứng thay vì chỉ tìm theo tên doanh nghiệp.”
+
+Search placeholder:
+“Bạn đang cần sản phẩm, dịch vụ hoặc nhà cung ứng gì?”
+
+Support two modes:
+
+1. General search.
+2. Requirement-context search.
+
+Filters:
+
+Category
+Product/service
+Province
+Industrial Park
+Order size
+Availability
+Sample/Survey
+Certification
+
+Do not show too many filters initially.
+
+Use:
+Basic filters
++
+Advanced filters.
+
+SupplierCard must show:
+
+Logo
+Organization name
+Main capabilities
+Service area
+Relevant order range
+2-3 meaningful capability/evidence indicators
+Data updated date
+Profile state
+
+CTA:
+“Xem năng lực”
+“Gửi yêu cầu”
+
+If requirement context exists:
+
+show:
+“Vì sao được đề xuất?”
+
+MATCH
+UNKNOWN
+MISMATCH explanations.
+
+Do not show:
+fake rating
+fake Top Supplier
+internal match score
+private notes
+private contacts.
+
+Founding Partner:
+show in separate labeled commercial block.
+Do not automatically rank first.
+
+Mobile:
+search
+filter chips
+bottom-sheet filters
+supplier cards
+SUPPI CTA.
+
+No overflow at 390px.
+
+PROMPT 05-04 — SEARCH + MATCHING BACKEND
+PROJECT: CHUOICUNGUNG.COM
+PAGE 05
+PHASE:
+SUPPLIER SEARCH + MATCHING BACKEND
+
+Separate:
+
+SupplierSearchService
+from
+SupplierMatchingService.
+
+SupplierSearchService:
+retrieves candidate suppliers.
+
+Search by:
+
+query
+category
+product
+capability
+service area
+industrial park
+availability
+certification
+
+Do not treat company office address as service area.
+
+SupplierMatchingService:
+evaluates candidate suppliers against a Requirement.
+
+Dimensions:
+
+product/category
+capability
+location
+quantity/MOQ/capacity
+deadline/lead time
+sample/survey
+required certification
+current availability
+data freshness
+
+Support:
+MATCH
+PARTIAL
+UNKNOWN
+MISMATCH
+
+Store match reasons.
+
+Do not claim probability.
+
+Do not use:
+Founding Partner
+Sponsor payment
+commercial package
+
+as matching score factors.
+
+If a hard buyer requirement fails:
+do not allow soft score to override it.
+
+Support requirement context:
+requirement_id.
+
+Create/reuse supplier_matches only when:
+candidate is shortlisted/evaluated in a requirement workflow.
+
+Do not create supplier_match for every public search result.
+
+Index/search optimization:
+use current project stack.
+Do not add external search service unless necessary.
+
+Output:
+
+docs/pages/doanh-nghiep/SUPPLIER_SEARCH_BACKEND.md
+docs/pages/doanh-nghiep/MATCHING_RULES_V1.md
+
+PROMPT 05-05 — ADMIN SUPPLIER MANAGEMENT
+PROJECT: CHUOICUNGUNG.COM
+ADMIN PHASE FOR PAGE 05
+
+Upgrade:
+
+/admin/to-chuc
+
+with Supplier role support.
+
+Optional alias:
+/admin/nha-cung-ung
+may redirect to:
+/admin/to-chuc?role=SUPPLIER
+
+Do not create a second supplier company database.
+
+ADMIN SUPPLIER LIST columns:
+
+Organization
+Tax ID
+Main capability
+Service area
+Profile completeness
+Availability
+Evidence status
+Updated
+Owner
+Status
+
+Filters:
+
+Category
+Capability
+Province
+Industrial Park
+Availability
+Completeness
+Evidence
+Owner
+Updated date
+
+Supplier detail tabs:
+
+Overview
+Capabilities
+Products/Services
+Service areas
+Facilities
+Machines
+Certifications
+Evidence
+Media
+Catalogue
+Received requirements
+Matching
+Connections
+Programs
+Tasks
+Timeline
+Audit
+
+Create/reuse queues:
+
+Incomplete profile
+Missing evidence
+Expired evidence
+Availability stale
+Unassigned owner
+
+Admin must be able to:
+
+add capability
+update product/service
+manage service area
+request evidence
+review evidence
+change publish state
+assign owner
+
+All mutations write AuditLog.
+
+Do not mark organization globally verified
+because one certificate or field was reviewed.
+
+Duplicate detection:
+
+tax code
+domain
+phone
+legal name similarity.
+
+If existing organization found:
+attach SUPPLIER role/profile
+instead of creating duplicate.
+
+Support supplier search inside
+Admin Requirement Matching workflow.
+
+Admin can shortlist a candidate into:
+supplier_matches.
+
+Reject/not suitable requires reason.
+
+Reasons:
+
+OUT_OF_AREA
+CAPACITY
+LEAD_TIME
+CERTIFICATION
+TECHNICAL
+NO_RESPONSE
+DATA_INSUFFICIENT
+OTHER
+
+PROMPT 05-06 — QA PAGE 05
+PROJECT: CHUOICUNGUNG.COM
+PAGE 05 + ADMIN
+PHASE: QA
+
+Test:
+
+A.
+Public visitor searches:
+“đồng phục công nhân Đồng Nai”.
+
+B.
+Search can find suppliers by:
+product/capability,
+not just organization name.
+
+C.
+Province/service-area filtering works.
+
+D.
+Office location does not falsely equal service coverage.
+
+E.
+Unpublished supplier is not public.
+
+F.
+Supplier with multiple roles has one Organization.
+
+G.
+Founding Partner is not automatically ranked #1.
+
+H.
+Expired evidence does not appear current.
+
+I.
+Requirement-context search shows match reasons.
+
+J.
+Unknown data shows:
+“Cần xác nhận”.
+
+K.
+No fake rating or Top Supplier claim.
+
+L.
+Admin can shortlist supplier.
+
+M.
+SupplierMatch links existing supplier,
+does not duplicate profile data.
+
+N.
+Admin rejection requires reason.
+
+O.
+Internal notes never leak public.
+
+P.
+Mobile 390px works.
+
+Q.
+SEO canonical is correct.
+
+R.
+Pagination/filter URL state works.
+
+Generate:
+
+docs/pages/doanh-nghiep/SUPPLIER_SEARCH_QA.md
+
+docs/admin/SUPPLIER_ADMIN_QA.md
+
+Report:
+PASS
+FAIL
+BLOCKED
+NOT IMPLEMENTED
+
+82. PAGE 05 CHỈ ĐƯỢC COI LÀ HOÀN THÀNH KHI
+Anh phải test được flow thật:
+Buyer:
+“Tôi cần 500 bộ đồng phục tại Đồng Nai”
+↓
+SUPPI / Search
+↓
+18 candidate records
+↓
+lọc theo năng lực + địa bàn + MOQ
+↓
+5 nguồn đáng xem
+↓
+mỗi nguồn có:
+năng lực
+địa bàn
+evidence
+thông tin cần xác nhận
+↓
+Admin shortlist 3 NCC
+↓
+supplier_matches
+↓
+Page 04 hiển thị 3 NCC
+
+Đó mới là Supplier Search, không phải directory.
+Tài liệu cũng nhấn mạnh buyer không cần xem hàng trăm công ty; giá trị nằm ở việc hệ thống đưa ra một bộ hồ sơ đề xuất nguồn cung gồm vài lựa chọn có năng lực, địa bàn, bằng chứng và những điểm còn cần xác nhận.   Văn bản đã dán (1)
+Sau khi Page 05 hoàn thành, Page 06 sẽ là /doanh-nghiep/[slug] — Hồ sơ Nhà Cung Ứng. Ở Page 06 tôi sẽ đi sâu vào slug chuẩn SEO, company header, năng lực, sản phẩm/dịch vụ, nhà xưởng, máy móc, công suất, MOQ, lead time, service area, chứng nhận, evidence, video 1 phút, catalogue, “Thông tin cần xác nhận”, CTA gửi yêu cầu, phần quản trị supplier profile trong Admin và cách SUPPI đọc profile này để matching.

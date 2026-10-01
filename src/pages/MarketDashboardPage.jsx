@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   BarChart3, TrendingUp, Calendar, Download, Building2, 
@@ -23,6 +23,25 @@ export default function MarketDashboardPage() {
   const [isDiamondModalOpen, setIsDiamondModalOpen] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
+  useEffect(() => {
+    document.title = "Thị trường | CHUOICUNGUNG.COM";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Dữ liệu thị trường chuỗi cung ứng Việt Nam: giám sát nhu cầu B2B, phân tích thanh khoản RFQ, năng lực cung ứng theo ngành và địa phương trên toàn quốc.'
+      );
+    }
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', 'https://chuoicungung.com/thi-truong');
+  }, []);
+
   const handleExport = () => {
     setIsExporting(true);
     setTimeout(() => {
@@ -34,7 +53,7 @@ export default function MarketDashboardPage() {
   };
 
   return (
-    <div className="space-y-8 pb-24 pt-6 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
+    <main className="space-y-8 pb-24 pt-6 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* 1. HEADER & MACRO INTELLIGENCE CONTROL BAR */}
@@ -48,7 +67,7 @@ export default function MarketDashboardPage() {
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <span className="text-[#0052cc] font-bold font-heading">
-            {lang === 'en' ? 'Macro Intelligence & Market Analytics' : 'Dashboard Thị Trường & Tình Báo Vĩ Mô'}
+            {lang === 'en' ? 'Macro Intelligence & Market Analytics' : 'Dữ liệu thị trường chuỗi cung ứng'}
           </span>
         </nav>
 
@@ -61,27 +80,40 @@ export default function MarketDashboardPage() {
             </div>
             
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight leading-tight">
-              Dashboard Phân Tích Thị Trường & Chuỗi Cung Ứng
+              Dữ liệu thị trường chuỗi cung ứng
             </h1>
             
             <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-2xl">
-              Giám sát vĩ mô, phân tích thanh khoản RFQ thời gian thực, dự báo điểm nghẽn nguyên vật liệu và điều phối cung ứng 400+ Khu công nghiệp toàn quốc.
+              Giám sát vĩ mô, phân tích thanh khoản RFQ thời gian thực, dự báo điểm nghẽn nguyên vật liệu và điều phối cung ứng 400+ Khu công nghiệp toàn quốc. Dữ liệu đối soát từ thực tế giao dịch và báo cáo hải quan định kỳ.
             </p>
           </div>
 
           {/* Action Toolbar */}
           <div className="flex flex-wrap items-center gap-2.5 font-heading shrink-0">
-            {/* Zone Filter */}
-            <select 
-              value={selectedZone}
-              onChange={(e) => setSelectedZone(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0052cc] cursor-pointer"
+            {/* CTA Khám phá theo ngành/địa phương */}
+            <a
+              href="#phan-tich-nganh-dia-phuong"
+              className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center space-x-1.5 font-heading cursor-pointer"
             >
-              <option value="all">{lang === 'en' ? 'Nationwide (63 Provinces)' : 'Toàn Quốc (63 Tỉnh Thành)'}</option>
-              <option value="north">{lang === 'en' ? 'Northern Key Zone' : 'Trọng Điểm Miền Bắc'}</option>
-              <option value="south">{lang === 'en' ? 'Southern Key Zone' : 'Trọng Điểm Miền Nam'}</option>
-              <option value="central">{lang === 'en' ? 'Central Key Zone' : 'Trọng Điểm Miền Trung'}</option>
-            </select>
+              <Filter className="w-3.5 h-3.5" />
+              <span>Khám phá theo ngành/địa phương</span>
+            </a>
+
+            {/* Zone Filter */}
+            <div className="relative">
+              <label htmlFor="market-zone-select" className="sr-only">Khu vực phân tích</label>
+              <select 
+                id="market-zone-select"
+                value={selectedZone}
+                onChange={(e) => setSelectedZone(e.target.value)}
+                className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-[#0052cc] cursor-pointer"
+              >
+                <option value="all">{lang === 'en' ? 'Nationwide (63 Provinces)' : 'Toàn Quốc (63 Tỉnh Thành)'}</option>
+                <option value="north">{lang === 'en' ? 'Northern Key Zone' : 'Trọng Điểm Miền Bắc'}</option>
+                <option value="south">{lang === 'en' ? 'Southern Key Zone' : 'Trọng Điểm Miền Nam'}</option>
+                <option value="central">{lang === 'en' ? 'Central Key Zone' : 'Trọng Điểm Miền Trung'}</option>
+              </select>
+            </div>
 
             {/* Timeframe Selector */}
             <div className="flex bg-slate-100 p-1 rounded-xl">
@@ -135,7 +167,7 @@ export default function MarketDashboardPage() {
       {/* ========================================================================= */}
       {/* 2. MIDDLE ROW: INTERACTIVE TREEMAP (Biểu Đồ Cây Nhu Cầu Ngành) */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="phan-tich-nganh-dia-phuong" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <InteractiveTreemap 
           lang={lang} 
           onOpenDiamondModal={() => setIsDiamondModalOpen(true)} 
@@ -177,6 +209,6 @@ export default function MarketDashboardPage() {
         lang={lang}
       />
 
-    </div>
+    </main>
   );
 }

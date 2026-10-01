@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { STAGE_ID_TO_SLUG_MAP, PHASE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 
 export default function InteractiveLifecycleFlow({ onStageSelect = null }) {
   const { t, lang } = useLanguage();
@@ -280,7 +281,7 @@ export default function InteractiveLifecycleFlow({ onStageSelect = null }) {
                     {lang === 'en' ? '3 Standard Phases' : '3 Pha chuẩn hóa'}
                   </span>
                   <Link
-                    to={`/giai-doan/${stage.id}`}
+                    to={`/giai-doan/${STAGE_ID_TO_SLUG_MAP[stage.id] || stage.id}`}
                     onClick={(e) => e.stopPropagation()}
                     className="font-bold flex items-center space-x-0.5 text-blue-600 hover:text-blue-800 transition group-hover:translate-x-0.5 font-heading"
                   >
@@ -322,7 +323,7 @@ export default function InteractiveLifecycleFlow({ onStageSelect = null }) {
 
               {/* Action Button to Open Stage Page */}
               <Link
-                to={`/giai-doan/${currentStage.id}`}
+                to={`/giai-doan/${STAGE_ID_TO_SLUG_MAP[currentStage.id] || currentStage.id}`}
                 style={{ backgroundColor: currentStage.color }}
                 className="px-4 py-2.5 rounded-xl text-white text-xs font-bold shadow-md hover:brightness-110 transition flex items-center justify-center space-x-1.5 whitespace-nowrap self-start lg:self-center font-heading uppercase tracking-wider"
               >
@@ -336,10 +337,11 @@ export default function InteractiveLifecycleFlow({ onStageSelect = null }) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-4 pt-3 border-t border-slate-200/60">
               {currentStage.phases.map((ph, pIdx) => {
                 const phaseId = `${currentStage.id}.${pIdx + 1}`;
+                const phaseSlug = PHASE_ID_TO_SLUG_MAP[phaseId] || phaseId;
                 return (
                   <Link
                     key={phaseId}
-                    to={`/pha/${phaseId}`}
+                    to={`/pha/${phaseSlug}`}
                     className="p-2.5 rounded-xl bg-white border border-slate-200 hover:border-blue-400 hover:shadow-xs transition flex items-center justify-between text-xs group/phase"
                   >
                     <div className="flex items-center space-x-2 truncate">

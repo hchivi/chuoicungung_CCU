@@ -12,6 +12,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 42,
     suppliersCount: 115,
     highlight: "Tập trung giải pháp chuỗi cung ứng cho các nhà máy chế biến nông sản xuất khẩu & may mặc KCN.",
+    image: "/images/supply_chain_expo_hero.jpg",
     needToBuy: [
       { item: "Áo thun & Đồng phục công nhân, bảo hộ PPE", qty: "15.000 bộ/năm", buyer: "Nhà máy Dệt May Tân Bình Thuận" },
       { item: "Máy bơm hạt nhựa & Máy ép khuôn đùn", qty: "8 cụm máy", buyer: "Công ty Bao Bì Nhựa KCN" },
@@ -43,6 +44,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 68,
     suppliersCount: 160,
     highlight: "Sự kiện trọng điểm quy tụ hơn 68 Nhà máy FDI Nhật Bản, Hàn Quốc, Đài Loan và Châu Âu.",
+    image: "/images/smart_factory_hero.jpg",
     needToBuy: [
       { item: "Thi công phòng sạch Class 1000 & Sàn Epoxy chống tĩnh điện ESD", qty: "6.500 m²", buyer: "Tập Đoàn Điện Tử MicroTech VSIP" },
       { item: "Gia công cơ khí chính xác CNC, đồ gá Jig kiểm tra bản mạch", qty: "Hợp đồng dài hạn", buyer: "Công ty Công Nghệ Bán Dẫn S-Semicon" },
@@ -72,6 +74,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 54,
     suppliersCount: 130,
     highlight: "Khớp lệnh cung - cầu phụ trợ cho tổ hợp công nghiệp ô tô, cảng biển và điện tử miền Bắc.",
+    image: "/images/supplier_b2b_hero.jpg",
     needToBuy: [
       { item: "Dịch vụ vận chuyển container lạnh & Cho thuê kho bãi cảng", qty: "300 cont/tháng", buyer: "Logistics Quốc Tế Hải Phòng Port" },
       { item: "Khuôn dập kim loại & Đúc linh kiện nhôm áp lực cao", qty: "12 bộ khuôn", buyer: "Linh Kiện Ô Tô HP Auto Parts" },
@@ -99,6 +102,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 75,
     suppliersCount: 190,
     highlight: "Tọa đàm và giao thương kết nối trực tiếp tại trung tâm logistics cảng biển TP.HCM.",
+    image: "/images/association_summit_hero.jpg",
     needToBuy: [
       { item: "Vải may đo đồng phục, phụ liệu may & In thêu logo cao cấp", qty: "100.000 mét vải", buyer: "Tập Đoàn Dệt May Sài Gòn" },
       { item: "Chai lọ nhựa PET, màng nhôm dược phẩm & Bao bì tiệt trùng", qty: "2 triệu sản phẩm/tháng", buyer: "Dược Phẩm & Sinh Học Medipharm" },
@@ -125,6 +129,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 82,
     suppliersCount: 210,
     highlight: "Quy mô lớn nhất khu vực Đồng Nai, kết nối chuỗi cung ứng trước thềm vận hành Sân bay Long Thành.",
+    image: "/images/industrial_park_hero.jpg",
     needToBuy: [
       { item: "Máy bơm hạt nhựa, trục vít đùn cao su & Máy ép thủy lực 500T", qty: "4 máy ép mới", buyer: "Nhựa Kỹ Thuật Nhơn Trạch Vina" },
       { item: "Hạt nhựa ABS, PP, POM tái sinh & Hạt nhựa nguyên sinh", qty: "150 tấn/tháng", buyer: "Sản Xuất Nhựa Gia Dụng & Công Nghiệp" },
@@ -152,6 +157,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 60,
     suppliersCount: 150,
     highlight: "Kết nối hệ sinh thái nhà máy vệ tinh cho các tập đoàn bán dẫn & điện thoại thông minh hàng đầu.",
+    image: "/images/b2b_sourcing_demand_hero.jpg",
     needToBuy: [
       { item: "Bản mạch in nhiều lớp PCB/FPCB & Linh kiện dán bề mặt SMT", qty: "10 triệu pcs/tháng", buyer: "Điện Tử Công Nghệ Cao Bắc Ninh" },
       { item: "Khuôn ép nhựa chính xác dung sai 0.005mm", qty: "20 bộ khuôn", buyer: "Nhà Máy Khuôn Mẫu Điện Tử Vina" },
@@ -178,6 +184,7 @@ export const EXPO_EVENTS = [
     factoriesCount: 45,
     suppliersCount: 110,
     highlight: "Diễn đàn cung ứng công nghiệp miền Trung kết nối cụm cảng Kỳ Hà, Chu Lai và Tiên Sa Đà Nẵng.",
+    image: "/images/association_b2b_meeting.jpg",
     needToBuy: [
       { item: "Dây cáp điện ô tô, đầu cos & Ống gen bọc cách điện", qty: "500.000 mét", buyer: "Tập Đoàn Sản Xuất Ô Tô Chu Lai" },
       { item: "Gia công dập thân vỏ kim loại & Sơn tĩnh điện bột", qty: "50.000 chi tiết", buyer: "Cơ Khí Ô Tô Miền Trung" },

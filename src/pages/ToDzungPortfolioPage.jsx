@@ -1561,11 +1561,22 @@ export default function ToDzungPortfolioPage() {
 
   // Set SEO Meta on Page Mount
   useEffect(() => {
-    document.title = t.nameTitle;
+    document.title = "Todzung | CHUOICUNGUNG.COM";
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', t.introMessage);
+      metaDesc.setAttribute(
+        'content',
+        'Tô Ngọc Dũng (Todzung) – Nhà sáng lập CHUOICUNGUNG.COM, điều phối hệ sinh thái kết nối chuỗi cung ứng, hạ tầng khu công nghiệp và chuyển đổi số B2B.'
+      );
     }
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', 'https://chuoicungung.com/todzung');
   }, [lang]);
 
   // GSAP ENTRANCE ANIMATIONS
@@ -1739,7 +1750,14 @@ export default function ToDzungPortfolioPage() {
       {/* ========================================================
           MAIN PORTFOLIO & CONTACT HUB (THREE.JS & GSAP INTEGRATED)
       ======================================================== */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 lg:py-10 space-y-8 flex-1 w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 lg:py-10 space-y-6 flex-1 w-full">
+
+        {/* Breadcrumb */}
+        <nav className="flex items-center text-xs text-slate-500 space-x-2">
+          <Link to="/" className="hover:text-blue-600 transition">Trang chủ</Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-slate-900 font-semibold">Todzung</span>
+        </nav>
 
         {/* TOP ROW: EXECUTIVE IDENTITY & 3D STUDIO PORTRAIT */}
         <div className="flex flex-col md:flex-row gap-5 lg:gap-8 xl:gap-10 items-start w-full">
@@ -1757,8 +1775,29 @@ export default function ToDzungPortfolioPage() {
                 </p>
                 <div className="animated-underline-6colors pb-1 inline-block max-w-full">
                   <h1 className="text-[23px] min-[360px]:text-[25px] min-[390px]:text-[27px] min-[414px]:text-[29px] sm:text-2xl md:text-3xl lg:text-[26px] xl:text-[32px] font-black text-slate-900 font-heading tracking-tight leading-tight whitespace-nowrap">
-                    TÔ NGỌC DŨNG <span className="text-[#006938] font-black">| TODZUNG</span>
+                    Todzung
                   </h1>
+                </div>
+                <p className="text-xs sm:text-sm font-bold text-slate-600">
+                  TÔ NGỌC DŨNG <span className="text-[#006938] font-bold">| Founder CHUOICUNGUNG.COM</span>
+                </p>
+
+                {/* CTAs: Tìm hiểu hệ sinh thái / Liên hệ */}
+                <div className="flex items-center gap-2 pt-1.5">
+                  <a
+                    href="#he-sinh-thai"
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold transition flex items-center gap-1.5"
+                  >
+                    <Boxes className="w-3.5 h-3.5 text-[#006938]" />
+                    <span>Tìm hiểu hệ sinh thái</span>
+                  </a>
+                  <a
+                    href="#lien-he"
+                    className="px-3 py-1.5 rounded-xl bg-[#006938]/10 hover:bg-[#006938]/20 text-[#006938] text-xs font-bold transition flex items-center gap-1.5"
+                  >
+                    <PhoneCall className="w-3.5 h-3.5" />
+                    <span>Liên hệ</span>
+                  </a>
                 </div>
               </div>
 

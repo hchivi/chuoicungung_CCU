@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ChevronRight, Sparkles } from 'lucide-react';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { STAGE_ID_TO_SLUG_MAP, PHASE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 
 export default function InteractivePhaseWheel({ activeStageId = null, onSelectStage = null }) {
   const { t, lang } = useLanguage();
@@ -15,7 +16,8 @@ export default function InteractivePhaseWheel({ activeStageId = null, onSelectSt
     if (onSelectStage) {
       onSelectStage(id);
     } else {
-      navigate(`/giai-doan/${id}`);
+      const stageSlug = selectedStage.slug || STAGE_ID_TO_SLUG_MAP[id] || id;
+      navigate(`/giai-doan/${stageSlug}`);
     }
   };
 
@@ -206,7 +208,7 @@ export default function InteractivePhaseWheel({ activeStageId = null, onSelectSt
               {selectedStage.phases.map((phase) => (
                 <Link
                   key={phase.id}
-                  to={`/pha/${phase.id}`}
+                  to={`/pha/${phase.slug || PHASE_ID_TO_SLUG_MAP[phase.id] || phase.id}`}
                   className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition flex items-center justify-between group"
                 >
                   <div className="flex items-center space-x-2 min-w-0">
@@ -232,7 +234,7 @@ export default function InteractivePhaseWheel({ activeStageId = null, onSelectSt
               {selectedStage.stats.enterprises} {lang === 'en' ? 'suppliers participating' : 'doanh nghiệp tham gia'}
             </span>
             <Link
-              to={`/giai-doan/${selectedStage.id}`}
+              to={`/giai-doan/${selectedStage.slug || STAGE_ID_TO_SLUG_MAP[selectedStage.id] || selectedStage.id}`}
               className="inline-flex items-center space-x-1 text-xs font-bold text-sky-300 hover:text-white transition group font-heading"
             >
               <span>{lang === 'en' ? `Explore Stage ${selectedStage.id}` : `Khám phá chi tiết Giai đoạn ${selectedStage.id}`}</span>

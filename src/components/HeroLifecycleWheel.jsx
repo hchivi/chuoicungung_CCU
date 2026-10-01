@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { STAGE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 
 export default function HeroLifecycleWheel({ activeStageId = null, onSelectStage = null }) {
   const { t } = useLanguage();
@@ -124,7 +125,7 @@ export default function HeroLifecycleWheel({ activeStageId = null, onSelectStage
     if (onSelectStage) {
       onSelectStage(id);
     } else {
-      navigate(`/giai-doan/${id}`);
+      navigate(`/giai-doan/${STAGE_ID_TO_SLUG_MAP[id] || id}`);
     }
   };
 

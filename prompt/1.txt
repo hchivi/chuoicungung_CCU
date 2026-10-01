@@ -1,0 +1,763 @@
+Với Page 01 — Trang chủ /, tôi khuyên không để Antigravity “tự nghĩ lại website”, mà giao cho nó một spec đóng gồm URL, mục tiêu, UX/UI, dữ liệu, API, backend, SEO, responsive và tiêu chí nghiệm thu.
+Theo tài liệu, trang chủ là điểm vào hệ thống, CTA chính xoay quanh “Đăng nhu cầu”, “Tìm nguồn”, “Giới thiệu năng lực” và “Tổ chức kết nối”; đồng thời không nên tạo thêm một danh bạ song song.   Văn bản đã dán (1) Blueprint cũng xác định homepage thuộc P0 và phải dẫn người dùng vào luồng xử lý nhu cầu thực tế.   Văn bản đã dán (2)
+PAGE 01 — TRANG CHỦ CHUOICUNGUNG.COM
+1. Thông số trang
+Hạng mục	Chốt triển khai
+Tên page	Trang chủ
+URL	/
+Không tạo	/home, /homepage, /index
+Canonical	https://chuoicungung.com/
+Ưu tiên	P0
+Đối tượng	Nhà máy, Nhà cung ứng, Hội/Hiệp hội, KCN, Nhà tài trợ, Đối tác Đồng hành, doanh nghiệp nước ngoài, chuyên gia
+Mục tiêu chính	Đưa người dùng vào đúng workflow
+CTA số 1	Hỏi SUPPI & CHAINY
+CTA số 2	Đăng nhu cầu
+CTA số 3	Giới thiệu năng lực
+CTA số 4	Tổ chức kết nối
+KPI chính	homepage → /tro-ly-ai → requirement draft
+KPI phụ	đăng nhu cầu, tạo hồ sơ NCC, mở chương trình, gửi đề xuất hợp tác
+
+
+Điểm mới so với bản cũ: Homepage không chỉ dẫn vào /dang-nhu-cau nữa. Vì chúng ta đã chốt AI Workspace, nên điểm vào tự nhiên nhất là:
+Trang chủ → nói nhu cầu → /tro-ly-ai → SUPPI hiểu → tự tạo Requirement Draft → /dang-nhu-cau đã điền sẵn.
+2. HEADER TRANG CHỦ
+Tôi đề xuất header desktop:
+[LOGO CHUỖI CUNG ỨNG]
+
+Tìm nguồn
+Nhu cầu
+6 Giai đoạn
+Chương trình
+Hệ sinh thái
+Dịch vụ
+Hợp tác
+
+                    🔍
+              [ Hỏi SUPPI & CHAINY ]
+              [ Đăng nhập ]
+
+Không nên nhét quá nhiều mục trực tiếp trên header.
+Dropdown HỆ SINH THÁI
+Nhà cung ứng
+Nhà máy
+Khu công nghiệp
+Hội / Hiệp hội
+Đối tác
+Catalogue
+
+Dropdown DỊCH VỤ
+Tìm nguồn cung
+Tổ chức kết nối
+Hồ sơ & truyền thông
+Video giới thiệu
+Catalogue
+Vật phẩm sự kiện
+Hiện diện từ xa
+
+Dropdown HỢP TÁC
+Đối tác Đồng hành Sáng lập
+Nhà tài trợ
+Đối tác phát triển
+Chuyên gia / Cố vấn
+Nhà đầu tư
+Hợp tác quốc tế
+
+Header mobile:
+[Logo]       [SUPPI/CHAINY icon] [☰]
+
+Không cố nhét menu desktop xuống mobile.
+3. BLOCK 01 — HERO
+Đây phải là vùng quan trọng nhất homepage.
+Nội dung
+Badge nhỏ
+SUPPI & CHAINY · TRỢ LÝ CHUỖI CUNG ỨNG
+H1
+BẠN ĐANG CẦN GÌ CHO DOANH NGHIỆP?
+Sub
+Mô tả nhu cầu bằng cách của bạn. SUPPI giúp làm rõ và tìm nguồn phù hợp; CHAINY hỗ trợ kết nối và theo việc đến kết quả.
+Ô lớn
+Placeholder:
+Ví dụ: Nhà máy tôi tại Đồng Nai cần 500 bộ đồng phục công nhân, tháng sau cần hàng và muốn xem mẫu trước...
+
+Button:
+HỎI SUPPI & CHAINY →
+Quick prompts
+Tìm nhà cung ứng
+Tìm nguồn thay thế
+Tìm cơ hội kinh doanh
+Tổ chức kết nối
+Tìm đối tác tại Việt Nam
+Logic Hero
+User chưa login nhập:
+Tôi cần thùng carton 5 lớp tại Đồng Nai.
+
+Khi submit:
+/
+↓
+/tro-ly-ai?q=...
+↓
+SUPPI đọc query
+↓
+Intent Detection
+↓
+Requirement Draft
+
+Không gửi thẳng sang Google Search.
+Không bắt login.
+Không đăng nhu cầu công khai ngay.
+4. BLOCK 02 — 3 LỐI VÀO CHÍNH
+Tài liệu trước xác định ba lối vào: tìm NCC, giới thiệu năng lực và tổ chức kết nối.   Văn bản đã dán (1)
+Tôi giữ logic đó nhưng sửa wording:
+CARD 01
+TÔI ĐANG CẦN NGUỒN CUNG
+Bạn có một nhu cầu cụ thể?
+SUPPI giúp làm rõ yêu cầu và tìm nguồn phù hợp.
+CTA:
+Bắt đầu với SUPPI →
+→ /tro-ly-ai?role=factory&intent=sourcing
+CARD 02
+TÔI MUỐN TÌM KHÁCH HÀNG
+Doanh nghiệp của bạn có sản phẩm, dịch vụ hoặc năng lực cung ứng?
+Chuẩn hóa hồ sơ để SUPPI có thể tìm đúng cơ hội.
+CTA:
+Giới thiệu năng lực →
+→ /tao-ho-so
+CARD 03
+TÔI MUỐN TỔ CHỨC KẾT NỐI
+Dành cho Hội, Hiệp hội, KCN và tổ chức kết nối kinh doanh.
+Thu nhu cầu, tìm nguồn, tổ chức gặp gỡ và theo dõi sau chương trình.
+CTA:
+Đề xuất chương trình →
+→ /dich-vu/to-chuc-ket-noi
+5. BLOCK 03 — SUPPI & CHAINY
+Không để mascot chỉ là hình trang trí. Blueprint đã xác định SUPPI phụ trách nhu cầu/tìm nguồn và CHAINY phụ trách kết nối, lịch, follow-up.   Văn bản đã dán (2)
+Headline
+HAI TRỢ LÝ — MỘT QUY TRÌNH
+SUPPI
+TÌM ĐÚNG NGUỒN
+SUPPI giúp bạn:
+Tìm nhà cung ứng
+Làm rõ nhu cầu
+Tìm nguồn thay thế
+So sánh khả năng đáp ứng
+Tìm cơ hội phù hợp
+Hoàn thiện hồ sơ năng lực
+CTA:
+Hỏi SUPPI →
+CHAINY
+KẾT NỐI & THEO VIỆC ĐẾN CÙNG
+CHAINY giúp bạn:
+Kết nối hai bên
+Sắp lịch gặp
+Theo dõi mẫu / khảo sát
+Theo dõi báo giá
+Nhắc việc tiếp theo
+Ghi nhận kết quả
+CTA:
+Hỏi CHAINY →
+Câu chốt
+MỘT NHU CẦU
+→ SUPPI tìm nguồn
+→ CHAINY kết nối
+→ CHUOICUNGUNG.COM theo dõi đến kết quả
+6. BLOCK 04 — CHỌN VAI TRÒ
+Đây là block tôi đề nghị bổ sung so với homepage cũ.
+Headline
+CHUOICUNGUNG.COM CÓ THỂ GIÚP GÌ CHO BẠN?
+Cards:
+🏭 Nhà máy
+Tìm nguồn · So sánh NCC · Đăng nhu cầu
+→ /tro-ly-ai?role=factory
+📦 Nhà cung ứng
+Tìm cơ hội · Hoàn thiện hồ sơ · Kết nối nhà máy
+→ /tro-ly-ai?role=supplier
+🤝 Hội / Hiệp hội
+Thu nhu cầu · Kết nối hội viên · Theo dõi kết quả
+→ /tro-ly-ai?role=association
+🏢 Khu công nghiệp
+Nhu cầu nhà máy · NCC địa phương · Chương trình KCN
+→ /tro-ly-ai?role=industrial-park
+⭐ Nhà tài trợ
+Chương trình · Ngành hàng · Đồng hành
+→ /tro-ly-ai?role=sponsor
+💎 Đối tác Đồng hành
+Ngành hàng · Địa bàn · Hiện diện ưu tiên
+→ /founding-partner
+Có nút:
+Xem tất cả vai trò →
+7. BLOCK 05 — BẢN ĐỒ 6 GIAI ĐOẠN
+Headline
+NHU CẦU CỦA NHÀ MÁY XUẤT HIỆN TRONG SUỐT VÒNG ĐỜI
+6 cards:
+01 Chuẩn bị & Đầu tư
+02 Thiết kế & Xây dựng
+03 Lắp đặt & Hoàn thiện
+04 Vận hành Sản xuất
+05 Nhân sự & Hậu cần
+06 Mở rộng · Tối ưu · Chuyển đổi
+Click:
+/giai-doan/[slug]
+Không hard-code count.
+Ví dụ:
+Vận hành sản xuất
+12 nhóm nhu cầu
+148 nhà cung ứng
+24 nhu cầu đang mở
+
+chỉ hiển thị nếu database thật có số liệu.
+8. BLOCK 06 — NHU CẦU ĐANG TÌM NGUỒN
+Blueprint đã yêu cầu không công khai buyer nếu chưa có quyền.   Văn bản đã dán (2)
+Headline
+NHU CẦU ĐANG TÌM NGUỒN
+Demand Card:
+NC-2026-00125
+
+Đồng phục công nhân
+
+500 bộ
+Đồng Nai
+Cần mẫu trước
+Hạn phản hồi: 05/10/2026
+
+Đang tìm nguồn
+
+CTA:
+Xem nhu cầu
+Secondary CTA cho NCC:
+Tôi có khả năng đáp ứng
+Không hiển thị:
+- số điện thoại buyer;
+- email;
+- tên người mua;
+- file nội bộ;
+- giá mục tiêu riêng tư.
+9. BLOCK 07 — NHÀ CUNG ỨNG
+Headline
+KHÁM PHÁ NHÀ CUNG ỨNG THEO NĂNG LỰC
+Không dùng:
+Top 10 nhà cung ứng tốt nhất
+
+nếu chưa có cơ sở xếp hạng.
+Supplier Card:
+[Logo]
+
+CÔNG TY ABC
+
+Năng lực:
+Đồng phục công nhân · PPE
+
+Địa bàn:
+TP.HCM · Đồng Nai · Bình Dương
+
+Hồ sơ cập nhật:
+20/09/2026
+
+[Xem năng lực]
+
+CTA:
+Tìm tất cả nhà cung ứng →
+→ /doanh-nghiep
+10. BLOCK 08 — CHƯƠNG TRÌNH
+Tài liệu yêu cầu homepage lấy chương trình từ cùng dữ liệu /chuong-trinh, không nhập card thủ công.   Văn bản đã dán (1)
+Headline
+CHƯƠNG TRÌNH DÀNH CHO DOANH NGHIỆP
+ProgramCard:
+[Ảnh]
+
+NGÀY HỘI CHUỖI CUNG ỨNG...
+
+28/10/2026
+Long Thành · Đồng Nai
+
+Dành cho:
+Nhà máy · Nhà cung ứng · Đối tác
+
+[Đang nhận đăng ký]
+
+[Xem chương trình]
+
+Nếu không có chương trình:
+Không để block trống.
+Hiển thị:
+CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP?
+Đăng ký ngành và địa bàn để nhận thông tin.
+11. BLOCK 09 — DỊCH VỤ
+Headline
+DỊCH VỤ HỖ TRỢ KẾT NỐI
+4 card chính:
+Tìm nguồn cung
+Tổ chức kết nối
+Hồ sơ & truyền thông doanh nghiệp
+Vật phẩm doanh nghiệp & sự kiện
+Secondary:
+Catalogue
+Hiện diện từ xa
+CTA:
+Xem tất cả dịch vụ
+→ /dich-vu
+12. BLOCK 10 — HỢP TÁC
+Headline
+CÙNG XÂY HỆ SINH THÁI CHUỖI CUNG ỨNG
+Cards:
+Hội / Hiệp hội
+Khu công nghiệp
+Nhà tài trợ
+Đối tác Đồng hành Sáng lập
+Đối tác phát triển
+Doanh nghiệp quốc tế
+CTA:
+Đề xuất hợp tác →
+→ /hop-tac
+Không hiển thị logo đối tác nếu chưa có quyền hoặc quan hệ chưa xác nhận. Tài liệu cũng yêu cầu chỉ công bố đối tác đã được xác nhận.   Văn bản đã dán (1)
+13. BLOCK 11 — CTA CUỐI
+Background lớn, đơn giản.
+MỘT NHU CẦU THẬT.
+MỘT KẾT NỐI ĐÚNG.
+MỘT KẾT QUẢ CÓ THỂ THEO DÕI.
+Hai nút:
+HỎI SUPPI & CHAINY
+GIỚI THIỆU NĂNG LỰC
+14. FOOTER
+Tôi chia 5 nhóm:
+CHUOICUNGUNG.COM
+
+TÌM NGUỒN
+Nhà cung ứng
+Sàn nhu cầu
+6 Giai đoạn
+SUPPI & CHAINY
+
+HỆ SINH THÁI
+Nhà máy
+KCN
+Hội / Hiệp hội
+Đối tác
+
+CHƯƠNG TRÌNH
+Ngày hội
+Chương trình kết nối
+Catalogue
+
+HỢP TÁC
+Founding Partner
+Tài trợ
+Đối tác phát triển
+
+HỖ TRỢ
+Giới thiệu
+Liên hệ
+Điều khoản
+Quyền riêng tư
+
+15. DATABASE TRANG CHỦ
+Không tạo bảng homepage_cards cho mọi thứ.
+Trang chủ nên đọc dữ liệu thật từ các module.
+Block	Data source
+Hero quick prompts	config/CMS
+3 lối vào	config/CMS
+Role cards	config
+6 giai đoạn	stages, categories
+Nhu cầu	requirements
+NCC	organizations, supplier_capabilities
+Chương trình	programs
+Dịch vụ	services
+Đối tác	partners, sponsors
+Founding Partner	founding_partnerships
+
+
+Không tạo duplicate data
+Ví dụ chương trình homepage phải lấy từ:
+programs
+
+chứ không phải:
+homepage_programs
+
+Có thể có bảng/config:
+homepage_featured_items
+
+nhưng chỉ để lưu:
+entity_type
+entity_id
+position
+start_at
+end_at
+is_active
+
+16. API TRANG CHỦ
+Tôi khuyên dùng một endpoint tổng hợp:
+GET /api/home
+
+Response logic:
+{
+  "stages": [],
+  "openRequirements": [],
+  "featuredSuppliers": [],
+  "programs": [],
+  "services": [],
+  "partners": []
+}
+
+Hoặc nếu framework hiện tại ưu tiên server components/server-side query thì không nhất thiết phải tạo API chỉ để frontend gọi chính backend của mình.
+Để Antigravity tự lựa chọn theo stack hiện tại.
+Nhưng business service nên tách:
+HomeService
+RequirementService
+SupplierService
+ProgramService
+PartnerService
+
+Không viết query trực tiếp khắp component React/Vue.
+17. QUERY RULES
+Nhu cầu homepage
+Chỉ lấy:
+status = ACTIVE / SOURCING
+visibility = PUBLIC_SUMMARY
+not expired
+approved = true
+
+Sort:
+featured DESC
+published_at DESC
+
+Supplier homepage
+Chỉ lấy profile:
+is_active = true
+profile_publishable = true
+
+Không tự gọi là “đã xác minh” nếu chưa có verification thật.
+Program homepage
+status IN:
+UPCOMING
+OPEN_REGISTRATION
+SURVEYING
+
+Chương trình đã hết:
+→ tự bỏ CTA đăng ký.
+18. BACKEND CHO HERO CHAT
+Đây là phần mới quan trọng.
+Khi guest submit Hero:
+POST /api/ai/session
+
+Request:
+{
+  "message": "...",
+  "source": "homepage",
+  "role": null
+}
+
+Response:
+{
+  "sessionId": "...",
+  "redirectUrl": "/tro-ly-ai?session=..."
+}
+
+Không tạo requirement ngay ở frontend.
+Sau khi /tro-ly-ai nhận message:
+Intent Detection
+↓
+nếu là nhu cầu thật
+↓
+RequirementDraft
+
+Frontend không tự quyết định business intent.
+19. LOGIN
+Trang chủ không yêu cầu login.
+Header guest:
+Hỏi SUPPI & CHAINY
+Đăng nhập
+
+Đã login:
+🔔
+Tên tổ chức
+Vai trò
+Avatar ▼
+
+Dropdown:
+Công việc của tôi
+Nhu cầu của tôi
+Hồ sơ tổ chức
+Kết nối
+Cài đặt
+Đăng xuất
+
+20. SEO
+Homepage:
+<title>
+Chuỗi Cung Ứng | Tìm Nhà Cung Ứng & Kết Nối Nhu Cầu B2B
+</title>
+
+Meta description đề xuất:
+CHUOICUNGUNG.COM hỗ trợ doanh nghiệp làm rõ nhu cầu, tìm nhà cung ứng theo năng lực và địa bàn, kết nối và theo dõi công việc đến kết quả.
+
+H1 duy nhất:
+Bạn đang cần gì cho doanh nghiệp?
+
+Schema:
+Organization
+WebSite
+SearchAction
+
+Chưa khai báo các schema hoặc mối quan hệ với cơ quan/tổ chức nếu chưa có cơ sở chính thức.
+21. URL / SLUG RULE
+Từ Homepage trở đi chốt luôn convention:
+lowercase
+không dấu
+dùng dấu -
+không _
+
+Ví dụ:
+/dang-nhu-cau
+/tro-ly-ai
+/doanh-nghiep
+/khu-cong-nghiep
+/hoi-hiep-hoi
+/chuong-trinh
+/founding-partner
+
+Dynamic:
+/doanh-nghiep/cong-ty-abc
+/chuong-trinh/ngay-hoi-chuoi-cung-ung-long-thanh-2026
+
+ID không nên làm URL public chính:
+/doanh-nghiep/827272
+
+nhưng database vẫn dùng UUID/id riêng.
+22. UX MOBILE
+Thứ tự mobile:
+Header
+↓
+Hero chat
+↓
+Quick prompts
+↓
+3 lối vào
+↓
+SUPPI / CHAINY
+↓
+Vai trò
+↓
+6 giai đoạn
+↓
+Nhu cầu
+↓
+NCC
+↓
+Chương trình
+↓
+Dịch vụ
+↓
+Hợp tác
+↓
+CTA
+↓
+Footer
+
+Không dùng carousel quá nhiều.
+Cards có thể horizontal scroll ở:
+- role;
+- nhu cầu;
+- NCC;
+- chương trình.
+CTA chính nên sticky nhẹ ở mobile:
+Hỏi SUPPI & CHAINY
+nhưng không che nội dung.
+23. PERFORMANCE
+Trang chủ không cần 3D nặng.
+Ảnh:
+WebP/AVIF
+lazy loading
+responsive sizes
+
+Không preload hàng chục ảnh.
+Mascot SUPPI/CHAINY:
+dùng asset tối ưu, không video nặng mặc định.
+Target:
+LCP < 2.5s
+CLS < 0.1
+INP tốt
+
+Antigravity phải báo nếu feature mới làm tăng bundle đáng kể.
+24. ANALYTICS EVENTS
+Ngay từ homepage nên track:
+home_view
+hero_prompt_started
+hero_prompt_submitted
+
+entry_sourcing_clicked
+entry_supplier_clicked
+entry_program_clicked
+
+assistant_suppi_clicked
+assistant_chainy_clicked
+
+role_selected
+
+requirement_card_clicked
+supplier_card_clicked
+program_card_clicked
+
+login_clicked
+
+Đừng chỉ track pageview.
+25. ACCEPTANCE TEST — PAGE HOME CHỈ ĐƯỢC COI LÀ XONG KHI
+Homepage mở được không lỗi.
+Guest nhập:
+“Nhà máy tôi tại Đồng Nai cần 500 bộ đồng phục.”
+
+Bấm:
+Hỏi SUPPI & CHAINY
+Phải:
+Homepage
+↓
+/tro-ly-ai
+↓
+message vẫn còn
+↓
+SUPPI nhận được context
+
+Không login.
+Không mất text.
+Không tự đăng nhu cầu.
+Các card nhu cầu phải lấy DB thật.
+Program hết hạn không hiện CTA đăng ký.
+NCC không có quyền publish không xuất hiện.
+Mobile không overflow.
+Không console error.
+Không API mock ở production.
+Không fake badge/count.
+Không hard-code “500+ nhà máy”, “24.000 NCC” nếu chưa có dữ liệu thật.
+BÂY GIỜ ANH LÀM VỚI ANTIGRAVITY NHƯ THẾ NÀO?
+Không đưa toàn bộ phần trên vào Antigravity một lần.
+Chúng ta chia PAGE 01 thành 4 prompt.
+PROMPT HOME-01 — AUDIT TRANG CHỦ HIỆN TẠI
+Anh copy nguyên prompt này trước:
+PROJECT: CHUOICUNGUNG.COM
+PAGE: 01 — HOMEPAGE
+ROUTE: /
+
+Ở bước này CHƯA redesign và CHƯA code business feature mới.
+
+Hãy audit riêng Homepage hiện tại và những dependency trực tiếp của Homepage.
+
+1. Xác định file/component render route "/".
+2. Xác định:
+- layout
+- header
+- footer
+- navigation
+- hero
+- search
+- existing sections
+- responsive behavior
+- authentication state
+- API
+- database query
+- CMS/config
+- analytics
+- SEO metadata
+
+3. Liệt kê tất cả component Homepage đang sử dụng.
+
+4. Với từng component ghi:
+- file path
+- chức năng
+- data source
+- hard-coded hay database
+- reusable hay không
+- giữ / sửa / bỏ
+- dependency
+
+5. Kiểm tra các CTA hiện tại đang dẫn đi đâu.
+
+6. Kiểm tra các route sau đã tồn tại chưa:
+/
+/tro-ly-ai
+/dang-nhu-cau
+/tao-ho-so
+/doanh-nghiep
+/san-nhu-cau
+/ban-do-6-giai-doan
+/chuong-trinh
+/dich-vu
+/founding-partner
+/hop-tac
+
+7. Kiểm tra database hiện tại đã có các entity tương đương:
+categories
+stages
+requirements
+organizations
+supplier_capabilities
+programs
+services
+partners
+founding_partnerships
+
+Không tạo table mới trong bước này.
+
+8. Kiểm tra Homepage có các số liệu hard-code hoặc claim chưa lấy từ database không.
+
+9. Kiểm tra SEO:
+title
+description
+canonical
+H1
+Open Graph
+structured data
+
+10. Kiểm tra responsive desktop/mobile.
+
+11. Xuất kết quả thành:
+
+docs/pages/home/HOME_CURRENT_AUDIT.md
+
+với bảng:
+
+CURRENT
+KEEP
+MODIFY
+REMOVE
+MISSING
+RISK
+
+12. Sau audit, đề xuất mapping từ Homepage hiện tại sang các block mục tiêu:
+
+01 Header
+02 Hero AI Entry
+03 Ba lối vào
+04 SUPPI & CHAINY
+05 Vai trò người dùng
+06 Bản đồ 6 giai đoạn
+07 Nhu cầu đang tìm nguồn
+08 Nhà cung ứng
+09 Chương trình
+10 Dịch vụ
+11 Hợp tác
+12 Final CTA
+13 Footer
+
+DỪNG LẠI SAU AUDIT.
+
+Không redesign.
+Không migration.
+Không xóa component.
+Không sửa database.
+Không tự tạo mock data.
+
+Anh chạy prompt này trước.
+Khi Antigravity trả về HOME_CURRENT_AUDIT.md, gửi file đó lại cho tôi.
+Lúc đó tôi sẽ viết tiếp cho anh:
+HOME-02 — Database + Backend Mapping
+→ không phá database hiện tại.
+Sau đó:
+HOME-03 — UX/UI + Responsive
+Cuối cùng:
+HOME-04 — Integration + SEO + QA + nghiệm thu
+Và khi Homepage đạt hết acceptance test, anh chỉ cần nói:
+“Tiếp tục Page 02”
+
+thì tôi sẽ chuyển sang:
+PAGE 02 — /tro-ly-ai
+và làm lại đúng format này từ slug → UX/UI → database → backend → SUPPI → CHAINY → login → CRM → Zalo → mobile → test, rồi mới sang /dang-nhu-cau.
+Tôi đề nghị thứ tự toàn bộ website từ đây là:
+01 / → 02 /tro-ly-ai → 03 /dang-nhu-cau → 04 Workspace nhu cầu → 05 /doanh-nghiep → 06 Hồ sơ NCC → 07 /san-nhu-cau → sau đó mới tới 6 Giai đoạn, từ khóa, chương trình, Hội, KCN, dịch vụ, Founding Partner và các phần mở rộng.

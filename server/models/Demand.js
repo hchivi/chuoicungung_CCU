@@ -13,8 +13,10 @@ const demandSchema = new mongoose.Schema({
   budget: { type: String },
   deadline: { type: String },
   requirements: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'approved', 'closed'], default: 'approved' },
+  status: { type: String, enum: ['draft', 'pending', 'approved', 'rejected', 'closed'], default: 'pending' },
   responsesCount: { type: Number, default: 0 },
 }, { timestamps: true });
+
+demandSchema.index({ status: 1, category: 1, location: 1, deadline: 1 });
 
 export default mongoose.models.Demand || mongoose.model('Demand', demandSchema);

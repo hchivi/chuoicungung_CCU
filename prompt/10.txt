@@ -1,0 +1,485 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 10: BẢN ĐỒ 6 GIAI ĐOẠN
+ROUTE: /ban-do-6-giai-doan
+
+MỤC TIÊU:
+Biến trang này thành bản đồ điều hướng chính của hệ thống Chuỗi Cung Ứng.
+
+Logic bắt buộc:
+
+GIAI ĐOẠN
+→ NHÓM NHU CẦU
+→ CHUYÊN MỤC
+→ NHÀ CUNG ỨNG
+→ CHƯƠNG TRÌNH
+
+Đây không phải page marketing.
+Đây là bản đồ giúp người dùng xác định:
+- mình đang ở giai đoạn nào;
+- đang có nhu cầu gì;
+- nên xem chuyên mục nào;
+- có NCC nào liên quan;
+- có chương trình nào phù hợp.
+
+Không làm 3D nặng.
+Không tạo page độc lập duplicate cho cùng taxonomy.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/ban-do-6-giai-doan
+
+Kiểm tra hiện tại có:
+
+stages
+stage groups
+categories
+keywords
+suppliers
+programs
+existing routes
+existing map components
+
+Reuse taxonomy hiện có.
+
+Không tạo một bộ taxonomy mới tách khỏi:
+/nganh-nghe
+/tu-khoa
+/doanh-nghiep
+/chuong-trinh
+
+==================================================
+2. 6 GIAI ĐOẠN
+==================================================
+
+Giữ đúng 6 giai đoạn hiện tại của MASTER:
+
+1. Chuẩn bị & Đầu tư
+2. Thiết kế & Xây dựng
+3. Lắp đặt & Hoàn thiện
+4. Vận hành Sản xuất
+5. Nhân sự & Hậu cần
+6. Mở rộng – Tối ưu – Chuyển đổi
+
+Mỗi Stage cần:
+
+id
+name
+slug
+order
+shortDescription
+icon/image
+status
+publishable
+
+Relations:
+
+stage
+→ need groups
+→ categories
+→ keywords
+→ suppliers
+→ programs
+
+Không hard-code toàn bộ relation trong frontend.
+
+==================================================
+3. UX/UI DESKTOP
+==================================================
+
+SECTION 01 — HERO
+
+H1:
+“BẢN ĐỒ 6 GIAI ĐOẠN CHUỖI CUNG ỨNG”
+
+Sub:
+“Khám phá nhu cầu, nguồn cung và chương trình theo từng giai đoạn trong vòng đời của nhà máy.”
+
+CTA:
+[XÁC ĐỊNH GIAI ĐOẠN CỦA TÔI]
+[ĐĂNG NHU CẦU]
+
+--------------------------------------------------
+
+SECTION 02 — VISUAL 6 GIAI ĐOẠN
+
+Desktop có thể dùng:
+
+- vòng tròn 6 phần;
+hoặc
+- timeline;
+hoặc
+- 6 card liên kết trực quan.
+
+Yêu cầu:
+
+Hover:
+hiện mô tả ngắn.
+
+Click:
+mở chi tiết stage ngay trên page hoặc link:
+/giai-doan/[slug]
+
+Không dùng WebGL/3D nặng nếu không cần.
+
+--------------------------------------------------
+
+SECTION 03 — 6 STAGE CARDS
+
+Mỗi card hiển thị:
+
+Tên giai đoạn
+Mô tả ngắn
+Các nhóm nhu cầu chính
+Số category thực tế nếu có
+Số NCC nếu có dữ liệu thật
+Số chương trình liên quan nếu có
+
+CTA:
+[XEM GIAI ĐOẠN]
+
+Không hard-code count.
+
+==================================================
+4. DRILL-DOWN
+==================================================
+
+Khi người dùng chọn 1 Giai đoạn:
+
+Hiển thị:
+
+GIAI ĐOẠN
+↓
+NHÓM NHU CẦU
+↓
+CATEGORY
+↓
+KEYWORD / USE CASE
+
+Ví dụ:
+
+Giai đoạn 5
+Nhân sự & Hậu cần
+
+→ Nhóm nhu cầu
+→ Đồng phục & BHLĐ
+→ Logistics
+→ Phúc lợi
+...
+
+Category link:
+/nganh-nghe/[slug]
+
+Keyword link:
+/tu-khoa/[slug]
+
+Không tạo nội dung duplicate.
+
+==================================================
+5. NHÀ CUNG ỨNG LIÊN QUAN
+==================================================
+
+Khi user chọn:
+
+Stage
++
+Category
+
+Reuse:
+SupplierSearchService
+
+Hiển thị SupplierCard từ Page 05.
+
+Không build search engine riêng.
+
+Supplier chỉ xuất hiện khi:
+- có relation category/capability phù hợp;
+- profile đang publish;
+- data được phép public.
+
+Không dùng:
+Top Supplier
+Best Supplier
+fake rating.
+
+==================================================
+6. CHƯƠNG TRÌNH LIÊN QUAN
+==================================================
+
+Sau mỗi Stage hoặc Category có thể load:
+
+Chương trình đang mở
+Chương trình sắp tới
+Ngày hội
+Buyer–Supplier Meeting
+
+Dữ liệu lấy từ programs.
+
+Không hard-code event cards.
+
+Nếu không có:
+ẩn block.
+
+==================================================
+7. SUPPI
+==================================================
+
+SUPPI phải nhận context từ bản đồ.
+
+Ví dụ user chọn:
+
+Giai đoạn 4
+→ Vận hành sản xuất
+→ Bao bì
+
+và hỏi:
+
+“Tôi cần thùng carton giao tại Đồng Nai.”
+
+SUPPI phải nhận sẵn:
+
+stageId
+categoryId
+keywordId nếu có
+
+và tạo RequirementDraft.
+
+Không hỏi lại thông tin đã biết.
+
+CTA:
+
+[HỎI SUPPI VỀ GIAI ĐOẠN NÀY]
+
+==================================================
+8. XÁC ĐỊNH GIAI ĐOẠN CỦA TÔI
+==================================================
+
+Tạo flow đơn giản:
+
+“Nhà máy hiện đang ở trạng thái nào?”
+
+User có thể chọn:
+
+Chuẩn bị đầu tư
+Đang xây dựng
+Đang lắp máy
+Đang sản xuất
+Đang tuyển dụng / hậu cần
+Đang mở rộng / tối ưu
+
+Kết quả:
+
+“Bạn có thể đang ở Giai đoạn X.”
+
+Sau đó hiển thị:
+- nhóm nhu cầu liên quan;
+- chuyên mục liên quan;
+- CTA tìm nguồn;
+- CTA đăng nhu cầu.
+
+Đây chỉ là trợ giúp điều hướng,
+không phải đánh giá/chứng nhận nhà máy.
+
+==================================================
+9. DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+stages
+need_groups
+categories
+keywords
+
+Relations:
+
+stage_need_groups
+need_group_categories
+category_keywords
+
+supplier_categories
+program_categories
+
+Không duplicate supplier/program data.
+
+Nếu cần stage mapping cho supplier/program:
+dùng relation table,
+không copy object.
+
+==================================================
+10. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/giai-doan
+
+/admin/giai-doan/[id]
+
+Admin quản lý:
+
+Tên
+Slug
+Order
+Mô tả
+Icon/Image
+Need Groups
+Categories
+Keywords
+Suppliers relation
+Programs relation
+Publish status
+
+Admin view:
+
+GIAI ĐOẠN
+→ NHÓM NHU CẦU
+→ CATEGORY
+→ KEYWORD
+
+Cho phép drag/reorder nếu phù hợp.
+
+Admin phải thấy:
+
+- số category;
+- số keyword;
+- số supplier;
+- số program;
+- node chưa có dữ liệu;
+- node unpublished.
+
+Không hard delete stage/category đã có historical relations.
+
+Dùng:
+ARCHIVED / INACTIVE
+
+Mọi thay đổi ghi AuditLog.
+
+==================================================
+11. SEO
+==================================================
+
+Title:
+
+Bản Đồ 6 Giai Đoạn Chuỗi Cung Ứng | CHUOICUNGUNG.COM
+
+Meta:
+
+Khám phá nhu cầu, chuyên mục, nhà cung ứng và chương trình theo 6 giai đoạn trong vòng đời của nhà máy.
+
+Canonical:
+
+/ban-do-6-giai-doan
+
+Schema:
+CollectionPage
+BreadcrumbList
+
+Không cần tạo hàng loạt URL filter để index.
+
+==================================================
+12. MOBILE
+==================================================
+
+Mobile KHÔNG dùng vòng tròn phức tạp bắt buộc.
+
+Chuyển thành:
+
+Accordion / Cards
+
+Giai đoạn 1
+↓
+Nhóm nhu cầu
+↓
+Category
+
+Giai đoạn 2
+...
+
+Ưu tiên:
+
+- dễ đọc;
+- chạm được;
+- không zoom;
+- không overflow;
+- không animation nặng.
+
+CTA sticky có thể là:
+
+[ĐĂNG NHU CẦU]
+
+==================================================
+13. PERFORMANCE
+==================================================
+
+Không dùng:
+heavy WebGL
+large 3D library
+video background nặng
+
+Chỉ dùng:
+CSS
+SVG
+light animation
+intersection observer nếu cần.
+
+Lazy-load:
+supplier lists
+program cards
+images.
+
+==================================================
+14. QA
+==================================================
+
+Test:
+
+1. Đủ đúng 6 Stage.
+2. Thứ tự Stage đúng.
+3. Stage → Need Group → Category đúng relation.
+4. Category link đúng /nganh-nghe/[slug].
+5. Keyword link đúng /tu-khoa/[slug].
+6. Supplier list reuse SupplierSearchService.
+7. Program list lấy DB thật.
+8. Count không hard-code.
+9. SUPPI nhận context đúng.
+10. RequirementDraft giữ stage/category context.
+11. Unpublished node không public.
+12. Admin edit tạo AuditLog.
+13. Mobile 390px không overflow.
+14. Không có 3D nặng làm giảm performance.
+
+==================================================
+15. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Relation tables
+- API/server actions
+- Stage taxonomy implementation
+- Admin implementation
+- SUPPI context integration
+- SEO
+- Performance notes
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+6 GIAI ĐOẠN
+→ NHÓM NHU CẦU
+→ CATEGORY
+→ KEYWORD
+→ NHÀ CUNG ỨNG
+→ CHƯƠNG TRÌNH
+→ SUPPI
+→ REQUIREMENT
+
+Không biến trang này thành một infographic tĩnh.
+Nó phải là bản đồ điều hướng dữ liệu thật của CHUOICUNGUNG.COM.

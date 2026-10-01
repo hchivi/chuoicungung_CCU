@@ -1,0 +1,627 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 12: TẠO / NHẬN QUẢN LÝ HỒ SƠ
+ROUTE: /tao-ho-so
+
+MỤC TIÊU:
+
+Đây là cửa vào dành cho doanh nghiệp/tổ chức muốn:
+
+1. Tạo hồ sơ mới nếu chưa tồn tại.
+2. Tìm hồ sơ doanh nghiệp đã có.
+3. Yêu cầu quyền quản lý hồ sơ đó.
+4. Chọn vai trò của tổ chức.
+5. Hoàn thiện hồ sơ năng lực sau khi quyền quản lý được xác nhận.
+
+Đây KHÔNG phải form tạo Supplier đơn thuần.
+
+Phải hỗ trợ:
+
+Nhà cung ứng
+Nhà máy
+Hội / Hiệp hội
+KCN / Ban quản lý
+Sponsor
+Founding Partner
+FDI
+Investor
+Expert / Partner
+
+Một Organization có thể có nhiều role.
+
+KHÔNG tạo nhiều Organization chỉ vì cùng doanh nghiệp có nhiều vai trò.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Trước khi code audit:
+
+/tao-ho-so
+
+Kiểm tra:
+
+organizations
+organization_users
+organization_roles
+users
+supplier_profiles
+factory_profiles
+association_profiles
+industrial_park_profiles
+claim/profile ownership flow
+auth
+admin
+
+Reuse toàn bộ Organization Registry đã xây.
+
+Không tạo duplicate domain.
+
+==================================================
+2. UX FLOW
+==================================================
+
+Page bắt đầu bằng:
+
+H1:
+“GIỚI THIỆU DOANH NGHIỆP / TỔ CHỨC”
+
+Sub:
+“Tạo hồ sơ mới hoặc nhận quyền quản lý hồ sơ đã có trên CHUOICUNGUNG.COM.”
+
+Hai lựa chọn lớn:
+
+[TÌM HỒ SƠ ĐÃ CÓ]
+
+[TẠO HỒ SƠ MỚI]
+
+==================================================
+3. TÌM HỒ SƠ ĐÃ CÓ
+==================================================
+
+Search theo:
+
+Tên doanh nghiệp
+Tên pháp lý
+Mã số thuế
+Website/domain
+
+Hiển thị kết quả giới hạn:
+
+Tên
+Logo nếu public
+Địa bàn
+Loại tổ chức
+
+CTA:
+
+[ĐÂY LÀ DOANH NGHIỆP CỦA TÔI]
+
+Không public:
+private contact
+internal owner
+internal notes.
+
+==================================================
+4. CLAIM PROFILE
+==================================================
+
+Nếu user chọn:
+
+“ĐÂY LÀ DOANH NGHIỆP CỦA TÔI”
+
+Nếu chưa login:
+yêu cầu login.
+
+Sau đó tạo:
+
+organization_claim
+
+Fields:
+
+id
+organizationId
+requesterUserId
+
+requestedRole
+
+businessEmail?
+phone?
+
+evidenceAttachments[]
+
+note?
+
+status
+
+reviewedBy?
+reviewedAt?
+
+createdAt
+
+Status:
+
+PENDING
+NEED_MORE_INFO
+APPROVED
+REJECTED
+CANCELLED
+
+Không tự cấp quyền quản trị chỉ vì:
+email giống tên công ty
+hoặc user biết mã số thuế.
+
+==================================================
+5. XÁC NHẬN QUYỀN QUẢN LÝ
+==================================================
+
+Có thể dùng một hoặc nhiều bằng chứng:
+
+Email domain doanh nghiệp
+
+Giấy tờ doanh nghiệp
+
+Thư xác nhận
+
+Contact đã có trong hệ thống
+
+Admin manual review
+
+Không bắt buộc một phương thức duy nhất cho mọi loại tổ chức.
+
+Hội/KCN/FDI có thể cần quy trình review khác Supplier thông thường.
+
+==================================================
+6. TẠO HỒ SƠ MỚI
+==================================================
+
+Trước khi tạo mới:
+
+backend phải chạy duplicate detection.
+
+Check:
+
+taxCode
+legalName
+domain
+phone
+name similarity
+
+Nếu tìm thấy hồ sơ có thể trùng:
+
+hiển thị:
+
+“Có thể doanh nghiệp này đã tồn tại.”
+
+CTA:
+
+[XEM HỒ SƠ]
+[YÊU CẦU QUẢN LÝ]
+[VẪN TẠO MỚI]
+
+Chỉ cho tạo mới khi hợp lý.
+
+==================================================
+7. THÔNG TIN CƠ BẢN
+==================================================
+
+Form ngắn:
+
+Tên doanh nghiệp / tổ chức
+
+Tên pháp lý
+
+Mã số thuế nếu có
+
+Website
+
+Quốc gia
+
+Tỉnh / thành
+
+Địa chỉ
+
+Loại tổ chức
+
+Logo optional
+
+Không yêu cầu nhập toàn bộ hồ sơ năng lực ngay bước đầu.
+
+==================================================
+8. CHỌN VAI TRÒ
+==================================================
+
+User có thể chọn nhiều role:
+
+BUYER
+SUPPLIER
+FACTORY
+ASSOCIATION
+INDUSTRIAL_PARK
+SPONSOR
+FOUNDING_PARTNER
+FDI
+INVESTOR
+EXPERT
+PROGRAM_ORGANIZER
+DEVELOPMENT_PARTNER
+
+Không duplicate Organization theo role.
+
+Ví dụ:
+
+ABC Manufacturing
+
+roles:
+BUYER
+SUPPLIER
+FACTORY
+
+chỉ là một Organization.
+
+==================================================
+9. ROLE-SPECIFIC NEXT STEP
+==================================================
+
+Sau khi tạo/claim thành công:
+
+Nếu SUPPLIER:
+→ hoàn thiện Supplier Profile
+→ Capability
+→ Product/Service
+→ Service Area
+→ Evidence
+
+Nếu FACTORY:
+→ Factory Profile
+→ production information
+→ nhu cầu
+→ location/KCN
+
+Nếu ASSOCIATION:
+→ Association Profile
+→ scope
+→ industries
+→ programs
+
+Nếu INDUSTRIAL_PARK:
+→ Industrial Park Profile
+→ province
+→ industries
+→ factories/programs
+
+Nếu SPONSOR / FOUNDING PARTNER:
+→ chỉ tạo role/profile cơ bản.
+Không tự tạo hợp đồng tài trợ.
+
+Nếu FDI:
+→ profile + market-entry context khi module hỗ trợ.
+
+==================================================
+10. PROFILE COMPLETENESS
+==================================================
+
+Sau khi Organization được tạo/claim:
+
+hiển thị:
+
+“HỒ SƠ CỦA BẠN ĐÃ HOÀN THIỆN 45%”
+
+Checklist theo role.
+
+Supplier ví dụ:
+
+✓ Thông tin doanh nghiệp
+○ Năng lực
+○ Product/Service
+○ Địa bàn phục vụ
+○ Điều kiện nhận việc
+○ Evidence
+○ Video/Catalogue
+
+Không bắt user hoàn thành 100% mới lưu.
+
+==================================================
+11. PUBLICATION
+==================================================
+
+Tạo Organization ≠ public ngay.
+
+Phân biệt:
+
+Organization exists
+
+Profile claimed
+
+Profile completed
+
+Profile reviewed
+
+Profile published
+
+Không auto public hồ sơ ngay sau submit.
+
+Admin/workflow phải quyết định publish state theo quy tắc hiện tại.
+
+==================================================
+12. ADMIN
+==================================================
+
+Reuse:
+
+/admin/to-chuc
+/admin/to-chuc/[id]
+
+Bổ sung:
+
+/admin/yeu-cau-quan-ly-ho-so
+
+hoặc equivalent tab trong Organization Admin.
+
+Admin cần thấy:
+
+Claim ID
+
+Organization
+
+Requester
+
+Requested role
+
+Evidence
+
+Status
+
+Created date
+
+Reviewer
+
+CTA:
+
+[XÁC NHẬN]
+[YÊU CẦU BỔ SUNG]
+[TỪ CHỐI]
+
+Khi APPROVED:
+
+create organization_user membership
+
+assign appropriate role
+
+Không tạo Organization mới.
+
+==================================================
+13. ORGANIZATION MEMBERSHIP
+==================================================
+
+Reuse:
+
+organization_users
+
+Một Organization có thể có nhiều users.
+
+Ví dụ:
+
+Owner/Admin
+Procurement
+Sales
+Marketing
+Finance
+Viewer
+
+Claim approval chỉ cấp mức quyền phù hợp.
+
+Không mặc định tất cả claim thành Organization Admin
+nếu chưa được xác nhận.
+
+==================================================
+14. ADMIN DUPLICATE / MERGE
+==================================================
+
+Admin phải phát hiện:
+
+duplicate organization
+duplicate tax code
+duplicate domain
+
+Nếu duplicate:
+
+không xóa dữ liệu tùy tiện.
+
+Cho phép workflow:
+
+REVIEW
+→ MERGE
+→ REMAP RELATIONS
+→ ARCHIVE DUPLICATE
+
+Không làm mất:
+
+requirements
+supplier matches
+connections
+programs
+evidence
+audit history.
+
+==================================================
+15. SUPPI
+==================================================
+
+SUPPI có thể hỗ trợ user:
+
+“Tôi nên chọn vai trò nào?”
+
+“Hồ sơ còn thiếu gì?”
+
+“Tôi cần thêm năng lực gì?”
+
+“Làm sao để hồ sơ xuất hiện khi Buyer tìm kiếm?”
+
+SUPPI chỉ đọc trạng thái hồ sơ thực tế.
+
+Không nói:
+“Doanh nghiệp đã được xác minh”
+nếu chưa có bằng chứng.
+
+==================================================
+16. LOGIN + RETURN FLOW
+==================================================
+
+Nếu user từ:
+
+Supplier Card
+Sàn Nhu Cầu
+Homepage
+Program
+Keyword Page
+
+được chuyển tới /tao-ho-so,
+
+phải giữ source context.
+
+Ví dụ:
+
+source=san-nhu-cau
+requirement=NC-2026-00125
+
+Sau khi hoàn thiện hồ sơ:
+cho phép quay lại nhu cầu đó.
+
+Không làm user mất flow.
+
+==================================================
+17. SEO
+==================================================
+
+/tao-ho-so có thể index.
+
+Title:
+
+Tạo Hồ Sơ Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Tạo hoặc nhận quyền quản lý hồ sơ doanh nghiệp để giới thiệu năng lực, sản phẩm, địa bàn phục vụ và tham gia các cơ hội phù hợp trên CHUOICUNGUNG.COM.
+
+Claim/detail/private URLs:
+noindex.
+
+==================================================
+18. SECURITY
+==================================================
+
+Bắt buộc:
+
+Backend kiểm tra authenticated user.
+
+Không tin organizationId từ frontend.
+
+Không tự approve claim.
+
+Private evidence dùng protected storage/signed URL.
+
+Rate limit claim requests.
+
+Ngăn một user spam claim nhiều Organization.
+
+Log mọi approval/rejection.
+
+==================================================
+19. AUDIT LOG
+==================================================
+
+Log:
+
+Organization created
+
+Claim submitted
+
+Evidence added
+
+Claim reviewed
+
+Claim approved/rejected
+
+Organization role added
+
+Membership created
+
+Publish status changed
+
+Profile important fields changed
+
+==================================================
+20. MOBILE
+==================================================
+
+Mobile flow đơn giản:
+
+Tìm hồ sơ
+hoặc
+Tạo mới
+
+→ thông tin cơ bản
+→ chọn role
+→ xác nhận
+→ checklist hoàn thiện
+
+Không trình bày toàn bộ profile editor trong một màn hình dài.
+
+Không overflow 390px.
+
+==================================================
+21. QA
+==================================================
+
+Test:
+
+1. Search tìm được Organization hiện có.
+2. Không tạo duplicate khi MST trùng.
+3. Claim không auto approve.
+4. Approved claim tạo membership đúng Organization.
+5. Một Organization có nhiều role.
+6. Một Organization có nhiều user.
+7. Supplier role tạo/reuse SupplierProfile.
+8. Factory role không tạo Organization duplicate.
+9. Association/KCN dùng đúng role/profile.
+10. Profile chưa publish không public.
+11. Private evidence không lộ.
+12. Source context giữ sau login.
+13. Admin approval tạo AuditLog.
+14. Merge duplicate không làm mất relations.
+15. Mobile 390px hoạt động.
+
+==================================================
+22. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- Claim workflow
+- Duplicate detection
+- Organization membership implementation
+- Role handling
+- Admin implementation
+- Security
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+USER
+→ TÌM ORGANIZATION
+→ CLAIM NẾU ĐÃ CÓ
+HOẶC
+→ TẠO MỚI NẾU CHƯA CÓ
+→ CHỌN ROLE
+→ ADMIN/WORKFLOW XÁC NHẬN
+→ ORGANIZATION MEMBERSHIP
+→ HOÀN THIỆN HỒ SƠ
+→ PUBLISH
+→ THAM GIA SEARCH / MATCHING / PROGRAM / NEED FLOW
+
+Không biến /tao-ho-so thành form “đăng tin doanh nghiệp”.
+Nó phải là cửa vào của Organization Registry trên toàn CHUOICUNGUNG.COM.

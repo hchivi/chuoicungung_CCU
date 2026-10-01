@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { PHASE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 
 export default function ClickUpBrainMatrixSection() {
   const { t, lang } = useLanguage();
@@ -133,7 +134,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(1)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/1')}
+          onClick={() => navigate('/giai-doan/chuan-bi-dau-tu')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 1 || hoveredCardId === 1
               ? 'border-purple-400 shadow-lg shadow-purple-500/10 ring-2 ring-purple-400/20' 
@@ -214,7 +215,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[0].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-purple-700 hover:bg-purple-50 transition group/phase font-medium"
               >
@@ -234,7 +235,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(2)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/2')}
+          onClick={() => navigate('/giai-doan/thiet-ke-xay-dung')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 2 || hoveredCardId === 2
               ? 'border-emerald-400 shadow-lg shadow-emerald-500/10 ring-2 ring-emerald-400/20' 
@@ -320,7 +321,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[1].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition group/phase font-medium"
               >
@@ -340,7 +341,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(3)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/3')}
+          onClick={() => navigate('/giai-doan/lap-dat-hoan-thien')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 3 || hoveredCardId === 3
               ? 'border-orange-400 shadow-lg shadow-orange-500/10 ring-2 ring-orange-400/20' 
@@ -411,7 +412,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[2].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-orange-700 hover:bg-orange-50 transition group/phase font-medium"
               >
@@ -431,7 +432,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(4)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/4')}
+          onClick={() => navigate('/giai-doan/van-hanh-san-xuat')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 4 || hoveredCardId === 4
               ? 'border-blue-400 shadow-lg shadow-blue-500/10 ring-2 ring-blue-400/20' 
@@ -517,7 +518,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[3].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-blue-700 hover:bg-blue-50 transition group/phase font-medium"
               >
@@ -537,7 +538,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(5)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/5')}
+          onClick={() => navigate('/giai-doan/nhan-su-hau-can')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 5 || hoveredCardId === 5
               ? 'border-amber-400 shadow-lg shadow-amber-500/10 ring-2 ring-amber-400/20' 
@@ -614,7 +615,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[4].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-amber-700 hover:bg-amber-50 transition group/phase font-medium"
               >
@@ -634,7 +635,7 @@ export default function ClickUpBrainMatrixSection() {
         <div 
           onMouseEnter={() => setHoveredCardId(6)}
           onMouseLeave={() => setHoveredCardId(null)}
-          onClick={() => navigate('/giai-doan/6')}
+          onClick={() => navigate('/giai-doan/mo-rong-toi-uu-chuyen-doi')}
           className={`group rounded-2xl sm:rounded-3xl bg-white border transition-all duration-300 p-4 sm:p-5 flex flex-col justify-between h-[390px] sm:h-[400px] cursor-pointer relative overflow-hidden transform-gpu hover:-translate-y-1 hover:shadow-xl ${
             activeStageHighlight === 6 || hoveredCardId === 6
               ? 'border-red-400 shadow-lg shadow-red-500/10 ring-2 ring-red-400/20' 
@@ -720,7 +721,7 @@ export default function ClickUpBrainMatrixSection() {
             {stagesData[5].phases.map((ph) => (
               <Link
                 key={ph.id}
-                to={`/pha/${ph.id}`}
+                to={`/pha/${ph.slug || PHASE_ID_TO_SLUG_MAP[ph.id] || ph.id}`}
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center justify-between py-0.5 px-2 rounded-md text-xs text-slate-600 hover:text-red-700 hover:bg-red-50 transition group/phase font-medium"
               >

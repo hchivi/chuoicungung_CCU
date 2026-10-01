@@ -1,41 +1,63 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
-  Building2, MapPin, Calendar, Clock, DollarSign, ShieldCheck, 
-  CheckCircle2, Phone, Mail, Globe, MessageSquare, FileText, 
-  Download, ArrowLeft, Share2, Heart, Award, Sparkles, Send,
-  Layers, ChevronRight, Eye, Users, AlertCircle, ExternalLink
+  Building2, MapPin, Calendar, Clock, ShieldCheck, 
+  CheckCircle2, FileText, ArrowLeft, Share2, Heart, 
+  Sparkles, Send, Layers, ChevronRight, Users, 
+  AlertCircle, Bot, ArrowRight, Check
 } from 'lucide-react';
-import { demandsMarketplaceData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { 
+  getPublicRequirementById, 
+  getAllMasterRequirements,
+  toPublicRequirementSummary,
+  getSupplierResponseForRequirement
+} from '../data/requirementsData';
+import SupplierResponseModal from '../components/demands/SupplierResponseModal';
+import SuppiDemandAssistantModal from '../components/demands/SuppiDemandAssistantModal';
+import AuthModal from '../components/auth/AuthModal';
 
 export default function DemandDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { t, lang } = useLanguage();
   const [isSaved, setIsSaved] = useState(false);
-  const [bidForm, setBidForm] = useState({
-    supplierName: '',
-    contactPerson: '',
-    phone: '',
-    email: '',
-    fabricTypesOffered: '',
-    unitPriceEstimate: '',
-    sampleDeliveryDate: '',
-    note: ''
+  
+  // Modals
+  const [responseModalOpen, setResponseModalOpen] = useState(false);
+  const [suppiModalOpen, setSuppiModalOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  // Authenticated user state from session
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ccu_user_session');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return {
+      isLoggedIn: false,
+      name: 'Khách vãng lai',
+      role: 'Guest',
+      orgName: '',
+      orgId: null
+    };
   });
-  const [isBidSubmitted, setIsBidSubmitted] = useState(false);
 
-  // Find demand by ID, fallback to Proser uniform demand if not found
-  const demand = demandsMarketplaceData.find(d => String(d.id) === String(id)) || demandsMarketplaceData[0];
+  // Tìm nhu cầu công khai đã sanitize an toàn
+  const demand = getPublicRequirementById(id) || (() => {
+    const all = getAllMasterRequirements();
+    const fallback = all.find(d => String(d.id) === String(id) || String(d.publicCode) === String(id)) || all[0];
+    return toPublicRequirementSummary(fallback);
+  })();
 
-  const handleBidSubmit = (e) => {
-    e.preventDefault();
-    setIsBidSubmitted(true);
-  };
+  const existingResponse = currentUser?.isLoggedIn
+    ? getSupplierResponseForRequirement(demand.id, currentUser.orgId || currentUser.name)
+    : null;
+
+  const isClosed = demand.status === 'CLOSED';
 
   return (
-    <div className="space-y-8 pb-20 pt-6 font-sans bg-slate-50 min-h-screen">
+    <div className="space-y-6 pb-20 pt-6 font-sans bg-slate-50 min-h-screen text-slate-900">
       
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,13 +65,13 @@ export default function DemandDetailPage() {
           <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
             <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
           </Link>
-          <span>&gt;</span>
-          <Link to="/san-nhu-cau" className="hover:text-blue-600 font-medium">
-            {lang === 'en' ? 'Sourcing Marketplace' : 'Sàn Nhu Cầu B2B'}
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <Link to="/san-nhu-cau" className="hover:text-[#0052cc] font-medium">
+            Sàn Nhu Cầu B2B
           </Link>
-          <span>&gt;</span>
-          <span className="text-blue-600 font-semibold truncate max-w-xs sm:max-w-md">
-            {demand.title}
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-[#0052cc] font-semibold truncate max-w-xs sm:max-w-md">
+            {demand.publicCode} - {demand.title}
           </span>
         </div>
       </div>
@@ -58,22 +80,29 @@ export default function DemandDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
         {/* Hero Header Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-sm relative overflow-hidden">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs relative overflow-hidden">
           
-          {/* Top Badges & Status */}
+          {/* Top Badges & Actions */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-full shadow-xs flex items-center gap-1 font-heading uppercase tracking-wide">
+              <span className="px-3 py-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-full shadow-xs flex items-center gap-1 font-mono uppercase tracking-wide">
                 <Sparkles className="w-3.5 h-3.5" />
-                {demand.isFoundingPartner ? 'Founding Partner Sourcing' : 'Nhu Cầu Doanh Nghiệp'}
+                MÃ: {demand.publicCode}
               </span>
-              <span className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold rounded-full flex items-center gap-1">
+              <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 ${
+                isClosed ? 'bg-slate-100 text-slate-500' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              }`}>
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                {demand.status || 'Đang mở nhận báo giá'}
+                {isClosed ? 'Đã đóng tiếp nhận' : 'Đang mở nhận hồ sơ'}
               </span>
-              <span className="px-2.5 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-semibold rounded-full">
-                {demand.phaseName || 'Pha 5.3 Đồng phục & Bảo hộ (PPE)'}
+              <span className="px-2.5 py-1 bg-slate-100 text-slate-800 border border-slate-200 text-xs font-semibold rounded-full">
+                {demand.category}
               </span>
+              {demand.stageName && (
+                <span className="px-2.5 py-1 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-semibold rounded-full">
+                  {demand.stageName}
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -107,14 +136,21 @@ export default function DemandDetailPage() {
               {demand.title}
             </h1>
 
+            <div className="text-xs text-slate-500 flex items-center gap-1.5">
+              <Building2 className="w-4 h-4 text-slate-400" />
+              <span>Đăng bởi: <strong>{demand.buyerDisplayName}</strong></span>
+              <span>•</span>
+              <span>Đăng ngày: {new Date(demand.publishedAt).toLocaleDateString('vi-VN')}</span>
+            </div>
+
             {/* Key Metric Chips */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
               <div className="p-3.5 bg-blue-50/70 border border-blue-100 rounded-2xl">
                 <span className="text-[11px] text-blue-600 font-bold uppercase tracking-wider block font-heading">
-                  Ngân sách ước tính
+                  Sản phẩm / Dịch vụ
                 </span>
-                <span className="text-sm sm:text-base font-black text-blue-900 font-mono">
-                  {demand.budget || '2,5 - 4,0 tỷ VND'}
+                <span className="text-xs sm:text-sm font-bold text-blue-900 truncate block">
+                  {demand.productService}
                 </span>
               </div>
 
@@ -123,28 +159,29 @@ export default function DemandDetailPage() {
                   Sản lượng yêu cầu
                 </span>
                 <span className="text-sm sm:text-base font-black text-emerald-900">
-                  {demand.quantity || '50.000m - 100.000m / tháng'}
+                  {demand.quantity ? `${demand.quantity} ${demand.unit}` : 'Theo thỏa thuận'}
                 </span>
               </div>
 
               <div className="p-3.5 bg-purple-50/70 border border-purple-100 rounded-2xl">
                 <span className="text-[11px] text-purple-600 font-bold uppercase tracking-wider block font-heading">
-                  Địa điểm nhận hàng
+                  Địa bàn nhận hàng
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-purple-900 truncate block">
-                  {demand.location || 'TP. Hồ Chí Minh & Toàn quốc'}
+                  {demand.province} {demand.industrialPark ? `(${demand.industrialPark})` : ''}
                 </span>
               </div>
 
               <div className="p-3.5 bg-amber-50/70 border border-amber-100 rounded-2xl">
                 <span className="text-[11px] text-amber-700 font-bold uppercase tracking-wider block font-heading">
-                  Thời hạn nhận mẫu
+                  Thời hạn cần
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-amber-900 block font-mono">
-                  {demand.deadline || 'Ưu tiên trong 7 ngày'}
+                  {demand.deadline || 'Sớm nhất'}
                 </span>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -154,361 +191,171 @@ export default function DemandDetailPage() {
           {/* Left Main Content (8 cols) */}
           <div className="lg:col-span-8 space-y-6">
 
-            {/* Section: Chi tiết mô tả nhu cầu */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-sm space-y-4">
+            {/* Section: Mô tả tóm tắt nhu cầu */}
+            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-4">
               <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading uppercase flex items-center gap-2">
                 <FileText className="w-5 h-5 text-blue-600" />
-                Mô tả chi tiết nhu cầu tìm nguồn cung
+                Bản tóm tắt nhu cầu tìm nguồn cung
               </h2>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                {demand.description || 'Chuyên Gia Đồng Phục (Công ty TNHH Proser) đang mở rộng quy mô xưởng may và ký kết các hợp đồng may đo đồng phục doanh nghiệp FDI, chuỗi khách sạn và bảo hộ lao động nhà máy KCN. Chúng tôi cần tìm kiếm các đối tác dệt may uy tín cung ứng các chủng loại vải chất lượng cao, có bảng màu chuẩn và sẵn sàng gửi mẫu kiểm tra độ co giãn, độ bền màu.'}
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                {demand.publicSummary}
               </p>
 
-              {/* Bảng quy cách kỹ thuật chi tiết các loại vải */}
-              {demand.detailedRequirements && demand.detailedRequirements.length > 0 && (
-                <div className="pt-4 space-y-3">
+              {/* Yêu cầu điều kiện tham gia */}
+              {demand.publicRequirements && demand.publicRequirements.length > 0 && (
+                <div className="pt-2 space-y-3">
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 font-heading">
-                    Quy cách kỹ thuật các chủng loại vải cần tìm:
+                    Quy cách kỹ thuật & Tiêu chí lựa chọn nhà cung ứng:
                   </h3>
-                  <div className="space-y-3">
-                    {demand.detailedRequirements.map((req, idx) => (
-                      <div key={idx} className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl space-y-1.5 hover:bg-blue-50/30 transition">
-                        <div className="flex items-center justify-between">
-                          <span className="font-extrabold text-sm text-blue-900 font-heading">
-                            {idx + 1}. {req.type}
-                          </span>
-                          <span className="px-2.5 py-0.5 bg-blue-100/70 text-blue-700 rounded-full text-[11px] font-bold">
-                            {req.usage}
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                          <strong>Thông số:</strong> {req.specs}
-                        </p>
+                  <div className="space-y-2">
+                    {demand.publicRequirements.map((req, idx) => (
+                      <div key={idx} className="p-3 bg-slate-50 border border-slate-200/80 rounded-xl flex items-start gap-2.5 text-xs text-slate-700">
+                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{req}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Điều kiện hợp tác */}
-              <div className="pt-4 border-t border-slate-100 space-y-2 text-xs text-slate-700">
-                <h3 className="font-extrabold text-xs uppercase tracking-wider text-slate-500 font-heading">
-                  Yêu cầu đối với Nhà cung ứng tham gia:
-                </h3>
-                <ul className="space-y-1.5 list-disc list-inside text-slate-600">
-                  <li>Có chứng chỉ nguồn gốc xuất xứ (CO), chứng chỉ kiểm định chất lượng (CQ) hoặc tiêu chuẩn OEKO-TEX / ISO.</li>
-                  <li>Sẵn sàng cung cấp tập mẫu vải (Swatches) và bảng màu chuẩn Pantone để tiến hành may mẫu thử.</li>
-                  <li>Cam kết sản lượng cung ứng ổn định tối thiểu 50.000m/tháng và tiến độ giao hàng đúng cam kết tại xưởng.</li>
-                  <li>Chấp nhận thanh toán theo hợp đồng nguyên tắc B2B định kỳ.</li>
-                </ul>
+              {/* Quy định bảo mật thông tin Buyer (Section 4) */}
+              <div className="p-4 bg-blue-50/60 border border-blue-200/70 rounded-2xl space-y-2 text-xs text-blue-900">
+                <div className="flex items-center gap-2 font-bold font-heading">
+                  <ShieldCheck className="w-4 h-4 text-blue-600" />
+                  Quy trình bảo mật danh tính & Ghép đôi B2B
+                </div>
+                <p className="text-[11px] leading-relaxed text-blue-800">
+                  Để đảm bảo sự công bằng và tính bảo mật giao dịch, thông tin danh tính chi tiết, số điện thoại cá nhân và ngân sách nội bộ của Buyer được mã hóa. Nhà cung ứng gửi phản hồi <strong>"Tôi có khả năng đáp ứng"</strong> sẽ được Ban Điều Phối thẩm định năng lực và đưa vào danh sách Shortlist kết nối chính thức.
+                </p>
               </div>
+
             </div>
 
-            {/* Section: Doanh nghiệp đã quan tâm & theo dõi thời gian thực */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-sm space-y-4">
-              <div className="flex items-center justify-between flex-wrap gap-2">
-                <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading uppercase flex items-center gap-2">
-                  <Users className="w-5 h-5 text-indigo-600" />
-                  Doanh nghiệp & Nhà cung ứng đã quan tâm ({demand.totalInterestedCount || 24})
-                </h2>
-                <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-bold animate-pulse">
-                  ● Cập nhật thời gian thực
-                </span>
-              </div>
-
-              <p className="text-xs text-slate-500">
-                Danh sách các nhà máy dệt may, đơn vị cung ứng nguyên phụ liệu đã xem hồ sơ nhu cầu và chuẩn bị gửi mẫu chào giá:
-              </p>
-
-              {/* Grid of Interested Suppliers */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                {(demand.interestedSuppliers || []).map((sup) => (
-                  <div key={sup.id} className="p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/70 rounded-2xl flex items-center gap-3 transition">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-xs bg-gradient-to-br ${sup.bgGradient || 'from-blue-600 to-indigo-600'} shrink-0 shadow-xs`}>
-                      {sup.monogram || 'NCC'}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-bold text-slate-900 truncate font-heading">
-                        {sup.name}
-                      </p>
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                        <span>{sup.viewedAt || 'Vừa xem'}</span>
-                        <span>•</span>
-                        <span className="text-emerald-600 font-semibold">{sup.status || 'Đang quan tâm'}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Section: Form gửi báo giá & gửi mẫu vải trực tiếp */}
-            <div className="bg-white rounded-3xl border border-blue-200 p-6 sm:p-8 shadow-sm space-y-6 relative overflow-hidden">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                  <Send className="w-4 h-4" />
-                </div>
-                <div>
-                  <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading uppercase">
-                    Gửi hồ sơ chào giá & đăng ký gửi mẫu vải
-                  </h2>
-                  <p className="text-xs text-slate-500">
-                    Báo giá và thông tin của bạn sẽ được gửi trực tiếp đến Trưởng phòng Mua hàng của Proser.
-                  </p>
-                </div>
-              </div>
-
-              {isBidSubmitted ? (
-                <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-3">
-                  <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                  <h3 className="text-base font-bold text-emerald-900 font-heading">
-                    Đã gửi thông tin chào giá thành công!
+            {/* Section: CTA Phản hồi năng lực */}
+            <div className="bg-white rounded-3xl border border-blue-200 p-6 sm:p-8 shadow-xs space-y-5 text-center sm:text-left">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 font-heading">
+                    Doanh nghiệp của bạn có năng lực đáp ứng nhu cầu này?
                   </h3>
-                  <p className="text-xs text-emerald-700 max-w-md mx-auto">
-                    Bộ phận Mua hàng của Chuyên Gia Đồng Phục (Proser) sẽ liên hệ lại với bạn qua số điện thoại <strong>{bidForm.phone || 'của bạn'}</strong> trong vòng 24 giờ làm việc.
+                  <p className="text-xs text-slate-500">
+                    Gửi xác nhận năng lực, hồ sơ kỹ thuật và mẫu sản phẩm tới Ban Điều Phối để được ghép đôi với Buyer.
                   </p>
-                  <button 
-                    onClick={() => setIsBidSubmitted(false)}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition"
-                  >
-                    Gửi thêm thông tin khác
-                  </button>
                 </div>
-              ) : (
-                <form onSubmit={handleBidSubmit} className="space-y-4 text-xs">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Tên công ty / Xưởng dệt *</label>
-                      <input 
-                        type="text" 
-                        required
-                        value={bidForm.supplierName}
-                        onChange={(e) => setBidForm({...bidForm, supplierName: e.target.value})}
-                        placeholder="VD: Công ty TNHH Dệt May..." 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-                      />
-                    </div>
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Người đại diện / Chức vụ *</label>
-                      <input 
-                        type="text" 
-                        required
-                        value={bidForm.contactPerson}
-                        onChange={(e) => setBidForm({...bidForm, contactPerson: e.target.value})}
-                        placeholder="VD: Nguyễn Văn B - Trưởng phòng kinh doanh" 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Số điện thoại / Zalo liên hệ *</label>
-                      <input 
-                        type="tel" 
-                        required
-                        value={bidForm.phone}
-                        onChange={(e) => setBidForm({...bidForm, phone: e.target.value})}
-                        placeholder="09xx xxx xxx" 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono" 
-                      />
-                    </div>
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Email doanh nghiệp *</label>
-                      <input 
-                        type="email" 
-                        required
-                        value={bidForm.email}
-                        onChange={(e) => setBidForm({...bidForm, email: e.target.value})}
-                        placeholder="sales@company.com" 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono" 
-                      />
-                    </div>
-                  </div>
+                <button
+                  disabled={isClosed}
+                  onClick={() => setResponseModalOpen(true)}
+                  className={`py-3 px-6 rounded-2xl text-xs sm:text-sm font-bold shadow-md transition flex items-center justify-center gap-2 shrink-0 ${
+                    isClosed
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : existingResponse
+                        ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                        : 'bg-[#0052cc] hover:bg-[#0047a5] text-white shadow-blue-500/20'
+                  }`}
+                >
+                  <Send className="w-4 h-4" />
+                  <span>{existingResponse ? 'XEM / CẬP NHẬT PHẢN HỒI' : 'TÔI CÓ KHẢ NĂNG ĐÁP ỨNG'}</span>
+                </button>
+              </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Chủng loại vải có thể cung ứng</label>
-                      <input 
-                        type="text" 
-                        value={bidForm.fabricTypesOffered}
-                        onChange={(e) => setBidForm({...bidForm, fabricTypesOffered: e.target.value})}
-                        placeholder="VD: Kate Mỹ, Kaki Cotton 100%, Thun Cá Sấu..." 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-                      />
-                    </div>
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1 font-heading">Thời gian có thể gửi mẫu vải</label>
-                      <input 
-                        type="text" 
-                        value={bidForm.sampleDeliveryDate}
-                        onChange={(e) => setBidForm({...bidForm, sampleDeliveryDate: e.target.value})}
-                        placeholder="VD: Có sẵn mẫu, gửi trong 24h" 
-                        className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none" 
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="font-bold text-slate-700 block mb-1 font-heading">Ghi chú năng lực sản xuất / Báo giá ước tính</label>
-                    <textarea 
-                      rows="3"
-                      value={bidForm.note}
-                      onChange={(e) => setBidForm({...bidForm, note: e.target.value})}
-                      placeholder="Nhập thông số định lượng vải, đơn giá tham khảo hoặc giới thiệu xưởng dệt..." 
-                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    ></textarea>
-                  </div>
-
-                  <button 
-                    type="submit"
-                    className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold rounded-xl shadow-md shadow-blue-500/20 text-xs sm:text-sm uppercase tracking-wider font-heading transition"
-                  >
-                    Xác nhận gửi hồ sơ chào giá & mẫu vải
-                  </button>
-                </form>
+              {existingResponse && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-center justify-between">
+                  <span>Trạng thái hồ sơ của bạn: <strong>{existingResponse.responseStatus}</strong></span>
+                  <span className="text-[11px] text-amber-700">Gửi lúc: {new Date(existingResponse.submittedAt).toLocaleString('vi-VN')}</span>
+                </div>
               )}
             </div>
 
           </div>
 
-          {/* Right Sidebar: Thông tin Doanh Nghiệp Đăng Tin (4 cols) */}
+          {/* Right Sidebar: Điều phối & SUPPI (4 cols) */}
           <div className="lg:col-span-4 space-y-6">
 
-            {/* Doanh nghiệp Profile Card */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-sm space-y-5 text-xs">
-              <div className="text-center space-y-3 pb-4 border-b border-slate-100">
-                <div className="w-20 h-20 mx-auto rounded-2xl bg-white border border-slate-200 p-2 shadow-sm flex items-center justify-center">
-                  <img 
-                    src={demand.logo || "/images/founding-partners/chuyen-gia-dong-phuc-logo.png"} 
-                    alt={demand.company}
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      e.target.style.display = 'none';
-                      e.target.parentElement.innerHTML = '<span class="font-black text-blue-700 text-lg">PROSER</span>';
-                    }}
-                  />
+            {/* Sourcing Coordinator Card */}
+            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs space-y-4 text-xs">
+              <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+                <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                  CCU
                 </div>
                 <div>
-                  <span className="px-2.5 py-0.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-full text-[10px] font-bold inline-flex items-center gap-1 mb-1">
-                    <Award className="w-3 h-3 text-amber-600" />
-                    Đối tác Sáng lập Chuỗi Cung Ứng
-                  </span>
-                  <h3 className="text-sm font-black text-slate-900 font-heading">
-                    {demand.company || 'Chuyên Gia Đồng Phục - Công Ty TNHH Proser'}
-                  </h3>
-                  <p className="text-[11px] text-slate-500 font-medium">
-                    "cần ĐỒNG PHỤC có CHUYÊN GIA"
-                  </p>
+                  <h4 className="font-black text-slate-900 font-heading">
+                    Ban Điều Phối Chuỗi Cung Ứng
+                  </h4>
+                  <p className="text-[10px] text-slate-400">CHUOICUNGUNG.COM Sourcing Desk</p>
                 </div>
               </div>
 
-              {/* Contact Direct Box (Unlocked in Detail Page) */}
-              <div className="space-y-3 pt-1">
-                <div className="p-3 bg-blue-50/70 border border-blue-100 rounded-2xl space-y-2">
-                  <span className="text-[10px] font-extrabold text-blue-700 uppercase tracking-wider block font-heading">
-                    Liên hệ trực tiếp bộ phận Sourcing:
-                  </span>
-                  
-                  {/* Hotline */}
-                  <a 
-                    href={`tel:${demand.contactInfo?.hotline || '0582877799'}`}
-                    className="flex items-center justify-between p-2 bg-white rounded-xl border border-blue-200 hover:border-blue-400 text-blue-900 font-bold transition group"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
-                      <span>Hotline / ĐT:</span>
-                    </span>
-                    <span className="font-mono font-black text-blue-700">
-                      {demand.contactInfo?.hotline || '0582 87 77 99'}
-                    </span>
-                  </a>
+              <div className="space-y-2 text-slate-600 leading-relaxed">
+                <p>
+                  Mọi phản hồi được giám sát độc lập bởi Hội đồng Điều phối nhằm tránh tình trạng chào thầu ảo, quấy rối doanh nghiệp và phá vỡ chuỗi cung ứng.
+                </p>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1 text-[11px]">
+                  <div>✓ Thẩm định năng lực pháp lý & xưởng</div>
+                  <div>✓ Bảo mật thông tin kỹ thuật dự án</div>
+                  <div>✓ Hỗ trợ kết nối Buyer - Supplier trực tiếp</div>
+                </div>
+              </div>
 
-                  {/* Zalo */}
-                  <a 
-                    href={demand.contactInfo?.zalo || "https://zalo.me/0582877799"}
-                    target="_blank" 
-                    rel="noreferrer"
-                    className="flex items-center justify-between p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition shadow-xs"
-                  >
-                    <span className="flex items-center gap-2">
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Chat Zalo B2B:</span>
-                    </span>
-                    <span className="font-mono text-xs">Mở Zalo ➔</span>
-                  </a>
+              <button
+                onClick={() => setSuppiModalOpen(true)}
+                className="w-full py-2.5 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl font-bold transition flex items-center justify-center gap-1.5"
+              >
+                <Bot className="w-4 h-4 text-indigo-600" />
+                <span>Hỏi Trợ lý SUPPI về nhu cầu này</span>
+              </button>
+            </div>
 
-                  {/* Email */}
-                  <a 
-                    href={`mailto:${demand.contactInfo?.email || 'contact@chuyengiadongphuc.com'}`}
-                    className="flex items-center justify-between p-2 bg-white rounded-xl border border-blue-200 hover:border-blue-400 text-slate-700 font-medium transition text-[11px]"
-                  >
-                    <span className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Email:</span>
-                    </span>
-                    <span className="font-mono font-bold text-slate-900 truncate max-w-[150px]">
-                      {demand.contactInfo?.email || 'contact@chuyengiadongphuc.com'}
-                    </span>
-                  </a>
+            {/* Tiêu chí kiểm chứng đối chứng */}
+            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs space-y-3 text-xs">
+              <h4 className="font-extrabold uppercase text-slate-500 font-heading text-[11px] tracking-wider">
+                Yêu cầu kiểm chứng thực tế:
+              </h4>
+
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                  <span className="text-slate-700">Mẫu thử đối chứng:</span>
+                  <strong className={demand.sampleRequired ? 'text-amber-700 font-bold' : 'text-slate-500'}>
+                    {demand.sampleRequired ? 'BẮT BUỘC' : 'Không bắt buộc'}
+                  </strong>
                 </div>
 
-                {/* Company Specs */}
-                <div className="space-y-2 text-slate-600 text-[11px] pt-2">
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                    <span><strong>Địa chỉ:</strong> {demand.contactInfo?.address || '154 Phạm Văn Chiêu, P. 9, Q. Gò Vấp, TP. HCM'}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Globe className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span><strong>Website:</strong> <a href={demand.contactInfo?.website || "https://chuyengiadongphuc.com/"} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">chuyengiadongphuc.com</a></span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span><strong>Mã số thuế:</strong> <span className="font-mono font-bold text-slate-800">{demand.contactInfo?.taxCode || '0316881973'}</span></span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Award className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                    <span><strong>Năng lực xưởng may:</strong> 50.000+ sản phẩm / tháng</span>
-                  </div>
+                <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                  <span className="text-slate-700">Khảo sát nhà máy:</span>
+                  <strong className={demand.surveyRequired ? 'text-purple-700 font-bold' : 'text-slate-500'}>
+                    {demand.surveyRequired ? 'CÓ KHẢO SÁT' : 'Không bắt buộc'}
+                  </strong>
                 </div>
-
-                {/* Link to Founding Partner Page */}
-                <Link 
-                  to="/founding-partner"
-                  className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl flex items-center justify-center gap-1.5 transition text-xs font-heading"
-                >
-                  <span>Xem hồ sơ Đối tác Sáng lập Proser</span>
-                  <ChevronRight className="w-4 h-4" />
-                </Link>
               </div>
             </div>
-
-            {/* Sourcing Safety Notice */}
-            <div className="bg-emerald-50/70 border border-emerald-200/80 rounded-3xl p-5 space-y-2.5 text-xs">
-              <h3 className="font-bold text-emerald-900 flex items-center gap-1.5 font-heading">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                Cam kết minh bạch Sourcing B2B
-              </h3>
-              <p className="text-emerald-800 text-[11px] leading-relaxed">
-                Nhu cầu được đăng tải và xác thực trực tiếp bởi Chuỗi Cung Ứng . Com. Nhà cung ứng tham gia chào giá không mất bất kỳ khoản phí trung gian nào.
-              </p>
-            </div>
-
-            {/* Back Button */}
-            <button 
-              onClick={() => navigate('/san-nhu-cau')}
-              className="w-full py-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold rounded-2xl flex items-center justify-center gap-2 transition text-xs font-heading"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Quay lại Sàn Nhu Cầu B2B</span>
-            </button>
 
           </div>
 
         </div>
 
       </div>
+
+      {/* Modals */}
+      <SupplierResponseModal
+        isOpen={responseModalOpen}
+        onClose={() => setResponseModalOpen(false)}
+        requirement={demand}
+        currentUser={currentUser}
+        onOpenAuth={() => setAuthModalOpen(true)}
+      />
+
+      <SuppiDemandAssistantModal
+        isOpen={suppiModalOpen}
+        onClose={() => setSuppiModalOpen(false)}
+        requirement={demand}
+        currentUser={currentUser}
+      />
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        initialTab="login"
+      />
 
     </div>
   );

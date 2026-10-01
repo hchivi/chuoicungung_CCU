@@ -1,0 +1,1197 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 28: DANH SÁCH NHÀ MÁY
+ROUTE: /nha-may
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /nha-may thành cổng khám phá các nhà máy
+trong hệ sinh thái CHUOICUNGUNG.COM.
+
+ĐÂY KHÔNG PHẢI DIRECTORY NHÀ MÁY.
+
+Nhà máy có thể đồng thời có 2 vai trò:
+
+1. NHÀ MÁY MUA
+   → đăng nhu cầu
+   → tìm nguồn cung
+   → tham gia chương trình
+   → meeting / sample / quote / outcome
+
+2. NHÀ MÁY BÁN
+   → giới thiệu sản phẩm đầu ra
+   → năng lực sản xuất
+   → OEM
+   → xuất khẩu
+   → phân phối
+   → trở thành Supplier khi phù hợp
+
+Không tạo hai Organization riêng cho cùng một nhà máy.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/nha-may
+
+Reuse:
+
+Organization
+OrganizationRole
+FactoryProfile
+Facility
+IndustrialPark
+Location
+
+Requirement
+SupplierProfile
+ProductService
+Capability
+ServiceArea
+
+Program
+Catalogue
+MediaAsset
+
+Tasks
+AuditLog
+
+Không duplicate:
+
+Factory
+Supplier
+Buyer
+Organization.
+
+Một Organization có thể đồng thời:
+
+FACTORY
+BUYER
+SUPPLIER
+
+tùy dữ liệu/role thực tế.
+
+==================================================
+2. ORGANIZATION MASTER
+==================================================
+
+Factory không phải một company record độc lập
+nếu Organization đã tồn tại.
+
+Architecture:
+
+Organization
+→ OrganizationRole = FACTORY
+
+và:
+
+FactoryProfile
+
+Nếu nhà máy cũng cung ứng:
+
+Organization
+→ OrganizationRole += SUPPLIER
+→ SupplierProfile
+
+Không tạo:
+
+Factory A
+và Supplier A
+
+thành hai company records khác nhau.
+
+==================================================
+3. FACTORY PROFILE
+==================================================
+
+FactoryProfile chỉ chứa dữ liệu đặc thù:
+
+FactoryProfile {
+ id
+ organizationId
+
+ industrialParkId?
+ facilityId?
+
+ industryCategories[]
+
+ productionDescription?
+
+ outputProductsSummary?
+
+ manufacturingTypes[]
+
+ oemAvailable?
+ exportAvailable?
+ distributionAvailable?
+
+ publicProfileStatus
+
+ updatedAt
+}
+
+Các field chi tiết chỉ tạo nếu
+architecture hiện tại thực sự cần.
+
+Không copy:
+organization name
+logo
+legal data
+contacts
+
+nếu Organization đã có.
+
+==================================================
+4. HERO
+==================================================
+
+H1:
+
+“NHÀ MÁY & DOANH NGHIỆP SẢN XUẤT”
+
+Sub:
+
+“Khám phá nhà máy theo ngành, khu công nghiệp và địa bàn. Nhà máy có thể gửi nhu cầu tìm nguồn cung hoặc giới thiệu sản phẩm và năng lực sản xuất khi phù hợp.”
+
+Thông điệp chính:
+
+“Gửi nhu cầu và tham gia chương trình phù hợp với nhà máy.”
+
+CTA chính:
+
+[ĐĂNG NHU CẦU]
+
+→ /dang-nhu-cau?role=factory
+
+CTA phụ:
+
+[TÌM CHƯƠNG TRÌNH]
+
+→ /chuong-trinh?role=buyer
+
+==================================================
+5. GIẢI THÍCH 2 VAI TRÒ
+==================================================
+
+Tạo block ngắn:
+
+“NHÀ MÁY CÓ THỂ VỪA MUA — VỪA BÁN”
+
+Card 01:
+
+NHÀ MÁY MUA
+
+Ví dụ:
+- nguyên liệu;
+- vật tư;
+- dịch vụ;
+- PPE;
+- logistics;
+- nhân sự;
+- M&E;
+- bảo trì;
+- giải pháp sản xuất.
+
+CTA:
+
+[ĐĂNG NHU CẦU]
+
+Card 02:
+
+NHÀ MÁY BÁN
+
+Ví dụ:
+- sản phẩm đầu ra;
+- năng lực sản xuất;
+- OEM;
+- gia công;
+- xuất khẩu;
+- phân phối.
+
+CTA:
+
+[GIỚI THIỆU NĂNG LỰC]
+
+→ /tao-ho-so?role=factory
+
+==================================================
+6. SEARCH
+==================================================
+
+Search theo:
+
+Tên nhà máy
+
+Tên doanh nghiệp
+
+Ngành sản xuất
+
+KCN
+
+Địa bàn
+
+Sản phẩm đầu ra public
+
+Năng lực public
+
+Không search vào:
+
+private Requirement
+private quotation
+private contacts.
+
+==================================================
+7. FILTER
+==================================================
+
+Filter chính:
+
+Ngành sản xuất
+
+Tỉnh / thành
+
+KCN
+
+Vai trò công khai:
+- Có nhu cầu public
+- Có năng lực cung ứng
+- Có sản phẩm đầu ra public
+- Đang có chương trình liên quan
+
+OEM available nếu dữ liệu có
+
+Export available nếu dữ liệu có
+
+Không làm filter quá sâu trong P1.
+
+==================================================
+8. FACTORY CARD
+==================================================
+
+Mỗi card có thể hiển thị:
+
+Logo
+
+Tên nhà máy / doanh nghiệp
+
+Industry
+
+Location
+
+KCN nếu relation đã confirmed
+
+Public role chips:
+
+NHÀ MÁY
+
+CÓ NĂNG LỰC CUNG ỨNG
+nếu SupplierProfile publishable
+
+CÓ NHU CẦU CÔNG KHAI
+nếu thực sự có Public Requirement
+
+Sản phẩm đầu ra chính nếu public
+
+Ngày cập nhật
+
+CTA:
+
+[XEM NHÀ MÁY]
+
+→ /nha-may/[slug]
+
+==================================================
+9. KHÔNG HIỂN THỊ “BUYER” QUÁ MỨC
+==================================================
+
+Không gắn badge:
+
+“ĐANG MUA HÀNG”
+
+chỉ vì Factory từng tạo Requirement.
+
+Chỉ hiển thị:
+
+“Có nhu cầu đang được phép công bố”
+
+khi Requirement visibility cho phép.
+
+==================================================
+10. PUBLIC NEEDS
+==================================================
+
+Factory card/page chỉ được relation tới
+Requirement public nếu:
+
+visibility = PUBLIC_SUMMARY
+
+hoặc explicit public permission.
+
+Không expose:
+
+Buyer contact
+Procurement person
+Target price
+Internal budget
+Private specs
+Quotation
+Supplier responses.
+
+==================================================
+11. FACTORY AS BUYER
+==================================================
+
+Factory buyer workflow phải reuse:
+
+Requirement
+
+không tạo:
+
+FactoryNeed
+PlantNeed
+KCNNeed
+
+thành schema khác.
+
+Flow:
+
+Factory
+→ Requirement
+→ SupplierMatching
+→ Connection
+→ Follow-up
+→ Outcome
+
+==================================================
+12. FACTORY AS SUPPLIER
+==================================================
+
+Nếu Factory có năng lực bán:
+
+reuse:
+
+SupplierProfile
+Capability
+ProductService
+ServiceArea
+
+Không lưu năng lực cung ứng trong FactoryProfile
+nếu Supplier module đã quản lý dữ liệu đó.
+
+==================================================
+13. MUA VS BÁN LÀ ROLE, KHÔNG PHẢI 2 PROFILE DUPLICATE
+==================================================
+
+Một Factory:
+
+Organization A
+
+BUY SIDE:
+Requirements
+
+SELL SIDE:
+SupplierProfile
+Products
+Capabilities
+
+Không:
+
+OrganizationBuyer A
+OrganizationSupplier A.
+
+==================================================
+14. INDUSTRIAL PARK RELATION
+==================================================
+
+Factory thuộc KCN qua relation đã xây:
+
+IndustrialParkFactory
+
+Chỉ hiển thị KCN nếu:
+
+relation.status = CONFIRMED
+AND publicDisplay = true
+
+Không chỉ parse address rồi kết luận thuộc KCN.
+
+==================================================
+15. INDUSTRY
+==================================================
+
+Factory industry:
+
+reuse Category / industry taxonomy.
+
+Ví dụ:
+
+Điện tử
+Cơ khí
+Dệt may
+Thực phẩm
+Nhựa
+Gỗ
+Hóa chất
+Logistics-related manufacturing
+
+Không tạo taxonomy riêng cho Factory.
+
+==================================================
+16. OUTPUT PRODUCTS
+==================================================
+
+Nếu Factory cho phép public:
+
+hiển thị:
+
+Sản phẩm đầu ra
+
+Nhóm sản phẩm
+
+OEM capability nếu có
+
+Distribution capability
+
+Export capability
+
+Nhưng phải phân biệt:
+
+SELF_DECLARED
+
+REVIEWED
+
+NEEDS_UPDATE
+
+không tự gọi là verified.
+
+==================================================
+17. FACTORY LIST ≠ SUPPLIER LIST
+==================================================
+
+/nha-may:
+
+tập trung Factory ecosystem.
+
+/doanh-nghiep:
+
+tập trung Supplier Search.
+
+Một Factory có SupplierProfile
+có thể xuất hiện cả hai nơi
+với cùng Organization ID.
+
+Không duplicate record.
+
+==================================================
+18. KCN FILTER
+==================================================
+
+Khi chọn:
+
+KCN Long Thành
+
+query Factory relation đã confirmed.
+
+Không query bằng text chứa:
+
+“Long Thành”
+
+trong address בלבד.
+
+==================================================
+19. LOCATION FILTER
+==================================================
+
+Reuse Location.
+
+Filter:
+
+Province
+IndustrialPark
+
+Không tạo duplicated strings
+ở từng Factory record.
+
+==================================================
+20. PROGRAM INTEGRATION
+==================================================
+
+Block:
+
+“CHƯƠNG TRÌNH DÀNH CHO NHÀ MÁY”
+
+Reuse ProgramCard.
+
+Filter:
+
+targetRole includes BUYER/FACTORY
+
+plus:
+
+industry
+location
+KCN
+
+nếu phù hợp.
+
+CTA:
+
+[XEM CHƯƠNG TRÌNH]
+
+==================================================
+21. PROGRAM PARTICIPATION
+==================================================
+
+Factory tham gia Program:
+
+reuse:
+
+ProgramRegistration
+ProgramParticipant
+
+Không tạo:
+
+FactoryEventRelation riêng
+nếu Program participation model đã đủ.
+
+==================================================
+22. PUBLIC PROGRAM RELATION
+==================================================
+
+Có thể hiển thị Program Factory tham gia
+chỉ khi:
+
+participation/public display được phép.
+
+Đăng ký tham gia riêng tư
+không mặc định được public.
+
+==================================================
+23. PUBLIC REQUIREMENT BLOCK
+==================================================
+
+Trang listing có thể có section:
+
+“NHU CẦU NHÀ MÁY ĐƯỢC PHÉP CHIA SẺ”
+
+Reuse cards từ /san-nhu-cau.
+
+Không tạo một demand board mới.
+
+CTA:
+
+[XEM SÀN NHU CẦU]
+
+→ /san-nhu-cau
+
+==================================================
+24. SUPPLIER OPPORTUNITY
+==================================================
+
+Supplier vào /nha-may
+không được xem:
+
+toàn bộ nhu cầu private của nhà máy.
+
+Chỉ thấy Public Summary.
+
+Nếu muốn đáp ứng:
+
+use controlled SupplierResponse workflow.
+
+==================================================
+25. CTA ĐĂNG NHU CẦU
+==================================================
+
+CTA:
+
+[ĐĂNG NHU CẦU]
+
+→ /dang-nhu-cau
+?role=factory
+&sourcePage=factory-list
+
+Nếu đi từ Factory manager đã login:
+
+prefill Organization.
+
+Không auto publish.
+
+==================================================
+26. CTA TÌM CHƯƠNG TRÌNH
+==================================================
+
+CTA:
+
+[TÌM CHƯƠNG TRÌNH]
+
+→ /chuong-trinh?role=buyer
+
+Nếu context có:
+
+industry
+province
+industrialPark
+
+có thể prefill filter.
+
+==================================================
+27. CTA GIỚI THIỆU NĂNG LỰC
+==================================================
+
+Nếu Factory muốn bán:
+
+[GIỚI THIỆU NĂNG LỰC SẢN XUẤT]
+
+→ /tao-ho-so
+?role=factory
+&intent=supplier-capability
+
+Nếu Organization đã tồn tại:
+đi vào claim/update.
+
+Không tạo Organization duplicate.
+
+==================================================
+28. SUPPI
+==================================================
+
+SUPPI trên Factory listing hỗ trợ:
+
+“Tôi cần tìm nhà cung ứng cho nhà máy.”
+
+“Nhà máy ở Đồng Nai đang cần nhóm dịch vụ nào được công khai?”
+
+“Có chương trình nào cho Factory?”
+
+“Tôi muốn giới thiệu sản phẩm đầu ra.”
+
+Không đưa private Buyer Need vào câu trả lời.
+
+==================================================
+29. CHAINY
+==================================================
+
+CHAINY không cần mạnh ở listing.
+
+Chỉ khi user đã có:
+
+Requirement
+SupplierMatch
+Connection
+ProgramRegistration
+Meeting
+
+thì mới hiện các chức năng:
+
+Follow-up
+Next action
+Meeting
+Sample
+Quote
+Outcome.
+
+==================================================
+30. ACCOUNT WORKSPACE
+==================================================
+
+Factory account phải reuse workspace hiện tại.
+
+Factory Organization có thể quản lý:
+
+Needs
+
+Owners
+
+Supplier matches
+
+Connections
+
+Meetings
+
+Sample requests
+
+Quotations
+
+Programs
+
+Outcomes
+
+Nhưng không xây một CRM thứ hai.
+
+==================================================
+31. PUBLIC VS PRIVATE
+==================================================
+
+PUBLIC FACTORY PROFILE:
+
+Name
+Logo
+Industry
+Location
+KCN relation nếu confirmed
+Output products nếu allowed
+Capabilities nếu Supplier role
+Programs nếu allowed
+
+PRIVATE WORKSPACE:
+
+Procurement needs
+Buyer contacts
+Supplier shortlist
+Meetings
+Samples
+Quotes
+Negotiation
+Outcomes
+Internal documents.
+
+==================================================
+32. QUOTATION
+==================================================
+
+Hard rule:
+
+Quotation không xuất hiện trên:
+
+/nha-may
+
+/nha-may/[slug]
+
+public API
+
+SEO payload.
+
+Quotations chỉ ở authorized workspace.
+
+==================================================
+33. MEETING
+==================================================
+
+Meeting schedule riêng:
+
+không public.
+
+Có thể public aggregate Program result
+nếu đã được xác nhận,
+nhưng không public lịch cụ thể.
+
+==================================================
+34. FACTORY CLAIM
+==================================================
+
+Nếu user thấy Factory của mình:
+
+CTA:
+
+[QUẢN LÝ HỒ SƠ NHÀ MÁY]
+
+Reuse Page 12:
+
+/tao-ho-so
+
+Flow:
+
+Find Organization
+→ Claim
+→ Verification
+→ APPROVED
+→ OrganizationMembership/manager permission
+
+Không auto claim bằng email domain.
+
+==================================================
+35. FACTORY STATUS
+==================================================
+
+Không cần badge marketing phức tạp.
+
+Profile status có thể:
+
+DRAFT
+INCOMPLETE
+PUBLISHED
+ARCHIVED
+
+Data verification từng field giữ riêng.
+
+Không dùng một badge:
+
+“VERIFIED FACTORY”
+
+để ngụ ý mọi thông tin đã được kiểm chứng.
+
+==================================================
+36. SEARCH SORTING
+==================================================
+
+Default:
+
+Relevance theo query/filter
++
+Profile completeness
++
+Data freshness
+
+Không ưu tiên:
+
+Sponsor
+Founding Partner
+Paid service
+
+trong organic Factory results.
+
+==================================================
+37. FEATURED / SPONSORED
+==================================================
+
+Nếu sau này có paid placement:
+
+tách block:
+
+“TÀI TRỢ / ĐỒNG HÀNH”
+
+và label rõ.
+
+Không trộn vào organic Factory ranking.
+
+==================================================
+38. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/nha-may
+
+Nhưng master data vẫn Organization.
+
+Listing columns:
+
+Factory / Organization
+
+Industry
+
+Location
+
+KCN
+
+Public profile status
+
+Buyer Needs count
+
+Supplier role?
+
+Programs
+
+Owner
+
+Updated
+
+==================================================
+39. ADMIN FACTORY DETAIL
+==================================================
+
+Reuse:
+
+/admin/to-chuc/[id]
+
+hoặc specialized view.
+
+Tabs:
+
+OVERVIEW
+
+FACTORY PROFILE
+
+FACILITIES
+
+INDUSTRIES
+
+INDUSTRIAL PARK
+
+BUY SIDE
+- Requirements
+- Connections
+- Meetings
+- Samples
+- Quotes
+- Outcomes
+
+SELL SIDE
+- Supplier Profile
+- Capabilities
+- Products
+- Service Areas
+
+PROGRAMS
+
+MEDIA
+
+CATALOGUES
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+40. BUY / SELL SEPARATION
+==================================================
+
+Admin UX phải cho thấy rõ:
+
+MUA
+
+và
+
+BÁN
+
+nhưng cùng Organization.
+
+Không làm người vận hành nhầm:
+
+Factory Requirement
+
+với
+
+Supplier Opportunity.
+
+==================================================
+41. DATA QUALITY
+==================================================
+
+Admin warning:
+
+Factory relation to KCN unconfirmed
+
+Industry missing
+
+Output product outdated
+
+SupplierProfile incomplete
+
+Private Need accidentally public
+
+Public contact without permission
+
+Duplicate Factory Organization.
+
+==================================================
+42. OWNER + NEXT ACTION
+==================================================
+
+Các operational record active:
+
+Requirement
+SupplierMatch
+Connection
+Program participation
+
+phải có:
+
+owner
+nextAction
+nextActionAt.
+
+Không gắn owner bắt buộc vào
+chính public Factory profile
+nếu không có workflow đang xử lý.
+
+==================================================
+43. SEO
+==================================================
+
+Title:
+
+Nhà Máy & Doanh Nghiệp Sản Xuất | CHUOICUNGUNG.COM
+
+Description:
+
+Khám phá nhà máy theo ngành, khu công nghiệp và địa bàn; xem thông tin công khai về sản phẩm, năng lực và chương trình, hoặc gửi nhu cầu tìm nguồn cung.
+
+Canonical:
+
+/nha-may
+
+Filter URLs:
+canonical/noindex phù hợp.
+
+==================================================
+44. STRUCTURED DATA
+==================================================
+
+Use:
+
+CollectionPage
+ItemList
+Organization
+
+Không invent:
+
+factory size
+employee count
+capacity
+export markets
+
+nếu chưa có dữ liệu public/source.
+
+==================================================
+45. EMPTY STATE
+==================================================
+
+Nếu không có Factory phù hợp:
+
+“Chưa tìm thấy nhà máy phù hợp với bộ lọc này.”
+
+CTA:
+
+[XÓA BỘ LỌC]
+
+[ĐĂNG NHU CẦU]
+
+[TÌM CHƯƠNG TRÌNH]
+
+Không tạo demo Factory production.
+
+==================================================
+46. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+2-role explanation
+
+Search
+
+Filter chips
+
+Factory cards
+
+Public needs
+
+Programs
+
+Final CTAs
+
+Không overflow 390px.
+
+==================================================
+47. ANALYTICS
+==================================================
+
+Track:
+
+factory_listing_view
+
+factory_search
+
+factory_filter
+
+factory_detail_click
+
+factory_public_need_click
+
+submit_need_from_factory
+
+factory_program_click
+
+factory_capability_cta
+
+Không coi profile click = procurement lead.
+
+==================================================
+48. SECURITY
+==================================================
+
+Public API chỉ trả:
+
+published Organization
+
+published FactoryProfile
+
+confirmed public relations
+
+public Requirements
+
+public supplier capability
+
+public Programs.
+
+Không fetch private Buyer records rồi hide bằng UI.
+
+==================================================
+49. QA
+==================================================
+
+Test tối thiểu:
+
+1. Listing reuse Organization.
+2. Factory Buyer/Supplier không duplicate company.
+3. Search theo name/industry/location hoạt động.
+4. KCN relation chỉ dùng confirmed relation.
+5. Private Requirement không public.
+6. Public Requirement reuse /san-nhu-cau workflow.
+7. Factory Supplier role reuse SupplierProfile.
+8. Quote không public.
+9. Meeting private không public.
+10. Program participation không auto public.
+11. Claim Factory không auto approve.
+12. Paid status không ảnh hưởng organic ranking.
+13. Admin Buy/Sell views cùng Organization.
+14. Audit mutations hoạt động.
+15. Mobile 390px hoạt động.
+
+==================================================
+50. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- FactoryProfile implementation
+- Organization multi-role integration
+- IndustrialPark relation
+- Search/filter
+- Buyer Requirement integration
+- SupplierProfile integration
+- Program integration
+- Account workspace integration
+- Admin implementation
+- Privacy/RBAC
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+FACTORY
+├── MUA
+│   → REQUIREMENT
+│   → SOURCING
+│   → CONNECTION
+│   → FOLLOW-UP
+│   → OUTCOME
+│
+└── BÁN
+    → PRODUCTS
+    → CAPABILITY
+    → OEM
+    → EXPORT
+    → DISTRIBUTION
+    → SUPPLIER MATCHING
+
+MỘT FACTORY
+=
+MỘT ORGANIZATION GỐC.
+
+Không tạo hai hệ thống Buyer và Supplier
+tách rời cho cùng một doanh nghiệp.

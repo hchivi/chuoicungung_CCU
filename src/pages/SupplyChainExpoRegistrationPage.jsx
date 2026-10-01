@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { 
   Calendar, MapPin, Users, Building2, Factory, ArrowRight, CheckCircle2, 
   ChevronRight, PhoneCall, Send, Award, DollarSign, 
@@ -8,26 +8,39 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { EXPO_EVENTS, SUGGESTED_BUY_KEYWORDS, SUGGESTED_SELL_KEYWORDS } from '../data/expoEventsData';
+import { getProgramByIdOrSlug } from '../data/programsData';
 
 export default function SupplyChainExpoRegistrationPage() {
   const { lang } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { slug } = useParams();
 
-  // Determine initial event ID from state or query parameter
-  const initialEventId = location.state?.eventId || searchParams.get('event') || EXPO_EVENTS[0].id;
+  // Determine initial event ID from state, param, or slug
+  const matchedProgram = slug ? getProgramByIdOrSlug(slug) : null;
+  const initialEventId = matchedProgram?.id || location.state?.eventId || searchParams.get('event') || EXPO_EVENTS[0].id;
   const [targetEventId, setTargetEventId] = useState(initialEventId);
 
+  // Preselect role from query param ?role=buyer or ?role=supplier (Section 22)
+  const initialRole = searchParams.get('role') === 'buyer' ? 'factory' : 'supplier';
+  const [userRole, setUserRole] = useState(initialRole); // 'factory' (Nhà máy) or 'supplier' (Nhà cung cấp)
+
   useEffect(() => {
-    const evFromParam = searchParams.get('event') || location.state?.eventId;
-    if (evFromParam && EXPO_EVENTS.some(e => e.id === evFromParam)) {
+    const roleParam = searchParams.get('role');
+    if (roleParam === 'buyer' || roleParam === 'factory') {
+      setUserRole('factory');
+    } else if (roleParam === 'supplier') {
+      setUserRole('supplier');
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const evFromParam = searchParams.get('event') || location.state?.eventId || matchedProgram?.id;
+    if (evFromParam) {
       setTargetEventId(evFromParam);
     }
-  }, [searchParams, location.state]);
-
-  // Registration Form State
-  const [userRole, setUserRole] = useState('factory'); // 'factory' (Nhà máy) or 'supplier' (Nhà cung cấp)
+  }, [searchParams, location.state, matchedProgram]);
   const [selectedBuyKw, setSelectedBuyKw] = useState(["Áo thun & Đồng phục", "Máy bơm hạt nhựa"]);
   const [customBuyNote, setCustomBuyNote] = useState('');
   const [selectedSellKw, setSelectedSellKw] = useState(["May đo đồng phục doanh nghiệp", "Đồ bảo hộ lao động PPE"]);

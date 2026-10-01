@@ -1,0 +1,1389 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 31: CHI TIẾT CATALOGUE / ẤN PHẨM
+ROUTE: /catalogue/[slug]
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây trang chi tiết một Catalogue/Ấn phẩm
+không phải như một PDF viewer đơn thuần.
+
+Luồng đúng:
+
+CATALOGUE
+→ EDITION
+→ DANH SÁCH DOANH NGHIỆP ĐÃ DUYỆT
+→ XEM NỘI DUNG
+→ QR / PROFILE LINK
+→ HỒ SƠ LIVE
+→ GỬI YÊU CẦU
+→ CONNECTION / FOLLOW-UP
+
+Catalogue phải kết nối tài liệu tĩnh
+với dữ liệu doanh nghiệp đang được cập nhật.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/catalogue/[slug]
+
+Reuse từ Page 30:
+
+Catalogue
+CatalogueEdition
+CatalogueEntry
+CatalogueEntryContentVersion
+CatalogueDistributionBatch
+
+Reuse core:
+
+Organization
+SupplierProfile
+FactoryProfile
+ProductService
+Capability
+Category
+KeywordCluster
+Location
+IndustrialPark
+Program
+MediaAsset
+QR tracking
+ServiceRequest
+Requirement
+Connection
+Task
+AuditLog
+
+Không duplicate Supplier/Profile.
+
+==================================================
+2. SLUG / EDITION
+==================================================
+
+Catalogue có canonical slug.
+
+Ví dụ:
+
+/catalogue/nha-cung-ung-dong-phuc-2026
+
+Nếu Catalogue có nhiều edition:
+
+Trang detail mặc định hiển thị edition hiện hành
+hoặc edition xác định bởi architecture hiện tại.
+
+Có section:
+
+“CÁC ẤN BẢN”
+
+để xem edition trước.
+
+Không overwrite edition lịch sử.
+
+==================================================
+3. HERO
+==================================================
+
+Hero hiển thị:
+
+Cover
+
+Catalogue title
+
+Edition
+
+Topic
+
+Publication date
+
+Publisher
+
+Program liên quan nếu có
+
+Location/KCN scope nếu có
+
+Catalogue status
+
+H1:
+
+[TÊN CATALOGUE]
+
+Sub:
+
+“Ấn phẩm tổng hợp các hồ sơ doanh nghiệp đã được duyệt theo [chủ đề/phạm vi]. Mỗi doanh nghiệp được liên kết về hồ sơ số để xem thông tin đang được cập nhật.”
+
+CTA chính:
+
+[XEM TRỰC TUYẾN]
+
+CTA phụ:
+
+[TẢI PDF]
+
+chỉ khi downloadPermission cho phép.
+
+==================================================
+4. PUBLICATION CONTEXT
+==================================================
+
+Block:
+
+“THÔNG TIN ẤN PHẨM”
+
+Hiển thị:
+
+Chủ đề
+
+Edition
+
+Ngày phát hành
+
+Đơn vị phát hành
+
+Program liên quan
+
+Category
+
+Địa bàn
+
+KCN nếu có
+
+Distribution scope
+
+Ngày cập nhật trang digital
+
+Không đánh đồng:
+
+publicationDate
+
+với
+
+profile updatedAt.
+
+==================================================
+5. SNAPSHOT VS LIVE DATA
+==================================================
+
+Hiển thị note rõ:
+
+“Nội dung ấn phẩm phản ánh thông tin tại thời điểm phát hành. Hồ sơ doanh nghiệp trên website có thể được cập nhật sau đó.”
+
+Hai nguồn:
+
+CATALOGUE SNAPSHOT
+→ dữ liệu tại edition.
+
+LIVE PROFILE
+→ dữ liệu hiện tại.
+
+Không sửa ngược file/PDF lịch sử
+khi Supplier update profile.
+
+==================================================
+6. ONLINE VIEWER
+==================================================
+
+Ưu tiên bản xem online.
+
+Có thể triển khai:
+
+Digital page viewer
+
+hoặc structured catalogue sections
+
+tùy architecture hiện tại.
+
+Yêu cầu:
+
+responsive
+fast
+accessible
+không ép download PDF.
+
+Nếu PDF viewer được dùng:
+lazy load pages.
+
+Không tải toàn bộ PDF nặng ngay khi mở page.
+
+==================================================
+7. ONLINE VIEW ≠ PDF FILE
+==================================================
+
+Trang web phải vẫn có structured content:
+
+Title
+Edition facts
+Companies
+Categories
+Program
+Distribution
+Next edition CTA
+
+kể cả khi PDF không load.
+
+Không xây toàn page thành iframe PDF.
+
+==================================================
+8. TABLE OF CONTENTS
+==================================================
+
+Nếu edition có nhiều nhóm:
+
+tạo mục lục:
+
+Category
+
+Supplier groups
+
+Sections
+
+Program content
+
+Sponsored sections
+
+Cho phép jump-to-section.
+
+Không hard-code page number
+nếu edition digital không dựa hoàn toàn trên PDF.
+
+==================================================
+9. DANH SÁCH DOANH NGHIỆP
+==================================================
+
+Block:
+
+“DOANH NGHIỆP TRONG ẤN PHẨM”
+
+Chỉ query:
+
+CatalogueEntry.approvalStatus = APPROVED
+
+AND
+
+visibility phù hợp.
+
+Mỗi entry relation tới:
+
+Organization
+
+và nếu có:
+
+SupplierProfile
+FactoryProfile
+ProductService.
+
+==================================================
+10. BUSINESS CARD
+==================================================
+
+Mỗi Catalogue Business Card có:
+
+Logo
+
+Tên doanh nghiệp
+
+Category
+
+Capability ngắn
+
+Product/Service chính
+
+Service area
+
+Snapshot date / edition context
+
+CTA:
+
+[XEM HỒ SƠ CẬP NHẬT]
+
+→ canonical profile.
+
+Có thể thêm:
+
+[XEM SẢN PHẨM]
+
+nếu ProductService relation tồn tại.
+
+==================================================
+11. LIVE PROFILE LINK
+==================================================
+
+Hard rule:
+
+Catalogue không tạo:
+
+/catalogue/.../supplier-a-profile
+
+như profile thứ hai.
+
+CTA phải dẫn về:
+
+/doanh-nghiep/[slug]
+
+hoặc:
+
+/nha-may/[slug]
+
+hoặc entity canonical tương ứng.
+
+==================================================
+12. QR
+==================================================
+
+QR mỗi entry dẫn về canonical live profile.
+
+QR tracking context có thể chứa:
+
+catalogueId
+editionId
+entryId
+distributionBatchId optional.
+
+Sau tracking:
+
+redirect canonical profile.
+
+Không encode:
+
+private contact
+commercial price
+Buyer data.
+
+==================================================
+13. QR STABILITY
+==================================================
+
+QR phải tiếp tục hoạt động khi:
+
+Supplier update profile
+
+Catalogue hết edition
+
+Program kết thúc.
+
+Nếu Supplier slug đổi:
+redirect mapping phải giữ QR hoạt động.
+
+==================================================
+14. QR METRICS
+==================================================
+
+Track riêng:
+
+QR_SCAN
+
+PROFILE_VIEW
+
+CONTACT_REQUEST
+
+REQUIREMENT_CREATED
+
+CONNECTION_CREATED
+
+OUTCOME
+
+Không cộng chung.
+
+==================================================
+15. HARD METRIC RULE
+==================================================
+
+QR SCAN
+≠ LEAD
+
+PROFILE VIEW
+≠ CONTACT REQUEST
+
+CONTACT REQUEST
+≠ BUYER NEED
+
+BUYER NEED
+≠ DEAL
+
+Không report misleading conversion.
+
+==================================================
+16. SEARCH TRONG CATALOGUE
+==================================================
+
+Search trong edition:
+
+Organization
+
+Category
+
+Product/Service
+
+Capability
+
+Location
+
+Không search dữ liệu private.
+
+==================================================
+17. FILTER TRONG CATALOGUE
+==================================================
+
+Filter nhẹ:
+
+Category
+
+Location
+
+Supplier type
+
+Factory/Supplier
+
+Product group
+
+Không biến Catalogue thành Supplier Search thứ hai.
+
+CTA có thể dẫn về:
+
+/doanh-nghiep
+
+cho search đầy đủ.
+
+==================================================
+18. CATALOGUE ENTRY DETAIL
+==================================================
+
+Không nhất thiết tạo public URL riêng cho từng Entry.
+
+Có thể dùng:
+
+modal
+drawer
+anchor section
+
+để tránh tạo hàng nghìn thin URLs.
+
+Chi tiết vẫn phải link về canonical profile.
+
+==================================================
+19. PROGRAM INTEGRATION
+==================================================
+
+Nếu Catalogue gắn Program:
+
+Block:
+
+“CHƯƠNG TRÌNH LIÊN QUAN”
+
+Hiển thị:
+
+Program name
+date
+location
+status
+
+CTA:
+
+[XEM CHƯƠNG TRÌNH]
+
+→ /chuong-trinh/[slug]
+
+Không duplicate Program content.
+
+==================================================
+20. ASSOCIATION / KCN CONTEXT
+==================================================
+
+Nếu Catalogue thuộc:
+
+Association
+Industrial Park
+
+chỉ hiển thị relationship khi được xác nhận.
+
+Ví dụ:
+
+“Catalogue dành cho chương trình tại KCN ABC”
+
+không đồng nghĩa:
+
+“KCN ABC phát hành”
+
+nếu publisher relation không xác nhận.
+
+==================================================
+21. PUBLISHER
+==================================================
+
+Block:
+
+“ĐƠN VỊ PHÁT HÀNH”
+
+Reuse Organization.
+
+Hiển thị:
+
+Name
+Logo
+Role
+
+chỉ khi public.
+
+Không dùng publisher text rời
+nếu Organization đã tồn tại.
+
+==================================================
+22. DISTRIBUTION SCOPE
+==================================================
+
+Block:
+
+“PHẠM VI PHÂN PHỐI”
+
+Chỉ hiển thị scope đã xác nhận.
+
+Ví dụ:
+
+Digital
+
+Ngày hội Chuỗi Cung Ứng
+
+KCN
+
+Association
+
+Trade fair
+
+Direct distribution
+
+Không dùng wording rộng hơn dữ liệu.
+
+==================================================
+23. DISTRIBUTION NUMBERS
+==================================================
+
+Nếu hiển thị số lượng:
+
+chỉ dùng:
+
+actual confirmed distribution.
+
+Không hiển thị:
+
+plannedPrintQuantity
+
+như số đã phát.
+
+Nếu chưa đủ dữ liệu:
+chỉ mô tả channel/scope.
+
+==================================================
+24. DISTRIBUTION HISTORY
+==================================================
+
+Có thể hiển thị public summary:
+
+Đợt
+Ngày
+Kênh
+Địa bàn
+
+chỉ khi phù hợp.
+
+Chi tiết:
+
+receiver
+shipping document
+commercial data
+
+không cần public.
+
+==================================================
+25. DOWNLOAD PDF
+==================================================
+
+CTA:
+
+[TẢI PDF]
+
+chỉ khi:
+
+file exists
+AND
+downloadPermission permits.
+
+Nếu public:
+download trực tiếp/protected URL.
+
+Nếu participant-only:
+auth + permission.
+
+Không dùng predictable storage URL.
+
+==================================================
+26. PDF VERSION LABEL
+==================================================
+
+Khi download:
+
+hiển thị:
+
+Edition
+Publication date
+File version
+
+để user hiểu đây là snapshot.
+
+Không gọi:
+
+“latest profile data”
+
+cho PDF cũ.
+
+==================================================
+27. SPONSORED CONTENT
+==================================================
+
+Nếu có paid placement:
+
+label rõ:
+
+“TÀI TRỢ”
+
+“ĐỐI TÁC ĐỒNG HÀNH”
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+theo contract type.
+
+Không render như organic editorial recommendation.
+
+==================================================
+28. FOUNDING PARTNER
+==================================================
+
+Nếu quyền Catalogue
+đã thuộc Founding Partner entitlement:
+
+hiển thị theo entitlement.
+
+Không tạo quyền mới tự động.
+
+Không double charge.
+
+Không tăng SupplierMatching score.
+
+==================================================
+29. SPONSORED ≠ APPROVED SUPPLIER
+==================================================
+
+Có sponsor placement
+không đồng nghĩa:
+
+Supplier được xác minh
+
+Supplier phù hợp mọi Buyer Need
+
+Supplier được ưu tiên matching.
+
+Copy/UI phải giữ rõ sự khác biệt.
+
+==================================================
+30. THAM GIA ẤN PHẨM TIẾP THEO
+==================================================
+
+Block bắt buộc:
+
+“THAM GIA ẤN PHẨM TIẾP THEO”
+
+Hiển thị:
+
+Chuyên mục đang nhận hồ sơ
+
+Đối tượng phù hợp
+
+Deadline
+
+Quy cách hồ sơ
+
+Ảnh/video cần chuẩn bị
+
+Cách xét duyệt
+
+Cách nhận báo giá
+
+Phạm vi biên tập
+
+CTA:
+
+[ĐĂNG KÝ GIỚI THIỆU DOANH NGHIỆP]
+
+==================================================
+31. CTA NEXT EDITION
+==================================================
+
+Route:
+
+/yeu-cau-dich-vu
+?service=catalogue
+&catalogueId={id}
+&nextEdition=true
+
+Nếu next edition đã tồn tại:
+
+editionId={nextEditionId}
+
+Prefill:
+Organization nếu login.
+
+==================================================
+32. SUBMISSION ≠ APPROVAL
+==================================================
+
+Hard rule:
+
+Supplier submit
+→ REQUEST
+
+REQUEST
+→ REVIEW
+
+REVIEW
+→ CONTENT PREPARATION
+
+→ CLIENT REVIEW
+
+→ APPROVED
+
+→ CATALOGUE ENTRY
+
+Không auto publish.
+
+==================================================
+33. CONTENT REQUIREMENTS
+==================================================
+
+Có thể hiển thị checklist:
+
+Logo
+
+Company description
+
+Capabilities
+
+Products
+
+Service area
+
+Images
+
+Contact
+
+QR target
+
+Approval person
+
+Nhưng checklist phải cấu hình theo edition.
+
+Không hard-code một form cho mọi Catalogue.
+
+==================================================
+34. EDITORIAL SCOPE
+==================================================
+
+Giải thích:
+
+CHUOICUNGUNG.COM/Publisher có thể:
+
+chuẩn hóa cách trình bày
+
+rút gọn nội dung
+
+chuẩn hóa hình ảnh
+
+sắp xếp theo taxonomy
+
+nhưng không tự thay đổi
+claim kỹ thuật/capability
+không có nguồn.
+
+==================================================
+35. COMPANY CONTENT OWNER
+==================================================
+
+Mỗi CatalogueEntry phải có:
+
+content owner / approver.
+
+Có thể là:
+
+Organization member
+Internal coordinator
+
+Tối thiểu phải biết:
+
+ai chịu trách nhiệm xác nhận nội dung.
+
+==================================================
+36. CONTENT APPROVAL
+==================================================
+
+Trước publish edition:
+
+mỗi Entry cần:
+
+approved content version
+
+approved media rights
+
+QR target valid.
+
+Không publish entry incomplete.
+
+==================================================
+37. PROFILE UPDATE AFTER PUBLICATION
+==================================================
+
+Nếu Supplier cập nhật profile sau publication:
+
+Catalogue snapshot không đổi.
+
+CTA/QR live profile sẽ cho thấy current data.
+
+Có thể hiển thị:
+
+“Hồ sơ trực tuyến cập nhật ngày ...”
+
+==================================================
+38. ARCHIVED EDITION
+==================================================
+
+Edition cũ vẫn truy cập nếu:
+
+archive policy cho phép.
+
+Label:
+
+“ẤN BẢN LƯU TRỮ”
+
+Publication date rõ.
+
+Không giả vờ edition cũ là current.
+
+==================================================
+39. EDITION SWITCHER
+==================================================
+
+Nếu có nhiều edition:
+
+2026 Q1
+2026 Q2
+2026 Q3
+
+cho phép switch.
+
+Canonical strategy phải tránh duplicate SEO.
+
+Current edition:
+canonical main slug.
+
+Archived edition:
+route/version phù hợp architecture.
+
+==================================================
+40. GỬI YÊU CẦU CHO DOANH NGHIỆP
+==================================================
+
+Business Card có thể có CTA:
+
+[GỬI YÊU CẦU]
+
+Flow:
+
+Catalogue source
+→ target Organization
+→ select/create Requirement
+→ confirm
+→ Connection Request
+
+Track:
+
+sourceCatalogueId
+editionId
+entryId.
+
+Không reveal contact trực tiếp mặc định.
+
+==================================================
+41. SUPPI
+==================================================
+
+SUPPI trên Catalogue có thể hỗ trợ:
+
+“Tìm NCC trong catalogue này.”
+
+“Doanh nghiệp nào phục vụ Đồng Nai?”
+
+“Tôi cần NCC đồng phục cho 500 người.”
+
+Nếu user chuyển sang sourcing:
+
+dùng SupplierProfile live data,
+không chỉ snapshot Catalogue.
+
+==================================================
+42. CATALOGUE SNAPSHOT KHÔNG DÙNG ĐỂ MATCHING MÙ
+==================================================
+
+Matching phải dùng dữ liệu SupplierProfile hiện tại.
+
+CatalogueEntry chỉ có thể là:
+
+discovery/source context.
+
+Không dùng dữ liệu edition cũ
+làm truth nếu live profile đã thay đổi.
+
+==================================================
+43. MEDIA
+==================================================
+
+Cover
+Entry photos
+Ad creative
+Sponsor logo
+
+đều phải reuse MediaAsset.
+
+Check:
+
+usageRights
+catalogueUsageAllowed
+visibility
+publishStatus.
+
+==================================================
+44. REPORT
+==================================================
+
+Nếu user có quyền:
+
+có thể xem distribution report.
+
+Public page chỉ hiển thị summary được phép.
+
+Partner/private report có thể gồm:
+
+Print confirmed
+Distribution confirmed
+QR scans
+Profile visits
+Contact requests
+Requirements
+Deliverables.
+
+==================================================
+45. COMMERCIAL PRIVACY
+==================================================
+
+Không public:
+
+Catalogue fee
+
+Supplier package price
+
+Sponsor contract amount
+
+Printing vendor cost
+
+Internal margin
+
+Partner commission.
+
+Finance data nằm admin theo RBAC.
+
+==================================================
+46. ADMIN
+==================================================
+
+Reuse:
+
+/admin/catalogue/[id]
+
+Tabs:
+
+OVERVIEW
+
+EDITIONS
+
+ENTRIES
+
+ONLINE VERSION
+
+CONTENT REVIEW
+
+MEDIA
+
+QR
+
+PRINT
+
+DISTRIBUTION
+
+SPONSORSHIP
+
+REPORT
+
+FINANCE
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+47. ADMIN EDITION PREVIEW
+==================================================
+
+Admin cần preview exact edition
+trước publication.
+
+Checklist:
+
+Title
+Cover
+Topic
+Publication date
+Publisher
+Entries approved
+Images rights
+QR valid
+Distribution scope
+Sponsored labels
+Download permission
+
+==================================================
+48. PUBLISH GATE
+==================================================
+
+Không cho PUBLISHED_DIGITAL nếu:
+
+no approved edition
+
+broken QR
+
+entry chưa approved
+
+media rights missing
+
+publisher undefined
+nếu business rule yêu cầu.
+
+Show blockers.
+
+==================================================
+49. PRINT GATE
+==================================================
+
+Không chuyển PRINT_CONFIRMED nếu thiếu:
+
+approved digital edition
+final file
+confirmed quantity
+budget
+distribution plan
+receiver/responsible party.
+
+==================================================
+50. QR HEALTH CHECK
+==================================================
+
+Admin checker:
+
+QR target exists
+
+profile still publishable
+
+redirect valid
+
+entry mapping valid.
+
+Flag broken QR trước print.
+
+==================================================
+51. DISTRIBUTION ADMIN
+==================================================
+
+Quản lý:
+
+Distribution Batch
+
+Channel
+
+Planned qty
+
+Actual qty
+
+Date
+
+Receiver
+
+Evidence
+
+Owner
+
+Status
+
+Không overwrite planned bằng actual.
+
+==================================================
+52. OWNER + NEXT ACTION
+==================================================
+
+Edition active có:
+
+owner
+nextAction
+nextActionAt.
+
+Entry review active cũng phải có:
+
+owner/status/due.
+
+Ví dụ:
+
+“Chờ doanh nghiệp duyệt bản nháp”
+
+“Chốt 200 bản giao chương trình”
+
+“Kiểm tra QR trước khi in”.
+
+==================================================
+53. ANALYTICS
+==================================================
+
+Track:
+
+catalogue_detail_view
+
+catalogue_online_open
+
+catalogue_section_view
+
+catalogue_entry_view
+
+catalogue_profile_click
+
+catalogue_qr_scan
+
+catalogue_pdf_download
+
+catalogue_request_click
+
+next_edition_start
+
+next_edition_submit
+
+Không coi scan/download = lead.
+
+==================================================
+54. SEO
+==================================================
+
+Title:
+
+[Tên Catalogue] | CHUOICUNGUNG.COM
+
+Meta:
+
+Xem [Tên Catalogue], danh sách doanh nghiệp đã duyệt, chủ đề, chương trình và phạm vi phân phối; truy cập hồ sơ doanh nghiệp đang được cập nhật trên CHUOICUNGUNG.COM.
+
+Canonical:
+
+/catalogue/[slug]
+
+==================================================
+55. STRUCTURED DATA
+==================================================
+
+Có thể dùng:
+
+CreativeWork
+BreadcrumbList
+ItemList
+
+Chỉ output:
+
+name
+datePublished
+publisher
+
+khi có data thật.
+
+Không fake:
+
+numberOfPages
+distribution
+author
+download count.
+
+==================================================
+56. ACCESSIBILITY
+==================================================
+
+Online catalogue phải:
+
+keyboard navigable
+
+alt text cho cover/entry image
+
+PDF link rõ
+
+không phụ thuộc chỉ vào flip animation.
+
+Không ép hiệu ứng page-flip nặng
+nếu làm giảm khả năng đọc.
+
+==================================================
+57. PERFORMANCE
+==================================================
+
+Lazy load:
+
+pages
+images
+supplier sections.
+
+Thumbnail trước,
+full asset sau.
+
+Không load toàn bộ:
+100 trang PDF
++ toàn bộ Supplier images
+ngay initial render.
+
+==================================================
+58. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+
+Edition facts
+
+Online viewer
+
+Contents/categories
+
+Company entries
+
+Program
+
+Distribution scope
+
+Next edition CTA
+
+Sticky CTA optional:
+
+[XEM ONLINE]
+
+Không overflow 390px.
+
+==================================================
+59. SECURITY
+==================================================
+
+Check:
+
+private PDF direct URL
+
+unpublished edition
+
+unapproved entry
+
+private media
+
+admin preview token
+
+cross-edition access
+
+download permission.
+
+Backend enforce.
+
+==================================================
+60. QA
+==================================================
+
+Test tối thiểu:
+
+1. Detail load đúng slug.
+2. Edition history giữ nguyên.
+3. Snapshot và live profile tách rõ.
+4. Approved entries mới public.
+5. Supplier profile link canonical.
+6. QR vẫn hoạt động khi slug đổi.
+7. QR scan tracking đúng edition.
+8. QR scan không tạo lead.
+9. Online viewer hoạt động không cần PDF download.
+10. PDF chỉ tải khi có quyền.
+11. Planned distribution không hiển thị như actual.
+12. Sponsored placement có label.
+13. Founding Partner entitlement không double charge.
+14. Next edition submit không auto approve.
+15. Media rights được kiểm tra.
+16. Broken QR block print/publish khi cần.
+17. Private commercial data không public.
+18. Mobile 390px hoạt động.
+
+==================================================
+61. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- Catalogue detail
+- Edition handling
+- Online viewer
+- Entry rendering
+- Snapshot/live profile logic
+- QR tracking
+- Distribution display
+- Program integration
+- Sponsor integration
+- Next-edition workflow
+- Admin publication gate
+- Print gate
+- Permissions
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+CATALOGUE
+→ EDITION
+→ APPROVED BUSINESSES
+→ ONLINE VIEW
+→ QR
+→ LIVE PROFILE
+→ REQUEST
+→ CONNECTION
+→ FOLLOW-UP
+
+PRINTED EDITION
+=
+HISTORICAL SNAPSHOT
+
+LIVE PROFILE
+=
+CURRENT BUSINESS DATA
+
+Không để Catalogue trở thành
+một PDF chết sau khi phát hành.

@@ -1,0 +1,1911 @@
+PROJECT: CHUOICUNGUNG.COM
+
+TASK:
+MASTER SYSTEM OPTIMIZATION
+P0 + P1 FINAL HARDENING
+PRE-PILOT READY
+
+IMPORTANT:
+
+37 PAGE P0 + P1 ĐÃ ĐƯỢC TRIỂN KHAI.
+
+KHÔNG XÂY PAGE 38.
+KHÔNG MỞ P2.
+KHÔNG REBUILD TOÀN WEBSITE.
+
+Mục tiêu của task này là:
+
+AUDIT
+→ FIX
+→ CLEAN
+→ CONSOLIDATE
+→ OPTIMIZE
+→ TEST
+→ HARDEN
+→ PILOT READY
+
+Nếu có lỗi an toàn và có thể sửa không phá dữ liệu:
+HÃY TỰ SỬA.
+
+Chỉ dừng và report khi:
+
+- migration phá dữ liệu;
+- cần credential bên ngoài;
+- cần quyết định business;
+- cần thay đổi architecture lớn;
+- không thể xác định dữ liệu đúng.
+
+==================================================
+A. SNAPSHOT TRƯỚC KHI SỬA
+==================================================
+
+Trước khi sửa:
+
+1. Audit framework hiện tại.
+2. Audit routing.
+3. Audit database/schema.
+4. Audit auth.
+5. Audit shared components.
+6. Audit API/server actions.
+7. Audit admin.
+8. Audit current tests.
+9. Audit environment variables.
+10. Audit existing mocks.
+
+Tạo baseline report.
+
+Không reset database.
+
+Không xóa migration cũ.
+
+==================================================
+B. KHÓA PHẠM VI
+==================================================
+
+Không tự xây:
+
+/ban-do-viet-nam
+/tuyen-dung
+/dich-vu/phuc-loi-doanh-nghiep
+international sourcing
+enterprise buyer workspace
+KCN workspace nâng cao
+Association workspace nâng cao
+supplier membership premium
+industry analytics dashboard
+marketplace mở rộng
+API partner platform
+
+Các phần này chỉ đưa vào BACKLOG.
+
+==================================================
+C. KIẾN TRÚC ORGANIZATION
+==================================================
+
+Hard rule:
+
+ONE LEGAL BUSINESS
+=
+ONE ORGANIZATION.
+
+Organization có thể có nhiều roles:
+
+BUYER
+SUPPLIER
+FACTORY_OWNER
+ASSOCIATION
+INDUSTRIAL_PARK_OPERATOR
+SPONSOR
+FOUNDING_PARTNER
+DEVELOPMENT_PARTNER
+PROGRAM_ORGANIZER
+INVESTOR
+ADVISOR
+
+Không tạo:
+
+ABC Buyer
+ABC Supplier
+ABC Sponsor
+
+thành 3 company record.
+
+Audit duplicate Organization.
+
+Detect theo:
+
+tax code
+normalized legal name
+website domain
+phone
+email domain
+aliases.
+
+Không auto merge candidate không chắc chắn.
+
+==================================================
+D. FACTORY / FACILITY
+==================================================
+
+Một Organization có thể có nhiều:
+
+Factory
+Facility
+Office
+Warehouse.
+
+Legal company data nằm Organization.
+
+Factory chỉ giữ:
+
+facility-specific data
+location
+KCN relation
+production capability
+factory attributes.
+
+Không copy toàn bộ company record.
+
+==================================================
+E. TAXONOMY
+==================================================
+
+Audit:
+
+6 Stages
+
+18 NeedGroups
+
+Categories
+
+KeywordClusters
+
+ProductServices
+
+Capabilities.
+
+Không có taxonomy song song.
+
+Canonical 6 Stage:
+
+1. Chuẩn bị & Đầu tư
+2. Thiết kế & Xây dựng
+3. Lắp đặt & Hoàn thiện
+4. Vận hành Sản xuất
+5. Nhân sự & Hậu cần
+6. Mở rộng – Tối ưu – Chuyển đổi
+
+Map legacy names về canonical.
+
+==================================================
+F. ROUTE CLEANUP
+==================================================
+
+Audit toàn bộ route.
+
+Check:
+
+duplicate routes
+old routes
+dead routes
+broken dynamic slugs
+incorrect redirects
+wrong canonical URLs.
+
+Tất cả CTA phải trỏ tới route thật.
+
+Các old URLs hợp lệ:
+301 redirect.
+
+Không redirect loop.
+
+==================================================
+G. HEADER / FOOTER
+==================================================
+
+Desktop + mobile navigation phải thống nhất.
+
+Main:
+
+Tìm nguồn cung
+Nhu cầu
+6 Giai đoạn
+Chương trình
+Hệ sinh thái
+Dịch vụ
+Hợp tác
+
+CTA nổi bật:
+
+ĐĂNG NHU CẦU
+
+Check toàn bộ dropdown.
+
+Không để link P2 chưa làm
+xuất hiện như feature đang hoạt động.
+
+==================================================
+H. CORE WORKFLOW
+==================================================
+
+Core system phải chạy:
+
+NHU CẦU
+→ TÌM NGUỒN
+→ KẾT NỐI
+→ THEO DÕI
+→ KẾT QUẢ.
+
+Đây là flow chính.
+
+Không biến platform thành directory.
+
+==================================================
+I. REQUIREMENT
+==================================================
+
+Audit:
+
+RequirementDraft
+Requirement
+RequirementVersion.
+
+Requirement cần:
+
+owner
+status
+visibility
+nextAction
+nextActionAt
+updatedAt.
+
+Visibility:
+
+PRIVATE
+MATCHED_SUPPLIERS_ONLY
+PUBLIC_SUMMARY
+
+Backend enforce.
+
+==================================================
+J. REQUIREMENT VERSIONING
+==================================================
+
+Khi thay đổi:
+
+quantity
+deadline
+location
+technical requirement
+visibility
+
+phải giữ version history.
+
+Không silently overwrite.
+
+==================================================
+K. MATCHING
+==================================================
+
+Supplier matching dựa trên:
+
+NEED
+CAPABILITY
+LOCATION
+TIME
+ABILITY TO RESPOND.
+
+Không dựa trên:
+
+paid plan
+Sponsor
+Founding Partner
+advertising fee.
+
+==================================================
+L. EXPLAINABLE MATCH
+==================================================
+
+Match phải trả lời:
+
+TẠI SAO NCC NÀY ĐƯỢC ĐƯA VÀO?
+
+Ví dụ:
+
+✓ đúng sản phẩm
+✓ đúng năng lực
+✓ phục vụ địa bàn
+✓ nhận quy mô đơn
+? chưa xác nhận lead time
+
+Không hiển thị opaque score
+nếu score không có methodology rõ.
+
+==================================================
+M. WORKFLOW STATUS CLEANUP
+==================================================
+
+Audit state machine.
+
+Không dùng một status chung:
+
+SUCCESS.
+
+Need lifecycle có thể:
+
+NEW
+NEED_MORE_INFO
+VERIFIED
+SOURCING
+SUPPLIER_INVITED
+RESPONSE_RECEIVED
+MEETING
+QUOTED
+NEGOTIATING
+CLOSED
+
+Closed reason:
+
+WON
+NOT_SUITABLE
+CANCELLED
+PAUSED
+EXPIRED
+UNKNOWN_RESULT.
+
+Map về schema hiện tại nếu đã có.
+
+Không destructive rewrite nếu không cần.
+
+==================================================
+N. SUPPLIER RESPONSE STATUS
+==================================================
+
+Supplier response phải riêng với Need status.
+
+Ví dụ:
+
+INVITED
+VIEWED
+RESPONDED
+NEED_MORE_INFO
+DECLINED
+NOT_SUITABLE.
+
+Không đổi Requirement thành RESPONDED
+chỉ vì một Supplier trả lời.
+
+==================================================
+O. CONNECTION WORKFLOW
+==================================================
+
+Connection phải có:
+
+buyer
+supplier
+requirement
+owner
+status
+nextAction
+nextActionAt
+activity history.
+
+Connection mới là nơi CHAINY follow-up.
+
+==================================================
+P. MEETING / SAMPLE / QUOTE
+==================================================
+
+Reuse shared objects:
+
+Meeting
+Sample
+Quotation.
+
+Không có:
+
+ProgramQuote
+DossierQuote
+FactoryQuote
+
+nếu cùng bản chất.
+
+Link context bằng relation.
+
+==================================================
+Q. OUTCOME
+==================================================
+
+Outcome phải ghi được:
+
+SELECTED
+NOT_SELECTED
+NOT_SUITABLE
+PAUSED
+CANCELLED
+UNKNOWN
+
+và evidence/note nếu có.
+
+Meeting không đồng nghĩa deal.
+
+Quote không đồng nghĩa deal.
+
+==================================================
+R. OWNER RULE
+==================================================
+
+Mọi operational record đang active phải có:
+
+ownerUserId
+nextAction
+nextActionAt
+status
+lastUpdatedAt.
+
+Nếu thiếu owner:
+flag admin warning.
+
+Auto assign theo rule hiện có
+nếu an toàn.
+
+==================================================
+S. SHARED TASK SYSTEM
+==================================================
+
+Mọi module reuse shared Task.
+
+Task relation:
+
+Requirement
+Connection
+ServiceRequest
+Program
+Sponsorship
+Catalogue
+Dossier
+Partnership.
+
+Không có nhiều task engine khác nhau.
+
+==================================================
+T. FORM ENGINE
+==================================================
+
+Audit tất cả forms.
+
+Ưu tiên shared:
+
+<FormEngine
+  schema={formSchema}
+  context={sourceContext}
+/>
+
+Schema có:
+
+type
+version
+steps
+fields
+conditions
+consent.
+
+==================================================
+U. FORM STANDARD FLOW
+==================================================
+
+Mọi form quan trọng:
+
+OPEN
+→ DRAFT
+→ CLIENT VALIDATION
+→ SUBMIT
+→ SERVER VALIDATION
+→ DEDUPLICATION
+→ CREATE RECORD
+→ ASSIGN OWNER
+→ CREATE TASK
+→ SEND CONFIRMATION
+→ SHOW TRACKING CODE
+
+Nếu form nào thiếu:
+fix.
+
+==================================================
+V. FORM CONTEXT
+==================================================
+
+Giữ:
+
+sourcePage
+sourceId
+category
+keyword
+program
+association
+KCN
+partner
+campaign
+referral.
+
+Context phải sống qua:
+
+login
+register
+refresh
+submit.
+
+==================================================
+W. CONSENT
+==================================================
+
+Tách:
+
+request-processing consent
+
+và
+
+marketing consent.
+
+Không tự bật marketing.
+
+==================================================
+X. PUBLIC CODE
+==================================================
+
+Internal:
+UUID.
+
+Public:
+
+NC-...
+DV-...
+CT-...
+HT-...
+
+hoặc convention hiện có.
+
+Không expose raw incremental IDs.
+
+==================================================
+Y. AUTH / RBAC
+==================================================
+
+Audit:
+
+Guest
+Buyer
+Supplier
+Organization Manager
+Association
+KCN
+Sponsor
+Development Partner
+Advisor
+Coordinator
+Finance
+Admin.
+
+Default:
+
+LEAST PRIVILEGE.
+
+==================================================
+Z. IDOR / PRIVATE DATA
+==================================================
+
+Test direct access bằng đổi ID.
+
+Đặc biệt:
+
+Requirement
+SupplierResponse
+Quote
+Meeting
+ServiceRequest
+ProgramRegistration
+Private Catalogue file
+Dossier
+Contract
+Sponsorship
+Settlement.
+
+Backend phải deny.
+
+Frontend hide không đủ.
+
+==================================================
+AA. FILE SECURITY
+==================================================
+
+Private file:
+
+không dùng permanent public URL.
+
+Use signed/protected URL
+hoặc existing secured mechanism.
+
+Test anonymous copied URL.
+
+==================================================
+AB. SUPPLIER PROFILE
+==================================================
+
+Audit profile completeness:
+
+Organization
+Capability
+ProductService
+ServiceArea
+Evidence
+Facilities
+Media
+updatedAt.
+
+Không hiển thị fake verification.
+
+Self-declared và reviewed
+phải phân biệt.
+
+==================================================
+AC. DATA FRESHNESS
+==================================================
+
+Warn:
+
+profile stale
+evidence expired
+certificate expired
+contact invalid
+product archived.
+
+Admin cần thấy Data Quality warnings.
+
+==================================================
+AD. PROGRAM
+==================================================
+
+Audit:
+
+Program
+Registration
+Payment
+Attendance
+Meeting.
+
+Các status phải riêng.
+
+REGISTERED
+≠ PAID
+≠ ATTENDED.
+
+==================================================
+AE. PROGRAM EXPIRATION
+==================================================
+
+UPCOMING
+OPEN
+CLOSED
+COMPLETED
+POSTPONED
+CANCELLED
+
+phải có UX phù hợp.
+
+Cancelled/Postponed:
+không mất history.
+
+==================================================
+AF. ASSOCIATION
+==================================================
+
+Membership chỉ khi confirmed.
+
+Program participant
+không tự thành member.
+
+Không ngụ ý endorsement.
+
+==================================================
+AG. KCN
+==================================================
+
+KCN relation phải confirmed.
+
+Không suy từ text address.
+
+Phân biệt:
+
+state management
+developer
+operator.
+
+==================================================
+AH. FACTORY
+==================================================
+
+Factory MUA:
+
+Requirement workflow.
+
+Factory BÁN:
+
+SupplierProfile/Capability/ProductService.
+
+Cùng Organization.
+
+Không lộ buyer private data
+trên public factory page.
+
+==================================================
+AI. CATALOGUE
+==================================================
+
+Digital edition
++
+historical snapshot.
+
+CatalogueEntry link canonical Supplier profile.
+
+Không tạo duplicate Supplier.
+
+==================================================
+AJ. QR
+==================================================
+
+QR:
+
+source attribution only.
+
+QR_SCAN
+≠ CONTACT
+≠ REQUIREMENT
+≠ DEAL.
+
+Fix analytics nếu đang gộp.
+
+==================================================
+AK. SPONSORSHIP
+==================================================
+
+Workflow:
+
+INQUIRY
+→ SCOPE
+→ PROPOSAL
+→ CONTRACT
+→ ACTIVE
+→ DELIVERY
+→ ACCEPTANCE
+→ REPORT
+→ COMPLETE/EXPIRE.
+
+Form submit
+không auto Sponsor.
+
+==================================================
+AL. SPONSOR ENTITLEMENT
+==================================================
+
+Entitlement phải có:
+
+scope
+quantity
+period
+owner
+delivery status
+evidence
+acceptance.
+
+Không double-charge
+quyền đã nằm trong contract.
+
+==================================================
+AM. FOUNDING PARTNER
+==================================================
+
+Founding Partner scope:
+
+Category/KeywordCluster
+Location/KCN optional
+Placement
+Term.
+
+Không ảnh hưởng matching.
+
+Không đồng nghĩa equity.
+
+==================================================
+AN. DEVELOPMENT PARTNER
+==================================================
+
+Audit:
+
+Application
+Agreement
+Referral
+Attribution
+Valid transaction
+Settlement
+Refund adjustment.
+
+Referral click
+không phải revenue.
+
+==================================================
+AO. INVESTOR
+==================================================
+
+Investor workflow tách khỏi:
+
+Sponsor
+Founding Partner.
+
+Finance:
+
+Investment capital
+không được ghi là revenue.
+
+==================================================
+AP. SOURCING DOSSIER
+==================================================
+
+Dossier cần:
+
+Purpose
+Criteria
+Prepared by
+Updated date
+Candidates
+Inclusion reason
+Evidence
+Missing info.
+
+Paid Supplier
+không tự vào shortlist.
+
+==================================================
+AQ. SUPPI
+==================================================
+
+SUPPI role:
+
+clarify needs
+structure information
+identify missing fields
+search/match suppliers
+explain match.
+
+Không:
+
+verify automatically
+publish automatically
+select winner
+make legal/technical approval.
+
+==================================================
+AR. CHAINY
+==================================================
+
+CHAINY role:
+
+connection
+meeting
+sample
+quote
+follow-up
+next action
+outcome.
+
+Không tự:
+
+accept terms
+commit price
+mark Won
+sign contract.
+
+==================================================
+AS. ADMIN OPTIMIZATION
+==================================================
+
+Central operational view:
+
+ĐĂNG NHU CẦU
+TÌM NGUỒN
+KẾT NỐI
+THEO DÕI
+KẾT QUẢ
+
+Add useful queues:
+
+UNASSIGNED
+
+OVERDUE
+
+DUE TODAY
+
+WAITING BUYER
+
+WAITING SUPPLIER
+
+WAITING INTERNAL
+
+NO NEXT ACTION.
+
+==================================================
+AT. ADMIN PERFORMANCE
+==================================================
+
+Admin tables:
+
+server-side pagination
+
+server-side filters
+
+search
+
+sorting
+
+URL query persistence.
+
+Không fetch hàng nghìn rows
+rồi filter client-side.
+
+==================================================
+AU. AUDIT LOG
+==================================================
+
+Log:
+
+who
+when
+action
+entity
+before
+after
+
+cho important changes.
+
+Đặc biệt:
+
+status
+visibility
+permission
+role
+owner
+contract
+finance
+outcome
+public display.
+
+==================================================
+AV. SEARCH OPTIMIZATION
+==================================================
+
+Global Search:
+
+Supplier
+Product
+Category
+Keyword
+Factory
+KCN
+Association
+Program
+Catalogue.
+
+Normalize:
+
+Vietnamese accents
+case
+aliases
+synonyms.
+
+Không create duplicate landing page
+cho synonym.
+
+==================================================
+AW. DATABASE INDEXES
+==================================================
+
+Audit query patterns.
+
+Add safe indexes cho:
+
+slug
+
+organization normalized name
+
+tax code
+
+categoryId
+
+status
+
+visibility
+
+ownerUserId
+
+nextActionAt
+
+programId
+
+requirementId
+
+supplierId
+
+createdAt/updatedAt
+
+only where useful.
+
+Không index mọi field vô tội vạ.
+
+==================================================
+AX. N+1 QUERY
+==================================================
+
+Detect N+1 ở:
+
+Supplier lists
+
+Program lists
+
+Catalogue entries
+
+Admin tables
+
+Requirements
+
+Connections.
+
+Optimize bằng:
+
+select/include strategy
+batching
+appropriate joins.
+
+==================================================
+AY. PAGINATION
+==================================================
+
+All large collections:
+
+pagination
+or cursor.
+
+Không return unlimited results.
+
+==================================================
+AZ. CACHE
+==================================================
+
+Public static-ish content:
+
+Category
+Stage
+Program public content
+Catalogue public metadata
+
+có thể cache phù hợp.
+
+Private/personalized data:
+không shared cache.
+
+Ensure invalidation.
+
+==================================================
+BA. IMAGE OPTIMIZATION
+==================================================
+
+Audit:
+
+image dimensions
+responsive src
+lazy loading
+format
+compression
+alt.
+
+Không load full-resolution
+cho thumbnails.
+
+==================================================
+BB. VIDEO
+==================================================
+
+Video:
+
+lazy load
+poster
+metadata
+avoid autoplay heavy media
+unless existing UX requires.
+
+==================================================
+BC. PDF
+==================================================
+
+Catalogue PDF:
+
+không preload full file.
+
+Viewer lazy load.
+
+Mobile fallback.
+
+==================================================
+BD. JAVASCRIPT
+==================================================
+
+Audit bundle.
+
+Remove:
+
+unused packages
+duplicate libraries
+dead imports
+legacy components.
+
+Code split large admin/media modules.
+
+Không rewrite framework.
+
+==================================================
+BE. PERFORMANCE TARGET
+==================================================
+
+Ưu tiên:
+
+fast first meaningful render
+
+responsive interaction
+
+no huge blocking JS
+
+no unnecessary client rendering.
+
+Nếu Lighthouse/Web Vitals tooling tồn tại:
+run before/after.
+
+Report actual values,
+không fake scores.
+
+==================================================
+BF. MOBILE
+==================================================
+
+Test:
+
+390
+430
+768 px.
+
+Đặc biệt:
+
+Header
+Filters
+Forms
+Supplier cards
+Program cards
+Tables
+Admin
+Modal
+Tabs
+Sticky CTA.
+
+Không horizontal overflow.
+
+==================================================
+BG. DESKTOP
+==================================================
+
+Test:
+
+1024
+1280
+1440
+1920.
+
+Không kéo content quá rộng.
+
+Không để large blank areas
+sau refactor.
+
+==================================================
+BH. UX CONSISTENCY
+==================================================
+
+Standardize:
+
+buttons
+inputs
+cards
+status badges
+empty states
+error states
+loading states
+breadcrumbs
+dialogs.
+
+Reuse design system.
+
+Không redesign brand.
+
+==================================================
+BI. COPY CONSISTENCY
+==================================================
+
+Giữ terminology:
+
+Nhu cầu
+
+Nhà cung ứng
+
+Nhà máy
+
+Chương trình
+
+Kết nối
+
+Theo dõi
+
+Kết quả
+
+Founding Partner
+
+Nhà tài trợ
+
+Đối tác phát triển.
+
+Không đổi từ tùy page.
+
+==================================================
+BJ. ERROR HANDLING
+==================================================
+
+Every main feature:
+
+Loading
+
+Empty
+
+Validation error
+
+Server error
+
+Permission denied
+
+Not found
+
+Expired
+
+Archived.
+
+Không blank screen.
+
+==================================================
+BK. ACCESSIBILITY
+==================================================
+
+Fix:
+
+form labels
+keyboard navigation
+focus
+button semantics
+modal focus trap
+alt text
+error announcement
+contrast where clearly broken.
+
+==================================================
+BL. SEO
+==================================================
+
+Audit all public pages:
+
+title
+meta description
+canonical
+OpenGraph
+robots
+sitemap
+breadcrumb.
+
+Private/admin/account:
+noindex.
+
+==================================================
+BM. STRUCTURED DATA
+==================================================
+
+Only use schema supported by real data.
+
+No fake:
+
+ratings
+reviews
+offers
+availability
+numberOfItems.
+
+==================================================
+BN. SEO DUPLICATION
+==================================================
+
+Resolve:
+
+old slug
+aliases
+filters
+query params
+synonyms
+archive versions.
+
+Use:
+canonical
+redirect
+noindex
+where appropriate.
+
+==================================================
+BO. OBSERVABILITY
+==================================================
+
+Add/verify logging for:
+
+API errors
+form submission errors
+background failures
+permission failures
+failed notifications.
+
+Do not log:
+password
+token
+sensitive private file content.
+
+==================================================
+BP. ANALYTICS EVENT TAXONOMY
+==================================================
+
+Normalize metrics:
+
+PAGE_VIEW
+
+SEARCH
+
+PROFILE_VIEW
+
+QR_SCAN
+
+FORM_START
+
+FORM_SUBMIT
+
+CONFIRMED_REQUIREMENT
+
+SUPPLIER_INVITED
+
+SUPPLIER_RESPONSE
+
+CONNECTION
+
+MEETING
+
+SAMPLE
+
+QUOTE
+
+OUTCOME
+
+CONTRACT
+
+REVENUE.
+
+Không trộn events.
+
+==================================================
+BQ. PILOT KPI
+==================================================
+
+Dashboard/report cần đo:
+
+Requests received
+
+Confirmed Needs
+
+Needs requiring more info
+
+Supplier invitations
+
+Supplier responses
+
+Meetings
+
+Samples
+
+Quotes
+
+Outcomes
+
+Service contracts
+
+Sponsor contracts
+
+Actual collected revenue
+
+Refunds
+
+Service cost
+
+Repeat customers / renewals.
+
+==================================================
+BR. DO NOT FAKE KPI
+==================================================
+
+Nếu chưa có data:
+
+0
+hoặc
+“No data yet”.
+
+Không generate impressive metrics.
+
+==================================================
+BS. PILOT DATA QUALITY
+==================================================
+
+Prepare for real data:
+
+Organizations
+
+Suppliers
+
+Factories
+
+KCN
+
+Associations
+
+Categories
+
+Keywords
+
+Products
+
+Capabilities
+
+Programs
+
+Requirements.
+
+Validate import/edit workflows.
+
+==================================================
+BT. PILOT SEED MODE
+==================================================
+
+If test/demo records required:
+
+mark:
+
+TEST
+DEMO
+SEED.
+
+Ensure production public queries
+can exclude them.
+
+==================================================
+BU. END-TO-END BUYER TEST
+==================================================
+
+Test:
+
+Describe need
+→ SUPPI
+→ Draft
+→ Confirm
+→ Requirement
+→ Match
+→ Supplier response
+→ Connection
+→ Meeting
+→ Quote
+→ Follow-up
+→ Outcome.
+
+==================================================
+BV. END-TO-END SUPPLIER TEST
+==================================================
+
+Organization
+→ Claim
+→ SupplierProfile
+→ Capability
+→ Product
+→ Public profile
+→ Invite
+→ Response
+→ Connection.
+
+==================================================
+BW. END-TO-END PROGRAM TEST
+==================================================
+
+Program
+→ registration
+→ payment if relevant
+→ attendance
+→ meeting
+→ follow-up
+→ result/report.
+
+==================================================
+BX. END-TO-END SERVICE TEST
+==================================================
+
+ServiceRequest
+→ Proposal
+→ Agreement
+→ Delivery
+→ Acceptance
+→ Completed.
+
+==================================================
+BY. END-TO-END SPONSOR TEST
+==================================================
+
+Inquiry
+→ Contract
+→ Entitlements
+→ Delivery
+→ Evidence
+→ Acceptance
+→ Report.
+
+==================================================
+BZ. END-TO-END QR TEST
+==================================================
+
+Catalogue QR
+→ tracking
+→ canonical profile.
+
+No automatic:
+lead
+need
+deal.
+
+==================================================
+CA. SECURITY TEST
+==================================================
+
+Test:
+
+guest
+wrong organization
+wrong supplier
+wrong buyer
+wrong sponsor
+wrong advisor
+wrong partner.
+
+Try modifying IDs.
+
+PASS only if backend blocks access.
+
+==================================================
+CB. DATABASE MIGRATION SAFETY
+==================================================
+
+For each migration:
+
+explain purpose
+
+data affected
+
+backfill
+
+constraint
+
+rollback consideration.
+
+No destructive DROP
+without explicit approval.
+
+==================================================
+CC. DELETE / ARCHIVE POLICY
+==================================================
+
+Prefer archive/soft delete for:
+
+Organization
+SupplierProfile
+Product
+Program
+Catalogue
+Relationship
+
+where history matters.
+
+Do not destroy history
+used by transactions.
+
+==================================================
+CD. CLEAN LEGACY CODE
+==================================================
+
+After successful replacement:
+
+remove dead components
+
+unused APIs
+
+obsolete route handlers
+
+unused types
+
+unreferenced constants
+
+duplicate helpers.
+
+But only after confirming
+nothing references them.
+
+==================================================
+CE. TYPE SAFETY
+==================================================
+
+Fix:
+
+any overuse
+nullable assumptions
+invalid enum mappings
+inconsistent API response types
+
+where architecture supports typing.
+
+==================================================
+CF. VALIDATION
+==================================================
+
+Use consistent server schemas.
+
+Frontend validation
+must not be sole validation.
+
+Check:
+
+email
+phone
+slug
+enum
+ids
+file type
+file size
+date
+money
+quantity.
+
+==================================================
+CG. TRANSACTION SAFETY
+==================================================
+
+Use DB transaction
+for multi-step critical writes such as:
+
+Requirement + initial task
+
+Registration + payment record
+
+Contract + entitlement setup
+
+Organization merge
+
+when supported.
+
+==================================================
+CH. CONCURRENCY
+==================================================
+
+Check duplicate submission
+from double click/retry.
+
+Use:
+idempotency
+unique key
+dedupe
+where appropriate.
+
+==================================================
+CI. EMPTY PRODUCT STATE
+==================================================
+
+If certain module has no real data:
+
+show appropriate empty state.
+
+Do not populate fake cards.
+
+==================================================
+CJ. BRAND
+==================================================
+
+Do not change:
+
+core logo
+brand identity
+SUPPI identity
+CHAINY identity
+
+unless fixing broken assets.
+
+Maintain visual consistency.
+
+==================================================
+CK. FINAL PILOT GATES
+==================================================
+
+GATE 1
+NAVIGATION PASS
+
+GATE 2
+FORM PASS
+
+GATE 3
+AUTH/RBAC PASS
+
+GATE 4
+REQUIREMENT FLOW PASS
+
+GATE 5
+SUPPLIER FLOW PASS
+
+GATE 6
+PROGRAM FLOW PASS
+
+GATE 7
+SERVICE FLOW PASS
+
+GATE 8
+COMMERCIAL RIGHTS PASS
+
+GATE 9
+FINANCE CLASSIFICATION PASS
+
+GATE 10
+MOBILE PASS
+
+GATE 11
+SECURITY PASS
+
+GATE 12
+REPORTING PASS.
+
+==================================================
+CL. PILOT READY DECISION
+==================================================
+
+Only output:
+
+PILOT READY
+
+if no Critical blocker.
+
+Otherwise:
+
+NOT PILOT READY
+
+and list exact blockers.
+
+==================================================
+CM. PRIORITY LEVELS
+==================================================
+
+P0 CRITICAL:
+
+security
+data leakage
+data corruption
+broken auth
+broken requirement flow
+incorrect finance classification.
+
+P1 HIGH:
+
+broken program
+broken catalogue
+broken supplier workflow
+broken sponsorship
+broken admin follow-up.
+
+P2 MEDIUM:
+
+performance
+SEO
+data quality
+UX inconsistency.
+
+P3 LOW:
+
+cosmetic polish.
+
+Fix in this order.
+
+==================================================
+CN. FINAL REPORT
+==================================================
+
+Return:
+
+1. Overall status
+2. Files changed
+3. Migrations
+4. Architecture fixes
+5. Duplicate data fixes
+6. Route fixes
+7. Form fixes
+8. Requirement workflow fixes
+9. Supplier workflow fixes
+10. Program fixes
+11. Catalogue fixes
+12. Sponsorship/Founding Partner fixes
+13. Admin fixes
+14. RBAC/security fixes
+15. Performance improvements
+16. Mobile fixes
+17. SEO fixes
+18. Analytics fixes
+19. Tests added
+20. Tests passed
+21. Tests failed
+22. Remaining mocks
+23. Manual-review items
+24. External credentials required
+25. Pilot blockers
+26. P2 backlog
+
+==================================================
+CO. FINAL PRINCIPLE
+==================================================
+
+Do not optimize CHUOICUNGUNG.COM
+as a collection of landing pages.
+
+Optimize it as one connected B2B operating system:
+
+NGƯỜI MUA
+→ NHU CẦU
+
+NHU CẦU
+→ NHÀ CUNG ỨNG
+
+NHÀ CUNG ỨNG
+→ KẾT NỐI
+
+KẾT NỐI
+→ MEETING / SAMPLE / QUOTE
+
+→ FOLLOW-UP
+
+→ OUTCOME
+
+→ REPORT.
+
+SUPPI:
+TÌM ĐÚNG NGUỒN.
+
+CHAINY:
+KẾT NỐI & THEO VIỆC ĐẾN CÙNG.
+
+Every important activity must leave:
+
+DATA
+STATUS
+OWNER
+NEXT ACTION
+HISTORY
+RESULT.

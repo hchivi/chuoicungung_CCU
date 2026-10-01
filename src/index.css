@@ -739,6 +739,35 @@ body {
   pointer-events: none;
 }
 
+.clickup-chat-border {
+  position: relative;
+  border-radius: 28px;
+  padding: 2.5px;
+  overflow: hidden;
+  background: #cbd5e1;
+}
+
+.clickup-chat-border::before {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: conic-gradient(
+    transparent 0deg,
+    transparent 180deg,
+    #ff007f 230deg,
+    #7b2cbf 265deg,
+    #3a86ff 300deg,
+    #00f2fe 335deg,
+    #ffbe0b 360deg
+  );
+  animation: rotateGlow 4.5s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* =========================================================
    Completely Disable Browser Native Picture-in-Picture (PiP)
    & Media Control Overlay Buttons Across All Browsers

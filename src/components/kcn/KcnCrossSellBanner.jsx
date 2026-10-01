@@ -47,7 +47,7 @@ export default function KcnCrossSellBanner() {
           
           {/* Nút 1: Kết nối PORTALINK - Vận tải thiết bị về KCN (Pha 1) */}
           <Link
-            to="/pha/1.1"
+            to="/pha/khao-sat-dinh-huong"
             onMouseEnter={() => setHoveredCard('pha1')}
             onMouseLeave={() => setHoveredCard(null)}
             className="group relative p-5 rounded-2xl bg-white hover:bg-gradient-to-b hover:from-blue-50/90 hover:to-white border-2 border-blue-200/80 hover:border-[#0052cc] shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between space-y-3 cursor-pointer overflow-hidden"
@@ -93,7 +93,7 @@ export default function KcnCrossSellBanner() {
 
           {/* Nút 2: Tìm Nhà thầu Xây dựng/M&E (Pha 2, 3, 4) */}
           <Link
-            to="/pha/2.1"
+            to="/pha/thiet-ke-quy-hoach"
             onMouseEnter={() => setHoveredCard('pha2')}
             onMouseLeave={() => setHoveredCard(null)}
             className="group relative p-5 rounded-2xl bg-white hover:bg-gradient-to-b hover:from-emerald-50/90 hover:to-white border-2 border-emerald-200/80 hover:border-emerald-600 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between space-y-3 cursor-pointer overflow-hidden"

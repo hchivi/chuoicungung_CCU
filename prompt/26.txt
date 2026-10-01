@@ -1,0 +1,1079 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 26: DANH SÁCH KHU CÔNG NGHIỆP
+ROUTE: /khu-cong-nghiep
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /khu-cong-nghiep thành cổng khám phá hệ sinh thái
+doanh nghiệp theo địa bàn KCN.
+
+Đây KHÔNG phải directory KCN kiểu:
+
+Tên KCN
+→ địa chỉ
+→ diện tích
+→ hotline.
+
+Trang phải giúp người dùng đi tiếp tới:
+
+KCN
+→ NHÀ MÁY
+→ NHÓM NGÀNH
+→ NHU CẦU
+→ NHÀ CUNG ỨNG PHỤC VỤ ĐỊA BÀN
+→ CHƯƠNG TRÌNH
+→ CATALOGUE
+→ GỬI NHU CẦU / ĐỀ XUẤT CHƯƠNG TRÌNH
+
+========================================
+1. AUDIT + REUSE
+========================================
+
+Audit route hiện tại:
+
+/khu-cong-nghiep
+
+Audit dữ liệu KCN hiện có.
+
+Reuse:
+
+IndustrialPark
+Organization
+Location
+Factory
+Category
+Requirement
+SupplierProfile
+SupplierServiceArea
+Program
+Catalogue
+MediaAsset
+ServiceRequest
+Tasks
+AuditLog
+
+Không tạo duplicate:
+
+Industrial Park
+Province
+Factory
+Supplier
+Program
+Organization.
+
+Nếu codebase hiện tại đã có model KCN:
+reuse và migrate targeted.
+
+========================================
+2. INDUSTRIAL PARK LÀ ENTITY RIÊNG
+========================================
+
+IndustrialPark đại diện cho địa điểm/khu công nghiệp.
+
+Organization đại diện cho các tổ chức liên quan.
+
+Không biến:
+
+Ban quản lý
+Chủ đầu tư
+Operator
+
+thành cùng một field text trong IndustrialPark.
+
+Data model gợi ý:
+
+IndustrialPark {
+ id
+ slug
+
+ name
+ shortName?
+
+ provinceId
+ districtId?
+
+ address?
+ lat?
+ lng?
+
+ description?
+
+ status
+ publishable
+
+ createdAt
+ updatedAt
+}
+
+Các relationship Organization quản lý riêng.
+
+========================================
+3. PHÂN BIỆT CÁC TỔ CHỨC LIÊN QUAN
+========================================
+
+IndustrialParkOrganization {
+ id
+
+ industrialParkId
+ organizationId
+
+ role:
+ STATE_MANAGEMENT
+ DEVELOPER
+ OPERATOR
+ PROGRAM_CONTACT
+ INFRASTRUCTURE_PROVIDER
+ OTHER
+
+ status:
+ PENDING
+ CONFIRMED
+ ENDED
+
+ publicDisplay
+
+ source?
+ evidenceId?
+
+ confirmedBy?
+ confirmedAt?
+}
+
+Không chỉ dùng một field:
+
+managementBoardName.
+
+========================================
+4. HARD RULE VAI TRÒ KCN
+========================================
+
+Có tên KCN trong:
+
+Program location
+
+Requirement location
+
+Factory address
+
+KHÔNG đồng nghĩa:
+
+KCN là đối tác
+KCN là đơn vị tổ chức
+KCN bảo trợ
+KCN đồng tổ chức.
+
+Các nhãn này chỉ xuất hiện
+khi có relationship CONFIRMED.
+
+========================================
+5. HERO
+========================================
+
+H1:
+
+“KHU CÔNG NGHIỆP & HỆ SINH THÁI DOANH NGHIỆP”
+
+Sub:
+
+“Khám phá nhà máy, nhu cầu, nguồn cung và chương trình kết nối theo từng khu công nghiệp và địa bàn.”
+
+Thông điệp bổ sung:
+
+“Chương trình và dịch vụ hỗ trợ doanh nghiệp theo địa bàn.”
+
+CTA chính:
+
+[TÌM KHU CÔNG NGHIỆP]
+
+CTA phụ:
+
+[GỬI NHU CẦU DOANH NGHIỆP]
+
+→ /dang-nhu-cau
+
+========================================
+6. SEARCH
+========================================
+
+Search theo:
+
+Tên KCN
+
+Tên viết tắt
+
+Tỉnh / thành
+
+Địa bàn
+
+Nhóm ngành
+
+Tên nhà máy public nếu phù hợp
+
+Program liên quan
+
+Không search private Requirement text.
+
+========================================
+7. FILTER
+========================================
+
+Filter chính:
+
+Tỉnh / thành
+
+Khu vực
+
+Nhóm ngành chính
+
+Có nhà máy public
+
+Có nhu cầu public
+
+Có chương trình đang mở
+
+Có nguồn cung phục vụ
+
+Có catalogue
+
+Không tạo quá nhiều filter ở P1.
+
+========================================
+8. INDUSTRIAL PARK CARD
+========================================
+
+Mỗi card hiển thị:
+
+Tên KCN
+
+Địa phương
+
+Ảnh public nếu có
+
+Nhóm ngành nổi bật
+
+Số nhà máy public nếu có dữ liệu thật
+
+Số nhu cầu public đang mở nếu có
+
+Program đang mở nếu có
+
+CTA:
+
+[XEM KHU CÔNG NGHIỆP]
+
+→ /khu-cong-nghiep/[slug]
+
+CTA phụ:
+
+[XEM CHƯƠNG TRÌNH]
+
+nếu có Program phù hợp.
+
+========================================
+9. KHÔNG BIẾN CARD THÀNH REAL ESTATE CARD
+========================================
+
+Không ưu tiên:
+
+Diện tích đất
+Giá thuê
+Tỷ lệ lấp đầy
+Giá điện/nước
+Thông tin môi giới
+
+trừ khi dự án sau này có nguồn dữ liệu phù hợp.
+
+P1 này tập trung:
+
+Doanh nghiệp
+Nhu cầu
+Nguồn cung
+Chương trình
+Kết nối.
+
+========================================
+10. NHÓM NGÀNH
+========================================
+
+Industrial Park relation với:
+
+Category / Industry
+
+có thể derive từ:
+
+Factory public profiles
+
+hoặc curated KCN metadata
+có source.
+
+Không suy luận ngành KCN
+chỉ từ một vài Supplier.
+
+========================================
+11. FACTORY COUNT
+========================================
+
+Nếu hiển thị:
+
+“32 nhà máy”
+
+chỉ count Factory relation
+được phép public.
+
+Không lấy:
+
+registration attendee
+supplier
+organization không xác nhận
+
+làm Factory.
+
+========================================
+12. FACTORY RELATION
+========================================
+
+Reuse Factory/Organization.
+
+IndustrialParkFactory relation:
+
+industrialParkId
+factoryId / organizationId
+
+status
+source
+publicDisplay
+
+Không duplicate Factory profile.
+
+========================================
+13. REQUIREMENT COUNT
+========================================
+
+Hiển thị nhu cầu nếu:
+
+Requirement
+→ industrialParkId
+
+AND visibility phù hợp.
+
+Chỉ count:
+
+PUBLIC_SUMMARY
+
+hoặc scope explicitly allowed.
+
+Không count private Needs vào public KPI.
+
+========================================
+14. SUPPLIER COVERAGE
+========================================
+
+Không gắn Supplier vào KCN chỉ vì Supplier ở gần.
+
+Supplier phục vụ KCN phải dựa trên:
+
+ServiceArea
+Location
+IndustrialPark coverage nếu có.
+
+Có thể hiển thị:
+
+“Có nhà cung ứng phục vụ khu vực này”
+
+nhưng chỉ từ dữ liệu profile.
+
+========================================
+15. SUPPLIER COVERAGE ≠ KCN MEMBER
+========================================
+
+Supplier phục vụ KCN
+KHÔNG đồng nghĩa:
+
+- doanh nghiệp nằm trong KCN;
+- đối tác KCN;
+- vendor approved by KCN;
+- nhà cung ứng được KCN chứng nhận.
+
+UI/copy phải phân biệt rõ.
+
+========================================
+16. PROGRAM INTEGRATION
+========================================
+
+Section:
+
+“CHƯƠNG TRÌNH TẠI KHU VỰC”
+
+Reuse ProgramCard Page 20.
+
+Filter:
+
+program.industrialParkId
+hoặc
+program location relation.
+
+Nếu Organization KCN có vai trò:
+
+ORGANIZER
+CO_ORGANIZER
+PARTNER
+
+chỉ hiển thị role khi confirmed.
+
+========================================
+17. FILTER → PROGRAM
+========================================
+
+Khi user chọn một KCN:
+
+có CTA:
+
+[XEM CHƯƠNG TRÌNH TẠI KHU VỰC]
+
+→ /chuong-trinh?industrialPark={id}
+
+Không tạo listing Program thứ hai.
+
+========================================
+18. BLOCK “CHƯƠNG TRÌNH & DỊCH VỤ”
+========================================
+
+Tạo block:
+
+“CHƯƠNG TRÌNH & DỊCH VỤ HỖ TRỢ DOANH NGHIỆP THEO ĐỊA BÀN”
+
+Có thể gồm:
+
+Ngày hội Chuỗi Cung Ứng
+
+Buyer–Supplier Meeting
+
+Supplier Presentation
+
+Tổ chức chương trình
+
+Sourcing theo nhu cầu
+
+Catalogue
+
+Remote Presence nếu đã triển khai.
+
+Không hard-code service availability.
+
+========================================
+19. CTA GỬI NHU CẦU
+========================================
+
+CTA:
+
+[GỬI NHU CẦU DOANH NGHIỆP]
+
+Nếu chưa chọn KCN:
+
+→ /dang-nhu-cau
+
+Nếu từ KCN card/context:
+
+→ /dang-nhu-cau?industrialParkId={id}
+
+Prefill:
+
+location / KCN.
+
+User vẫn được kiểm tra và sửa.
+
+========================================
+20. CTA ĐỀ XUẤT CHƯƠNG TRÌNH
+========================================
+
+CTA:
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH TẠI KCN]
+
+→ /dich-vu/to-chuc-ket-noi
+?source=industrial-park
+&industrialParkId={id}
+
+Reuse ServiceRequest.
+
+Không tạo KCN event form riêng.
+
+========================================
+21. CHƯƠNG TRÌNH KHÔNG TỰ ĐỒNG = KCN HỢP TÁC
+========================================
+
+Ví dụ:
+
+Program location = KCN ABC
+
+nhưng Program organizer là Company XYZ.
+
+Không được tự render:
+
+“KCN ABC đồng tổ chức”
+
+nếu chưa có ProgramOrganization relation
+được CONFIRMED.
+
+========================================
+22. KCN SPONSOR / FOUNDING PARTNER
+========================================
+
+Phân biệt:
+
+PROGRAM SPONSOR
+
+và
+
+FOUNDING PARTNER theo Category.
+
+Không render hai quyền lợi thành cùng một badge.
+
+Sponsor:
+theo Program Contract.
+
+Founding Partner:
+theo Category/Keyword/Location scope.
+
+========================================
+23. MAP
+========================================
+
+Page tổng có thể có map/list toggle
+nếu codebase đã hỗ trợ map ổn định.
+
+Nhưng map không phải dependency.
+
+Ưu tiên P1:
+
+Search
+Filter
+Cards
+Programs
+CTA
+
+trước.
+
+Không xây bản đồ Việt Nam phức tạp ở đây;
+bản đồ quốc gia rộng thuộc P2 theo sitemap.
+
+========================================
+24. LOCATION DATA
+========================================
+
+Reuse Location taxonomy.
+
+Không hard-code province string ở nhiều bảng.
+
+IndustrialPark:
+
+provinceId
+districtId optional
+
+Factory:
+location relation
+
+Supplier:
+service area relation
+
+Program:
+location relation.
+
+========================================
+25. SEO LANDING THEO TỈNH
+========================================
+
+Không tự tạo hàng nghìn URL:
+
+/khu-cong-nghiep-dong-nai-gia-re
+/kcn-dongnai
+/industrial-park-dong-nai-abc
+
+Page tổng:
+
+/khu-cong-nghiep
+
+Detail:
+
+/khu-cong-nghiep/[slug]
+
+Filters:
+query params.
+
+Không index mọi combination.
+
+========================================
+26. SORTING
+========================================
+
+Default:
+
+Profile completeness
++
+available public ecosystem data
++
+relevance theo filter.
+
+Không ưu tiên KCN vì:
+
+Sponsor payment
+Commercial partner
+Founding Partner
+
+trừ sponsored module có label rõ.
+
+========================================
+27. DATA SOURCE / FRESHNESS
+========================================
+
+Thông tin KCN nên có:
+
+source
+status
+checkedBy
+checkedAt
+scope
+
+đặc biệt:
+
+Tên chính thức
+
+Địa chỉ
+
+Operator
+
+Developer
+
+Management organization
+
+Không tự gọi dữ liệu là “đã xác minh”
+nếu mới self-declared.
+
+========================================
+28. ADMIN
+========================================
+
+Tạo/reuse:
+
+/admin/khu-cong-nghiep
+
+Listing columns:
+
+Tên KCN
+
+Province
+
+Factories public
+
+Public Needs
+
+Programs
+
+Organizations related
+
+Profile status
+
+Owner
+
+Updated
+
+========================================
+29. ADMIN DETAIL
+========================================
+
+/admin/khu-cong-nghiep/[id]
+
+Tabs:
+
+OVERVIEW
+
+PROFILE
+
+LOCATION
+
+ORGANIZATIONS
+
+FACTORIES
+
+INDUSTRIES
+
+PUBLIC NEEDS
+
+SUPPLIERS
+
+PROGRAMS
+
+CATALOGUES
+
+MEDIA
+
+SERVICE REQUESTS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+========================================
+30. KCN ORGANIZATION REVIEW
+========================================
+
+Admin phải review relation:
+
+State Management
+
+Developer
+
+Operator
+
+Program Contact
+
+Không auto public organization role.
+
+Actions:
+
+CONFIRM
+REQUEST INFO
+REJECT
+END RELATION
+
+Audit.
+
+========================================
+31. FACTORY RELATION REVIEW
+========================================
+
+Nếu Factory claim:
+
+“Nhà máy thuộc KCN này”
+
+flow:
+
+PENDING
+→ review
+→ CONFIRMED
+
+Không tự confirm
+chỉ từ text address.
+
+========================================
+32. DATA QUALITY QUEUE
+========================================
+
+Flag:
+
+Missing province
+
+Missing location
+
+Operator unconfirmed
+
+Factory relation uncertain
+
+Duplicate KCN
+
+Outdated organization info
+
+Program role unresolved
+
+========================================
+33. DUPLICATE INDUSTRIAL PARK
+========================================
+
+Detect duplicates theo:
+
+Canonical name
+
+Aliases
+
+Province
+
+Address
+
+Coordinates nếu có.
+
+Không tạo KCN mới
+chỉ vì tên viết tắt khác.
+
+========================================
+34. ALIASES
+========================================
+
+IndustrialParkAlias:
+
+KCN Amata
+Amata Industrial Park
+Khu công nghiệp Amata
+
+→ cùng một canonical entity.
+
+SEO redirect/canonical phù hợp.
+
+========================================
+35. ACCOUNT / OPERATOR ACCESS
+========================================
+
+Nếu Operator/Management Organization
+được cấp quyền:
+
+chỉ xem dữ liệu thuộc scope đã thỏa thuận.
+
+Không mặc định xem:
+
+Private Buyer Requirements
+
+Supplier Quotations
+
+Factory confidential profiles
+
+Meeting notes.
+
+========================================
+36. REPORTING
+========================================
+
+KCN partner report có thể gồm:
+
+Confirmed public/authorized requirements
+
+Supplier matches
+
+Meetings completed
+
+Quotes recorded
+
+Confirmed outcomes
+
+Program participation
+
+nhưng chỉ theo Agreement scope.
+
+Không auto chia contact list.
+
+========================================
+37. SUPPI
+========================================
+
+SUPPI có thể trả lời:
+
+“KCN nào tại Đồng Nai đang có chương trình?”
+
+“Có nhu cầu public nào ở KCN này?”
+
+“Nhà cung ứng của tôi phục vụ KCN nào?”
+
+Dựa trên:
+
+IndustrialPark
+Location
+Program
+Requirement
+SupplierServiceArea.
+
+Không suy diễn certification/partnership.
+
+========================================
+38. CHAINY
+========================================
+
+CHAINY chỉ trở nên active khi:
+
+Need
+Connection
+Program registration
+Meeting
+
+đã tồn tại.
+
+Listing page không tự tạo connection.
+
+========================================
+39. SEO
+========================================
+
+Title:
+
+Khu Công Nghiệp & Hệ Sinh Thái Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Meta:
+
+Khám phá khu công nghiệp theo địa bàn, nhà máy, nhóm ngành, nhu cầu, nhà cung ứng phục vụ khu vực và chương trình kết nối doanh nghiệp.
+
+Canonical:
+
+/khu-cong-nghiep
+
+Filter URLs:
+canonical/noindex phù hợp.
+
+========================================
+40. STRUCTURED DATA
+========================================
+
+Use cautiously:
+
+CollectionPage
+ItemList
+Place
+
+Không invent:
+
+number of companies
+area
+occupancy
+developer
+management unit
+
+nếu source chưa có.
+
+========================================
+41. EMPTY STATE
+========================================
+
+Nếu filter không có kết quả:
+
+“Chưa tìm thấy khu công nghiệp phù hợp với bộ lọc này.”
+
+CTA:
+
+[XÓA BỘ LỌC]
+
+[GỬI NHU CẦU]
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH]
+
+Không fake KCN.
+
+========================================
+42. MOBILE
+========================================
+
+Mobile:
+
+Hero
+
+Search
+
+Province chips
+
+Filters
+
+KCN cards
+
+Programs by location
+
+CTA need/program
+
+Không overflow 390px.
+
+Map nếu có:
+không chiếm toàn màn hình mặc định.
+
+========================================
+43. ANALYTICS
+========================================
+
+Track:
+
+industrial_park_listing_view
+
+industrial_park_search
+
+industrial_park_filter
+
+industrial_park_detail_click
+
+program_by_location_click
+
+submit_need_from_kcn
+
+propose_program_from_kcn
+
+Không coi card click là lead.
+
+========================================
+44. SECURITY
+========================================
+
+Public API chỉ trả:
+
+publishable KCN
+
+public organization relations
+
+public factory relations
+
+public needs
+
+public programs.
+
+Không return private relations rồi hide frontend.
+
+========================================
+45. QA
+========================================
+
+Test tối thiểu:
+
+1. Listing lấy KCN DB thật.
+2. Search tên/alias hoạt động.
+3. Filter province hoạt động.
+4. Factory count chỉ count public/confirmed.
+5. Need count không tính private Need.
+6. Supplier service coverage không bị gọi là KCN member.
+7. Program location không tự tạo Organizer relation.
+8. KCN role chỉ public khi confirmed.
+9. CTA Need prefill đúng KCN.
+10. CTA Program prefill đúng KCN.
+11. ProgramCard reuse Page 20.
+12. Sponsor/Founding Partner phân biệt.
+13. Duplicate alias map đúng canonical entity.
+14. Admin changes có AuditLog.
+15. Mobile 390px hoạt động.
+
+========================================
+46. OUTPUT
+========================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- IndustrialPark model
+- Organization relations
+- Factory relations
+- Location integration
+- Search/filter
+- Requirement integration
+- Supplier coverage integration
+- Program integration
+- ServiceRequest integration
+- Admin implementation
+- Data quality checks
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+KHU CÔNG NGHIỆP
+→ NHÀ MÁY
+→ NHÓM NGÀNH
+→ NHU CẦU
+→ NGUỒN CUNG PHỤC VỤ
+→ CHƯƠNG TRÌNH
+→ CATALOGUE
+→ GỬI NHU CẦU
+→ TỔ CHỨC KẾT NỐI
+
+Không biến /khu-cong-nghiep
+thành danh bạ bất động sản KCN.
+
+Nó phải là một ĐIỂM ĐIỀU PHỐI THEO ĐỊA BÀN
+của CHUOICUNGUNG.COM.

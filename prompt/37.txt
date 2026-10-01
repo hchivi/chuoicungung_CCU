@@ -1,0 +1,1904 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 37: HỢP TÁC HỆ SINH THÁI
+ROUTE: /hop-tac
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+ĐÂY LÀ PAGE CUỐI CỦA P0 + P1.
+
+MỤC TIÊU:
+
+Xây /hop-tac thành PARTNERSHIP HUB
+để người dùng tự xác định đúng loại quan hệ hợp tác
+trước khi đi vào workflow tương ứng.
+
+Các nhóm chính:
+
+1. HỘI / HIỆP HỘI
+2. KHU CÔNG NGHIỆP
+3. NHÀ TÀI TRỢ
+4. FOUNDING PARTNER
+5. ĐỐI TÁC PHÁT TRIỂN
+6. CỐ VẤN
+7. NHÀ ĐẦU TƯ
+
+Mục tiêu:
+
+ĐÚNG ĐỐI TƯỢNG
+→ ĐÚNG LOẠI HỢP TÁC
+→ ĐÚNG FORM / WORKFLOW
+→ ĐÚNG HỢP ĐỒNG
+→ ĐÚNG QUYỀN
+→ ĐÚNG DÒNG TIỀN
+→ ĐÚNG BÀN GIAO
+
+Không gom tất cả thành:
+“ĐỐI TÁC CHIẾN LƯỢC”.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit trước:
+
+/hop-tac
+
+/hoi-hiep-hoi
+/khu-cong-nghiep
+/tai-tro
+/founding-partner
+/doi-tac-phat-trien
+/yeu-cau-dich-vu
+/admin/...
+
+Audit existing:
+
+Organization
+OrganizationRole
+PartnershipRequest
+ServiceRequest
+Sponsorship
+FoundingPartnership
+DevelopmentPartner
+Contract
+Agreement
+Task
+Finance
+AuditLog
+FormEngine
+
+Không rebuild Partnership system.
+
+Không tạo Organization duplicate
+cho từng kiểu hợp tác.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“HỢP TÁC CÙNG HỆ SINH THÁI CHUỖI CUNG ỨNG”
+
+Sub:
+
+“Chọn hình thức phù hợp với vai trò và nguồn lực của bạn. Mỗi quan hệ hợp tác được xác định rõ phạm vi, trách nhiệm, quyền truy cập, quyền lợi và cách ghi nhận trước khi triển khai.”
+
+CTA:
+
+[CHỌN HÌNH THỨC HỢP TÁC]
+
+Secondary:
+
+[TRAO ĐỔI VỚI ĐỘI ĐIỀU PHỐI]
+
+Không dùng:
+
+“Trở thành đối tác chiến lược ngay”
+
+nếu chưa có thỏa thuận.
+
+==================================================
+3. 7 PARTNERSHIP CARDS
+==================================================
+
+Tạo 7 cards:
+
+01.
+HỘI / HIỆP HỘI
+
+02.
+KHU CÔNG NGHIỆP
+
+03.
+NHÀ TÀI TRỢ
+
+04.
+FOUNDING PARTNER
+
+05.
+ĐỐI TÁC PHÁT TRIỂN
+
+06.
+CỐ VẤN
+
+07.
+NHÀ ĐẦU TƯ
+
+Mỗi card phải giải thích:
+
+- Bạn đóng góp gì?
+- Bạn phối hợp ở phạm vi nào?
+- Workflow nào xử lý?
+- CTA đi đâu?
+
+==================================================
+4. CARD HỘI / HIỆP HỘI
+==================================================
+
+Title:
+
+“HỘI / HIỆP HỘI”
+
+Purpose:
+
+Phối hợp chương trình,
+hỗ trợ hội viên,
+thu nhận nhu cầu được phép chia sẻ,
+giới thiệu hồ sơ,
+theo dõi kết quả trong phạm vi thỏa thuận.
+
+CTA chính:
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH CHO HỘI VIÊN]
+
+→ /dich-vu/to-chuc-ket-noi
+?source=partnership
+&partnerType=association
+
+CTA phụ:
+
+[XEM HỆ SINH THÁI HỘI / HIỆP HỘI]
+
+→ /hoi-hiep-hoi
+
+Không tự tạo Association Membership.
+
+==================================================
+5. ASSOCIATION HARD RULE
+==================================================
+
+Việc một Hội:
+
+đăng ký hợp tác
+
+tham gia Program
+
+giới thiệu doanh nghiệp
+
+KHÔNG tự:
+
+xác nhận doanh nghiệp là hội viên
+
+xác nhận tư cách đại diện
+
+tạo quyền xem private Buyer data.
+
+Membership và permission
+vẫn theo workflow Page 24–25.
+
+==================================================
+6. CARD KHU CÔNG NGHIỆP
+==================================================
+
+Title:
+
+“KHU CÔNG NGHIỆP”
+
+Purpose:
+
+Phối hợp chương trình theo địa bàn,
+thu nhận nhu cầu được phép chia sẻ,
+kết nối nguồn cung
+và tổ chức hoạt động cho doanh nghiệp trong khu.
+
+CTA:
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH TẠI KCN]
+
+→ /dich-vu/to-chuc-ket-noi
+?source=partnership
+&partnerType=industrial-park
+
+Secondary:
+
+[XEM KHU CÔNG NGHIỆP]
+
+→ /khu-cong-nghiep
+
+==================================================
+7. KCN HARD RULE
+==================================================
+
+Phải tiếp tục phân biệt:
+
+STATE MANAGEMENT
+
+DEVELOPER
+
+OPERATOR
+
+PROGRAM CONTACT.
+
+Đăng ký hợp tác
+không tự biến Organization thành:
+
+Ban quản lý
+Operator
+Co-organizer
+Endorser.
+
+Role cần confirmation.
+
+==================================================
+8. CARD NHÀ TÀI TRỢ
+==================================================
+
+Title:
+
+“NHÀ TÀI TRỢ”
+
+Purpose:
+
+Đồng hành cùng:
+
+Program
+Catalogue
+Media
+Content
+Merchandise
+Specific activity.
+
+CTA:
+
+[GỬI ĐỀ XUẤT TÀI TRỢ]
+
+→ /tai-tro
+
+Reuse Page 32.
+
+==================================================
+9. SPONSOR HARD RULE
+==================================================
+
+Sponsor:
+
+≠ Investor
+≠ Shareholder
+≠ Founding Partner mặc định
+≠ Verified Supplier
+≠ Matching priority.
+
+Sponsor contribution có thể là:
+
+cash
+in-kind
+product
+service
+media support
+printing
+venue.
+
+==================================================
+10. CARD FOUNDING PARTNER
+==================================================
+
+Title:
+
+“FOUNDING PARTNER — ĐỐI TÁC TIÊN PHONG CHUYÊN MỤC”
+
+Purpose:
+
+Đồng hành một phạm vi:
+
+Category / Keyword Cluster
++
+Location/KCN nếu có
++
+Placement
++
+Term.
+
+CTA:
+
+[TRAO ĐỔI PHẠM VI ĐỒNG HÀNH]
+
+→ /founding-partner
+
+Reuse Page 18.
+
+==================================================
+11. FOUNDING PARTNER HARD RULE
+==================================================
+
+Founding Partner là:
+
+COMMERCIAL PACKAGE.
+
+Không phải:
+
+co-founder
+shareholder
+equity investor
+organizational endorsement.
+
+Nếu cùng Organization
+vừa Founding Partner vừa Investor:
+
+tạo hai relationship/contract riêng.
+
+==================================================
+12. CARD ĐỐI TÁC PHÁT TRIỂN
+==================================================
+
+Title:
+
+“ĐỐI TÁC PHÁT TRIỂN”
+
+Purpose:
+
+Giới thiệu khách dùng dịch vụ
+
+Phát triển nhóm doanh nghiệp tham gia Program
+
+Giới thiệu đơn vị có nhu cầu tổ chức
+
+Phối hợp theo phạm vi.
+
+CTA:
+
+[ĐĂNG KÝ TRAO ĐỔI HỢP TÁC]
+
+→ /doi-tac-phat-trien
+
+Reuse Page 33.
+
+==================================================
+13. DEVELOPMENT PARTNER HARD RULE
+==================================================
+
+Development Partner:
+
+≠ reseller mặc định
+≠ affiliate MLM
+≠ Supplier priority
+≠ Association membership
+≠ Investor.
+
+Referral compensation
+chỉ theo policy approved.
+
+==================================================
+14. CARD CỐ VẤN
+==================================================
+
+Title:
+
+“CỐ VẤN”
+
+Purpose:
+
+Tiếp nhận chuyên gia phù hợp
+muốn đóng góp kiến thức/chuyên môn
+cho một phạm vi cụ thể.
+
+Ví dụ scope triển khai:
+
+Industry taxonomy review
+
+Requirement schema review
+
+Program content
+
+Supplier capability criteria
+
+Technical review
+
+Market/domain knowledge
+
+Không hard-code các lĩnh vực
+nếu chưa có dữ liệu thật.
+
+CTA:
+
+[TRAO ĐỔI VAI TRÒ CỐ VẤN]
+
+→ partnership FormEngine
+type=ADVISOR
+
+==================================================
+15. ADVISOR ≠ ENDORSEMENT
+==================================================
+
+Một Advisor được duyệt:
+
+không có nghĩa:
+
+họ bảo trợ toàn bộ nền tảng
+
+họ chứng nhận tất cả Supplier
+
+tổ chức nơi họ công tác
+đã chính thức hợp tác.
+
+Public title/affiliation
+chỉ hiển thị đúng phạm vi
+và có permission.
+
+==================================================
+16. ADVISOR APPLICATION
+==================================================
+
+Fields:
+
+Name
+
+Organization optional
+
+Current role
+
+Expertise
+
+Industry/domain
+
+Geographic experience optional
+
+Proposed contribution
+
+Availability
+
+Relevant profile / URL optional
+
+Conflict disclosure
+
+Contact
+
+Consent.
+
+Không yêu cầu
+sensitive personal data không cần thiết.
+
+==================================================
+17. ADVISOR WORKFLOW
+==================================================
+
+APPLICATION
+→ REVIEW
+→ DISCUSSION
+→ SCOPE_DEFINED
+→ AGREEMENT / CONFIRMATION
+→ ACTIVE
+→ PAUSED / ENDED.
+
+Submit form
+không tự tạo:
+
+“Cố vấn CHUOICUNGUNG.COM”.
+
+==================================================
+18. ADVISOR SCOPE
+==================================================
+
+Nếu Advisor Active:
+
+AdvisorEngagement {
+ id
+
+ personId / userId
+ organizationId?
+
+ expertiseScopes[]
+
+ assignmentType
+
+ categoryIds[]
+ programIds[]
+ stageIds[]
+
+ startAt?
+ endAt?
+
+ publicDisplay
+
+ status
+
+ agreementId?
+
+ ownerUserId
+
+ createdAt
+ updatedAt
+}
+
+Chỉ tạo nếu architecture cần.
+
+Có thể reuse Partnership relation.
+
+==================================================
+19. ADVISOR ACCESS
+==================================================
+
+Advisor chỉ được xem:
+
+dữ liệu cần cho assignment.
+
+Không mặc định xem:
+
+Buyer private needs
+
+Supplier quotes
+
+commercial contracts
+
+financial data
+
+all Program contacts.
+
+RBAC theo scope.
+
+==================================================
+20. CARD NHÀ ĐẦU TƯ
+==================================================
+
+Title:
+
+“NHÀ ĐẦU TƯ”
+
+Purpose:
+
+Tiếp nhận đề nghị trao đổi
+về đầu tư vào doanh nghiệp/nền tảng
+theo một luồng riêng.
+
+CTA:
+
+[ĐĂNG KÝ TRAO ĐỔI ĐẦU TƯ]
+
+→ Partnership FormEngine
+type=INVESTOR
+
+KHÔNG route sang /tai-tro.
+
+==================================================
+21. INVESTOR ≠ SPONSOR
+==================================================
+
+HARD RULE QUAN TRỌNG NHẤT:
+
+INVESTMENT
+≠ SPONSORSHIP.
+
+Investment:
+
+capital / ownership / governance
+theo thỏa thuận đầu tư riêng.
+
+Sponsorship:
+
+commercial rights/deliverables
+theo hợp đồng tài trợ.
+
+Không dùng cùng contract type.
+
+==================================================
+22. INVESTOR ≠ FOUNDING PARTNER
+==================================================
+
+Founding Partner trả phí cho:
+
+commercial category rights.
+
+Investor đưa vốn theo:
+
+investment agreement.
+
+Founding Partner
+không nhận equity mặc định.
+
+Investor
+không tự nhận commercial sponsor placement.
+
+==================================================
+23. SAME ORGANIZATION, MULTIPLE RELATIONSHIPS
+==================================================
+
+Organization ABC có thể đồng thời:
+
+Supplier
+
+Sponsor
+
+Founding Partner
+
+Development Partner
+
+Investor.
+
+Nhưng:
+
+MỘT Organization record
+
++
+NHIỀU relationship records.
+
+Không tạo:
+
+ABC Sponsor Company
+
+ABC Investor Company
+
+ABC Supplier Company
+
+thành 3 Organization.
+
+==================================================
+24. SEPARATE CONTRACTS
+==================================================
+
+Nếu Organization vừa:
+
+Sponsor
++
+Investor
+
+bắt buộc:
+
+SponsorshipContract
+
+và
+
+InvestmentAgreement
+
+riêng.
+
+Nếu vừa:
+
+Founding Partner
++
+Investor
+
+cũng riêng.
+
+Không merge quyền lợi.
+
+==================================================
+25. SEPARATE MONEY FLOWS
+==================================================
+
+Finance phải tách:
+
+SERVICE_REVENUE
+
+SPONSORSHIP_REVENUE
+
+FOUNDING_PARTNER_REVENUE
+
+INVESTMENT_CAPITAL
+
+LOAN nếu có
+
+COLLECTED_ON_BEHALF
+
+PARTNER_COMMISSION.
+
+Không ghi investment capital
+như revenue.
+
+==================================================
+26. INVESTOR FORM
+==================================================
+
+Không làm form như crowdfunding.
+
+Fields giai đoạn đầu:
+
+Organization / Investor name
+
+Contact
+
+Investor type optional
+
+Areas of interest
+
+Preferred form of discussion
+
+Investment interest range optional
+
+Strategic contribution optional
+
+Notes
+
+Attachment optional
+
+Consent.
+
+Không công bố:
+
+valuation
+equity %
+guaranteed return
+fundraising target
+
+nếu chưa có tài liệu/hồ sơ chính thức.
+
+==================================================
+27. INVESTOR INQUIRY ONLY
+==================================================
+
+Form submit:
+
+→ INVESTOR_INQUIRY
+
+KHÔNG:
+
+→ Investor Partner
+→ Shareholder
+→ Investment committed.
+
+Workflow:
+
+INQUIRY
+→ REVIEW
+→ DISCUSSION
+→ INFORMATION_SHARING
+→ DUE_DILIGENCE nếu thật sự bắt đầu
+→ PROPOSAL / NEGOTIATION
+→ AGREEMENT nếu có
+→ CLOSED / DECLINED.
+
+Chỉ implement phases
+mà business thực sự cần.
+
+==================================================
+28. NO PUBLIC INVESTMENT CLAIMS
+==================================================
+
+Không public:
+
+“đang gọi vốn X tỷ”
+
+“cam kết lợi nhuận”
+
+“ROI”
+
+“equity available”
+
+“định giá”
+
+nếu chưa có approved legal/business material.
+
+Page /hop-tac chỉ mở
+kênh trao đổi ban đầu.
+
+==================================================
+29. HERO / CARD COPY NEUTRALITY
+==================================================
+
+Không viết:
+
+“Cơ hội đầu tư sinh lời cao”
+
+“Đầu tư ngay”
+
+“cơ hội không thể bỏ lỡ”
+
+“độc quyền thị trường”
+
+Page phải mang tính:
+
+business partnership information.
+
+==================================================
+30. PARTNERSHIP TYPE SELECTOR
+==================================================
+
+Sau cards có:
+
+“BẠN MUỐN PHỐI HỢP THEO CÁCH NÀO?”
+
+Selector:
+
+ASSOCIATION
+INDUSTRIAL_PARK
+SPONSOR
+FOUNDING_PARTNER
+DEVELOPMENT_PARTNER
+ADVISOR
+INVESTOR
+OTHER
+
+Mỗi selection:
+
+route sang page chuyên biệt
+hoặc dynamic FormEngine.
+
+==================================================
+31. ƯU TIÊN ROUTE CHUYÊN BIỆT
+==================================================
+
+Nếu chọn:
+
+SPONSOR
+→ /tai-tro
+
+FOUNDING_PARTNER
+→ /founding-partner
+
+DEVELOPMENT_PARTNER
+→ /doi-tac-phat-trien
+
+ASSOCIATION
+→ /dich-vu/to-chuc-ket-noi?...association
+
+KCN
+→ /dich-vu/to-chuc-ket-noi?...industrial-park
+
+ADVISOR
+→ generic partnership form
+
+INVESTOR
+→ separate investor branch.
+
+Không tạo một giant form
+cho mọi trường hợp
+nếu dedicated route đã tồn tại.
+
+==================================================
+32. FORM ENGINE
+==================================================
+
+Reuse:
+
+<FormEngine
+  schema={formSchema}
+  context={sourceContext}
+/>
+
+Context:
+
+{
+ sourcePage: "/hop-tac",
+ partnershipType,
+ sourceId?,
+ program?,
+ category?,
+ industrialPark?,
+ association?,
+ campaign?
+}
+
+Không tạo form system mới.
+
+==================================================
+33. FORM STANDARD FLOW
+==================================================
+
+Tất cả partnership submissions:
+
+OPEN
+→ DRAFT
+→ CLIENT VALIDATION
+→ SUBMIT
+→ SERVER VALIDATION
+→ DEDUPLICATION
+→ CREATE RECORD
+→ ASSIGN OWNER
+→ CREATE TASK
+→ SEND CONFIRMATION
+→ SHOW TRACKING CODE
+
+==================================================
+34. TRACKING CODE
+==================================================
+
+Có thể dùng prefix:
+
+HT-2026-00125
+
+hoặc PartnershipRequest code hiện có.
+
+Không reuse:
+
+NC
+DV
+CT
+
+nếu làm user hiểu sai loại record.
+
+Audit existing code standard trước.
+
+==================================================
+35. PARTNERSHIP REQUEST MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+PartnershipRequest {
+ id
+ publicCode
+
+ partnershipType
+
+ applicantOrganizationId?
+ applicantUserId?
+
+ description
+
+ scope?
+
+ locationId?
+
+ status
+
+ ownerUserId
+
+ nextAction
+ nextActionAt
+
+ sourceContext
+
+ createdAt
+ updatedAt
+}
+
+Dedicated workflows
+có thể link từ request này.
+
+==================================================
+36. PARTNERSHIP REQUEST STATUS
+==================================================
+
+Generic:
+
+NEW
+
+NEED_MORE_INFO
+
+UNDER_REVIEW
+
+DISCUSSION
+
+SCOPE_DEFINITION
+
+AGREEMENT_PENDING
+
+ACCEPTED
+
+ACTIVE
+
+PAUSED
+
+COMPLETED
+
+DECLINED
+
+CANCELLED
+
+Nhưng dedicated workflow status
+vẫn ưu tiên nếu entity riêng đã tồn tại.
+
+==================================================
+37. REQUEST ≠ PARTNERSHIP
+==================================================
+
+Hard rule:
+
+Submit form
+không tạo:
+
+confirmed partner
+advisor
+investor
+sponsor
+official association relationship.
+
+Chỉ tạo inquiry/request.
+
+==================================================
+38. ORGANIZATION VERIFICATION
+==================================================
+
+Nếu applicant đại diện Organization:
+
+reuse Page 12:
+
+Organization claim/membership.
+
+Không tự trao quyền Organization
+chỉ từ partnership form.
+
+==================================================
+39. “CÁCH CHÚNG TÔI PHỐI HỢP”
+==================================================
+
+Block:
+
+“CÁCH MỘT ĐỀ XUẤT HỢP TÁC ĐƯỢC XỬ LÝ”
+
+1.
+Chọn loại hợp tác
+
+2.
+Gửi đề xuất
+
+3.
+Làm rõ phạm vi
+
+4.
+Xác định trách nhiệm / quyền lợi
+
+5.
+Thỏa thuận nếu phù hợp
+
+6.
+Giao người phụ trách
+
+7.
+Triển khai đầu việc
+
+8.
+Bàn giao / đối soát / báo cáo.
+
+Không hứa mọi đề xuất đều được chấp nhận.
+
+==================================================
+40. RIGHTS ARE SCOPE-BASED
+==================================================
+
+Mọi partnership phải xác định:
+
+Scope
+
+Start/end dates
+
+Responsibilities
+
+Access permissions
+
+Public display permissions
+
+Commercial rights
+
+Data sharing
+
+Deliverables
+
+Acceptance
+
+Termination.
+
+Không dùng nhãn Partnership
+thay cho permission model.
+
+==================================================
+41. PUBLIC LOGOS
+==================================================
+
+Public partner/logo chỉ xuất hiện khi:
+
+relationship confirmed
+
+AND
+publicDisplay = true
+
+AND
+within relevant scope/time.
+
+Không public applicant logo
+ngay khi họ gửi form.
+
+==================================================
+42. PARTNERSHIP LABELS
+==================================================
+
+Public label phải đúng:
+
+“NHÀ TÀI TRỢ”
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+“ĐỐI TÁC PHÁT TRIỂN”
+
+“ĐƠN VỊ TỔ CHỨC”
+
+“ĐỒNG TỔ CHỨC”
+
+“CỐ VẤN”
+
+chỉ khi relationship thật sự xác nhận.
+
+Không dùng umbrella badge:
+
+“ĐỐI TÁC CHIẾN LƯỢC”
+
+cho mọi loại.
+
+==================================================
+43. ASSOCIATION/KCN ENDORSEMENT
+==================================================
+
+Tên/logo Association/KCN
+không được dùng để ngụ ý:
+
+official endorsement
+
+government endorsement
+
+certification
+
+nếu agreement không có.
+
+Location relation
+không tạo endorsement.
+
+==================================================
+44. ADVISOR PUBLIC PROFILE
+==================================================
+
+Nếu public Advisor section sau này:
+
+chỉ show:
+
+name
+approved title
+expertise
+scope
+term optional
+
+theo consent.
+
+Không sử dụng Organization affiliation
+để ngụ ý Organization đã bảo trợ.
+
+==================================================
+45. INVESTOR PUBLIC DISPLAY
+==================================================
+
+Không cần list public Investors
+ở P1.
+
+Nếu có investor relationship sau này:
+
+public disclosure
+chỉ theo approved corporate/legal basis.
+
+Không tự hiển thị logo
+chỉ từ inquiry.
+
+==================================================
+46. DATA SHARING MATRIX
+==================================================
+
+Mỗi partnership type cần matrix:
+
+PUBLIC DATA
+
+PARTICIPANT DATA
+
+ORGANIZATION DATA
+
+BUYER PRIVATE DATA
+
+SUPPLIER PRIVATE DATA
+
+FINANCE DATA
+
+CONTRACT DATA.
+
+Default:
+least privilege.
+
+==================================================
+47. ASSOCIATION ACCESS
+==================================================
+
+Association chỉ xem:
+
+member/program data
+theo agreement.
+
+Không mặc định:
+all Buyer Needs.
+
+==================================================
+48. KCN ACCESS
+==================================================
+
+KCN Organization chỉ xem:
+
+authorized programs
+authorized requirements
+reports
+
+theo scope.
+
+Không mặc định:
+all Factory procurement.
+
+==================================================
+49. SPONSOR ACCESS
+==================================================
+
+Sponsor xem:
+
+contract
+entitlements
+delivery
+approved reports.
+
+Không xem:
+Buyer private data.
+
+==================================================
+50. DEVELOPMENT PARTNER ACCESS
+==================================================
+
+Development Partner xem:
+
+referrals
+eligible transactions
+settlements
+approved materials
+
+theo scope.
+
+Không xem:
+full CRM.
+
+==================================================
+51. ADVISOR ACCESS
+==================================================
+
+Advisor xem:
+
+assignment-related material.
+
+Không xem:
+commercial/financial data
+nếu không cần.
+
+==================================================
+52. INVESTOR ACCESS
+==================================================
+
+Investor Inquiry
+không tạo data-room access.
+
+Nếu sau này tới information sharing /
+due diligence:
+
+tạo explicit permission
+và controlled document set.
+
+Không expose platform internal data
+qua generic account.
+
+==================================================
+53. DOCUMENT ROOM
+==================================================
+
+P1 KHÔNG cần xây
+full investor data room.
+
+Nếu cần chia tài liệu:
+
+reuse protected files
++
+specific access.
+
+Data-room enterprise
+để sau khi có nhu cầu thực.
+
+==================================================
+54. ADMIN HUB
+==================================================
+
+Tạo/reuse:
+
+/admin/hop-tac
+
+Đây là cross-partnership overview.
+
+Không thay thế dedicated admin pages:
+
+/admin/tai-tro
+
+/admin/founding-partner
+
+/admin/doi-tac-phat-trien
+
+/admin/hoi-hiep-hoi
+
+/admin/khu-cong-nghiep
+
+==================================================
+55. ADMIN LIST
+==================================================
+
+Columns:
+
+Request code
+
+Applicant
+
+Partnership type
+
+Scope
+
+Related Program/Category/KCN
+
+Status
+
+Owner
+
+Next action
+
+Due date
+
+Agreement?
+
+Public display?
+
+Updated.
+
+==================================================
+56. ADMIN DETAIL
+==================================================
+
+Tabs:
+
+OVERVIEW
+
+APPLICATION
+
+ORGANIZATION
+
+PARTNERSHIP TYPE
+
+SCOPE
+
+RELATIONSHIPS
+
+AGREEMENT
+
+PERMISSIONS
+
+DELIVERABLES
+
+FINANCE REFERENCES
+
+DOCUMENTS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+Dedicated type tabs
+link to their own workflows.
+
+==================================================
+57. ROUTING FROM ADMIN
+==================================================
+
+If SPONSOR:
+open Sponsorship record.
+
+If FOUNDING_PARTNER:
+open Founding Partnership.
+
+If DEVELOPMENT_PARTNER:
+open Development Partner record.
+
+If ASSOCIATION/KCN:
+open Organization relation/service request.
+
+If ADVISOR:
+open Advisor Engagement.
+
+If INVESTOR:
+open Investor Inquiry.
+
+Không xử lý tất cả
+trong generic JSON blob.
+
+==================================================
+58. OWNER + NEXT ACTION
+==================================================
+
+Mọi active PartnershipRequest cần:
+
+ownerUserId
+
+status
+
+nextAction
+
+nextActionAt.
+
+Không để partnership proposal
+nằm trong inbox không người phụ trách.
+
+==================================================
+59. DUPLICATE DETECTION
+==================================================
+
+Check:
+
+same Organization
+
+same partnershipType
+
+same active scope
+
+same source campaign
+
+recent similar inquiry.
+
+Không block nếu:
+cùng Organization nhưng
+một Sponsor + một Investor inquiry.
+
+Đó là hai relationship hợp lệ khác nhau.
+
+==================================================
+60. CONFLICT CHECK
+==================================================
+
+Before agreement:
+
+check:
+
+Existing relationship
+
+Commercial exclusivity
+
+Founding Partner scope overlap
+
+Program sponsor exclusivity
+
+Advisor conflict disclosure
+
+Investor vs commercial relationship separation.
+
+Không auto reject;
+flag for review.
+
+==================================================
+61. FINANCE SEPARATION
+==================================================
+
+Admin Finance must NOT mix:
+
+Investment capital
+with revenue.
+
+Separate:
+
+SPONSORSHIP
+
+FOUNDING PARTNER
+
+SERVICE
+
+REFERRAL COST
+
+INVESTMENT CAPITAL
+
+LOAN
+
+COLLECTED ON BEHALF.
+
+If Finance module chưa đủ:
+ít nhất store transactionType.
+
+==================================================
+62. AGREEMENT TYPE
+==================================================
+
+Types:
+
+ASSOCIATION_COOPERATION
+
+INDUSTRIAL_PARK_COOPERATION
+
+SPONSORSHIP
+
+FOUNDING_PARTNER
+
+DEVELOPMENT_PARTNER
+
+ADVISOR_ENGAGEMENT
+
+INVESTMENT
+
+OTHER
+
+Không dùng generic “PARTNER”
+cho mọi contract.
+
+==================================================
+63. NO IMPLIED EQUITY
+==================================================
+
+Text site phải nói rõ:
+
+Founding Partner
+Sponsor
+Development Partner
+
+không tạo quyền sở hữu công ty.
+
+Investment rights,
+nếu phát sinh,
+theo thỏa thuận đầu tư riêng.
+
+==================================================
+64. NO IMPLIED REVENUE SHARE
+==================================================
+
+Association/KCN/Advisor/Partner
+không tự có revenue share.
+
+Revenue/commission
+chỉ tồn tại khi agreement xác định rõ.
+
+==================================================
+65. “ĐÃ HỢP TÁC” ≠ “ĐÃ GỬI ĐỀ XUẤT”
+==================================================
+
+Public claims chỉ dùng confirmed relationships.
+
+Không lấy:
+
+PartnershipRequest
+
+Inquiry
+
+Meeting
+
+MoU draft
+
+để render:
+
+“Đối tác của CHUOICUNGUNG.COM”.
+
+==================================================
+66. HOMEPAGE / MENU INTEGRATION
+==================================================
+
+Header dropdown:
+
+HỢP TÁC
+
+→ Founding Partner
+→ Nhà tài trợ
+→ Đối tác phát triển
+→ Cố vấn
+→ Nhà đầu tư
+
+Hub:
+
+/hop-tac
+
+giữ vai trò entry point.
+
+Không bỏ các dedicated pages.
+
+==================================================
+67. RELATED CTA
+==================================================
+
+Footer / relevant pages có thể dẫn:
+
+Hội/KCN:
+“Hợp tác tổ chức chương trình”
+
+Program:
+“Tài trợ chương trình”
+
+Category:
+“Founding Partner”
+
+Services:
+“Đối tác phát triển”
+
+About/Partnership:
+“Cố vấn / Nhà đầu tư”.
+
+==================================================
+68. SEO
+==================================================
+
+Title:
+
+Hợp Tác Hệ Sinh Thái | CHUOICUNGUNG.COM
+
+Description:
+
+Khám phá các hình thức hợp tác cùng CHUOICUNGUNG.COM dành cho Hội/Hiệp hội, Khu công nghiệp, nhà tài trợ, Founding Partner, đối tác phát triển, cố vấn và nhà đầu tư.
+
+Canonical:
+
+/hop-tac
+
+==================================================
+69. STRUCTURED DATA
+==================================================
+
+Use:
+
+WebPage
+BreadcrumbList
+
+Không output:
+Partner Organization list
+nếu relationship chưa confirmed.
+
+Không schema-mark Investor/Sponsor
+từ inquiry.
+
+==================================================
+70. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+
+7 partnership cards
+
+Comparison/explanation
+
+How cooperation works
+
+CTA
+
+FAQ
+
+Không overflow 390px.
+
+Các card phải đọc được
+mà không cần hover.
+
+==================================================
+71. ANALYTICS
+==================================================
+
+Track:
+
+partnership_hub_view
+
+partnership_type_select
+
+association_partnership_click
+
+industrial_park_partnership_click
+
+sponsorship_click
+
+founding_partner_click
+
+development_partner_click
+
+advisor_inquiry_start
+
+advisor_inquiry_submit
+
+investor_inquiry_start
+
+investor_inquiry_submit
+
+partnership_request_created
+
+agreement_activated
+
+Không gọi inquiry submit
+= partnership confirmed.
+
+==================================================
+72. SECURITY
+==================================================
+
+Test:
+
+Cross-organization request access
+
+Advisor assignment access
+
+Investor document access
+
+Finance data
+
+Agreement documents
+
+Public/private logos
+
+Fake organizationId
+
+Form tampering
+
+Partnership type mutation
+
+RBAC.
+
+Backend enforce.
+
+==================================================
+73. AUDIT
+==================================================
+
+Log:
+
+Request submitted
+
+Type selected
+
+Owner assigned
+
+Scope changed
+
+Status changed
+
+Agreement created
+
+Relationship activated
+
+Permission granted/revoked
+
+Public display toggled
+
+Agreement ended
+
+Finance classification changed.
+
+==================================================
+74. QA
+==================================================
+
+Test tối thiểu:
+
+1. 7 partnership types hiển thị đúng.
+2. Sponsor route tới /tai-tro.
+3. Founding Partner route đúng.
+4. Development Partner route đúng.
+5. Hội/KCN reuse service workflow.
+6. Advisor submit chỉ tạo inquiry.
+7. Investor submit chỉ tạo inquiry.
+8. Investor không vào Sponsorship entity.
+9. Sponsor không vào Investment entity.
+10. Same Organization hỗ trợ multiple roles.
+11. Investment capital không ghi revenue.
+12. Inquiry không render public logo.
+13. Association/KCN không auto endorsement.
+14. Founding Partner không tạo equity.
+15. Advisor không tự thành official representative.
+16. FormEngine reuse.
+17. Dedupe không merge Sponsor + Investor.
+18. Owner/next action bắt buộc cho active request.
+19. Permissions least privilege.
+20. Admin AuditLog hoạt động.
+21. Mobile 390px hoạt động.
+
+==================================================
+75. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Partnership hub implementation
+- 7 partnership types
+- Routing
+- PartnershipRequest
+- Advisor workflow
+- Investor inquiry workflow
+- Organization multi-role handling
+- Agreement types
+- Finance separation
+- FormEngine integration
+- Admin hub
+- RBAC/data sharing
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+==================================================
+76. P0 + P1 FINAL INTEGRATION CHECK
+==================================================
+
+Vì đây là page cuối,
+sau khi implement /hop-tac:
+
+KHÔNG tiếp tục tự tạo thêm P2 pages.
+
+Thực hiện quick cross-check:
+
+- Header routes
+- Footer routes
+- Sitemap
+- Canonicals
+- Organization multi-role consistency
+- Requirement workflow
+- Supplier matching
+- Program workflow
+- Association/KCN relations
+- Factory buy/sell
+- Catalogue/QR
+- Sponsorship
+- Founding Partner
+- Development Partner
+- Remote Presence
+- Sourcing Dossier
+- Stage taxonomy
+- Partnership Hub
+- Admin links
+- FormEngine
+- RBAC
+- AuditLog
+
+Chỉ sửa các integration blocker trực tiếp
+liên quan tới Page 37.
+
+Không mở rộng scope sang P2.
+
+==================================================
+MỤC TIÊU CUỐI
+==================================================
+
+/hop-tac
+không phải một trang “logo đối tác”.
+
+Nó phải là ROUTER của các quan hệ hệ sinh thái:
+
+HỘI
+→ PROGRAM / MEMBER SUPPORT
+
+KCN
+→ LOCAL PROGRAM / BUSINESS SUPPORT
+
+SPONSOR
+→ SPECIFIC ACTIVITY RIGHTS
+
+FOUNDING PARTNER
+→ CATEGORY COMMERCIAL RIGHTS
+
+DEVELOPMENT PARTNER
+→ NETWORK / REFERRAL / PROGRAM DEVELOPMENT
+
+ADVISOR
+→ EXPERTISE WITH DEFINED SCOPE
+
+INVESTOR
+→ CAPITAL / OWNERSHIP DISCUSSION
+   UNDER SEPARATE AGREEMENT
+
+MỖI LOẠI:
+→ SCOPE RIÊNG
+→ CONTRACT RIÊNG
+→ PERMISSION RIÊNG
+→ FINANCE TYPE RIÊNG
+→ PUBLIC LABEL RIÊNG.
+
+KHÔNG TRỘN:
+
+SPONSORSHIP
+FOUNDING PARTNER
+PARTNERSHIP
+ADVISORY
+INVESTMENT.

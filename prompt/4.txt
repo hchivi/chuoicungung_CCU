@@ -1,0 +1,1632 @@
+Page 04 sẽ là “Không gian xử lý một nhu cầu” — đây là nơi biến một nhu cầu đã đăng thành công việc thực tế, thay vì chỉ để lại một record trong database.
+Tài liệu đã xác định workspace nhu cầu phải có các nhóm Tổng quan, NCC, bằng chứng, mẫu/khảo sát, báo giá, trao đổi, timeline, việc tiếp theo và kết quả.   Văn bản đã dán (2) Đây cũng là page thực hiện xương sống của CHUOICUNGUNG.COM:
+ĐĂNG NHU CẦU → TÌM NGUỒN → KẾT NỐI → THEO DÕI → KẾT QUẢ.
+PAGE 04 — KHÔNG GIAN XỬ LÝ NHU CẦU
+1. Thông số page
+Hạng mục	Chốt triển khai
+Tên page	Không gian nhu cầu
+URL	/tai-khoan/nhu-cau/[id]
+Ví dụ	/tai-khoan/nhu-cau/NC-2026-00125
+Ưu tiên	P0
+Login	Bắt buộc
+Người dùng chính	Nhà máy / Buyer
+Trợ lý	SUPPI → CHAINY
+Data	Requirement + Supplier Matches + Connections + CRM
+SEO	noindex
+Admin tương ứng	/admin/nhu-cau/[id]
+
+
+Tôi khuyên URL public dùng mã nhu cầu, không lộ UUID database:
+/tai-khoan/nhu-cau/NC-2026-00125
+
+Database vẫn dùng:
+id = uuid
+public_code = NC-2026-00125
+
+2. MỤC TIÊU CỦA PAGE
+User vào đây phải trả lời ngay được 5 câu:
+Nhu cầu của tôi đang ở bước nào?
+SUPPI đã tìm được nguồn nào?
+Nhà cung ứng nào đã xác nhận?
+Ai đang cần làm việc tiếp theo?
+Kết quả cuối cùng hiện ra sao?
+Nếu page không trả lời được 5 câu này thì chưa đạt.
+3. HEADER WORKSPACE
+Desktop:
+← Nhu cầu của tôi
+
+NC-2026-00125
+Tìm 500 bộ đồng phục công nhân
+
+                           🔔
+                     ✓ Zalo
+                     CÔNG TY ABC ▼
+
+Dưới header:
+Đồng Nai
+500 bộ
+Cần trước 15/11/2026
+
+Status badge:
+ĐANG TÌM NGUỒN
+4. PIPELINE LUÔN HIỂN THỊ
+Ngay đầu page:
+✓ ĐĂNG NHU CẦU
+      ↓
+● TÌM NGUỒN
+      ↓
+○ KẾT NỐI
+      ↓
+○ THEO DÕI
+      ↓
+○ KẾT QUẢ
+
+Desktop hiển thị ngang.
+Mobile hiển thị compact:
+2/5 · ĐANG TÌM NGUỒN
+
+Click mở timeline đầy đủ.
+5. KHÔNG DÙNG PIPELINE ĐỂ CHE GIẤU STATUS THỰC
+Pipeline 5 bước chỉ là UX cấp cao.
+Database vẫn phải có trạng thái cụ thể:
+NEW
+NEED_MORE_INFO
+VERIFIED
+SOURCING
+CONNECTING
+IN_PROGRESS
+CLOSED
+CANCELLED
+
+Và status từng NCC phải riêng.
+Điểm này rất quan trọng vì một nhu cầu có thể có NCC A đã báo giá, NCC B đang gửi mẫu và NCC C không phản hồi; không thể gộp hết thành một status của nhu cầu.
+6. CẤU TRÚC PAGE
+Tôi chốt 8 tab:
+TỔNG QUAN
+
+NHÀ CUNG ỨNG
+
+MẪU & KHẢO SÁT
+
+BÁO GIÁ
+
+TRAO ĐỔI
+
+VIỆC CẦN LÀM
+
+TIMELINE
+
+KẾT QUẢ
+
+Không cần tab “Bằng chứng” riêng nếu evidence được hiển thị bên trong từng NCC.
+7. TAB 01 — TỔNG QUAN
+Đây là dashboard mini của chính nhu cầu đó.
+Block A — Nhu cầu hiện tại
+TÌM 500 BỘ ĐỒNG PHỤC CÔNG NHÂN
+
+Số lượng        500 bộ
+Địa bàn         Long Thành, Đồng Nai
+Cần trước       15/11/2026
+Cần mẫu         Có
+Khảo sát        Không
+Quyền chia sẻ   Chỉ NCC phù hợp
+
+CTA:
+Chỉnh sửa nhu cầu
+Nếu chỉnh sửa field quan trọng:
+phải tạo Requirement Version mới.
+8. BLOCK B — SUPPI / CHAINY STATUS
+Nếu đang sourcing:
+🔎 SUPPI ĐANG TÌM NGUỒN
+Đã tìm thấy 7 hồ sơ có khả năng liên quan.
+4 đang được kiểm tra thêm.
+2 đã xác nhận có khả năng tiếp nhận.
+
+Nếu đã có kết nối:
+🔗 CHAINY ĐANG THEO DÕI KẾT NỐI
+Có 2 nhà cung ứng đang làm việc với nhu cầu này.
+
+Không dùng những câu như:
+“SUPPI đã tìm được 100% nhà cung ứng tốt nhất.”
+
+9. BLOCK C — TỔNG QUAN NCC
+7 nguồn được xem xét
+
+3 phù hợp sơ bộ
+
+2 đã xác nhận
+
+1 đang gửi mẫu
+
+1 đã báo giá
+
+Các số liệu phải query thật.
+Không hard-code.
+10. BLOCK D — VIỆC TIẾP THEO
+Đây phải là block nổi bật nhất.
+VIỆC TIẾP THEO
+Ví dụ:
+Nhà cung ứng:
+Công ty ABC
+
+Việc cần làm:
+Gửi mẫu vải
+
+Người thực hiện:
+Nhà cung ứng
+
+Hạn:
+30/09/2026
+
+Trạng thái:
+Đang chờ
+
+Buttons:
+Nhắc việc
+Xem kết nối
+11. RULE CỨNG: MỖI KẾT NỐI PHẢI CÓ NEXT ACTION
+Đây nên thành validation backend.
+Nếu:
+connection.status != CLOSED
+
+thì phải có:
+owner
+next_action
+next_action_at
+
+Không cho một connection ở:
+“Đang xử lý”
+
+mà không biết:
+Ai làm?
+Làm gì?
+Khi nào?
+12. TAB 02 — NHÀ CUNG ỨNG
+Headline:
+NHÀ CUNG ỨNG ĐANG ĐƯỢC XEM XÉT
+Không chỉ hiển thị company card.
+Mỗi card phải thuộc:
+supplier_match
+
+13. SUPPLIER MATCH CARD
+Ví dụ:
+CÔNG TY ABC
+
+Năng lực liên quan:
+Đồng phục công nhân
+
+Địa bàn:
+Đồng Nai · Bình Dương · TP.HCM
+
+Điều kiện:
+Có thể gửi mẫu
+
+Hồ sơ cập nhật:
+20/09/2026
+
+Trạng thái:
+ĐÃ XÁC NHẬN KHẢ NĂNG TIẾP NHẬN
+
+Buttons:
+Xem hồ sơ
+Xem vì sao phù hợp
+Kết nối
+14. “VÌ SAO PHÙ HỢP”
+Rất nên có.
+Ví dụ:
+✓ Đúng nhóm sản phẩm
+✓ Phục vụ Đồng Nai
+✓ Số lượng nằm trong phạm vi nhận đơn
+✓ Có khả năng gửi mẫu
+? Lead time cần xác nhận
+
+Không chỉ hiện:
+92% MATCH
+
+mà không giải thích.
+15. MATCH SCORE
+Nếu dùng score:
+match_score = 78
+
+UI nên ghi:
+Mức độ phù hợp cao
+Không nên ghi:
+78% chắc chắn phù hợp
+Score chỉ là công cụ hỗ trợ.
+16. SUPPLIER MATCH STATUS
+Tôi chốt:
+CANDIDATE
+
+CHECKING
+
+INVITED
+
+RESPONDED
+
+SUPPLIER_CONFIRMED
+
+SUPPLIER_DECLINED
+
+CONNECTED
+
+SAMPLE_OR_SURVEY
+
+QUOTED
+
+NEGOTIATING
+
+RESULT
+
+NOT_SUITABLE
+
+Requirement status và SupplierMatch status phải tách riêng.
+17. USER KHÔNG ĐƯỢC THẤY TẤT CẢ ADMIN NOTES
+Buyer chỉ thấy:
+NCC được phép giới thiệu
+Năng lực
+Evidence được phép chia sẻ
+Trạng thái liên quan buyer
+
+Không thấy:
+internal score note
+commercial note
+admin comment
+supplier private note
+other buyer data
+
+18. FOUNDING PARTNER TRONG MATCHING
+Nếu một NCC là Founding Partner:
+card có thể có label:
+ĐỐI TÁC ĐỒNG HÀNH CHUYÊN MỤC
+nhưng:
+không tự động đứng đầu.
+Nếu không phù hợp:
+không đưa vào shortlist.
+Founding Partner chỉ là commercial entitlement, không thay logic matching.
+19. CLICK “KẾT NỐI”
+Không ngay lập tức mở số điện thoại.
+Flow:
+Buyer yêu cầu kết nối
+↓
+Permission check
+↓
+NCC xác nhận
+↓
+Connection created
+↓
+CHAINY tiếp quản
+
+20. CONNECTION MODEL
+Connection {
+  id
+
+  requirementId
+  supplierMatchId
+
+  buyerOrganizationId
+  supplierOrganizationId
+
+  ownerUserId
+
+  stage
+
+  status
+
+  nextAction
+  nextActionOwnerType
+  nextActionAt
+
+  startedAt
+  closedAt
+
+  resultId
+}
+
+21. TAB 03 — MẪU & KHẢO SÁT
+Một nhu cầu có thể có nhiều NCC nên dữ liệu phải theo từng connection.
+Ví dụ:
+CÔNG TY ABC
+
+Mẫu:
+Đã gửi
+
+Ngày gửi:
+28/09
+
+Ngày nhận:
+29/09
+
+Buyer đánh giá:
+Đang xem
+
+22. SAMPLE MODEL
+Sample {
+ id
+
+ connectionId
+
+ requestedAt
+ promisedAt
+ sentAt
+ receivedAt
+
+ status
+
+ description
+
+ attachments[]
+
+ buyerFeedback
+
+ nextAction
+ nextActionAt
+}
+
+23. SAMPLE STATUS
+REQUESTED
+
+CONFIRMED
+
+PREPARING
+
+SENT
+
+RECEIVED
+
+UNDER_REVIEW
+
+APPROVED
+
+REVISION_REQUIRED
+
+REJECTED
+
+CANCELLED
+
+24. KHẢO SÁT
+Survey riêng:
+Survey {
+ id
+ connectionId
+
+ type
+ scheduledAt
+ location
+
+ participants
+
+ status
+
+ notes
+ attachments
+ result
+}
+
+Có thể là:
+Khảo sát nhà máy
+Khảo sát công trình
+Khảo sát kỹ thuật
+Factory visit
+
+25. TAB 04 — BÁO GIÁ
+Một bảng:
+NCC	Báo giá	Ngày gửi	Phiên bản	Trạng thái
+ABC	Đã nhận	05/10	v2	Đang xem
+XYZ	Chờ	—	—	Nhắc NCC
+
+
+Không expose báo giá NCC A cho NCC B.
+26. QUOTATION MODEL
+Quotation {
+ id
+
+ connectionId
+ supplierOrganizationId
+
+ quotationNumber
+
+ version
+
+ currency
+ totalAmount?
+
+ validUntil?
+
+ fileId?
+
+ status
+
+ submittedAt
+
+ buyerFeedback
+
+ createdAt
+ updatedAt
+}
+
+27. QUOTATION STATUS
+REQUESTED
+
+PREPARING
+
+SUBMITTED
+
+UNDER_REVIEW
+
+REVISION_REQUESTED
+
+REVISED
+
+ACCEPTED
+
+REJECTED
+
+EXPIRED
+
+WITHDRAWN
+
+28. GIÁ KHÔNG BẮT BUỘC LƯU STRUCTURED
+Trong P0, có thể:
+quotation file
++
+currency
++
+optional total amount
+
+Không cần xây procurement ERP ngay.
+29. TAB 05 — TRAO ĐỔI
+Đây không phải email inbox.
+Hiển thị conversation liên quan requirement.
+Có thể filter:
+Tất cả
+SUPPI
+CHAINY
+NCC ABC
+NCC XYZ
+Hệ thống
+
+Website và Zalo dùng cùng conversation CRM.
+30. MESSAGE VISIBILITY
+Message phải có scope:
+BUYER_ONLY
+
+SUPPLIER_CONNECTION
+
+INTERNAL
+
+SYSTEM
+
+Không phải mọi message trong requirement đều visible cho mọi supplier.
+31. ZALO
+Nếu đã link:
+✓ Zalo đang đồng bộ
+
+Dòng nhỏ:
+Bạn có thể tiếp tục trao đổi qua Website hoặc Zalo.
+Không cần đẩy toàn bộ historical data sang Zalo.
+CRM vẫn là source of truth.
+32. TAB 06 — VIỆC CẦN LÀM
+Tôi khuyên xem dạng checklist.
+HÔM NAY
+
+⚠ Nhắc Công ty ABC gửi mẫu
+Hạn: hôm nay
+
+
+TUẦN NÀY
+
+○ Buyer phản hồi mẫu
+Hạn: 03/10
+
+○ NCC gửi báo giá
+Hạn: 07/10
+
+33. TASK MODEL
+Task {
+ id
+
+ requirementId
+ connectionId?
+
+ ownerType
+ ownerUserId?
+ ownerOrganizationId?
+
+ title
+ description
+
+ status
+
+ priority
+
+ dueAt
+
+ completedAt
+
+ source
+
+ createdAt
+}
+
+34. TASK STATUS
+OPEN
+IN_PROGRESS
+WAITING
+DONE
+CANCELLED
+OVERDUE
+
+OVERDUE có thể derive thay vì lưu DB.
+35. TAB 07 — TIMELINE
+Đây là một trong những phần tạo khác biệt.
+Ví dụ:
+26/09
+Buyer xác nhận nhu cầu
+
+27/09
+SUPPI đề xuất 5 NCC
+
+28/09
+Công ty ABC xác nhận quan tâm
+
+29/09
+CHAINY tạo kết nối
+
+30/09
+NCC gửi mẫu
+
+03/10
+Buyer phản hồi mẫu
+
+07/10
+NCC gửi báo giá
+
+Meeting không phải kết quả cuối. Sau meeting phải tiếp tục có next action. Đây là logic cốt lõi trong tài liệu.
+36. ACTIVITY MODEL
+Activity {
+ id
+
+ requirementId
+ connectionId?
+
+ type
+
+ actorType
+ actorId?
+
+ title
+ description
+
+ metadata
+
+ createdAt
+}
+
+Activity là immutable log.
+Không dùng nó thay cho business records.
+37. TAB 08 — KẾT QUẢ
+Không chỉ hỏi:
+Đã ký hợp đồng chưa?
+
+Kết quả có nhiều dạng.
+THÀNH CÔNG
+Đã chọn NCC
+Đã đặt hàng
+Đã ký hợp đồng
+Đã bắt đầu triển khai
+
+ĐANG TIẾP TỤC
+Đang thử mẫu
+Chờ ngân sách
+Đang thương lượng
+Chờ phê duyệt
+
+CHƯA PHÙ HỢP
+Giá chưa phù hợp
+Lead time không phù hợp
+Không đáp ứng kỹ thuật
+Không phản hồi
+Buyer dừng dự án
+
+KHÔNG XÁC NHẬN ĐƯỢC
+Không có phản hồi cuối
+
+38. OUTCOME MODEL
+Outcome {
+ id
+
+ requirementId
+ connectionId?
+
+ category
+ reason
+
+ summary
+
+ selectedSupplierId?
+
+ contractValue?
+ currency?
+
+ confirmedByBuyer
+ confirmedBySupplier
+
+ evidenceAttachments[]
+
+ recordedBy
+
+ createdAt
+}
+
+39. KHÔNG ÉP LƯU CONTRACT VALUE
+contractValue optional.
+Nhiều doanh nghiệp không muốn chia sẻ giá trị hợp đồng.
+Platform vẫn có thể ghi nhận:
+Đã chọn NCC
+
+mà không cần biết giá.
+40. ĐÓNG REQUIREMENT
+Requirement chỉ đóng khi:
+buyer/admin confirm close
+
+Hoặc:
+expired/cancelled
+
+Không tự đóng chỉ vì một NCC declined.
+41. NHIỀU NCC CÓ THỂ CÓ KẾT QUẢ KHÁC NHAU
+Ví dụ:
+ABC
+→ WON
+
+XYZ
+→ NOT_SELECTED
+
+DEF
+→ NO_RESPONSE
+
+Requirement:
+CLOSED
+reason = WON
+
+42. EDIT REQUIREMENT SAU KHI SOURCING
+Nếu buyer sửa thông tin trọng yếu như:
+500 → 5.000 bộ
+Đồng Nai → Hà Nội
+15/11 → 30/10
+
+Backend phải:
+create requirement_version
+mark matches for re-evaluation
+notify coordinator
+
+Không silently update.
+43. RIGHT SIDEBAR DESKTOP
+Tôi đề nghị luôn có:
+TRẠNG THÁI
+Đang tìm nguồn
+OWNER
+Lan Nguyễn
+VIỆC TIẾP THEO
+Xác nhận 3 NCC
+HẠN
+30/09
+SUPPI / CHAINY
+Button:
+Tiếp tục với SUPPI
+hoặc
+Hỏi CHAINY
+44. BUYER KHÔNG NÊN THẤY TÊN INTERNAL OWNER NẾU KHÔNG CẦN
+User-facing có thể hiển thị:
+Điều phối viên phụ trách
+Nếu tổ chức muốn.
+Admin luôn thấy owner thật.
+45. DATABASE PAGE 04
+P0 cần:
+requirements
+
+requirement_versions
+
+supplier_matches
+
+connections
+
+samples
+
+surveys
+
+quotations
+
+meetings
+
+tasks
+
+outcomes
+
+activities
+
+messages
+
+attachments
+
+Nếu đã có table tương đương thì reuse.
+Không tạo duplicate.
+46. MEETING MODEL
+Meeting {
+ id
+
+ connectionId
+
+ meetingType
+
+ scheduledAt
+ duration
+
+ locationType
+ location
+
+ participants
+
+ status
+
+ summary
+
+ nextAction
+
+ createdAt
+}
+
+47. MEETING STATUS
+PROPOSED
+
+PENDING_CONFIRMATION
+
+CONFIRMED
+
+COMPLETED
+
+RESCHEDULED
+
+CANCELLED
+
+NO_SHOW
+
+Sau:
+COMPLETED
+
+backend/UI nên yêu cầu:
+Việc tiếp theo là gì?
+48. BACKEND SERVICES
+Page 04 cần:
+RequirementWorkspaceService
+
+SupplierMatchService
+
+ConnectionService
+
+MeetingService
+
+SampleService
+
+SurveyService
+
+QuotationService
+
+TaskService
+
+OutcomeService
+
+ActivityService
+
+NotificationService
+
+PermissionService
+
+SUPPI / CHAINY dùng service này.
+Không bypass business logic.
+49. API / SERVER ACTION
+Conceptual:
+GET requirement workspace
+
+GET supplier matches
+
+POST request connection
+
+GET connection
+
+POST meeting
+
+POST sample request
+
+POST quotation request
+
+POST task
+
+PATCH task
+
+POST outcome
+
+GET timeline
+
+Antigravity tự map theo stack hiện tại.
+50. WORKSPACE AGGREGATE API
+Nếu frontend cần endpoint tổng:
+GET /api/requirements/{id}/workspace
+
+Response:
+{
+  "requirement": {},
+  "summary": {},
+  "matches": [],
+  "connections": [],
+  "tasks": [],
+  "recentActivities": [],
+  "nextAction": {}
+}
+
+Không nhất thiết trả mọi quotation/file trong một request nếu dữ liệu lớn.
+51. PERMISSION
+Buyer:
+own requirement only
+
+Supplier:
+không truy cập workspace buyer toàn bộ.
+Supplier chỉ xem phần connection được chia sẻ.
+Admin/Coordinator:
+theo quyền.
+Association/KCN:
+chỉ nếu requirement thuộc program/scope đã được cấp quyền.
+52. SEO / PRIVACY
+Toàn:
+/tai-khoan/*
+
+→
+noindex
+
+Không cache public.
+Không expose private data qua SSR HTML mà không kiểm tra quyền.
+53. MOBILE
+Mobile tabs không nên 8 tab chạy ngang quá dài.
+Dùng:
+Tổng quan
+Nguồn
+Công việc
+Trao đổi
+Kết quả
+
+Sau đó submenu bên trong.
+Sticky bottom:
+[ Hỏi SUPPI / CHAINY ]
+
+Khi có next action:
+button ưu tiên next action thay vì chatbot.
+54. NOTIFICATION
+Notification types:
+SUPPLIER_CONFIRMED
+
+CONNECTION_CREATED
+
+MEETING_PROPOSED
+
+MEETING_CONFIRMED
+
+SAMPLE_SENT
+
+SAMPLE_RECEIVED
+
+QUOTATION_SUBMITTED
+
+TASK_DUE
+
+TASK_OVERDUE
+
+RESULT_UPDATED
+
+55. CHAINY PROACTIVE UI
+Ví dụ:
+CHAINY: Công ty ABC dự kiến gửi báo giá ngày 07/10 nhưng hiện chưa có cập nhật.
+
+CTA:
+Nhắc nhà cung ứng
+Không cần CHAINY tự gửi tin nếu policy/channel không cho phép.
+56. ADMIN PAGE 04 — NEED DETAIL
+Admin route đã tạo ở Page 03:
+/admin/nhu-cau/[id]
+
+Page 04 làm sâu route này.
+Đây là Control Center của một requirement.
+57. ADMIN HEADER
+NC-2026-00125
+
+500 bộ đồng phục công nhân
+
+Công ty ABC
+Đồng Nai
+
+STATUS:
+Đang tìm nguồn
+
+OWNER:
+Lan Nguyễn
+
+NEXT ACTION:
+Xác nhận 3 NCC
+
+DUE:
+30/09
+
+Actions:
+Đổi owner
+Đổi status
+Tạo task
+Thêm NCC
+Gửi tin
+Đóng nhu cầu
+
+58. ADMIN TABS
+Tôi chốt:
+TỔNG QUAN
+
+NHU CẦU
+
+MATCHING
+
+KẾT NỐI
+
+MẪU / KHẢO SÁT
+
+BÁO GIÁ
+
+MEETING
+
+TASKS
+
+TRAO ĐỔI
+
+TIMELINE
+
+KẾT QUẢ
+
+FILES
+
+AUDIT
+
+59. ADMIN — MATCHING
+Admin không chỉ xem score.
+Layout:
+Candidate suppliers
+↓
+Shortlist
+↓
+Invited
+↓
+Confirmed
+↓
+Connected
+
+Có thể drag/drop nếu phù hợp UX.
+60. ADMIN MATCHING CARD
+Hiển thị:
+Công ty ABC
+
+Match:
+High
+
+Lý do:
+✓ ngành
+✓ địa bàn
+✓ capacity
+? lead time
+
+Source:
+Database
+
+Status:
+Checking
+
+Owner:
+Sourcing Team
+
+Buttons:
+Xem profile
+Mời xác nhận
+Không phù hợp
+Thêm note
+
+61. ADMIN PHẢI LƯU “WHY”
+Khi admin chọn:
+Không phù hợp
+phải chọn reason:
+OUT_OF_AREA
+CAPACITY
+LEAD_TIME
+PRICE
+TECHNICAL
+NO_RESPONSE
+DUPLICATE
+OTHER
+
+Không chỉ remove card.
+62. ADMIN — CONNECTION DETAIL
+Ví dụ:
+Buyer ABC
+↔
+Supplier XYZ
+
+Stage:
+Mẫu
+
+Owner:
+CHAINY / Lan
+
+Next:
+Supplier gửi mẫu
+
+Due:
+30/09
+
+Timeline riêng từng connection.
+63. ADMIN — TASK BOARD
+Route:
+/admin/tasks
+
+Các filter:
+Today
+Overdue
+This week
+By owner
+By requirement
+By connection
+By organization
+
+Admin dashboard không được để task biến mất trong từng requirement.
+64. ADMIN — OVERDUE
+Nếu due < now và task chưa done:
+badge:
+QUÁ HẠN 2 NGÀY
+Dashboard:
+12 việc quá hạn
+
+Click filter.
+65. ADMIN — INTERNAL NOTE
+Có riêng:
+Nội bộ
+
+Không cho buyer/NCC thấy.
+Ví dụ:
+NCC đang cần kiểm tra lại năng lực xưởng.
+
+Không trộn vào conversation.
+66. ADMIN — HUMAN HANDOFF
+Nếu SUPPI/CHAINY không xử lý được:
+Escalate to human
+
+Admin:
+Nhận xử lý
+Từ đó:
+activeAssistant = HUMAN
+
+Sau khi xong:
+có thể hand back về SUPPI/CHAINY.
+67. ADMIN — CLOSE REQUIREMENT
+Modal:
+ĐÓNG NHU CẦU
+Reason:
+Đã chọn NCC
+Đã đặt hàng
+Đã ký hợp đồng
+
+Không phù hợp
+
+Buyer dừng dự án
+
+Hết nhu cầu
+
+Không xác nhận được kết quả
+
+Nếu có supplier selected:
+chọn supplier.
+68. ADMIN — KPI KHÔNG CHỈ ĐẾM LEAD
+Từ Page 04, admin bắt đầu đo:
+Time to verify
+
+Time to first supplier
+
+Number of suppliers considered
+
+Supplier response rate
+
+Meetings
+
+Samples
+
+Quotes
+
+Time to next action
+
+Closed outcome
+
+Chưa cần dashboard phức tạp nhưng schema phải lưu được.
+69. ANALYTICS USER
+Track:
+workspace_viewed
+
+supplier_match_viewed
+
+connection_requested
+
+sample_viewed
+
+quotation_viewed
+
+task_completed
+
+message_sent
+
+outcome_submitted
+
+Không gửi private amount/message content sang analytics.
+70. ACCEPTANCE TEST PAGE 04
+TEST A
+Buyer mở đúng requirement của mình.
+→ PASS.
+Buyer khác mở URL.
+→ 403/404 phù hợp.
+TEST B
+Requirement có 5 supplier matches.
+Mỗi NCC có trạng thái riêng.
+TEST C
+NCC A báo giá.
+NCC B gửi mẫu.
+Requirement vẫn không bị ép thành một status chi tiết duy nhất.
+TEST D
+Connection đang active nhưng không có next action.
+Backend/UI phải cảnh báo.
+TEST E
+Meeting completed.
+Hệ thống yêu cầu next action.
+TEST F
+Supplier submits quotation.
+Buyer thấy.
+Supplier khác không thấy.
+TEST G
+Buyer chỉnh số lượng lớn.
+RequirementVersion được tạo.
+Matching được flag review.
+TEST H
+Admin đổi owner.
+Audit log được tạo.
+TEST I
+Task quá hạn.
+User/Admin nhận state overdue.
+TEST J
+Outcome được ghi.
+Requirement có thể close.
+71. ANTIGRAVITY — PAGE 04 CHIA 6 PROMPT
+Anh chạy từng prompt.
+PROMPT 04-01 — AUDIT WORKSPACE
+PROJECT: CHUOICUNGUNG.COM
+PAGE 04
+ROUTE: /tai-khoan/nhu-cau/[id]
+
+SCOPE:
+BUYER REQUIREMENT WORKSPACE + ADMIN NEED DETAIL.
+
+Ở bước này KHÔNG redesign và KHÔNG migration.
+
+Audit:
+
+1. Route /tai-khoan/nhu-cau/[id] hiện có hay chưa.
+
+2. Kiểm tra model/API hiện tại liên quan:
+requirements
+supplier matches
+connections
+meetings
+samples
+surveys
+quotations
+tasks
+messages
+activities
+outcomes
+attachments
+
+3. Kiểm tra authorization:
+buyer ownership
+organization membership
+admin access
+supplier access.
+
+4. Kiểm tra requirement status và supplier-match status có đang bị trộn hay không.
+
+5. Kiểm tra hiện tại có:
+owner
+nextAction
+nextActionAt
+không.
+
+6. Audit route:
+/admin/nhu-cau/[id]
+/admin/matching
+/admin/connections
+/admin/tasks
+
+7. Xuất:
+
+docs/pages/requirement-workspace/WORKSPACE_CURRENT_AUDIT.md
+
+docs/admin/REQUIREMENT_ADMIN_DETAIL_AUDIT.md
+
+DỪNG SAU AUDIT.
+
+PROMPT 04-02 — DATA MODEL
+PROJECT: CHUOICUNGUNG.COM
+PAGE 04
+PHASE: WORKSPACE DATA MODEL
+
+Reuse existing models whenever possible.
+
+Do not duplicate data.
+
+Need to support:
+
+requirements
+requirement_versions
+
+supplier_matches
+
+connections
+
+meetings
+
+samples
+surveys
+
+quotations
+
+tasks
+
+outcomes
+
+activities
+
+messages
+
+attachments
+
+CORE RULE:
+
+Requirement status
+MUST be separate from
+SupplierMatch status
+and Connection stage.
+
+Every active connection must have:
+
+owner
+nextAction
+nextActionAt
+
+Add safe migrations only where missing.
+
+SupplierMatch status:
+
+CANDIDATE
+CHECKING
+INVITED
+RESPONDED
+SUPPLIER_CONFIRMED
+SUPPLIER_DECLINED
+CONNECTED
+SAMPLE_OR_SURVEY
+QUOTED
+NEGOTIATING
+RESULT
+NOT_SUITABLE
+
+Connection stages:
+
+CONNECTED
+MEETING
+SAMPLE_OR_SURVEY
+QUOTATION
+NEGOTIATION
+RESULT
+
+Task:
+requirementId
+connectionId optional
+owner
+status
+dueAt
+
+Activity:
+immutable timeline.
+
+Outcome:
+requirement/connection result.
+
+Create:
+docs/pages/requirement-workspace/WORKSPACE_DATA_MODEL.md
+
+PROMPT 04-03 — BUYER UX/UI
+PROJECT: CHUOICUNGUNG.COM
+PAGE:
+/tai-khoan/nhu-cau/[id]
+
+Build Requirement Workspace.
+
+PRIVATE AUTHENTICATED PAGE.
+
+Header:
+
+tracking code
+requirement title
+location
+status
+organization
+
+Top pipeline:
+
+ĐĂNG NHU CẦU
+TÌM NGUỒN
+KẾT NỐI
+THEO DÕI
+KẾT QUẢ
+
+Tabs:
+
+Tổng quan
+Nhà cung ứng
+Mẫu & khảo sát
+Báo giá
+Trao đổi
+Việc cần làm
+Timeline
+Kết quả
+
+OVERVIEW:
+
+Requirement summary
+
+SUPPI/CHAINY status
+
+Supplier summary
+
+Next Action
+
+Supplier Match cards must show:
+capability
+location
+relevant evidence
+status
+why matched
+CTA
+
+Do not expose:
+internal notes
+other suppliers' quotation
+private supplier data
+admin score details.
+
+Mobile:
+simplify tabs:
+Overview
+Sources
+Work
+Messages
+Result
+
+No horizontal overflow.
+
+Private page must be noindex.
+
+PROMPT 04-04 — SUPPI → CHAINY + NEXT ACTION
+PROJECT: CHUOICUNGUNG.COM
+PAGE 04
+PHASE: WORKFLOW
+
+Implement:
+
+Requirement
+→ Supplier Match
+→ Supplier confirmation
+→ Connection
+→ CHAINY
+→ Next Action
+→ Result
+
+SUPPI owns:
+sourcing context.
+
+CHAINY owns:
+connection follow-up.
+
+Do not create new conversation when switching assistant.
+
+Hard business rule:
+
+Every active Connection must have:
+
+owner
+nextAction
+nextActionAt
+
+If meeting becomes COMPLETED:
+require next action.
+
+If nextActionAt passes:
+show overdue.
+
+Do not automatically send external messages unless channel policy allows.
+
+Create activities for:
+supplier matched
+supplier invited
+supplier replied
+connection created
+meeting
+sample
+quotation
+task
+result.
+
+Preserve same requirement_id and CRM history.
+
+PROMPT 04-05 — ADMIN DETAIL + MATCHING
+PROJECT: CHUOICUNGUNG.COM
+ADMIN PHASE FOR PAGE 04
+
+Upgrade:
+
+/admin/nhu-cau/[id]
+/admin/matching
+/admin/connections
+/admin/tasks
+
+ADMIN NEED DETAIL TABS:
+
+Overview
+Requirement
+Matching
+Connections
+Samples/Surveys
+Quotes
+Meetings
+Tasks
+Messages
+Timeline
+Results
+Files
+Audit
+
+Header always shows:
+
+Code
+Organization
+Status
+Owner
+Next Action
+Due
+
+MATCHING:
+
+Support:
+candidate
+shortlist
+invite
+response
+confirm
+connection
+reject/not suitable
+
+Every not-suitable action requires reason.
+
+CONNECTION:
+
+show buyer
+supplier
+stage
+owner
+next action
+due
+timeline
+
+TASK BOARD:
+
+Today
+Overdue
+This week
+By owner
+By requirement
+By organization
+
+All admin mutations must create audit log.
+
+Internal notes must never appear to buyer/supplier.
+
+Human handoff supported.
+
+Do not implement fake AI matching.
+If real matching engine is not implemented,
+clearly label rules/manual matching state.
+
+PROMPT 04-06 — QA
+PROJECT: CHUOICUNGUNG.COM
+PAGE 04 + ADMIN
+PHASE: QA
+
+Test:
+
+1.
+Buyer can view own requirement.
+
+2.
+Buyer cannot view another organization's requirement.
+
+3.
+5 supplier matches can all have different status.
+
+4.
+Supplier A cannot see Supplier B quotation.
+
+5.
+Every active connection has:
+owner
+next action
+due.
+
+6.
+Completed meeting without next action triggers warning.
+
+7.
+Overdue task is visible.
+
+8.
+Requirement edit creates version when material fields change.
+
+9.
+Changing important requirement data flags existing matches for review.
+
+10.
+SUPPI → CHAINY keeps same conversation/context.
+
+11.
+Admin matching rejection requires reason.
+
+12.
+Admin mutation creates audit.
+
+13.
+Internal admin notes never appear user-side.
+
+14.
+Outcome can be:
+won
+ongoing
+not suitable
+cancelled
+unknown.
+
+15.
+Mobile 390px works.
+
+16.
+Private workspace is noindex.
+
+Generate:
+
+docs/pages/requirement-workspace/WORKSPACE_QA.md
+
+docs/admin/REQUIREMENT_ADMIN_QA.md
+
+Report:
+PASS
+FAIL
+BLOCKED
+NOT IMPLEMENTED
+
+Page 04 chỉ được coi là hoàn thành khi anh có thể mở một nhu cầu thật và nhìn xuyên suốt:
+NC-2026-00125 → SUPPI đang tìm 5 NCC → 2 NCC xác nhận → CHAINY kết nối 1 NCC → 30/09 gửi mẫu → 07/10 báo giá → buyer phản hồi → ghi nhận kết quả.
+Đây chính là phần biến CHUOICUNGUNG.COM từ hệ thống “đăng tin” thành CRM điều phối nhu cầu B2B.   Văn bản đã dán (1)
+Sau Page 04, Page 05 nên là /doanh-nghiep — Tìm Nhà Cung Ứng, và tôi sẽ làm song song /admin/to-chuc + hồ sơ Supplier trong Admin, đặc biệt đi sâu vào taxonomy năng lực, bộ lọc sourcing, Supplier Card, matching data, verification/evidence và cách SUPPI tìm NCC từ database thật.

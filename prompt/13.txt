@@ -1,0 +1,480 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 13: TRUNG TÂM DỊCH VỤ
+ROUTE: /dich-vu
+
+MỤC TIÊU:
+
+Xây /dich-vu thành trang giúp người dùng:
+→ hiểu mình đang cần loại hỗ trợ nào;
+→ chọn đúng dịch vụ;
+→ đi tới page chi tiết;
+→ hoặc gửi một đề bài tổng hợp qua /yeu-cau-dich-vu.
+
+Đây KHÔNG phải trang liệt kê dịch vụ kiểu brochure.
+Mỗi dịch vụ phải dẫn tới một đầu ra và workflow xử lý thật.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit route hiện tại:
+
+/dich-vu
+
+Kiểm tra:
+
+service records
+service categories
+service status
+service owner
+service request flow
+existing service pages
+pricing/package data nếu có
+admin
+SEO
+
+Reuse model hiện có.
+
+Không hard-code toàn bộ service cards nếu hệ thống đã có dữ liệu dịch vụ.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“DỊCH VỤ HỖ TRỢ KẾT NỐI VÀ PHÁT TRIỂN DOANH NGHIỆP”
+
+Sub:
+
+“Chọn dịch vụ phù hợp với công việc bạn đang cần: tổ chức chương trình, chuẩn bị vật phẩm, giới thiệu năng lực hoặc tham gia một hoạt động kết nối. CHUOICUNGUNG.COM tiếp nhận yêu cầu và thống nhất phạm vi, chi phí, thời hạn trước khi triển khai.”
+
+CTA:
+
+[GỬI YÊU CẦU TƯ VẤN]
+
+→ /yeu-cau-dich-vu
+
+==================================================
+3. SERVICE CARDS
+==================================================
+
+CARD 01
+
+TỔ CHỨC KẾT NỐI DOANH NGHIỆP
+
+Mô tả:
+
+“Chuẩn bị nhu cầu, tiếp nhận đăng ký, sắp xếp cuộc gặp và theo dõi đầu việc sau chương trình.”
+
+CTA:
+[XEM DỊCH VỤ]
+
+→ /dich-vu/to-chuc-ket-noi
+
+
+CARD 02
+
+VẬT PHẨM DOANH NGHIỆP & SỰ KIỆN
+
+Mô tả:
+
+“Thiết kế và phối hợp cung ứng đồng phục, thẻ QR, túi, quà tặng và tài liệu theo yêu cầu.”
+
+CTA:
+
+[XEM DỊCH VỤ]
+
+→ /dich-vu/vat-pham-su-kien
+
+
+CARD 03
+
+HỒ SƠ & TRUYỀN THÔNG DOANH NGHIỆP
+
+Mô tả:
+
+“Chuẩn hóa hồ sơ, sản xuất video giới thiệu, ảnh và nội dung catalogue để sử dụng trên nhiều điểm tiếp xúc.”
+
+CTA:
+
+[XEM DỊCH VỤ]
+
+→ /dich-vu/truyen-thong-doanh-nghiep
+
+
+CARD 04
+
+HIỆN DIỆN TỪ XA
+
+Mô tả:
+
+“Đưa hồ sơ, video hoặc mẫu của doanh nghiệp đến chương trình phù hợp và tiếp nhận yêu cầu liên hệ theo phạm vi đã thống nhất.”
+
+CTA:
+
+[TÌM HIỂU]
+
+→ /dich-vu/hien-dien-tu-xa
+
+Nếu route này chưa triển khai:
+có thể dẫn về block tương ứng trong trang truyền thông ở giai đoạn đầu.
+
+Không tạo page rỗng chỉ để đủ sitemap.
+
+==================================================
+4. PHÚC LỢI DOANH NGHIỆP
+==================================================
+
+Chỉ hiển thị service này khi hệ thống thực sự:
+
+- có đối tác;
+- có phạm vi dịch vụ rõ;
+- có người phụ trách;
+- đang nhận yêu cầu.
+
+Nếu chưa sẵn sàng:
+ẨN.
+
+Không tạo card “Coming soon” nếu không cần.
+
+==================================================
+5. SERVICE DATA
+==================================================
+
+Mỗi Service nên hỗ trợ:
+
+id
+slug
+name
+shortDescription
+description
+
+serviceType
+
+status
+
+acceptingRequests
+
+ownerUserId
+
+targetAudience[]
+
+deliverables[]
+
+relatedPages[]
+
+ctaLabel
+ctaUrl
+
+sortOrder
+
+publishable
+
+createdAt
+updatedAt
+
+Status ví dụ:
+
+DRAFT
+ACTIVE
+PAUSED
+INACTIVE
+ARCHIVED
+
+Không hard-code trạng thái “đang nhận việc”.
+
+==================================================
+6. MỖI DỊCH VỤ PHẢI CÓ ĐẦU RA
+==================================================
+
+Không mô tả chung chung.
+
+Ví dụ:
+
+Tổ chức kết nối:
+- trang chương trình;
+- đăng ký;
+- danh sách cuộc gặp;
+- bảng đầu việc;
+- báo cáo.
+
+Vật phẩm:
+- yêu cầu;
+- quy cách;
+- mẫu;
+- báo giá;
+- giao hàng.
+
+Truyền thông:
+- profile;
+- ảnh;
+- video;
+- catalogue.
+
+Hiện diện từ xa:
+- hồ sơ;
+- video;
+- mẫu;
+- phạm vi đại diện;
+- đầu mối phản hồi.
+
+Các deliverables này phải được quản lý trong service/package data nếu có.
+
+==================================================
+7. CTA “GỬI YÊU CẦU”
+==================================================
+
+CTA chung:
+
+[GỬI YÊU CẦU TƯ VẤN]
+
+→ /yeu-cau-dich-vu
+
+Nếu user click từ một Service Card:
+
+pre-fill:
+
+serviceType
+sourcePage
+sourceService
+
+Ví dụ:
+
+/yeu-cau-dich-vu?service=to-chuc-ket-noi
+
+Không bắt user chọn lại service nếu context đã rõ.
+
+==================================================
+8. GÓI KẾT HỢP
+==================================================
+
+Cuối page:
+
+H2:
+
+“BẠN CẦN KẾT HỢP NHIỀU DỊCH VỤ?”
+
+Text:
+
+“Hãy mô tả chương trình, đối tượng tham gia và thời gian dự kiến. Chúng tôi sẽ cùng bạn xác định các hạng mục cần thiết.”
+
+CTA:
+
+[GỬI ĐỀ BÀI]
+
+→ /yeu-cau-dich-vu
+
+Nếu chọn nhiều service:
+
+ServiceRequest phải hỗ trợ:
+
+serviceIds[]
+
+Không tạo nhiều request duplicate.
+
+==================================================
+9. COMMERCIAL RULE
+==================================================
+
+Mỗi Service phải có:
+
+owner
+status
+acceptingRequests
+
+Nếu service không nhận yêu cầu:
+CTA phải đổi trạng thái phù hợp.
+
+Gói kết hợp phải có danh sách deliverables rõ.
+
+Không tính một quyền lợi/hạng mục hai lần
+nếu đã nằm trong package khác.
+
+Không hiển thị giá cố định
+nếu phạm vi công việc chưa đủ rõ.
+
+Có thể dùng:
+
+“Nhận báo giá theo phạm vi”
+
+thay vì fake price.
+
+==================================================
+10. PROGRAM INTEGRATION
+==================================================
+
+Nếu Service liên quan chương trình:
+
+reuse dữ liệu /chuong-trinh.
+
+Không copy Program Card thủ công vào /dich-vu.
+
+Ví dụ:
+
+“Tổ chức kết nối”
+có thể hiển thị:
+“Chương trình đang mở”
+
+nhưng phải lấy từ Program database.
+
+==================================================
+11. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/dich-vu
+
+/admin/dich-vu/[id]
+
+Admin quản lý:
+
+Tên
+Slug
+Mô tả
+Target audience
+Deliverables
+CTA
+Service owner
+Status
+Accepting requests
+Related pages
+Sort order
+SEO
+Publish state
+
+Admin phải thấy:
+
+- số ServiceRequest;
+- request mới;
+- đang xử lý;
+- doanh thu/giá trị chỉ khi dữ liệu tài chính thực sự có;
+- owner;
+- SLA/next action nếu hệ thống đã hỗ trợ.
+
+Mọi mutation:
+AuditLog.
+
+==================================================
+12. SERVICE REQUEST RELATION
+==================================================
+
+Không tạo lead rời khỏi hệ thống.
+
+Service Card
+→ Service Request
+→ Owner
+→ Status
+→ Next Action
+→ Proposal / Quote
+→ Execution
+→ Result
+
+Mỗi ServiceRequest tối thiểu phải có:
+
+owner
+status
+nextAction
+nextActionAt
+
+==================================================
+13. RESPONSIVE
+==================================================
+
+Desktop:
+
+Hero
+Service grid 2x2
+Optional additional services
+Combined services CTA
+
+Mobile:
+
+Hero
+Service cards stacked
+Combined services CTA
+
+Không nhồi quá nhiều text trên card.
+
+Mỗi card ưu tiên:
+
+Tên
+1 câu mô tả
+Đầu ra chính
+CTA
+
+Không overflow 390px.
+
+==================================================
+14. SEO
+==================================================
+
+Title:
+
+Dịch Vụ Hỗ Trợ Kết Nối Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Các dịch vụ tổ chức kết nối, vật phẩm doanh nghiệp, hồ sơ – truyền thông và hiện diện tại chương trình dành cho doanh nghiệp, Hội và KCN.
+
+Canonical:
+
+/dich-vu
+
+Schema phù hợp:
+
+CollectionPage
+Service
+
+Không tạo fake review/rating.
+
+==================================================
+15. QA
+==================================================
+
+Test:
+
+1. 4 service chính hiển thị đúng.
+2. CTA dẫn đúng route.
+3. Context service được giữ khi sang /yeu-cau-dich-vu.
+4. Service inactive không nhận request.
+5. Phúc lợi không xuất hiện nếu chưa active.
+6. Program data không bị duplicate.
+7. Combined request hỗ trợ nhiều service.
+8. Owner + status + next action hoạt động.
+9. Không fake price.
+10. Admin thay đổi trạng thái tạo AuditLog.
+11. Mobile 390px không overflow.
+12. Không còn mock service card nếu DB đã có data thật.
+
+==================================================
+16. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration nếu có
+- Service data structure
+- Admin implementation
+- Service Request integration
+- Routes/CTAs
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+/dich-vu
+→ CHỌN ĐÚNG DỊCH VỤ
+→ XEM CHI TIẾT
+→ GỬI ĐỀ BÀI
+→ SERVICE REQUEST
+→ OWNER
+→ NEXT ACTION
+→ BÁO GIÁ / ĐỀ XUẤT
+→ TRIỂN KHAI
+→ KẾT QUẢ
+
+Không biến /dich-vu thành một trang brochure tĩnh.

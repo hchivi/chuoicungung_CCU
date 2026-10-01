@@ -1,864 +1,553 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { 
-  ArrowRight, CheckCircle2, ChevronRight, FileText, 
-  Building2, Factory, Users, MapPin, Sparkles, Layers,
-  Compass, Check, Shield, Wrench, RefreshCw, Briefcase, 
-  FileCheck, Download, ExternalLink, HelpCircle, Send,
-  Filter, Zap, Star, Clock, PlusCircle, X
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
+import {
+  Compass, Building2, Factory, Zap, Users, Sparkles,
+  ArrowRight, ArrowLeft, CheckCircle2, ChevronRight, FileText,
+  MapPin, Check, Shield, Wrench, Download, ExternalLink,
+  MessageSquare, Layers, Clock, AlertCircle, HelpCircle,
+  FolderOpen, ShoppingBag, Eye, UserCheck, Calendar, BookOpen,
+  Filter, Tag, Share2, Info
 } from 'lucide-react';
-import { stagesData } from '../data/mockData';
-import { stageSuppliers } from '../data/stageSuppliersData';
-import { useLanguage } from '../contexts/LanguageContext';
-import StageFilterSidebar from '../components/stage/StageFilterSidebar';
-import StageSupplierCard from '../components/stage/StageSupplierCard';
-import StageRequestQuoteModal from '../components/stage/StageRequestQuoteModal';
+import {
+  MASTER_SIX_STAGES,
+  getStageBySlugOrId,
+  getNeedGroupByCode,
+  getStagePublicRequirements,
+  getStageSourcingDossiers,
+  getStageSuppliers,
+  getNeedGroupBuyerGuide,
+  getStagePrograms,
+  getStageRealMetrics,
+  verifyStageNeutrality
+} from '../data/sixStagesData.js';
 
 export default function StageDetailPage() {
-  const { t, lang } = useLanguage();
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Parse stageId (supports "1", "1-khao-sat-phap-ly-ha-tang", etc.)
-  const stageId = parseInt(id) || 1;
-  const stage = stagesData.find(s => s.id === stageId) || stagesData[0];
+  // Nhận diện Stage hiện tại theo slug hoặc ID
+  const currentStage = getStageBySlugOrId(id);
+  const stageMetrics = getStageRealMetrics(currentStage.id);
 
-  // Dynamic Theme Palette matching the 6 Flower Petal Colors:
-  // 1: Tím, 2: Xanh lá, 3: Cam, 4: Xanh dương, 5: Vàng, 6: Đỏ
-  const stageThemes = {
-    1: { 
-      color: "#8b5cf6", 
-      darkColor: "#6b21a8",
-      bgPage: "from-[#fbf8ff] via-[#f7f0fe] to-[#f3e8ff]/40", 
-      heroImg: "/stage1_hero.jpg", 
-      bgPill: "bg-purple-50",
-      borderPill: "border-purple-200",
-      textAcc: "text-purple-600" 
-    },
-    2: { 
-      color: "#10b981", 
-      darkColor: "#047857",
-      bgPage: "from-[#f0fdf4] via-[#e6fbf0] to-[#dcfce7]/40", 
-      heroImg: "/stage2_hero.jpg", 
-      bgPill: "bg-emerald-50",
-      borderPill: "border-emerald-200",
-      textAcc: "text-emerald-600" 
-    },
-    3: { 
-      color: "#f97316", 
-      darkColor: "#c2410c",
-      bgPage: "from-[#fff7ed] via-[#ffedd5] to-[#ffedd5]/40", 
-      heroImg: "/stage3_hero.jpg", 
-      bgPill: "bg-orange-50",
-      borderPill: "border-orange-200",
-      textAcc: "text-orange-600" 
-    },
-    4: { 
-      color: "#0284c7", 
-      darkColor: "#0369a1",
-      bgPage: "from-[#f0f9ff] via-[#e0f2fe] to-[#e0f2fe]/40", 
-      heroImg: "/stage4_hero.jpg", 
-      bgPill: "bg-sky-50",
-      borderPill: "border-sky-200",
-      textAcc: "text-sky-600" 
-    },
-    5: { 
-      color: "#eab308", 
-      darkColor: "#b45309",
-      bgPage: "from-[#fefce8] via-[#fef9c3] to-[#fef08a]/35", 
-      heroImg: "/stage5_hero.jpg", 
-      bgPill: "bg-amber-50",
-      borderPill: "border-amber-200",
-      textAcc: "text-amber-600" 
-    },
-    6: { 
-      color: "#ef4444", 
-      darkColor: "#b91c1c",
-      bgPage: "from-[#fef2f2] via-[#fee2e2] to-[#fee2e2]/40", 
-      heroImg: "/stage6_hero.jpg", 
-      bgPill: "bg-red-50",
-      borderPill: "border-red-200",
-      textAcc: "text-red-600" 
-    }
-  };
+  // Nhóm nhu cầu được chọn (mặc định là nhóm đầu tiên của Stage)
+  const [selectedNeedGroupId, setSelectedNeedGroupId] = useState(
+    currentStage.needGroups[0]?.phaseId || '1.1'
+  );
 
-  const theme = stageThemes[stage.id] || stageThemes[1];
-
-  // Micro-Tabs State: selected phase id ("all" or "1.1", "1.2", "1.3")
-  const [selectedPhase, setSelectedPhase] = useState("all");
-  const [isBottomBarClosed, setIsBottomBarClosed] = useState(false);
-
-  // Filters State
-  const [filters, setFilters] = useState({
-    search: '',
-    kycTiers: [],
-    erpOnly: false,
-    standards: []
-  });
-
-  // Skeleton loading simulation on filter change (< 250ms)
-  const [isLoading, setIsLoading] = useState(false);
-
-  // RFQ Modal State
-  const [isRfqModalOpen, setIsRfqModalOpen] = useState(false);
-  const [selectedSupplierForRfq, setSelectedSupplierForRfq] = useState(null);
-
-  // Reset phase when stage changes
+  // Đọc hash hoặc query param nếu có (VD: #5-3 hoặc #5.3)
   useEffect(() => {
-    setSelectedPhase("all");
-    setFilters({
-      search: '',
-      kycTiers: [],
-      erpOnly: false,
-      standards: []
-    });
-  }, [stage.id]);
+    if (location.hash) {
+      const hashClean = location.hash.replace('#', '').replace('-', '.');
+      const foundNg = currentStage.needGroups.find(ng => ng.phaseId === hashClean);
+      if (foundNg) {
+        setSelectedNeedGroupId(foundNg.phaseId);
+      }
+    } else {
+      setSelectedNeedGroupId(currentStage.needGroups[0]?.phaseId || '1.1');
+    }
+  }, [currentStage.id, location.hash]);
 
-  // Handle opening RFQ Modal
-  const handleOpenRfq = (supplier = null) => {
-    setSelectedSupplierForRfq(supplier);
-    setIsRfqModalOpen(true);
+  const selectedNeedGroup = currentStage.needGroups.find(
+    ng => ng.phaseId === selectedNeedGroupId
+  ) || currentStage.needGroups[0];
+
+  // Dữ liệu cho Need Group đang active
+  const buyerGuide = getNeedGroupBuyerGuide(selectedNeedGroup.phaseId);
+  const publicRequirements = getStagePublicRequirements(currentStage.id);
+  const sourcingDossiers = getStageSourcingDossiers(currentStage.id);
+  const suppliers = getStageSuppliers(currentStage.id);
+  const programs = getStagePrograms(currentStage.id);
+
+  // Xác định Stage trước và sau (Navigation khám phá, không bắt buộc thứ tự)
+  const prevStageIndex = (currentStage.id - 2 + 6) % 6;
+  const nextStageIndex = currentStage.id % 6;
+  const prevStage = MASTER_SIX_STAGES[prevStageIndex];
+  const nextStage = MASTER_SIX_STAGES[nextStageIndex];
+
+  // Dynamic Theme Colors
+  const stageThemeMap = {
+    1: { color: "#8b5cf6", bgLight: "bg-purple-50", textCol: "text-purple-700", borderCol: "border-purple-200" },
+    2: { color: "#0052cc", bgLight: "bg-blue-50", textCol: "text-blue-700", borderCol: "border-blue-200" },
+    3: { color: "#06b6d4", bgLight: "bg-cyan-50", textCol: "text-cyan-700", borderCol: "border-cyan-200" },
+    4: { color: "#10b981", bgLight: "bg-emerald-50", textCol: "text-emerald-700", borderCol: "border-emerald-200" },
+    5: { color: "#f59e0b", bgLight: "bg-amber-50", textCol: "text-amber-700", borderCol: "border-amber-200" },
+    6: { color: "#f43f5e", bgLight: "bg-rose-50", textCol: "text-rose-700", borderCol: "border-rose-200" }
   };
+  const theme = stageThemeMap[currentStage.id] || stageThemeMap[1];
 
-  // Reset all filters
-  const handleResetFilters = () => {
-    setFilters({
-      search: '',
-      kycTiers: [],
-      erpOnly: false,
-      standards: []
-    });
-  };
-
-  // Filtered suppliers
-  const filteredSuppliers = useMemo(() => {
-    // Start with suppliers for this stage
-    let list = stageSuppliers.filter(s => s.stageId === stage.id);
-
-    // Filter by selected phase
-    if (selectedPhase !== "all") {
-      list = list.filter(s => s.phaseId === selectedPhase);
-    }
-
-    // Filter by keyword search
-    if (filters.search) {
-      const q = filters.search.toLowerCase().trim();
-      list = list.filter(s => 
-        s.name.toLowerCase().includes(q) ||
-        s.shortName.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q) ||
-        s.tags.some(t => t.toLowerCase().includes(q)) ||
-        s.location.toLowerCase().includes(q)
-      );
-    }
-
-    // Filter by KYC Tiers
-    if (filters.kycTiers && filters.kycTiers.length > 0) {
-      list = list.filter(s => filters.kycTiers.includes(s.kycTier));
-    }
-
-    // Filter by ERP Ready
-    if (filters.erpOnly) {
-      list = list.filter(s => s.erpReady === true || s.odooReady === true);
-    }
-
-    // Filter by Standards / Certifications
-    if (filters.standards && filters.standards.length > 0) {
-      list = list.filter(s => 
-        s.standards && filters.standards.some(reqStd => s.standards.includes(reqStd))
-      );
-    }
-
-    return list;
-  }, [stage.id, selectedPhase, filters]);
-
-  // Trigger quick skeleton animation on filter change
+  // SEO & Schema (Section 51, 52, 53, 54 & URLs 090-095)
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 180);
-    return () => clearTimeout(timer);
-  }, [selectedPhase, filters]);
+    document.title = `${currentStage.name} trong vòng đời nhà máy | CHUOICUNGUNG.COM`;
 
-  // Dynamic Stage-Specific Ecosystem Roles (Customized for Stages 1 to 6)
-  const ecosystemRoles = useMemo(() => {
-    switch (stage.id) {
-      case 2:
-        return [
-          { icon: <Factory className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "EPC General Contractor" : "Tổng thầu EPC", desc: lang === 'en' ? "Design & Build execution" : "Thiết kế & thi công xây dựng trọn gói" },
-          { icon: <Building2 className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Steel Structure" : "Kết cấu thép tiền chế", desc: lang === 'en' ? "Fabrication & site erection" : "Gia công & lắp dựng dầm nhịp lớn" },
-          { icon: <Wrench className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "MEP Contractor" : "Nhà thầu cơ điện MEP", desc: lang === 'en' ? "HVAC, Substation & Piping" : "Trạm biến áp, Chiller, PCCC tự động" },
-          { icon: <Users className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Supervision Consultant" : "Tư vấn giám sát", desc: lang === 'en' ? "QA/QC on-site management" : "Kiểm soát chất lượng thi công hiện trường" },
-          { icon: <Shield className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Fire Safety Agency" : "Thẩm duyệt PCCC", desc: lang === 'en' ? "QCVN 06:2022 fire standards" : "Nghiệm thu an toàn PCCC công trình" }
-        ];
-      case 3:
-        return [
-          { icon: <Cpu className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "OEM Equipment Maker" : "Nhà sản xuất máy móc", desc: lang === 'en' ? "Supplying assembly lines" : "Cung cấp dây chuyền công nghệ chính" },
-          { icon: <Layers className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Cleanroom Contractor" : "Nhà thầu phòng sạch", desc: lang === 'en' ? "ISO 14644 panel fit-out" : "Thi công panel & AHU phòng sạch" },
-          { icon: <Wrench className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Heavy Rigging Partner" : "Vận tải siêu trường", desc: lang === 'en' ? "Machine lifting & leveling" : "Nâng hạ, cân chỉnh máy móc nặng" },
-          { icon: <FileCheck className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Audit & Inspection" : "Trung tâm kiểm định", desc: lang === 'en' ? "Safety load testing" : "Kiểm định an toàn thiết bị áp lực" },
-          { icon: <Zap className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Scada/PLC Integrator" : "Tích hợp Scada/PLC", desc: lang === 'en' ? "Automation commissioning" : "Lập trình điều khiển & chạy thử" }
-        ];
-      case 4:
-        return [
-          { icon: <Factory className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Plant Director" : "Ban Giám Đốc Nhà Máy", desc: lang === 'en' ? "Daily manufacturing KPI" : "Điều hành sản xuất & chỉ số OEE" },
-          { icon: <Building2 className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Raw Materials Supplier" : "Cung ứng NVL & Phụ tùng", desc: lang === 'en' ? "Just-In-Time supplies" : "Cung cấp phôi thép, nhựa, linh kiện" },
-          { icon: <Cpu className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "MES / Smart Factory" : "Phần mềm MES / ERP", desc: lang === 'en' ? "Realtime shopfloor IoT" : "Số hóa lệnh sản xuất & AI Camera QC" },
-          { icon: <Wrench className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "TPM Maintenance" : "Bảo trì bảo dưỡng TPM", desc: lang === 'en' ? "Preventive repairs" : "Bảo dưỡng phòng ngừa sự cố máy" },
-          { icon: <MapPin className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "3PL Outbound Logistics" : "Logistics & Kho bãi", desc: lang === 'en' ? "Customs & shipping" : "Kho ngoại quan & xuất khẩu container" }
-        ];
-      case 5:
-        return [
-          { icon: <Users className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "HR & Labor Staffing" : "Cung ứng lao động", desc: lang === 'en' ? "Mass worker recruiting" : "Tuyển dụng hàng ngàn nhân công" },
-          { icon: <Briefcase className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Headhunt Agency" : "Headhunter cấp cao", desc: lang === 'en' ? "Engineers & plant managers" : "Tuyển dụng kỹ sư & chuyên gia FDI" },
-          { icon: <Building2 className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Industrial Catering" : "Suất ăn công nghiệp", desc: lang === 'en' ? "HACCP certified meals" : "Bếp ăn trung tâm chuẩn an toàn thực phẩm" },
-          { icon: <MapPin className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Staff Commuter Bus" : "Xe đưa đón công nhân", desc: lang === 'en' ? "Daily bus transport" : "Hệ thống xe 45 chỗ & Limousine" },
-          { icon: <Shield className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "PPE & Safety Gear" : "Bảo hộ lao động PPE", desc: lang === 'en' ? "Shoes, helmets & uniforms" : "Đồng phục, giày chống đinh, kính 3M" }
-        ];
-      case 6:
-        return [
-          { icon: <Building2 className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Industrial Park Dev" : "Chủ đầu tư KCN", desc: lang === 'en' ? "Phase 2 land expansion" : "Bàn giao quỹ đất mở rộng Phase 2" },
-          { icon: <FileCheck className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "ESG Audit Agency" : "Tổ chức audit quốc tế", desc: lang === 'en' ? "TÜV, SGS, BSI audits" : "Audit BSCI, SMETA, ISO 14064" },
-          { icon: <Zap className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Rooftop Solar PPA" : "Điện mặt trời mái xưởng", desc: lang === 'en' ? "Green I-REC credits" : "Đầu tư năng lượng xanh 0 đồng" },
-          { icon: <Briefcase className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Corporate Gifts B2B" : "Quà tặng & Hậu mãi", desc: lang === 'en' ? "TahoMart eco packaging" : "Túi canvas, hộp quà đặc sản Nam Huy" },
-          { icon: <Sparkles className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Green Finance Fund" : "Quỹ tài chính xanh ESG", desc: lang === 'en' ? "Expansion loans & IPO" : "Thu xếp vốn mở rộng & tư vấn IPO" }
-        ];
-      case 1:
-      default:
-        return [
-          { icon: <Factory className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Factory / Investor" : "Nhà máy / Chủ đầu tư", desc: lang === 'en' ? "Orienting & executing project" : "Định hướng, quyết định và triển khai dự án" },
-          { icon: <Users className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Industrial Association" : "Hội / Hiệp hội", desc: lang === 'en' ? "Consulting & networking" : "Tư vấn, kết nối, hỗ trợ thành viên" },
-          { icon: <Building2 className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Verified Supplier" : "Doanh nghiệp cung ứng", desc: lang === 'en' ? "Supplying solutions per phase" : "Cung cấp giải pháp, dịch vụ theo từng pha" },
-          { icon: <MapPin className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Industrial Park (IP)" : "Khu công nghiệp", desc: lang === 'en' ? "Land & infrastructure support" : "Cung cấp hạ tầng, quỹ đất và hỗ trợ đầu tư" },
-          { icon: <Briefcase className="w-5 h-5" style={{ color: theme.color }} />, name: lang === 'en' ? "Support Entity" : "Tổ chức tài chính & pháp lý", desc: lang === 'en' ? "Banking, legal, consulting" : "Thu xếp vốn FDI, tư vấn thuế, ĐTM" }
-        ];
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
     }
-  }, [stage.id, theme.color, lang]);
+    canonical.href = `https://chuoicungung.com/giai-doan/${currentStage.slug}`;
 
-  // Dynamic Stage-Specific Reference Documents
-  const sampleDocuments = useMemo(() => {
-    switch (stage.id) {
-      case 2:
-        return [
-          { name: "Checklist thiết kế tổng mặt bằng & BIM 3D (PDF)", size: "2.8 MB" },
-          { name: "Mẫu hồ sơ thẩm duyệt PCCC nhà xưởng QCVN 06:2022 (PDF)", size: "4.1 MB" },
-          { name: "Tiêu chuẩn thi công kết cấu thép tiền chế & nền sàn (PDF)", size: "3.5 MB" },
-          { name: "Danh bạ nhà thầu xây dựng EPC & MEP xác thực (PDF)", size: "2.2 MB" }
-        ];
-      case 3:
-        return [
-          { name: "Quy trình chạy thử nghiệm thu máy móc liên động (PDF)", size: "3.1 MB" },
-          { name: "Checklist thi công phòng sạch ISO 14644 Class 100-100k (PDF)", size: "2.6 MB" },
-          { name: "Mẫu biên bản kiểm định an toàn thiết bị áp lực & cầu trục (PDF)", size: "1.9 MB" },
-          { name: "Sổ tay hướng dẫn lập trình Scada/PLC công nghiệp (PDF)", size: "5.4 MB" }
-        ];
-      case 4:
-        return [
-          { name: "Sổ tay quản trị bảo trì phòng ngừa TPM nhà máy (PDF)", size: "3.4 MB" },
-          { name: "Bảng tiêu chuẩn kiểm soát chất lượng QA/QC AQL (PDF)", size: "1.7 MB" },
-          { name: "Quy trình khai báo hải quan điện tử & kho ngoại quan (PDF)", size: "2.9 MB" },
-          { name: "Danh bạ nhà cung cấp vật tư công nghiệp phụ trợ (PDF)", size: "4.8 MB" }
-        ];
-      case 5:
-        return [
-          { name: "Mẫu thỏa ước lao động tập thể & nội quy nhà máy (PDF)", size: "1.5 MB" },
-          { name: "Quy chuẩn an toàn vệ sinh lao động nhóm 1 đến 6 (PDF)", size: "3.2 MB" },
-          { name: "Tiêu chuẩn kiểm soát suất ăn công nghiệp HACCP (PDF)", size: "2.1 MB" },
-          { name: "Danh bạ công ty cung ứng lao động & nhà xe đưa đón (PDF)", size: "2.8 MB" }
-        ];
-      case 6:
-        return [
-          { name: "Khung hướng dẫn lập báo cáo phát triển bền vững ESG (PDF)", size: "4.5 MB" },
-          { name: "Quy trình kiểm kê khí nhà kính & bù trừ carbon ISO 14064 (PDF)", size: "3.6 MB" },
-          { name: "Checklist audit trách nhiệm xã hội BSCI & Sedex SMETA (PDF)", size: "2.9 MB" },
-          { name: "Hồ sơ đề xuất đầu tư mở rộng nhà máy giai đoạn 2 (PDF)", size: "5.1 MB" }
-        ];
-      case 1:
-      default:
-        return [
-          { name: "Checklist thủ tục pháp lý & cấp phép FDI (PDF)", size: "1.2 MB" },
-          { name: "Mẫu kế hoạch triển khai đầu tư nhà máy (PDF)", size: "2.4 MB" },
-          { name: "Quy trình lập ĐTM & thẩm duyệt PCCC sơ bộ (PDF)", size: "1.8 MB" },
-          { name: "Danh bạ KCN & Đối tác tài chính liên kết (PDF)", size: "3.1 MB" }
-        ];
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
     }
-  }, [stage.id]);
+    metaDesc.content = `Tìm hiểu giai đoạn ${currentStage.name} trong vòng đời nhà máy: các nhóm nhu cầu, bên tham gia, sản phẩm, dịch vụ và nhà cung ứng phù hợp.`;
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": `${currentStage.name} – Nhu Cầu & Nguồn Cung`,
+      "description": `Khám phá các nhóm nhu cầu, chuyên mục, sản phẩm, dịch vụ, nhà cung ứng và chương trình liên quan đến ${currentStage.name}.`,
+      "url": `https://chuoicungung.com/giai-doan/${currentStage.slug}`,
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Trang chủ",
+            "item": "https://chuoicungung.com"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Bản đồ 6 giai đoạn",
+            "item": "https://chuoicungung.com/ban-do-6-giai-doan"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": currentStage.name,
+            "item": `https://chuoicungung.com/giai-doan/${currentStage.slug}`
+          }
+        ]
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": currentStage.needGroups.map((ng, idx) => ({
+          "@type": "ListItem",
+          "position": idx + 1,
+          "name": ng.name,
+          "description": ng.shortDescription
+        }))
+      }
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'stage-detail-schema';
+    script.text = JSON.stringify(schemaData);
+    const old = document.getElementById('stage-detail-schema');
+    if (old) old.remove();
+    document.head.appendChild(script);
+
+    return () => {
+      const el = document.getElementById('stage-detail-schema');
+      if (el) el.remove();
+    };
+  }, [currentStage]);
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b ${theme.bgPage} space-y-8 pb-32 pt-4 transition-all duration-300 font-sans`}>
-      
-      {/* 1. BREADCRUMB */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-xs sm:text-sm text-slate-500 flex items-center space-x-2">
-          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-          </Link>
-          <span>&gt;</span>
-          <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
-          <span>&gt;</span>
-          <span className="font-bold text-slate-900 font-heading uppercase">
-            {lang === 'en' ? `Stage ${stage.id}: ${stage.titleEn || stage.title}` : `GIAI ĐOẠN ${stage.id}: ${stage.title}`}
-          </span>
-        </div>
-      </div>
+    <main className="min-h-screen bg-slate-50 text-slate-800 antialiased pb-24 overflow-hidden">
+      {/* 1. HERO SECTION (Section 9) */}
+      <section className="bg-white border-b border-slate-200 pt-8 pb-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Breadcrumb (Section 54) */}
+          <nav className="flex items-center gap-2 text-xs text-slate-500 mb-5">
+            <Link to="/" className="hover:text-blue-600">Trang chủ</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600">Bản đồ 6 giai đoạn</Link>
+            <ChevronRight className="w-3.5 h-3.5" />
+            <span className="text-slate-900 font-semibold">{currentStage.name}</span>
+          </nav>
 
-      {/* 2. HERO HEADER BANNER (EXACT IMAGE 1 DESIGN: Bright White Card, Right Factory Image, 3 Metric Pills, 6-Stage Pills) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm relative overflow-hidden">
-          
-          {/* Right-Side High-Res Crisp Factory Photo */}
-          <div 
-            className="absolute right-0 top-0 bottom-0 w-full sm:w-[58%] lg:w-[55%] bg-cover bg-center"
-            style={{ 
-              backgroundImage: `url('${theme.heroImg}')`,
-            }}
-          ></div>
-
-          {/* Left-to-Right Soft Gradient Mask */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 via-[42%] sm:via-white/90 sm:via-[45%] to-transparent pointer-events-none"></div>
-
-          {/* Left Hero Content */}
-          <div className="relative z-10 p-6 sm:p-10 lg:p-12 max-w-2xl space-y-5">
-            
-            {/* Stage Color Badge */}
-            <div 
-              style={{ backgroundColor: theme.darkColor }}
-              className="inline-block px-3.5 py-1.5 text-white rounded-lg text-xs font-black uppercase tracking-wider font-heading shadow-xs"
-            >
-              {lang === 'en' ? `STAGE ${stage.id}` : `GIAI ĐOẠN ${stage.id}`}
-            </div>
-
-            {/* Stage Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-black text-[#072348] tracking-tight leading-tight uppercase font-heading">
-              {lang === 'en' ? (stage.titleEn || stage.title) : stage.title}
-            </h1>
-
-            {/* Stage Summary Description */}
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-              {lang === 'en' ? (stage.summaryEn || stage.summary) : stage.summary}
-            </p>
-
-            {/* 3 Metric Pills */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <div className="flex items-center space-x-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xs text-xs sm:text-sm font-semibold text-slate-800">
-                <Building2 className="w-4 h-4 flex-shrink-0" style={{ color: theme.color }} />
-                <span><strong>{stage.phases.length}</strong> {lang === 'en' ? 'Core Phases' : 'Pha chính'}</span>
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
+            <div className="space-y-3.5 max-w-3xl">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-xs font-black px-2.5 py-0.5 rounded bg-slate-900 text-white">
+                  GIAI ĐOẠN 0{currentStage.id}
+                </span>
+                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${theme.bgLight} ${theme.textCol}`}>
+                  Mã: {currentStage.code}
+                </span>
+                <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                  {currentStage.enName}
+                </span>
               </div>
 
-              <div className="flex items-center space-x-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xs text-xs sm:text-sm font-semibold text-slate-800">
-                <Users className="w-4 h-4 flex-shrink-0" style={{ color: theme.color }} />
-                <span><strong>{stage.stats.enterprises}</strong> {lang === 'en' ? 'Suppliers Participating' : 'Doanh nghiệp tham gia'}</span>
-              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                Giai đoạn {currentStage.name}
+              </h1>
 
-              <div className="flex items-center space-x-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-2xs text-xs sm:text-sm font-semibold text-slate-800">
-                <MapPin className="w-4 h-4 flex-shrink-0" style={{ color: theme.color }} />
-                <span><strong>{stage.stats.industrialParks}</strong> {lang === 'en' ? 'Connected IPs' : 'KCN đang kết nối'}</span>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Khám phá các nhóm nhu cầu, sản phẩm, dịch vụ và nguồn cung thường liên quan đến giai đoạn này.
+              </p>
+
+              {/* BẮT BUỘC: Note nhỏ về tính phi tuần tự (Section 4, 9) */}
+              <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl text-xs text-blue-900 flex items-start gap-2.5">
+                <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                <span className="leading-snug">
+                  <strong>Lưu ý:</strong> Các nhóm công việc có thể diễn ra đồng thời. Cấu trúc 6 giai đoạn được CHUOICUNGUNG.COM sử dụng như một lớp ngữ cảnh để giúp doanh nghiệp định vị nhu cầu, không phải là một quy trình pháp lý bắt buộc phải hoàn thành tuần tự.
+                </span>
               </div>
             </div>
 
-          </div>
+            {/* CTA Group */}
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0">
+              <a
+                href="#nhom-nhu-cau"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-colors text-center cursor-pointer"
+              >
+                <span>XEM NHU CẦU THEO GIAI ĐOẠN</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
 
-          {/* Bottom 6-Stage Selector Tab Bar */}
-          <div className="relative z-10 border-t border-slate-100 bg-white/85 backdrop-blur-md px-4 sm:px-8 py-3 overflow-x-auto">
-            <div className="flex items-center space-x-2 sm:space-x-3 min-w-max">
-              {stagesData.map((s) => {
-                const isCurrent = s.id === stage.id;
-                const sTheme = stageThemes[s.id] || stageThemes[1];
-                return (
-                  <div key={s.id} className="relative flex flex-col items-center">
-                    <Link
-                      to={`/giai-doan/${s.id}`}
-                      style={{
-                        backgroundColor: isCurrent ? sTheme.darkColor : undefined
-                      }}
-                      className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center space-x-2 whitespace-nowrap ${
-                        isCurrent
-                          ? 'text-white shadow-md'
-                          : 'bg-white hover:bg-slate-50 text-slate-600 border border-slate-200/80 shadow-2xs'
-                      }`}
-                    >
-                      <span 
-                        style={{
-                          backgroundColor: isCurrent ? 'rgba(255,255,255,0.25)' : sTheme.color,
-                          color: '#ffffff'
-                        }}
-                        className="w-5 h-5 rounded-lg flex items-center justify-center font-mono font-black text-[10px]"
-                      >
-                        0{s.id}
-                      </span>
-                      <span className="font-heading uppercase">{lang === 'en' ? (s.titleEn || s.title) : s.title}</span>
-                    </Link>
-
-                    {/* Active Triangle Arrow pointing down */}
-                    {isCurrent && (
-                      <div 
-                        style={{ borderTopColor: sTheme.darkColor }}
-                        className="absolute -bottom-3 w-0 h-0 border-x-4 border-x-transparent border-t-4"
-                      ></div>
-                    )}
-                  </div>
-                );
-              })}
+              <Link
+                to={`/nha-cung-ung?stage=${currentStage.id}`}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl border border-slate-300 transition-colors text-center"
+              >
+                <Factory className="w-4 h-4 text-slate-500" />
+                <span>TÌM ĐƠN VỊ PHÙ HỢP</span>
+              </Link>
             </div>
           </div>
-
-        </div>
-      </div>
-
-      {/* 3. STICKY MICRO-TABS (PHASE NAVIGATOR) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sticky top-2 z-30">
-        <div className="bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-sm p-2 flex items-center justify-between gap-2 overflow-x-auto">
-          
-          <div className="flex items-center space-x-2 min-w-max">
-            {/* All Phases Tab */}
-            <button
-              onClick={() => setSelectedPhase("all")}
-              style={{
-                backgroundColor: selectedPhase === "all" ? theme.color : undefined,
-                color: selectedPhase === "all" ? "#ffffff" : undefined
-              }}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center space-x-2 ${
-                selectedPhase === "all"
-                  ? 'shadow-xs font-heading'
-                  : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              <Layers className="w-4 h-4" />
-              <span>Tất cả các pha ({stage.phases.length})</span>
-            </button>
-
-            {/* Phase Sub-Tabs */}
-            {stage.phases.map((ph) => {
-              const isActive = selectedPhase === ph.id;
-              return (
-                <button
-                  key={ph.id}
-                  onClick={() => setSelectedPhase(ph.id)}
-                  style={{
-                    backgroundColor: isActive ? theme.color : undefined,
-                    color: isActive ? "#ffffff" : undefined
-                  }}
-                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center space-x-2 ${
-                    isActive
-                      ? 'shadow-xs font-heading'
-                      : 'text-slate-600 hover:bg-slate-100'
-                  }`}
-                >
-                  <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-mono font-black ${
-                    isActive ? 'bg-white/25 text-white' : 'bg-slate-200 text-slate-700'
-                  }`}>
-                    {ph.id}
-                  </span>
-                  <span>{ph.title}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Quick RFQ Action on Header */}
-          <button
-            onClick={() => handleOpenRfq(null)}
-            style={{ backgroundColor: `${theme.color}15`, color: theme.color, borderColor: `${theme.color}40` }}
-            className="hidden sm:inline-flex items-center space-x-1.5 px-3.5 py-1.5 border rounded-xl text-xs font-bold font-heading hover:bg-white transition flex-shrink-0"
-          >
-            <Send className="w-3.5 h-3.5" />
-            <span>Tạo Nhu Cầu Báo Giá (RFQ)</span>
-          </button>
-
-        </div>
-      </div>
-
-      {/* 4. WORKSPACE: 2-COLUMN LAYOUT (SMART FILTER + SUPPLIER GRID) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-          
-          {/* Left Column: Smart Filter Sidebar (280px) */}
-          <StageFilterSidebar
-            stageId={stage.id}
-            filters={filters}
-            setFilters={setFilters}
-            onResetFilters={handleResetFilters}
-            totalResults={filteredSuppliers.length}
-            themeColor={theme.color}
-          />
-
-          {/* Right Column: Supplier Grid / List */}
-          <div className="flex-1 w-full space-y-6">
-            
-            {/* Top Workspace Header Bar */}
-            <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <h3 className="text-base sm:text-lg font-black text-slate-900 font-heading uppercase">
-                    {selectedPhase === "all" ? `Mạng Lưới Đối Tác Giai Đoạn ${stage.id}` : `Danh Sách Đối Tác Pha ${selectedPhase}`}
-                  </h3>
-                  <span 
-                    style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
-                    className="px-2.5 py-0.5 rounded-full text-xs font-black font-mono"
-                  >
-                    {filteredSuppliers.length} kết quả
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 mt-1">
-                  Xác thực năng lực qua hồ sơ KYC B2B, tích hợp báo giá tự động và hỗ trợ đàm phán 1-1.
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-2 self-start sm:self-auto">
-                <button
-                  onClick={() => handleOpenRfq(null)}
-                  style={{ backgroundColor: theme.color }}
-                  className="px-4 py-2 text-white rounded-xl text-xs font-bold font-heading shadow-xs hover:opacity-90 transition flex items-center space-x-1.5"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Đăng Yêu Cầu Chào Giá</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Supplier Cards List */}
-            {isLoading ? (
-              // Skeleton Loading Transition (< 250ms)
-              <div className="space-y-4">
-                {[1, 2, 3].map((n) => (
-                  <div key={n} className="bg-white rounded-3xl border border-slate-200 p-6 space-y-4 animate-pulse">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-12 h-12 bg-slate-200 rounded-2xl" />
-                        <div className="space-y-2">
-                          <div className="w-48 h-4 bg-slate-200 rounded" />
-                          <div className="w-32 h-3 bg-slate-200 rounded" />
-                        </div>
-                      </div>
-                      <div className="w-24 h-6 bg-slate-200 rounded-lg" />
-                    </div>
-                    <div className="w-full h-10 bg-slate-100 rounded-xl" />
-                  </div>
-                ))}
-              </div>
-            ) : filteredSuppliers.length > 0 ? (
-              <div className="grid grid-cols-1 gap-5">
-                {filteredSuppliers.map((supplier) => (
-                  <StageSupplierCard
-                    key={supplier.id}
-                    supplier={supplier}
-                    onRequestQuote={handleOpenRfq}
-                    themeColor={theme.color}
-                  />
-                ))}
-              </div>
-            ) : (
-              // Friendly Empty State with FOMO Message
-              <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-10 sm:p-14 text-center space-y-5">
-                <div className="w-16 h-16 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-2xl font-black">
-                  🔍
-                </div>
-                <div className="space-y-2 max-w-md mx-auto">
-                  <h4 className="text-xl font-black text-slate-900 font-heading">
-                    Chưa Có Đối Tác Khớp Bộ Lọc
-                  </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Hiện đang có <strong>15 dự án FDI</strong> đang tìm kiếm nhà cung cấp theo các tiêu chí này. Hãy đặt lại bộ lọc hoặc đăng ký tham gia chuỗi cung ứng ngay hôm nay.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-                  <button
-                    onClick={handleResetFilters}
-                    className="px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition"
-                  >
-                    Đặt lại bộ lọc
-                  </button>
-                  <button
-                    onClick={() => handleOpenRfq(null)}
-                    style={{ backgroundColor: theme.color }}
-                    className="px-6 py-2.5 text-white rounded-xl text-xs font-bold font-heading shadow-md hover:opacity-90 transition flex items-center space-x-1.5"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Đăng Ký Nhu Cầu Tìm Đối Tác</span>
-                  </button>
-                </div>
-              </div>
-            )}
-
-          </div>
-
         </div>
       </section>
 
-      {/* 5. SECTION: 3 PHA CHI TIẾT (CÔNG VIỆC CHÍNH, NHU CẦU THƯỜNG GẶP) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-6 border-t border-slate-200/80">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 uppercase font-heading">
-              {lang === 'en' ? `3 Core Phases Blueprint - Stage ${stage.id}` : `Bản Thiết Kế 3 Pha Của Giai Đoạn ${stage.id}`}
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Chi tiết các bước công việc chuẩn hóa ISO và các hạng mục thường xuyên phát sinh nhu cầu kết nối.
-            </p>
-          </div>
-          
+      {/* 2. PREVIOUS / NEXT STAGE NAVIGATION (Section 10) */}
+      <section className="bg-slate-100/80 border-b border-slate-200 py-2.5 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto flex items-center justify-between text-xs">
+          <Link
+            to={`/giai-doan/${prevStage.slug}`}
+            className="inline-flex items-center gap-1.5 font-semibold text-slate-600 hover:text-blue-600 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Giai đoạn trước:</span>
+            <strong>{prevStage.name}</strong>
+          </Link>
+
           <Link
             to="/ban-do-6-giai-doan"
-            style={{ color: theme.color, borderColor: theme.color }}
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-white hover:bg-slate-50 border rounded-xl text-xs sm:text-sm font-bold shadow-2xs transition self-start sm:self-auto font-heading uppercase"
+            className="text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800"
           >
-            <span>{lang === 'en' ? 'View 6 Stages Map' : 'Xem sa bàn 6 giai đoạn'}</span>
+            Bản đồ 6 giai đoạn
+          </Link>
+
+          <Link
+            to={`/giai-doan/${nextStage.slug}`}
+            className="inline-flex items-center gap-1.5 font-semibold text-slate-600 hover:text-blue-600 transition-colors"
+          >
+            <span className="hidden sm:inline">Giai đoạn tiếp theo:</span>
+            <strong>{nextStage.name}</strong>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-
-        {/* 3 Phase Cards List */}
-        <div className="space-y-5">
-          {stage.phases.map((phase, idx) => (
-            <div 
-              key={phase.id}
-              className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-7 hover:shadow-md transition-all space-y-4"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
-                {/* Col 1: Phase Info (lg:col-span-3) */}
-                <div className="lg:col-span-3 space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <span 
-                      style={{ color: theme.color }}
-                      className="text-3xl sm:text-4xl font-black font-mono"
-                    >
-                      {phase.id}
-                    </span>
-                    <div 
-                      style={{ 
-                        backgroundColor: `${theme.color}15`, 
-                        borderColor: `${theme.color}35` 
-                      }}
-                      className="w-10 h-10 rounded-2xl border flex items-center justify-center flex-shrink-0"
-                    >
-                      {idx === 0 ? <Compass className="w-5 h-5" style={{ color: theme.color }} /> :
-                       idx === 1 ? <FileText className="w-5 h-5" style={{ color: theme.color }} /> :
-                                   <MapPin className="w-5 h-5" style={{ color: theme.color }} />}
-                    </div>
-                  </div>
-
-                  <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase font-heading leading-snug">
-                    {lang === 'en' ? (phase.titleEn || phase.title) : phase.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                    {lang === 'en' ? (phase.summaryEn || phase.summary) : phase.summary}
-                  </p>
-
-                  <div className="pt-1 flex items-center space-x-3">
-                    <button
-                      onClick={() => {
-                        setSelectedPhase(phase.id);
-                        window.scrollTo({ top: 380, behavior: 'smooth' });
-                      }}
-                      style={{ color: theme.color }}
-                      className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-bold hover:underline transition"
-                    >
-                      <span>Lọc đối tác pha này</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Col 2: CÔNG VIỆC CHÍNH (lg:col-span-3) */}
-                <div className="lg:col-span-3 space-y-2.5">
-                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-wider font-heading">
-                    {lang === 'en' ? 'CORE TASKS' : 'CÔNG VIỆC CHÍNH'}
-                  </h4>
-                  <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                    {(phase.tasks || [
-                      "Nghiên cứu thị trường & ngành nghề",
-                      "Đánh giá nhu cầu sản phẩm",
-                      "Khảo sát hiện trạng khu vực",
-                      "Phân tích tính khả thi dự án",
-                      "Định hướng chiến lược đầu tư"
-                    ]).slice(0, 5).map((task, tIdx) => (
-                      <li key={tIdx} className="flex items-start">
-                        <Check 
-                          className="w-4 h-4 mr-2 flex-shrink-0 mt-0.5" 
-                          style={{ color: theme.color }} 
-                        />
-                        <span className="leading-snug">{task}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Col 3: NHU CẦU THƯỜNG GẶP (lg:col-span-3) */}
-                <div className="lg:col-span-3 space-y-2.5">
-                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider font-heading">
-                    {lang === 'en' ? 'Common Demands' : 'Nhu cầu thường gặp'}
-                  </h4>
-                  <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
-                    {(phase.commonDemands || [
-                      "Tư vấn chiến lược đầu tư",
-                      "Nghiên cứu thị trường",
-                      "Khảo sát địa hình, địa chất",
-                      "Đánh giá tác động môi trường sơ bộ"
-                    ]).slice(0, 4).map((demand, dIdx) => (
-                      <li key={dIdx} className="flex items-start">
-                        <span 
-                          style={{ color: theme.color }} 
-                          className="mr-2 font-bold"
-                        >
-                          •
-                        </span>
-                        <span className="leading-snug">{demand}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Col 4: HÀNH ĐỘNG NHANH (lg:col-span-3) */}
-                <div className="lg:col-span-3 space-y-3 bg-slate-50/80 p-4 rounded-2xl border border-slate-100">
-                  <h4 className="text-xs font-bold text-slate-800 uppercase tracking-wider font-heading">
-                    Kết nối nhanh B2B
-                  </h4>
-                  <p className="text-xs text-slate-500 leading-relaxed">
-                    Tạo yêu cầu báo giá chuyên biệt cho hạng mục thuộc Pha {phase.id}.
-                  </p>
-                  
-                  <button
-                    onClick={() => handleOpenRfq(null)}
-                    style={{ backgroundColor: theme.color }}
-                    className="w-full py-2.5 text-white rounded-xl text-xs font-bold font-heading shadow-xs hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase"
-                  >
-                    <Send className="w-3.5 h-3.5" />
-                    <span>Yêu Cầu Báo Giá Pha {phase.id}</span>
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
 
-      {/* 6. SECTION: HỆ SINH THÁI THAM GIA GIAI ĐOẠN + TÀI LIỆU THAM KHẢO */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          {/* Left: HỆ SINH THÁI THAM GIA GIAI ĐOẠN (lg:col-span-8) */}
-          <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-sm space-y-5">
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 font-heading">
-              {lang === 'en' ? `ECOSYSTEM STAKEHOLDERS IN STAGE ${stage.id}` : `HỆ SINH THÁI THAM GIA GIAI ĐOẠN ${stage.id}`}
-            </h3>
+      {/* MAIN CONTAINER */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+        {/* 3. KHỐI 3 NHÓM CÔNG VIỆC CỐT LÕI (Section 11, 12) */}
+        <section id="nhom-nhu-cau" className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Cấu trúc công việc</span>
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5">
+                3 Nhóm Nhu Cầu Cốt Lõi Của Giai Đoạn 0{currentStage.id}
+              </h2>
+            </div>
+            <span className="text-xs text-slate-500">Bấm vào từng nhóm để xem chi tiết danh mục & nhà cung ứng</span>
+          </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 text-center">
-              {ecosystemRoles.map((role, rIdx) => (
-                <div key={rIdx} className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 space-y-2 flex flex-col items-center justify-between">
-                  <div className="w-10 h-10 rounded-2xl bg-white shadow-2xs border border-slate-200 flex items-center justify-center">
-                    {role.icon}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {currentStage.needGroups.map((ng) => {
+              const isActive = selectedNeedGroupId === ng.phaseId;
+
+              return (
+                <div
+                  key={ng.id}
+                  onClick={() => setSelectedNeedGroupId(ng.phaseId)}
+                  className={`p-5 rounded-2xl border cursor-pointer transition-all ${
+                    isActive
+                      ? 'bg-white border-blue-600 shadow-md ring-2 ring-blue-500/20'
+                      : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-mono text-xs font-black text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+                      Nhóm {ng.code || ng.phaseId}
+                    </span>
+                    {isActive && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-600 text-white">
+                        Đang xem
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-900 leading-snug">{role.name}</h4>
-                    <p className="text-[11px] text-slate-500 mt-1 leading-snug">{role.desc}</p>
+
+                  <h3 className="text-base font-bold text-slate-900 mb-2 leading-snug">
+                    {ng.name}
+                  </h3>
+
+                  <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                    {ng.shortDescription}
+                  </p>
+
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+                    <span>{ng.categories?.length || 0} chuyên mục ngành</span>
+                    <span className="font-bold text-blue-600 flex items-center gap-1">
+                      Chi tiết <ChevronRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 4. CHI TIẾT NHÓM NHU CẦU ĐƯỢC CHỌN (Section 13, 14, 15, 16, 17, 18) */}
+        <section className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+          {/* Header nhóm nhu cầu */}
+          <div className="border-b border-slate-100 pb-5">
+            <div className="flex items-center gap-2 text-xs font-bold text-blue-600 uppercase mb-1">
+              <Layers className="w-4 h-4" />
+              <span>Khám Phá Chi Tiết Nhóm {selectedNeedGroup.code || selectedNeedGroup.phaseId}</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900">
+              {selectedNeedGroup.name}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
+              {selectedNeedGroup.shortDescription}
+            </p>
+          </div>
+
+          {/* 4.1 BẠN CÓ THỂ ĐANG CẦN (Categories & Keywords - Section 14, 15, 16) */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold text-slate-700 uppercase tracking-wider block">
+              BẠN CÓ THỂ ĐANG CẦN (Chuyên Mục & Từ Khóa Cung Ứng):
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {selectedNeedGroup.categories?.map((cat, cIdx) => (
+                <div key={cIdx} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-50 transition-colors">
+                  <Link
+                    to={`/nganh-nghe/${cat.slug}`}
+                    className="font-bold text-xs text-blue-700 hover:underline flex items-center justify-between"
+                  >
+                    <span>{cat.name}</span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                  </Link>
+
+                  {/* Keywords */}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {cat.keywords?.map((kw, kwIdx) => (
+                      <Link
+                        key={kwIdx}
+                        to={`/tu-khoa/${cat.slug}`}
+                        className="text-[10px] text-slate-600 bg-white border border-slate-200 px-2 py-0.5 rounded hover:border-blue-400"
+                      >
+                        #{kw}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right: Tài liệu tham khảo (lg:col-span-4) */}
-          <div className="lg:col-span-4 bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-sm flex flex-col justify-between space-y-4">
-            <div>
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 font-heading">
-                {lang === 'en' ? 'REFERENCE DOCUMENTS' : 'Tài liệu tham khảo & Checklist'}
-              </h3>
-              <div className="space-y-2">
-                {sampleDocuments.map((doc, dIdx) => (
-                  <div 
-                    key={dIdx}
-                    className="flex items-center space-x-2 text-xs text-slate-700 hover:text-blue-600 cursor-pointer transition p-1.5 rounded-lg hover:bg-slate-50"
-                    onClick={() => alert(lang === 'en' ? `Downloading document: ${doc.name}` : `Tải xuống tài liệu: ${doc.name}`)}
-                  >
-                    <FileText className="w-4 h-4 text-red-500 flex-shrink-0" />
-                    <span className="truncate font-medium">{doc.name}</span>
+          {/* 4.2 BUYER GUIDE: BẠN NÊN CHUẨN BỊ GÌ TRƯỚC KHI TÌM NCC (Section 18, 19) */}
+          <div className="p-5 sm:p-6 bg-gradient-to-r from-amber-50/80 to-orange-50/50 border border-amber-200 rounded-2xl space-y-4">
+            <div className="flex items-center gap-2 text-amber-900">
+              <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
+              <h4 className="text-sm sm:text-base font-bold">
+                TRƯỚC KHI TÌM NHÀ CUNG ỨNG, BẠN NÊN CHUẨN BỊ GÌ? (Buyer Preparation Guide)
+              </h4>
+            </div>
+
+            <ul className="space-y-2 text-xs text-slate-700">
+              {buyerGuide.map((item, bIdx) => (
+                <li key={bIdx} className="flex items-start gap-2">
+                  <span className="font-bold text-amber-700 shrink-0">✓</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-3 border-t border-amber-200/60">
+              <span className="text-[11px] text-amber-800 italic">
+                Đã chuẩn bị đủ thông tin? Đăng đề bài trực tiếp để nhận báo giá đối soát.
+              </span>
+              <Link
+                to={`/dang-nhu-cau?stageId=${currentStage.id}&needGroupId=${selectedNeedGroup.phaseId}`}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-colors"
+              >
+                Đăng Nhu Cầu Cho Nhóm Này
+              </Link>
+            </div>
+          </div>
+
+          {/* 4.3 NHU CẦU ĐANG ĐƯỢC PHÉP CHIA SẺ (Section 21, 22) */}
+          {publicRequirements && publicRequirements.length > 0 && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Thị trường B2B</span>
+                  <h4 className="text-base font-bold text-slate-900">
+                    Nhu Cầu Thực Tế Đang Chờ Báo Giá ({publicRequirements.length})
+                  </h4>
+                </div>
+                <Link to="/san-nhu-cau" className="text-xs text-blue-600 font-semibold hover:underline">
+                  Xem tất cả sàn nhu cầu →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {publicRequirements.map(req => (
+                  <div key={req.id} className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition-colors">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-mono text-xs font-bold text-blue-700">{req.publicCode}</span>
+                      <span className="text-[10px] font-semibold text-slate-500 bg-slate-200 px-1.5 py-0.5 rounded">
+                        {req.deadline}
+                      </span>
+                    </div>
+                    <Link
+                      to={`/nhu-cau/${req.id}`}
+                      className="text-xs font-bold text-slate-900 hover:text-blue-600 line-clamp-2"
+                    >
+                      {req.title}
+                    </Link>
+                    <div className="mt-2.5 pt-2 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+                      <span>{req.industrialPark || req.location}</span>
+                      <span className="font-bold text-slate-700">{req.quantity}</span>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+          )}
 
-            <button
-              onClick={() => alert(lang === 'en' ? `Downloading document catalog for Stage ${stage.id}` : `Đang tải danh mục toàn bộ tài liệu giai đoạn ${stage.id}`)}
-              className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-1.5 font-heading"
-            >
-              <span>{lang === 'en' ? 'View all documents' : 'Xem tất cả tài liệu'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 7. BOTTOM STICKY FLOATING ACTION BAR */}
-      {!isBottomBarClosed && (
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-2xl py-3 px-4 sm:px-8 transition-all">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-            
-            <div className="flex items-center space-x-3 text-center sm:text-left">
-              <div 
-                style={{ backgroundColor: `${theme.color}20`, color: theme.darkColor }}
-                className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 font-bold"
-              >
-                🚀
+          {/* 4.4 BỘ HỒ SƠ TUYỂN CHỌN SOURCING DOSSIERS (Section 30 - Page 35 Integration) */}
+          {sourcingDossiers && sourcingDossiers.length > 0 && (
+            <div className="p-5 bg-blue-50/60 border border-blue-200 rounded-2xl space-y-3">
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-blue-600 shrink-0" />
+                <div>
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900">
+                    Bộ Hồ Sơ Tuyển Chọn (Sourcing Dossiers) Cho Giai Đoạn Này
+                  </h4>
+                  <p className="text-xs text-slate-600">
+                    Danh sách nhà cung ứng đã được sàng lọc kèm tiêu chí kỹ thuật và bằng chứng đối chứng (Page 35).
+                  </p>
+                </div>
               </div>
+
+              <div className="space-y-2">
+                {sourcingDossiers.map(dos => (
+                  <div key={dos.id} className="p-3.5 bg-white border border-blue-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                          {dos.publicCode}
+                        </span>
+                        <span className="text-[10px] font-semibold text-slate-500">
+                          Phiên bản: {dos.version}
+                        </span>
+                      </div>
+                      <h5 className="text-xs font-bold text-slate-900">{dos.title}</h5>
+                      <p className="text-[11px] text-slate-600 line-clamp-1 mt-0.5">{dos.purpose}</p>
+                    </div>
+
+                    <Link
+                      to={`/bo-ho-so/${dos.slug}`}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg shrink-0 text-center"
+                    >
+                      Xem Bộ Hồ Sơ
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 4.5 NHÀ CUNG ỨNG LIÊN QUAN (Explainable Relevance - Section 23, 26, 27) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
               <div>
-                <h4 className="text-xs sm:text-sm font-black text-slate-900 font-heading">
-                  Bạn đang tìm kiếm hoặc cung cấp giải pháp trong {stage.title}?
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Mạng lưới sản xuất</span>
+                <h4 className="text-base font-bold text-slate-900">
+                  Nhà Cung Ứng Có Hồ Sơ Năng Lực Liên Quan ({suppliers.length})
                 </h4>
-                <p className="text-[11px] text-slate-500 hidden sm:block">
-                  Hơn 250+ doanh nghiệp đã được xác thực KYC và sẵn sàng kết nối giao thương.
-                </p>
               </div>
-            </div>
-
-            <div className="flex items-center space-x-2.5 w-full sm:w-auto">
-              <button
-                onClick={() => handleOpenRfq(null)}
-                style={{ backgroundColor: theme.color }}
-                className="flex-1 sm:flex-none px-5 py-2.5 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
-              >
-                <Send className="w-4 h-4" />
-                <span>Tạo Nhu Cầu Báo Giá (RFQ)</span>
-              </button>
-
-              <Link
-                to="/dang-nhu-cau"
-                className="flex-1 sm:flex-none px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center justify-center space-x-1.5 uppercase cursor-pointer"
-              >
-                <Shield className="w-4 h-4 text-amber-400" />
-                <span>Xác Thực Hồ Sơ Nhận Lead</span>
+              <Link to="/doanh-nghiep" className="text-xs text-blue-600 font-semibold hover:underline">
+                Xem toàn bộ danh bạ →
               </Link>
-
-              <button
-                type="button"
-                onClick={() => setIsBottomBarClosed(true)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-400 flex items-center justify-center transition cursor-pointer shrink-0 ml-1"
-                title="Đóng thanh tiện ích"
-                aria-label="Đóng thanh tiện ích"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {suppliers.map((sup, sIdx) => (
+                <div key={sIdx} className="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 shadow-sm space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <h5 className="text-xs font-bold text-slate-900 line-clamp-1">{sup.name}</h5>
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 shrink-0">
+                      {sup.province || 'Toàn quốc'}
+                    </span>
+                  </div>
+
+                  {/* Explainable Relevance Box (Section 27) */}
+                  <p className="text-[11px] text-slate-600 bg-slate-50 p-2 rounded border border-slate-100 leading-snug">
+                    <strong className="text-blue-800">Lý do liên quan:</strong> {sup.explainableReason}
+                  </p>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-500 text-[11px]">{sup.category || 'Công nghiệp phụ trợ'}</span>
+                    <Link
+                      to={`/doanh-nghiep/${sup.slug || sup.id}`}
+                      className="text-blue-600 font-bold hover:underline inline-flex items-center gap-1 text-[11px]"
+                    >
+                      <span>Xem Năng Lực</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
 
-      {/* 8. REQUEST QUOTE MODAL */}
-      <StageRequestQuoteModal
-        isOpen={isRfqModalOpen}
-        onClose={() => setIsRfqModalOpen(false)}
-        supplier={selectedSupplierForRfq}
-        stageTitle={stage.title}
-        phaseTitle={selectedPhase === "all" ? "Tất cả các pha" : `Pha ${selectedPhase}`}
-        themeColor={theme.color}
-      />
+          {/* 4.6 ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC TÁCH BIỆT (Section 33, 34) */}
+          <div className="p-4 bg-slate-100 border border-slate-200 rounded-xl text-center text-xs text-slate-600">
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">
+              Quy Chế Minh Bạch Vị Trí Cung Ứng
+            </span>
+            <span>
+              Các doanh nghiệp đồng hành hoặc tài trợ chuyên mục được ghi nhận riêng biệt và tuyệt đối không làm sai lệch tính khách quan của danh sách đối soát theo tiêu chuẩn kỹ thuật của Buyer.
+            </span>
+          </div>
+        </section>
 
-    </div>
+        {/* 5. CTA CUỐI TRANG & DIALOGUE TRỢ LÝ (Section 19, 20) */}
+        <section className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white rounded-2xl p-8 sm:p-10 text-center shadow-lg space-y-4">
+          <h3 className="text-xl sm:text-2xl font-black">
+            Bạn Đang Ở Giai Đoạn 0{currentStage.id} Và Cần Đơn Vị Đồng Hành?
+          </h3>
+          <p className="text-blue-100 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+            Hệ sinh thái CHUOICUNGUNG.COM sẵn sàng hỗ trợ khảo sát mặt bằng, kết nối tổng thầu xây dựng, xưởng gia công phụ trợ và cung ứng vật tư vận hành theo đúng yêu cầu riêng của bạn.
+          </p>
+          <div className="pt-2 flex flex-wrap justify-center gap-3">
+            <Link
+              to={`/dang-nhu-cau?stageId=${currentStage.id}&needGroupId=${selectedNeedGroup.phaseId}`}
+              className="px-6 py-3 bg-white text-blue-800 font-bold text-xs sm:text-sm rounded-xl shadow hover:bg-blue-50 transition-colors"
+            >
+              Đăng Nhu Cầu Ngay
+            </Link>
+            <Link
+              to="/ban-do-6-giai-doan"
+              className="px-6 py-3 bg-blue-850 hover:bg-blue-900 border border-blue-400 text-white font-bold text-xs sm:text-sm rounded-xl transition-colors"
+            >
+              Khám Phá Toàn Bộ 6 Giai Đoạn
+            </Link>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

@@ -1,1060 +1,1281 @@
+// ============================================================================
+// PAGE 18: FOUNDING PARTNER
+// ROUTE: /founding-partner
+// Triển khai chuẩn hóa theo đặc tả 18.txt - CHUOICUNGUNG.COM
+// ============================================================================
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { 
-  Award, Shield, Crown, Sparkles, CheckCircle2, Download, 
-  ArrowRight, Users, Building2, Globe, HeartHandshake, FileText, Check,
-  Search, Filter, MapPin, Eye, PhoneCall, Send, Star, X, Layers,
-  ChevronRight, ArrowUpRight, Zap, Factory, CheckCircle, Lock, ShieldCheck,
-  RotateCcw, SlidersHorizontal, ArrowLeftRight, CheckCheck, ExternalLink
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  Crown, Shield, Sparkles, CheckCircle2, ArrowRight, Building2,
+  FileText, Check, Search, Filter, MapPin, Eye, PhoneCall, Send,
+  X, Layers, ChevronRight, ArrowUpRight, Zap, Factory, CheckCircle,
+  Lock, ShieldCheck, RotateCcw, SlidersHorizontal, ArrowLeftRight,
+  AlertTriangle, Video, Download, HelpCircle, AlertCircle, Info,
+  ExternalLink, Calendar, Users, Briefcase, Award, FolderTree, Key, Clock
 } from 'lucide-react';
-import { foundingPartnersData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
-import { 
-  STRATEGIC_FOUNDING_PARTNERS, 
-  resolveStrategicSponsor, 
-  VERIFIED_B2B_SUPPLIERS 
-} from '../data/strategicFoundingPartners';
-import SupplierCompareModal from '../components/suppliers/SupplierCompareModal';
-import SupplierRequestQuoteModal from '../components/suppliers/SupplierRequestQuoteModal';
-import AuthModal from '../components/auth/AuthModal';
-
-// 24 Latin Alphabet Letters for the compact A-Z quick jump
-const ALPHABET_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X'];
-
-// 18 Technical Phases Reference
-const TECHNICAL_18_PHASES = [
-  { id: "all", title: "Tất cả 18 Pha kỹ thuật", stage: "Tất cả" },
-  { id: "1.1", title: "1.1 Khảo sát & Định hướng", stage: "GD 01" },
-  { id: "1.2", title: "1.2 Pháp lý & Thủ tục", stage: "GD 01" },
-  { id: "1.3", title: "1.3 Chọn địa điểm & Mặt bằng KCN", stage: "GD 01" },
-  { id: "2.1", title: "2.1 Thiết kế & Quy hoạch", stage: "GD 02" },
-  { id: "2.2", title: "2.2 Thi công xây dựng", stage: "GD 02" },
-  { id: "2.3", title: "2.3 Cơ điện & Hạ tầng kỹ thuật MEP", stage: "GD 02" },
-  { id: "3.1", title: "3.1 Lắp đặt máy & Gia công CNC", stage: "GD 03" },
-  { id: "3.2", title: "3.2 Hoàn thiện phòng sạch Cleanroom", stage: "GD 03" },
-  { id: "3.3", title: "3.3 Chạy thử nghiệm thu & Kiểm định", stage: "GD 03" },
-  { id: "4.1", title: "4.1 Cung ứng đầu vào, Bao bì & Quà tặng", stage: "GD 04" },
-  { id: "4.2", title: "4.2 Quản lý sản xuất & QA/QC", stage: "GD 04" },
-  { id: "4.3", title: "4.3 Giao nhận, Logistics & Pallet", stage: "GD 04" },
-  { id: "5.1", title: "5.1 Tuyển dụng lao động & Nhân sự", stage: "GD 05" },
-  { id: "5.2", title: "5.2 Suất ăn công nghiệp & Phúc lợi", stage: "GD 05" },
-  { id: "5.3", title: "5.3 Đồng phục & Bảo hộ lao động (PPE)", stage: "GD 05" },
-  { id: "6.1", title: "6.1 Mở rộng công suất & Xưởng Phase 2", stage: "GD 06" },
-  { id: "6.2", title: "6.2 Audit ISO, ESG & Chuẩn hóa FDI", stage: "GD 06" },
-  { id: "6.3", title: "6.3 Chuyển đổi số & Tự động hóa Smart Factory", stage: "GD 06" }
-];
-
-// Trending Niche Keywords from Prompt & Blueprint
-const TRENDING_SEARCH_CHIPS = [
-  { label: "hộp quà dọc 9:16", query: "hộp quà 9:16", tag: "Hot Trend" },
-  { label: "giỏ quà bọc màng co", query: "giỏ quà màng co", tag: "Quà Tết" },
-  { label: "mít sấy Nam Huy", query: "mít sấy", tag: "Nông sản" },
-  { label: "đồng phục siêu thị", query: "đồng phục", tag: "Đồng phục" },
-  { label: "gia công CNC 5 trục", query: "gia công CNC", tag: "Cơ khí" },
-  { label: "thùng carton 5 lớp", query: "carton", tag: "Bao bì" },
-  { label: "pallet gỗ xuất khẩu", query: "pallet gỗ", tag: "Logistics" },
-  { label: "vận tải container lạnh", query: "container lạnh", tag: "Vận tải" },
-  { label: "phòng sạch Class 1000", query: "phòng sạch", tag: "Cleanroom" }
-];
+import {
+  getAllFoundingPartnerships,
+  submitFoundingPartnershipInquiry,
+  checkScopeConflict,
+  ENTITLEMENT_TYPES,
+  PARTNERSHIP_STATUSES
+} from '../data/foundingPartnershipData';
+import { CURATED_CATEGORIES } from '../data/categoryHubData';
+import { KEYWORD_CLUSTERS } from '../data/keywordClustersData';
 
 export default function FoundingPartnerPage() {
   const { t, lang } = useLanguage();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const formRef = useRef(null);
+  const howItWorksRef = useRef(null);
+  const scopeRef = useRef(null);
 
-  // Search & Filter State
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPhase, setSelectedPhase] = useState('all');
-  const [selectedLetter, setSelectedLetter] = useState('all');
-  const [selectedKyc, setSelectedKyc] = useState('all'); // 'all' | 'Diamond' | 'Gold' | 'Silver'
-  const [selectedRegion, setSelectedRegion] = useState('all'); // 'all' | 'Miền Bắc' | 'Miền Trung' | 'Miền Nam'
-  
-  // Page Tab View: 'marketplace' | 'packages'
-  const [pageView, setPageView] = useState('marketplace');
+  // SEO & Head title (Section 28)
+  useEffect(() => {
+    document.title = "Founding Partner | Đồng Hành Chuyên Mục | CHUOICUNGUNG.COM";
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute(
+        'content',
+        'Đồng hành phát triển chuyên mục và cụm nhu cầu phù hợp với năng lực doanh nghiệp thông qua phạm vi hiển thị, nội dung, video, catalogue và chương trình được thống nhất rõ.'
+      );
+    }
+  }, []);
 
-  // Video playback state for Spotlight
-  const [isPlayingSpotlightVideo, setIsPlayingSpotlightVideo] = useState(false);
+  // Preload query parameters if coming from category or keyword page
+  const initialCategoryParam = searchParams.get('category') || searchParams.get('cat') || '';
+  const initialClusterParam = searchParams.get('cluster') || searchParams.get('kw') || '';
 
-  // Comparison selection state (up to 3 suppliers)
-  const [selectedForCompare, setSelectedForCompare] = useState([]);
-  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  // --------------------------------------------------------------------------
+  // 1. SCOPE CONFIGURATOR STATE (Section 4 & 5)
+  // --------------------------------------------------------------------------
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState(initialCategoryParam || 'dong-phuc-bao-ho');
+  const [selectedClusterId, setSelectedClusterId] = useState(initialClusterParam || 'cluster-dong-phuc-cong-nhan');
+  const [selectedLocation, setSelectedLocation] = useState('Đồng Nai & TP.HCM');
+  const [selectedKcn, setSelectedKcn] = useState('KCN Amata Đồng Nai');
+  const [selectedPeriod, setSelectedPeriod] = useState('12_MONTHS');
+  const [selectedPosition, setSelectedPosition] = useState('TOP_CATEGORY_SPONSORED_BLOCK');
+  const [selectedServices, setSelectedServices] = useState([
+    'FEATURED_SPONSORED_BLOCK',
+    'CAPABILITY_PROFILE_SHOWCASE',
+    'VIDEO_SHOWCASE',
+    'CATALOGUE_INCLUSION'
+  ]);
 
-  // RFQ Modal State
-  const [quoteSupplier, setQuoteSupplier] = useState(null);
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  // Available clusters based on selected category
+  const availableClusters = useMemo(() => {
+    if (!selectedCategorySlug) return KEYWORD_CLUSTERS;
+    // Map curated category to cluster group
+    if (selectedCategorySlug.includes('dong-phuc')) {
+      return KEYWORD_CLUSTERS.filter(c => c.id.includes('dong-phuc') || c.categorySlug?.includes('dong-phuc'));
+    }
+    if (selectedCategorySlug.includes('hop-qua') || selectedCategorySlug.includes('qua-tang')) {
+      return KEYWORD_CLUSTERS.filter(c => c.id.includes('hop-qua') || c.categorySlug?.includes('qua-tang'));
+    }
+    if (selectedCategorySlug.includes('co-khi')) {
+      return KEYWORD_CLUSTERS.filter(c => c.id.includes('co-khi') || c.categorySlug?.includes('co-khi'));
+    }
+    return KEYWORD_CLUSTERS;
+  }, [selectedCategorySlug]);
 
-  // Auth Modal State (for unmasking phones & Odoo SSO)
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState('login');
+  const currentCategoryObj = useMemo(() => {
+    return CURATED_CATEGORIES.find(c => c.slug === selectedCategorySlug || c.id === selectedCategorySlug) || CURATED_CATEGORIES[0];
+  }, [selectedCategorySlug]);
 
-  // Sponsorship Tier Modal
-  const [selectedTierModal, setSelectedTierModal] = useState(null);
-  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const currentClusterObj = useMemo(() => {
+    return availableClusters.find(c => c.id === selectedClusterId) || availableClusters[0] || KEYWORD_CLUSTERS[0];
+  }, [availableClusters, selectedClusterId]);
 
-  // 1. Dynamic Sponsored Routing: Resolve Spotlight Partner based on search query or selected phase
-  const activeSpotlightPartner = useMemo(() => {
-    return resolveStrategicSponsor(searchQuery, selectedPhase);
-  }, [searchQuery, selectedPhase]);
+  // --------------------------------------------------------------------------
+  // 2. FORM STATE (Section 12: REQUEST FORM)
+  // --------------------------------------------------------------------------
+  const [formData, setFormData] = useState({
+    companyName: '',
+    taxId: '',
+    website: '',
+    contactName: '',
+    roleTitle: '',
+    contactEmail: '',
+    contactPhone: '',
+    categorySlug: selectedCategorySlug,
+    categoryName: currentCategoryObj?.name || 'Đồng Phục & Bảo Hộ Lao Động (PPE)',
+    clusterId: selectedClusterId,
+    clusterName: currentClusterObj?.clusterName || currentClusterObj?.canonicalKeyword || 'Đồng phục công nhân nhà máy',
+    location: selectedLocation,
+    kcn: selectedKcn,
+    expectedDuration: selectedPeriod,
+    displayPosition: selectedPosition,
+    objective: '',
+    budget: 'Theo phạm vi đề xuất',
+    consent: false
+  });
 
-  // 2. Filter Verified Suppliers Grid
-  const filteredSuppliers = useMemo(() => {
-    return VERIFIED_B2B_SUPPLIERS.filter(s => {
-      // Query filter
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase().trim();
-        const matchName = s.name.toLowerCase().includes(q) || s.shortName.toLowerCase().includes(q);
-        const matchIndustry = s.industry.toLowerCase().includes(q);
-        const matchAddress = s.address.toLowerCase().includes(q);
-        const matchThumbnails = s.thumbnails.some(t => t.name.toLowerCase().includes(q));
-        if (!matchName && !matchIndustry && !matchAddress && !matchThumbnails) {
-          return false;
-        }
-      }
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submissionResult, setSubmissionResult] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-      // Phase filter
-      if (selectedPhase !== 'all') {
-        if (s.phaseId !== selectedPhase && !s.phaseId.startsWith(selectedPhase)) {
-          return false;
-        }
-      }
+  // Sync configurator to form fields
+  const handleApplyScopeToForm = () => {
+    setFormData(prev => ({
+      ...prev,
+      categorySlug: selectedCategorySlug,
+      categoryName: currentCategoryObj?.name || '',
+      clusterId: selectedClusterId,
+      clusterName: currentClusterObj?.clusterName || currentClusterObj?.canonicalKeyword || '',
+      location: selectedLocation,
+      kcn: selectedKcn,
+      expectedDuration: selectedPeriod,
+      displayPosition: selectedPosition
+    }));
+    // Scroll smoothly to form
+    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
-      // Alphabet filter
-      if (selectedLetter !== 'all') {
-        const firstLetter = (s.shortName || s.name).trim()[0].toUpperCase();
-        if (firstLetter !== selectedLetter) {
-          return false;
-        }
-      }
-
-      // KYC filter
-      if (selectedKyc !== 'all') {
-        if (s.kycTier !== selectedKyc) return false;
-      }
-
-      // Region filter
-      if (selectedRegion !== 'all') {
-        if (s.region !== selectedRegion) return false;
-      }
-
-      return true;
-    });
-  }, [searchQuery, selectedPhase, selectedLetter, selectedKyc, selectedRegion]);
-
-  // Compare Checkbox Handler (Max 3)
-  const handleToggleCompare = (supplier) => {
-    if (selectedForCompare.some(item => item.id === supplier.id)) {
-      setSelectedForCompare(selectedForCompare.filter(item => item.id !== supplier.id));
+  const handleToggleService = (srvKey) => {
+    if (selectedServices.includes(srvKey)) {
+      setSelectedServices(selectedServices.filter(s => s !== srvKey));
     } else {
-      if (selectedForCompare.length >= 3) {
-        alert("Bạn chỉ có thể so sánh tối đa 3 nhà cung ứng cùng lúc. Vui lòng bỏ bớt 1 lựa chọn.");
-        return;
-      }
-      setSelectedForCompare([...selectedForCompare, supplier]);
+      setSelectedServices([...selectedServices, srvKey]);
     }
   };
 
-  // RFQ Trigger Handler
-  const handleOpenQuote = (supplier) => {
-    setQuoteSupplier(supplier);
-    setIsQuoteModalOpen(true);
-  };
-
-  // Clear all filters
-  const handleResetFilters = () => {
-    setSearchQuery('');
-    setSelectedPhase('all');
-    setSelectedLetter('all');
-    setSelectedKyc('all');
-    setSelectedRegion('all');
-  };
-
-  const handleRegisterTier = (e) => {
+  // Form submit handler - STRICT: ONLY CREATES INQUIRY, NEVER ACTIVE (Section 11 & 13)
+  const handleSubmitInquiry = (e) => {
     e.preventDefault();
-    setRegisterSuccess(true);
+    if (!formData.companyName.trim() || !formData.contactName.trim() || !formData.contactPhone.trim() || !formData.contactEmail.trim()) {
+      alert("Vui lòng điền đầy đủ các thông tin liên hệ bắt buộc (*).");
+      return;
+    }
+    if (!formData.consent) {
+      alert("Vui lòng xác nhận đồng ý với nguyên tắc minh bạch thương mại của gói Founding Partner.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
     setTimeout(() => {
-      setRegisterSuccess(false);
-      setSelectedTierModal(null);
-      alert("Cảm ơn bạn đã gửi thông tin đăng ký Founding Partner. Ban Điều phối Quốc gia sẽ liên hệ thẩm định trong vòng 24h!");
-    }, 1200);
+      const res = submitFoundingPartnershipInquiry({
+        companyName: formData.companyName,
+        contactName: formData.contactName,
+        contactEmail: formData.contactEmail,
+        contactPhone: formData.contactPhone,
+        roleTitle: formData.roleTitle,
+        categoryId: formData.categorySlug,
+        categoryName: formData.categoryName,
+        keywordClusterId: formData.clusterId,
+        keywordClusterName: formData.clusterName,
+        locationName: formData.location,
+        industrialParkName: formData.kcn,
+        expectedDuration: formData.expectedDuration,
+        displayPosition: formData.displayPosition,
+        servicesInterested: selectedServices,
+        objective: formData.objective,
+        budget: formData.budget,
+        consentToContact: true
+      });
+
+      setSubmissionResult(res);
+      setFormSubmitted(true);
+      setIsSubmitting(false);
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 600);
   };
+
+  // --------------------------------------------------------------------------
+  // 3. ACTIVE PARTNERS SHOWCASE DATA (Section 20 & 21)
+  // --------------------------------------------------------------------------
+  const allPartners = useMemo(() => {
+    return getAllFoundingPartnerships();
+  }, [formSubmitted]);
+
+  const activePartners = useMemo(() => {
+    return allPartners.filter(p => p.status === 'ACTIVE');
+  }, [allPartners]);
+
+  // SEO & Head Setup
+  useEffect(() => {
+    document.title = 'Founding Partner | CHUOICUNGUNG.COM';
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = 'Gói Founding Partner dành cho đối tác tiên phong tài trợ một phạm vi chuyên mục được xác định rõ. Minh bạch thương mại, không ảnh hưởng matching, xếp hạng và xác minh.';
+
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      canonicalTag = document.createElement('link');
+      canonicalTag.rel = 'canonical';
+      document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute('href', 'https://chuoicungung.com/founding-partner');
+  }, []);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900 antialiased">
+    <main className="min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900 antialiased selection:bg-amber-400 selection:text-slate-950">
       
-      {/* 0. Breadcrumb & Top Page Header */}
-      <div className="bg-slate-900 border-b border-slate-800 text-white pt-6 pb-6 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto space-y-4">
-          <div className="text-xs text-slate-400 flex items-center space-x-2">
-            <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+      {/* ==================================================================== */}
+      {/* 1. HERO SECTION (Exact Spec Section 2) */}
+      {/* ==================================================================== */}
+      <section className="relative bg-slate-950 text-white pt-10 pb-16 sm:pt-14 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-slate-800">
+        {/* Glow ambient background */}
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 -right-32 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto relative z-10 space-y-6 text-center">
+          
+          {/* Breadcrumb & Commercial Tag */}
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-mono text-slate-400">
+            <Link to="/" className="hover:text-white transition flex items-center space-x-1">
+              <span>Trang chủ</span>
             </Link>
-            <span>&gt;</span>
-            <span className="text-amber-400 font-bold font-heading">Founding Partner & Nhà Cung Ứng Chiến Lược</span>
+            <span>/</span>
+            <span className="text-amber-400 font-bold">Founding Partner</span>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-mono font-bold tracking-wide">
-                <Crown className="w-3.5 h-3.5 text-amber-400" />
-                <span>HẠ TẦNG ĐỐI TÁC SÁNG LẬP & NHÀ THẦU B2B CHIẾN LƯỢC</span>
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-300 text-xs font-mono font-bold tracking-wide">
+            <Crown className="w-4 h-4 text-amber-400" />
+            <span>GÓI THƯƠNG MẠI ĐỒNG HÀNH CHUYÊN MỤC B2B MINH BẠCH</span>
+          </div>
+
+          {/* Exact H1 */}
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading tracking-tight text-white max-w-4xl mx-auto leading-tight sm:leading-snug">
+            Founding Partner
+          </h1>
+
+          {/* Exact Sub */}
+          <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
+            Gói Founding Partner dành cho đối tác tiên phong tài trợ một phạm vi chuyên mục được xác định rõ. Quyền lợi có thể gồm khối giới thiệu nổi bật, nội dung doanh nghiệp, video, catalogue và báo cáo theo thỏa thuận.
+          </p>
+
+          {/* Exact CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+            <button
+              onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+              className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm font-heading uppercase tracking-wide shadow-lg shadow-amber-500/20 transition cursor-pointer flex items-center justify-center space-x-2"
+            >
+              <span>ĐĂNG KÝ ĐỒNG HÀNH</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => {
+                const el = document.getElementById('quyen-loi');
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                else howItWorksRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700 font-bold text-xs sm:text-sm font-heading transition cursor-pointer flex items-center justify-center space-x-2"
+            >
+              <Award className="w-4 h-4 text-amber-400" />
+              <span>XEM QUYỀN LỢI</span>
+            </button>
+          </div>
+
+          {/* Quick Pillars */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6 max-w-4xl mx-auto text-left">
+            <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl">
+              <div className="text-amber-400 font-mono text-xs font-bold">01. Minh Bạch</div>
+              <div className="text-slate-300 text-[11px] mt-0.5">Nhãn "ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC" rõ ràng</div>
+            </div>
+            <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl">
+              <div className="text-amber-400 font-mono text-xs font-bold">02. Không Bán Lead</div>
+              <div className="text-slate-300 text-[11px] mt-0.5">Không che search, không can thiệp matching</div>
+            </div>
+            <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl">
+              <div className="text-amber-400 font-mono text-xs font-bold">03. Cụm Ý Định</div>
+              <div className="text-slate-300 text-[11px] mt-0.5">Quy chuẩn theo Keyword Cluster, không bán từ khóa lẻ</div>
+            </div>
+            <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-2xl">
+              <div className="text-amber-400 font-mono text-xs font-bold">04. Deliverable Thật</div>
+              <div className="text-slate-300 text-[11px] mt-0.5">Bàn giao có URL, Video, Catalogue & Báo cáo</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 pt-10">
+
+        {/* ==================================================================== */}
+        {/* 2. GIẢI THÍCH FOUNDING PARTNER (Section 3) */}
+        {/* ==================================================================== */}
+        <section ref={howItWorksRef} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md mb-2">
+              <Info className="w-3.5 h-3.5 text-blue-600" />
+              <span>ĐỊNH NGHĨA CHUẨN MỰC THƯƠNG MẠI</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              FOUNDING PARTNER LÀ GÌ?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mt-2 max-w-3xl">
+              <strong>Founding Partner</strong> là đối tác tài trợ phát triển một phạm vi chuyên mục hoặc cụm nhu cầu cụ thể trên <strong>CHUOICUNGUNG.COM</strong>. Thay vì quảng cáo ngẫu nhiên, doanh nghiệp đồng hành cùng hệ thống kiến tạo nội dung chuẩn hóa, hồ sơ năng lực xưởng 360°, video dây chuyền và cẩm nang kỹ thuật giúp Buyer FDI tìm nguồn cung nhanh chóng và chuẩn xác.
+            </p>
+          </div>
+
+          {/* Phạm vi xác định 6 thành phần */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold font-heading uppercase text-slate-500 tracking-wider">
+              Một Phạm Vi Đồng Hành Chuẩn Gồm 6 Thành Phần Cụ Thể:
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-xs font-mono">1</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Ngành / Category</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Ví dụ: Đồng phục & Bảo hộ lao động (PPE), Hộp quà tặng & Nông sản, Cơ khí CNC...</p>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black font-heading tracking-tight text-white">
-                Sàn Khớp Nhu Cầu & Đối Tác Sáng Lập Quốc Gia
-              </h1>
-              <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-                Độc quyền kết nối các tổng thầu, nhà sản xuất đầu ngành được bảo trợ bởi VCCI, đạt chuẩn kiểm định KYC 3 lớp với 620+ tập đoàn FDI và 400+ KCN toàn quốc.
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold text-xs font-mono">2</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Keyword Cluster / Buyer Intent</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Cụm ý định tìm kiếm thống nhất, gồm từ khóa chính và các từ khóa đồng nghĩa (synonyms).</p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs font-mono">3</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Địa Bàn & KCN (Optional)</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Phạm vi địa lý (Đồng Nai, Bắc Ninh, Bình Dương...) hoặc cụm Khu công nghiệp trọng điểm.</p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs font-mono">4</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Thời Hạn Thỏa Thuận</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Thời gian hiệu lực rõ ràng (6 tháng, 12 tháng...). Khi hết hạn sẽ tự động dừng paid placement.</p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-xs font-mono">5</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Vị Trí Hiển Thị</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Khối đầu trang chuyên mục với nhãn bắt buộc "ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC".</p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                <div className="w-7 h-7 rounded-lg bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs font-mono">6</div>
+                <h5 className="text-xs font-bold text-slate-900 font-heading">Quyền Lợi Theo Hợp Đồng</h5>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Được liệt kê thành từng deliverable chi tiết (video, catalogue, profile, bài viết, báo cáo).</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Exact Note box (Section 3 Spec) */}
+          <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-300/80 text-amber-950 space-y-1 flex items-start space-x-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-xs leading-relaxed">
+              <strong className="font-heading uppercase block text-amber-900">Lưu ý pháp lý và thương mại:</strong>
+              “Founding Partner là gói thương mại. Việc tham gia không tạo quyền sở hữu CHUOICUNGUNG.COM và không đồng nghĩa với bảo trợ hoặc chứng nhận năng lực.”
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================================== */}
+        {/* 3. CHỌN PHẠM VI ĐỒNG HÀNH & KEYWORD CLUSTER RULE (Section 4 & 5) */}
+        {/* ==================================================================== */}
+        <section ref={scopeRef} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md mb-1.5">
+                <Layers className="w-3.5 h-3.5 text-emerald-600" />
+                <span>BỘ CẤU HÌNH TRỰC QUAN</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+                CHỌN PHẠM VI ĐỒNG HÀNH
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Tự định hình phạm vi chuyên mục phù hợp với năng lực sản xuất thực tế trước khi gửi đề xuất.
               </p>
             </div>
 
-            {/* Switch Tabs: Sàn Nhà Cung Cấp vs Gói Đồng Sáng Lập */}
-            <div className="flex items-center bg-slate-800 p-1 rounded-2xl border border-slate-700 self-start md:self-auto shrink-0 text-xs font-heading font-bold">
-              <button
-                onClick={() => setPageView('marketplace')}
-                className={`px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 cursor-pointer ${
-                  pageView === 'marketplace'
-                    ? 'bg-amber-400 text-slate-950 font-black shadow-md'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Sàn Khớp Nhu Cầu & Spotlight</span>
-              </button>
-              
-              <button
-                onClick={() => setPageView('packages')}
-                className={`px-4 py-2.5 rounded-xl transition flex items-center space-x-1.5 cursor-pointer ${
-                  pageView === 'packages'
-                    ? 'bg-white text-slate-900 font-black shadow-md'
-                    : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                <Crown className="w-4 h-4 text-amber-500" />
-                <span>Gói Tài Trợ 2024 - 2027</span>
-              </button>
-            </div>
+            <button
+              onClick={handleApplyScopeToForm}
+              className="px-4 py-2 bg-[#0052cc] hover:bg-blue-800 text-white rounded-xl text-xs font-bold font-heading uppercase transition flex items-center space-x-1.5 shadow-xs cursor-pointer self-start md:self-auto shrink-0"
+            >
+              <span>Áp dụng vào mẫu đề xuất</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
-        </div>
-      </div>
 
-      {pageView === 'marketplace' ? (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
-          
-          {/* 1. KHỐI 1: SEARCH & FILTER BAR (TRẠM KHỚP LỆNH TỐC ĐỘ CAO <50MS) */}
-          <section className="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200/80 space-y-4">
-            <div className="flex flex-col md:flex-row items-center gap-3">
-              <div className="relative flex-1 w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-blue-600" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Gõ từ khóa tìm nhanh: 'hộp quà dọc 9:16', 'giỏ quà màng co', 'mít sấy', 'đồng phục siêu thị', 'gia công CNC 5 trục'..."
-                  className="w-full pl-12 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 focus:border-[#0052cc] focus:bg-white rounded-2xl text-xs sm:text-sm font-medium outline-none transition shadow-inner placeholder:text-slate-400"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs hover:bg-slate-300 transition"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
-
-              {/* Quick Filter Reset & Status Badge */}
-              <div className="flex items-center space-x-2 w-full md:w-auto justify-between md:justify-start">
-                <span className="text-[11px] font-mono font-bold text-slate-500 bg-slate-100 px-3 py-2 rounded-xl border border-slate-200 flex items-center space-x-1.5 shrink-0">
-                  <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                  <span>Khớp lệnh: <strong className="text-blue-700">{filteredSuppliers.length}</strong> đối tác</span>
-                </span>
-
-                {(searchQuery || selectedPhase !== 'all' || selectedLetter !== 'all' || selectedKyc !== 'all' || selectedRegion !== 'all') && (
-                  <button
-                    onClick={handleResetFilters}
-                    className="px-3.5 py-2 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-xs flex items-center space-x-1.5 transition shrink-0"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Đặt lại</span>
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Trending Niche Keywords Quick Chips */}
-            <div className="flex items-center space-x-2 overflow-x-auto pb-1 pt-1 scrollbar-none text-xs">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 font-heading">
-                Từ Khóa Hot:
-              </span>
-              {TRENDING_SEARCH_CHIPS.map((chip, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSearchQuery(chip.query)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition cursor-pointer border flex items-center space-x-1.5 ${
-                    searchQuery.toLowerCase().includes(chip.query.toLowerCase())
-                      ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                      : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200'
-                  }`}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Left Column: Interactive Scope Form (Col 7) */}
+            <div className="lg:col-span-7 space-y-4 text-xs">
+              
+              {/* Category Selector */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <FolderTree className="w-3.5 h-3.5 text-blue-600" />
+                  <span>1. Ngành hàng / Chuyên mục (Category):</span>
+                </label>
+                <select
+                  value={selectedCategorySlug}
+                  onChange={(e) => {
+                    setSelectedCategorySlug(e.target.value);
+                  }}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
                 >
-                  <span>{chip.label}</span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-black/10 text-current font-mono">
-                    {chip.tag}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </section>
+                  {CURATED_CATEGORIES.map(cat => (
+                    <option key={cat.slug} value={cat.slug}>
+                      {cat.name} ({cat.phaseName || 'Giai đoạn chuỗi cung ứng'})
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-          {/* 2. KHỐI 2: BLOCK ĐẶC QUYỀN FOUNDING PARTNER SPOTLIGHT (VÀNG ĐỒNG SANG TRỌNG + DYNAMIC ROUTING) */}
-          <section className="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-400/50 bg-gradient-to-br from-[#1b1404] via-[#241a06] via-[#151a24] to-[#0a1120] text-white p-6 sm:p-8 lg:p-9">
-            
-            {/* Ambient Gold Glow Effects */}
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+              {/* Keyword Cluster Selector */}
+              <div className="space-y-1.5">
+                <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                  <Key className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>2. Cụm ý định tìm kiếm (Keyword Cluster / Intent):</span>
+                </label>
+                <select
+                  value={selectedClusterId}
+                  onChange={(e) => setSelectedClusterId(e.target.value)}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
+                >
+                  {availableClusters.map(cl => (
+                    <option key={cl.id} value={cl.id}>
+                      {cl.clusterName || cl.canonicalKeyword} (Gồm các từ khóa đồng nghĩa: {cl.synonyms?.slice(0, 2).join(', ')}...)
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* Spotlight Header Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-400/20 pb-5 mb-6 relative z-10">
-              <div className="flex items-center space-x-3 flex-wrap gap-y-2">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-300 to-amber-600 text-slate-950 flex items-center justify-center font-black shadow-lg">
-                  <Crown className="w-5 h-5 fill-slate-950" />
+              {/* Location & KCN Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>3. Địa bàn ưu tiên (Optional):</span>
+                  </label>
+                  <select
+                    value={selectedLocation}
+                    onChange={(e) => setSelectedLocation(e.target.value)}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
+                  >
+                    <option value="Toàn quốc">Toàn quốc (Không giới hạn địa bàn)</option>
+                    <option value="Đồng Nai & TP.HCM">Đồng Nai & TP.HCM</option>
+                    <option value="Bắc Ninh & Hà Nội">Bắc Ninh & Hà Nội</option>
+                    <option value="Bình Dương">Bình Dương & Vùng phụ cận</option>
+                    <option value="Hải Phòng & Quảng Ninh">Hải Phòng & Vùng Duyên Hải</option>
+                  </select>
                 </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-[10px] font-mono font-black uppercase tracking-widest bg-amber-400/20 text-amber-300 px-2.5 py-0.5 rounded-full border border-amber-400/40">
-                      FOUNDING PARTNER SPOTLIGHT • TOP 0 ĐỘC QUYỀN
-                    </span>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full border border-emerald-500/30">
-                      ✓ Đã Xác Thực VCCI
-                    </span>
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-black font-heading text-amber-300 tracking-tight mt-0.5">
-                    {activeSpotlightPartner.brandTitle}
-                  </h3>
+
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                    <Factory className="w-3.5 h-3.5 text-slate-600" />
+                    <span>4. Khu công nghiệp (Optional):</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={selectedKcn}
+                    onChange={(e) => setSelectedKcn(e.target.value)}
+                    placeholder="VD: KCN Amata, VSIP Bắc Ninh..."
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
+                  />
                 </div>
               </div>
 
-              {/* Selection Phase Tag */}
-              <div className="flex items-center space-x-2 self-start sm:self-auto">
-                <span className="text-xs font-mono text-slate-300 bg-white/10 px-3 py-1.5 rounded-xl border border-white/15">
-                  {activeSpotlightPartner.phaseName}
-                </span>
-                <span className="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-400/30">
-                  ★ KYC {activeSpotlightPartner.kycTier}
-                </span>
-              </div>
-            </div>
+              {/* Period & Display Position */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                    <span>5. Thời hạn dự kiến:</span>
+                  </label>
+                  <select
+                    value={selectedPeriod}
+                    onChange={(e) => setSelectedPeriod(e.target.value)}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
+                  >
+                    <option value="6_MONTHS">6 Tháng (Thử nghiệm & Đo lường)</option>
+                    <option value="12_MONTHS">12 Tháng (Đồng hành chu kỳ 1 năm)</option>
+                    <option value="24_MONTHS">24 Tháng (Chiến lược dài hạn)</option>
+                    <option value="CUSTOM">Thỏa thuận theo đề xuất dự án</option>
+                  </select>
+                </div>
 
-            {/* Spotlight 2-Column Split Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center relative z-10">
-              
-              {/* Left Column: Factory Video / Virtual Tour Player (Col 5) */}
-              <div className="lg:col-span-5 space-y-3">
-                <div className="relative aspect-video bg-slate-950 rounded-2xl overflow-hidden shadow-2xl border border-amber-400/30 group">
-                  {isPlayingSpotlightVideo ? (
-                    <iframe
-                      src={`${activeSpotlightPartner.youtubeEmbed}?autoplay=1&mute=1&enablejsapi=1&rel=0&playsinline=1`}
-                      title={activeSpotlightPartner.name}
-                      className="w-full h-full border-0 rounded-2xl"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  ) : (
-                    <div 
-                      onClick={() => setIsPlayingSpotlightVideo(true)}
-                      className="relative w-full h-full cursor-pointer flex items-center justify-center"
+                <div className="space-y-1.5">
+                  <label className="font-bold text-slate-800 flex items-center space-x-1.5">
+                    <Eye className="w-3.5 h-3.5 text-purple-600" />
+                    <span>6. Vị trí hiển thị quan tâm:</span>
+                  </label>
+                  <select
+                    value={selectedPosition}
+                    onChange={(e) => setSelectedPosition(e.target.value)}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:border-[#0052cc] outline-none"
+                  >
+                    <option value="TOP_CATEGORY_SPONSORED_BLOCK">Đầu trang chuyên mục (Top Sponsored Block)</option>
+                    <option value="TOP_KEYWORD_SPONSORED_BLOCK">Đầu cụm từ khóa tìm kiếm (Top Keyword Block)</option>
+                    <option value="CATEGORY_SIDEBAR_SPONSOR">Cột nội dung đồng hành (Sidebar Sponsored)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Entitlement Services Checkboxes */}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <label className="font-bold text-slate-800 block">
+                  7. Các dịch vụ & quyền lợi quan tâm (Mỗi hợp đồng quyết định thực tế):
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {Object.values(ENTITLEMENT_TYPES).map(ent => (
+                    <label
+                      key={ent.id}
+                      className={`p-2.5 rounded-xl border flex items-start space-x-2 cursor-pointer transition select-none ${
+                        selectedServices.includes(ent.id)
+                          ? 'bg-blue-50/80 border-blue-300 text-blue-950 font-medium'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
                     >
-                      <img
-                        src={activeSpotlightPartner.videoThumbnail}
-                        alt={activeSpotlightPartner.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      <input
+                        type="checkbox"
+                        checked={selectedServices.includes(ent.id)}
+                        onChange={() => handleToggleService(ent.id)}
+                        className="w-3.5 h-3.5 text-blue-600 rounded mt-0.5"
                       />
-                      <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors flex items-center justify-center">
-                        <div className="w-16 h-16 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:bg-amber-300 transition-transform">
-                          <svg className="w-7 h-7 fill-current ml-1" viewBox="0 0 24 24">
-                            <polygon points="5 3 19 12 5 21 5 3" />
-                          </svg>
-                        </div>
+                      <div className="leading-tight">
+                        <span className="font-bold text-[11px] block">{ent.shortName}</span>
+                        <span className="text-[10px] text-slate-500 line-clamp-1">{ent.name}</span>
                       </div>
-                      <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-xs text-white px-3 py-1.5 rounded-xl text-[11px] font-mono font-bold flex items-center space-x-1.5 border border-white/20">
-                        <Factory className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Xem Trực Quan Nhà Máy & Dây Chuyền</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 3 Visual Core Products Thumbnail Strip */}
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  {activeSpotlightPartner.coreProducts.map((prod, pIdx) => (
-                    <div key={pIdx} className="bg-white/5 rounded-xl p-2 border border-white/10 hover:border-amber-400/50 transition text-left space-y-1">
-                      <div className="aspect-square rounded-lg overflow-hidden bg-slate-800">
-                        <img src={prod.image} alt={prod.name} className="w-full h-full object-cover" />
-                      </div>
-                      <h5 className="text-[10px] font-bold text-slate-200 line-clamp-1">{prod.name}</h5>
-                      <span className="text-[9px] text-amber-400 font-mono block truncate">{prod.tag}</span>
-                    </div>
+                    </label>
                   ))}
-                </div>
-              </div>
-
-              {/* Right Column: B2B Capability Matrix (Col 7) */}
-              <div className="lg:col-span-7 space-y-4">
-                <div>
-                  <h4 className="text-xl sm:text-2xl font-black text-white font-heading tracking-tight">
-                    {activeSpotlightPartner.name}
-                  </h4>
-                  <p className="text-xs text-amber-200/90 font-medium mt-1">
-                    "{activeSpotlightPartner.slogan}"
-                  </p>
-                  <p className="text-xs text-slate-300 leading-relaxed mt-2 line-clamp-3">
-                    {activeSpotlightPartner.description}
-                  </p>
-                </div>
-
-                {/* 4-Cell Capability Metric Matrix */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 py-1">
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Công Suất / Tháng</span>
-                    <span className="text-xs font-mono font-bold text-amber-300 block truncate">{activeSpotlightPartner.capacity.split('(')[0]}</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Đơn Hàng (MOQ)</span>
-                    <span className="text-xs font-mono font-bold text-sky-300 block truncate">{activeSpotlightPartner.moq.split('(')[0]}</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Thời Gian Mẫu</span>
-                    <span className="text-xs font-mono font-bold text-emerald-300 block truncate">{activeSpotlightPartner.leadTime.split(',')[0]}</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Quy Mô Nhà Xưởng</span>
-                    <span className="text-xs font-mono font-bold text-purple-300 block truncate">{activeSpotlightPartner.factoryArea}</span>
-                  </div>
-                </div>
-
-                {/* Certifications Badge Row */}
-                <div className="flex flex-wrap gap-1.5 items-center text-[10px]">
-                  <span className="text-slate-400 font-bold uppercase mr-1">Tiêu Chuẩn:</span>
-                  {activeSpotlightPartner.certifications.map((cert, cIdx) => (
-                    <span key={cIdx} className="px-2.5 py-0.5 rounded-md bg-amber-400/10 text-amber-300 font-mono font-bold border border-amber-400/30 flex items-center space-x-1">
-                      <Check className="w-2.5 h-2.5" />
-                      <span>{cert}</span>
-                    </span>
-                  ))}
-                </div>
-
-                {/* CTA Actions for Strategic Spotlight */}
-                <div className="flex flex-wrap gap-3 pt-2">
-                  <button
-                    onClick={() => handleOpenQuote(activeSpotlightPartner)}
-                    className="px-5 py-3 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center space-x-2 font-heading uppercase cursor-pointer"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Yêu Cầu Báo Giá Độc Quyền</span>
-                  </button>
-
-                  <a
-                    href={`tel:${activeSpotlightPartner.hotline.replace(/\s+/g, '')}`}
-                    className="px-4 py-3 bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm rounded-xl border border-white/20 transition flex items-center space-x-2 font-heading"
-                  >
-                    <PhoneCall className="w-4 h-4 text-amber-400" />
-                    <span>Hotline: {activeSpotlightPartner.hotline}</span>
-                  </a>
-
-                  <a
-                    href={activeSpotlightPartner.website}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-3 bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white font-bold text-xs rounded-xl border border-white/10 transition flex items-center space-x-1.5 font-heading"
-                  >
-                    <span>Xem Hồ Sơ 360°</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </a>
                 </div>
               </div>
             </div>
-          </section>
 
-          {/* 3 & 4. LAYOUT 2 CỘT: STICKY SIDEBAR FILTER (CỘT TRÁI) + LƯỚI NHÀ CUNG CẤP (CỘT PHẢI) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* KHỐI 3: STICKY SIDEBAR BỘ LỌC GỒM A-Z & 18 PHA KỸ THUẬT (CỘT TRÁI - COL 4) */}
-            <aside className="lg:col-span-4 space-y-5 lg:sticky lg:top-24">
+            {/* Right Column: Live Scope Preview & Keyword Cluster Rule Box (Col 5) */}
+            <div className="lg:col-span-5 space-y-4">
               
-              {/* Sidebar Container */}
-              <div className="bg-white rounded-3xl p-5 shadow-sm border border-slate-200/80 space-y-6">
-                
-                {/* Header Filter Title */}
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+              {/* Scope Preview Card */}
+              <div className="bg-slate-900 text-white p-5 rounded-3xl space-y-4 border border-slate-800 shadow-md">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                   <div className="flex items-center space-x-2">
-                    <SlidersHorizontal className="w-4 h-4 text-[#0052cc]" />
-                    <h4 className="text-sm font-black text-slate-900 font-heading tracking-tight">
-                      Bộ Lọc Phân Bổ Nhà Cung Cấp
-                    </h4>
+                    <Crown className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-mono font-bold text-amber-300 uppercase">
+                      XEM TRƯỚC PHẠM VI ĐÃ CHỌN
+                    </span>
                   </div>
-                  <button
-                    onClick={handleResetFilters}
-                    className="text-[11px] font-bold text-slate-400 hover:text-rose-600 transition"
-                  >
-                    Xóa tất cả
-                  </button>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/30">
+                    Sẵn sàng đề xuất
+                  </span>
                 </div>
 
-                {/* 1. Quick Alphabet Jump A-Z Bar (Gọn gàng, không tràn màn hình) */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-700 font-heading">
-                    <span>Mục Lục Chữ Cái A-Z:</span>
-                    <span className="text-[11px] font-mono text-blue-600">{selectedLetter === 'all' ? 'Tất cả' : `Ký tự: ${selectedLetter}`}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-1 bg-slate-50 p-2 rounded-2xl border border-slate-200">
-                    <button
-                      onClick={() => setSelectedLetter('all')}
-                      className={`px-2 py-1 rounded-lg text-[10.5px] font-mono font-bold transition cursor-pointer ${
-                        selectedLetter === 'all'
-                          ? 'bg-[#0052cc] text-white shadow-xs'
-                          : 'text-slate-600 hover:bg-slate-200'
-                      }`}
-                    >
-                      ALL
-                    </button>
-                    {ALPHABET_LETTERS.map((letter) => (
-                      <button
-                        key={letter}
-                        onClick={() => setSelectedLetter(letter)}
-                        className={`w-6 h-6 rounded-lg text-[10.5px] font-mono font-bold transition cursor-pointer flex items-center justify-center ${
-                          selectedLetter === letter
-                            ? 'bg-[#0052cc] text-white shadow-xs'
-                            : 'text-slate-600 hover:bg-slate-200'
-                        }`}
-                      >
-                        {letter}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 2. 18 Technical Phases Taxonomy Selector */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-700 font-heading">
-                    <span>18 Pha Kỹ Thuật Chuỗi Cung Ứng:</span>
-                    <span className="text-[11px] font-mono text-slate-400">18 Pha FDI</span>
+                <div className="space-y-2.5 text-xs">
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-mono block">Chuyên mục:</span>
+                    <strong className="text-white font-bold">{currentCategoryObj?.name}</strong>
                   </div>
 
-                  <div className="max-h-64 overflow-y-auto space-y-1 pr-1 scrollbar-thin text-xs">
-                    {TECHNICAL_18_PHASES.map((phase) => (
-                      <button
-                        key={phase.id}
-                        onClick={() => setSelectedPhase(phase.id)}
-                        className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium transition flex items-center justify-between cursor-pointer ${
-                          selectedPhase === phase.id
-                            ? 'bg-blue-50 text-[#0052cc] font-bold border border-blue-200 shadow-2xs'
-                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                        }`}
-                      >
-                        <span className="truncate pr-2">{phase.title}</span>
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 shrink-0">
-                          {phase.stage}
+                  <div>
+                    <span className="text-slate-400 text-[10px] uppercase font-mono block">Cụm ý định:</span>
+                    <strong className="text-amber-300 font-bold">{currentClusterObj?.clusterName || currentClusterObj?.canonicalKeyword}</strong>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-[11px] pt-1">
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-mono block">Địa bàn:</span>
+                      <span className="text-slate-200">{selectedLocation}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 text-[10px] uppercase font-mono block">Thời hạn:</span>
+                      <span className="text-slate-200">
+                        {selectedPeriod === '6_MONTHS' ? '6 tháng' : selectedPeriod === '12_MONTHS' ? '12 tháng' : 'Theo dự án'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-800">
+                    <span className="text-slate-400 text-[10px] uppercase font-mono block mb-1">Quyền lợi quan tâm:</span>
+                    <div className="flex flex-wrap gap-1">
+                      {selectedServices.map(sid => (
+                        <span key={sid} className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                          {ENTITLEMENT_TYPES[sid]?.shortName || sid}
                         </span>
-                      </button>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
 
-                {/* 3. KYC 3-Tier Selector (Kim Cương / Vàng / Bạc) */}
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <span className="text-xs font-bold text-slate-700 font-heading block">
-                    Cấp Độ Thẩm Định KYC 3 Lớp:
-                  </span>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-heading">
-                    <button
-                      onClick={() => setSelectedKyc('all')}
-                      className={`p-2 rounded-xl border text-center font-bold transition cursor-pointer ${
-                        selectedKyc === 'all'
-                          ? 'bg-slate-900 text-white border-slate-900'
-                          : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-                      }`}
-                    >
-                      Tất cả Hạng
-                    </button>
-                    <button
-                      onClick={() => setSelectedKyc('Diamond')}
-                      className={`p-2 rounded-xl border text-center font-bold transition cursor-pointer flex items-center justify-center space-x-1 ${
-                        selectedKyc === 'Diamond'
-                          ? 'bg-amber-400 text-slate-950 border-amber-500 font-black'
-                          : 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
-                      }`}
-                    >
-                      <span>★ Kim Cương</span>
-                    </button>
-                    <button
-                      onClick={() => setSelectedKyc('Gold')}
-                      className={`p-2 rounded-xl border text-center font-bold transition cursor-pointer flex items-center justify-center space-x-1 ${
-                        selectedKyc === 'Gold'
-                          ? 'bg-blue-600 text-white border-blue-600 font-black'
-                          : 'bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100'
-                      }`}
-                    >
-                      <span>★ Hạng Vàng</span>
-                    </button>
-                    <button
-                      onClick={() => setSelectedKyc('Silver')}
-                      className={`p-2 rounded-xl border text-center font-bold transition cursor-pointer flex items-center justify-center space-x-1 ${
-                        selectedKyc === 'Silver'
-                          ? 'bg-slate-700 text-white border-slate-700 font-black'
-                          : 'bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200'
-                      }`}
-                    >
-                      <span>★ Hạng Bạc</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* 4. Region Selector */}
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <span className="text-xs font-bold text-slate-700 font-heading block">
-                    Khu Vực Địa Lý:
-                  </span>
-                  <div className="grid grid-cols-3 gap-1.5 text-xs font-heading">
-                    {['all', 'Miền Bắc', 'Miền Nam'].map((r) => (
-                      <button
-                        key={r}
-                        onClick={() => setSelectedRegion(r)}
-                        className={`py-2 px-1 rounded-xl border text-center font-bold transition cursor-pointer text-[11px] ${
-                          selectedRegion === r
-                            ? 'bg-[#0052cc] text-white border-[#0052cc]'
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-                        }`}
-                      >
-                        {r === 'all' ? 'Toàn quốc' : r}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* B2B Trust Shield Box */}
-                <div className="p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 space-y-1.5">
-                  <div className="flex items-center space-x-2 text-blue-900 font-bold text-xs font-heading">
-                    <ShieldCheck className="w-4 h-4 text-[#0052cc]" />
-                    <span>Quy Trình Xác Thực VCCI</span>
-                  </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">
-                    100% doanh nghiệp trong danh bạ đã được đối soát Mã số thuế, Năng lực xưởng thực tế và Chứng chỉ ISO định kỳ.
-                  </p>
-                </div>
-              </div>
-            </aside>
-
-            {/* KHỐI 4: LƯỚI DANH SÁCH NHÀ CUNG CẤP CHUẨN B2B (CỘT PHẢI - COL 8) */}
-            <main className="lg:col-span-8 space-y-5">
-              
-              {/* Section Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
-                <div>
-                  <h3 className="text-base font-black text-slate-900 font-heading">
-                    Danh Sách Nhà Cung Cấp Đã Thẩm Định ({filteredSuppliers.length})
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Hiển thị các doanh nghiệp đạt chuẩn năng lực cung ứng theo 18 pha kỹ thuật
-                  </p>
-                </div>
-
-                {/* Compare Counter Indicator */}
-                <div className="flex items-center space-x-2">
-                  <span className="text-xs font-mono text-slate-600">
-                    Đã chọn: <strong className="text-blue-700 font-bold">{selectedForCompare.length}/3</strong> so sánh
-                  </span>
-                  {selectedForCompare.length > 0 && (
-                    <button
-                      onClick={() => setIsCompareModalOpen(true)}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition font-heading flex items-center space-x-1"
-                    >
-                      <ArrowLeftRight className="w-3.5 h-3.5" />
-                      <span>Xem Bảng So Sánh</span>
-                    </button>
-                  )}
-                </div>
+                <button
+                  onClick={handleApplyScopeToForm}
+                  className="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs font-heading uppercase transition cursor-pointer flex items-center justify-center space-x-1.5 shadow-sm"
+                >
+                  <span>Chuyển sang mẫu đề xuất</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
 
-              {/* Grid of B2B Supplier Cards with 3 Thumbnails */}
-              {filteredSuppliers.length === 0 ? (
-                <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-2xl">
-                    🔍
-                  </div>
-                  <h4 className="text-base font-bold text-slate-900 font-heading">
-                    Không tìm thấy nhà cung ứng phù hợp
-                  </h4>
-                  <p className="text-xs text-slate-500 max-w-md mx-auto">
-                    Vui lòng thử tìm kiếm với các từ khóa phổ biến hơn hoặc đặt lại các bộ lọc A-Z và ngành nghề.
-                  </p>
-                  <button
-                    onClick={handleResetFilters}
-                    className="px-5 py-2.5 bg-[#0052cc] text-white font-bold text-xs rounded-xl shadow-sm hover:bg-blue-800 transition"
-                  >
-                    Đặt lại bộ lọc
-                  </button>
+              {/* Exact Section 5: KEYWORD CLUSTER RULE Box */}
+              <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-blue-950 space-y-2">
+                <div className="flex items-center space-x-1.5 font-bold text-xs font-heading text-blue-900">
+                  <ShieldCheck className="w-4 h-4 text-blue-700 shrink-0" />
+                  <span>QUY TẮC BẮT BUỘC: KEYWORD CLUSTER RULE</span>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {filteredSuppliers.map((supplier) => {
-                    const isSelected = selectedForCompare.some(item => item.id === supplier.id);
-
-                    return (
-                      <div
-                        key={supplier.id}
-                        className={`bg-white rounded-3xl p-5 border transition-all duration-200 flex flex-col justify-between space-y-4 hover:shadow-lg ${
-                          isSelected 
-                            ? 'border-blue-500 ring-2 ring-blue-500/20 shadow-md' 
-                            : 'border-slate-200 hover:border-blue-300'
-                        }`}
-                      >
-                        {/* Card Header: Name, KYC Badge, Tax ID */}
-                        <div className="space-y-2.5">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex items-center space-x-2">
-                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                                supplier.kycTier === 'Diamond'
-                                  ? 'bg-amber-100 text-amber-900 border border-amber-300'
-                                  : supplier.kycTier === 'Gold'
-                                  ? 'bg-blue-100 text-[#0052cc] border border-blue-200'
-                                  : 'bg-slate-200 text-slate-800'
-                              }`}>
-                                ★ KYC {supplier.verifiedKYC}
-                              </span>
-                              <span className="text-[10.5px] font-mono text-slate-400">
-                                MST: {supplier.taxId}
-                              </span>
-                            </div>
-
-                            {/* Checkbox for Compare */}
-                            <label className="inline-flex items-center space-x-1.5 cursor-pointer select-none bg-slate-50 hover:bg-blue-50 px-2 py-1 rounded-lg border border-slate-200 transition">
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => handleToggleCompare(supplier)}
-                                className="w-3.5 h-3.5 text-blue-600 rounded focus:ring-blue-500"
-                              />
-                              <span className="text-[10px] font-bold text-slate-600 font-heading">
-                                So sánh
-                              </span>
-                            </label>
-                          </div>
-
-                          <div>
-                            <h4 className="font-black text-sm text-slate-900 font-heading line-clamp-2 hover:text-[#0052cc] transition">
-                              {supplier.name}
-                            </h4>
-                            <div className="flex items-center space-x-1.5 text-xs text-slate-500 mt-1">
-                              <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                              <span className="truncate">{supplier.province} • {supplier.region}</span>
-                            </div>
-                          </div>
-
-                          <div className="inline-block px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-medium">
-                            {supplier.industry}
-                          </div>
-                        </div>
-
-                        {/* Visual Showcase: 3 Small Thumbnail Images (Mô Tả Năng Lực Minh Chứng) */}
-                        <div className="space-y-1.5 pt-1">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-heading">
-                            Sản phẩm / Năng lực thực tế:
-                          </span>
-                          <div className="grid grid-cols-3 gap-2">
-                            {supplier.thumbnails.map((thumb, tIdx) => (
-                              <div key={tIdx} className="group relative rounded-xl overflow-hidden aspect-video bg-slate-100 border border-slate-200">
-                                <img
-                                  src={thumb.img}
-                                  alt={thumb.name}
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-1">
-                                  <span className="text-[9px] text-white font-medium line-clamp-1 leading-tight">
-                                    {thumb.name}
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Capacity Metrics & Data Masking Row */}
-                        <div className="pt-2 border-t border-slate-100 space-y-2 text-xs">
-                          <div className="grid grid-cols-2 gap-2 text-[11px]">
-                            <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
-                              <span className="text-slate-400 block text-[10px]">Công suất:</span>
-                              <strong className="text-slate-800 font-mono font-bold truncate block">{supplier.capacity}</strong>
-                            </div>
-                            <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
-                              <span className="text-slate-400 block text-[10px]">Đơn hàng tối thiểu:</span>
-                              <strong className="text-slate-800 font-mono font-bold truncate block">{supplier.moq}</strong>
-                            </div>
-                          </div>
-
-                          {/* Data Masking Contact Row */}
-                          <div className="flex items-center justify-between text-[11px] bg-amber-50/60 border border-amber-200/60 p-2 rounded-xl">
-                            <div className="flex items-center space-x-1.5 text-amber-900 font-mono font-bold">
-                              <PhoneCall className="w-3.5 h-3.5 text-amber-600" />
-                              <span>Hotline: {supplier.maskedPhone}</span>
-                            </div>
-                            <button
-                              onClick={() => {
-                                setAuthModalTab('login');
-                                setIsAuthModalOpen(true);
-                              }}
-                              className="text-[10px] font-bold text-[#0052cc] hover:underline flex items-center space-x-0.5"
-                            >
-                              <Lock className="w-3 h-3" />
-                              <span>Hiện đầy đủ</span>
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Dual CTA: [Yêu Cầu Báo Giá] + [Kết Nối Odoo] */}
-                        <div className="grid grid-cols-2 gap-2 pt-2">
-                          <button
-                            onClick={() => handleOpenQuote(supplier)}
-                            className="py-2.5 bg-[#0052cc] hover:bg-[#0041a8] text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center justify-center space-x-1.5 font-heading uppercase cursor-pointer"
-                          >
-                            <Send className="w-3.5 h-3.5" />
-                            <span>Báo Giá</span>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              alert(`Đang khởi tạo liên kết SSO với Odoo ERP của Doanh nghiệp ${supplier.shortName}...`);
-                            }}
-                            className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 font-heading"
-                          >
-                            <ExternalLink className="w-3.5 h-3.5 text-purple-600" />
-                            <span>Kết Nối Odoo</span>
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                <p className="text-[11px] text-slate-700 leading-relaxed">
+                  Ví dụ: <em>“đồng phục công nhân”</em>, <em>“áo công nhân nhà máy”</em>, <em>“đồng phục nhà xưởng”</em> nếu cùng chung <strong>Buyer Intent</strong> thì bắt buộc quy về <strong>cùng một Keyword Cluster</strong>.
+                </p>
+                <div className="p-2 rounded-xl bg-white/80 border border-blue-200 text-[10.5px] font-mono text-slate-800">
+                  ⚠️ <strong>Chính sách minh bạch:</strong> Không bán 3 quyền Founding Partner riêng rẽ chỉ vì có 3 URL hoặc từ khóa gần giống nhau.
                 </div>
-              )}
-            </main>
+              </div>
+            </div>
           </div>
-        </div>
-      ) : (
-        /* GÓI TÀI TRỢ SÁNG LẬP FOUNDING PARTNER 2024 - 2027 SECTION */
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
-          
-          {/* Why Founding Partners */}
-          <section className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-mono font-bold text-amber-600 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-              TIÊN PHONG ĐỒNG HÀNH KIẾN TẠO
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
-              Vì Sao Cần Trở Thành Founding Partner?
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Founding Partners là các tập đoàn, tổ chức sản xuất và nhà cung ứng đầu ngành tiên phong bảo trợ hạ tầng kết nối chuỗi cung ứng quốc gia, đặt nền móng bền vững cho công nghiệp Việt Nam.
-            </p>
-          </section>
+        </section>
 
-          {/* 6 Value Pillars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* ==================================================================== */}
+        {/* 4. QUYỀN LỢI CÓ THỂ CÓ (01 ĐẾN 07 MODULES - Section 6) */}
+        {/* ==================================================================== */}
+        <section id="quyen-loi" className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6 scroll-mt-24">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-1.5">
+              <Award className="w-3.5 h-3.5 text-amber-600" />
+              <span>DANH MỤC ENTITLEMENTS</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              QUYỀN LỢI CÓ THỂ CÓ
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Hiển thị dạng module tiêu chuẩn. <strong>KHÔNG cam kết mặc định tất cả</strong> — Mỗi hợp đồng sẽ quyết định phạm vi entitlement thực tế.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { title: "Hạ Tầng Số Quốc Gia", desc: "Xây dựng nền tảng trung lập, phi lợi nhuận phục vụ hơn 50.000 doanh nghiệp sản xuất." },
-              { title: "Đặc Quyền Top 0", desc: "Ghim độc quyền Spotlight thương hiệu trên đỉnh sàn giao dịch và công cụ tìm kiếm." },
-              { title: "Kết Nối 620+ Nhà Máy FDI", desc: "Ưu tiên ghép nối các gói thầu mua sắm định kỳ hàng chục tỷ đồng của các tập đoàn FDI." },
-              { title: "Bảo Trợ Bởi VCCI", desc: "Được công nhận và tôn vinh trong tất cả các ấn phẩm, diễn đàn kinh tế cấp cao." },
-              { title: "Quyền Truy Cập Dữ Liệu", desc: "Nhận báo cáo phân tích chuỗi cung ứng chuyên sâu và dự báo nhu cầu thị trường." },
-              { title: "Hội Đồng Cố Vấn", desc: "Tham gia Ban Cố Vấn Phát Triển Hạ Tầng Số cùng các chuyên gia hàng đầu." }
-            ].map((p, idx) => (
-              <div key={idx} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0052cc] font-mono font-black flex items-center justify-center text-sm">
-                  0{idx + 1}
+              {
+                num: "01",
+                title: "KHỐI GIỚI THIỆU NỔI BẬT",
+                desc: "Vị trí nhận diện trang trọng đầu trang ngành hoặc cụm từ khóa tương ứng, luôn gắn nhãn bắt buộc 'ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC'.",
+                deliverable: "URL chuyên mục & ảnh chụp placement"
+              },
+              {
+                num: "02",
+                title: "HỒ SƠ NĂNG LỰC / PRODUCT SERVICE",
+                desc: "Chuẩn hóa hồ sơ năng lực 360° giới thiệu xưởng, dây chuyền máy móc, chứng chỉ ISO/FDI và quy cách sản phẩm dịch vụ.",
+                deliverable: "Trang hồ sơ năng lực doanh nghiệp"
+              },
+              {
+                num: "03",
+                title: "VIDEO GIỚI THIỆU",
+                desc: "Nhúng khung video phóng sự trực quan về xưởng may, xưởng cơ khí hoặc dây chuyền đóng gói giúp Buyer xác thực nhanh.",
+                deliverable: "Video YouTube 4K nhúng trực tiếp"
+              },
+              {
+                num: "04",
+                title: "CATALOGUE KỸ THUẬT SỐ",
+                desc: "Đính kèm E-Catalogue hoặc tài liệu giới thiệu giải pháp kỹ thuật dạng PDF cho phép Buyer tải về nghiên cứu.",
+                deliverable: "File PDF Catalogue kiểm duyệt"
+              },
+              {
+                num: "05",
+                title: "NỘI DUNG CHUYÊN MỤC",
+                desc: "Đồng hành xây dựng cẩm nang tiêu chuẩn kỹ thuật, kinh nghiệm nghiệm thu và hướng dẫn mua hàng cho Buyer.",
+                deliverable: "Bài viết chuyên sâu chuẩn Buyer Guide"
+              },
+              {
+                num: "06",
+                title: "HIỆN DIỆN TRONG CHƯƠNG TRÌNH",
+                desc: "Tham gia kết nối giao thương 1-1 tại ngày hội chuỗi cung ứng hoặc sự kiện B2B ngành nếu trong hợp đồng có thỏa thuận.",
+                deliverable: "Biên bản tham gia & kỷ yếu chương trình"
+              },
+              {
+                num: "07",
+                title: "BÁO CÁO QUYỀN LỢI",
+                desc: "Báo cáo minh bạch về các hạng mục đã hoàn thành, số liệu hiển thị thực tế (không dùng số liệu ảo) và phản hồi chuyên mục.",
+                deliverable: "File Báo cáo định kỳ Quý/Năm"
+              }
+            ].map((m, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-50/80 rounded-2xl p-5 border border-slate-200/80 flex flex-col justify-between space-y-3 hover:border-blue-300 transition"
+              >
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white font-mono font-black flex items-center justify-center text-xs shadow-xs">
+                    {m.num}
+                  </div>
+                  <h4 className="font-black text-xs sm:text-sm text-slate-900 font-heading">
+                    {m.title}
+                  </h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">
+                    {m.desc}
+                  </p>
                 </div>
-                <h4 className="font-black text-sm text-slate-900 font-heading">{p.title}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed">{p.desc}</p>
+                <div className="pt-2 border-t border-slate-200/60 text-[10px] font-mono text-slate-500">
+                  <span className="text-slate-400">Minh chứng: </span>
+                  <span className="text-blue-700 font-bold">{m.deliverable}</span>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Tiers Pricing Grid */}
-          <section className="space-y-6">
-            <div className="text-center space-y-1">
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
-                Các Gói Tham Gia Đồng Sáng Lập 2024 - 2027
-              </h3>
-              <p className="text-xs text-slate-500">
-                Áp dụng cho giai đoạn 3 năm đầu tiên xây dựng và chuẩn hóa hạ tầng số
+          <div className="text-center text-xs text-slate-500 italic">
+            * Lưu ý: Mỗi hợp đồng tài trợ cụ thể sẽ xác định chi tiết số lượng, tiến độ và tiêu chí nghiệm thu từng deliverable.
+          </div>
+        </section>
+
+        {/* ==================================================================== */}
+        {/* 5. LABEL BẮT BUỘC & MINH HỌA MINH BẠCH (Section 7) */}
+        {/* ==================================================================== */}
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-md mb-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
+              <span>TIÊU CHUẨN GIAO DIỆN CÔNG KHAI</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              LABEL BẮT BUỘC TRÊN CHUYÊN MỤC CÔNG CỘNG
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Khi xuất hiện trên <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-700">/nganh-nghe/[slug]</code> hoặc <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-700">/tu-khoa/[slug]</code>, khối tài trợ luôn có nhãn minh bạch rõ ràng.
+            </p>
+          </div>
+
+          {/* Visual Comparison Mockup */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Box 1: Khối Tài Trợ Chuyên Mục (Có Label) */}
+            <div className="p-5 rounded-3xl bg-gradient-to-br from-amber-50/50 to-orange-50/30 border-2 border-amber-300 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-black uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-1 rounded-md shadow-xs">
+                  ★ ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC
+                </span>
+                <span className="text-[10px] font-mono text-slate-500">
+                  Thời hạn: 01/2026 - 12/2026
+                </span>
+              </div>
+              <div>
+                <h4 className="font-black text-sm text-slate-900 font-heading">
+                  Chuyên Gia Đồng Phục - Công Ty TNHH Proser
+                </h4>
+                <p className="text-xs text-slate-600 mt-1">
+                  Đồng hành tài trợ chuyên mục <strong>Đồng phục công nhân nhà máy</strong> tại Đồng Nai & TP.HCM.
+                </p>
+              </div>
+              <div className="text-[11px] text-blue-700 flex items-center space-x-1 font-medium">
+                <Info className="w-3 h-3 text-blue-600" />
+                <Link to="/founding-partner" className="hover:underline">
+                  Tìm hiểu về chính sách Founding Partner →
+                </Link>
+              </div>
+            </div>
+
+            {/* Box 2: Kết Quả Tìm Kiếm Tự Nhiên (Organic Search) */}
+            <div className="p-5 rounded-3xl bg-slate-50 border border-slate-200 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider bg-slate-200 text-slate-700 px-2.5 py-1 rounded-md">
+                  KẾT QUẢ TÌM KIẾM TỰ NHIÊN (ORGANIC)
+                </span>
+                <span className="text-[10px] font-mono text-emerald-700">
+                  Xếp hạng theo năng lực & KYC
+                </span>
+              </div>
+              <div>
+                <h4 className="font-bold text-sm text-slate-900 font-heading">
+                  Nhà Cung Cấp Đã Thẩm Định KYC 3 Lớp
+                </h4>
+                <p className="text-xs text-slate-600 mt-1">
+                  Kết quả sắp xếp 100% trung lập theo tiêu chí kỹ thuật, số lượng máy, chứng chỉ và đánh giá của Buyer.
+                </p>
+              </div>
+              <div className="text-[11px] text-slate-500">
+                Founding Partner <strong>không được can thiệp</strong> thứ tự hoặc thay thế kết quả tìm kiếm tự nhiên.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================================== */}
+        {/* 6. FOUNDING PARTNER KHÔNG ĐƯỢC LÀM GÌ (10 HARD RULES - Section 8) */}
+        {/* ==================================================================== */}
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md mb-1.5">
+              <Lock className="w-3.5 h-3.5 text-rose-600" />
+              <span>10 NGUYÊN TẮC GIỚI HẠN BẮT BUỘC</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              FOUNDING PARTNER KHÔNG ĐƯỢC LÀM GÌ?
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Hệ thống bảo vệ tính trung lập tuyệt đối của sàn giao dịch chuỗi cung ứng quốc gia theo các điều khoản sau:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            {[
+              { rule: "01. KHÔNG thay thế bộ lọc/tìm kiếm", desc: "Không làm sai lệch hoặc vô hiệu hóa bộ lọc kỹ thuật của Buyer." },
+              { rule: "02. KHÔNG che khuất kết quả tìm kiếm", desc: "Không dùng pop-up, banner che lấp màn hình làm gián đoạn trải nghiệm." },
+              { rule: "03. KHÔNG tự động đứng #1 Organic Search", desc: "Kết quả tự nhiên sắp xếp độc lập, đối tác chỉ đứng ở khối tài trợ được phân định." },
+              { rule: "04. KHÔNG tăng Matching Score", desc: "SupplierMatchingService tuyệt đối không dùng số tiền tài trợ làm yếu tố chấm điểm." },
+              { rule: "05. KHÔNG nhận toàn bộ Buyer Lead", desc: "Mọi Buyer có quyền chọn gửi RFQ cho bất kỳ nhà cung ứng phù hợp nào." },
+              { rule: "06. KHÔNG xem dữ liệu Buyer Private", desc: "Thông tin liên hệ bảo mật, file dự toán riêng tư của Buyer không được chia sẻ trái phép." },
+              { rule: "07. KHÔNG tự biến thành Verified Supplier", desc: "Vẫn phải trải qua quy trình xác thực MST, năng lực xưởng như mọi doanh nghiệp." },
+              { rule: "08. KHÔNG tự thành Recommended Supplier", desc: "Nhãn gợi ý chỉ cấp khi đạt điểm tín nhiệm vận hành và kiểm tra thực địa." },
+              { rule: "09. KHÔNG độc quyền kết quả / ngăn NCC khác", desc: "Không ngăn cản các nhà sản xuất cùng ngành hiển thị trên sàn." },
+              { rule: "10. KHÔNG tạo quyền cổ đông / vốn đầu tư", desc: "Founding Partner là gói thương mại, không tạo quyền sở hữu hay can thiệp quản trị." }
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className="p-3.5 rounded-2xl bg-rose-50/50 border border-rose-100 flex items-start space-x-3"
+              >
+                <div className="w-5 h-5 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                  ✕
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold font-heading text-rose-950">
+                    {item.rule}
+                  </h4>
+                  <p className="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-900 text-slate-200 text-xs flex items-center justify-between flex-wrap gap-2">
+            <span className="font-mono text-[11px] text-amber-300">
+              ⚡ SupplierMatchingService: 100% Thuật toán trung lập khách quan
+            </span>
+            <span className="text-[10px] text-slate-400">
+              Cam kết tuân thủ quy chuẩn dữ liệu B2B quốc gia
+            </span>
+          </div>
+        </section>
+
+        {/* ==================================================================== */}
+        {/* 7. QUY TRÌNH HỢP TÁC 7 BƯỚC (Section 13) */}
+        {/* ==================================================================== */}
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md mb-1.5">
+              <Zap className="w-3.5 h-3.5 text-blue-600" />
+              <span>TIẾN TRÌNH MINH BẠCH</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              QUY TRÌNH HỢP TÁC TỪ ĐỀ XUẤT ĐẾN KÍCH HOẠT
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Gửi đề xuất chỉ tạo <strong>INQUIRY</strong> — Không bao giờ tự động kích hoạt thành Active Partnership khi chưa qua kiểm tra xung đột và hợp đồng.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-7 gap-2.5 text-xs">
+            {[
+              { step: "01", title: "Doanh Nghiệp", desc: "Tìm hiểu mô hình và định hình mục tiêu tài trợ" },
+              { step: "02", title: "Chọn Phạm Vi", desc: "Xác định Category + Cluster + Địa bàn + Thời hạn" },
+              { step: "03", title: "Gửi Đề Xuất", desc: "Submit form (Tạo mã INQUIRY duy nhất)" },
+              { step: "04", title: "Review & Check", desc: "Kiểm tra xung đột phạm vi (Scope Conflict Check)" },
+              { step: "05", title: "Quyền Lợi & Proposal", desc: "Thống nhất các deliverable cụ thể" },
+              { step: "06", title: "Ký Hợp Đồng", desc: "Ký kết hợp đồng thương mại có giá trị pháp lý" },
+              { step: "07", title: "Active & Báo Cáo", desc: "Bàn giao quyền lợi, minh chứng & nghiệm thu" }
+            ].map((s, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-50 rounded-2xl p-3 border border-slate-200/80 flex flex-col justify-between space-y-2 relative"
+              >
+                <div>
+                  <div className="text-[10px] font-mono font-bold text-blue-600 uppercase">
+                    BƯỚC {s.step}
+                  </div>
+                  <h4 className="font-bold text-xs text-slate-900 font-heading mt-0.5">
+                    {s.title}
+                  </h4>
+                </div>
+                <p className="text-[10px] text-slate-500 leading-tight">
+                  {s.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ==================================================================== */}
+        {/* 8. ACTIVE FOUNDING PARTNERS SHOWCASE (Section 20 & 21) */}
+        {/* ==================================================================== */}
+        <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-1.5">
+                <Crown className="w-3.5 h-3.5 text-amber-500" />
+                <span>ĐỐI TÁC TIÊN PHONG</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+                CÁC FOUNDING PARTNER ĐANG ĐỒNG HÀNH
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Các doanh nghiệp đang tài trợ phát triển chuyên mục và cụm ý định tìm kiếm
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {foundingPartnersData.tiers.map((tier, idx) => (
-                <div
-                  key={idx}
-                  className={`bg-white rounded-3xl p-6 border-2 flex flex-col justify-between shadow-card hover:shadow-card-hover transition relative ${tier.color} ${
-                    tier.isPopular ? 'ring-2 ring-amber-400' : ''
-                  }`}
-                >
-                  {tier.isPopular && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-500 text-slate-950 font-black text-[10px] rounded-full uppercase tracking-wider shadow-sm font-heading">
-                      Gói tiêu biểu
-                    </span>
-                  )}
+            <div className="text-[11px] font-mono text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+              Đang hoạt động: <strong className="text-emerald-700 font-bold">{activePartners.length}</strong> chuyên mục
+            </div>
+          </div>
 
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-black text-lg text-slate-900 font-heading">{tier.name}</h3>
-                      <div className="text-xl font-extrabold text-blue-700 mt-1 font-mono">{tier.price}</div>
-                      <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">{tier.target}</p>
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {activePartners.map(partner => (
+              <div
+                key={partner.id}
+                className="rounded-3xl p-6 border-2 border-amber-300 bg-gradient-to-br from-amber-50/40 via-white to-slate-50 space-y-4 shadow-sm"
+              >
+                {/* Header Badge */}
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <span className="text-[10px] font-mono font-black uppercase tracking-widest bg-amber-400 text-slate-950 px-2.5 py-1 rounded-md shadow-2xs">
+                    ★ ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                    Hiệu lực: {partner.startDate} → {partner.endDate}
+                  </span>
+                </div>
 
-                    <div className="border-t border-slate-200/80 pt-4 space-y-2.5">
-                      <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block font-heading">
-                        QUYỀN LỢI GỒM:
-                      </span>
-                      {tier.features.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-start text-xs text-slate-700">
-                          <Check className="w-3.5 h-3.5 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-                          <span>{feat}</span>
-                        </div>
+                <div>
+                  <h3 className="font-black text-base text-slate-900 font-heading">
+                    {partner.partnerName}
+                  </h3>
+                  <div className="text-xs text-blue-700 font-bold mt-0.5">
+                    {partner.brandTitle}
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1 line-clamp-2">
+                    {partner.slogan}
+                  </p>
+                </div>
+
+                {/* Scope Details */}
+                <div className="p-3 rounded-2xl bg-white border border-slate-200/80 space-y-1.5 text-xs">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-[10px] uppercase font-mono">Chuyên mục:</span>
+                    <strong className="text-slate-800 text-right">{partner.categoryName}</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-[10px] uppercase font-mono">Cụm ý định:</span>
+                    <span className="text-amber-700 font-bold text-right">{partner.keywordClusterName}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 text-[10px] uppercase font-mono">Địa bàn:</span>
+                    <span className="text-slate-600 text-right">{partner.locationName}</span>
+                  </div>
+                </div>
+
+                {/* Core Products / Deliverables */}
+                {Array.isArray(partner.coreProducts) && partner.coreProducts.length > 0 && (
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 font-mono block">Sản phẩm tiêu biểu:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {partner.coreProducts.map((p, pIdx) => (
+                        <span key={pIdx} className="text-[11px] px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium">
+                          {p.name}
+                        </span>
                       ))}
                     </div>
                   </div>
+                )}
 
-                  <button
-                    onClick={() => setSelectedTierModal(tier)}
-                    className={`mt-6 w-full py-2.5 rounded-xl font-bold text-xs transition font-heading uppercase cursor-pointer ${
-                      tier.isPopular
-                        ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-md'
-                        : 'bg-[#0b3f6d] hover:bg-blue-900 text-white'
-                    }`}
+                {/* Actions */}
+                <div className="flex items-center justify-between pt-2 border-t border-slate-200/60">
+                  <div className="text-xs text-slate-500 flex items-center space-x-1">
+                    <PhoneCall className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="font-mono">{partner.hotline}</span>
+                  </div>
+
+                  <Link
+                    to={`/nganh-nghe/${partner.categoryId}`}
+                    className="px-3.5 py-2 bg-slate-900 hover:bg-[#0052cc] text-white rounded-xl text-xs font-bold transition flex items-center space-x-1.5 font-heading"
                   >
-                    Đăng ký gói {tier.name} →
-                  </button>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      )}
-
-      {/* 5. KHỐI 5: FLOATING BOTTOM COMPARE DOCK (THANH SO SÁNH NỔI DƯỚI ĐÁY KHI CÓ CHỌN NHÀ CUNG CẤP) */}
-      {selectedForCompare.length > 0 && (
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[1000] w-full max-w-2xl px-4 animate-in slide-in-from-bottom-5 duration-200">
-          <div className="bg-slate-950/90 backdrop-blur-md text-white p-3.5 sm:p-4 rounded-3xl shadow-2xl border border-amber-400/40 flex items-center justify-between gap-3">
-            <div className="flex items-center space-x-3 overflow-hidden">
-              <div className="w-10 h-10 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-black shrink-0">
-                <ArrowLeftRight className="w-5 h-5" />
-              </div>
-              <div className="truncate">
-                <div className="text-xs font-bold font-heading text-amber-300">
-                  So Sánh Năng Lực Cung Ứng ({selectedForCompare.length}/3)
-                </div>
-                <div className="text-[11px] text-slate-300 truncate">
-                  {selectedForCompare.map(s => s.shortName || s.name).join(' • ')}
+                    <span>Xem Trên Chuyên Mục</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
 
-            <div className="flex items-center space-x-2 shrink-0">
-              <button
-                onClick={() => setSelectedForCompare([])}
-                className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white text-xs font-bold transition font-heading"
-              >
-                Xóa
-              </button>
-
-              <button
-                onClick={() => setIsCompareModalOpen(true)}
-                className="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition font-heading uppercase flex items-center space-x-1.5 cursor-pointer"
-              >
-                <span>So Sánh Ngay</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed flex items-center space-x-3">
+            <Info className="w-5 h-5 text-blue-600 shrink-0" />
+            <div>
+              <strong>Nguyên tắc vận hành nền tảng:</strong> Nếu một chuyên mục không có Founding Partner, trang ngành và từ khóa vẫn hoạt động đầy đủ 100% với Tìm kiếm, Lọc, Nhà cung ứng, SUPPI, Cẩm nang và Catalogue. Founding Partner là đối tác tăng cường, không phải điều kiện bắt buộc để chuyên mục tồn tại.
             </div>
           </div>
-        </div>
-      )}
+        </section>
 
-      {/* Comparison Matrix Modal */}
-      <SupplierCompareModal
-        isOpen={isCompareModalOpen}
-        onClose={() => setIsCompareModalOpen(false)}
-        suppliers={selectedForCompare}
-        onRequestQuote={(targetSupplier) => {
-          setIsCompareModalOpen(false);
-          handleOpenQuote(targetSupplier);
-        }}
-      />
-
-      {/* RFQ Quote Modal */}
-      <SupplierRequestQuoteModal
-        supplier={quoteSupplier}
-        isOpen={isQuoteModalOpen}
-        onClose={() => {
-          setIsQuoteModalOpen(false);
-          setQuoteSupplier(null);
-        }}
-      />
-
-      {/* Auth Modal for Unmasking Data */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        initialTab={authModalTab}
-      />
-
-      {/* Sponsorship Application Modal */}
-      {selectedTierModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl border border-slate-200">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="text-xs font-bold text-blue-600 uppercase font-heading">Đăng ký tham gia</span>
-                <h3 className="text-xl font-bold text-slate-900 font-heading">Gói {selectedTierModal.name} ({selectedTierModal.price})</h3>
-              </div>
-              <button onClick={() => setSelectedTierModal(null)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+        {/* ==================================================================== */}
+        {/* 9. REQUEST FORM (Exact Section 12: TRAO ĐỔI PHẠM VI ĐỒNG HÀNH) */}
+        {/* ==================================================================== */}
+        <section ref={formRef} className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-md space-y-6">
+          <div className="border-b border-slate-100 pb-4">
+            <div className="inline-flex items-center space-x-2 text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md mb-1.5">
+              <Send className="w-3.5 h-3.5 text-amber-600" />
+              <span>TIẾP NHẬN ĐỀ XUẤT HỢP TÁC</span>
             </div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
+              TRAO ĐỔI PHẠM VI ĐỒNG HÀNH
+            </h2>
+            <p className="text-xs text-slate-500 mt-1">
+              Gửi thông tin đề xuất tài trợ chuyên mục. Ban Điều Phối sẽ kiểm tra xung đột phạm vi và gửi bản dự thảo Proposal trong vòng 24 giờ.
+            </p>
+          </div>
 
-            <form onSubmit={handleRegisterTier} className="space-y-3 text-xs">
-              <div>
-                <label className="font-bold text-slate-700 block mb-1 font-heading">Tên Doanh nghiệp / Tổ chức *</label>
-                <input required type="text" placeholder="VD: Tập đoàn ABC" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl" />
+          {/* Confirmation Alert after submit */}
+          {formSubmitted && submissionResult && (
+            <div className="p-6 rounded-3xl bg-emerald-50 border-2 border-emerald-400 text-emerald-950 space-y-3">
+              <div className="flex items-center space-x-2">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
+                <h3 className="text-base font-black font-heading text-emerald-900">
+                  Gửi Đề Xuất Thành Công! (Mã Hồ Sơ: {submissionResult.publicCode})
+                </h3>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 font-heading">Người đại diện *</label>
-                  <input required type="text" placeholder="Họ và tên" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl" />
+              <p className="text-xs text-emerald-800 leading-relaxed">
+                Đề xuất hợp tác của doanh nghiệp đã được ghi nhận với trạng thái <strong>INQUIRY (Tiếp nhận đề xuất)</strong>. Ban Điều Phối sẽ tiến hành kiểm tra xung đột phạm vi (Scope Conflict Check) và gửi phản hồi đến email <strong>{formData.contactEmail}</strong> trong 24 giờ làm việc.
+              </p>
+              {submissionResult.isConflictWarning && (
+                <div className="p-3 rounded-xl bg-amber-100/80 border border-amber-300 text-amber-900 text-xs">
+                  ⚠️ <strong>Lưu ý nội bộ:</strong> Chuyên mục này hiện đang có đối tác khác đang đàm phán hoặc hoạt động. Ban Điều Phối sẽ tư vấn điều chỉnh thời điểm kích hoạt hoặc mở rộng sang cụm từ khóa phụ cận.
                 </div>
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 font-heading">Chức vụ *</label>
-                  <input required type="text" placeholder="Tổng Giám đốc / Giám đốc" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 font-heading">Số điện thoại *</label>
-                  <input required type="tel" placeholder="090 123 4567" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
-                </div>
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1 font-heading">Email doanh nghiệp *</label>
-                  <input required type="email" placeholder="contact@company.com" className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono" />
-                </div>
-              </div>
-              <div>
-                <label className="font-bold text-slate-700 block mb-1 font-heading">Ghi chú hoặc mong muốn kết nối</label>
-                <textarea rows="3" placeholder="Chia sẻ thêm về mục tiêu đồng hành..." className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl"></textarea>
-              </div>
-
-              <div className="pt-3 flex justify-end space-x-3 font-heading uppercase">
-                <button type="button" onClick={() => setSelectedTierModal(null)} className="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold">
-                  Hủy
+              )}
+              <div className="pt-2 flex items-center space-x-3">
+                <button
+                  onClick={() => {
+                    setFormSubmitted(false);
+                    setSubmissionResult(null);
+                  }}
+                  className="px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold font-heading uppercase transition"
+                >
+                  Gửi thêm đề xuất khác
                 </button>
-                <button type="submit" className="px-6 py-2 bg-[#0b3f6d] hover:bg-blue-900 text-white rounded-xl font-bold shadow-md cursor-pointer">
-                  {registerSuccess ? "Đang gửi..." : "Gửi thông tin đăng ký"}
+              </div>
+            </div>
+          )}
+
+          {/* The Actual Form */}
+          {!formSubmitted && (
+            <form onSubmit={handleSubmitInquiry} className="space-y-4 text-xs">
+              
+              {/* Organization Info */}
+              <div className="space-y-3">
+                <h4 className="font-bold font-heading text-slate-800 text-xs uppercase tracking-wider text-blue-700">
+                  A. THÔNG TIN DOANH NGHIỆP / TỔ CHỨC
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2 space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Tên Doanh Nghiệp / Tổ Chức *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={formData.companyName}
+                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                      placeholder="VD: Công Ty Cổ Phần May Mặc Á Châu..."
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Mã Số Thuế (MST) *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={formData.taxId}
+                      onChange={(e) => setFormData({ ...formData, taxId: e.target.value })}
+                      placeholder="VD: 0312345678"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 block">
+                    Website / Profile Doanh Nghiệp (Optional)
+                  </label>
+                  <input
+                    type="url"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                    placeholder="https://company.com"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:bg-white focus:border-[#0052cc] outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Contact Person */}
+              <div className="space-y-3 pt-3 border-t border-slate-100">
+                <h4 className="font-bold font-heading text-slate-800 text-xs uppercase tracking-wider text-blue-700">
+                  B. THÔNG TIN NGƯỜI ĐẠI DIỆN LIÊN HỆ
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Họ và Tên *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={formData.contactName}
+                      onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                      placeholder="Họ tên người liên hệ"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Chức Vụ *
+                    </label>
+                    <input
+                      required
+                      type="text"
+                      value={formData.roleTitle}
+                      onChange={(e) => setFormData({ ...formData, roleTitle: e.target.value })}
+                      placeholder="Giám đốc / Trưởng phòng B2B..."
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Email Doanh Nghiệp *
+                    </label>
+                    <input
+                      required
+                      type="email"
+                      value={formData.contactEmail}
+                      onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+                      placeholder="email@company.com"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="font-bold text-slate-700 block">
+                      Số Điện Thoại / Zalo *
+                    </label>
+                    <input
+                      required
+                      type="tel"
+                      value={formData.contactPhone}
+                      onChange={(e) => setFormData({ ...formData, contactPhone: e.target.value })}
+                      placeholder="090 123 4567"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono focus:bg-white focus:border-[#0052cc] outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Scope Confirmation in Form */}
+              <div className="space-y-3 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold font-heading text-slate-800 text-xs uppercase tracking-wider text-blue-700">
+                    C. PHẠM VI CHUYÊN MỤC ĐỀ XUẤT ĐỒNG HÀNH
+                  </h4>
+                  <button
+                    type="button"
+                    onClick={() => scopeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className="text-[11px] text-blue-600 hover:underline flex items-center space-x-1"
+                  >
+                    <span>Thay đổi bộ chọn</span>
+                    <ArrowUpRight className="w-3 h-3" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Chuyên mục:</span>
+                    <strong className="text-slate-800 block truncate">{formData.categoryName}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Cụm từ khóa:</span>
+                    <strong className="text-amber-700 block truncate">{formData.clusterName}</strong>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Địa bàn & KCN:</span>
+                    <span className="text-slate-700 block truncate">{formData.location} ({formData.kcn || 'Chung'})</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono uppercase text-slate-400 block">Thời hạn:</span>
+                    <span className="text-slate-700 block font-mono">
+                      {formData.expectedDuration === '6_MONTHS' ? '6 tháng' : formData.expectedDuration === '12_MONTHS' ? '12 tháng' : 'Thỏa thuận'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Objectives & Budget */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 block">
+                    Mục Tiêu Đồng Hành & Mong Muốn Kết Nối
+                  </label>
+                  <textarea
+                    rows="3"
+                    value={formData.objective}
+                    onChange={(e) => setFormData({ ...formData, objective: e.target.value })}
+                    placeholder="VD: Tiếp cận các tập đoàn FDI tại KCN Amata, giới thiệu dòng sản phẩm bảo hộ lao động đạt chuẩn xuất khẩu..."
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0052cc] outline-none"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-bold text-slate-700 block">
+                    Ngân Sách Dự Kiến / Thỏa Thuận (Optional)
+                  </label>
+                  <select
+                    value={formData.budget}
+                    onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-[#0052cc] outline-none"
+                  >
+                    <option value="Theo phạm vi đề xuất">Nhận phương án & dự toán theo phạm vi</option>
+                    <option value="Dưới 50 triệu / năm">Dưới 50 triệu / năm</option>
+                    <option value="50 - 100 triệu / năm">50 - 100 triệu / năm</option>
+                    <option value="100 - 200 triệu / năm">100 - 200 triệu / năm</option>
+                    <option value="Trên 200 triệu / năm">Gói chiến lược chuyên sâu (trên 200 triệu)</option>
+                  </select>
+                  <p className="text-[10.5px] text-slate-400 mt-1 leading-normal">
+                    * Khoản tài trợ được hạch toán là chi phí truyền thông/sự kiện thương mại, hoàn toàn tách biệt khỏi vốn góp hay cổ phần.
+                  </p>
+                </div>
+              </div>
+
+              {/* Mandatory Consent Checkbox */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80">
+                <label className="flex items-start space-x-2.5 cursor-pointer select-none">
+                  <input
+                    required
+                    type="checkbox"
+                    checked={formData.consent}
+                    onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                    className="w-4 h-4 text-amber-600 rounded mt-0.5"
+                  />
+                  <div className="text-[11px] text-amber-950 leading-relaxed">
+                    <strong className="block font-heading">CAM KẾT MINH BẠCH THƯƠNG MẠI:</strong>
+                    Tôi xác nhận hiểu rõ <strong>Founding Partner</strong> là gói tài trợ thương mại theo phạm vi xác định, không tạo quyền sở hữu/cổ đông tại CHUOICUNGUNG.COM, không can thiệp thuật toán tìm kiếm tự nhiên và tuân thủ các nguyên tắc minh bạch của hệ thống.
+                  </div>
+                </label>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="text-[11px] text-slate-500 flex items-center space-x-1.5">
+                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Phản hồi kết quả Scope Check trong 24 giờ làm việc.</span>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black text-xs sm:text-sm rounded-xl font-heading uppercase tracking-wide shadow-md transition cursor-pointer flex items-center justify-center space-x-2 disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>{isSubmitting ? "Đang gửi đề xuất..." : "GỬI ĐỀ XUẤT ĐỒNG HÀNH CHUYÊN MỤC"}</span>
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+          )}
+        </section>
 
-    </div>
+      </div>
+    </main>
   );
 }

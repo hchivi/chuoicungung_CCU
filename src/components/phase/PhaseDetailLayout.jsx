@@ -10,6 +10,7 @@ import {
 import { stagesData } from '../../data/mockData';
 import { stageSuppliers } from '../../data/stageSuppliersData';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { PHASE_SLUG_MAP, PHASE_ID_TO_SLUG_MAP, STAGE_ID_TO_SLUG_MAP } from '../../data/sixStagesData.js';
 import StageSupplierCard from '../stage/StageSupplierCard';
 import StageRequestQuoteModal from '../stage/StageRequestQuoteModal';
 
@@ -17,12 +18,14 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
   const { t, lang } = useLanguage();
   const navigate = useNavigate();
 
+  const resolvedPhaseId = PHASE_SLUG_MAP[phaseId] || phaseId;
+
   // Find current stage & phase
   let currentStage = stagesData[0];
   let currentPhase = stagesData[0].phases[0];
 
   for (const s of stagesData) {
-    const found = s.phases.find(p => p.id === phaseId);
+    const found = s.phases.find(p => p.id === resolvedPhaseId || p.slug === phaseId);
     if (found) {
       currentStage = s;
       currentPhase = found;
@@ -291,7 +294,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
           <span>&gt;</span>
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
           <span>&gt;</span>
-          <Link to={`/giai-doan/${currentStage.id}`} className="hover:text-blue-600 font-medium">
+          <Link to={`/giai-doan/${currentStage.slug || STAGE_ID_TO_SLUG_MAP[currentStage.id] || currentStage.id}`} className="hover:text-blue-600 font-medium">
             {lang === 'en' ? `Stage ${currentStage.id}: ${currentStage.titleEn || currentStage.title}` : `Giai đoạn ${currentStage.id}: ${currentStage.title}`}
           </Link>
           <span>&gt;</span>
@@ -397,7 +400,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
                 return (
                   <Link
                     key={p.id}
-                    to={`/pha/${p.id}`}
+                    to={`/pha/${p.slug || PHASE_ID_TO_SLUG_MAP[p.id] || p.id}`}
                     style={{
                       backgroundColor: isCurrent ? theme.darkColor : undefined,
                       color: isCurrent ? '#ffffff' : undefined
@@ -749,7 +752,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {prevPhase && (
             <Link
-              to={`/pha/${prevPhase.id}`}
+              to={`/pha/${prevPhase.slug || PHASE_ID_TO_SLUG_MAP[prevPhase.id] || prevPhase.id}`}
               className="bg-white rounded-2xl border border-slate-200 p-4 hover:border-slate-300 hover:shadow-sm transition space-y-2 group"
             >
               <div className="flex items-center space-x-2 text-xs text-slate-500 font-bold">
@@ -766,7 +769,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
 
           {nextPhase && (
             <Link
-              to={`/pha/${nextPhase.id}`}
+              to={`/pha/${nextPhase.slug || PHASE_ID_TO_SLUG_MAP[nextPhase.id] || nextPhase.id}`}
               className="bg-white rounded-2xl border border-slate-200 p-4 hover:border-slate-300 hover:shadow-sm transition space-y-2 group"
             >
               <div className="flex items-center space-x-2 text-xs text-slate-500 font-bold">
@@ -782,7 +785,7 @@ export default function PhaseDetailLayout({ phaseId = "1.1", customHeroSubtitle 
           )}
 
           <Link
-            to={`/giai-doan/${currentStage.id}`}
+            to={`/giai-doan/${currentStage.slug || STAGE_ID_TO_SLUG_MAP[currentStage.id] || currentStage.id}`}
             style={{ backgroundColor: `${theme.color}10`, borderColor: `${theme.color}30` }}
             className="rounded-2xl border p-4 hover:shadow-sm transition space-y-2 flex flex-col justify-between"
           >

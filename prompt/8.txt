@@ -1,0 +1,542 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 08: CHUYÊN MỤC NHU CẦU / NGÀNH NGHỀ
+ROUTE: /nganh-nghe/[slug]
+
+MỤC TIÊU:
+Biến /nganh-nghe/[slug] thành Category Hub giúp Buyer:
+
+1. Hiểu nhóm nhu cầu này gồm những gì.
+2. Tìm Product/Service và Nhà cung ứng liên quan.
+3. Đi sâu xuống các keyword/use-case cụ thể.
+4. Gửi nhu cầu cho SUPPI.
+5. Xem chương trình, catalogue và nội dung liên quan.
+
+Đây KHÔNG phải blog category.
+Đây là một trang sourcing theo ngành.
+
+QUAN TRỌNG:
+- Reuse taxonomy hiện tại.
+- Không tạo category duplicate.
+- Không nhân bản cùng nội dung thành nhiều URL SEO giống nhau.
+- Không hard-code Supplier/Founding Partner vào page.
+- Supplier list lấy từ database thật.
+- Founding Partner là khối tài trợ riêng có nhãn, không ảnh hưởng organic matching.
+- Tạo luôn phần Admin quản lý Category.
+
+==================================================
+1. AUDIT + TAXONOMY
+==================================================
+
+Audit route hiện tại:
+
+/nganh-nghe/[slug]
+
+Kiểm tra:
+- category model;
+- slug;
+- parent/child;
+- 6 giai đoạn;
+- keywords;
+- products/services;
+- suppliers;
+- SEO;
+- admin.
+
+Reuse nếu đã có.
+
+Category hierarchy phải hỗ trợ:
+
+6 GIAI ĐOẠN
+→ NHÓM NHU CẦU
+→ CATEGORY
+→ KEYWORD / USE CASE
+→ PRODUCT / SERVICE
+→ SUPPLIER
+
+Không tạo category riêng chỉ vì khác cách gọi.
+
+Ví dụ các từ đồng nghĩa phải có thể map về cùng category/keyword cluster.
+
+==================================================
+2. CATEGORY DATA MODEL
+==================================================
+
+Category cần hỗ trợ:
+
+id
+parentId?
+stageId?
+
+name
+slug
+
+shortDescription
+buyerIntent
+
+icon?
+image?
+
+status
+publishable
+
+seoTitle?
+seoDescription?
+
+sortOrder
+
+createdAt
+updatedAt
+
+Relation:
+
+category_keywords
+category_products
+supplier_categories
+category_programs
+category_catalogues
+
+Nếu đã có model tương đương:
+REUSE.
+
+==================================================
+3. SLUG
+==================================================
+
+Slug:
+
+- lowercase;
+- không dấu;
+- "-";
+- unique.
+
+Ví dụ:
+
+/nganh-nghe/dong-phuc-bao-ho
+/nganh-nghe/bao-bi
+/nganh-nghe/co-khi
+/nganh-nghe/logistics
+
+Internal ID dùng UUID.
+
+Nếu đổi slug:
+redirect URL cũ → URL mới.
+
+==================================================
+4. UX/UI PAGE
+==================================================
+
+Thiết kế theo thứ tự:
+
+01. BREADCRUMB
+
+Trang chủ
+→ Giai đoạn
+→ Category
+
+--------------------------------------------------
+
+02. HERO
+
+H1:
+[Tên chuyên mục]
+
+Ví dụ:
+ĐỒNG PHỤC & BẢO HỘ CHO NHÀ MÁY
+
+Sub:
+Giải thích ngắn Buyer có thể tìm những nhóm sản phẩm/dịch vụ nào tại đây.
+
+Search:
+
+“Bạn đang cần gì trong nhóm này?”
+
+CTA chính:
+[HỎI SUPPI TÌM NGUỒN]
+
+CTA phụ:
+[ĐĂNG NHU CẦU]
+
+--------------------------------------------------
+
+03. NHÓM NHU CẦU / KEYWORD
+
+Hiển thị các nhu cầu con thực sự thuộc Category.
+
+Ví dụ:
+
+Đồng phục công nhân
+Áo polo
+Bảo hộ lao động
+Áo phản quang
+Giày bảo hộ
+Nón bảo hộ
+
+Mỗi item link:
+
+/tu-khoa/[slug]
+
+Không tạo URL keyword nếu chưa có:
+- buyer intent rõ;
+- dữ liệu;
+- nội dung khác biệt.
+
+--------------------------------------------------
+
+04. SEARCH & FILTER SUPPLIER
+
+Reuse SupplierSearchService từ Page 05.
+
+Filters chính:
+
+Product/Service
+Province
+Industrial Park
+Order size
+Availability
+Certification
+
+Category tự pre-filter theo page hiện tại.
+
+Không xây search engine riêng cho page này.
+
+--------------------------------------------------
+
+05. ĐĂNG NHU CẦU
+
+Block nổi bật:
+
+“CHƯA TÌM THẤY ĐÚNG NGUỒN?”
+
+Textarea ngắn:
+
+“Mô tả điều doanh nghiệp đang cần...”
+
+CTA:
+[ĐỂ SUPPI TÌM NGUỒN]
+
+Khi submit:
+
+create RequirementDraft với sẵn:
+
+categoryId
+sourcePage
+sourceSlug
+
+Sau đó:
+
+/tro-ly-ai
+
+hoặc
+/dang-nhu-cau?draft={id}
+
+theo workflow hiện tại.
+
+Không auto publish.
+
+--------------------------------------------------
+
+06. FOUNDING PARTNER
+
+Nếu có hợp đồng active cho Category này:
+
+hiển thị block riêng:
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+Hiển thị:
+Logo
+Tên
+Năng lực
+Phạm vi phục vụ
+Video nếu có
+CTA xem hồ sơ
+
+Data phải lấy từ:
+founding_partnerships
+
+Check:
+category
+keyword cluster nếu áp dụng
+location
+startDate
+endDate
+status
+
+KHÔNG:
+- hard-code logo;
+- đứng trước Search;
+- tự đứng #1 supplier result;
+- nhận toàn bộ lead;
+- hiển thị như chứng nhận của CHUOICUNGUNG.COM.
+
+Nếu hết hạn:
+tự ngừng block nổi bật.
+
+--------------------------------------------------
+
+07. NHÀ CUNG ỨNG LIÊN QUAN
+
+Reuse SupplierCard từ Page 05.
+
+Hiển thị một số NCC có dữ liệu liên quan đến Category.
+
+Card gồm:
+Tên
+Năng lực
+Product/Service
+Service area
+Order condition
+Evidence indicator
+Updated date
+
+CTA:
+[XEM NĂNG LỰC]
+[GỬI YÊU CẦU]
+
+Không dùng:
+Top Supplier
+Best Supplier
+fake rating.
+
+--------------------------------------------------
+
+08. HƯỚNG DẪN BUYER
+
+Block ngắn:
+
+“TRƯỚC KHI TÌM NGUỒN, BẠN NÊN CHUẨN BỊ GÌ?”
+
+Nội dung lấy từ Category configuration/CMS.
+
+Ví dụ với đồng phục:
+
+- số lượng;
+- loại nhân sự;
+- môi trường làm việc;
+- chất liệu nếu biết;
+- yêu cầu logo;
+- thời gian cần;
+- địa điểm giao;
+- có cần mẫu hay không.
+
+Không hard-code một checklist dùng cho mọi ngành.
+
+==================================================
+5. CHƯƠNG TRÌNH + CATALOGUE
+==================================================
+
+Nếu có dữ liệu:
+
+hiển thị:
+
+CHƯƠNG TRÌNH LIÊN QUAN
+
+CATALOGUE / BỘ HỒ SƠ LIÊN QUAN
+
+Lấy từ relation database.
+
+Không nhập card chương trình thủ công riêng trên page.
+
+Nếu không có:
+ẩn block.
+
+==================================================
+6. SUPPI
+==================================================
+
+SUPPI trên Category Page phải hiểu context hiện tại:
+
+categoryId
+category name
+search/filter
+location nếu user chọn
+
+Ví dụ Buyer hỏi:
+
+“Tôi cần 500 bộ tại Đồng Nai.”
+
+SUPPI phải hiểu:
+
+Category hiện tại
++
+500 bộ
++
+Đồng Nai
+
+để tạo Requirement Draft.
+
+Không hỏi lại category nếu đã rõ.
+
+==================================================
+7. SEO
+==================================================
+
+Title:
+
+[Tên chuyên mục] | Tìm Nhà Cung Ứng | CHUOICUNGUNG.COM
+
+Meta:
+
+Tìm sản phẩm, dịch vụ và nhà cung ứng trong nhóm [Category] theo năng lực, địa bàn và điều kiện đáp ứng.
+
+Canonical:
+
+/nganh-nghe/[slug]
+
+Schema phù hợp:
+
+CollectionPage
+ItemList
+BreadcrumbList
+
+Không dùng fake rating.
+
+Filter URLs:
+không tự index tất cả combination.
+
+Canonical/noindex phải xử lý để tránh index explosion.
+
+==================================================
+8. ADMIN CATEGORY
+==================================================
+
+Tạo/reuse:
+
+/admin/danh-muc
+
+/admin/danh-muc/[id]
+
+Admin quản lý:
+
+Tên
+Slug
+Parent category
+Giai đoạn
+Mô tả
+Buyer intent
+Keywords
+Products/Services
+Supplier mapping
+Buyer guide
+SEO
+Publish state
+Sort order
+
+Tabs:
+
+Tổng quan
+Taxonomy
+Keywords
+Products / Services
+Suppliers
+Programs
+Catalogue
+Founding Partner
+SEO
+Audit
+
+Admin phải nhìn thấy:
+
+- bao nhiêu Supplier thuộc Category;
+- bao nhiêu ProductService;
+- bao nhiêu keyword child;
+- chương trình liên quan;
+- Founding Partner active;
+- category có đủ dữ liệu để publish hay chưa.
+
+Mọi thay đổi tạo AuditLog.
+
+Không hard delete category đã có relation.
+
+Dùng:
+ARCHIVED
+
+Nếu merge category:
+phải remap relations trước.
+
+==================================================
+9. PUBLICATION RULE
+==================================================
+
+Category chỉ public khi:
+
+status = ACTIVE
+publishable = true
+
+Nếu Category chưa đủ data:
+có thể giữ draft trong Admin.
+
+Không tạo hàng trăm category page rỗng chỉ để SEO.
+
+==================================================
+10. MOBILE
+==================================================
+
+Mobile ưu tiên:
+
+Hero
+Search
+Keyword chips
+SUPPI CTA
+Supplier list
+Buyer guide
+Founding Partner nếu có
+Programs/Catalogue
+
+Filter mở bottom sheet.
+
+Không overflow 390px.
+
+==================================================
+11. QA
+==================================================
+
+Test:
+
+1. Category slug unique.
+2. Breadcrumb đúng hierarchy.
+3. Supplier list đúng Category.
+4. ProductService đúng Category.
+5. Search reuse SupplierSearchService.
+6. Keyword link đúng /tu-khoa/[slug].
+7. Requirement Draft giữ category context.
+8. Founding Partner chỉ hiện khi active.
+9. Founding Partner không ảnh hưởng organic ranking.
+10. Không có fake count/rating.
+11. Category unpublished không public.
+12. Filter URLs không gây index explosion.
+13. Admin edit tạo AuditLog.
+14. Category archived không làm mất historical relations.
+15. Mobile 390px hoạt động.
+
+==================================================
+12. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- files changed;
+- model/table reused;
+- migration;
+- category relations;
+- API/server actions;
+- admin changes;
+- SEO implementation;
+- real data vs mock;
+- QA PASS / FAIL / BLOCKED.
+
+MỤC TIÊU CUỐI:
+
+/nganh-nghe/[slug]
+
+phải tạo được luồng:
+
+NGÀNH / NHÓM NHU CẦU
+→ NHU CẦU CỤ THỂ
+→ PRODUCT / SERVICE
+→ NHÀ CUNG ỨNG
+→ SUPPI
+→ REQUIREMENT
+→ MATCHING
+
+Không biến page này thành một bài blog dài.

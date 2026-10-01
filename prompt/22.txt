@@ -1,0 +1,1308 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 22: ĐĂNG KÝ CHƯƠNG TRÌNH
+ROUTE: /chuong-trinh/[slug]/dang-ky
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây một Registration Form Engine dùng chung cho mọi Program.
+
+Luồng:
+
+PROGRAM
+→ CHỌN ROLE
+→ NHẬP THÔNG TIN THEO ROLE
+→ REVIEW QUYỀN LỢI / PHÍ / POLICY
+→ SUBMIT
+→ REGISTRATION
+→ REVIEW
+→ PAYMENT NẾU CÓ
+→ ATTENDANCE
+→ MEETING / FOLLOW-UP
+
+Không tạo form riêng hoàn toàn cho Buyer, Supplier và Sponsor.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/chuong-trinh/[slug]/dang-ky
+
+Reuse:
+
+Program
+ProgramParticipationOption
+Organization
+User
+SupplierProfile
+Requirement
+ServiceArea
+Capability
+ProductService
+Sponsor/Partnership Request
+Payment
+Attendance
+Consent
+Attachments
+Tasks
+AuditLog
+
+Reuse FormEngine nếu đã có từ:
+
+/dang-nhu-cau
+/yeu-cau-dich-vu
+
+Không duplicate Organization/Profile data.
+
+==================================================
+2. PAGE HEADER
+==================================================
+
+H1:
+
+“ĐĂNG KÝ THAM GIA [TÊN CHƯƠNG TRÌNH]”
+
+Sub:
+
+“Chọn vai trò và cho biết nhu cầu hoặc năng lực của doanh nghiệp. Thông tin giúp đội điều phối chuẩn bị hình thức tham gia phù hợp.”
+
+Hiển thị Program Summary:
+
+Tên
+Ngày
+Địa điểm
+Status
+Registration deadline
+Participation option đang chọn
+
+==================================================
+3. FORM 3 BƯỚC
+==================================================
+
+Bắt buộc:
+
+STEP 1
+THÔNG TIN CHUNG + ROLE
+
+STEP 2
+THÔNG TIN THEO VAI TRÒ
+
+STEP 3
+KIỂM TRA & GỬI
+
+Không đưa 30–40 fields lên một màn hình.
+
+==================================================
+4. KHÔNG ÉP LOGIN NGAY
+==================================================
+
+User phải có thể:
+
+- đọc Program;
+- mở form;
+- bắt đầu nhập dữ liệu;
+
+mà chưa bắt buộc login.
+
+Chỉ yêu cầu xác nhận danh tính / login
+tại điểm cần lưu hoặc submit nếu architecture yêu cầu.
+
+Nếu guest bắt đầu form rồi login:
+
+GIỮ TOÀN BỘ DRAFT.
+
+Không làm mất dữ liệu.
+
+==================================================
+5. STEP 1 — ROLE
+==================================================
+
+Cho chọn:
+
+BUYER
+
+SUPPLIER
+
+SPONSOR
+
+Nếu link đến từ:
+
+?role=buyer
+?role=supplier
+?role=sponsor
+
+thì preselect nhưng user được kiểm tra lại
+nếu Program cho phép nhiều role.
+
+==================================================
+6. STEP 1 — THÔNG TIN CHUNG
+==================================================
+
+Fields:
+
+Vai trò
+
+Doanh nghiệp / Organization
+
+Người liên hệ
+
+Chức danh
+
+Email hoặc điện thoại xác nhận
+
+Số người dự kiến tham gia
+
+Hình thức tham gia
+
+Participation option
+
+Nếu login:
+
+reuse:
+Organization
+User
+Contact
+SupplierProfile
+
+Không bắt nhập lại dữ liệu đã có.
+
+==================================================
+7. CONTACT VERIFICATION
+==================================================
+
+Trước khi registration được xác nhận:
+
+phải có contact có thể sử dụng được.
+
+Tùy architecture hiện tại:
+
+email verification
+hoặc
+phone verification
+hoặc
+authenticated account + existing verified contact.
+
+Không tự gọi contact là verified
+nếu hệ thống chưa xác nhận.
+
+==================================================
+8. STEP 2 — BUYER
+==================================================
+
+Nếu role = BUYER:
+
+Fields:
+
+Nhóm nhu cầu
+
+Mô tả nhu cầu
+
+Category
+
+Product/Service nếu biết
+
+Địa bàn cần cung ứng
+
+KCN nếu có
+
+Thời điểm cần
+
+Số lượng / quy mô optional
+
+Tiêu chí phù hợp
+
+Có cần mẫu?
+
+Có cần khảo sát?
+
+Người phụ trách trao đổi
+
+Phạm vi cho phép chia sẻ
+
+Attachments optional
+
+Cho phép:
+
+PRIVATE
+
+MATCHED_SUPPLIERS_ONLY
+
+PUBLIC_SUMMARY
+
+Không tự public Buyer Need.
+
+==================================================
+9. BUYER REGISTRATION → REQUIREMENT
+==================================================
+
+Nếu Buyer nhập một nhu cầu mới:
+
+không copy data thành một “Program Need” riêng.
+
+Flow:
+
+ProgramRegistration
+→ RequirementDraft
+→ Buyer review
+→ Requirement
+
+Requirement giữ relation:
+
+programId
+
+Nếu Buyer đã có Requirement:
+
+cho phép chọn Requirement hiện có.
+
+Không duplicate Need chỉ vì tham gia Program.
+
+==================================================
+10. BUYER CONFIDENTIAL FILES
+==================================================
+
+Technical specs
+Price
+Private drawing
+Internal document
+
+phải private.
+
+Không public trong Program detail.
+
+Chỉ Supplier/Coordinator được cấp quyền mới xem.
+
+==================================================
+11. STEP 2 — SUPPLIER
+==================================================
+
+Nếu role = SUPPLIER:
+
+Fields:
+
+Category
+
+Năng lực chính
+
+Product/Service
+
+Địa bàn phục vụ
+
+Hồ sơ doanh nghiệp
+
+Profile URL nếu có
+
+Capability liên quan
+
+Service Area
+
+Catalogue optional
+
+Sample muốn trưng bày
+
+Meeting request
+
+Participation option
+
+Ghi chú
+
+==================================================
+12. REUSE SUPPLIER PROFILE
+==================================================
+
+Nếu Supplier đã có hồ sơ:
+
+hiển thị:
+
+“ĐÃ TÌM THẤY HỒ SƠ DOANH NGHIỆP”
+
+Prefill:
+
+Capabilities
+
+ProductsServices
+
+Service Area
+
+Catalogue
+
+Contact
+
+Không bắt Supplier khai lại mọi thứ.
+
+Cho user chọn:
+những capability/product nào áp dụng cho Program này.
+
+==================================================
+13. SUPPLIER PROFILE CHƯA ĐỦ
+==================================================
+
+Nếu thiếu:
+
+Capability
+Service Area
+Product
+Evidence quan trọng
+
+hiển thị:
+
+“HỒ SƠ CÒN THIẾU THÔNG TIN”
+
+Cho phép:
+
+[HOÀN THIỆN HỒ SƠ]
+
+nhưng không nhất thiết chặn việc lưu Draft Registration.
+
+==================================================
+14. SUPPLIER MEETING REQUEST
+==================================================
+
+Field:
+
+“TÔI MUỐN ĐỀ NGHỊ CUỘC GẶP”
+
+Có thể chọn:
+
+Buyer Need cụ thể
+Category
+Program topic
+
+Nhưng đây chỉ là:
+
+MEETING REQUEST
+
+Không tự tạo:
+
+CONFIRMED MEETING.
+
+==================================================
+15. RULE: REGISTRATION ≠ MEETING
+==================================================
+
+Supplier đăng ký thành công
+KHÔNG đồng nghĩa có lịch gặp.
+
+Supplier trả phí
+KHÔNG đồng nghĩa có lịch gặp.
+
+Meeting cần:
+
+Need phù hợp
+Supplier phù hợp
+Buyer/Coordinator review
+Availability
+Confirmation.
+
+==================================================
+16. STEP 2 — SPONSOR
+==================================================
+
+Nếu role = SPONSOR:
+
+Fields:
+
+Phạm vi quan tâm
+
+Program sponsorship type
+
+Hình thức đóng góp
+
+Ngân sách dự kiến optional
+
+Quyền lợi quan tâm
+
+Nội dung muốn đồng hành
+
+Contact person
+
+Ghi chú
+
+Nhánh Sponsor:
+
+chỉ tạo Sponsor/Partnership Inquiry.
+
+KHÔNG tự tạo:
+Active Sponsorship
+Entitlement
+Contract
+Sponsor badge.
+
+==================================================
+17. SPONSOR REGISTRATION
+==================================================
+
+ProgramRegistration có thể lưu role SPONSOR
+nếu architecture cần để theo dõi inquiry.
+
+Nhưng commercial workflow phải tiếp tục qua:
+
+Inquiry
+→ Proposal
+→ Contract
+→ Active Sponsorship.
+
+Không activate từ form.
+
+==================================================
+18. STEP 3 — REVIEW
+==================================================
+
+Hiển thị lại:
+
+Program
+
+Role
+
+Organization
+
+Contact
+
+Participation option
+
+Role-specific information
+
+Fee nếu có
+
+Policy
+
+Sharing scope
+
+Consent
+
+Attachments
+
+CTA:
+
+[GỬI ĐĂNG KÝ]
+
+==================================================
+19. FEE
+==================================================
+
+Fee lấy từ:
+
+ProgramParticipationOption.
+
+Không hard-code.
+
+Có thể:
+
+FREE
+
+FIXED
+
+QUOTE_REQUIRED
+
+Nếu FREE:
+hiển thị đúng “Miễn phí”.
+
+Nếu FIXED:
+hiển thị amount + currency.
+
+Nếu QUOTE_REQUIRED:
+hiển thị “Nhận báo giá / trao đổi phạm vi”.
+
+==================================================
+20. POLICY
+==================================================
+
+Trước submit hiển thị:
+
+Registration conditions
+
+Change information policy
+
+Cancellation policy
+
+Postponement policy
+
+Refund policy nếu có
+
+Payment terms nếu có
+
+Privacy / sharing scope
+
+Không ẩn policy sau submit.
+
+==================================================
+21. CONSENT
+==================================================
+
+Tách ít nhất:
+
+A.
+Đồng ý xử lý thông tin cho Registration này.
+
+B.
+Đồng ý chia sẻ contact trong phạm vi Program
+nếu phù hợp.
+
+C.
+Marketing consent.
+
+Marketing phải optional.
+
+Không gộp thành một checkbox duy nhất.
+
+==================================================
+22. SUBMIT SERVER FLOW
+==================================================
+
+Flow:
+
+VALIDATE PROGRAM
+→ VALIDATE REGISTRATION WINDOW
+→ VALIDATE ROLE
+→ RESOLVE ORGANIZATION
+→ VERIFY CONTACT
+→ DUPLICATE CHECK
+→ CREATE REGISTRATION
+→ CREATE ROLE-SPECIFIC RELATIONS
+→ ASSIGN OWNER
+→ CREATE TASK
+→ AUDIT
+→ NOTIFY
+→ RETURN REGISTRATION CODE
+
+==================================================
+23. REGISTRATION CODE
+==================================================
+
+Tạo public code:
+
+DK-2026-00125
+
+UUID internal riêng.
+
+Success:
+
+“CHÚNG TÔI ĐÃ NHẬN ĐĂNG KÝ DK-2026-00125.”
+
+“Bạn có thể theo dõi trạng thái và cập nhật thông tin tại Chương trình của tôi.”
+
+==================================================
+24. REGISTRATION STATUS
+==================================================
+
+RegistrationStatus riêng:
+
+DRAFT
+
+SUBMITTED
+
+UNDER_REVIEW
+
+NEED_MORE_INFO
+
+APPROVED
+
+REJECTED
+
+WITHDRAWN
+
+CANCELLED
+
+Không dùng:
+
+PAID
+ATTENDED
+
+trong RegistrationStatus.
+
+==================================================
+25. PAYMENT STATUS
+==================================================
+
+PaymentStatus riêng:
+
+NOT_REQUIRED
+
+NOT_STARTED
+
+PENDING
+
+PAID
+
+PARTIALLY_PAID
+
+FAILED
+
+REFUND_PENDING
+
+PARTIALLY_REFUNDED
+
+REFUNDED
+
+CANCELLED
+
+Nếu hệ thống payment chưa tích hợp:
+không giả lập Paid.
+
+==================================================
+26. ATTENDANCE STATUS
+==================================================
+
+AttendanceStatus riêng:
+
+NOT_ELIGIBLE
+
+EXPECTED
+
+CHECKED_IN
+
+ATTENDED
+
+NO_SHOW
+
+CANCELLED
+
+Không tự đặt ATTENDED khi QR được tạo.
+
+==================================================
+27. BA STATE KHÔNG ĐƯỢC GỘP
+==================================================
+
+Ví dụ hợp lệ:
+
+Registration:
+APPROVED
+
+Payment:
+PAID
+
+Attendance:
+EXPECTED
+
+Hoặc:
+
+Registration:
+APPROVED
+
+Payment:
+NOT_REQUIRED
+
+Attendance:
+NO_SHOW
+
+Không tạo một status duy nhất:
+
+SUCCESS.
+
+==================================================
+28. APPROVAL BEFORE PAYMENT
+==================================================
+
+Nếu Program có registration approval:
+
+SUBMITTED
+→ UNDER_REVIEW
+→ APPROVED
+
+sau đó mới:
+
+Payment instruction.
+
+Không yêu cầu user thanh toán trước khi Registration được chấp nhận
+nếu Program policy yêu cầu review.
+
+==================================================
+29. QR
+==================================================
+
+QR chỉ phát khi:
+
+Registration APPROVED
+
+AND
+
+Payment đủ điều kiện nếu required
+
+AND
+
+Program cho phép check-in.
+
+QR phải map tới:
+
+registrationId / attendee token
+
+Không encode contact/private data trực tiếp vào QR.
+
+==================================================
+30. QR ≠ SALES LEAD
+==================================================
+
+QR scan/check-in chỉ tạo Attendance Event.
+
+Không tự:
+
+create Requirement
+
+create Connection
+
+create Opportunity
+
+mark Buyer interest
+
+mark Deal.
+
+==================================================
+31. MULTI-ATTENDEE
+==================================================
+
+Nếu doanh nghiệp đăng ký nhiều người:
+
+Có primary contact.
+
+Có attendee list.
+
+Fields:
+
+name
+title
+email/phone nếu cần
+attendance status
+
+Không cấp Organization admin cho mọi attendee.
+
+==================================================
+32. GROUP / DELEGATION
+==================================================
+
+Supplier hoặc Association có thể có đoàn.
+
+Cần:
+
+delegationLead
+
+members[]
+
+Không duplicate Registration cho từng member
+nếu business rule là một Registration theo Organization.
+
+Attendance có thể tracking từng person.
+
+==================================================
+33. DUPLICATE DETECTION
+==================================================
+
+Check:
+
+programId
+organizationId
+role
+participationOption
+
+Nếu Registration tương tự đã tồn tại:
+
+hiển thị:
+
+“DOANH NGHIỆP ĐÃ CÓ ĐĂNG KÝ CHO CHƯƠNG TRÌNH NÀY.”
+
+CTA:
+
+[XEM / CẬP NHẬT ĐĂNG KÝ]
+
+Không tạo duplicate.
+
+==================================================
+34. DRAFT
+==================================================
+
+Autosave Draft.
+
+Guest:
+temporary/session draft.
+
+Logged in:
+persistent draft.
+
+Draft phải giữ khi:
+
+login
+refresh
+network failure.
+
+==================================================
+35. ACCOUNT WORKSPACE
+==================================================
+
+Reuse/create:
+
+/tai-khoan/chuong-trinh
+
+Hiển thị:
+
+Program
+
+Registration Code
+
+Role
+
+Registration status
+
+Payment status
+
+Attendance status
+
+Participation option
+
+Pending actions
+
+QR nếu eligible
+
+Confirmed meetings
+
+Documents theo quyền
+
+==================================================
+36. CHAINY
+==================================================
+
+Sau submit:
+
+CHAINY có thể hỗ trợ:
+
+Registration status
+
+Thông tin còn thiếu
+
+Payment reminder nếu phù hợp
+
+Preparation checklist
+
+Meeting confirmation
+
+Program reminders
+
+Không tự approve Registration.
+
+==================================================
+37. SUPPI
+==================================================
+
+Đối với Buyer:
+
+SUPPI hỗ trợ làm rõ Requirement.
+
+Đối với Supplier:
+
+SUPPI có thể chỉ ra:
+profile còn thiếu gì
+capability nào liên quan
+service area nào cần xác nhận.
+
+Không tự xác minh Supplier.
+
+==================================================
+38. ADMIN LIST
+==================================================
+
+Reuse:
+
+/admin/chuong-trinh/[id]
+
+Tab:
+
+REGISTRATIONS
+
+Columns:
+
+Registration code
+
+Organization
+
+Role
+
+Participation option
+
+Registration status
+
+Payment status
+
+Attendance status
+
+Owner
+
+Submitted at
+
+Updated at
+
+==================================================
+39. ADMIN REVIEW
+==================================================
+
+Admin có actions:
+
+APPROVE
+
+REQUEST MORE INFO
+
+REJECT
+
+CANCEL
+
+VIEW ORGANIZATION
+
+VIEW REQUIREMENT
+
+VIEW SUPPLIER PROFILE
+
+Không cho frontend tự set Approved.
+
+==================================================
+40. REJECT
+==================================================
+
+Khi REJECT:
+
+require reason.
+
+Có thể lưu:
+
+NOT_ELIGIBLE
+
+PROGRAM_FULL
+
+PROFILE_INCOMPLETE
+
+SCOPE_NOT_MATCH
+
+DUPLICATE
+
+OTHER
+
+Không xóa Registration.
+
+==================================================
+41. CAPACITY
+==================================================
+
+Nếu ParticipationOption có giới hạn:
+
+capacity
+
+approvedCount
+
+waitlist nếu architecture hỗ trợ.
+
+Không coi:
+
+SUBMITTED count = occupied seats
+
+nếu Program cần approval.
+
+==================================================
+42. PAYMENT
+==================================================
+
+Nếu Payment module đã có:
+
+Registration relation tới Payment.
+
+Không lưu transaction logic trong Registration table.
+
+Nếu chưa có online payment:
+
+PaymentStatus vẫn có thể được quản lý thủ công
+với AuditLog + evidence phù hợp.
+
+Không fake payment gateway.
+
+==================================================
+43. REFUND
+==================================================
+
+Nếu có refund:
+
+track riêng.
+
+Không chỉ đổi Registration thành CANCELLED
+rồi coi tiền đã hoàn.
+
+==================================================
+44. FILE SECURITY
+==================================================
+
+Buyer technical files
+
+Supplier profile attachments
+
+Sponsor proposal files
+
+private by default.
+
+Backend permission required.
+
+Không public trên Program page.
+
+==================================================
+45. NOTIFICATIONS
+==================================================
+
+Trigger:
+
+Registration submitted
+
+Need more info
+
+Approved
+
+Rejected
+
+Payment instruction
+
+Payment confirmed
+
+QR available
+
+Program changed
+
+Program postponed
+
+Program cancelled
+
+Meeting confirmed
+
+Nếu Zalo chưa tích hợp thật:
+dùng in-app/email hiện có.
+
+==================================================
+46. PROGRAM CHANGE
+==================================================
+
+Nếu Program:
+
+POSTPONED
+CANCELLED
+
+Registration không bị xóa.
+
+Notify participants.
+
+Payment/refund xử lý theo policy.
+
+Audit all changes.
+
+==================================================
+47. ADMIN TASKS
+==================================================
+
+Registration cần owner nếu có review.
+
+Task ví dụ:
+
+Review registration
+
+Request profile update
+
+Confirm payment
+
+Prepare QR
+
+Confirm attendance
+
+Schedule meeting
+
+==================================================
+48. SOURCE + ATTRIBUTION
+==================================================
+
+Track:
+
+sourcePage
+
+referrer
+
+campaign optional
+
+program detail CTA
+
+supplier page
+
+association page
+
+KCN page
+
+Không dùng marketing source để thay business status.
+
+==================================================
+49. PRIVACY
+==================================================
+
+Buyer chỉ thấy registration của Organization mình.
+
+Supplier chỉ thấy của mình.
+
+Sponsor chỉ thấy inquiry của mình.
+
+Organizer chỉ xem data trong Program scope được cấp.
+
+Association/KCN không tự được xem toàn bộ participant contacts.
+
+==================================================
+50. EXPORT
+==================================================
+
+Export attendee/registration list là permission riêng.
+
+Có thể export:
+
+Name
+Organization
+Role
+Attendance
+
+chỉ khi authorized.
+
+Contact fields phụ thuộc permission/consent.
+
+Log mọi export.
+
+==================================================
+51. SEO
+==================================================
+
+Registration page:
+
+NOINDEX.
+
+Canonical:
+có thể canonical về Program detail
+hoặc self canonical theo SEO architecture hiện tại,
+nhưng không cần index.
+
+Không đưa Registration data vào structured public schema.
+
+==================================================
+52. MOBILE
+==================================================
+
+Mobile:
+
+Step 1
+Role + common info
+
+Step 2
+Dynamic fields
+
+Step 3
+Review
+
+Sticky bottom:
+[TIẾP TỤC]
+[GỬI ĐĂNG KÝ]
+
+Không overflow 390px.
+
+Không hiển thị form dài toàn bộ ngay từ đầu.
+
+==================================================
+53. ANALYTICS
+==================================================
+
+Track:
+
+registration_start
+
+role_selected
+
+step_1_complete
+
+step_2_complete
+
+registration_review
+
+registration_submit
+
+registration_approved
+
+registration_rejected
+
+payment_started
+
+payment_completed
+
+qr_issued
+
+checkin_completed
+
+Không coi registration_start = registration.
+
+==================================================
+54. QA
+==================================================
+
+Test tối thiểu:
+
+1. Guest bắt đầu form mà không login.
+2. Login không làm mất draft.
+3. Buyer/Supplier/Sponsor dùng cùng form engine.
+4. Dynamic fields đúng theo role.
+5. Buyer Need không auto public.
+6. Existing Requirement có thể reuse.
+7. Supplier Profile được prefill.
+8. Supplier payment không tạo meeting.
+9. Sponsor submit không activate Sponsorship.
+10. Duplicate Registration bị phát hiện.
+11. Registration/Payment/Attendance status tách riêng.
+12. Approval trước payment khi policy yêu cầu.
+13. QR chỉ phát khi đủ điều kiện.
+14. QR check-in không tạo opportunity.
+15. Private attachments không public.
+16. Cancellation/refund tách đúng.
+17. Admin actions ghi AuditLog.
+18. Mobile 390px hoạt động.
+
+==================================================
+55. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- Registration model
+- Role-specific schemas
+- Draft implementation
+- Requirement integration
+- Supplier Profile integration
+- Sponsor inquiry integration
+- Payment status
+- Attendance status
+- QR implementation
+- Account workspace
+- Admin implementation
+- Notifications
+- Permissions
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+PROGRAM
+→ ROLE
+→ COMMON INFO
+→ ROLE-SPECIFIC INFO
+→ REVIEW
+→ REGISTRATION
+→ APPROVAL
+→ PAYMENT NẾU CÓ
+→ QR NẾU ĐỦ ĐIỀU KIỆN
+→ ATTENDANCE
+→ MEETING
+→ FOLLOW-UP
+
+NHỚ:
+
+REGISTRATION ≠ PAYMENT
+PAYMENT ≠ ATTENDANCE
+ATTENDANCE ≠ MEETING
+MEETING ≠ DEAL
+
+Không gom tất cả thành một trạng thái “THÀNH CÔNG”.

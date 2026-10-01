@@ -1,0 +1,1020 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 24: HỘI / HIỆP HỘI & TỔ CHỨC KẾT NỐI
+ROUTE: /hoi-hiep-hoi
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /hoi-hiep-hoi thành nơi người dùng tìm:
+
+- Hội / Hiệp hội
+- Tổ chức kết nối doanh nghiệp
+- Chương trình dành cho hội viên
+- Nhóm năng lực / ngành liên quan
+- Các hoạt động hỗ trợ doanh nghiệp đang diễn ra
+
+Đây KHÔNG phải directory chỉ có:
+logo + tên + địa chỉ.
+
+Câu hỏi chính của page:
+
+“HỘI / HIỆP HỘI NÀY ĐANG CÓ HOẠT ĐỘNG GÌ
+ĐỂ HỖ TRỢ HỘI VIÊN KẾT NỐI NHU CẦU VÀ CƠ HỘI?”
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/hoi-hiep-hoi
+
+Reuse:
+
+organizations
+organization_roles
+association_profiles
+programs
+program_organizations
+categories
+keywords
+requirements
+supplier_profiles
+catalogues
+media_assets
+partnerships
+
+Không tạo một bảng Association độc lập
+nếu Organization + role/profile hiện tại đã hỗ trợ.
+
+Một Hội vẫn là Organization.
+
+Ví dụ:
+
+Organization
+→ role = ASSOCIATION
+
+và có:
+AssociationProfile
+
+==================================================
+2. ORGANIZATION MASTER
+==================================================
+
+Không duplicate Organization.
+
+AssociationProfile chỉ chứa
+dữ liệu đặc thù của Hội/Hiệp hội.
+
+Ví dụ:
+
+AssociationProfile {
+ id
+ organizationId
+
+ associationType?
+ scopeDescription?
+
+ geographicScope[]
+ industryScope[]
+
+ establishedYear?
+
+ publicContact?
+ website?
+
+ membershipPublicPolicy?
+
+ publishable
+
+ updatedAt
+}
+
+Không copy lại:
+
+name
+logo
+legal name
+address
+website
+
+nếu Organization đã có.
+
+==================================================
+3. HERO
+==================================================
+
+H1:
+
+“HỘI / HIỆP HỘI & TỔ CHỨC KẾT NỐI DOANH NGHIỆP”
+
+Sub:
+
+“Khám phá các tổ chức đang triển khai chương trình, kết nối nhu cầu và hỗ trợ doanh nghiệp theo ngành, địa bàn và cộng đồng hội viên.”
+
+Thông điệp phụ:
+
+“Duy trì hoạt động hỗ trợ hội viên trước và sau mỗi chương trình.”
+
+CTA chính:
+
+[TÌM HỘI / HIỆP HỘI]
+
+CTA phụ:
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH CHO HỘI]
+
+→ /dich-vu/to-chuc-ket-noi?source=association
+
+==================================================
+4. SEARCH
+==================================================
+
+Search theo:
+
+Tên Hội / Hiệp hội
+
+Tên viết tắt
+
+Ngành / lĩnh vực
+
+Địa bàn
+
+Nhóm doanh nghiệp
+
+Program liên quan
+
+Không search private membership data.
+
+==================================================
+5. FILTER
+==================================================
+
+Filter chính:
+
+Lĩnh vực / ngành
+
+Địa bàn
+
+Phạm vi:
+- Quốc gia
+- Vùng
+- Tỉnh / thành
+- Ngành chuyên môn
+
+Có chương trình đang mở
+
+Có catalogue
+
+Có hoạt động kết nối
+
+Không hiển thị 40–50 filters.
+
+Advanced filter có thể mở thêm.
+
+==================================================
+6. ASSOCIATION CARD
+==================================================
+
+Mỗi card hiển thị:
+
+Logo
+
+Tên tổ chức
+
+Tên viết tắt nếu có
+
+Lĩnh vực chính
+
+Địa bàn / phạm vi hoạt động
+
+Chương trình đang mở nếu có
+
+Nhóm doanh nghiệp liên quan
+
+Ngày cập nhật
+
+CTA:
+
+[XEM HỒ SƠ]
+
+→ /hoi-hiep-hoi/[slug]
+
+CTA phụ khi có program:
+
+[XEM CHƯƠNG TRÌNH]
+
+==================================================
+7. CARD KHÔNG PHẢI DIRECTORY CARD
+==================================================
+
+Không chỉ hiển thị:
+
+Logo
+Tên
+Điện thoại
+Website.
+
+Ưu tiên cho user thấy:
+
+“Hội đang làm gì?”
+
+Ví dụ:
+
+2 chương trình đang mở
+
+Nhóm nhu cầu:
+- logistics
+- đồng phục
+- cơ khí
+
+Khu vực:
+Đồng Nai
+
+CTA:
+Xem chương trình.
+
+Nhưng chỉ hiện số liệu khi query DB thật.
+
+==================================================
+8. PROGRAM INTEGRATION
+==================================================
+
+AssociationCard có thể hiển thị:
+
+Program đang mở
+Program sắp diễn ra
+
+Dữ liệu lấy từ:
+
+Program
++
+program_organizations
+
+Không copy program text thủ công vào AssociationProfile.
+
+==================================================
+9. ASSOCIATION ↔ PROGRAM ROLE
+==================================================
+
+Relation phải hỗ trợ vai trò:
+
+ORGANIZER
+
+CO_ORGANIZER
+
+PARTNER
+
+SUPPORTING_ORGANIZATION
+
+OTHER
+
+Không tự đặt:
+
+CO_ORGANIZER
+
+chỉ vì Organization xuất hiện trong event.
+
+Vai trò phải có:
+
+confirmed status
+
+và nếu cần:
+source/evidence.
+
+==================================================
+10. CONFIRMED ORGANIZATION RELATION
+==================================================
+
+ProgramOrganization relation gợi ý:
+
+id
+programId
+organizationId
+
+role
+
+status:
+PENDING
+CONFIRMED
+DECLINED
+ENDED
+
+publicDisplay
+
+confirmedBy?
+confirmedAt?
+
+Không public role chưa CONFIRMED.
+
+==================================================
+11. MEMBERSHIP KHÔNG ĐƯỢC SUY DIỄN
+==================================================
+
+Hard rule:
+
+Doanh nghiệp tham dự Program của Hội
+KHÔNG đồng nghĩa là hội viên.
+
+Doanh nghiệp nằm cùng Category
+KHÔNG đồng nghĩa là hội viên.
+
+Doanh nghiệp được Hội giới thiệu
+KHÔNG đồng nghĩa là hội viên.
+
+Chỉ hiển thị membership
+khi có Membership relation được xác nhận.
+
+==================================================
+12. MEMBERSHIP MODEL
+==================================================
+
+Reuse nếu có hoặc chuẩn hóa:
+
+OrganizationMembership {
+ id
+
+ associationOrganizationId
+ memberOrganizationId
+
+ membershipType?
+
+ status:
+ PENDING
+ CONFIRMED
+ ENDED
+ REJECTED
+
+ startDate?
+ endDate?
+
+ source?
+ evidenceId?
+
+ publicDisplay
+
+ confirmedBy?
+ confirmedAt?
+
+ createdAt
+ updatedAt
+}
+
+Không tự import danh sách member rồi publish ngay.
+
+==================================================
+13. HỘI VIÊN TỰ NGUYỆN
+==================================================
+
+Nếu Hội cho phép doanh nghiệp
+đề nghị liên kết hồ sơ:
+
+CTA:
+
+“TÔI LÀ HỘI VIÊN CỦA TỔ CHỨC NÀY”
+
+Flow:
+
+Organization
+→ Membership Claim
+→ Association/Admin review
+→ CONFIRMED membership
+
+Không auto approve.
+
+==================================================
+14. ASSOCIATION LISTING + MEMBERSHIP
+==================================================
+
+Trang tổng không cần hiển thị toàn bộ hội viên.
+
+Có thể hiển thị:
+
+“Số hồ sơ hội viên đã được xác nhận”
+
+chỉ nếu có dữ liệu thật và policy cho phép.
+
+Không dùng:
+member count marketing
+nếu source chưa xác nhận.
+
+==================================================
+15. CATEGORY / INDUSTRY
+==================================================
+
+Association có thể relation với:
+
+Category
+
+Keyword Cluster
+
+Need Group
+
+Nhưng đây là scope hoạt động,
+không phải capability của Supplier.
+
+Tách:
+
+association_industry_scope
+
+khỏi:
+
+supplier_capabilities.
+
+==================================================
+16. LOCATION
+==================================================
+
+Association có thể:
+
+national
+
+regional
+
+provincial
+
+industry-specific
+
+Không bắt mọi Association phải có một province duy nhất.
+
+Dùng:
+
+scopeType
+location relations
+
+phù hợp architecture hiện tại.
+
+==================================================
+17. “CHƯƠNG TRÌNH ĐANG MỞ”
+==================================================
+
+Section:
+
+“CHƯƠNG TRÌNH DÀNH CHO DOANH NGHIỆP”
+
+Có thể hiển thị ProgramCard từ Page 20.
+
+Filter:
+
+program.organization relation
++
+association role confirmed.
+
+Không tạo ProgramCard phiên bản riêng.
+
+==================================================
+18. “NHÓM LĨNH VỰC”
+==================================================
+
+Hiển thị các nhóm:
+
+Category
+Need Group
+Industry
+
+mà tổ chức đang hoạt động.
+
+CTA vào:
+
+/nganh-nghe/[slug]
+
+hoặc Program phù hợp.
+
+Không tạo taxonomy riêng cho Hội.
+
+==================================================
+19. “NHU CẦU ĐANG ĐƯỢC KẾT NỐI”
+==================================================
+
+Có thể hiển thị public Requirement summaries
+liên quan đến:
+
+Association
+Program
+Category
+
+NHƯNG chỉ khi:
+
+Requirement visibility cho phép.
+
+Không hiển thị:
+
+Buyer identity
+Private contact
+Budget
+Confidential files.
+
+Không tạo Need duplicate cho Hội.
+
+==================================================
+20. CATALOGUE
+==================================================
+
+Association có thể có:
+
+Catalogue chương trình
+
+Catalogue nhóm hội viên
+
+Ấn phẩm được phép public
+
+Reuse Catalogue module.
+
+Không hard-code PDF vào AssociationProfile.
+
+==================================================
+21. CASE / KẾT QUẢ
+==================================================
+
+Trang tổng có thể hiển thị:
+
+case kết nối đã được phép công bố
+
+hoặc confirmed aggregate results.
+
+Không fake:
+
+“100 doanh nghiệp kết nối”
+“50 hợp đồng”
+
+nếu dữ liệu chưa có source.
+
+==================================================
+22. CTA “ĐỀ XUẤT CHƯƠNG TRÌNH CHO HỘI”
+==================================================
+
+CTA bắt buộc:
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH CHO HỘI]
+
+Route:
+
+/dich-vu/to-chuc-ket-noi?source=association
+
+Nếu CTA xuất phát từ Association cụ thể:
+
+/dich-vu/to-chuc-ket-noi?source=association&organizationId=...
+
+Prefill Organization context.
+
+Không yêu cầu user nhập lại tên Hội.
+
+==================================================
+23. SERVICE REQUEST
+==================================================
+
+CTA phải đi vào ServiceRequest engine đã xây.
+
+Không dùng contact form riêng của Hội module.
+
+Flow:
+
+Association
+→ Propose Program
+→ ServiceRequest
+→ Owner
+→ Scope
+→ Proposal
+→ Program nếu accepted.
+
+==================================================
+24. SUPPI
+==================================================
+
+SUPPI có thể hỗ trợ:
+
+“Tìm Hội hoạt động trong ngành cơ khí.”
+
+“Hội nào đang có chương trình tại Đồng Nai?”
+
+“Có chương trình nào phù hợp với nhà cung ứng của tôi?”
+
+SUPPI dùng data thật:
+
+Association
+Category
+Program
+Location
+
+Không tự suy luận membership.
+
+==================================================
+25. CHAINY
+==================================================
+
+CHAINY không cần xuất hiện quá mạnh ở listing.
+
+Chỉ giải thích ngắn:
+
+“Sau khi doanh nghiệp tham gia chương trình hoặc kết nối, CHAINY hỗ trợ theo dõi đầu việc tiếp theo.”
+
+Không tạo Connection từ việc chỉ xem AssociationCard.
+
+==================================================
+26. PUBLIC TRUST / CLAIMS
+==================================================
+
+Không sử dụng các nhãn:
+
+“được bảo trợ”
+“đối tác chính thức”
+“đơn vị đồng tổ chức”
+“hội viên”
+
+nếu relationship chưa CONFIRMED.
+
+Mọi badge relationship phải có relation record.
+
+==================================================
+27. SOURCE / DATA QUALITY
+==================================================
+
+Thông tin Association quan trọng nên có:
+
+content
+source
+status
+checkedBy
+checkedAt
+scope
+usageRights
+
+Ví dụ:
+
+Tên tổ chức:
+official source
+
+Lĩnh vực:
+organization provided
+
+Program role:
+confirmed relation
+
+Membership:
+confirmed membership.
+
+==================================================
+28. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/hoi-hiep-hoi
+
+Nhưng dữ liệu master vẫn dựa trên:
+
+Organization.
+
+Listing columns:
+
+Organization
+
+Association type
+
+Scope
+
+Location
+
+Programs active
+
+Membership relations
+
+Profile status
+
+Owner
+
+Updated
+
+==================================================
+29. ADMIN ASSOCIATION DETAIL
+==================================================
+
+Có thể reuse:
+
+/admin/to-chuc/[id]
+
+và mở Association-specific tabs:
+
+OVERVIEW
+
+ASSOCIATION PROFILE
+
+INDUSTRY SCOPE
+
+LOCATIONS
+
+MEMBERSHIP
+
+PROGRAMS
+
+REQUIREMENTS
+
+CATALOGUES
+
+MEDIA
+
+PARTNERSHIPS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+Không tạo admin record duplicate.
+
+==================================================
+30. MEMBERSHIP REVIEW QUEUE
+==================================================
+
+Admin queue:
+
+Membership claims
+
+Columns:
+
+Association
+
+Claiming Organization
+
+Membership Type
+
+Evidence
+
+Submitted
+
+Status
+
+Reviewer
+
+Actions:
+
+APPROVE
+REQUEST MORE INFO
+REJECT
+
+Không auto approve.
+
+==================================================
+31. PROGRAM RELATION REVIEW
+==================================================
+
+Nếu một Program khai Association là:
+
+Organizer
+Co-organizer
+Partner
+
+nhưng relation chưa confirmed:
+
+admin warning.
+
+Không public label cho tới khi confirmed.
+
+==================================================
+32. OWNER + NEXT ACTION
+==================================================
+
+Mọi Association cooperation/workflow active phải có:
+
+owner
+nextAction
+nextActionAt
+
+Ví dụ:
+
+Owner:
+Partnership team
+
+Next action:
+Xác nhận đầu mối chương trình
+
+Due:
+02/10/2026
+
+==================================================
+33. RBAC
+==================================================
+
+Association account chỉ xem:
+
+Organization của mình
+
+Membership data trong phạm vi được cấp
+
+Programs có relation phù hợp
+
+Reports được share
+
+Không mặc định xem:
+
+mọi Requirement của hội viên
+
+Supplier quotes
+
+Private Buyer data
+
+Internal admin notes.
+
+==================================================
+34. REPORTING
+==================================================
+
+Association report có thể gồm:
+
+Confirmed requirements
+
+Supplier matches considered
+
+Meetings completed
+
+Quotes recorded
+
+Outcomes confirmed
+
+Program attendance
+
+nhưng chỉ trong phạm vi Program/Agreement.
+
+Không mặc định chia sẻ contact lists.
+
+==================================================
+35. SEO
+==================================================
+
+Title:
+
+Hội & Hiệp Hội Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Khám phá các Hội, Hiệp hội và tổ chức kết nối đang triển khai chương trình, hoạt động hỗ trợ và cơ hội dành cho doanh nghiệp theo ngành và địa bàn.
+
+Canonical:
+
+/hoi-hiep-hoi
+
+Filter combinations:
+noindex/canonical phù hợp.
+
+==================================================
+36. STRUCTURED DATA
+==================================================
+
+Có thể dùng:
+
+CollectionPage
+ItemList
+Organization
+
+Chỉ output Organization fields
+có dữ liệu public thật.
+
+Không fake:
+
+foundingDate
+member count
+address
+endorsement.
+
+==================================================
+37. SORTING
+==================================================
+
+Default ưu tiên:
+
+Organizations có profile đủ dùng
++
+Program đang mở / upcoming
++
+relevance theo filter.
+
+Không ưu tiên vì:
+
+Sponsor
+Founding Partner
+commercial payment
+
+trừ sponsored block có label riêng.
+
+==================================================
+38. EMPTY STATE
+==================================================
+
+Nếu không có Organization phù hợp:
+
+“Chưa tìm thấy Hội/Hiệp hội phù hợp với bộ lọc này.”
+
+CTA:
+
+[XÓA BỘ LỌC]
+
+[ĐỀ XUẤT CHƯƠNG TRÌNH]
+
+Không tạo fake organizations.
+
+==================================================
+39. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+Search
+Filter chips
+Association cards
+Open programs
+CTA propose program
+
+Card không quá nhiều text.
+
+Không overflow 390px.
+
+==================================================
+40. ANALYTICS
+==================================================
+
+Track:
+
+association_listing_view
+
+association_search
+
+association_filter
+
+association_profile_click
+
+association_program_click
+
+propose_program_click
+
+membership_claim_start
+
+Không gọi profile click = partnership lead.
+
+==================================================
+41. QA
+==================================================
+
+Test tối thiểu:
+
+1. Listing dùng Organization thật.
+2. Association role/profile không duplicate Organization.
+3. Search theo tên/ngành/địa bàn hoạt động.
+4. Program relation chỉ public khi confirmed.
+5. Attending Program không tạo Membership.
+6. Membership claim không auto approve.
+7. Program cards reuse Page 20 component.
+8. Requirement public không lộ Buyer private.
+9. Catalogue reuse module.
+10. CTA propose Program giữ Association context.
+11. Association không mặc định xem member private needs.
+12. Sponsor không thay organic sorting.
+13. Admin review ghi AuditLog.
+14. Empty state không fake data.
+15. Mobile 390px hoạt động.
+
+==================================================
+42. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- AssociationProfile implementation
+- Organization role integration
+- Membership model/workflow
+- Program relation workflow
+- Search/filter
+- Catalogue integration
+- Requirement integration
+- ServiceRequest integration
+- Admin implementation
+- RBAC
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+HỘI / HIỆP HỘI
+→ HỒ SƠ TỔ CHỨC
+→ LĨNH VỰC / ĐỊA BÀN
+→ CHƯƠNG TRÌNH
+→ NHU CẦU ĐƯỢC PHÉP CHIA SẺ
+→ HỘI VIÊN ĐÃ XÁC NHẬN
+→ CATALOGUE
+→ KẾT NỐI
+→ FOLLOW-UP
+→ REPORT
+
+Không biến /hoi-hiep-hoi
+thành danh bạ logo Hội.
+
+Giá trị phải nằm ở:
+CHƯƠNG TRÌNH + NHU CẦU + KẾT NỐI + KẾT QUẢ.

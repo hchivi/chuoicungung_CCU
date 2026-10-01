@@ -1,0 +1,1327 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 30: DANH SÁCH CATALOGUE & ẤN PHẨM
+ROUTE: /catalogue
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /catalogue thành nơi tìm các bộ hồ sơ / catalogue
+nhà cung ứng theo:
+
+- chuyên mục;
+- nhóm nhu cầu;
+- ngành;
+- địa bàn;
+- KCN;
+- chương trình.
+
+Catalogue KHÔNG phải một kho PDF tĩnh.
+
+Mục tiêu:
+
+CATALOGUE / ẤN PHẨM
+→ DOANH NGHIỆP ĐÃ DUYỆT
+→ QR / LINK
+→ HỒ SƠ SỐ ĐANG CẬP NHẬT
+→ GỬI YÊU CẦU
+→ CONNECTION / FOLLOW-UP
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/catalogue
+
+/catalogue/[slug]
+
+Reuse:
+
+Catalogue
+CatalogueEdition
+CatalogueEntry
+Organization
+SupplierProfile
+FactoryProfile
+ProductService
+Category
+KeywordCluster
+Location
+IndustrialPark
+Program
+MediaAsset
+QR / tracking system
+ServiceRequest
+Tasks
+AuditLog
+
+Không tạo:
+Supplier record riêng trong Catalogue.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“CATALOGUE NHÀ CUNG ỨNG THEO NHU CẦU DOANH NGHIỆP”
+
+Sub:
+
+“Tìm hồ sơ nhà cung ứng theo chuyên mục, địa bàn hoặc chương trình kết nối. Mỗi ấn phẩm có thời điểm phát hành và QR dẫn về thông tin doanh nghiệp trên CHUOICUNGUNG.COM.”
+
+CTA chính:
+
+[XEM CATALOGUE]
+
+scroll/search.
+
+CTA phụ:
+
+[ĐĂNG KÝ GIỚI THIỆU DOANH NGHIỆP]
+
+→ /yeu-cau-dich-vu
+?service=catalogue
+
+hoặc route/service request tương đương hiện có.
+
+==================================================
+3. CATALOGUE KHÔNG PHẢI BLOG
+==================================================
+
+Không hiển thị dạng:
+
+thumbnail PDF
+→ title
+→ download.
+
+Mỗi Catalogue phải là một structured object có:
+
+topic
+edition
+publication date
+scope
+approved entries
+distribution scope
+online edition
+QR/tracking
+related Program
+status.
+
+==================================================
+4. DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+Catalogue {
+ id
+ slug
+
+ title
+ shortDescription
+
+ catalogueType
+
+ categoryId?
+ keywordClusterId?
+
+ provinceId?
+ industrialParkId?
+
+ programId?
+
+ publisherOrganizationId?
+
+ coverMediaId?
+
+ status
+
+ publishable
+
+ createdAt
+ updatedAt
+}
+
+==================================================
+5. EDITION
+==================================================
+
+Nếu cùng Catalogue có nhiều đợt:
+
+CatalogueEdition {
+ id
+ catalogueId
+
+ editionCode
+ editionName?
+
+ publicationDate
+
+ onlinePublishedAt?
+
+ printStatus
+
+ distributionStatus
+
+ plannedPrintQuantity?
+ confirmedPrintQuantity?
+
+ fileAssetId?
+
+ status
+
+ createdAt
+ updatedAt
+}
+
+Không overwrite edition cũ
+khi phát hành bản mới.
+
+==================================================
+6. CATALOGUE STATUS
+==================================================
+
+Có thể dùng:
+
+PLANNING
+
+CONTENT_COLLECTION
+
+CONTENT_REVIEW
+
+DIGITAL_PREVIEW
+
+APPROVED
+
+PUBLISHED_DIGITAL
+
+PRINT_CONFIRMED
+
+PRINTED
+
+DISTRIBUTING
+
+COMPLETED
+
+ARCHIVED
+
+CANCELLED
+
+Nếu schema hiện tại có enum tương đương:
+reuse/map.
+
+==================================================
+7. SEARCH
+==================================================
+
+Search theo:
+
+Tên Catalogue
+
+Chủ đề
+
+Category
+
+Keyword / Buyer Intent
+
+Program
+
+KCN
+
+Province
+
+Organization/Supplier được giới thiệu
+
+Không search private profile content.
+
+==================================================
+8. FILTER
+==================================================
+
+Filter:
+
+Chủ đề / Category
+
+Địa bàn
+
+KCN
+
+Program
+
+Thời gian phát hành
+
+Loại Catalogue
+
+Đang phát hành / Lưu trữ
+
+Không tạo filter quá nhiều.
+
+==================================================
+9. CATALOGUE CARD
+==================================================
+
+Card hiển thị:
+
+Cover
+
+Title
+
+Topic
+
+Publication date
+
+Related Program nếu có
+
+Location/KCN scope nếu có
+
+Publisher
+
+Number of approved entries nếu data thật
+
+Format:
+Online / Print / Both
+
+Status
+
+CTA:
+
+[XEM CATALOGUE]
+
+→ /catalogue/[slug]
+
+==================================================
+10. KHÔNG HIỂN THỊ SỐ LIỆU DỰ KIẾN NHƯ THỰC TẾ
+==================================================
+
+Nếu:
+
+plannedPrintQuantity = 1,000
+
+nhưng mới in 300:
+
+không hiển thị:
+
+“Đã phát hành 1.000 bản”.
+
+Chỉ dùng số:
+
+confirmedPrintQuantity
+distributedQuantity
+verifiedDistribution
+
+nếu có dữ liệu thật.
+
+==================================================
+11. ONLINE FIRST
+==================================================
+
+Workflow ưu tiên:
+
+CONTENT
+→ DIGITAL PREVIEW
+→ APPROVAL
+→ ONLINE VERSION
+→ PRINT DECISION
+→ PRINT
+→ DISTRIBUTION
+
+Không bắt buộc Catalogue phải được in.
+
+Bản số phải có thể dùng trước để:
+
+review
+approve
+update links
+verify entries.
+
+==================================================
+12. PRINT CHỈ KHI ĐỦ PHẠM VI
+==================================================
+
+Chỉ chuyển sang PRINT_CONFIRMED khi đã có:
+
+approved content
+
+approved supplier list
+
+budget confirmed
+
+print quantity confirmed
+
+distribution scope
+
+delivery/receiver
+
+responsible owner.
+
+Không in chỉ vì Catalogue đã tạo.
+
+==================================================
+13. CATALOGUE ENTRY
+==================================================
+
+CatalogueEntry {
+ id
+ catalogueEditionId
+
+ organizationId
+
+ supplierProfileId?
+ factoryProfileId?
+
+ productServiceId?
+
+ categoryId?
+
+ position?
+
+ contentVersionId?
+
+ qrCodeId?
+
+ status
+
+ approvalStatus
+
+ sponsorPlacementType?
+
+ createdAt
+ updatedAt
+}
+
+Không duplicate Supplier/Profile text
+thành entity riêng.
+
+==================================================
+14. APPROVED BUSINESS LIST
+==================================================
+
+Chỉ CatalogueEntry có:
+
+approvalStatus = APPROVED
+
+mới xuất hiện ở public edition.
+
+Không:
+
+form submit
+→ catalogue entry public ngay.
+
+==================================================
+15. CONTENT SOURCE
+==================================================
+
+Catalogue content phải reuse:
+
+Organization
+SupplierProfile
+ProductService
+Capability
+MediaAsset
+
+Có thể snapshot một version để in,
+nhưng phải giữ relation tới hồ sơ gốc.
+
+==================================================
+16. STATIC PRINT VS LIVE PROFILE
+==================================================
+
+Nguyên tắc:
+
+PRINTED CATALOGUE
+= snapshot tại thời điểm phát hành.
+
+DIGITAL PROFILE
+= dữ liệu hiện tại.
+
+Khi Supplier cập nhật sau đó:
+
+PDF cũ không bị sửa lịch sử.
+
+QR vẫn dẫn tới:
+current canonical profile.
+
+UI phải hiển thị:
+
+Catalogue publication date
+
+và
+
+Profile last updated date
+
+để user hiểu sự khác biệt.
+
+==================================================
+17. QR
+==================================================
+
+Mỗi doanh nghiệp/entry có QR ổn định.
+
+QR không nên dẫn trực tiếp tới:
+
+temporary PDF page
+query URL khó duy trì.
+
+Ưu tiên:
+
+canonical Supplier/Factory/Profile URL
+
+có tracking context:
+
+catalogueEditionId
+entryId
+distributionBatchId optional.
+
+==================================================
+18. QR SOURCE TRACKING
+==================================================
+
+Khi scan:
+
+ghi nhận:
+
+catalogueId
+editionId
+entryId
+distributionBatchId nếu có
+timestamp
+
+nhưng redirect tới:
+
+canonical live profile.
+
+Không tạo profile duplicate
+cho từng edition.
+
+==================================================
+19. QR SCAN ≠ BUYER NEED
+==================================================
+
+Hard rule:
+
+QR scan
+≠ contact request
+
+QR scan
+≠ Buyer Need
+
+QR scan
+≠ qualified lead
+
+QR scan
+≠ sale.
+
+Analytics phải tách riêng.
+
+==================================================
+20. PUBLIC PROFILE CTA
+==================================================
+
+Sau khi scan/view supplier:
+
+CTA:
+
+[GỬI YÊU CẦU]
+
+[TÌM NGUỒN]
+
+hoặc Program-related CTA.
+
+Chỉ khi user action tiếp theo xảy ra
+mới tạo workflow.
+
+==================================================
+21. CATALOGUE TYPES
+==================================================
+
+Có thể hỗ trợ:
+
+CATEGORY_CATALOGUE
+
+PROGRAM_CATALOGUE
+
+INDUSTRIAL_PARK_CATALOGUE
+
+ASSOCIATION_CATALOGUE
+
+SUPPLIER_SHORTLIST_CATALOGUE
+
+GENERAL_SUPPLIER_CATALOGUE
+
+Không tạo table riêng cho từng type.
+
+==================================================
+22. CATEGORY CATALOGUE
+==================================================
+
+Ví dụ:
+
+“Nhà cung ứng Đồng phục & Bảo hộ 2026”
+
+relation:
+
+Category
+Supplier entries
+Location scope
+Optional Program.
+
+==================================================
+23. PROGRAM CATALOGUE
+==================================================
+
+Nếu Program:
+
+reuse Program relation.
+
+Có thể hiển thị:
+
+“Catalogue của Ngày hội Chuỗi Cung Ứng Đồng Nai 2026”
+
+CTA:
+
+[XEM CHƯƠNG TRÌNH]
+
+==================================================
+24. KCN / ASSOCIATION CATALOGUE
+==================================================
+
+Có thể relation:
+
+IndustrialPark
+
+Association Organization
+
+Nhưng:
+
+KCN Catalogue
+không đồng nghĩa KCN bảo trợ/duyệt
+nếu relation chưa confirmed.
+
+Association Catalogue
+không đồng nghĩa mọi Supplier là hội viên.
+
+==================================================
+25. PARTICIPATE IN NEXT EDITION
+==================================================
+
+Block trên listing:
+
+“THAM GIA ẤN PHẨM TIẾP THEO”
+
+Nội dung phải nêu:
+
+Chuyên mục đang nhận hồ sơ
+
+Deadline
+
+Profile requirements
+
+Image/content requirements
+
+Review process
+
+Pricing / quote method
+
+Editorial scope
+
+CTA:
+
+[ĐĂNG KÝ GIỚI THIỆU DOANH NGHIỆP]
+
+==================================================
+26. SERVICE REQUEST
+==================================================
+
+CTA tham gia Catalogue:
+
+Reuse ServiceRequest.
+
+Không tạo CatalogueRegistrationForm độc lập
+nếu /yeu-cau-dich-vu đã hỗ trợ.
+
+Prefill:
+
+service = catalogue
+
+catalogueId / editionId nếu có
+
+organizationId nếu login
+
+category
+
+programId optional.
+
+==================================================
+27. FORM SUBMIT ≠ CATALOGUE APPROVAL
+==================================================
+
+Flow:
+
+ServiceRequest / CatalogueSubmission
+→ Review
+→ Scope
+→ Quote nếu có
+→ Content Preparation
+→ Client Approval
+→ CatalogueEntry APPROVED
+→ Publication
+
+Không:
+
+submit
+→ publish.
+
+==================================================
+28. EDITORIAL CONTROL
+==================================================
+
+Catalogue phải có đơn vị/người chịu trách nhiệm:
+
+content approval
+
+organization list approval
+
+image rights
+
+final version approval.
+
+Không cho Supplier tự sửa file Catalogue
+sau khi edition APPROVED
+mà không có versioning.
+
+==================================================
+29. CONTENT VERSION
+==================================================
+
+Nếu Catalogue cần snapshot:
+
+CatalogueEntryContentVersion {
+ id
+ catalogueEntryId
+
+ sourceProfileVersion?
+
+ title
+ description
+ capabilities
+ contactDisplay
+ mediaRefs[]
+
+ approvedAt
+ approvedBy
+
+ version
+}
+
+Dùng cho edition snapshot.
+
+Không thay thế hồ sơ canonical.
+
+==================================================
+30. MEDIA RIGHTS
+==================================================
+
+Ảnh dùng trong Catalogue phải có:
+
+provider
+usageRights
+catalogueUsageAllowed
+status
+
+Không dùng ảnh Supplier
+chỉ vì file tồn tại trong media library.
+
+==================================================
+31. SPONSORED PLACEMENT
+==================================================
+
+Nếu Catalogue có vị trí tài trợ:
+
+phải label rõ:
+
+“TÀI TRỢ”
+
+“ĐỐI TÁC ĐỒNG HÀNH”
+
+hoặc quyền lợi tương ứng.
+
+Không giả làm organic Supplier recommendation.
+
+==================================================
+32. FOUNDING PARTNER
+==================================================
+
+Nếu Founding Partner contract có quyền lợi Catalogue:
+
+reuse entitlement từ Page 18.
+
+Không tính phí Catalogue lần nữa
+cho quyền lợi đã nằm trong hợp đồng.
+
+Admin cần nhìn được:
+
+INCLUDED_IN_FOUNDING_PARTNER
+
+để tránh double charge.
+
+==================================================
+33. PROGRAM SPONSOR
+==================================================
+
+Nếu Sponsor Program có Catalogue placement:
+
+relation từ Sponsorship Entitlement.
+
+Không tự tạo placement
+chỉ vì sponsor Program.
+
+==================================================
+34. COMMERCIAL SEPARATION
+==================================================
+
+Tách:
+
+Content fee
+
+Sponsored placement
+
+Print cost
+
+Distribution cost
+
+Program package inclusion
+
+Founding Partner inclusion
+
+Không gom thành một field:
+
+cataloguePrice.
+
+==================================================
+35. DISTRIBUTION SCOPE
+==================================================
+
+Mỗi Edition phải ghi rõ:
+
+Digital only
+
+Program distribution
+
+Factory distribution
+
+Industrial Park distribution
+
+Association distribution
+
+Trade fair distribution
+
+Direct mailing
+
+Other confirmed channel
+
+Không dùng wording:
+
+“phân phối toàn quốc”
+
+nếu không có kế hoạch/bằng chứng.
+
+==================================================
+36. DISTRIBUTION BATCH
+==================================================
+
+Có thể chuẩn hóa:
+
+CatalogueDistributionBatch {
+ id
+ catalogueEditionId
+
+ channel
+ location?
+
+ plannedQuantity?
+ actualQuantity?
+
+ distributedAt?
+
+ receiverOrganizationId?
+ receiverName?
+
+ responsibleUserId
+
+ evidenceId?
+
+ status
+}
+
+==================================================
+37. DISTRIBUTION STATUS
+==================================================
+
+PLANNED
+
+CONFIRMED
+
+IN_PROGRESS
+
+COMPLETED
+
+CANCELLED
+
+Không dùng plannedQuantity
+làm actualQuantity.
+
+==================================================
+38. DISTRIBUTION EVIDENCE
+==================================================
+
+Evidence có thể gồm:
+
+handover record
+
+event delivery
+
+shipment receipt
+
+partner acknowledgment
+
+distribution photo
+
+Không bắt buộc public.
+
+Admin/report dùng để đối soát.
+
+==================================================
+39. DISTRIBUTION REPORT
+==================================================
+
+Mỗi edition có thể có report:
+
+Printed confirmed
+
+Distributed confirmed
+
+Distribution batches
+
+Destinations
+
+QR scans
+
+Profile visits
+
+Contact requests
+
+Requirements created
+
+Nhưng metric phải tách nhau.
+
+==================================================
+40. METRIC SEPARATION
+==================================================
+
+Hard rule:
+
+PRINTED
+≠ DISTRIBUTED
+
+DISTRIBUTED
+≠ READ
+
+QR SCAN
+≠ PROFILE ENGAGEMENT
+
+PROFILE VIEW
+≠ CONTACT REQUEST
+
+CONTACT REQUEST
+≠ BUYER NEED
+
+BUYER NEED
+≠ DEAL.
+
+==================================================
+41. “XEM CATALOGUE”
+==================================================
+
+Listing CTA:
+
+[XEM CATALOGUE]
+
+dẫn /catalogue/[slug]
+
+Detail sẽ làm Page 31.
+
+Không mở PDF trực tiếp từ listing
+trừ khi UX hiện tại có secondary download
+và quyền cho phép.
+
+==================================================
+42. DOWNLOAD
+==================================================
+
+Nếu file Catalogue được phép download:
+
+show:
+
+[TẢI BẢN PDF]
+
+nhưng vẫn ưu tiên:
+
+[XEM TRỰC TUYẾN]
+
+để giữ link live tới Supplier profiles.
+
+Private edition:
+permission backend.
+
+==================================================
+43. SEARCH RESULT
+==================================================
+
+Catalogue search phải trả:
+
+Catalogue/Edition
+
+không trả từng page PDF
+như một search result độc lập.
+
+==================================================
+44. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/catalogue
+
+Listing columns:
+
+Catalogue
+
+Edition
+
+Topic
+
+Program
+
+Location
+
+Publication date
+
+Status
+
+Approved entries
+
+Print status
+
+Distribution status
+
+Owner
+
+Updated
+
+==================================================
+45. ADMIN DETAIL
+==================================================
+
+/admin/catalogue/[id]
+
+Tabs:
+
+OVERVIEW
+
+EDITIONS
+
+ENTRIES
+
+CONTENT REVIEW
+
+MEDIA
+
+QR
+
+PRINT
+
+DISTRIBUTION
+
+SPONSORSHIP
+
+FOUNDING PARTNER ENTITLEMENTS
+
+REPORT
+
+FINANCE
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+46. ADMIN ENTRY REVIEW
+==================================================
+
+Entry statuses:
+
+SUBMITTED
+
+NEED_MORE_INFO
+
+CONTENT_PREPARATION
+
+CLIENT_REVIEW
+
+APPROVED
+
+REJECTED
+
+PUBLISHED
+
+ARCHIVED
+
+Không auto approve.
+
+==================================================
+47. ADMIN PRINT GATE
+==================================================
+
+Không cho status:
+
+PRINT_CONFIRMED
+
+nếu thiếu:
+
+approved final version
+budget confirmation
+quantity
+distribution plan
+responsible owner.
+
+Hiển thị blockers rõ.
+
+==================================================
+48. OWNER + NEXT ACTION
+==================================================
+
+Active Catalogue/Edition phải có:
+
+owner
+nextAction
+nextActionAt
+
+Ví dụ:
+
+“Chờ 5 NCC duyệt nội dung”
+
+“Chốt file trước khi in”
+
+“Xác nhận 300 bản giao cho chương trình”
+
+==================================================
+49. ADMIN DATA QUALITY
+==================================================
+
+Warning:
+
+Entry không còn SupplierProfile public
+
+QR broken
+
+Image rights missing
+
+Old profile data
+
+Programme relation missing
+
+Print quantity ≠ distribution plan
+
+Sponsor entitlement duplicated
+
+No owner
+
+Overdue approval.
+
+==================================================
+50. ACCESS / PRIVACY
+==================================================
+
+Public Catalogue chỉ có:
+
+approved entries
+
+public profile data
+
+approved media
+
+public Program references.
+
+Không public:
+
+Supplier private contact
+
+Buyer needs
+
+Quotation
+
+Commercial contract
+
+Sponsor price
+
+Internal distribution contacts.
+
+==================================================
+51. SEO
+==================================================
+
+Title:
+
+Catalogue Nhà Cung Ứng | CHUOICUNGUNG.COM
+
+Description:
+
+Khám phá catalogue và ấn phẩm nhà cung ứng theo chuyên mục, địa bàn và chương trình; mỗi hồ sơ dẫn về thông tin doanh nghiệp đang được cập nhật trên CHUOICUNGUNG.COM.
+
+Canonical:
+
+/catalogue
+
+Filter combinations:
+noindex/canonical phù hợp.
+
+==================================================
+52. STRUCTURED DATA
+==================================================
+
+Use:
+
+CollectionPage
+ItemList
+
+Có thể dùng CreativeWork
+cho Catalogue detail
+ở Page 31.
+
+Không fake:
+author
+distribution numbers
+download count.
+
+==================================================
+53. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+Search
+
+Filter chips
+
+Catalogue cards
+
+Upcoming edition
+
+CTA participate
+
+Không overflow 390px.
+
+Cover ratio phải nhất quán.
+
+==================================================
+54. ANALYTICS
+==================================================
+
+Track:
+
+catalogue_listing_view
+
+catalogue_search
+
+catalogue_filter
+
+catalogue_detail_click
+
+catalogue_online_view
+
+catalogue_download
+
+catalogue_participation_click
+
+Không gọi download = lead.
+
+==================================================
+55. QA
+==================================================
+
+Test tối thiểu:
+
+1. Listing lấy Catalogue DB thật.
+2. Search/filter hoạt động.
+3. Edition history không overwrite.
+4. Approved entry mới public.
+5. Entry reuse Organization/SupplierProfile.
+6. QR dẫn canonical profile.
+7. QR scan tracking có edition context.
+8. QR scan không tạo Requirement.
+9. Planned print không hiển thị là actual.
+10. Print ≠ distribution.
+11. Digital-first workflow hoạt động.
+12. File download đúng permission.
+13. Sponsor placement có label.
+14. Included Founding Partner entitlement không double charge.
+15. Media rights được check.
+16. Admin blockers trước print hoạt động.
+17. AuditLog hoạt động.
+18. Mobile 390px hoạt động.
+
+==================================================
+56. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Catalogue model
+- Edition model
+- CatalogueEntry
+- Content versioning
+- QR integration
+- Search/filter
+- Program/KCN/Association integration
+- ServiceRequest integration
+- Sponsorship integration
+- Print workflow
+- Distribution workflow
+- Reporting
+- Admin implementation
+- Permissions
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+SUPPLIER PROFILE
+→ CATALOGUE ENTRY
+→ CONTENT REVIEW
+→ DIGITAL EDITION
+→ QR
+→ LIVE PROFILE
+→ PRINT NẾU CẦN
+→ DISTRIBUTION
+→ PROFILE VISIT
+→ CONTACT / REQUIREMENT
+→ FOLLOW-UP
+
+Catalogue không phải PDF chết.
+
+Catalogue phải là
+CẦU NỐI TỪ ẤN PHẨM TĨNH
+VỀ HỒ SƠ SỐ ĐANG ĐƯỢC CẬP NHẬT.

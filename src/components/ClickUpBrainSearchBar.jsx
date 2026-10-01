@@ -1,16 +1,11 @@
 import React from 'react';
-import { Search, Filter } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import { Search } from 'lucide-react';
 
 export default function ClickUpBrainSearchBar({
-  searchCategory,
-  setSearchCategory,
   searchQuery,
   setSearchQuery,
   handleSearchSubmit
 }) {
-  const { t } = useLanguage();
-
   return (
     <div className="relative w-full group">
       
@@ -22,21 +17,8 @@ export default function ClickUpBrainSearchBar({
           onSubmit={handleSearchSubmit}
           className="relative z-10 bg-white p-1 sm:p-1.5 rounded-[24px] flex flex-col sm:flex-row items-stretch gap-1.5 sm:gap-2"
         >
-          {/* Category Selector Dropdown */}
-          <div className="relative sm:w-56 flex-shrink-0">
-            <select
-              value={searchCategory}
-              onChange={(e) => setSearchCategory(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3.5 sm:px-4 py-2 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500/20 appearance-none cursor-pointer pr-9 font-sans transition"
-            >
-              <option value="all">{t('hero.searchAll')}</option>
-              <option value="enterprises">{t('hero.searchEnterprises')}</option>
-              <option value="factories">{t('hero.searchFactories')}</option>
-              <option value="industrial_parks">{t('hero.searchParks')}</option>
-              <option value="associations">{t('hero.searchAssociations')}</option>
-              <option value="stages">{t('hero.searchStages')}</option>
-            </select>
-            <Filter className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="flex h-10 items-center justify-center rounded-xl border border-blue-100 bg-blue-50 px-4 text-xs font-black text-blue-800 sm:h-12 sm:w-40 sm:rounded-2xl tracking-wide font-heading">
+            <span>TRỢ LÝ AI</span>
           </div>
 
           {/* Search Keyword Input */}
@@ -44,7 +26,7 @@ export default function ClickUpBrainSearchBar({
             <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 absolute left-3.5 pointer-events-none" />
             <input
               type="text"
-              placeholder={t('hero.searchPlaceholder')}
+              placeholder="Anh/chị đang cần gì cho doanh nghiệp?"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full h-10 sm:h-12 pl-10 sm:pl-11 pr-4 bg-transparent text-xs sm:text-base font-medium text-slate-800 placeholder-slate-400 focus:outline-none font-sans"
@@ -57,7 +39,7 @@ export default function ClickUpBrainSearchBar({
             className="h-10 sm:h-12 px-6 sm:px-9 bg-[#0052cc] hover:bg-[#0041a8] text-white rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition flex items-center justify-center space-x-2 whitespace-nowrap font-heading uppercase tracking-wide cursor-pointer flex-shrink-0"
           >
             <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span>{t('hero.searchButton')}</span>
+            <span>TÌM KIẾM</span>
           </button>
         </form>
 

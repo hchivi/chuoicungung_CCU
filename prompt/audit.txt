@@ -1,0 +1,2461 @@
+PROJECT: CHUOICUNGUNG.COM
+FINAL AUDIT — P0 + P1
+PHASE: PRE-PILOT SYSTEM AUDIT
+
+IMPORTANT:
+
+ĐÂY KHÔNG PHẢI PAGE 38.
+
+37 PAGE / WORKSTREAM P0 + P1 ĐÃ ĐƯỢC THIẾT KẾ.
+
+Mục tiêu của task này:
+
+AUDIT
+→ PHÁT HIỆN LỖI KIẾN TRÚC
+→ PHÁT HIỆN TRÙNG DATA
+→ PHÁT HIỆN ROUTE HỎNG
+→ PHÁT HIỆN WORKFLOW ĐỨT
+→ PHÁT HIỆN PRIVACY/RBAC ISSUE
+→ FIX CÁC BLOCKER
+→ TEST END-TO-END
+→ CHUẨN BỊ PILOT
+
+KHÔNG tự xây:
+
+P2
+marketplace mới
+dashboard ngành nâng cao
+API partner
+buyer enterprise workspace
+Hội workspace enterprise
+KCN workspace enterprise
+sourcing quốc tế
+tuyển dụng chuyên biệt
+phúc lợi mở rộng
+bản đồ Việt Nam nâng cao
+
+trong task này.
+
+==================================================
+1. AUDIT FIRST — KHÔNG REBUILD
+==================================================
+
+Trước tiên audit toàn bộ codebase.
+
+Không rebuild project.
+
+Không thay design system tổng thể.
+
+Không tạo database song song.
+
+Không tạo entity mới
+nếu core entity hiện tại đã giải quyết được.
+
+Không thực hiện destructive migration
+nếu chưa có migration plan an toàn.
+
+Nếu phát hiện destructive change cần thiết:
+
+STOP phần destructive đó
+và report:
+
+- issue
+- affected tables
+- affected routes
+- migration strategy
+- backward compatibility
+- rollback plan
+
+Các fix không destructive:
+thực hiện luôn.
+
+==================================================
+2. FREEZE SCOPE P0 + P1
+==================================================
+
+Freeze feature scope.
+
+P0 + P1 hiện tại phải được đưa tới trạng thái:
+
+FUNCTIONAL
+CONSISTENT
+SECURE
+TESTABLE
+PILOT-READY
+
+Không mở thêm feature
+chỉ vì thấy “có thể làm thêm”.
+
+==================================================
+3. ROUTE MANIFEST AUDIT
+==================================================
+
+Audit ít nhất các route chính hiện có:
+
+/
+
+/tro-ly-ai
+
+/dang-nhu-cau
+
+/tai-khoan/nhu-cau/[id]
+
+/doanh-nghiep
+/doanh-nghiep/[slug]
+
+/san-pham-dich-vu/[slug]
+
+/nganh-nghe/[slug]
+
+/tu-khoa/[slug]
+
+/ban-do-6-giai-doan
+
+/san-nhu-cau
+
+/tao-ho-so
+
+/dich-vu
+
+/dich-vu/to-chuc-ket-noi
+/dich-vu/truyen-thong-doanh-nghiep
+/dich-vu/vat-pham-su-kien
+/dich-vu/hien-dien-tu-xa
+
+/yeu-cau-dich-vu
+
+/founding-partner
+
+/chuong-trinh
+/chuong-trinh/[slug]
+/chuong-trinh/[slug]/dang-ky
+/chuong-trinh/[slug]/thu-vien
+
+/hoi-hiep-hoi
+/hoi-hiep-hoi/[slug]
+
+/khu-cong-nghiep
+/khu-cong-nghiep/[slug]
+
+/nha-may
+/nha-may/[slug]
+
+/catalogue
+/catalogue/[slug]
+
+/tai-tro
+
+/doi-tac-phat-trien
+
+/bo-ho-so/[slug]
+
+/giai-doan/[slug]
+
+/hop-tac
+
+/admin/...
+
+Audit thêm các account routes
+đã thực sự tồn tại.
+
+==================================================
+4. ROUTE CHECK
+==================================================
+
+Với từng route:
+
+Check:
+
+200/redirect behavior
+
+auth requirement
+
+RBAC
+
+loading state
+
+error state
+
+empty state
+
+404
+
+canonical
+
+mobile
+
+CTA destinations
+
+back navigation
+
+context preservation.
+
+Không để CTA trỏ:
+
+404
+placeholder
+old slug
+old architecture.
+
+==================================================
+5. HEADER / FOOTER
+==================================================
+
+Audit navigation toàn site.
+
+Header desktop/mobile.
+
+Đặc biệt:
+
+Đăng nhu cầu
+
+Tìm nguồn cung
+
+6 Giai đoạn
+
+Chương trình
+
+Hệ sinh thái
+
+Dịch vụ
+
+Hợp tác
+
+Đăng nhập.
+
+Mọi item phải tới route thực.
+
+Xóa link P2
+nếu page chưa tồn tại thực.
+
+Không để dead navigation.
+
+==================================================
+6. ONE ORGANIZATION RULE
+==================================================
+
+HARD RULE:
+
+MỘT DOANH NGHIỆP
+=
+MỘT ORGANIZATION GỐC.
+
+Một Organization có thể có roles:
+
+BUYER
+SUPPLIER
+FACTORY
+ASSOCIATION
+INDUSTRIAL_PARK_OPERATOR
+SPONSOR
+FOUNDING_PARTNER
+DEVELOPMENT_PARTNER
+PROGRAM_ORGANIZER
+INVESTOR
+EXPERT
+...
+
+Không tạo:
+
+ABC Buyer
+ABC Supplier
+ABC Sponsor
+
+thành ba Organization khác nhau.
+
+==================================================
+7. ORGANIZATION DUPLICATE AUDIT
+==================================================
+
+Audit duplicates theo:
+
+taxCode
+
+legalName
+
+normalizedName
+
+domain
+
+website
+
+phone
+
+known aliases.
+
+Report:
+
+possible duplicates
+
+safe auto-merge candidates
+
+manual review required.
+
+Không auto merge
+nếu legal identity chưa chắc chắn.
+
+==================================================
+8. FACILITY / FACTORY
+==================================================
+
+Audit:
+
+Organization
+→ Facilities
+→ FactoryProfile
+
+Một Organization có thể có nhiều Factory.
+
+Không duplicate legal company data
+trong từng Factory nếu không cần.
+
+Check:
+
+Factory → Organization
+
+Factory → IndustrialPark relation
+
+Factory MUA/BÁN roles.
+
+==================================================
+9. ROLE CONSISTENCY
+==================================================
+
+Một Organization có thể vừa:
+
+BUYER
+vừa SUPPLIER.
+
+Factory có thể:
+
+MUA
++
+BÁN.
+
+Sponsor có thể đồng thời Supplier.
+
+Investor có thể đồng thời Sponsor.
+
+Nhưng relationship/workflow/finance
+phải tách riêng.
+
+==================================================
+10. CORE DATA MODEL AUDIT
+==================================================
+
+Audit các domain chính:
+
+Organization
+OrganizationMembership
+Facility
+FactoryProfile
+
+SupplierProfile
+Capability
+ProductService
+ServiceArea
+Evidence
+
+Category
+KeywordCluster
+Stage
+NeedGroup
+
+Requirement
+RequirementVersion
+
+SupplierMatch
+SupplierResponse
+
+Connection
+
+Meeting
+Sample
+Quotation
+Outcome
+
+Program
+ProgramRegistration
+Attendance
+ProgramMeeting
+
+Service
+ServiceRequest
+ServiceContract
+
+Sponsorship
+Entitlement
+EntitlementDelivery
+
+FoundingPartnership
+
+Catalogue
+CatalogueEdition
+CatalogueEntry
+
+MediaAsset
+
+DevelopmentPartner
+Referral
+Settlement
+
+SourcingDossier
+
+PartnershipRequest
+
+Consent
+Permission
+Task
+AuditLog
+
+Check duplicate concepts.
+
+==================================================
+11. NO PARALLEL MODELS
+==================================================
+
+Flag nếu codebase có:
+
+FactoryNeed
+KCNNeed
+AssociationNeed
+
+thay vì Requirement.
+
+Flag:
+
+DossierQuote
+
+thay vì Quotation.
+
+Flag:
+
+CatalogueSupplier
+
+nếu nó duplicate SupplierProfile.
+
+Flag:
+
+ProgramSupplierProfile
+
+nếu duplicate Organization/Supplier.
+
+Đề xuất migration/reuse.
+
+==================================================
+12. REQUIREMENT IS THE CORE
+==================================================
+
+Audit end-to-end:
+
+Natural language / form
+→ RequirementDraft
+→ Confirm
+→ Requirement
+→ Supplier Matching
+→ Connection
+→ Follow-up
+→ Outcome.
+
+Không có workflow nào
+bypass Requirement
+chỉ để tạo “lead”.
+
+==================================================
+13. REQUIREMENT PRIVACY
+==================================================
+
+Visibility:
+
+PRIVATE
+
+MATCHED_SUPPLIERS_ONLY
+
+PUBLIC_SUMMARY
+
+phải được backend enforce.
+
+Test tuyệt đối không lộ:
+
+Buyer contact
+
+Budget
+
+Target price
+
+Confidential files
+
+Supplier responses
+
+Quotes
+
+Internal notes.
+
+==================================================
+14. PUBLIC REQUIREMENT
+==================================================
+
+/san-nhu-cau
+và các public blocks khác
+chỉ query:
+
+PUBLIC_SUMMARY
+
++
+allowed status.
+
+Không query private Requirements
+rồi chỉ hide bằng frontend.
+
+==================================================
+15. REQUIREMENT VERSIONING
+==================================================
+
+Audit:
+
+Requirement change
+
+must preserve history.
+
+Không overwrite silently:
+
+quantity
+
+deadline
+
+technical spec
+
+location
+
+visibility.
+
+==================================================
+16. SUPPLIER MATCHING
+==================================================
+
+Audit matching logic theo:
+
+NEED
+
+CAPABILITY
+
+LOCATION
+
+TIME
+
+ABILITY TO RESPOND.
+
+Không dùng:
+
+SponsorshipAmount
+
+FoundingPartner status
+
+Paid package
+
+commercial tier
+
+để tăng match.
+
+==================================================
+17. EXPLAINABLE MATCH
+==================================================
+
+SupplierMatch cần reason.
+
+Ví dụ:
+
+Capability match
+
+Product match
+
+Location match
+
+Order size
+
+Availability
+
+Evidence
+
+Sample capability.
+
+Không chỉ lưu opaque score.
+
+==================================================
+18. NEED STATUS ≠ MATCH STATUS
+==================================================
+
+Không gộp:
+
+Requirement lifecycle
+
+và
+
+SupplierMatch lifecycle.
+
+Một Need có thể:
+
+SOURCING
+
+trong khi Supplier A:
+
+INVITED
+
+Supplier B:
+
+RESPONDED
+
+Supplier C:
+
+NOT_SUITABLE.
+
+Audit enum/state implementation.
+
+==================================================
+19. RESULT ≠ SUCCESS BOOLEAN
+==================================================
+
+Không dùng:
+
+success = true/false
+
+cho toàn bộ workflow.
+
+Outcome có thể:
+
+SELECTED
+
+NOT_SELECTED
+
+NOT_SUITABLE
+
+PAUSED
+
+CANCELLED
+
+UNKNOWN_RESULT
+
+hoặc equivalent architecture.
+
+Không ép mọi case về “Success”.
+
+==================================================
+20. OWNER + NEXT ACTION
+==================================================
+
+Audit operational records.
+
+Active record phải có:
+
+owner
+
+nextAction
+
+nextActionAt
+
+status
+
+khi workflow cần follow-up.
+
+Đặc biệt:
+
+Requirement
+
+SupplierMatch
+
+Connection
+
+ServiceRequest
+
+Program operation
+
+Sponsorship
+
+Founding Partnership
+
+Remote Presence
+
+Development Partner
+
+Partnership Request.
+
+==================================================
+21. TASK ENGINE
+==================================================
+
+Không để mỗi module
+có task system riêng.
+
+Reuse shared Task.
+
+Task relation có thể tới:
+
+Requirement
+
+Connection
+
+Program
+
+ServiceRequest
+
+Sponsorship
+
+Catalogue
+
+Dossier
+
+Partnership.
+
+==================================================
+22. FORM ENGINE AUDIT
+==================================================
+
+Audit mọi form.
+
+Ưu tiên shared:
+
+FormEngine {
+ schema
+ context
+}
+
+Không xây form architecture riêng
+cho từng page nếu không cần.
+
+==================================================
+23. FORM SUBMISSION STANDARD
+==================================================
+
+Mọi form quan trọng phải tuân:
+
+OPEN
+→ DRAFT
+→ CLIENT VALIDATION
+→ SUBMIT
+→ SERVER VALIDATION
+→ DEDUPLICATION
+→ CREATE RECORD
+→ ASSIGN OWNER
+→ CREATE TASK
+→ SEND CONFIRMATION
+→ SHOW TRACKING CODE
+
+Audit tất cả form.
+
+==================================================
+24. SOURCE CONTEXT
+==================================================
+
+Submission phải giữ:
+
+sourcePage
+
+sourceId
+
+category
+
+keyword
+
+program
+
+industrialPark
+
+association
+
+partner
+
+campaign
+
+referral
+
+nếu có.
+
+Không mất context
+sau login/register.
+
+==================================================
+25. TRACKING CODES
+==================================================
+
+Check public codes:
+
+NC-...
+DV-...
+CT-...
+HT-...
+
+hoặc standard thực tế.
+
+UUID internal.
+
+Không expose sequential DB id
+như public identity nếu không cần.
+
+==================================================
+26. DEDUPLICATION
+==================================================
+
+Audit dedupe cho:
+
+Requirement submission
+
+Service request
+
+Program registration
+
+Organization
+
+Supplier response
+
+Sponsorship inquiry
+
+Partner referral
+
+Partnership inquiry.
+
+Không block legitimate separate workflows.
+
+==================================================
+27. CONSENT
+==================================================
+
+Tách:
+
+CONSENT xử lý yêu cầu
+
+và
+
+MARKETING CONSENT.
+
+Không auto subscribe marketing
+khi submit requirement/service/program.
+
+==================================================
+28. SUPPI AUDIT
+==================================================
+
+SUPPI = sourcing / clarification.
+
+Audit SUPPI xuất hiện phù hợp tại:
+
+Home/Search
+
+AI workspace
+
+Requirement
+
+Category
+
+Keyword
+
+Supplier profile context
+
+Stage
+
+Dossier.
+
+SUPPI được:
+
+clarify
+extract
+structure
+suggest missing info
+search/match.
+
+SUPPI không được:
+
+auto publish
+auto verify
+auto choose winner
+auto claim legal compliance.
+
+==================================================
+29. CHAINY AUDIT
+==================================================
+
+CHAINY = connection / follow-up.
+
+Audit CHAINY tại:
+
+Connection
+
+Program
+
+Meeting
+
+Sample
+
+Quote
+
+Follow-up
+
+Notification
+
+Outcome.
+
+CHAINY không tự:
+
+accept quotation
+
+commit pricing
+
+sign contract
+
+mark deal won
+
+nếu user chưa xác nhận.
+
+==================================================
+30. AUTH / RBAC AUDIT
+==================================================
+
+Roles/scopes cần audit:
+
+Guest
+
+Buyer
+
+Supplier
+
+Organization manager
+
+Association
+
+Industrial Park
+
+Sponsor
+
+Coordinator
+
+Finance
+
+Admin
+
+Advisor
+
+Development Partner.
+
+Default least privilege.
+
+==================================================
+31. IDOR TEST
+==================================================
+
+Test thay ID trên:
+
+Requirement
+
+Quotation
+
+Meeting
+
+Program registration
+
+ServiceRequest
+
+Catalogue protected file
+
+Private Dossier
+
+Sponsorship
+
+Contract
+
+Partner settlement
+
+Partnership request.
+
+Server phải reject.
+
+==================================================
+32. FILE SECURITY
+==================================================
+
+Private files không được bảo vệ
+chỉ bằng obscure URL.
+
+Check permission mỗi request/download.
+
+Use:
+
+signed/protected access
+hoặc equivalent.
+
+Test copied URL
+ở unauthenticated session.
+
+==================================================
+33. ORGANIZATION CLAIM
+==================================================
+
+Audit /tao-ho-so:
+
+Find existing org
+
+Claim
+
+Verification
+
+Admin review
+
+Approve
+
+Membership/permission.
+
+Không auto manager
+chỉ vì email domain match.
+
+==================================================
+34. ASSOCIATION
+==================================================
+
+Audit:
+
+Association membership
+chỉ khi confirmed.
+
+Program attendance
+không tạo membership.
+
+Co-organizer
+chỉ khi ProgramOrganization confirmed.
+
+Không expose member private data.
+
+==================================================
+35. INDUSTRIAL PARK
+==================================================
+
+Audit relation:
+
+STATE MANAGEMENT
+DEVELOPER
+OPERATOR
+PROGRAM CONTACT.
+
+Factory in KCN
+chỉ qua confirmed relation.
+
+Không parse address
+rồi tự khẳng định KCN relation.
+
+==================================================
+36. FACTORY
+==================================================
+
+Audit:
+
+Factory buy side
+
+Requirement
+
+Supplier matching
+
+Meetings
+
+Samples
+
+Quotes.
+
+Sell side:
+
+SupplierProfile
+
+Capabilities
+
+Products
+
+ServiceArea.
+
+Public profile
+không lộ private procurement.
+
+==================================================
+37. PROGRAM
+==================================================
+
+Audit Program:
+
+UPCOMING
+
+REGISTRATION_OPEN
+
+REGISTRATION_CLOSED
+
+COMPLETED
+
+POSTPONED
+
+CANCELLED
+
+hoặc equivalents.
+
+Check expiration automation/logic.
+
+==================================================
+38. PROGRAM STATUS SEPARATION
+==================================================
+
+RegistrationStatus
+
+PaymentStatus
+
+AttendanceStatus
+
+phải riêng.
+
+Không dùng:
+
+PAID = ATTENDED
+
+REGISTERED = CHECKED_IN.
+
+==================================================
+39. PROGRAM CHANGE HANDLING
+==================================================
+
+POSTPONED:
+
+reschedule communication.
+
+CANCELLED:
+
+registration handling
+refund/credit policy if applicable.
+
+COMPLETED:
+
+archive.
+
+Expired registration:
+CTA inactive.
+
+==================================================
+40. MEETING ≠ RESULT
+==================================================
+
+Program meeting
+không được tính:
+
+deal
+
+sale
+
+success
+
+trừ khi Outcome xác nhận.
+
+==================================================
+41. REMOTE PRESENCE
+==================================================
+
+Audit Page 34:
+
+Program supports remote participation
+
+content approval
+
+introduction script
+
+sample handling
+
+representation scope
+
+contact consent
+
+report.
+
+Coordinator không tự:
+
+quote
+negotiate
+commit technical claims.
+
+==================================================
+42. CATALOGUE
+==================================================
+
+Audit:
+
+Catalogue
+Edition
+Entry
+QR
+Distribution.
+
+Printed edition:
+historical snapshot.
+
+Live supplier profile:
+current data.
+
+Không overwrite old edition.
+
+==================================================
+43. QR
+==================================================
+
+QR scan:
+
+track source.
+
+Nhưng:
+
+SCAN
+≠ REQUEST
+≠ NEED
+≠ DEAL.
+
+Check code không auto create lead.
+
+==================================================
+44. DISTRIBUTION
+==================================================
+
+Planned quantity
+≠ printed quantity
+
+Printed
+≠ distributed.
+
+Không hiển thị planned number
+như actual.
+
+==================================================
+45. SPONSORSHIP
+==================================================
+
+Audit:
+
+Inquiry
+→ Scope
+→ Proposal
+→ Contract
+→ Active
+→ Entitlement delivery
+→ Acceptance
+→ Report.
+
+Form submission
+không auto Sponsor.
+
+==================================================
+46. SPONSOR ENTITLEMENTS
+==================================================
+
+Mỗi entitlement cần:
+
+scope
+quantity
+time
+owner
+status
+evidence
+acceptance.
+
+Check double charging.
+
+==================================================
+47. FOUNDING PARTNER
+==================================================
+
+Audit commercial scope:
+
+Category / Keyword Cluster
+
+Location/KCN optional
+
+Placement
+
+Term.
+
+Paid status
+không ảnh hưởng supplier matching.
+
+Expired rights:
+stop paid display
+but preserve history.
+
+==================================================
+48. SPONSOR ≠ INVESTOR
+==================================================
+
+Audit all models/finance/UI.
+
+Sponsor
+≠ Investor.
+
+Founding Partner
+≠ Equity.
+
+Investor
+≠ Sponsor.
+
+Separate:
+
+relationship
+contract
+finance type
+permissions.
+
+==================================================
+49. DEVELOPMENT PARTNER
+==================================================
+
+Audit:
+
+application
+
+agreement
+
+referral code
+
+attribution
+
+existing customer
+
+duplicate referral
+
+eligible transaction
+
+settlement
+
+refund adjustment.
+
+Click
+≠ valid referral.
+
+==================================================
+50. DOSSIER
+==================================================
+
+Audit Page 35:
+
+Purpose
+
+Criteria
+
+Prepared by
+
+Updated date
+
+Candidate list
+
+Inclusion reason
+
+Evidence
+
+Missing info
+
+Public/private.
+
+Sponsor content
+must be separately labeled.
+
+==================================================
+51. STAGE TAXONOMY
+==================================================
+
+Audit:
+
+6 canonical stages
+
+18 need groups.
+
+No duplicate old names.
+
+Stage
+≠ mandatory sequential process.
+
+Stage relation many-to-many
+with categories where needed.
+
+==================================================
+52. PARTNERSHIP HUB
+==================================================
+
+Audit:
+
+Association
+
+KCN
+
+Sponsor
+
+Founding Partner
+
+Development Partner
+
+Advisor
+
+Investor.
+
+Form submit
+only creates inquiry/request.
+
+Never auto confirmed partner.
+
+==================================================
+53. ADMIN CENTRAL AUDIT
+==================================================
+
+Audit /admin architecture.
+
+Need central visibility for:
+
+Needs
+
+Profile/data gaps
+
+Supplier connections
+
+Programs/meetings
+
+Service/sponsorship deliverables
+
+Finance/reconciliation.
+
+Avoid duplicate admin modules
+that edit same record independently.
+
+==================================================
+54. DAILY WORK
+==================================================
+
+Admin needs:
+
+MY TASKS
+
+OVERDUE
+
+DUE TODAY
+
+UNASSIGNED
+
+WAITING EXTERNAL
+
+WAITING CUSTOMER
+
+WAITING SUPPLIER.
+
+Operations team should know
+what to do next.
+
+==================================================
+55. AUDIT LOG
+==================================================
+
+Important mutations must log:
+
+who
+what
+when
+before/after where appropriate.
+
+At least:
+
+visibility
+
+status
+
+role
+
+permission
+
+price/finance classification
+
+contract
+
+entitlement
+
+outcome
+
+public display
+
+organization merge.
+
+==================================================
+56. FINANCE SEPARATION
+==================================================
+
+Audit financial categories:
+
+SERVICE REVENUE
+
+SPONSORSHIP REVENUE
+
+FOUNDING PARTNER REVENUE
+
+INVESTMENT CAPITAL
+
+LOAN
+
+COLLECTED ON BEHALF
+
+PARTNER COMMISSION / ACQUISITION COST
+
+REFUND.
+
+Investment capital
+must never be revenue.
+
+==================================================
+57. SEO AUDIT
+==================================================
+
+For public routes:
+
+title
+
+description
+
+canonical
+
+robots
+
+sitemap
+
+breadcrumbs
+
+structured data.
+
+Private/account/admin:
+
+NOINDEX.
+
+Filter/search pages:
+canonical/noindex according to strategy.
+
+==================================================
+58. SEO PRIVACY
+==================================================
+
+Ensure private data
+never enters:
+
+metadata
+
+SSR payload
+
+JSON-LD
+
+sitemap
+
+OpenGraph
+
+static generation cache.
+
+==================================================
+59. CANONICAL CONTENT
+==================================================
+
+Avoid duplicate SEO pages for:
+
+synonym keywords
+
+old slugs
+
+NeedGroup filters
+
+Catalogue archived edition
+
+Organization aliases.
+
+Use aliases/redirect/canonical.
+
+==================================================
+60. RESPONSIVE AUDIT
+==================================================
+
+Test at least:
+
+390px
+430px
+768px
+1024px
+1440px.
+
+Check:
+
+nav
+forms
+tables
+cards
+filters
+tabs
+modals
+sticky CTA
+admin boards.
+
+No horizontal overflow.
+
+==================================================
+61. ACCESSIBILITY
+==================================================
+
+Audit basic:
+
+keyboard navigation
+
+form labels
+
+error messages
+
+focus state
+
+modal focus
+
+alt text
+
+button semantics
+
+contrast.
+
+Do not block pilot
+on cosmetic perfection,
+but fix critical usability issues.
+
+==================================================
+62. PERFORMANCE
+==================================================
+
+Check:
+
+large Supplier lists
+
+Program images
+
+Catalogue PDFs
+
+media library
+
+Stage page
+
+admin boards.
+
+Use:
+
+pagination
+lazy loading
+server filtering
+
+where required.
+
+Do not load whole database
+into frontend.
+
+==================================================
+63. SEARCH
+==================================================
+
+Audit search across:
+
+Supplier
+
+Category
+
+Keyword
+
+Factory
+
+Industrial Park
+
+Association
+
+Catalogue
+
+Program.
+
+Check normalization
+and canonical routing.
+
+==================================================
+64. ERROR STATES
+==================================================
+
+Every key page must support:
+
+loading
+
+empty
+
+error
+
+not found
+
+permission denied
+
+expired
+
+archived.
+
+No blank screen.
+
+==================================================
+65. NO FAKE DATA
+==================================================
+
+Production/public pages must not show:
+
+fake Supplier count
+
+fake transaction count
+
+fake Program attendance
+
+fake review score
+
+fake Buyer demand
+
+fake distribution count.
+
+Development seed data
+must be clearly non-production.
+
+==================================================
+66. DATA FRESHNESS
+==================================================
+
+For public profiles/content:
+
+updatedAt
+
+evidence expiry
+
+certificate expiry where applicable
+
+archived status.
+
+Warn admin
+when stale.
+
+==================================================
+67. E2E SCENARIO 01 — BUYER
+==================================================
+
+Test:
+
+Guest
+→ /tro-ly-ai
+→ describe need
+→ SUPPI structures
+→ RequirementDraft
+→ login/value gate if necessary
+→ Confirm
+→ Requirement
+→ tracking code
+→ sourcing
+→ SupplierMatch
+→ Connection
+→ Meeting/Sample/Quote
+→ Outcome.
+
+PASS only if full chain persists correctly.
+
+==================================================
+68. E2E SCENARIO 02 — PUBLIC NEED
+==================================================
+
+Requirement
+→ PUBLIC_SUMMARY
+→ /san-nhu-cau
+→ Supplier Response
+→ review
+→ SupplierMatch
+→ Connection.
+
+Test privacy.
+
+==================================================
+69. E2E SCENARIO 03 — SUPPLIER
+==================================================
+
+Supplier:
+→ /tao-ho-so
+→ find/create Organization
+→ claim
+→ review
+→ SupplierProfile
+→ Capability
+→ ProductService
+→ public profile
+→ receive matching request.
+
+==================================================
+70. E2E SCENARIO 04 — FACTORY
+==================================================
+
+Organization
+→ Factory 01
+→ Buyer need
+
+same Organization
+→ Supplier capability
+
+No duplicate company.
+
+==================================================
+71. E2E SCENARIO 05 — PROGRAM
+==================================================
+
+Program created
+→ registration open
+→ Buyer registers
+→ Supplier registers
+→ payment status if needed
+→ attendance
+→ meeting
+→ follow-up
+→ outcome
+→ archive.
+
+==================================================
+72. E2E SCENARIO 06 — ASSOCIATION
+==================================================
+
+Association
+→ proposal Program
+→ Scope
+→ Program
+→ members only where confirmed
+→ registration
+→ report according to permission.
+
+==================================================
+73. E2E SCENARIO 07 — KCN
+==================================================
+
+Industrial Park
+→ confirmed Organization relations
+→ Factory list
+→ public needs
+→ suppliers serving area
+→ Program proposal.
+
+No false endorsement.
+
+==================================================
+74. E2E SCENARIO 08 — SERVICE REQUEST
+==================================================
+
+/yeu-cau-dich-vu
+→ dynamic form
+→ submit
+→ dedupe
+→ code
+→ owner
+→ proposal
+→ accepted
+→ in progress
+→ acceptance
+→ completed.
+
+==================================================
+75. E2E SCENARIO 09 — CATALOGUE
+==================================================
+
+Supplier
+→ Catalogue submission
+→ review
+→ entry approved
+→ digital edition
+→ QR
+→ canonical Supplier profile
+→ distribution
+→ report.
+
+==================================================
+76. E2E SCENARIO 10 — SPONSOR
+==================================================
+
+Sponsor inquiry
+→ scope
+→ proposal
+→ contract
+→ entitlements
+→ evidence
+→ acceptance
+→ report
+→ expiry.
+
+No matching boost.
+
+==================================================
+77. E2E SCENARIO 11 — FOUNDING PARTNER
+==================================================
+
+Inquiry
+→ category scope
+→ conflict check
+→ contract
+→ placement
+→ entitlement
+→ report
+→ expiry.
+
+Organic sourcing unaffected.
+
+==================================================
+78. E2E SCENARIO 12 — REMOTE PRESENCE
+==================================================
+
+Supplier
+→ Program
+→ Remote Presence request
+→ content approval
+→ sample if applicable
+→ Program display
+→ contact request
+→ Supplier response
+→ report.
+
+No coordinator quote commitment.
+
+==================================================
+79. E2E SCENARIO 13 — DEVELOPMENT PARTNER
+==================================================
+
+Application
+→ approval
+→ partner code
+→ referral
+→ valid request
+→ transaction
+→ eligibility
+→ settlement.
+
+Duplicate/existing customer handled.
+
+==================================================
+80. E2E SCENARIO 14 — SOURCING DOSSIER
+==================================================
+
+Requirement
+→ criteria
+→ supplier candidates
+→ inclusion reasons
+→ missing data
+→ Buyer review
+→ shortlist
+→ connection.
+
+Sponsor does not alter shortlist.
+
+==================================================
+81. E2E SCENARIO 15 — PARTNERSHIP
+==================================================
+
+/hop-tac
+→ select Investor
+→ investor inquiry.
+
+Separate test:
+
+/hop-tac
+→ Sponsor
+→ /tai-tro.
+
+Ensure records/finance are different.
+
+==================================================
+82. SECURITY TEST MATRIX
+==================================================
+
+Run tests for:
+
+unauthenticated
+
+wrong Organization
+
+wrong Supplier
+
+wrong Buyer
+
+wrong Sponsor
+
+wrong Coordinator
+
+expired session
+
+direct file URL
+
+changed query ID
+
+changed route ID.
+
+Document expected 401/403/404 behavior.
+
+==================================================
+83. DATA QUALITY REPORT
+==================================================
+
+Generate report categories:
+
+CRITICAL
+
+HIGH
+
+MEDIUM
+
+LOW.
+
+Examples:
+
+CRITICAL:
+private quote public
+
+HIGH:
+duplicate Organization
+
+MEDIUM:
+missing profile update date
+
+LOW:
+copy/spacing inconsistency.
+
+==================================================
+84. FIX PRIORITY
+==================================================
+
+P0 BLOCKER:
+
+security
+data corruption
+broken requirement flow
+broken auth
+payment/accounting classification
+private data leakage.
+
+P1 BLOCKER:
+
+broken Program
+broken sponsorship
+broken Catalogue
+broken KCN/Hội/Factory integration.
+
+COSMETIC:
+
+fix after functional blockers.
+
+==================================================
+85. MIGRATION SAFETY
+==================================================
+
+For database changes:
+
+migration idempotent where possible
+
+backup assumptions documented
+
+no DROP unless approved
+
+data backfill explicit
+
+unique constraints only after duplicate audit
+
+foreign key migration planned
+
+rollback described.
+
+==================================================
+86. TEST DATA
+==================================================
+
+Create controlled pilot fixtures
+only if required for QA.
+
+Clearly tag:
+
+TEST
+SEED
+DEMO
+
+and ensure production UI
+does not accidentally expose them.
+
+==================================================
+87. PILOT READINESS DATA
+==================================================
+
+Before real pilot:
+
+prepare ability to import/enter:
+
+Organizations
+
+SupplierProfiles
+
+Factories
+
+Industrial Parks
+
+Associations
+
+Categories
+
+Keywords
+
+Capabilities
+
+Products
+
+Programs
+
+Requirements.
+
+Do not require 100% database completeness
+to process first real Need.
+
+==================================================
+88. PILOT METRICS
+==================================================
+
+System must be able to report:
+
+Confirmed Requirements
+
+Suppliers considered
+
+Supplier responses
+
+Connections
+
+Meetings completed
+
+Samples
+
+Quotes
+
+Confirmed Outcomes
+
+Service requests
+
+Contracts
+
+Actual revenue received
+
+Refunds
+
+Service delivery cost
+
+Customers requesting continuation.
+
+Do not fabricate conversion rates.
+
+==================================================
+89. METRIC DEFINITIONS
+==================================================
+
+Define clearly:
+
+VIEW
+
+QR SCAN
+
+CONTACT REQUEST
+
+CONFIRMED REQUIREMENT
+
+SUPPLIER RESPONSE
+
+MATCH
+
+CONNECTION
+
+MEETING
+
+QUOTE
+
+OUTCOME
+
+REVENUE.
+
+Do not mix them.
+
+==================================================
+90. PILOT ACCEPTANCE GATES
+==================================================
+
+GATE A — NAVIGATION
+
+All important CTAs/routes work.
+
+GATE B — FORM
+
+Every major form:
+confirm + tracking code + owner.
+
+GATE C — DATA
+
+No critical duplicate/core relation issue.
+
+GATE D — PRIVACY
+
+No private data leakage.
+
+GATE E — OPERATIONS
+
+Every active workflow has owner/next action.
+
+GATE F — PROGRAM
+
+Registration/payment/attendance separated.
+
+GATE G — COMMERCIAL
+
+Service/Sponsor/Founding Partner rights trackable.
+
+GATE H — FINANCE
+
+Revenue/capital/refund classifications separated.
+
+GATE I — REPORTING
+
+Pilot KPIs can be extracted.
+
+Only after these gates:
+PILOT READY.
+
+==================================================
+91. DO NOT START P2
+==================================================
+
+At end:
+
+Do NOT implement:
+
+/ban-do-viet-nam
+
+/dich-vu/phuc-loi-doanh-nghiep
+
+/tuyen-dung
+
+industry dashboard
+
+expanded marketplace
+
+international sourcing
+
+enterprise buyer workspace
+
+full KCN workspace
+
+full Association workspace
+
+advanced membership
+
+API/data partner.
+
+Only create:
+P2 backlog.
+
+==================================================
+92. P2 BACKLOG
+==================================================
+
+Create one backlog document/table:
+
+Feature
+Evidence required before build
+Dependency
+Business owner
+Estimated complexity
+Pilot signal needed.
+
+Do NOT code P2.
+
+==================================================
+93. FINAL OUTPUT — EXECUTIVE
+==================================================
+
+Produce:
+
+1. SYSTEM STATUS
+
+PILOT READY
+or
+NOT PILOT READY.
+
+2. CRITICAL BLOCKERS
+
+3. HIGH PRIORITY ISSUES
+
+4. DATA MODEL ISSUES
+
+5. SECURITY/RBAC ISSUES
+
+6. ROUTE/CTA ISSUES
+
+7. WORKFLOW ISSUES
+
+8. ADMIN ISSUES
+
+9. SEO ISSUES
+
+10. MOBILE/PERFORMANCE ISSUES.
+
+==================================================
+94. FINAL OUTPUT — TECHNICAL
+==================================================
+
+Report:
+
+Files changed
+
+Migrations created
+
+Models modified
+
+APIs/server actions modified
+
+Routes fixed
+
+Permissions fixed
+
+Tests added
+
+Tests passing
+
+Tests failing
+
+External credentials missing
+
+Remaining mocks
+
+Backward compatibility concerns
+
+Manual review items.
+
+==================================================
+95. TEST RESULT FORMAT
+==================================================
+
+For every major workflow:
+
+PASS
+FAIL
+BLOCKED
+NOT APPLICABLE
+
+with:
+
+Test
+Expected
+Actual
+Issue
+Fix
+Retest status.
+
+==================================================
+96. NO FALSE “PASS”
+==================================================
+
+Do not mark PASS
+because component renders.
+
+PASS only when:
+
+UI
++
+backend
++
+database
++
+permission
++
+state transition
+
+work together.
+
+==================================================
+97. FINAL PILOT CHECK
+==================================================
+
+System must demonstrate at minimum:
+
+ONE REALISTIC REQUIREMENT
+can go:
+
+CREATE
+→ CONFIRM
+→ SOURCE
+→ MATCH
+→ CONNECT
+→ FOLLOW UP
+→ OUTCOME.
+
+ONE SERVICE REQUEST:
+
+REQUEST
+→ PROPOSAL
+→ ACCEPTED
+→ DELIVERY
+→ ACCEPTANCE.
+
+ONE PROGRAM:
+
+REGISTRATION
+→ ATTENDANCE
+→ MEETING
+→ FOLLOW-UP.
+
+ONE COMMERCIAL PARTNERSHIP:
+
+CONTRACT
+→ ENTITLEMENT
+→ DELIVERY
+→ EVIDENCE
+→ REPORT.
+
+==================================================
+98. FINAL PRINCIPLE
+==================================================
+
+CHUOICUNGUNG.COM phải vận hành như:
+
+A WORKFLOW SYSTEM
+
+không phải:
+
+A DIRECTORY
+A PDF LIBRARY
+A LEAD MARKETPLACE
+A COLLECTION OF LANDING PAGES.
+
+Core:
+
+NHU CẦU THẬT
+→ TÌM ĐÚNG NGUỒN
+→ KẾT NỐI ĐÚNG NGƯỜI
+→ THEO DÕI ĐẾN CÙNG
+→ GHI NHẬN KẾT QUẢ.
+
+==================================================
+99. FINISH CONDITION
+==================================================
+
+Task chỉ hoàn tất khi có:
+
+Audit report
+Fix report
+Migration report
+Security report
+E2E test report
+Pilot readiness result
+P2 backlog
+
+và không có CRITICAL BLOCKER chưa được nêu rõ.
+
+Nếu còn blocker:
+
+không được viết đơn giản:
+
+“Done”.
+
+Phải ghi:
+
+NOT PILOT READY
++
+blocker
++
+action required.

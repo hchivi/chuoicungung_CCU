@@ -1,0 +1,523 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 14: DỊCH VỤ TỔ CHỨC KẾT NỐI
+ROUTE: /dich-vu/to-chuc-ket-noi
+
+MỤC TIÊU:
+
+Xây page bán dịch vụ tổ chức chương trình kết nối
+DỰA TRÊN NHU CẦU DOANH NGHIỆP THẬT.
+
+Đối tượng:
+
+- Hội / Hiệp hội
+- KCN / đơn vị vận hành KCN
+- Tổ chức kết nối doanh nghiệp
+- Nhà máy / doanh nghiệp muốn gặp NCC
+
+Không biến page này thành dịch vụ “tổ chức event” chung chung.
+
+Luồng phải là:
+
+ĐỀ BÀI
+→ NHU CẦU BUYER
+→ NCC PHÙ HỢP
+→ ĐĂNG KÝ
+→ MATCHING
+→ CUỘC GẶP
+→ MẪU / BÁO GIÁ / NEXT ACTION
+→ FOLLOW-UP
+→ BÁO CÁO KẾT QUẢ
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit route:
+
+/dich-vu/to-chuc-ket-noi
+
+Reuse:
+
+services
+service_requests
+requirements
+organizations
+supplier_profiles
+programs
+program_registrations
+supplier_matches
+meetings
+tasks
+activities
+outcomes
+
+Không tạo một hệ CRM/sự kiện riêng nếu module hiện tại đã có.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“TỔ CHỨC CHƯƠNG TRÌNH KẾT NỐI THEO NHU CẦU DOANH NGHIỆP”
+
+Sub:
+
+“CHUOICUNGUNG.COM phối hợp cùng đơn vị tổ chức để tiếp nhận nhu cầu, chuẩn bị hồ sơ, sắp xếp cuộc gặp và theo dõi đầu việc sau chương trình. Phạm vi triển khai được thống nhất theo mục tiêu, địa bàn và nguồn lực của từng hoạt động.”
+
+CTA chính:
+
+[GỬI ĐỀ BÀI CHƯƠNG TRÌNH]
+
+→ /yeu-cau-dich-vu?service=to-chuc-ket-noi
+
+CTA phụ:
+
+[XEM CHƯƠNG TRÌNH ĐANG MỞ]
+
+→ /chuong-trinh
+
+==================================================
+3. HÌNH THỨC TRIỂN KHAI
+==================================================
+
+Hiển thị 4 hình thức chính:
+
+1. Buổi gặp nhà cung ứng cho một nhà máy
+
+2. Ngày hội Chuỗi Cung Ứng theo Hội/KCN
+
+3. Gian hàng chung tại hội chợ
+
+4. Phiên giới thiệu sản phẩm & năng lực
+
+Mỗi card chỉ cần:
+Tên
+Mô tả ngắn
+Phù hợp với ai
+CTA gửi đề bài
+
+==================================================
+4. QUY TRÌNH DỊCH VỤ
+==================================================
+
+BLOCK 01 — TRƯỚC CHƯƠNG TRÌNH
+
+- Làm rõ nhóm Buyer
+- Thu và chuẩn hóa nhu cầu
+- Phân loại NCC
+- Chuẩn bị hồ sơ
+- Tạo trang đăng ký
+- Chuẩn bị lịch và tài liệu
+
+QUAN TRỌNG:
+Nhu cầu phải được xác nhận trước khi đưa vào kế hoạch matching/cuộc gặp.
+
+--------------------------------------------------
+
+BLOCK 02 — TRONG CHƯƠNG TRÌNH
+
+- Xác nhận tham dự
+- Điều phối lịch gặp
+- Ghi nhận nhu cầu phát sinh
+- Ghi nhận yêu cầu mẫu
+- Ghi nhận yêu cầu báo giá
+- Xác định owner
+- Xác định next action
+
+Mỗi cuộc gặp phải có:
+
+owner
+nextAction
+nextActionAt
+
+--------------------------------------------------
+
+BLOCK 03 — SAU CHƯƠNG TRÌNH
+
+- Nhắc phản hồi
+- Theo dõi mẫu
+- Theo dõi báo giá
+- Theo dõi đầu việc
+- Ghi nhận kết quả
+- Tổng hợp báo cáo
+
+Meeting ≠ Result.
+
+Không tự đánh dấu thành công chỉ vì hai bên đã gặp nhau.
+
+==================================================
+5. BẠN NHẬN ĐƯỢC GÌ
+==================================================
+
+Hiển thị deliverables:
+
+- Trang chương trình
+- Biểu mẫu đăng ký
+- Dữ liệu đăng ký theo quyền truy cập
+- Danh sách Buyer/NCC theo phạm vi cho phép
+- Danh sách cuộc gặp
+- Bảng đầu việc
+- Timeline follow-up
+- Báo cáo chương trình
+
+Các hạng mục:
+
+Ảnh
+Video
+Vật phẩm
+Catalogue
+Gian hàng
+
+phải là ADD-ON riêng nếu chưa nằm trong gói.
+
+Không tính trùng quyền lợi.
+
+==================================================
+6. FORM GỬI ĐỀ BÀI
+==================================================
+
+Reuse:
+
+/yeu-cau-dich-vu
+
+Preselect:
+
+service = TO_CHUC_KET_NOI
+
+Form cần:
+
+Tổ chức/doanh nghiệp
+
+Người liên hệ
+
+Mục tiêu chương trình
+
+Đối tượng mong muốn
+
+Nhóm nhu cầu / chuyên mục
+
+Địa bàn / KCN
+
+Thời gian dự kiến
+
+Quy mô dự kiến
+
+Buyer dự kiến
+
+Supplier dự kiến nếu có
+
+Nguồn lực khách hàng đã có
+
+Phần việc cần CHUOICUNGUNG.COM hỗ trợ
+
+Ngân sách optional
+
+File đính kèm
+
+Không bắt khách điền lại Organization data nếu đã login.
+
+==================================================
+7. SERVICE REQUEST
+==================================================
+
+Sau submit:
+
+tạo ServiceRequest.
+
+Mã ví dụ:
+
+DV-2026-00125
+
+ServiceRequest phải có:
+
+serviceType
+organizationId
+contact
+objective
+location
+expectedDate
+estimatedScale
+budget optional
+attachments
+
+owner
+status
+nextAction
+nextActionAt
+
+source
+
+Sau gửi hiển thị:
+
+“Yêu cầu DV-xxxx đã được ghi nhận.”
+
+Không hứa:
+giá
+lịch
+số cuộc gặp
+số NCC
+
+trước khi khảo sát phạm vi.
+
+==================================================
+8. SERVICE REQUEST STATUS
+==================================================
+
+Reuse trạng thái chung:
+
+NEW
+NEED_MORE_INFO
+PREPARING_PROPOSAL
+PROPOSAL_SENT
+ACCEPTED
+IN_PROGRESS
+WAITING_ACCEPTANCE
+COMPLETED
+CANCELLED
+
+Không dùng một status “SUCCESS” chung.
+
+==================================================
+9. SAU KHI KHÁCH ĐỒNG Ý
+==================================================
+
+ServiceRequest có thể tạo:
+
+Program
+
+NHƯNG KHÔNG tạo Program ngay từ lúc chỉ gửi form.
+
+Flow:
+
+ServiceRequest
+→ Scope confirmed
+→ Proposal accepted
+→ Create Program
+→ Program operations
+
+Program phải giữ relation về ServiceRequest gốc.
+
+==================================================
+10. PROGRAM INTEGRATION
+==================================================
+
+Khi Program được tạo:
+
+reuse:
+
+/chuong-trinh
+/chuong-trinh/[slug]
+/chuong-trinh/[slug]/dang-ky
+
+Không xây một Program system khác riêng cho dịch vụ này.
+
+Program phải liên kết:
+
+Organizer
+ServiceRequest
+Categories
+Location/KCN
+Buyer needs
+Supplier participants
+Meetings
+Tasks
+Outcomes
+
+==================================================
+11. SUPPI + CHAINY
+==================================================
+
+SUPPI:
+
+trước chương trình:
+- làm rõ nhu cầu Buyer;
+- chuẩn hóa requirement;
+- tìm/so sánh nguồn;
+- hỗ trợ shortlist.
+
+CHAINY:
+
+sau khi có bên phù hợp:
+- điều phối kết nối;
+- lịch gặp;
+- mẫu;
+- báo giá;
+- next action;
+- follow-up;
+- outcome.
+
+Không tạo hai CRM riêng.
+
+==================================================
+12. ADMIN
+==================================================
+
+Reuse:
+
+/admin/dich-vu
+/admin/chuong-trinh
+/admin/nhu-cau
+/admin/matching
+/admin/connections
+/admin/tasks
+
+ServiceRequest detail cần thấy:
+
+Khách hàng
+Mục tiêu
+Địa bàn
+Quy mô
+Phạm vi
+Ngân sách nếu có
+Owner
+Status
+Next Action
+Due Date
+
+Tabs:
+
+Tổng quan
+Đề bài
+Buyer Needs
+Suppliers
+Proposal
+Program
+Tasks
+Timeline
+Files
+Audit
+
+==================================================
+13. ADMIN HANDOFF
+==================================================
+
+Flow nội bộ:
+
+PARTNERSHIP / SALES
+→ nhận ServiceRequest
+→ làm rõ phạm vi
+→ proposal
+
+Sau ACCEPTED:
+
+→ assign COORDINATOR
+
+Coordinator:
+→ vận hành Program
+→ requirements
+→ matching
+→ meetings
+→ follow-up
+
+Mỗi bàn giao phải có owner mới và AuditLog.
+
+==================================================
+14. COMMERCIAL RULES
+==================================================
+
+Chỉ niêm yết giá cố định nếu:
+
+phạm vi
+deliverables
+giới hạn
+điều kiện
+
+đã đủ rõ.
+
+Nếu chưa:
+
+CTA:
+“NHẬN ĐỀ XUẤT THEO PHẠM VI”
+
+Không hứa:
+
+“bao nhiêu buyer”
+“bao nhiêu cuộc gặp”
+“bao nhiêu hợp đồng”
+
+nếu chưa xác nhận được.
+
+Gói quý/năm chỉ mở khi hệ thống đã đo được chi phí phục vụ.
+
+==================================================
+15. SEO + MOBILE
+==================================================
+
+SEO Title:
+
+Tổ Chức Kết Nối Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Dịch vụ tiếp nhận nhu cầu, tìm nhà cung ứng, tổ chức cuộc gặp và theo dõi đầu việc cho nhà máy, Hội và KCN.
+
+Canonical:
+
+/dich-vu/to-chuc-ket-noi
+
+Mobile order:
+
+Hero
+Hình thức
+Quy trình 3 giai đoạn
+Deliverables
+CTA gửi đề bài
+
+Không overflow 390px.
+
+==================================================
+16. QA
+==================================================
+
+Test:
+
+1. CTA giữ đúng service context.
+2. ServiceRequest tạo mã.
+3. Không tạo Program trước khi proposal accepted.
+4. Requirement reuse hệ thống nhu cầu hiện tại.
+5. Supplier Matching reuse Page 05 logic.
+6. Meeting có owner + next action.
+7. Meeting completed không tự thành success.
+8. Add-on không bị tính trùng.
+9. Admin handoff ghi AuditLog.
+10. Private Buyer data không public.
+11. Program tạo sau khi scope confirmed.
+12. Mobile 390px hoạt động.
+
+==================================================
+17. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- ServiceRequest workflow
+- Program integration
+- Requirement/Matching integration
+- SUPPI/CHAINY integration
+- Admin workflow
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+HỘI / KCN / NHÀ MÁY
+→ GỬI ĐỀ BÀI
+→ SERVICE REQUEST
+→ LÀM RÕ PHẠM VI
+→ PROPOSAL
+→ PROGRAM
+→ BUYER NEEDS
+→ SUPPLIER MATCHING
+→ MEETINGS
+→ NEXT ACTION
+→ FOLLOW-UP
+→ OUTCOME
+→ REPORT
+
+Không biến dịch vụ này thành “đơn vị tổ chức sự kiện”.
+Giá trị chính của CHUOICUNGUNG.COM là
+NHU CẦU + MATCHING + ĐIỀU PHỐI + THEO DÕI KẾT QUẢ.

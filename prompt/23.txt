@@ -1,0 +1,1087 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 23: THƯ VIỆN CHƯƠNG TRÌNH
+ROUTE: /chuong-trinh/[slug]/thu-vien
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây thư viện ảnh, video và tài liệu của từng Program.
+
+Đây KHÔNG chỉ là photo gallery.
+
+Mục tiêu thực tế:
+
+PROGRAM
+→ MEDIA / DOCUMENT
+→ DOANH NGHIỆP
+→ XEM HỒ SƠ
+→ GỬI YÊU CẦU TRAO ĐỔI
+→ CONNECTION / FOLLOW-UP
+
+Thư viện phải giúp người tham gia:
+- tìm lại nội dung;
+- xem doanh nghiệp đã gặp;
+- xem video / catalogue;
+- tải nội dung được phép;
+- tiếp tục trao đổi sau chương trình.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/chuong-trinh/[slug]/thu-vien
+
+Reuse:
+
+Program
+Organization
+SupplierProfile
+MediaAsset
+Attachment
+Catalogue
+CatalogueEntry
+ProgramParticipant
+ProgramAgenda
+ServiceRequest
+Requirement
+Connection
+Task
+Consent
+AuditLog
+
+Nếu đã có media/file system:
+reuse.
+
+Không tạo storage/gallery system thứ hai.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“ẢNH VÀ TÀI LIỆU TỪ [TÊN CHƯƠNG TRÌNH]”
+
+Sub:
+
+“Tìm hình ảnh, nội dung giới thiệu và tài liệu được chia sẻ trong chương trình. Bạn có thể xem lại hồ sơ doanh nghiệp hoặc gửi yêu cầu trao đổi tiếp theo.”
+
+Hiển thị:
+
+Tên chương trình
+Ngày
+Địa điểm
+Organizer
+Link quay lại Program detail
+
+CTA:
+
+[XEM CHƯƠNG TRÌNH]
+
+→ /chuong-trinh/[slug]
+
+==================================================
+3. CẤU TRÚC THƯ VIỆN
+==================================================
+
+Tạo các section/tabs:
+
+01.
+KHOẢNH KHẮC CHƯƠNG TRÌNH
+
+02.
+GIAN HÀNG & DOANH NGHIỆP
+
+03.
+VIDEO GIỚI THIỆU
+
+04.
+CATALOGUE & TÀI LIỆU
+
+05.
+HOẠT ĐỘNG TIẾP THEO
+
+Không bắt buộc section trống phải hiển thị.
+
+==================================================
+4. MEDIA ASSET
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+MediaAsset {
+ id
+
+ type
+ IMAGE
+ VIDEO
+ DOCUMENT
+
+ title?
+ description?
+
+ fileId / storageKey
+
+ programId
+
+ providerOrganizationId?
+ relatedOrganizationId?
+ relatedSupplierProfileId?
+ relatedCatalogueId?
+
+ albumId?
+
+ visibility
+
+ downloadPermission
+
+ usageRights
+
+ consentStatus
+
+ capturedAt?
+
+ retainUntil?
+
+ publishStatus
+
+ createdBy
+ createdAt
+ updatedAt
+}
+
+Không chỉ lưu:
+
+file URL + title.
+
+==================================================
+5. VISIBILITY
+==================================================
+
+Tối thiểu hỗ trợ:
+
+PUBLIC
+
+PROGRAM_PARTICIPANTS
+
+ORGANIZATION_ONLY
+
+SPECIFIC_USERS
+
+INTERNAL
+
+Visibility phải được enforce backend.
+
+Không dùng CSS để “ẩn” file private.
+
+==================================================
+6. VIEW ≠ DOWNLOAD
+==================================================
+
+Tách:
+
+canView
+
+và
+
+canDownload.
+
+Ví dụ:
+
+Ảnh public:
+view public
+download optional
+
+Tài liệu participant:
+view participant
+download participant
+
+File confidential:
+không public.
+
+Nút:
+
+[TẢI XUỐNG]
+
+chỉ render khi file cho phép download.
+
+==================================================
+7. DOWNLOAD SECURITY
+==================================================
+
+Private download phải:
+
+check authentication
+check program relation
+check organization/user permission
+check file visibility
+check downloadPermission
+
+sau đó mới cấp signed URL / protected response.
+
+Không để:
+
+“biết URL là tải được”.
+
+==================================================
+8. KHOẢNH KHẮC CHƯƠNG TRÌNH
+==================================================
+
+Gallery:
+
+check-in
+opening
+meeting
+showcase
+booth
+presentation
+networking
+
+Cho phép admin group ảnh theo:
+
+Album
+Session
+Time
+Location
+Organization
+
+Không cần facial recognition.
+
+KHÔNG triển khai nhận diện khuôn mặt trong P1.
+
+==================================================
+9. SUPPI & CHAINY ALBUM
+==================================================
+
+Có thể có album riêng:
+
+“CHECK-IN CÙNG SUPPI & CHAINY”
+
+nếu có media thật.
+
+Mascot chỉ là hoạt động nhận diện/chụp ảnh.
+
+Không dùng album này làm bằng chứng:
+
+SUPPI/CHAINY đã kiểm tra doanh nghiệp
+hoặc xác nhận năng lực.
+
+==================================================
+10. GIAN HÀNG & DOANH NGHIỆP
+==================================================
+
+Media có thể relation tới:
+
+Organization
+SupplierProfile
+Booth/participation relation
+
+Card doanh nghiệp:
+
+Logo
+Tên
+Ảnh/video public
+Category
+Capability ngắn
+
+CTA:
+
+[XEM HỒ SƠ]
+
+→ /doanh-nghiep/[slug]
+
+CTA:
+
+[GỬI YÊU CẦU TRAO ĐỔI]
+
+Không hiển thị private contact nếu chưa được phép.
+
+==================================================
+11. “GỬI YÊU CẦU TRAO ĐỔI”
+==================================================
+
+CTA này KHÔNG chỉ mở mailto/phone.
+
+Phải tạo workflow có thể theo dõi.
+
+Flow:
+
+Library item
+→ Organization
+→ User request
+→ Requirement / Connection Draft
+→ Owner
+→ Status
+→ Next Action
+
+Tùy context:
+
+Nếu user đang có Requirement:
+cho chọn Requirement hiện có.
+
+Nếu chưa:
+tạo RequirementDraft hoặc Contact/Connection Request
+theo architecture hiện tại.
+
+Giữ source:
+
+source = PROGRAM_LIBRARY
+programId
+mediaId?
+targetOrganizationId
+
+==================================================
+12. VIDEO GIỚI THIỆU
+==================================================
+
+Reuse MediaAsset từ Supplier Profile/Page 15.
+
+Không upload duplicate cùng một video
+chỉ vì nó được dùng trong Program.
+
+Video card:
+
+Thumbnail
+Title
+Organization
+Duration
+Language
+Caption nếu có
+
+CTA:
+
+[XEM HỒ SƠ]
+
+[GỬI YÊU CẦU]
+
+==================================================
+13. CATALOGUE & TÀI LIỆU
+==================================================
+
+Reuse:
+
+Catalogue
+CatalogueEntry
+Program Documents
+
+Có thể gồm:
+
+Catalogue chương trình
+Supplier profile PDF
+Buyer guide
+Program presentation
+Public report
+Approved presentation materials
+
+Mỗi tài liệu phải có:
+
+provider
+visibility
+usage rights
+download rights
+updated date nếu phù hợp.
+
+==================================================
+14. KHÔNG PUBLIC DỮ LIỆU GIAO DỊCH
+==================================================
+
+Tuyệt đối không đưa vào public library:
+
+Buyer contact list
+
+Supplier quotations
+
+Price negotiation
+
+Private Requirement files
+
+Meeting private notes
+
+Internal evaluation
+
+Payment details
+
+Sponsor contract
+
+Internal report
+
+Công khai tài liệu Program
+KHÔNG đồng nghĩa công khai CRM data.
+
+==================================================
+15. TÌM KIẾM
+==================================================
+
+Search trong Library:
+
+Tên doanh nghiệp
+
+Tên tài liệu
+
+Tên album
+
+Booth/gian hàng
+
+Video
+
+Catalogue
+
+Không search vào private content mà user không có quyền.
+
+==================================================
+16. FILTER
+==================================================
+
+Filter ban đầu:
+
+Loại nội dung
+
+Doanh nghiệp
+
+Album / nhóm ảnh
+
+Gian hàng nếu có
+
+Khung giờ / session
+
+Category nếu cần
+
+Không cần filter quá phức tạp.
+
+==================================================
+17. TIME / SESSION FILTER
+==================================================
+
+Nếu ảnh có:
+
+capturedAt
+agendaItemId
+
+cho phép lọc:
+
+Buổi sáng
+Buổi chiều
+Opening
+1:1 meeting
+Supplier presentation
+Booth activity
+
+Dùng ProgramAgenda relation khi có.
+
+Không hard-code session text nếu Program đã có agenda.
+
+==================================================
+18. ALBUM
+==================================================
+
+Reuse hoặc tạo nhẹ:
+
+ProgramAlbum {
+ id
+ programId
+
+ title
+ description?
+
+ visibility
+
+ sortOrder
+
+ coverMediaId?
+
+ createdAt
+ updatedAt
+}
+
+MediaAsset có album relation.
+
+Một asset có thể hỗ trợ tag/group
+mà không duplicate file.
+
+==================================================
+19. RIGHTS / CONSENT
+==================================================
+
+Mỗi media/document cần biết:
+
+Ai cung cấp?
+
+Ai có quyền sử dụng?
+
+Được hiển thị ở đâu?
+
+Có được tải không?
+
+Có thời hạn không?
+
+Ví dụ:
+
+providerOrganizationId
+usageRights
+consentStatus
+visibility
+retainUntil
+
+Không assume:
+
+“Chụp tại sự kiện = được public vĩnh viễn”.
+
+==================================================
+20. MEDIA CHƯA ĐƯỢC DUYỆT
+==================================================
+
+Asset chưa đủ permission:
+
+DRAFT
+PENDING_REVIEW
+RESTRICTED
+
+Không public.
+
+Sau khi được duyệt:
+
+PUBLISHED
+
+Nếu thu hồi quyền:
+UNPUBLISHED / RESTRICTED
+
+Không hard-delete ngay nếu cần giữ audit.
+
+==================================================
+21. HOẠT ĐỘNG TIẾP THEO
+==================================================
+
+Section cuối:
+
+“TIẾP TỤC KẾT NỐI SAU CHƯƠNG TRÌNH”
+
+Có thể hiển thị:
+
+Doanh nghiệp đã xem
+
+Supplier profiles
+
+Related Requirements được phép public
+
+Follow-up Program
+
+Catalogue liên quan
+
+CTA:
+
+[GỬI NHU CẦU]
+
+[TÌM NHÀ CUNG ỨNG]
+
+[XEM CHƯƠNG TRÌNH KHÁC]
+
+==================================================
+22. PROGRAM RESULT LINK
+==================================================
+
+Nếu Program COMPLETED và có public result:
+
+Library có thể link:
+
+[XEM KẾT QUẢ CHƯƠNG TRÌNH]
+
+về Program detail/result section.
+
+Không duplicate kết quả trong Library DB.
+
+==================================================
+23. USER LOGIN
+==================================================
+
+Public media:
+không bắt login.
+
+Participant-only media:
+yêu cầu login.
+
+Khi yêu cầu login phải giải thích:
+
+“Nội dung này dành cho người tham gia hoặc tổ chức được cấp quyền.”
+
+Không chỉ redirect vô lý về login.
+
+==================================================
+24. PROGRAM PARTICIPANT ACCESS
+==================================================
+
+Access participant không chỉ dựa trên:
+
+registration code URL.
+
+Backend check:
+
+User
+→ Organization membership
+→ ProgramRegistration
+→ Registration/Participation rights
+
+Không dùng secret URL làm authorization.
+
+==================================================
+25. SPONSOR / ORGANIZER RIGHTS
+==================================================
+
+Organizer hoặc Sponsor có thể tài trợ:
+
+photo production
+video production
+library production
+
+Nhưng việc họ trả phí
+KHÔNG tự cho quyền truy cập:
+
+Buyer private data
+participant contacts
+quotations
+private meetings.
+
+==================================================
+26. QUYỀN LỢI ĐÃ HỨA KHÔNG ĐƯỢC THU LẠI
+==================================================
+
+Nếu người tham dự đã được hứa:
+
+basic event photos
+documents
+catalogue
+other access
+
+trong package đăng ký:
+
+không tạo paywall mới để lấy lại chính quyền lợi đó.
+
+Các gói ảnh/video riêng có thể bán thêm,
+nhưng phải là deliverable bổ sung.
+
+==================================================
+27. CONTENT PACKAGE
+==================================================
+
+Nếu doanh nghiệp đặt:
+
+bộ ảnh riêng
+video riêng
+
+reuse:
+
+ServiceRequest
+ContentProject / MediaProject
+
+từ Page 15.
+
+Không nhét workflow sản xuất media vào Library.
+
+Library chỉ publish/deliver asset sau khi hoàn tất và được duyệt.
+
+==================================================
+28. ADMIN
+==================================================
+
+Reuse:
+
+/admin/chuong-trinh/[id]
+
+Tab:
+
+THƯ VIỆN / MEDIA
+
+Admin cần quản lý:
+
+Albums
+
+Media
+
+Documents
+
+Provider
+
+Related organization
+
+Visibility
+
+Download permission
+
+Usage rights
+
+Consent
+
+Publish status
+
+Retention
+
+Sort order
+
+==================================================
+29. ADMIN BULK UPLOAD
+==================================================
+
+Cho phép upload nhiều asset.
+
+Sau upload:
+
+status = DRAFT hoặc PENDING_REVIEW.
+
+Admin có thể:
+
+assign album
+
+assign organization
+
+assign session
+
+set visibility
+
+set usage rights
+
+publish selected.
+
+Không auto-public bulk uploads.
+
+==================================================
+30. BULK TAGGING
+==================================================
+
+Cho phép admin gán nhóm:
+
+Program
+Organization
+Booth
+Agenda/session
+Album
+
+Không cần AI face recognition.
+
+Nếu dùng AI hỗ trợ phân nhóm trong tương lai:
+output chỉ là draft.
+
+==================================================
+31. ADMIN REVIEW QUEUE
+==================================================
+
+Queue:
+
+MEDIA CHỜ DUYỆT
+
+Hiển thị:
+
+Preview
+Provider
+Program
+Related Organization
+Rights status
+Visibility
+Uploaded by
+Created date
+
+Actions:
+
+APPROVE
+REQUEST INFO
+RESTRICT
+REJECT
+
+Audit every action.
+
+==================================================
+32. DELETE / ARCHIVE
+==================================================
+
+Không hard-delete ngay asset đã từng public
+nếu còn cần audit/history.
+
+Hỗ trợ:
+
+ARCHIVED
+UNPUBLISHED
+
+Hard delete chỉ khi:
+
+policy cho phép
+và không còn legal/business retention requirement.
+
+==================================================
+33. FILE METADATA
+==================================================
+
+File metadata:
+
+mimeType
+size
+width/height nếu image/video
+duration nếu video
+checksum nếu architecture hỗ trợ
+storage key
+original filename
+optimized variants
+
+Không lưu binary vào DB nếu storage architecture hiện tại dùng object storage.
+
+==================================================
+34. IMAGE OPTIMIZATION
+==================================================
+
+Public gallery:
+
+responsive image
+thumbnail
+lazy loading
+WebP/AVIF nếu pipeline hiện tại hỗ trợ
+original protected separately nếu cần.
+
+Không load ảnh gốc 10–20 MB vào grid.
+
+==================================================
+35. VIDEO
+==================================================
+
+Video:
+
+thumbnail
+poster
+stream/embed method hiện tại
+duration
+captions optional
+
+Không autoplay hàng loạt.
+
+Mobile ưu tiên performance.
+
+==================================================
+36. DOWNLOAD TRACKING
+==================================================
+
+Có thể track:
+
+media_view
+
+media_download
+
+document_view
+
+catalogue_open
+
+supplier_profile_click
+
+exchange_request_click
+
+Nhưng:
+
+download
+≠
+business lead.
+
+==================================================
+37. REQUEST TRACKING
+==================================================
+
+“Gửi yêu cầu trao đổi” phải track:
+
+request_created
+
+targetOrganization
+
+sourceProgram
+
+sourceAsset optional
+
+Sau đó đi vào:
+
+Owner
+Status
+Next Action
+
+theo Page 19 Admin.
+
+==================================================
+38. SEO
+==================================================
+
+Nếu Library có nội dung public đủ giá trị:
+
+Title:
+
+Ảnh & Tài Liệu [Tên chương trình] | CHUOICUNGUNG.COM
+
+Meta:
+
+Xem hình ảnh, video, catalogue và tài liệu được phép chia sẻ từ [Tên chương trình].
+
+Canonical:
+
+/chuong-trinh/[slug]/thu-vien
+
+Private/participant library:
+NOINDEX.
+
+Không index private files trực tiếp.
+
+==================================================
+39. STRUCTURED DATA
+==================================================
+
+Không cần tạo schema phức tạp cho từng photo.
+
+Có thể reuse:
+
+BreadcrumbList
+CollectionPage
+
+Program/Event data nằm ở Program detail.
+
+Không fake ImageObject license/creator nếu không có dữ liệu.
+
+==================================================
+40. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+Tabs/chips
+Search
+Filter
+2-column image grid hoặc 1-column cards
+Video
+Documents
+CTA follow-up
+
+Lightbox full-screen mobile-friendly.
+
+Không overflow 390px.
+
+==================================================
+41. EMPTY STATE
+==================================================
+
+Nếu chưa có media public:
+
+“Thư viện đang được cập nhật.”
+
+Nếu user có participant access nhưng chưa có file:
+
+“Chưa có nội dung được chia sẻ cho tài khoản này.”
+
+Không hiển thị mock photos production.
+
+==================================================
+42. PRIVACY / SECURITY
+==================================================
+
+Test:
+
+IDOR qua mediaId
+
+signed URL expiration
+
+cross-program access
+
+cross-organization access
+
+download permission bypass
+
+private file direct URL
+
+unpublished asset access
+
+Backend enforce toàn bộ.
+
+==================================================
+43. AUDIT
+==================================================
+
+Audit:
+
+Upload
+
+Metadata changed
+
+Organization assigned
+
+Visibility changed
+
+Rights changed
+
+Published
+
+Unpublished
+
+Download permission changed
+
+Archived
+
+Deleted nếu có
+
+==================================================
+44. QA
+==================================================
+
+Test tối thiểu:
+
+1. Public photo xem được không login.
+2. Participant-only asset yêu cầu quyền.
+3. Private file không mở bằng direct URL.
+4. View permission và Download permission tách riêng.
+5. Download button chỉ hiện đúng quyền.
+6. Media relation đúng Program.
+7. Organization media dẫn đúng Supplier Profile.
+8. “Gửi yêu cầu trao đổi” tạo workflow thật.
+9. Buyer contact/quotation không public.
+10. Bulk upload không auto publish.
+11. Asset chưa consent không public.
+12. Sponsor payment không cấp private data.
+13. Promised participant benefit không bị paywall lại.
+14. No facial recognition requirement.
+15. Images lazy load/optimized.
+16. Admin action có AuditLog.
+17. Mobile 390px hoạt động.
+
+==================================================
+45. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Media model / relations
+- Album implementation
+- File permissions
+- Usage rights implementation
+- Download controls
+- Search/filter
+- Organization/Profile integration
+- Catalogue integration
+- Follow-up request integration
+- Admin library management
+- Security tests
+- Performance changes
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+PROGRAM
+→ THƯ VIỆN
+→ ẢNH / VIDEO / TÀI LIỆU
+→ TÌM LẠI DOANH NGHIỆP
+→ XEM HỒ SƠ
+→ GỬI YÊU CẦU TRAO ĐỔI
+→ CONNECTION
+→ FOLLOW-UP
+
+Thư viện không phải nơi “đăng ảnh cho đẹp”.
+
+Nó phải tiếp tục nối dữ liệu và cơ hội
+sau khi chương trình đã kết thúc.

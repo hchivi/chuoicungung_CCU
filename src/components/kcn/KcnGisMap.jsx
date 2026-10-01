@@ -616,8 +616,10 @@ export default function KcnGisMap({
 
             {/* Search Input */}
             <div className="relative">
+              <label htmlFor="kcn-gis-search-input" className="sr-only">Tìm KCN, Tỉnh thành, Vùng kinh tế</label>
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
+                id="kcn-gis-search-input"
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -660,14 +662,15 @@ export default function KcnGisMap({
             {/* Slider Lọc Quỹ Đất Sẵn Sàng (Ready Land Area Filter) */}
             <div className="space-y-2 p-3 bg-blue-50/60 rounded-2xl border border-blue-100">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-slate-800 font-heading uppercase">
+                <label htmlFor="kcn-gis-land-range" className="text-[11px] font-bold text-slate-800 font-heading uppercase cursor-pointer">
                   Quỹ Đất Sẵn Sàng Còn Lại
-                </span>
+                </label>
                 <span className="px-2 py-0.5 bg-blue-600 text-white rounded-md text-[11px] font-black font-mono shadow-2xs">
                   {minReadyLand === 0 ? 'Tất cả quy mô' : `> ${minReadyLand} Ha`}
                 </span>
               </div>
               <input
+                id="kcn-gis-land-range"
                 type="range"
                 min="0"
                 max="50"

@@ -3,39 +3,39 @@ import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom'
 import { 
   Search, MapPin, Building2, ChevronRight, ArrowRight, RotateCcw, 
   ShieldCheck, Tag, Phone, Globe, ArrowUp, ChevronDown, Layers, Check, Sparkles,
-  ChevronLeft, ArrowLeft, Wrench, Factory, Cpu, Truck, Users, Leaf
+  ChevronLeft, ArrowLeft, Wrench, Factory, Cpu, Truck, Users, Leaf,
+  ExternalLink, FileText, Download, CheckCircle2, AlertCircle, Bot,
+  Send, HelpCircle, Filter, X, SlidersHorizontal, Package, Calendar, Award
 } from 'lucide-react';
-import categoriesAlphabetical from '../data/categoriesAlphabetical.json';
 import enterprisesFullList from '../data/enterprisesFull.json';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getEnterpriseBaseVotes } from './EnterprisesPage';
 import { 
   getCompanyMonogram, 
   getMonogramGradient, 
   isValidCustomLogo, 
-  getCategoryBannerImage,
-  getEnterpriseAvatarImage,
-  detectPhaseAndStage
+  getEnterpriseAvatarImage
 } from '../utils/companyUtils';
-import SupplierTopNavigationBlocks from '../components/SupplierTopNavigationBlocks';
+import { 
+  slugify, 
+  getCategoryHubBySlug, 
+  getCategoryProducts, 
+  getCategoryFoundingPartner, 
+  getCategoryPrograms 
+} from '../data/categoryHubData';
 
-export function slugify(str) {
-  if (!str) return '';
-  return str
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/đ/g, 'd')
-    .replace(/Đ/g, 'D')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
-}
+export { slugify };
 
 const PROVINCES = [
   "Toàn quốc", "Bình Dương", "Đồng Nai", "TP. Hồ Chí Minh", "Hà Nội", "Bắc Ninh", 
   "Hải Phòng", "Long An", "Đà Nẵng", "Bà Rịa - Vũng Tàu", "Hưng Yên", "Hải Dương", 
   "Vĩnh Phúc", "Bắc Giang", "Quảng Nam", "Quảng Ngãi", "Khánh Hòa", "Cần Thơ", "Thái Nguyên"
+];
+
+const ORDER_SIZES = [
+  { id: "all", label: "Tất cả quy mô đơn" },
+  { id: "small", label: "Đơn mẫu / MOQ nhỏ (< 100)" },
+  { id: "medium", label: "Quy mô vừa (100 - 1.000)" },
+  { id: "large", label: "Quy mô công nghiệp (> 1.000)" }
 ];
 
 export default function IndustryCategoryPage() {
@@ -44,118 +44,129 @@ export default function IndustryCategoryPage() {
   const navigate = useNavigate();
   const { t, lang } = useLanguage();
 
-  // Determine category name from query param or match by slug
-  const categoryName = useMemo(() => {
-    const fromParam = searchParams.get('name');
-    if (fromParam) return fromParam;
-
-    // Search across categoriesAlphabetical
-    for (const arr of Object.values(categoriesAlphabetical)) {
-      const match = arr.find(c => slugify(c.name) === slug);
-      if (match) return match.name;
-    }
-
-    // Search across enterprisesFullList
-    const entMatch = enterprisesFullList.find(e => slugify(e.category || e.industry || '') === slug);
-    if (entMatch) return entMatch.category || entMatch.industry;
-
-    // Fallback: convert slug back to words
-    return (slug || '').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  // Category entity resolution from slug & name parameter
+  const category = useMemo(() => {
+    return getCategoryHubBySlug(slug, searchParams.get('name'));
   }, [slug, searchParams]);
 
-  const [selectedProvince, setSelectedProvince] = useState('Toàn quốc');
+  // Filtering states (Page 05 reuse)
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProvince, setSelectedProvince] = useState('Toàn quốc');
+  const [selectedOrderSize, setSelectedOrderSize] = useState('all');
+  const [onlyVerified, setOnlyVerified] = useState(false);
+  const [onlyReady, setOnlyReady] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 24;
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const pageSize = 18;
 
-  // Local voting state
-  const [votes, setVotes] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ccu_supplier_votes');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
+  // Requirement Draft state for Callout
+  const [draftNote, setDraftNote] = useState('');
+  const [isSubmittingDraft, setIsSubmittingDraft] = useState(false);
+
+  // SUPPI Quick Interactive Dialog State
+  const [isSuppiModalOpen, setIsSuppiModalOpen] = useState(false);
+  const [suppiQuery, setSuppiQuery] = useState('');
+  const [suppiResponse, setSuppiResponse] = useState(null);
+
+  // Related data
+  const foundingPartner = useMemo(() => getCategoryFoundingPartner(category), [category]);
+  const relatedProducts = useMemo(() => getCategoryProducts(category), [category]);
+  const relatedPrograms = useMemo(() => getCategoryPrograms(category), [category]);
+
+  // SEO Management
+  useEffect(() => {
+    if (!category) return;
+    document.title = `${category.name} – Nhà cung ứng và nhu cầu B2B | CHUOICUNGUNG.COM`;
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
     }
-  });
+    metaDesc.content = category.seoDescription || `${category.name} – Danh bạ nhà cung ứng, xưởng chế tạo và nhu cầu mua sắm B2B uy tín. Tìm kiếm theo năng lực thật, khu vực phục vụ, MOQ và gửi yêu cầu kết nối trực tiếp.`;
 
-  const [userVoteActions, setUserVoteActions] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ccu_user_vote_actions');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
     }
-  });
+    canonical.href = `https://chuoicungung.com/nganh-nghe/${slug || category.slug}`;
 
-  const handleVote = (ent, delta) => {
-    const key = String(ent.id || ent._id || ent.name);
-    const currentAction = userVoteActions[key] || 0;
-    let newDelta = delta;
-    let newAction = delta;
-
-    if (currentAction === delta) {
-      newDelta = -delta;
-      newAction = 0;
-    } else if (currentAction !== 0) {
-      newDelta = delta * 2;
-      newAction = delta;
+    // Schema JSON-LD (CollectionPage & ItemList)
+    const scriptId = 'category-hub-jsonld';
+    let scriptTag = document.getElementById(scriptId);
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = scriptId;
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
     }
-
-    setVotes(prev => {
-      const updated = { ...prev, [key]: (prev[key] || 0) + newDelta };
-      try { localStorage.setItem('ccu_supplier_votes', JSON.stringify(updated)); } catch {}
-      return updated;
+    scriptTag.text = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": category.name,
+      "description": category.shortDescription,
+      "url": `https://chuoicungung.com/nganh-nghe/${category.slug}`,
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://chuoicungung.com/" },
+          { "@type": "ListItem", "position": 2, "name": category.stageName, "item": `https://chuoicungung.com/ban-do-6-giai-doan` },
+          { "@type": "ListItem", "position": 3, "name": category.name, "item": `https://chuoicungung.com/nganh-nghe/${category.slug}` }
+        ]
+      }
     });
 
-    setUserVoteActions(prev => {
-      const updated = { ...prev, [key]: newAction };
-      try { localStorage.setItem('ccu_user_vote_actions', JSON.stringify(updated)); } catch {}
-      return updated;
-    });
-  };
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [category]);
 
-  // Filter suppliers in this category
+  // Filter matching suppliers from enterprises database
   const matchingEnterprises = useMemo(() => {
-    const catLower = categoryName.toLowerCase();
-    const catSlug = slugify(categoryName);
+    if (!category) return [];
+    const catNameLower = (category.name || '').toLowerCase();
+    const catSlug = slugify(category.name || '');
 
+    // 1. Initial Match by Industry/Category
     let list = enterprisesFullList.filter(e => {
       const c = (e.category || e.industry || '').toLowerCase();
       const s = slugify(c);
-      return c.includes(catLower) || catLower.includes(c) || s.includes(catSlug) || catSlug.includes(s);
+      return c.includes(catNameLower) || catNameLower.includes(c) || s.includes(catSlug) || catSlug.includes(s);
     });
 
-    // If exact filter yielded 0, search broadly in searchTokens
-    if (list.length === 0) {
-      const tokens = catLower.split(/\s+/).filter(Boolean);
-      list = enterprisesFullList.filter(e => {
-        const text = `${e.name || ''} ${e.category || ''} ${e.industry || ''}`.toLowerCase();
+    // Fallback if strict match yields few
+    if (list.length < 5) {
+      const tokens = catNameLower.split(/\s+/).filter(t => t.length > 2);
+      const broad = enterprisesFullList.filter(e => {
+        const text = `${e.name || ''} ${e.category || ''} ${e.industry || ''} ${(e.products || []).join(' ')}`.toLowerCase();
         return tokens.some(t => text.includes(t));
       });
+      list = Array.from(new Set([...list, ...broad]));
     }
 
-    // Filter by Province
+    // 2. Filter by Province
     if (selectedProvince !== 'Toàn quốc') {
       list = list.filter(e => e.province && (e.province === selectedProvince || e.province.includes(selectedProvince)));
     }
 
-    // Filter by sub-search term
-    if (searchTerm.trim()) {
-      const q = searchTerm.toLowerCase();
-      list = list.filter(e => `${e.name || ''} ${e.address || ''} ${e.province || ''}`.toLowerCase().includes(q));
+    // 3. Filter by Verification
+    if (onlyVerified) {
+      list = list.filter(e => e.isVerified);
     }
 
-    // Sort by votes
-    list.sort((a, b) => {
-      const keyA = String(a.id || a._id || a.name);
-      const keyB = String(b.id || b._id || b.name);
-      const totalA = getEnterpriseBaseVotes(a) + (votes[keyA] || 0);
-      const totalB = getEnterpriseBaseVotes(b) + (votes[keyB] || 0);
-      return totalB - totalA;
-    });
+    // 4. Filter by search keyword
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase();
+      list = list.filter(e => 
+        (e.name || '').toLowerCase().includes(q) ||
+        (e.address || '').toLowerCase().includes(q) ||
+        (e.products && e.products.some(p => p.toLowerCase().includes(q)))
+      );
+    }
 
     return list;
-  }, [categoryName, selectedProvince, searchTerm, votes]);
+  }, [category, selectedProvince, onlyVerified, searchTerm]);
 
   const totalCount = matchingEnterprises.length;
   const totalPages = Math.ceil(totalCount / pageSize) || 1;
@@ -165,294 +176,819 @@ export default function IndustryCategoryPage() {
     return matchingEnterprises.slice(start, start + pageSize);
   }, [matchingEnterprises, currentPage]);
 
+  // Handle Quick Requirement Submission from Callout
+  const handleCreateDraft = (e) => {
+    e.preventDefault();
+    if (!draftNote.trim()) return;
+
+    setIsSubmittingDraft(true);
+    const draftId = `req-${Date.now()}`;
+    const draftPayload = {
+      id: draftId,
+      categoryId: category.id,
+      categoryName: category.name,
+      phaseId: category.phaseId,
+      stageId: category.stageId,
+      sourcePage: 'CATEGORY_PAGE',
+      sourceSlug: category.slug,
+      initialDescription: draftNote,
+      province: selectedProvince !== 'Toàn quốc' ? selectedProvince : undefined,
+      createdAt: new Date().toISOString()
+    };
+
+    try {
+      localStorage.setItem('ccu_current_requirement_draft', JSON.stringify(draftPayload));
+    } catch (err) {}
+
+    setTimeout(() => {
+      setIsSubmittingDraft(false);
+      navigate(`/dang-nhu-cau?draft=${draftId}`);
+    }, 400);
+  };
+
+  // Handle SUPPI Ask in Category Context
+  const handleAskSuppi = (promptText) => {
+    const q = promptText || suppiQuery;
+    if (!q) return;
+
+    setIsSuppiModalOpen(true);
+    setSuppiQuery(q);
+
+    // Context-grounded response without hallucination
+    const loc = selectedProvince !== 'Toàn quốc' ? `tại ${selectedProvince}` : 'trên toàn quốc';
+    setSuppiResponse({
+      title: `SUPPI Đang Phân Tích Yêu Cầu Cho Ngành: ${category.name}`,
+      text: `Dựa trên cơ sở dữ liệu xác thực, hiện có ${totalCount} nhà cung ứng đạt chuẩn ${loc}. Để tạo Requirement Draft gửi báo giá bảo mật:`,
+      actionDraft: {
+        categoryId: category.id,
+        categoryName: category.name,
+        notes: q,
+        location: selectedProvince
+      }
+    });
+  };
+
+  // Publication Rule Check
+  if (category.status !== 'ACTIVE' || !category.publishable) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <div className="max-w-md bg-white p-8 rounded-3xl border border-slate-200 text-center space-y-4 shadow-sm">
+          <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto">
+            <AlertCircle className="w-6 h-6" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 font-heading">Chuyên mục đang chuẩn hóa dữ liệu</h2>
+          <p className="text-xs text-slate-500 leading-relaxed">
+            Chuyên mục <strong>{category.name}</strong> hiện đang được ban quản trị kiểm tra hồ sơ năng lực và liên kết nhà cung ứng trước khi công bố công khai.
+          </p>
+          <Link to="/nha-cung-ung" className="inline-block px-5 py-2.5 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs">
+            Quay về Danh bạ Nhà cung ứng
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#FBFBFC] pb-24 font-sans text-slate-900 antialiased space-y-8">
+    <main className="min-h-screen bg-[#FBFBFC] pb-24 font-sans text-slate-900 antialiased space-y-10">
       
-      {/* Top Main Layout Container: TOP TO BOTTOM EXACT ORDER AS REQUESTED */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
-        
+      {/* Container Layout */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-10">
+
         {/* =========================================================================
-            VỊ TRÍ 1: BLOCK ĐƯỢC CHỌN LÊN TRÊN CÙNG (PANORAMIC B2B SPOTLIGHT BANNER)
+            01. BREADCRUMB
            ========================================================================= */}
-        <div className="relative overflow-hidden bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-sm p-6 sm:p-8 lg:p-10 space-y-5">
-          
-          {/* Right Half Relevant Category Photo with Smooth Left-to-Right Fade */}
-          <div className="absolute top-0 right-0 w-full sm:w-[65%] md:w-[60%] lg:w-[55%] h-full pointer-events-none overflow-hidden z-0 select-none">
+        <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium flex-wrap gap-y-1">
+          <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 transition">
+            Giai đoạn {category.stageId}: {category.stageName}
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+          <span className="text-blue-600 font-bold truncate max-w-[260px] sm:max-w-md">{category.name}</span>
+        </nav>
+
+        {/* =========================================================================
+            02. HERO SECTION
+           ========================================================================= */}
+        <section className="relative overflow-hidden bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 lg:p-10">
+          {/* Category Banner Background */}
+          <div className="absolute top-0 right-0 w-full sm:w-[55%] md:w-[50%] h-full pointer-events-none overflow-hidden z-0 select-none">
             <img 
-              src={getCategoryBannerImage(categoryName)} 
-              alt={categoryName}
-              className="w-full h-full object-cover object-center scale-105 transition-transform duration-700"
+              src={category.bannerImage} 
+              alt={category.name}
+              className="w-full h-full object-cover object-center scale-105 opacity-80"
               onError={(e) => {
-                e.target.src = "/images/supplier_b2b_hero.jpg";
+                e.target.src = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1400&q=85";
               }}
             />
-            {/* Left-to-right white gradient overlays: completely covers the text on left, fades out smoothly to right */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 sm:via-white/80 via-40% to-transparent pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-white/30 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 sm:via-white/85 via-35% to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-white/95 via-transparent to-white/40" />
           </div>
 
-          {/* Foreground Content (z-10) */}
-          <div className="relative z-10 max-w-2xl space-y-4">
-            
-            {/* Breadcrumbs & Quick Return */}
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium">
-                <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                  <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-                </Link>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <Link to="/nha-cung-ung" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Suppliers Directory' : 'Nhà Cung Ứng & Phụ Trợ'}</Link>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="text-[#0052cc] font-bold truncate max-w-[200px] sm:max-w-xs">{categoryName}</span>
-              </nav>
-
-              <Link
-                to="/nha-cung-ung"
-                className="text-xs font-bold text-slate-600 hover:text-[#0052cc] flex items-center space-x-1.5 transition bg-slate-100 hover:bg-blue-50 px-3 py-1.5 rounded-xl border border-slate-200/80"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
-                <span>Về Danh bạ Tổng hợp</span>
-              </Link>
+          <div className="relative z-10 max-w-2xl space-y-6">
+            {/* Stage & Hierarchy Tag */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold tracking-wide">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+              <span>CHUYÊN MỤC SOURCING B2B • PHA {category.phaseId}</span>
             </div>
 
-            {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse" />
-              <span>DANH MỤC NGÀNH NGHỀ ĐANG CHỌN (ACTIVE)</span>
-            </div>
-
-            {/* Headline */}
-            <div className="space-y-1">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-slate-950 leading-[1.15]">
-                {categoryName}
+            {/* H1 Headline */}
+            <div className="space-y-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-slate-950 leading-tight">
+                Nhà cung ứng {category.name}
               </h1>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-tight">
-                Kết Nối Chuẩn Hóa Chuỗi Cung Ứng B2B
-              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                {category.shortDescription}
+              </p>
             </div>
 
-            {/* Description */}
-            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
-              {lang === 'en'
-                ? `Directory of verified B2B manufacturing suppliers, fabricators, and specialized service providers in ${categoryName} across Vietnam.`
-                : `Danh bạ tổng hợp các nhà sản xuất, xưởng gia công, nhà phân phối vật tư và đơn vị dịch vụ chuyên ngành ${categoryName} đạt chuẩn cung ứng.`}
-            </p>
-
-            {/* Quick Action Pills & Stats */}
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <div className="px-4 py-2 bg-slate-100/90 text-slate-800 text-xs font-bold rounded-xl border border-slate-200/80 flex items-center space-x-2 shadow-2xs">
-                <Building2 className="w-4 h-4 text-[#0052cc]" />
-                <span>{totalCount.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} {lang === 'en' ? 'Suppliers' : 'Nhà cung ứng'}</span>
-              </div>
-
-              <div className="px-4 py-2 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-xl border border-emerald-200/80 flex items-center space-x-2 shadow-2xs">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>100% {lang === 'en' ? 'Profile Verified' : 'Xác thực hồ sơ'}</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* =========================================================================
-            VỊ TRÍ 2: BLOCK NHÀ CUNG CẤP NỔI BẬT (IMAGE 2: FOUNDING PARTNER)
-            VỊ TRÍ 3: BLOCK 18 PHA / 6 GIAI ĐOẠN (IMAGE 3: ACTIVE PHASE & STAGE)
-            VỊ TRÍ 4: BLOCK MỤC LỤC A-Z (IMAGE 4: ACTIVE LETTER & TAG)
-           ========================================================================= */}
-        <SupplierTopNavigationBlocks
-          selectedCategory={categoryName}
-          layoutOrder="active-first"
-        />
-
-        {/* =========================================================================
-            VỊ TRÍ 5: PHẦN CÒN LẠI Ở PHÍA DƯỚI GIỮ NGUYÊN (TÌM KIẾM, TỈNH THÀNH & DANH SÁCH)
-           ========================================================================= */}
-        {/* Search & Province Filter for this Category */}
-        <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-2xs space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-            <div className="sm:col-span-8 relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            {/* Search Input Bar inside Hero */}
+            <div className="relative max-w-xl">
+              <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder={`Tìm kiếm trong ngành ${categoryName}...`}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 font-sans"
+                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                placeholder={`Bạn đang cần gì trong nhóm ${category.name}?`}
+                className="w-full pl-11 pr-24 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:bg-white transition"
+              />
+              {searchTerm && (
+                <button 
+                  onClick={() => setSearchTerm('')} 
+                  className="absolute right-20 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                onClick={() => handleAskSuppi(searchTerm || `Tìm nguồn ${category.name}`)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl shadow-2xs transition"
+              >
+                Tìm
+              </button>
+            </div>
+
+            {/* Two Action CTAs */}
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <a
+                href="#category-suppliers-grid"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm flex items-center space-x-2 transition hover:-translate-y-0.5 cursor-pointer"
+              >
+                <Search className="w-4 h-4" />
+                <span>Tìm nhà cung ứng {category.name}</span>
+              </a>
+
+              <Link
+                to={`/dang-nhu-cau?category=${encodeURIComponent(category.name)}`}
+                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-bold rounded-xl border border-slate-200 flex items-center space-x-2 transition cursor-pointer"
+              >
+                <Send className="w-4 h-4 text-blue-600" />
+                <span>Đăng nhu cầu</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            03. NHÓM NHU CẦU / KEYWORD CLUSTER
+           ========================================================================= */}
+        {category.keywords && category.keywords.length > 0 && (
+          <section className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">
+                NHÓM NHU CẦU TRỌNG TÂM TRONG NGÀNH
+              </h2>
+              <span className="text-[11px] text-slate-400 font-mono">
+                {category.keywords.length} từ khóa chuyên sâu
+              </span>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              {category.keywords.map((kw) => (
+                <Link
+                  key={kw.id}
+                  to={`/tu-khoa/${kw.slug}?q=${encodeURIComponent(kw.query || kw.name)}`}
+                  className="inline-flex items-center space-x-2 px-3.5 py-2 bg-white hover:bg-blue-50/80 border border-slate-200 hover:border-blue-300 rounded-xl text-xs font-bold text-slate-800 hover:text-blue-700 transition shadow-2xs group"
+                >
+                  <Tag className="w-3.5 h-3.5 text-blue-600 group-hover:scale-110 transition-transform" />
+                  <span>{kw.name}</span>
+                  {kw.count && (
+                    <span className="px-1.5 py-0.2 bg-slate-100 group-hover:bg-blue-100 text-slate-500 group-hover:text-blue-700 text-[10px] rounded-md font-mono">
+                      {kw.count}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* =========================================================================
+            04. SEARCH & FILTER SUPPLIER (PAGE 05 REUSE)
+           ========================================================================= */}
+        <section className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div className="flex items-center space-x-2 text-xs font-bold text-slate-900 font-heading">
+              <SlidersHorizontal className="w-4 h-4 text-blue-600" />
+              <span>BỘ LỌC TÌM KIẾM NHÀ CUNG ỨNG TRONG NGÀNH</span>
+            </div>
+
+            <div className="flex items-center space-x-3 text-xs">
+              <span className="text-slate-500">
+                Tìm thấy <strong className="text-blue-600 font-mono">{totalCount}</strong> doanh nghiệp
+              </span>
+              {(selectedProvince !== 'Toàn quốc' || onlyVerified || searchTerm) && (
+                <button
+                  onClick={() => {
+                    setSelectedProvince('Toàn quốc');
+                    setOnlyVerified(false);
+                    setSearchTerm('');
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs text-rose-600 hover:underline flex items-center space-x-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Xóa lọc</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            {/* Search Keyword */}
+            <div className="sm:col-span-6 relative">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                placeholder="Lọc theo tên doanh nghiệp, sản phẩm, địa chỉ..."
+                className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/20"
               />
             </div>
 
-            <div className="sm:col-span-4">
+            {/* Province Select */}
+            <div className="sm:col-span-3">
               <select
                 value={selectedProvince}
-                onChange={(e) => setSelectedProvince(e.target.value)}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer font-sans"
+                onChange={(e) => { setSelectedProvince(e.target.value); setCurrentPage(1); }}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
               >
                 {PROVINCES.map(p => (
-                  <option key={p} value={p}>{p === "Toàn quốc" ? "📍 Toàn quốc (34 Tỉnh thành)" : `📍 ${p}`}</option>
+                  <option key={p} value={p}>{p === "Toàn quốc" ? "📍 Toàn quốc (63 Tỉnh)" : `📍 ${p}`}</option>
                 ))}
               </select>
             </div>
-          </div>
-        </div>
 
-        {/* Results Grid */}
-        {displayedEnterprises.length === 0 ? (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-3">
-            <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto text-2xl">
-              🔍
+            {/* Verified Only Toggle */}
+            <div className="sm:col-span-3 flex items-center">
+              <label className="flex items-center space-x-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 cursor-pointer hover:bg-slate-100 transition w-full">
+                <input
+                  type="checkbox"
+                  checked={onlyVerified}
+                  onChange={(e) => { setOnlyVerified(e.target.checked); setCurrentPage(1); }}
+                  className="rounded text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
+                />
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="truncate">Chỉ hiển thị đã xác minh B2B</span>
+              </label>
             </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading">
-              Không tìm thấy nhà cung ứng trong khu vực này
-            </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Vui lòng chọn lại khu vực "Toàn quốc" hoặc thử tìm kiếm với từ khóa khác.
-            </p>
-            <button
-              onClick={() => { setSelectedProvince('Toàn quốc'); setSearchTerm(''); }}
-              className="px-5 py-2 bg-[#0052cc] text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
-            >
-              Xem toàn quốc
-            </button>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {displayedEnterprises.map((ent) => {
-              const entId = ent.id || ent._id || ent.taxCode || ent.name;
-              const totalVotes = getEnterpriseBaseVotes(ent) + (votes[String(entId)] || 0);
-              const userAction = userVoteActions[String(entId)] || 0;
-              const detailUrl = `/doanh-nghiep/${ent.id || ent._id}`;
+        </section>
 
-              return (
-                <div
-                  key={entId}
-                  className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 p-4 sm:p-5 shadow-xs hover:shadow-xl hover:border-[#0052cc]/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 group relative"
+        {/* =========================================================================
+            05. CALLOUT: ĐĂNG NHU CẦU "CHƯA TÌM THẤY ĐÚNG NGUỒN?"
+           ========================================================================= */}
+        <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-sm relative overflow-hidden">
+          <div className="absolute right-0 bottom-0 translate-x-10 translate-y-10 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="relative z-10 max-w-3xl space-y-4">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-blue-200 text-[11px] font-bold">
+              <Bot className="w-3.5 h-3.5 text-blue-400" />
+              <span>YÊU CẦU TÌM NGUỒN BẢO MẬT & ĐÚNG NĂNG LỰC</span>
+            </div>
+
+            <h2 className="text-xl sm:text-2xl font-black font-heading tracking-tight">
+              Chưa tìm thấy đúng nguồn cung ứng cho nhu cầu của bạn?
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              Đừng tốn thời gian gọi điện từng nơi. Hãy mô tả nhanh số lượng, quy cách hoặc yêu cầu giao hàng; hệ thống SUPPI sẽ tự động đối soát hồ sơ kỹ thuật và gợi ý các đơn vị phù hợp nhất.
+            </p>
+
+            <form onSubmit={handleCreateDraft} className="space-y-3 pt-1">
+              <textarea
+                rows={2}
+                value={draftNote}
+                onChange={(e) => setDraftNote(e.target.value)}
+                placeholder={`Ví dụ: Tôi cần gia công 1.000 chi tiết theo bản vẽ STEP tại Bình Dương, giao hàng trước 30/11...`}
+                className="w-full p-3 bg-white/10 border border-white/20 rounded-2xl text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none font-sans"
+              />
+
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <span className="text-[11px] text-slate-400 italic">
+                  * Yêu cầu sẽ được tạo dưới dạng bản nháp bảo mật, không tự động công khai.
+                </span>
+
+                <button
+                  type="submit"
+                  disabled={isSubmittingDraft || !draftNote.trim()}
+                  className="px-5 py-2.5 bg-blue-500 hover:bg-blue-600 disabled:bg-white/20 disabled:cursor-not-allowed text-white text-xs font-bold rounded-xl shadow-xs transition flex items-center space-x-2 cursor-pointer"
                 >
-                  <div className="space-y-3">
-                    <div className="flex items-start space-x-3">
-                      {/* Logo / Avatar Image Container */}
-                      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-[#0052cc]/50 transition-colors relative">
-                        <img 
-                          src={getEnterpriseAvatarImage(ent)} 
-                          alt={ent.name} 
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            const fallbackUrl = getCategoryBannerImage(ent.category || ent.industry || ent.name);
-                            if (e.target.src !== fallbackUrl) {
-                              e.target.src = fallbackUrl;
-                            }
-                          }}
-                        />
-                      </div>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{isSubmittingDraft ? 'Đang tạo nháp...' : 'ĐỂ SUPPI TÌM NGUỒN'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
 
-                      {/* Name & Dual Vote */}
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="px-2 py-0.5 bg-blue-50 text-[#0052cc] text-[10px] font-bold rounded-md font-mono shrink-0">
-                            📍 {ent.province || 'Toàn quốc'}
-                          </span>
+        {/* =========================================================================
+            06. FOUNDING PARTNER (SPONSORED BLOCK - STRICTLY LABELED)
+           ========================================================================= */}
+        {foundingPartner && (
+          <section className="bg-amber-50/50 border border-amber-200/80 rounded-3xl p-6 sm:p-7 space-y-4 shadow-2xs relative">
+            <div className="flex items-center justify-between flex-wrap gap-2 border-b border-amber-200/60 pb-3">
+              <div className="flex items-center space-x-2">
+                <span className="px-2.5 py-0.5 bg-amber-500 text-white text-[10px] font-black rounded-md uppercase tracking-wider font-mono">
+                  ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC
+                </span>
+                <span className="text-xs text-slate-500 italic">
+                  (Khối tài trợ đồng hành • Không ảnh hưởng đến xếp hạng tìm kiếm tự nhiên)
+                </span>
+              </div>
 
-                          {/* Dual Vote Buttons */}
-                          <div className="flex items-center rounded-lg border border-slate-200/90 bg-slate-50/80 p-0.5 shadow-2xs shrink-0">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(ent, 1);
-                              }}
-                              className={`p-1 rounded-md transition-all cursor-pointer ${
-                                userAction === 1
-                                  ? 'bg-emerald-600 text-white shadow-2xs scale-105'
-                                  : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'
-                              }`}
-                              title={userAction === 1 ? "Bỏ bình chọn (+1)" : "Bình chọn uy tín (+1)"}
-                            >
-                              <ArrowUp className="w-3 h-3 stroke-[2.5]" />
-                            </button>
+              <Link
+                to={`/doanh-nghiep/${foundingPartner.slug || foundingPartner.id}`}
+                className="text-xs font-bold text-amber-800 hover:underline flex items-center space-x-1"
+              >
+                <span>Xem hồ sơ đối tác</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
-                            <span className={`px-1.5 text-[11px] font-mono font-bold select-none min-w-[20px] text-center ${
-                              userAction === 1 
-                                ? 'text-emerald-700 font-black' 
-                                : userAction === -1 
-                                ? 'text-rose-600 font-black' 
-                                : 'text-slate-700'
-                            }`}>
-                              {totalVotes}
-                            </span>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              <div className="md:col-span-8 space-y-3">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 rounded-2xl bg-white border border-amber-200 p-1 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center">
+                    <img
+                      src={foundingPartner.logo}
+                      alt={foundingPartner.name}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        e.target.src = "/logo_only.png";
+                      }}
+                    />
+                  </div>
 
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleVote(ent, -1);
-                              }}
-                              className={`p-1 rounded-md transition-all cursor-pointer ${
-                                userAction === -1
-                                  ? 'bg-rose-600 text-white shadow-2xs scale-105'
-                                  : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50'
-                              }`}
-                              title={userAction === -1 ? "Bỏ đánh giá (-1)" : "Đánh giá thấp (-1)"}
-                            >
-                              <ChevronDown className="w-3 h-3 stroke-[2.5]" />
-                            </button>
-                          </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base sm:text-lg font-black text-slate-900 font-heading">
+                      {foundingPartner.name}
+                    </h3>
+                    <p className="text-xs font-semibold text-amber-800 font-sans">
+                      {foundingPartner.brandTitle || foundingPartner.slogan}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <span className="px-2 py-0.5 bg-white text-slate-700 text-[11px] font-medium rounded border border-amber-200">
+                        📍 {foundingPartner.address}
+                      </span>
+                      {foundingPartner.capacity && (
+                        <span className="px-2 py-0.5 bg-amber-100 text-amber-900 text-[11px] font-bold rounded">
+                          ⚡ {foundingPartner.capacity}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {foundingPartner.description}
+                </p>
+              </div>
+
+              <div className="md:col-span-4 bg-white rounded-2xl p-4 border border-amber-200/80 space-y-3 shadow-2xs">
+                <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-mono">
+                  SẢN PHẨM / NĂNG LỰC NỔI BẬT
+                </div>
+                {Array.isArray(foundingPartner.coreProducts) && foundingPartner.coreProducts.slice(0, 2).map((cp, idx) => (
+                  <div key={idx} className="flex items-center space-x-2.5 text-xs text-slate-800">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="font-semibold line-clamp-1">{cp.name}</span>
+                  </div>
+                ))}
+                <Link
+                  to={`/doanh-nghiep/${foundingPartner.slug || foundingPartner.id}`}
+                  className="block w-full py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold text-center rounded-xl transition shadow-xs"
+                >
+                  XEM NĂNG LỰC ĐỐI TÁC
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* =========================================================================
+            07. NHÀ CUNG ỨNG LIÊN QUAN (REUSE SUPPLIER CARD - REAL DATABASE)
+           ========================================================================= */}
+        <section id="category-suppliers-grid" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading">
+                NHÀ CUNG ỨNG ĐẠT CHUẨN TRONG NGÀNH
+              </h2>
+              <p className="text-xs text-slate-500">
+                Hiển thị nhà sản xuất, xưởng gia công thực tế từ cơ sở dữ liệu chuỗi cung ứng
+              </p>
+            </div>
+
+            <span className="text-xs text-slate-500 font-mono">
+              Trang {currentPage} / {totalPages}
+            </span>
+          </div>
+
+          {displayedEnterprises.length === 0 ? (
+            <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-3">
+              <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto text-2xl">
+                🔍
+              </div>
+              <h3 className="text-base font-bold text-slate-900 font-heading">
+                Không tìm thấy nhà cung ứng phù hợp với tiêu chí lọc
+              </h3>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                Hãy thử chọn lại khu vực "Toàn quốc" hoặc xóa bớt từ khóa lọc.
+              </p>
+              <button
+                onClick={() => { setSelectedProvince('Toàn quốc'); setSearchTerm(''); setOnlyVerified(false); }}
+                className="px-5 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs cursor-pointer"
+              >
+                Xem tất cả nhà cung ứng
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {displayedEnterprises.map((ent) => {
+                const entId = ent.id || ent._id || ent.taxCode || ent.name;
+                const detailUrl = `/doanh-nghiep/${ent.id || ent._id}`;
+
+                return (
+                  <div
+                    key={entId}
+                    className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 p-5 shadow-xs hover:shadow-xl hover:border-blue-400 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between space-y-4 group"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-start space-x-3.5">
+                        <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-blue-300 transition-colors">
+                          <img 
+                            src={getEnterpriseAvatarImage(ent)} 
+                            alt={ent.name} 
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover rounded-xl"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = "/logo_only.png";
+                            }}
+                          />
                         </div>
 
-                        <Link
-                          to={detailUrl}
-                          className="font-black text-xs sm:text-[13px] text-slate-950 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-tight"
-                          title={ent.name}
-                        >
-                          {ent.name}
-                        </Link>
-                      </div>
-                    </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-md font-mono">
+                              📍 {ent.province || 'Toàn quốc'}
+                            </span>
+                            {ent.isVerified && (
+                              <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-md flex items-center space-x-1">
+                                <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                                <span>Verified</span>
+                              </span>
+                            )}
+                          </div>
 
-                    <div className="text-xs text-slate-600 space-y-1">
-                      <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-slate-800">
-                        <Tag className="w-3 h-3 text-[#0052cc] shrink-0" />
-                        <span className="truncate">{ent.category || ent.industry || categoryName}</span>
+                          <Link
+                            to={detailUrl}
+                            className="font-bold text-xs sm:text-[13px] text-slate-950 group-hover:text-blue-600 transition line-clamp-2 font-heading leading-tight"
+                            title={ent.name}
+                          >
+                            {ent.name}
+                          </Link>
+                        </div>
                       </div>
-                      {ent.address && (
-                        <div className="flex items-start space-x-1.5 text-[11px] text-slate-500">
-                          <MapPin className="w-3 h-3 text-slate-400 shrink-0 mt-0.5" />
-                          <span className="line-clamp-1">{ent.address}</span>
+
+                      <div className="text-xs text-slate-600 space-y-1">
+                        <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-slate-800">
+                          <Tag className="w-3 h-3 text-blue-600 shrink-0" />
+                          <span className="truncate">{ent.category || ent.industry || category.name}</span>
+                        </div>
+                        {ent.address && (
+                          <div className="flex items-start space-x-1.5 text-[11px] text-slate-500">
+                            <MapPin className="w-3 h-3 text-slate-400 shrink-0 mt-0.5" />
+                            <span className="line-clamp-1">{ent.address}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {Array.isArray(ent.products) && ent.products.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {ent.products.slice(0, 3).map((prod, pIdx) => (
+                            <span 
+                              key={pIdx} 
+                              className="px-2 py-0.5 bg-slate-100 text-slate-600 text-[10px] rounded font-medium truncate max-w-[140px]"
+                            >
+                              {prod}
+                            </span>
+                          ))}
                         </div>
                       )}
                     </div>
 
-                    {Array.isArray(ent.products) && ent.products.length > 0 && (
-                      <div className="flex flex-wrap gap-1 pt-1">
-                        {ent.products.slice(0, 3).map((prod, pIdx) => (
-                          <span 
-                            key={pIdx} 
-                            className="px-2 py-0.5 bg-slate-100/90 text-slate-600 text-[10px] rounded font-medium truncate max-w-[140px]"
-                          >
-                            {prod}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                      <button
+                        onClick={() => {
+                          const draftId = `req-${Date.now()}`;
+                          localStorage.setItem('ccu_current_requirement_draft', JSON.stringify({
+                            id: draftId,
+                            categoryId: category.id,
+                            categoryName: category.name,
+                            preferredSupplierId: ent.id,
+                            preferredSupplierName: ent.name,
+                            sourcePage: 'CATEGORY_PAGE'
+                          }));
+                          navigate(`/dang-nhu-cau?draft=${draftId}`);
+                        }}
+                        className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition cursor-pointer"
+                      >
+                        Gửi yêu cầu
+                      </button>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] text-slate-400 font-mono italic">
-                      {ent.isVerified ? "✓ Verified B2B" : "Đang cập nhật"}
-                    </span>
-                    <Link
-                      to={detailUrl}
-                      className="px-3.5 py-1.5 bg-[#0052cc] hover:bg-[#0041a8] text-white text-xs font-bold rounded-xl transition shadow-2xs flex items-center space-x-1 group/btn"
-                    >
-                      <span>{lang === 'en' ? 'Details' : 'Chi tiết'}</span>
-                      <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                    </Link>
+                      <Link
+                        to={detailUrl}
+                        className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition shadow-2xs flex items-center space-x-1"
+                      >
+                        <span>Xem năng lực</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center space-x-2 pt-6">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                className="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
+              >
+                Trước
+              </button>
+              <span className="text-xs font-mono font-bold text-slate-700 px-3">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                className="px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-600 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50 transition"
+              >
+                Sau
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* =========================================================================
+            08. HƯỚNG DẪN BUYER (BUYER GUIDE CHECKLIST)
+           ========================================================================= */}
+        {category.buyerGuide && (
+          <section className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 space-y-6 shadow-xs">
+            <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                <HelpCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading">
+                  {category.buyerGuide.title}
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Chuẩn bị đầy đủ các thông tin kỹ thuật này sẽ giúp rút ngắn 70% thời gian trao đổi và nhận báo giá chính xác.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {category.buyerGuide.items.map((item, idx) => (
+                <div key={idx} className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-2xl space-y-2">
+                  <div className="flex items-center space-x-2 text-xs font-bold text-slate-900">
+                    <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-mono flex items-center justify-center shrink-0">
+                      {idx + 1}
+                    </span>
+                    <span>{item.label}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed pl-7">
+                    {item.desc}
+                  </p>
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* =========================================================================
+            09. CHƯƠNG TRÌNH & CATALOGUE LIÊN QUAN
+           ========================================================================= */}
+        {(relatedPrograms.length > 0 || (category.catalogues && category.catalogues.length > 0)) && (
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Related Programs */}
+            {relatedPrograms.length > 0 && (
+              <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 p-6 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading flex items-center space-x-2">
+                    <Calendar className="w-4 h-4 text-blue-600" />
+                    <span>CHƯƠNG TRÌNH KẾT NỐI LIÊN QUAN</span>
+                  </h3>
+                  <Link to="/chuong-trinh" className="text-xs font-bold text-blue-600 hover:underline">
+                    Xem tất cả
+                  </Link>
+                </div>
+
+                <div className="space-y-3">
+                  {relatedPrograms.map((prog) => (
+                    <div key={prog.id} className="p-3.5 bg-slate-50 hover:bg-blue-50/50 rounded-2xl border border-slate-200 transition space-y-2">
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 font-bold rounded">
+                          {prog.time || 'Sắp diễn ra'}
+                        </span>
+                        <span className="text-slate-500 font-medium">{prog.zone || 'Toàn quốc'}</span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 font-heading line-clamp-1">
+                        {prog.title}
+                      </h4>
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-[11px] text-slate-500">{prog.location}</span>
+                        <Link 
+                          to="/ngay-hoi-chuoi-cung-ung" 
+                          className="text-xs font-bold text-blue-600 hover:underline flex items-center space-x-1"
+                        >
+                          <span>Đăng ký tham gia</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Related Catalogues */}
+            {category.catalogues && category.catalogues.length > 0 && (
+              <div className="lg:col-span-5 bg-white rounded-3xl border border-slate-200/90 p-6 space-y-4 shadow-xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading flex items-center space-x-2">
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    <span>CATALOGUE & BỘ HỒ SƠ NGÀNH</span>
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  {category.catalogues.map((catl) => (
+                    <div key={catl.id} className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <h4 className="text-xs font-bold text-slate-900 line-clamp-1">{catl.title}</h4>
+                        <p className="text-[10px] text-slate-400 font-mono">
+                          {catl.format} • {catl.size} • {catl.pages} trang
+                        </p>
+                      </div>
+                      <a
+                        href="#download"
+                        onClick={(e) => { e.preventDefault(); alert("Đang chuẩn bị tệp tải về..."); }}
+                        className="p-2 bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white rounded-xl transition shrink-0"
+                        title="Tải catalogue"
+                      >
+                        <Download className="w-4 h-4" />
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
         )}
 
       </div>
-    </div>
+
+      {/* =========================================================================
+          SUPPI CONTEXT INTERACTION MODAL
+         ========================================================================= */}
+      {isSuppiModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 border border-slate-200 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center space-x-2.5">
+                <div className="w-9 h-9 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 font-heading">Trợ lý Sourcing SUPPI</h3>
+                  <p className="text-[11px] text-slate-500">Ngữ cảnh: {category.name}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsSuppiModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {suppiResponse && (
+              <div className="space-y-3">
+                <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-2xl text-xs text-slate-700 leading-relaxed space-y-2">
+                  <div className="font-bold text-blue-900 flex items-center space-x-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                    <span>{suppiResponse.title}</span>
+                  </div>
+                  <p>{suppiResponse.text}</p>
+                </div>
+
+                <div className="pt-2 flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      const draftId = `req-${Date.now()}`;
+                      localStorage.setItem('ccu_current_requirement_draft', JSON.stringify({
+                        id: draftId,
+                        categoryId: category.id,
+                        categoryName: category.name,
+                        sourcePage: 'CATEGORY_PAGE',
+                        sourceSlug: category.slug,
+                        initialDescription: suppiQuery
+                      }));
+                      setIsSuppiModalOpen(false);
+                      navigate(`/dang-nhu-cau?draft=${draftId}`);
+                    }}
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-xs transition"
+                  >
+                    Tạo Requirement Draft ngay
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsSuppiModalOpen(false);
+                      navigate(`/tro-ly-ai?q=${encodeURIComponent(suppiQuery)}`);
+                    }}
+                    className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition"
+                  >
+                    Mở phiên trò chuyện sâu với SUPPI
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          MOBILE STICKY ACTION DOCK (390PX READY)
+         ========================================================================= */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 px-4 shadow-lg flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <div className="text-[10px] font-bold text-blue-700 truncate font-mono">
+            {category.name}
+          </div>
+          <div className="text-xs font-bold text-slate-900">
+            {totalCount} nhà cung ứng
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2 shrink-0">
+          <button
+            onClick={() => handleAskSuppi(`Tìm nhà cung ứng ${category.name}`)}
+            className="px-3.5 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl shadow-xs flex items-center space-x-1.5"
+          >
+            <Bot className="w-3.5 h-3.5" />
+            <span>Hỏi SUPPI</span>
+          </button>
+
+          <button
+            onClick={() => {
+              const draftId = `req-${Date.now()}`;
+              localStorage.setItem('ccu_current_requirement_draft', JSON.stringify({
+                id: draftId,
+                categoryId: category.id,
+                categoryName: category.name,
+                sourcePage: 'CATEGORY_PAGE'
+              }));
+              navigate(`/dang-nhu-cau?draft=${draftId}`);
+            }}
+            className="px-3.5 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl shadow-xs"
+          >
+            Đăng nhu cầu
+          </button>
+        </div>
+      </div>
+
+    </main>
   );
 }

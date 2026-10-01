@@ -10,6 +10,7 @@ import {
 import { stagesData } from '../data/mockData';
 import { stageSuppliers } from '../data/stageSuppliersData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { PHASE_SLUG_MAP, PHASE_ID_TO_SLUG_MAP, STAGE_ID_TO_SLUG_MAP } from '../data/sixStagesData.js';
 import StageSupplierCard from '../components/stage/StageSupplierCard';
 import StageRequestQuoteModal from '../components/stage/StageRequestQuoteModal';
 
@@ -18,9 +19,10 @@ export default function PhaseDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Parse Phase ID (e.g. "1.1", "1-1-khao-sat-thue-dat", "2.2", "GD-1.1" -> "1.1")
+  // Parse Phase ID (e.g. "khao-sat-dinh-huong", "1.1", "1-1-khao-sat-thue-dat", "2.2", "GD-1.1" -> "1.1")
   const parsedPhaseId = useMemo(() => {
     if (!id) return "1.1";
+    if (PHASE_SLUG_MAP[id]) return PHASE_SLUG_MAP[id];
     const dotMatch = id.match(/(\d\.\d)/);
     if (dotMatch) return dotMatch[1];
     const dashMatch = id.match(/(\d)-(\d)/);
@@ -77,6 +79,28 @@ export default function PhaseDetailPage() {
       standards: []
     });
   }, [parsedPhaseId]);
+
+  // SEO setup (URLs 096-113)
+  useEffect(() => {
+    const phaseSlug = currentPhase.slug || PHASE_ID_TO_SLUG_MAP[currentPhase.id] || id;
+    document.title = `${currentPhase.title} – Pha triển khai nhà máy | CHUOICUNGUNG.COM`;
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = `https://chuoicungung.com/pha/${phaseSlug}`;
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = `Tìm hiểu Pha ${currentPhase.title} trong giai đoạn ${currentStage.title} vòng đời nhà máy: nhà cung ứng, tiêu chuẩn, deliverable và đăng nhu cầu kết nối.`;
+  }, [currentPhase, currentStage, id]);
 
   // Loading transition
   useEffect(() => {
@@ -294,7 +318,7 @@ export default function PhaseDetailPage() {
   const nextPhase = currentIndex < all18Phases.length - 1 ? all18Phases[currentIndex + 1] : null;
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b ${theme.bgPage} space-y-8 pb-32 pt-4 transition-all duration-300 font-sans`}>
+    <main className={`min-h-screen bg-gradient-to-b ${theme.bgPage} space-y-8 pb-32 pt-4 transition-all duration-300 font-sans`}>
       
       {/* 1. BREADCRUMBS */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -305,7 +329,7 @@ export default function PhaseDetailPage() {
           <span>&gt;</span>
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 font-medium">{lang === 'en' ? '6-Stage Map' : 'Bản đồ 6 giai đoạn'}</Link>
           <span>&gt;</span>
-          <Link to={`/giai-doan/${currentStage.id}`} className="hover:text-blue-600 font-medium">
+          <Link to={`/giai-doan/${currentStage.slug || STAGE_ID_TO_SLUG_MAP[currentStage.id] || currentStage.id}`} className="hover:text-blue-600 font-medium">
             {lang === 'en' ? `Stage ${currentStage.id}: ${currentStage.titleEn || currentStage.title}` : `Giai đoạn ${currentStage.id}: ${currentStage.title}`}
           </Link>
           <span>&gt;</span>
@@ -344,7 +368,7 @@ export default function PhaseDetailPage() {
             </div>
 
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] tracking-tight leading-tight uppercase font-heading">
-              Pha {currentPhase.id}: {currentPhase.title}
+              Pha {currentPhase.title}
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
@@ -383,21 +407,22 @@ export default function PhaseDetailPage() {
 
             {/* Hero CTAs */}
             <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => handleOpenRfq(null, false)}
+              <a
+                href="#danh-sach-don-vi"
                 style={{ backgroundColor: theme.color }}
-                className="px-6 py-3 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center space-x-2 uppercase"
+                className="px-6 py-3 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md hover:opacity-90 transition flex items-center space-x-2 uppercase cursor-pointer"
               >
-                <Send className="w-4 h-4" />
-                <span>Yêu Cầu Báo Giá Pha {currentPhase.id}</span>
-              </button>
+                <Factory className="w-4 h-4" />
+                <span>Tìm đơn vị theo pha</span>
+              </a>
 
               <button
-                onClick={() => handleOpenRfq(null, true)}
-                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center space-x-2 uppercase"
+                type="button"
+                onClick={() => handleOpenRfq(null, false)}
+                className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold font-heading shadow-md transition flex items-center space-x-2 uppercase cursor-pointer"
               >
-                <Lock className="w-4 h-4 text-amber-400" />
-                <span>Bidding Ẩn Danh</span>
+                <Send className="w-4 h-4 text-amber-400" />
+                <span>Đăng nhu cầu</span>
               </button>
             </div>
 
@@ -414,7 +439,7 @@ export default function PhaseDetailPage() {
                 return (
                   <Link
                     key={p.id}
-                    to={`/pha/${p.id}`}
+                    to={`/pha/${p.slug || PHASE_ID_TO_SLUG_MAP[p.id] || p.id}`}
                     style={{
                       backgroundColor: isCurrent ? theme.darkColor : undefined,
                       color: isCurrent ? '#ffffff' : undefined
@@ -479,7 +504,7 @@ export default function PhaseDetailPage() {
       </section>
 
       {/* 4. BLOCK 3: PHÂN LUỒNG MATCHMAKING CORE (2 CỘT 3:7) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="danh-sach-don-vi" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           
           {/* CỘT TRÁI: ADVANCED FILTER (280px) */}
@@ -768,7 +793,7 @@ export default function PhaseDetailPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {prevPhase && (
             <Link
-              to={`/pha/${prevPhase.id}`}
+              to={`/pha/${prevPhase.slug || PHASE_ID_TO_SLUG_MAP[prevPhase.id] || prevPhase.id}`}
               className="bg-white rounded-2xl border border-slate-200 p-4 hover:border-slate-300 hover:shadow-sm transition space-y-2 group"
             >
               <div className="flex items-center space-x-2 text-xs text-slate-500 font-bold">
@@ -785,7 +810,7 @@ export default function PhaseDetailPage() {
 
           {nextPhase && (
             <Link
-              to={`/pha/${nextPhase.id}`}
+              to={`/pha/${nextPhase.slug || PHASE_ID_TO_SLUG_MAP[nextPhase.id] || nextPhase.id}`}
               className="bg-white rounded-2xl border border-slate-200 p-4 hover:border-slate-300 hover:shadow-sm transition space-y-2 group"
             >
               <div className="flex items-center space-x-2 text-xs text-slate-500 font-bold">
@@ -801,7 +826,7 @@ export default function PhaseDetailPage() {
           )}
 
           <Link
-            to={`/giai-doan/${currentStage.id}`}
+            to={`/giai-doan/${currentStage.slug || STAGE_ID_TO_SLUG_MAP[currentStage.id] || currentStage.id}`}
             style={{ backgroundColor: `${theme.color}10`, borderColor: `${theme.color}30` }}
             className="rounded-2xl border p-4 hover:shadow-sm transition space-y-2 flex flex-col justify-between"
           >
@@ -874,6 +899,6 @@ export default function PhaseDetailPage() {
         themeColor={theme.color}
       />
 
-    </div>
+    </main>
   );
 }

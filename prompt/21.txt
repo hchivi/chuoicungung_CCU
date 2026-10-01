@@ -1,0 +1,1228 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 21: CHI TIẾT CHƯƠNG TRÌNH
+ROUTE: /chuong-trinh/[slug]
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây một template duy nhất cho mọi Program.
+
+Người xem phải trả lời được:
+
+1. Chương trình này có phù hợp với tôi không?
+2. Tôi có thể tham gia theo vai trò nào?
+3. Tôi cần chuẩn bị gì?
+4. Tôi được nhận những quyền lợi gì?
+5. Tôi có thể đăng ký / gửi nhu cầu / tài trợ bằng cách nào?
+
+Đây KHÔNG phải landing page sự kiện chỉ có banner + agenda.
+
+Program phải cắm vào workflow:
+
+BUYER NEED
+→ SUPPLIER MATCHING
+→ REGISTRATION
+→ MEETING
+→ SAMPLE / QUOTE
+→ FOLLOW-UP
+→ OUTCOME
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/chuong-trinh/[slug]
+
+Reuse từ Page 20:
+
+Program
+ProgramType
+ProgramStatus
+ProgramParticipationOption
+Organization
+Category
+Keyword
+IndustrialPark
+Location
+
+Reuse từ core:
+
+Requirement
+SupplierProfile
+ProductService
+SupplierMatch
+Connection
+Meeting
+Task
+Outcome
+Media
+Catalogue
+Sponsor
+
+Không tạo Program-specific duplicate của:
+Supplier
+Buyer
+Requirement
+Organization.
+
+==================================================
+2. SLUG
+==================================================
+
+Slug:
+
+lowercase
+không dấu
+hyphen
+unique.
+
+Internal ID:
+UUID.
+
+Nếu đổi slug:
+301 redirect URL cũ.
+
+Public detail chỉ render khi:
+
+publishable = true
+
+và visibility cho phép.
+
+==================================================
+3. HERO
+==================================================
+
+H1:
+
+[TÊN CHƯƠNG TRÌNH]
+
+Sub theo dữ liệu:
+
+“Kết nối doanh nghiệp có nhu cầu [nhóm nhu cầu] với nhà cung ứng phục vụ [địa bàn]. Xem nội dung, hình thức tham gia và gửi đăng ký phù hợp với doanh nghiệp của bạn.”
+
+Hiển thị Program Facts:
+
+Program Type
+
+Ngày / giờ
+
+Địa điểm
+
+KCN nếu có
+
+Online / Offline / Hybrid
+
+Đơn vị tổ chức
+
+Status
+
+Thời hạn đăng ký
+
+Đầu mối hỗ trợ đã xác nhận
+
+CTA thay đổi theo role + status.
+
+==================================================
+4. STATUS BANNER
+==================================================
+
+NEEDS_DISCOVERY:
+“CHƯƠNG TRÌNH ĐANG KHẢO SÁT NHU CẦU”
+
+CTA:
+[ĐĂNG KÝ QUAN TÂM]
+
+UPCOMING:
+“SẮP MỞ ĐĂNG KÝ”
+
+CTA:
+[NHẬN THÔNG TIN]
+
+REGISTRATION_OPEN:
+“ĐANG NHẬN ĐĂNG KÝ”
+
+CTA role-based.
+
+REGISTRATION_CLOSED:
+“ĐÃ ĐÓNG ĐĂNG KÝ”
+
+COMPLETED:
+“CHƯƠNG TRÌNH ĐÃ DIỄN RA”
+
+CTA:
+[XEM KẾT QUẢ / THƯ VIỆN]
+
+POSTPONED:
+“CHƯƠNG TRÌNH TẠM HOÃN”
+
+CANCELLED:
+“CHƯƠNG TRÌNH ĐÃ HỦY”
+
+Không render CTA đăng ký sai trạng thái.
+
+==================================================
+5. CHƯƠNG TRÌNH DÀNH CHO AI
+==================================================
+
+Block:
+
+“CHƯƠNG TRÌNH DÀNH CHO AI?”
+
+Hiển thị theo targetRoles thực:
+
+BUYER / FACTORY
+
+SUPPLIER
+
+ASSOCIATION
+
+INDUSTRIAL_PARK
+
+SPONSOR / PARTNER
+
+Không ghi:
+
+“Mọi doanh nghiệp đều phù hợp.”
+
+Mỗi role phải có:
+
+whoIsItFor
+eligibility
+expectedPreparation
+participationOption
+
+==================================================
+6. BUYER / FACTORY BLOCK
+==================================================
+
+Ví dụ:
+
+“DÀNH CHO NHÀ MÁY / NGƯỜI MUA”
+
+Hiển thị:
+
+Nhóm nhu cầu phù hợp
+
+Địa bàn
+
+Thời gian cần
+
+Cách gửi Requirement
+
+Cách yêu cầu gặp Supplier
+
+Điều kiện chia sẻ thông tin
+
+CTA:
+
+[ĐĂNG KÝ NGƯỜI MUA]
+
+→ /chuong-trinh/[slug]/dang-ky?role=buyer
+
+CTA phụ:
+
+[GỬI NHU CẦU]
+
+→ /dang-nhu-cau?program={programId}
+
+==================================================
+7. BUYER NEEDS
+==================================================
+
+Block:
+
+“NHÓM NHU CẦU KẾT NỐI”
+
+Chỉ hiển thị Requirement:
+
+được Buyer cho phép công bố
+
+hoặc Public Summary được xác nhận.
+
+Có thể hiển thị:
+
+Mã nhu cầu
+Category
+Mô tả public
+Location
+Deadline
+Điều kiện public
+
+KHÔNG hiển thị:
+
+Buyer contact
+Private buyer company nếu chưa được phép
+Budget nội bộ
+Target price
+Private technical files
+Internal note
+Quotation
+
+Reuse Requirement record.
+
+Không copy Requirement thành ProgramNeed duplicate.
+
+==================================================
+8. SUPPLIER BLOCK
+==================================================
+
+“DÀNH CHO NHÀ CUNG ỨNG”
+
+Nêu rõ:
+
+Năng lực phù hợp
+
+Service area
+
+Profile cần chuẩn bị
+
+Product/Service
+
+Evidence
+
+Sample nếu có
+
+Meeting preference
+
+CTA:
+
+[ĐĂNG KÝ NHÀ CUNG ỨNG]
+
+→ /chuong-trinh/[slug]/dang-ky?role=supplier
+
+Nếu Supplier chưa có profile:
+
+CTA phụ:
+[HOÀN THIỆN HỒ SƠ]
+
+→ /tao-ho-so
+
+==================================================
+9. RULE: TRẢ PHÍ ≠ ĐƯỢC MEETING
+==================================================
+
+Hard rule:
+
+Supplier thanh toán phí tham gia
+KHÔNG tự động có meeting với Buyer.
+
+Meeting chỉ được tạo khi:
+
+Requirement phù hợp
+Supplier capability phù hợp
+Buyer/Coordinator xác nhận
+và điều kiện Program cho phép.
+
+Không quảng cáo:
+
+“Trả phí để gặp Buyer.”
+
+Dùng wording:
+
+“Đề nghị cuộc gặp được xem xét theo nhu cầu và mức độ phù hợp.”
+
+==================================================
+10. PARTICIPATION MODES
+==================================================
+
+Block:
+
+“HÌNH THỨC THAM GIA”
+
+Có thể gồm:
+
+A.
+BUYER / FACTORY
+
+B.
+SUPPLIER DIRECT
+
+C.
+REMOTE PRESENCE
+
+D.
+SPONSOR
+
+E.
+PARTNER
+nếu Program hỗ trợ.
+
+Mỗi option phải lấy từ:
+
+ProgramParticipationOption
+
+Fields:
+
+role
+participationType
+title
+description
+eligibility
+deliverables
+feeType
+amount?
+currency?
+capacity?
+status
+
+Không hard-code fee trên frontend.
+
+==================================================
+11. FEE DISPLAY
+==================================================
+
+FREE:
+“MIỄN PHÍ”
+
+FIXED:
+hiển thị đúng amount/currency
+
+QUOTE_REQUIRED:
+“NHẬN BÁO GIÁ / TRAO ĐỔI PHẠM VI”
+
+Nếu nhiều loại tham gia:
+
+không đặt một giá duy nhất ở Hero.
+
+Dùng:
+
+“XEM PHÍ THEO HÌNH THỨC”
+
+==================================================
+12. REMOTE PRESENCE
+==================================================
+
+Nếu Program nhận hiện diện từ xa:
+
+Hiển thị option:
+
+“THAM GIA TỪ XA / HIỆN DIỆN DOANH NGHIỆP”
+
+Có thể gồm:
+
+Profile
+Video
+Catalogue
+Product sample
+Display material
+
+CTA:
+
+[ĐĂNG KÝ HIỆN DIỆN TỪ XA]
+
+Nếu module đã có:
+/dich-vu/hien-dien-tu-xa?program={programId}
+
+Nếu chưa build Page 33:
+có thể route qua:
+
+/yeu-cau-dich-vu?service=hien-dien-tu-xa&program={programId}
+
+Không tạo route rỗng.
+
+==================================================
+13. SPONSOR
+==================================================
+
+Block:
+
+“ĐỒNG HÀNH CÙNG CHƯƠNG TRÌNH”
+
+Chỉ hiển thị Sponsor/Partner:
+
+đã được xác nhận và publish.
+
+Label rõ:
+
+“NHÀ TÀI TRỢ”
+“ĐỐI TÁC CHƯƠNG TRÌNH”
+
+CTA:
+
+[TÔI MUỐN TÀI TRỢ]
+
+→ /tai-tro?chuong-trinh={programCode}
+
+Nếu Page /tai-tro chưa build:
+route vẫn chuẩn bị nhưng không fake sponsor contract.
+
+==================================================
+14. SPONSOR ≠ MATCHING
+==================================================
+
+Sponsor không:
+
+tự đứng #1 Supplier
+
+tăng SupplierMatch score
+
+nhận Buyer contacts mặc định
+
+được xem private Requirements
+
+được đảm bảo meeting.
+
+Sponsor benefits phải theo contract/entitlement riêng.
+
+==================================================
+15. AGENDA
+==================================================
+
+Block:
+
+“LỊCH TRÌNH CHƯƠNG TRÌNH”
+
+Reuse ProgramAgendaItem.
+
+Mỗi item:
+
+startAt
+endAt
+title
+description
+location/room
+type
+visibility
+
+Ví dụ:
+
+Check-in
+Opening
+Buyer need session
+Supplier presentation
+1:1 meetings
+Break
+Closing
+
+Không hard-code agenda trong page source.
+
+==================================================
+16. MEETING 1:1
+==================================================
+
+Block:
+
+“CUỘC GẶP 1:1”
+
+Public page chỉ giải thích:
+
+Cách đề nghị meeting
+
+Điều kiện
+
+Thời hạn yêu cầu
+
+Cách xác nhận.
+
+KHÔNG hiển thị:
+
+meeting private schedule
+
+Buyer contact
+
+Supplier contact không public
+
+private notes.
+
+Lịch meeting cá nhân:
+chỉ hiển thị trong account workspace
+sau khi được xác nhận.
+
+==================================================
+17. MEETING DATA
+==================================================
+
+Reuse Meeting:
+
+id
+programId
+requirementId?
+buyerOrganizationId
+supplierOrganizationId
+
+status
+
+scheduledAt
+duration
+location/room
+
+ownerUserId
+
+nextAction
+nextActionAt
+
+Không tạo EventMeeting table khác nếu Meeting hiện có dùng được.
+
+==================================================
+18. MEETING STATUS
+==================================================
+
+Ví dụ:
+
+REQUESTED
+UNDER_REVIEW
+PROPOSED
+CONFIRMED
+COMPLETED
+CANCELLED
+NO_SHOW
+
+Meeting scheduled
+≠
+Meeting completed.
+
+Meeting completed
+≠
+Deal.
+
+==================================================
+19. SUPPLIER SHOWCASE
+==================================================
+
+Nếu Program có Supplier Showcase:
+
+Hiển thị SupplierCard rút gọn.
+
+Data lấy từ:
+
+Organization
+SupplierProfile
+ProductService
+
+Chỉ Supplier:
+
+được phép public
+và được Program publish.
+
+Không tạo EventSupplier profile duplicate.
+
+==================================================
+20. CATALOGUE
+==================================================
+
+Nếu Program có Catalogue:
+
+block:
+
+“CATALOGUE CHƯƠNG TRÌNH”
+
+Reuse:
+
+catalogues
+catalogue_entries
+
+CTA:
+[XEM CATALOGUE]
+
+Không hard-code PDF nếu Catalogue module đã có.
+
+==================================================
+21. CHUẨN BỊ TRƯỚC CHƯƠNG TRÌNH
+==================================================
+
+Block:
+
+“BẠN NÊN CHUẨN BỊ GÌ?”
+
+Theo role.
+
+BUYER:
+
+Requirement rõ
+
+Location
+
+Deadline
+
+Criteria
+
+Documents
+
+Contact person
+
+Sharing scope
+
+SUPPLIER:
+
+Supplier Profile
+
+Capabilities
+
+Product/Service
+
+Service area
+
+Samples
+
+Catalogue
+
+Contact person
+
+Không dùng cùng checklist cho mọi role.
+
+==================================================
+22. REGISTRATION CTA
+==================================================
+
+Hai CTA chính:
+
+[ĐĂNG KÝ NGƯỜI MUA]
+
+[ĐĂNG KÝ NHÀ CUNG ỨNG]
+
+Cùng dẫn tới:
+
+/chuong-trinh/[slug]/dang-ky
+
+nhưng preselect role.
+
+Không tạo 2 hệ form.
+
+Page 22 sẽ build FormEngine registration chi tiết.
+
+==================================================
+23. REGISTRATION STATE
+==================================================
+
+Detail page có thể hiển thị user state nếu login:
+
+Chưa đăng ký
+
+Đã gửi đăng ký
+
+Đang xét
+
+Đã chấp nhận
+
+Bị từ chối
+
+Đã rút
+
+Nhưng:
+
+RegistrationStatus
+PaymentStatus
+AttendanceStatus
+
+phải là 3 state riêng.
+
+Không gộp thành một:
+
+“Đã tham gia”.
+
+==================================================
+24. PROGRAM POLICIES
+==================================================
+
+Trước khi status = REGISTRATION_OPEN:
+
+Program phải có policy tối thiểu:
+
+Change information policy
+
+Cancellation policy
+
+Postponement policy
+
+Refund policy nếu có phí
+
+Payment entity nếu có
+
+Support contact
+
+Terms/consent.
+
+Admin validation phải cảnh báo nếu thiếu.
+
+==================================================
+25. SAU CHƯƠNG TRÌNH
+==================================================
+
+Program COMPLETED chuyển page sang post-event mode.
+
+Hiển thị nếu có:
+
+Ảnh được phép public
+
+Video
+
+Public documents
+
+Catalogue
+
+Confirmed aggregate results
+
+Follow-up CTA
+
+Feedback
+
+Related future programs.
+
+Không xóa Hero/facts cũ.
+
+==================================================
+26. KẾT QUẢ SAU CHƯƠNG TRÌNH
+==================================================
+
+Có thể hiển thị dữ liệu được xác nhận:
+
+Số nhu cầu đã xác nhận
+
+Số cuộc gặp đã diễn ra
+
+Số quotation được ghi nhận
+
+Số outcome đã xác nhận
+
+Số opportunity đang follow-up
+
+NHƯNG chỉ khi data thật.
+
+Không dùng:
+
+Registration = Attendance
+
+Scheduled meeting = Completed meeting
+
+QR scan = Need
+
+Quote = Deal.
+
+==================================================
+27. GALLERY PREVIEW
+==================================================
+
+Có thể hiển thị preview 4–8 ảnh public.
+
+CTA:
+
+[XEM THƯ VIỆN]
+
+→ /chuong-trinh/[slug]/thu-vien
+
+Full library sẽ làm Page 23.
+
+Không public ảnh không có usage rights.
+
+==================================================
+28. SUPPI
+==================================================
+
+SUPPI trên detail page phải biết:
+
+programId
+category
+location
+targetRole
+registration status nếu login
+
+Có thể trả lời:
+
+“Program này có phù hợp với tôi?”
+
+“Tôi cần chuẩn bị gì?”
+
+“Tôi muốn đăng nhu cầu để tham gia.”
+
+Không hứa:
+
+meeting chắc chắn
+deal chắc chắn
+Buyer chắc chắn gặp.
+
+==================================================
+29. CHAINY
+==================================================
+
+Nếu user đã có:
+
+approved registration
+meeting
+connection
+
+CHAINY có thể hiển thị:
+
+Next action
+
+Meeting status
+
+Preparation reminders
+
+Follow-up status
+
+Không expose internal coordination notes.
+
+==================================================
+30. ORGANIZER
+==================================================
+
+Block:
+
+“ĐƠN VỊ TỔ CHỨC”
+
+Reuse Organization.
+
+Có thể hiển thị:
+
+Logo
+Name
+Role in program
+Public contact/support nếu được phép
+
+Không dùng logo đối tác chưa xác nhận.
+
+==================================================
+31. ADMIN
+==================================================
+
+Reuse:
+
+/admin/chuong-trinh/[id]
+
+Tabs phải hỗ trợ:
+
+TỔNG QUAN
+
+FACTS
+
+AUDIENCE
+
+BUYER NEEDS
+
+PARTICIPATION OPTIONS
+
+AGENDA
+
+REGISTRATIONS
+
+SUPPLIERS
+
+MEETINGS
+
+CATALOGUE
+
+SPONSORS / PARTNERS
+
+PREPARATION
+
+RESULT
+
+GALLERY
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+32. ADMIN PUBLISH VALIDATION
+==================================================
+
+Trước publish:
+
+title
+slug
+type
+status
+organizer
+time
+location/modality
+target roles
+
+phải hợp lệ.
+
+Trước REGISTRATION_OPEN:
+
+registration dates
+
+participation options
+
+policies
+
+support contact
+
+phải đầy đủ.
+
+Nếu thiếu:
+block transition hoặc warning theo architecture hiện tại.
+
+==================================================
+33. ADMIN BUYER NEEDS
+==================================================
+
+Admin chọn Requirement relation.
+
+Không copy need.
+
+Mỗi Requirement relation có:
+
+programId
+requirementId
+visibilityInProgram
+displayOrder?
+
+Chỉ public nếu Requirement sharing scope cho phép.
+
+==================================================
+34. ADMIN SUPPLIER PARTICIPATION
+==================================================
+
+Supplier participation lưu relation:
+
+programId
+organizationId
+
+participationType
+
+registrationId?
+
+showcaseStatus
+
+sampleStatus?
+
+meetingPreference?
+
+Không tạo Supplier Profile mới.
+
+==================================================
+35. ADMIN AGENDA
+==================================================
+
+CRUD agenda:
+
+Start
+End
+Title
+Type
+Room/location
+Visibility
+Sort
+
+Audit changes.
+
+==================================================
+36. ADMIN RESULTS
+==================================================
+
+Không cho admin nhập một số “deal thành công” tùy ý
+mà không có source.
+
+Result metrics phải derive từ:
+
+Requirement
+Meeting
+Quote
+Outcome
+Attendance
+
+hoặc có explicit source + confirmation.
+
+==================================================
+37. PRIVACY
+==================================================
+
+Public page không được query/return:
+
+private Buyer contact
+
+private Supplier registration data
+
+payment details
+
+private agenda/meeting schedule
+
+quotations
+
+internal notes
+
+confidential files
+
+Sponsor contract
+
+Internal matching score.
+
+Backend enforce.
+
+==================================================
+38. SEO
+==================================================
+
+Title:
+
+[Tên chương trình] | CHUOICUNGUNG.COM
+
+Meta:
+
+[Tên chương trình] kết nối doanh nghiệp theo [nhóm nhu cầu] tại [địa bàn]. Xem đối tượng phù hợp, hình thức tham gia, lịch trình và thông tin đăng ký.
+
+Canonical:
+
+/chuong-trinh/[slug]
+
+Schema:
+
+Event
+BreadcrumbList
+Organization
+
+Chỉ output Event schema với dữ liệu thật:
+
+startDate
+endDate
+location
+organizer
+eventStatus
+
+Không fake:
+
+offers
+attendance
+rating.
+
+==================================================
+39. PROGRAM STATUS → EVENT STATUS
+==================================================
+
+Map đúng nếu dùng schema.org:
+
+UPCOMING /
+REGISTRATION_OPEN /
+REGISTRATION_CLOSED
+→ EventScheduled
+
+POSTPONED
+→ EventPostponed
+
+CANCELLED
+→ EventCancelled
+
+Không suy diễn status sai.
+
+==================================================
+40. MOBILE
+==================================================
+
+Mobile order:
+
+Hero/facts
+
+Status
+
+CTA role
+
+Dành cho ai
+
+Buyer needs
+
+Participation modes
+
+Agenda
+
+Preparation
+
+Partners
+
+Results/gallery nếu completed
+
+Sticky bottom CTA khi registration open.
+
+Không overflow 390px.
+
+==================================================
+41. ANALYTICS
+==================================================
+
+Track:
+
+program_detail_view
+
+buyer_registration_click
+
+supplier_registration_click
+
+send_need_click
+
+remote_presence_click
+
+sponsor_click
+
+agenda_view
+
+catalogue_click
+
+gallery_click
+
+Không gọi CTA click = registration.
+
+==================================================
+42. QA
+==================================================
+
+Test:
+
+1. Detail load đúng slug.
+2. Unpublished Program không public.
+3. CTA thay đúng status.
+4. Buyer/Supplier CTA cùng một registration route + role preset.
+5. Buyer Needs chỉ public đúng sharing scope.
+6. Supplier payment không tạo guaranteed meeting.
+7. Private meeting schedule không public.
+8. Sponsor không ảnh hưởng matching.
+9. Participation fee đúng theo role.
+10. Remote Presence chỉ hiện khi Program hỗ trợ.
+11. Agenda lấy DB.
+12. Catalogue reuse module.
+13. Gallery chỉ lấy media có permission.
+14. Completed Program giữ archive.
+15. Result metrics lấy dữ liệu xác nhận.
+16. Organizer reuse Organization.
+17. Admin changes có AuditLog.
+18. Mobile 390px hoạt động.
+
+==================================================
+43. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- Program detail implementation
+- Participation options
+- Buyer Need relations
+- Supplier participation
+- Agenda implementation
+- Meeting integration
+- Sponsor integration
+- Catalogue integration
+- Post-event/result implementation
+- Admin implementation
+- SEO/schema
+- Permissions
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+PROGRAM DETAIL
+→ USER HIỂU MÌNH CÓ PHÙ HỢP KHÔNG
+→ CHỌN ROLE
+→ ĐĂNG KÝ / GỬI NEED
+→ MATCHING
+→ MEETING
+→ FOLLOW-UP
+→ RESULT
+→ PUBLIC ARCHIVE
+
+Không biến /chuong-trinh/[slug]
+thành một poster sự kiện online.
+
+Đây phải là WORKSPACE PUBLIC
+dẫn người dùng vào workflow kết nối B2B.

@@ -1,0 +1,1678 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 19 / MODULE 19:
+BÀN ĐIỀU PHỐI NỘI BỘ
+
+ROOT:
+ /admin
+
+ĐÂY LÀ MODULE CUỐI CỦA P0.
+
+MỤC TIÊU:
+
+Gom toàn bộ admin/workflow đã xây từ Page 01–18
+thành MỘT BÀN ĐIỀU PHỐI THỐNG NHẤT.
+
+KHÔNG rebuild Admin từ đầu.
+
+Audit tất cả route/admin/model/service hiện có trước,
+sau đó tích hợp chúng vào một hệ thống điều phối chung.
+
+XƯƠNG SỐNG:
+
+ĐĂNG NHU CẦU
+→ TÌM NGUỒN
+→ KẾT NỐI
+→ THEO DÕI
+→ KẾT QUẢ
+
+Tất cả:
+
+Requirement
+Supplier
+Matching
+Connection
+Program
+Service
+Founding Partner
+Task
+Contract
+Finance
+Report
+
+phải cắm vào cùng hệ thống.
+
+==================================================
+1. AUDIT TOÀN BỘ ADMIN ĐÃ XÂY
+==================================================
+
+Audit:
+
+/admin
+
+/admin/nhu-cau
+/admin/nhu-cau/[id]
+
+/admin/to-chuc
+/admin/to-chuc/[id]
+
+/admin/matching
+/admin/connections
+
+/admin/tasks
+
+/admin/danh-muc
+/admin/tu-khoa
+/admin/giai-doan
+
+/admin/dich-vu
+/admin/yeu-cau-dich-vu
+
+/admin/founding-partner
+
+và các route admin hiện có tương đương.
+
+Mục tiêu:
+
+REUSE
+MERGE NAVIGATION
+UNIFY PERMISSIONS
+UNIFY STATUS/OWNER/TASK/AUDIT
+
+Không tạo thêm một bộ record admin duplicate.
+
+==================================================
+2. ADMIN HOME — /admin
+==================================================
+
+Dashboard đầu tiên phải trả lời 5 câu hỏi:
+
+1. Có nhu cầu mới nào?
+2. Nhu cầu nào chưa tìm được nguồn?
+3. Kết nối nào đang chờ?
+4. Việc nào quá hạn?
+5. Kết quả nào chưa được xác nhận?
+
+Không biến dashboard thành màn hình vanity metrics.
+
+==================================================
+3. KANBAN 5 CỘT CỐT LÕI
+==================================================
+
+Tạo Kanban trung tâm:
+
+COLUMN 01
+ĐĂNG NHU CẦU
+
+COLUMN 02
+TÌM NGUỒN
+
+COLUMN 03
+KẾT NỐI
+
+COLUMN 04
+THEO DÕI
+
+COLUMN 05
+KẾT QUẢ
+
+Mỗi card đại diện cho Requirement.
+
+Card tối thiểu:
+
+Public code
+Buyer/Organization nếu user có quyền xem
+Category
+Location
+Current status
+Owner
+Next action
+Next action date
+Supplier match count
+Last activity
+
+Overdue:
+highlight rõ.
+
+Không dùng màu đỏ chỉ để trang trí.
+Chỉ cảnh báo khi thực sự quá hạn / có blocker.
+
+==================================================
+4. KHÔNG DÙNG KANBAN COLUMN THAY CHO DOMAIN STATUS
+==================================================
+
+5 cột là high-level operational pipeline.
+
+Domain status vẫn phải giữ riêng.
+
+Requirement status:
+
+NEW
+NEED_MORE_INFO
+VERIFIED
+SOURCING
+CONNECTING
+IN_PROGRESS
+CLOSED
+CANCELLED
+
+Hoặc map tương đương từ schema hiện tại.
+
+Không phá migration nếu enum hiện tại khác.
+
+Tạo mapping:
+
+domain status
+→ pipeline column
+
+thay vì thay toàn bộ DB status chỉ để phục vụ UI.
+
+==================================================
+5. SUPPLIER MATCH STATUS TÁCH RIÊNG
+==================================================
+
+Một Requirement có thể có:
+
+Supplier A
+→ quotation
+
+Supplier B
+→ sample
+
+Supplier C
+→ no response
+
+Supplier D
+→ not suitable
+
+Supplier E
+→ negotiation
+
+Do đó SupplierMatch phải có status riêng.
+
+Reuse trạng thái đã xây:
+
+PROPOSED
+INVITED
+RESPONDED
+CONNECTED
+SAMPLE_OR_SURVEY
+QUOTED
+NEGOTIATING
+OUTCOME
+
+plus:
+
+NOT_SUITABLE
+WITHDRAWN
+NO_RESPONSE
+
+Không gom tất cả thành Requirement.status.
+
+==================================================
+6. HARD RULE: OWNER + NEXT ACTION
+==================================================
+
+Mọi work item active phải có:
+
+ownerUserId
+
+nextAction
+
+nextActionAt
+
+status
+
+Nếu không có Next Action:
+hiển thị warning.
+
+Nếu nextActionAt < now:
+OVERDUE.
+
+Áp dụng cho:
+
+Requirement
+SupplierMatch / Connection
+ServiceRequest
+Program operation
+Founding Partner entitlement
+Task
+Contract follow-up
+
+Không cho một record nằm mãi ở:
+
+“ĐANG XỬ LÝ”
+
+mà không biết:
+
+AI?
+LÀM GÌ?
+KHI NÀO?
+
+==================================================
+7. 6 BẢNG CÔNG VIỆC BẮT BUỘC
+==================================================
+
+Ngoài Dashboard 5 cột,
+Admin cần 6 work boards:
+
+-----------------------------------
+BOARD 01 — NHU CẦU
+-----------------------------------
+
+/admin/nhu-cau
+
+Quản lý:
+
+Need
+Buyer
+Category
+Location
+Visibility
+Owner
+Status
+Next action
+Due date
+Supplier matches
+Outcome
+
+-----------------------------------
+BOARD 02 — HỒ SƠ & DỮ LIỆU CÒN THIẾU
+-----------------------------------
+
+Có thể tại:
+
+/admin/to-chuc
+
+hoặc một filtered queue.
+
+Hiển thị:
+
+Organization
+Profile type
+Missing information
+Evidence needing review
+Last updated
+Owner
+Next action
+
+Ví dụ:
+
+Supplier chưa có capability
+Product thiếu MOQ
+Service area chưa xác nhận
+Evidence hết hạn
+Organization claim pending
+
+-----------------------------------
+BOARD 03 — KẾT NỐI TỪNG NCC
+-----------------------------------
+
+/admin/connections
+
+hoặc /admin/matching
+
+Mỗi row/card:
+
+Requirement
+Supplier
+Match status
+Reason matched
+Latest interaction
+Sample
+Survey
+Quotation
+Owner
+Next action
+Due
+Outcome
+
+-----------------------------------
+BOARD 04 — CHƯƠNG TRÌNH & LỊCH GẶP
+-----------------------------------
+
+/admin/chuong-trinh
+khi module Program tồn tại.
+
+Theo dõi:
+
+Program
+Registrations
+Buyer needs
+Supplier participants
+Meetings
+Attendance
+Follow-up
+Owner
+Tasks
+
+Nếu Program chưa nằm trong P0 hiện tại:
+giữ navigation/module placeholder có cấu trúc,
+KHÔNG tạo mock program data.
+
+-----------------------------------
+BOARD 05 — DỊCH VỤ / TÀI TRỢ / BÀN GIAO
+-----------------------------------
+
+Theo dõi:
+
+ServiceRequest
+Founding Partner
+Sponsorship
+Contract
+Entitlements
+Deliverables
+Acceptance
+
+Mỗi record:
+
+Customer
+Scope
+Contract
+Owner
+Next action
+Delivery status
+Evidence
+Acceptance
+
+-----------------------------------
+BOARD 06 — THU CHI / CÔNG NỢ / ĐỐI SOÁT
+-----------------------------------
+
+Chỉ triển khai UI/data khi Finance model thực tế đã tồn tại.
+
+Theo dõi riêng:
+
+Contract value
+Invoice
+Payment due
+Amount received
+Payable
+Collected on behalf
+Revenue recognition nếu hệ thống hỗ trợ
+
+KHÔNG trộn:
+
+Investment capital
+Loan
+Sponsorship
+Service revenue
+Collected-on-behalf
+
+Nếu Finance chưa hoàn thiện:
+tạo permission-ready structure,
+không invent financial numbers.
+
+==================================================
+8. ADMIN NAVIGATION
+==================================================
+
+Sidebar đề xuất:
+
+TỔNG QUAN
+
+PIPELINE
+
+NHU CẦU
+
+TÌM NGUỒN
+
+KẾT NỐI
+
+TỔ CHỨC
+- Doanh nghiệp
+- Hồ sơ cần bổ sung
+- Claim hồ sơ
+
+NỘI DUNG
+- Danh mục
+- Từ khóa
+- 6 giai đoạn
+- Product / Service
+
+CHƯƠNG TRÌNH
+
+DỊCH VỤ
+- Service requests
+- Truyền thông
+- Vật phẩm
+
+HỢP TÁC
+- Founding Partner
+- Sponsor
+
+CÔNG VIỆC
+- Tasks
+- Overdue
+- My tasks
+
+TÀI CHÍNH
+chỉ role phù hợp
+
+BÁO CÁO
+
+HỆ THỐNG
+- Users
+- Roles & permissions
+- Audit
+- Settings
+
+Ẩn menu theo permission.
+
+==================================================
+9. MY WORK
+==================================================
+
+Dashboard cá nhân:
+
+“VIỆC CỦA TÔI”
+
+Hiển thị:
+
+Due today
+
+Overdue
+
+Next 7 days
+
+Waiting for external response
+
+Need follow-up
+
+Không cần user mở từng module để tìm việc.
+
+==================================================
+10. OVERDUE CENTER
+==================================================
+
+Tạo:
+
+/admin/tasks?filter=overdue
+
+hoặc equivalent.
+
+Group:
+
+Need clarification overdue
+
+Supplier follow-up overdue
+
+Sample overdue
+
+Quote overdue
+
+Meeting response overdue
+
+Service request overdue
+
+Founding Partner deliverable overdue
+
+Admin có thể:
+
+Reassign
+Change due
+Complete task
+Add reason
+
+Mọi mutation ghi AuditLog.
+
+==================================================
+11. GLOBAL SEARCH
+==================================================
+
+Admin search có thể tìm:
+
+Requirement code
+
+ServiceRequest code
+
+Organization
+
+Tax code
+
+Supplier
+
+Contact nếu có permission
+
+Program
+
+Contract
+
+Founding Partner
+
+Product / Service
+
+Không tạo một search index chứa private data public.
+
+Admin search vẫn enforce permission.
+
+==================================================
+12. REQUIREMENT DETAIL
+==================================================
+
+/admin/nhu-cau/[id]
+
+Tabs:
+
+TỔNG QUAN
+
+YÊU CẦU
+
+VERSIONS
+
+SUPPLIER MATCHES
+
+CONNECTIONS
+
+SAMPLES / SURVEYS
+
+QUOTATIONS
+
+MESSAGES
+
+TASKS
+
+TIMELINE
+
+OUTCOME
+
+AUDIT
+
+Header phải luôn thấy:
+
+Code
+Status
+Owner
+Next Action
+Due
+
+==================================================
+13. ORGANIZATION DETAIL
+==================================================
+
+/admin/to-chuc/[id]
+
+Reuse Organization master.
+
+Tabs:
+
+Overview
+Roles
+Facilities
+Capabilities
+Product / Service
+Service Area
+Evidence
+Media
+Catalogue
+Needs
+Matching
+Connections
+Programs
+Service Requests
+Partnership
+Tasks
+Timeline
+Audit
+
+Một Organization có thể có nhiều role.
+
+Không tạo Supplier/Factory/Partner thành company records khác nhau.
+
+==================================================
+14. ACTIVITY TIMELINE
+==================================================
+
+Mỗi core object phải có timeline.
+
+Event ví dụ:
+
+Requirement created
+
+Requirement clarified
+
+Supplier proposed
+
+Supplier invited
+
+Supplier responded
+
+Connection created
+
+Meeting completed
+
+Sample requested
+
+Quote uploaded
+
+Next action changed
+
+Outcome recorded
+
+Service proposal sent
+
+Founding entitlement delivered
+
+Không lưu timeline chỉ ở frontend.
+
+==================================================
+15. TASK ENGINE
+==================================================
+
+Task schema tối thiểu:
+
+id
+
+entityType
+entityId
+
+title
+description?
+
+ownerUserId
+
+status
+
+priority?
+
+dueAt
+
+completedAt?
+
+createdBy
+
+createdAt
+updatedAt
+
+EntityType có thể gồm:
+
+REQUIREMENT
+SUPPLIER_MATCH
+CONNECTION
+PROGRAM
+SERVICE_REQUEST
+FOUNDING_PARTNERSHIP
+CONTRACT
+
+Không tạo task table riêng cho mỗi module.
+
+==================================================
+16. TASK STATUS
+==================================================
+
+Dùng đơn giản:
+
+OPEN
+IN_PROGRESS
+WAITING
+COMPLETED
+CANCELLED
+
+Task status ≠ Requirement status.
+
+==================================================
+17. OUTCOME
+==================================================
+
+Không dùng một checkbox:
+
+SUCCESS = true.
+
+Outcome cần hỗ trợ:
+
+SELECTED_SUPPLIER
+ORDER_PLACED
+CONTRACT_SIGNED
+
+SAMPLE_IN_PROGRESS
+WAITING_BUDGET
+NEGOTIATING
+
+PRICE_NOT_SUITABLE
+LEAD_TIME_NOT_SUITABLE
+TECHNICAL_NOT_SUITABLE
+NO_RESPONSE
+BUYER_STOPPED
+
+UNKNOWN / NOT_CONFIRMED
+
+Outcome phải có:
+
+source
+confirmedBy
+confirmedAt
+note
+
+nếu phù hợp.
+
+Không tự đánh dấu Deal sau meeting.
+
+==================================================
+18. BOTTLENECK VIEW
+==================================================
+
+Dashboard cần giúp team thấy pipeline nghẽn.
+
+Ví dụ tính từ DATA THẬT:
+
+Number in Demand intake
+
+Number in Sourcing
+
+Number in Connecting
+
+Number in Follow-up
+
+Number awaiting Outcome
+
+Average age by column nếu dữ liệu đủ.
+
+Overdue count
+
+Không hard-code sample metrics.
+
+Có thể hiển thị:
+
+“12 nhu cầu đang ở Tìm nguồn”
+
+nhưng chỉ nếu query DB trả đúng 12.
+
+==================================================
+19. FILTERS
+==================================================
+
+Filter dùng chung:
+
+Owner
+
+Team
+
+Status
+
+Pipeline stage
+
+Category
+
+Location
+
+KCN
+
+Organization
+
+Date
+
+Overdue
+
+Source
+
+Program nếu có
+
+Không nhồi 50 filters trên màn hình.
+
+Advanced filters mở thêm.
+
+==================================================
+20. SAVED VIEWS
+==================================================
+
+Nếu kiến trúc cho phép:
+
+user có thể lưu view:
+
+“Việc của tôi”
+
+“Chờ NCC phản hồi”
+
+“Nhu cầu Đồng Nai”
+
+“Quá hạn”
+
+“Founding Partner sắp hết hạn”
+
+Saved View chỉ lưu filter config.
+
+Không duplicate records.
+
+==================================================
+21. ROLE-BASED ACCESS CONTROL
+==================================================
+
+Tách rõ:
+
+SUPER_ADMIN
+
+COORDINATOR
+
+SOURCING
+
+PARTNERSHIP
+
+CONTENT
+
+PROGRAM_OPERATOR
+
+FINANCE
+
+VIEWER
+
+và account-side roles nếu dùng cùng RBAC.
+
+Không hard-code quyền theo email.
+
+==================================================
+22. BUYER PERMISSION
+==================================================
+
+Buyer chỉ xem:
+
+Requirement của Organization mình
+
+Supplier information được phép chia sẻ
+
+Meeting/timeline liên quan
+
+Files được cấp quyền
+
+Không xem:
+
+Requirement của Buyer khác
+
+Internal notes
+
+Commercial agreement khác
+
+==================================================
+23. SUPPLIER PERMISSION
+==================================================
+
+Supplier xem:
+
+Opportunity/Requirement được chia sẻ cho mình
+
+Response của mình
+
+Connection của mình
+
+Meeting của mình
+
+Quote của mình
+
+Không xem:
+
+Quote Supplier khác
+
+Buyer internal note
+
+Other supplier response
+
+Internal matching score
+
+==================================================
+24. HỘI / KCN
+==================================================
+
+Hội/KCN chỉ xem:
+
+Program/data thuộc phạm vi được thỏa thuận.
+
+Không mặc định:
+
+Hội → xem mọi nhu cầu của hội viên.
+
+KCN → xem mọi dữ liệu riêng của nhà máy trong KCN.
+
+Permission phải dựa trên explicit scope/relationship.
+
+==================================================
+25. SPONSOR / FOUNDING PARTNER
+==================================================
+
+Sponsor/Founding Partner xem:
+
+Contract/scope
+
+Entitlements
+
+Delivery evidence
+
+Related report
+
+Không tự có quyền:
+
+Buyer contacts
+
+Private Requirements
+
+Quotes
+
+Private meetings
+
+Supplier ranking
+
+==================================================
+26. COORDINATOR
+==================================================
+
+Coordinator chỉ làm việc trong phạm vi assigned.
+
+Có thể được quyền:
+
+Read
+Update status
+Create task
+Schedule follow-up
+Add operational notes
+
+Không mặc định được truy cập Finance hoặc contract terms nếu role không có.
+
+==================================================
+27. FINANCE
+==================================================
+
+Finance chỉ xem/điều chỉnh dữ liệu cần cho:
+
+Contract
+
+Invoice
+
+Payment
+
+Debt
+
+Reconciliation
+
+Không tự có quyền sửa:
+
+Supplier capability
+
+Buyer Requirement
+
+Matching result
+
+==================================================
+28. EXPORT PERMISSION
+==================================================
+
+EXPORT là permission riêng.
+
+Không đồng nghĩa:
+
+VIEW = EXPORT.
+
+Ví dụ Hội có thể xem một danh sách trong portal
+nhưng không nhất thiết tải toàn bộ contact data.
+
+Log:
+
+who exported
+what
+when
+scope.
+
+==================================================
+29. FILE PERMISSION
+==================================================
+
+Files phân loại:
+
+PUBLIC
+
+PARTICIPANT
+
+ORGANIZATION_PRIVATE
+
+INTERNAL
+
+FINANCE_PRIVATE
+
+Không dùng “có URL là xem được”.
+
+Protected files phải check permission backend.
+
+==================================================
+30. AUDIT LOG
+==================================================
+
+Mọi mutation quan trọng phải ghi:
+
+actorUserId
+
+action
+
+entityType
+
+entityId
+
+before
+
+after
+
+timestamp
+
+reason nếu cần
+
+ip/device metadata nếu architecture hiện tại đã hỗ trợ.
+
+Các action bắt buộc:
+
+Status changes
+
+Owner changes
+
+Permission changes
+
+Visibility changes
+
+Supplier shortlisted
+
+Connection created
+
+Quote status changed
+
+Outcome changed
+
+Contract changed
+
+Financial entry changed
+
+Founding Partner activation/expiry
+
+==================================================
+31. DATA QUALITY QUEUE
+==================================================
+
+Tạo queue:
+
+“HỒ SƠ / DỮ LIỆU CẦN KIỂM TRA”
+
+Các vấn đề:
+
+Missing source
+
+Missing update date
+
+Evidence expired
+
+Conflicting information
+
+AI draft not reviewed
+
+Service area outdated
+
+Capability availability needs reconfirmation
+
+Mỗi issue:
+
+owner
+status
+due date
+
+Không tự gán “verified”.
+
+==================================================
+32. NOTIFICATIONS
+==================================================
+
+Notification triggers:
+
+New Requirement assigned
+
+Need more information
+
+Supplier responded
+
+Next action due
+
+Task overdue
+
+Meeting pending confirmation
+
+Quote received
+
+Outcome waiting confirmation
+
+Service proposal accepted
+
+Founding entitlement due
+
+Nếu Zalo chưa tích hợp/test:
+không claim Zalo automation đang hoạt động.
+
+Use in-app/email hiện có.
+
+==================================================
+33. DAILY OPERATIONS VIEW
+==================================================
+
+Tạo dashboard:
+
+“HÔM NAY CẦN XỬ LÝ GÌ?”
+
+Sections:
+
+Mới nhận
+
+Đến hạn hôm nay
+
+Quá hạn
+
+Chờ phản hồi ngoài hệ thống
+
+Chờ Buyer
+
+Chờ Supplier
+
+Chờ nội bộ
+
+Mục tiêu:
+team bắt đầu ngày làm việc từ đây.
+
+==================================================
+34. REPORTING
+==================================================
+
+P0 reports dùng dữ liệu vận hành thật.
+
+Có thể report:
+
+Requirements received
+
+Requirements confirmed
+
+Supplier matches considered
+
+Supplier responses
+
+Connections created
+
+Meetings completed
+
+Quotes recorded
+
+Outcomes confirmed
+
+Open opportunities
+
+Overdue work
+
+Service requests
+
+Founding Partner entitlement delivery
+
+Không gọi:
+meeting = deal.
+
+Không dùng:
+registration = attendance.
+
+Không dùng:
+QR scan = buyer need.
+
+==================================================
+35. FUNNEL
+==================================================
+
+Funnel chính:
+
+REQUIREMENT
+→ SOURCING
+→ CONNECTION
+→ FOLLOW-UP
+→ OUTCOME
+
+Cho phép filter:
+
+date
+category
+location
+owner
+program
+source
+
+Không tạo số liệu fake.
+
+==================================================
+36. FINANCIAL REPORTING
+==================================================
+
+Nếu P0 Finance đã có data:
+
+tách:
+
+Contract value
+
+Invoice value
+
+Cash received
+
+Outstanding
+
+Direct service cost
+
+Sponsor revenue
+
+Service revenue
+
+Collected on behalf
+
+Investment capital
+
+Không cộng tất cả thành “doanh thu”.
+
+Nếu dữ liệu chưa đủ:
+không show misleading financial dashboard.
+
+==================================================
+37. SUPPI / CHAINY TRONG ADMIN
+==================================================
+
+SUPPI có thể hỗ trợ:
+
+summarize Requirement
+
+detect missing fields
+
+suggest sourcing criteria
+
+prepare shortlist draft
+
+flag information requiring confirmation
+
+CHAINY có thể hỗ trợ:
+
+summarize connection
+
+suggest follow-up draft
+
+show overdue next actions
+
+prepare meeting follow-up
+
+summarize current status
+
+Nhưng:
+
+AI OUTPUT = DRAFT / ASSISTANCE
+
+Không được tự:
+
+verify capability
+
+approve Supplier
+
+mark outcome
+
+send external message
+
+change financial data
+
+activate Founding Partner
+
+trừ khi có explicit authorized workflow.
+
+==================================================
+38. SECURITY
+==================================================
+
+Enforce backend permissions.
+
+Test:
+
+IDOR
+
+cross-organization access
+
+role escalation
+
+export bypass
+
+private file exposure
+
+admin API without role
+
+fake owner assignment
+
+fake organizationId
+
+mass assignment
+
+Do not rely only on frontend guards.
+
+==================================================
+39. PERFORMANCE
+==================================================
+
+Admin lists:
+
+server pagination
+
+indexed filters
+
+lazy-load detail tabs
+
+avoid loading whole timeline/files in list view.
+
+Index likely needed:
+
+status
+ownerUserId
+nextActionAt
+organizationId
+categoryId
+createdAt
+updatedAt
+
+and relevant relation keys.
+
+==================================================
+40. MOBILE / TABLET
+==================================================
+
+Admin primarily desktop,
+nhưng tablet/mobile vẫn phải sử dụng được.
+
+Mobile:
+
+Kanban có thể chuyển:
+horizontal scroll
+hoặc
+pipeline list.
+
+Critical actions:
+
+View
+Assign
+Next action
+Complete task
+Add note
+
+phải dùng được trên mobile.
+
+Không cố nhét desktop table vào 390px.
+
+==================================================
+41. ADMIN HOME SUMMARY CARDS
+==================================================
+
+Chỉ dùng số thực:
+
+Nhu cầu mới
+
+Đang tìm nguồn
+
+Đang kết nối
+
+Cần follow-up
+
+Quá hạn
+
+Chờ xác nhận kết quả
+
+Không dùng vanity:
+
+Total transactions
+Deal value
+Success rate
+
+nếu dữ liệu chưa đủ/định nghĩa chưa chốt.
+
+==================================================
+42. EMPTY STATE
+==================================================
+
+Không fake demo data production.
+
+Ví dụ:
+
+“Chưa có nhu cầu đang chờ tìm nguồn.”
+
+“Không có việc quá hạn.”
+
+“Chưa có Founding Partner sắp hết hạn.”
+
+Có thể dùng seed/demo environment riêng,
+không trộn production.
+
+==================================================
+43. ADMIN SETTINGS
+==================================================
+
+Settings P0 tối thiểu:
+
+Teams
+
+Assignment rules
+
+Status mappings
+
+Notification rules
+
+Category taxonomy
+
+File visibility defaults
+
+Service request routing
+
+Không cho business-critical config chỉ tồn tại hard-code nếu cần thay đổi vận hành thường xuyên.
+
+==================================================
+44. BACKWARD COMPATIBILITY
+==================================================
+
+Page 19 là INTEGRATION SPRINT.
+
+Không phá:
+
+public pages
+
+current Requirement URLs
+
+Supplier profiles
+
+existing IDs
+
+existing slugs
+
+existing historical data
+
+existing audit history
+
+Nếu cần migration:
+phải có migration plan.
+
+Không destructive migration nếu chưa có backfill/rollback plan.
+
+==================================================
+45. P0 ACCEPTANCE TEST — END TO END
+==================================================
+
+Test một flow thật xuyên P0:
+
+STEP 1
+Buyer vào /dang-nhu-cau
+
+STEP 2
+Requirement được tạo
+
+STEP 3
+Admin thấy ở:
+ĐĂNG NHU CẦU
+
+STEP 4
+Coordinator xác nhận Need
+
+STEP 5
+SUPPI/Sourcing tìm Supplier
+
+STEP 6
+Need chuyển:
+TÌM NGUỒN
+
+STEP 7
+Supplier phản hồi
+
+STEP 8
+SupplierMatch cập nhật
+
+STEP 9
+Connection được tạo
+
+STEP 10
+Need chuyển:
+KẾT NỐI
+
+STEP 11
+CHAINY/Coordinator tạo next action
+
+STEP 12
+Sample / Survey / Quote được ghi nhận
+
+STEP 13
+Need nằm:
+THEO DÕI
+
+STEP 14
+Outcome được Buyer/Supplier/Coordinator xác nhận phù hợp
+
+STEP 15
+Need chuyển:
+KẾT QUẢ
+
+STEP 16
+Timeline + Audit đầy đủ.
+
+PASS chỉ khi flow chạy bằng database thật,
+không bằng mock state.
+
+==================================================
+46. ACCEPTANCE TEST — SERVICE
+==================================================
+
+Test:
+
+/dich-vu
+→ /yeu-cau-dich-vu
+→ ServiceRequest
+→ Admin
+→ Owner
+→ Proposal
+→ Accepted
+→ Execution
+→ Delivery
+→ Completed
+
+==================================================
+47. ACCEPTANCE TEST — FOUNDING PARTNER
+==================================================
+
+Test:
+
+/founding-partner
+→ Inquiry
+→ Scope review
+→ Contract
+→ Active partnership
+→ Category/Keyword sponsored block
+→ Entitlement delivery
+→ Expiry
+→ Paid placement disappears
+
+Và xác nhận:
+
+Supplier Matching không thay đổi vì tài trợ.
+
+==================================================
+48. ACCEPTANCE TEST — PERMISSIONS
+==================================================
+
+Buyer A không xem Buyer B.
+
+Supplier A không xem Supplier B quotation.
+
+Association không tự xem private member opportunities.
+
+Sponsor không tự xem Buyer contacts.
+
+Finance không sửa Supplier capability.
+
+Coordinator không xem Finance nếu không được cấp.
+
+Export permission hoạt động riêng.
+
+==================================================
+49. OUTPUT BẮT BUỘC
+==================================================
+
+Sau khi hoàn thành:
+
+Báo cáo:
+
+1. Existing admin routes audited
+
+2. Routes reused
+
+3. Routes merged
+
+4. New routes created
+
+5. Database models reused
+
+6. Migrations
+
+7. Status mapping
+
+8. Pipeline mapping
+
+9. RBAC matrix
+
+10. Task engine
+
+11. Audit implementation
+
+12. Global search
+
+13. Notification implementation
+
+14. Reporting
+
+15. Security tests
+
+16. Performance changes
+
+17. Remaining mocks
+
+18. Missing credentials/integrations
+
+19. Backward compatibility issues
+
+20. QA:
+PASS / FAIL / BLOCKED
+
+==================================================
+50. MỤC TIÊU CUỐI CỦA P0
+==================================================
+
+CHUOICUNGUNG.COM phải chạy được một vòng thật:
+
+MỘT NHU CẦU THẬT
+↓
+TÌM ĐÚNG NGUỒN
+↓
+KẾT NỐI ĐÚNG NGƯỜI
+↓
+THEO DÕI ĐẾN CÙNG
+↓
+GHI NHẬN KẾT QUẢ
+
+Admin phải nhìn được:
+
+AI ĐANG PHỤ TRÁCH?
+ĐANG Ở BƯỚC NÀO?
+VIỆC TIẾP THEO LÀ GÌ?
+KHI NÀO PHẢI LÀM?
+ĐANG NGHẼN Ở ĐÂU?
+KẾT QUẢ THỰC TẾ LÀ GÌ?
+
+Không xây Admin chỉ để CRUD dữ liệu.
+
+Đây phải là BÀN ĐIỀU PHỐI VẬN HÀNH
+của toàn bộ CHUOICUNGUNG.COM.

@@ -1,0 +1,697 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 09: LANDING NHU CẦU / KEYWORD
+ROUTE: /tu-khoa/[slug]
+
+VÍ DỤ:
+/tu-khoa/dien-mat-troi-ap-mai-1mwp
+/tu-khoa/dong-phuc-cong-nhan
+/tu-khoa/thung-carton-5-lop
+
+MỤC TIÊU:
+
+Đây KHÔNG phải trang blog SEO.
+
+Đây là LANDING PAGE THEO BUYER INTENT dùng để:
+
+Buyer có một nhu cầu cụ thể
+→ hiểu cần chuẩn bị gì
+→ lọc giải pháp
+→ xem NCC có năng lực liên quan
+→ hỏi SUPPI
+→ tạo Requirement
+→ đi vào sourcing/matching.
+
+Đồng thời đây là nơi có thể triển khai quyền lợi
+FOUNDING PARTNER
+nhưng tài trợ tuyệt đối không thay đổi logic matching.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Trước khi code, audit route hiện tại:
+
+/tu-khoa/[slug]
+
+Kiểm tra và reuse:
+
+categories
+keywords
+keyword clusters
+products_services
+supplier search
+supplier profiles
+founding partnerships
+programs
+catalogues
+media
+SEO
+
+Không tạo database duplicate nếu model tương đương đã tồn tại.
+
+==================================================
+2. KEYWORD KHÔNG ĐƯỢC TẠO TRÀN LAN
+==================================================
+
+Phân biệt:
+
+CATEGORY:
+/nganh-nghe/[slug]
+
+và
+
+BUYER INTENT / KEYWORD:
+/tu-khoa/[slug]
+
+Ví dụ:
+
+Category:
+Đồng phục & Bảo hộ
+
+Keyword:
+Đồng phục công nhân
+Áo polo công ty
+Đồng phục phản quang
+
+Các từ đồng nghĩa phải map về cùng một keyword cluster.
+
+Ví dụ:
+
+“điện mặt trời nhà xưởng”
+“solar rooftop nhà máy”
+“điện mặt trời áp mái công nghiệp”
+
+không tự động tạo 3 landing page giống nhau.
+
+Mỗi keyword phải có:
+
+id
+categoryId
+keywordClusterId
+
+name
+slug
+buyerIntent
+
+shortDescription
+
+filterSchema
+buyerGuideSchema
+
+status
+publishable
+
+seoTitle
+seoDescription
+
+createdAt
+updatedAt
+
+==================================================
+3. SLUG
+==================================================
+
+Slug:
+
+lowercase
+không dấu
+dùng "-"
+unique
+
+Ví dụ:
+
+/tu-khoa/dien-mat-troi-ap-mai-1mwp
+
+Nếu đổi slug:
+redirect URL cũ → URL mới.
+
+Không tạo URL theo mọi combination filter.
+
+==================================================
+4. UX/UI — GIỮ ĐÚNG THỨ TỰ
+==================================================
+
+01 HERO
+
+Breadcrumb:
+
+Trang chủ
+→ Ngành nghề
+→ Category
+→ Keyword
+
+H1 phải thể hiện đúng buyer intent.
+
+Ví dụ:
+
+“ĐIỆN MẶT TRỜI ÁP MÁI CHO NHÀ MÁY”
+
+Sub:
+
+Mô tả ngắn:
+Buyer đang tìm loại giải pháp gì,
+dành cho đối tượng nào,
+và SUPPI có thể hỗ trợ việc gì.
+
+CTA chính:
+
+[GỬI NHU CẦU]
+
+CTA phụ:
+
+[HỎI SUPPI TÌM NGUỒN]
+
+--------------------------------------------------
+
+02 SEARCH / FILTER
+
+Filter phải thay đổi theo keyword/category.
+
+Không dùng một bộ filter cố định cho mọi ngành.
+
+Ví dụ Solar Rooftop:
+
+Công suất dự kiến
+Tỉnh / địa bàn
+KCN
+Diện tích mái
+Nhóm giải pháp
+Mô hình đầu tư nếu có
+
+Ví dụ Đồng phục:
+
+Loại đồng phục
+Số lượng
+Địa bàn
+Thời gian cần
+Chất liệu nếu biết
+Cần mẫu
+
+Filter schema phải được cấu hình từ database/config,
+không hard-code riêng trong page component.
+
+Reuse SupplierSearchService từ Page 05.
+
+--------------------------------------------------
+
+03 ĐĂNG NHU CẦU
+
+Block:
+
+“BẠN ĐANG CÓ NHU CẦU CỤ THỂ?”
+
+Textarea:
+
+“Mô tả yêu cầu của doanh nghiệp...”
+
+SUPPI phải biết sẵn:
+
+keywordId
+keywordClusterId
+categoryId
+sourcePage
+
+Khi user nhập:
+
+create RequirementDraft.
+
+Không hỏi lại category/keyword đã biết.
+
+CTA:
+
+[ĐỂ SUPPI LÀM RÕ & TÌM NGUỒN]
+
+Không auto publish nhu cầu.
+
+--------------------------------------------------
+
+04 FOUNDING PARTNER
+
+Nếu có partnership ACTIVE trong đúng phạm vi:
+
+hiển thị:
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+Block có thể gồm:
+
+Logo
+Tên doanh nghiệp
+Video
+Năng lực liên quan
+Địa bàn/phạm vi
+CTA xem hồ sơ
+Thời hạn quyền lợi nếu phù hợp
+
+Dữ liệu phải lấy từ:
+founding_partnerships
+
+Founding Partnership phải xác định được:
+
+organizationId
+categoryId
+keywordClusterId
+locationId optional
+industrialParkId optional
+startDate
+endDate
+displayPosition
+entitlements
+status
+
+TUYỆT ĐỐI KHÔNG:
+
+- hard-code sponsor logo vào page;
+- đặt sponsor thay cho search/filter;
+- tự động xếp sponsor #1 trong Supplier Matching;
+- gửi toàn bộ buyer lead cho sponsor;
+- gọi sponsor là NCC được xác minh;
+- coi Founding Partner là cổ đông hoặc bảo trợ.
+
+Nếu hết hạn:
+block tự hết quyền nổi bật.
+
+==================================================
+5. NHÀ CUNG ỨNG LIÊN QUAN
+==================================================
+
+Reuse:
+
+SupplierSearchService
+SupplierCard
+SupplierMatchingService
+
+Không tạo supplier list riêng cho Keyword Page.
+
+Supplier phải được lấy theo:
+
+keyword
+category
+product/service
+capability
+service area
+conditions
+
+Card:
+
+Tên NCC
+Năng lực liên quan
+Sản phẩm/dịch vụ
+Địa bàn phục vụ
+MOQ/quy mô nếu có
+Evidence indicators
+Ngày cập nhật
+
+CTA:
+
+[XEM NĂNG LỰC]
+[GỬI YÊU CẦU]
+
+Không dùng:
+Top Supplier
+Best Supplier
+fake rating.
+
+==================================================
+6. BUYER GUIDE
+==================================================
+
+Block:
+
+“TRƯỚC KHI TÌM NGUỒN, BẠN NÊN CHUẨN BỊ”
+
+Nội dung phải cấu hình theo từng keyword.
+
+Ví dụ Solar Rooftop:
+
+Diện tích mái
+Công suất điện dự kiến
+Địa điểm nhà máy
+Kết cấu mái
+Hóa đơn điện nếu phù hợp
+Mục tiêu đầu tư
+
+Ví dụ Đồng phục:
+
+Loại nhân sự
+Số lượng
+Môi trường làm việc
+Chất liệu nếu biết
+Logo/in/thêu
+Thời gian cần
+Địa điểm giao
+Cần mẫu hay không
+
+Không sử dụng cùng một checklist cho tất cả keyword.
+
+SUPPI có thể dùng Buyer Guide này để hỏi thông tin còn thiếu.
+
+==================================================
+7. BỘ HỒ SƠ ĐỀ XUẤT NGUỒN CUNG
+==================================================
+
+Nếu có curated sourcing dossier liên quan:
+
+hiển thị block:
+
+“BỘ HỒ SƠ ĐỀ XUẤT NGUỒN CUNG”
+
+Mỗi bộ hồ sơ có:
+
+Mục đích
+Tiêu chí lựa chọn
+Ngày cập nhật
+Các NCC được đưa vào
+Lý do lựa chọn
+Thông tin còn thiếu
+
+Có thể có:
+
+PUBLIC
+PRIVATE
+
+Không public bộ hồ sơ private.
+
+Nội dung tài trợ nếu xuất hiện phải có nhãn
+và không thay tiêu chí lựa chọn.
+
+Nếu module này chưa triển khai:
+ẩn block.
+Không tạo mock.
+
+==================================================
+8. VIDEO
+==================================================
+
+Nếu có video liên quan:
+
+hiển thị:
+
+Video hướng dẫn
+Video NCC
+Video năng lực
+Video chương trình
+
+Data lấy từ media_assets.
+
+Không upload/hard-code video riêng vào page nếu đã có Media module.
+
+==================================================
+9. CATALOGUE
+==================================================
+
+Hiển thị catalogue liên quan keyword/category.
+
+Data từ:
+catalogues
+catalogue_entries
+
+CTA:
+
+[XEM CATALOGUE]
+
+Nếu không có dữ liệu:
+ẩn block.
+
+==================================================
+10. CHƯƠNG TRÌNH LIÊN QUAN
+==================================================
+
+Load chương trình theo:
+
+category
+keyword
+location
+industry
+
+Chỉ hiển thị chương trình có dữ liệu thật.
+
+CTA:
+
+[XEM CHƯƠNG TRÌNH]
+
+Không hard-code event card.
+
+==================================================
+11. FAQ
+==================================================
+
+FAQ phải phục vụ Buyer Intent.
+
+Ví dụ:
+
+MOQ thường cần xác nhận thế nào?
+Cần chuẩn bị tài liệu gì?
+Có cần khảo sát không?
+Lead time cần xác nhận khi nào?
+SUPPI hỗ trợ gì?
+Thông tin nào được chia sẻ cho NCC?
+
+FAQ quản lý từ CMS/admin.
+
+Không tạo hàng loạt FAQ SEO rỗng.
+
+==================================================
+12. SUPPI CONTEXT
+==================================================
+
+Khi user ở keyword page:
+
+SUPPI phải nhận context:
+
+keyword
+keywordCluster
+category
+filters
+location
+product/service nếu đã chọn
+
+Ví dụ:
+
+User đang ở:
+
+/tu-khoa/dien-mat-troi-ap-mai-1mwp
+
+và hỏi:
+
+“Nhà máy tôi ở Đồng Nai, mái khoảng 8.000m2.”
+
+SUPPI không được hỏi lại:
+“Anh đang cần sản phẩm gì?”
+
+SUPPI phải tiếp tục làm rõ:
+
+công suất/mục tiêu
+kết cấu mái
+thời gian
+yêu cầu khảo sát
+...
+
+Sau đó tạo RequirementDraft.
+
+==================================================
+13. SEO
+==================================================
+
+Keyword page có giá trị SEO nhưng phải tránh index explosion.
+
+Index chỉ khi page:
+
+- có buyer intent rõ;
+- có nội dung riêng;
+- có data liên quan;
+- được publish.
+
+Canonical:
+
+/tu-khoa/[slug]
+
+Title:
+
+[Tên nhu cầu] | Tìm Nhà Cung Ứng | CHUOICUNGUNG.COM
+
+Description:
+
+Tìm nhà cung ứng cho [keyword] theo năng lực, địa bàn và điều kiện đáp ứng. Gửi nhu cầu để SUPPI hỗ trợ làm rõ và tìm nguồn phù hợp.
+
+Schema phù hợp:
+
+CollectionPage
+BreadcrumbList
+ItemList
+FAQPage chỉ khi FAQ thật sự hiển thị và phù hợp.
+
+Không index filter combinations.
+
+Không tạo hàng trăm URL từ synonym.
+
+==================================================
+14. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/tu-khoa
+/admin/tu-khoa/[id]
+
+Admin quản lý:
+
+Keyword
+Slug
+Category
+Keyword Cluster
+Buyer Intent
+Synonyms
+Filter Schema
+Buyer Guide
+FAQ
+SEO
+Supplier relation
+Programs
+Catalogue
+Media
+Founding Partner
+Publish state
+
+Admin detail tabs:
+
+Tổng quan
+Keyword Cluster
+Filters
+Buyer Guide
+Suppliers
+Founding Partner
+Programs
+Catalogue
+Media
+FAQ
+SEO
+Audit
+
+Admin phải thấy:
+
+Supplier count thực
+ProductService count thực
+Open requirements liên quan
+Founding Partner active/expired
+Programs liên quan
+Page data completeness
+
+Không hard delete keyword đã có relation.
+
+Dùng:
+ARCHIVED
+
+Nếu merge keyword:
+remap relation về keyword/cluster chuẩn.
+
+Mọi thay đổi ghi AuditLog.
+
+==================================================
+15. ADMIN FOUNDING PARTNER
+==================================================
+
+Keyword page phải dùng chung:
+
+/admin/founding-partner
+
+Admin cần kiểm tra:
+
+Partner
+Keyword Cluster
+Category
+Location/KCN
+Start
+End
+Display Position
+Entitlements
+Status
+
+Không cho bán chồng cùng một entitlement
+nếu hợp đồng quy định độc quyền.
+
+Commercial entitlement
+phải tách khỏi Supplier Matching.
+
+==================================================
+16. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+Search/filter
+Đăng nhu cầu / SUPPI
+Founding Partner nếu có
+Supplier list
+Buyer Guide
+Bộ hồ sơ
+Video
+Catalogue
+Program
+FAQ
+
+Filters mở bottom sheet.
+
+CTA:
+
+“GỬI NHU CẦU”
+
+có thể sticky bottom.
+
+Không overflow ở 390px.
+
+==================================================
+17. QA
+==================================================
+
+Test tối thiểu:
+
+1. Keyword slug + canonical đúng.
+2. Synonym không tạo duplicate page.
+3. Keyword map đúng Category.
+4. Filter thay đổi đúng theo keyword schema.
+5. Supplier results dùng database thật.
+6. RequirementDraft giữ keyword/category context.
+7. SUPPI không hỏi lại context đã biết.
+8. Founding Partner chỉ hiện khi active.
+9. Founding Partner không ảnh hưởng organic matching.
+10. Expired partnership tự hết nổi bật.
+11. Private dossier không public.
+12. Program/Catalogue/Video chỉ hiện nếu có data.
+13. Không fake supplier count/rating.
+14. Filter URLs không gây SEO index explosion.
+15. Admin edit tạo AuditLog.
+16. Mobile 390px hoạt động.
+
+==================================================
+18. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration created
+- Keyword/cluster implementation
+- Filter schema implementation
+- Supplier Search integration
+- Requirement/SUPPI integration
+- Founding Partner integration
+- Admin implementation
+- SEO implementation
+- Real data vs mock data
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+KEYWORD / BUYER INTENT
+→ LÀM RÕ NHU CẦU
+→ SEARCH / FILTER
+→ NCC LIÊN QUAN
+→ SUPPI
+→ REQUIREMENT
+→ MATCHING
+→ CONNECTION
+
+Không biến /tu-khoa/[slug] thành một bài blog SEO.

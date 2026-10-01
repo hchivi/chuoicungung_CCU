@@ -75,6 +75,31 @@ export default function RecruitmentPage({ defaultTab }) {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    const isJobs = activeTab === 'jobs';
+    const pageTitle = isJobs ? "Viec Tim Nguoi | CHUOICUNGUNG.COM" : "Nguoi Tim Viec | CHUOICUNGUNG.COM";
+    const canonicalUrl = isJobs 
+      ? "https://chuoicungung.com/tuyen-dung/viec-tim-nguoi" 
+      : "https://chuoicungung.com/tuyen-dung/nguoi-tim-viec";
+    const metaDescription = isJobs
+      ? "Tìm kiếm cơ hội việc làm chuyên ngành sản xuất, kỹ thuật, QA/QC, xuất nhập khẩu và logistics tại hơn 400+ Khu công nghiệp toàn quốc."
+      : "Hồ sơ ứng viên chuyên ngành sản xuất, kỹ sư, quản lý chất lượng và lao động kỹ thuật cao sẵn sàng kết nối cùng các nhà máy KCN toàn quốc.";
+
+    document.title = pageTitle;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute('content', metaDescription);
+    }
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', canonicalUrl);
+  }, [activeTab]);
+
   // Search & Filter state
   const [searchTerm, setSearchTerm] = useState('');
   const [industryFilter, setIndustryFilter] = useState('all');
@@ -237,7 +262,7 @@ export default function RecruitmentPage({ defaultTab }) {
   };
 
   return (
-    <div className="space-y-10 pb-20 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
+    <main className="space-y-10 pb-20 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Identical to Image 1) */}
@@ -284,34 +309,72 @@ export default function RecruitmentPage({ defaultTab }) {
             {/* Headline */}
             <div className="space-y-1">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                Việc Tìm Người
+                {activeTab === 'jobs' ? 'Viec Tim Nguoi' : 'Nguoi Tim Viec'}
               </h1>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
-                Kết Nối Nhà Máy & Xưởng Toàn Quốc
+                {activeTab === 'jobs' ? 'Kết Nối Nhà Máy & Xưởng Toàn Quốc' : 'Nhân Lực Kỹ Thuật & Quản Lý KCN'}
               </h2>
             </div>
 
             {/* Subtitle */}
             <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
-              Cổng thông tin việc làm chuyên ngành dành riêng cho Kỹ sư sản xuất, Trưởng phòng QA/QC, Chuyên viên XNK Logistics, Thợ kỹ thuật và Lao động tại hơn 400+ Khu Công Nghiệp toàn quốc.
+              {activeTab === 'jobs'
+                ? "Cổng thông tin việc làm chuyên ngành dành riêng cho Kỹ sư sản xuất, Trưởng phòng QA/QC, Chuyên viên XNK Logistics, Thợ kỹ thuật và Lao động tại hơn 400+ Khu Công Nghiệp toàn quốc."
+                : "Hồ sơ ứng viên chuyên ngành sản xuất, kỹ sư, quản lý chất lượng và lao động kỹ thuật cao sẵn sàng kết nối cùng các nhà máy KCN toàn quốc."}
             </p>
 
             {/* Dual Action Buttons */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
-              <button
-                onClick={() => setPostModal(true)}
-                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
-              >
-                <PlusCircle className="w-4 h-4" />
-                <span>Đăng Tin Tuyển Dụng</span>
-              </button>
+              {activeTab === 'jobs' ? (
+                <>
+                  <button
+                    onClick={() => setPostModal(true)}
+                    className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    <span>Đăng tin</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setActiveTab('candidates');
+                      navigate('/tuyen-dung/nguoi-tim-viec');
+                    }}
+                    className="px-6 py-3.5 bg-white border border-slate-300 hover:border-blue-500 text-slate-800 hover:text-blue-600 text-xs sm:text-sm font-bold rounded-xl shadow-sm transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <UserCheck className="w-4 h-4 text-emerald-600" />
+                    <span>Xem ứng viên</span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setPostModal(true)}
+                    className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-emerald-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    <span>Tạo hồ sơ</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setActiveTab('jobs');
+                      navigate('/tuyen-dung/viec-tim-nguoi');
+                    }}
+                    className="px-6 py-3.5 bg-white border border-slate-300 hover:border-blue-500 text-slate-800 hover:text-blue-600 text-xs sm:text-sm font-bold rounded-xl shadow-sm transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                  >
+                    <Briefcase className="w-4 h-4 text-blue-600" />
+                    <span>Xem việc</span>
+                  </button>
+                </>
+              )}
 
               <button
                 onClick={() => setNumerologyModal({ isOpen: true, tab: activeTab === 'jobs' ? 'candidate' : 'recruiter' })}
-                className="px-6 py-3.5 bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 hover:from-purple-800 hover:to-indigo-800 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-indigo-900/25 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                className="px-5 py-3.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs sm:text-sm font-bold rounded-xl transition flex items-center space-x-2 font-heading tracking-wide cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>Phân Tích Thần Số Học Chọn Việc</span>
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>Thần Số Học</span>
               </button>
             </div>
 
@@ -452,8 +515,10 @@ export default function RecruitmentPage({ defaultTab }) {
         {/* Search & Multi-criteria Filter Bar with GIS Radius & DISC Traits */}
         <div className="bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3.5">
           <div className="relative">
+            <label htmlFor="recruitment-search-input" className="sr-only">Tìm kiếm vị trí tuyển dụng hoặc ứng viên</label>
             <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
+              id="recruitment-search-input"
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -468,76 +533,98 @@ export default function RecruitmentPage({ defaultTab }) {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
             {/* GIS Radius Filter */}
-            <select
-              value={radiusFilter}
-              onChange={(e) => setRadiusFilter(e.target.value)}
-              className="bg-blue-50/70 border border-blue-200 rounded-xl px-3 py-2.5 text-[#0047a5] font-bold focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
-            >
-              <option value="all">📍 Bán kính KCN (Tất cả)</option>
-              <option value="5">&lt; 5km (Gần KCN / Đi bộ)</option>
-              <option value="10">&lt; 10km (Xe máy 15-20p)</option>
-              <option value="20">&lt; 20km (Có xe đưa đón KCN)</option>
-            </select>
+            <div>
+              <label htmlFor="recruitment-radius-filter" className="sr-only">Bán kính KCN</label>
+              <select
+                id="recruitment-radius-filter"
+                value={radiusFilter}
+                onChange={(e) => setRadiusFilter(e.target.value)}
+                className="w-full bg-blue-50/70 border border-blue-200 rounded-xl px-3 py-2.5 text-[#0047a5] font-bold focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              >
+                <option value="all">📍 Bán kính KCN (Tất cả)</option>
+                <option value="5">&lt; 5km (Gần KCN / Đi bộ)</option>
+                <option value="10">&lt; 10km (Xe máy 15-20p)</option>
+                <option value="20">&lt; 20km (Có xe đưa đón KCN)</option>
+              </select>
+            </div>
 
             {/* DISC Personality Profile Filter */}
-            <select
-              value={discFilter}
-              onChange={(e) => setDiscFilter(e.target.value)}
-              className="bg-purple-50/80 border border-purple-200 rounded-xl px-3 py-2.5 text-purple-950 font-bold focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="all">🧠 Nhóm tính cách DISC</option>
-              <option value="D">Nhóm D (Quyết đoán / Lãnh đạo)</option>
-              <option value="I">Nhóm I (Giao tiếp / Sourcing)</option>
-              <option value="S">Nhóm S (Kiên định / QA-QC)</option>
-              <option value="C">Nhóm C (Tuân thủ / Kỹ thuật)</option>
-            </select>
+            <div>
+              <label htmlFor="recruitment-disc-filter" className="sr-only">Nhóm tính cách DISC</label>
+              <select
+                id="recruitment-disc-filter"
+                value={discFilter}
+                onChange={(e) => setDiscFilter(e.target.value)}
+                className="w-full bg-purple-50/80 border border-purple-200 rounded-xl px-3 py-2.5 text-purple-950 font-bold focus:outline-none focus:ring-2 focus:ring-purple-500"
+              >
+                <option value="all">🧠 Nhóm tính cách DISC</option>
+                <option value="D">Nhóm D (Quyết đoán / Lãnh đạo)</option>
+                <option value="I">Nhóm I (Giao tiếp / Sourcing)</option>
+                <option value="S">Nhóm S (Kiên định / QA-QC)</option>
+                <option value="C">Nhóm C (Tuân thủ / Kỹ thuật)</option>
+              </select>
+            </div>
 
             {/* Industry Filter */}
-            <select
-              value={industryFilter}
-              onChange={(e) => setIndustryFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
-            >
-              <option value="all">Tất cả ngành nghề (18 nhóm)</option>
-              <option value="Điện & Điện tử">Điện & Điện tử (SMT/PCB)</option>
-              <option value="Cơ khí & Chế tạo">Cơ khí chính xác & CNC</option>
-              <option value="Dệt may & Da giày">Dệt may & Đồng phục</option>
-              <option value="Logistics & Kho vận">Logistics & Xuất nhập khẩu</option>
-              <option value="Hóa chất & Môi trường">Hóa chất & HSE Nhà máy</option>
-            </select>
+            <div>
+              <label htmlFor="recruitment-industry-filter" className="sr-only">Ngành nghề tuyển dụng</label>
+              <select
+                id="recruitment-industry-filter"
+                value={industryFilter}
+                onChange={(e) => setIndustryFilter(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              >
+                <option value="all">Tất cả ngành nghề (18 nhóm)</option>
+                <option value="Điện & Điện tử">Điện & Điện tử (SMT/PCB)</option>
+                <option value="Cơ khí & Chế tạo">Cơ khí chính xác & CNC</option>
+                <option value="Dệt may & Da giày">Dệt may & Đồng phục</option>
+                <option value="Logistics & Kho vận">Logistics & Xuất nhập khẩu</option>
+                <option value="Hóa chất & Môi trường">Hóa chất & HSE Nhà máy</option>
+              </select>
+            </div>
 
             {/* Province & KCN Filter */}
-            <select
-              value={provinceFilter}
-              onChange={(e) => setProvinceFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
-            >
-              <option value="all">Tất cả tỉnh thành / KCN</option>
-              <option value="Bắc Ninh">Bắc Ninh (Yên Phong, Quế Võ)</option>
-              <option value="Đồng Nai">Đồng Nai (Long Thành, Amata)</option>
-              <option value="Bình Dương">Bình Dương (VSIP, Mỹ Phước)</option>
-              <option value="Hải Phòng">Hải Phòng (Deep C, Tràng Duệ)</option>
-              <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh (SHTP, Tân Thuận)</option>
-              <option value="Quảng Nam">Quảng Nam (Chu Lai)</option>
-              <option value="Hà Nam">Hà Nam (Đồng Văn)</option>
-            </select>
+            <div>
+              <label htmlFor="recruitment-province-filter" className="sr-only">Tỉnh thành hoặc KCN</label>
+              <select
+                id="recruitment-province-filter"
+                value={provinceFilter}
+                onChange={(e) => setProvinceFilter(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              >
+                <option value="all">Tất cả tỉnh thành / KCN</option>
+                <option value="Bắc Ninh">Bắc Ninh (Yên Phong, Quế Võ)</option>
+                <option value="Đồng Nai">Đồng Nai (Long Thành, Amata)</option>
+                <option value="Bình Dương">Bình Dương (VSIP, Mỹ Phước)</option>
+                <option value="Hải Phòng">Hải Phòng (Deep C, Tràng Duệ)</option>
+                <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh (SHTP, Tân Thuận)</option>
+                <option value="Quảng Nam">Quảng Nam (Chu Lai)</option>
+                <option value="Hà Nam">Hà Nam (Đồng Văn)</option>
+              </select>
+            </div>
 
             {/* Level Filter */}
-            <select
-              value={levelFilter}
-              onChange={(e) => setLevelFilter(e.target.value)}
-              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
-            >
-              <option value="all">Tất cả cấp bậc</option>
-              <option value="Công nhân / Kỹ thuật viên">Công nhân / Kỹ thuật viên</option>
-              <option value="Chuyên viên / Kỹ sư">Chuyên viên / Kỹ sư</option>
-              <option value="Trưởng nhóm / Giám sát">Trưởng nhóm / Giám sát chuyền</option>
-              <option value="Trưởng phòng / Quản lý">Trưởng phòng / Quản lý nhà máy</option>
-            </select>
+            <div>
+              <label htmlFor="recruitment-level-filter" className="sr-only">Cấp bậc</label>
+              <select
+                id="recruitment-level-filter"
+                value={levelFilter}
+                onChange={(e) => setLevelFilter(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc]"
+              >
+                <option value="all">Tất cả cấp bậc</option>
+                <option value="Công nhân / Kỹ thuật viên">Công nhân / Kỹ thuật viên</option>
+                <option value="Chuyên viên / Kỹ sư">Chuyên viên / Kỹ sư</option>
+                <option value="Trưởng nhóm / Giám sát">Trưởng nhóm / Giám sát chuyền</option>
+                <option value="Trưởng phòng / Quản lý">Trưởng phòng / Quản lý nhà máy</option>
+              </select>
+            </div>
 
             {/* Salary & Reset */}
             <div className="flex items-center gap-1.5">
+              <label htmlFor="recruitment-salary-filter" className="sr-only">Mức lương</label>
               <select
+                id="recruitment-salary-filter"
                 value={salaryFilter}
                 onChange={(e) => setSalaryFilter(e.target.value)}
                 className="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-2.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc] flex-1 text-xs"
@@ -1297,6 +1384,6 @@ export default function RecruitmentPage({ defaultTab }) {
         }}
       />
 
-    </div>
+    </main>
   );
 }

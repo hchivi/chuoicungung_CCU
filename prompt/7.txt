@@ -1,0 +1,532 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 07: CHI TIẾT SẢN PHẨM / DỊCH VỤ
+ROUTE: /san-pham-dich-vu/[slug]
+
+MỤC TIÊU:
+Biến mỗi sản phẩm/dịch vụ của Nhà cung ứng thành một trang dữ liệu có thể:
+- được Buyer tìm thấy;
+- được SUPPI đọc và matching;
+- liên kết về Supplier Profile;
+- tạo Requirement từ đúng sản phẩm/dịch vụ;
+- dùng cho SEO/category/keyword pages.
+
+QUAN TRỌNG:
+- Không duplicate Organization hoặc SupplierProfile.
+- Một Supplier có nhiều ProductService.
+- ProductService phải là dữ liệu có cấu trúc, không chỉ là bài viết marketing.
+- Không dùng fake rating, fake review hoặc claim chưa có nguồn.
+- Founding Partner/tài trợ không được ảnh hưởng dữ liệu năng lực hay matching.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Trước khi code, audit:
+
+/san-pham-dich-vu/[slug]
+
+Kiểm tra:
+- route/component hiện có;
+- product/service model hiện có;
+- category/taxonomy;
+- supplier relation;
+- slug;
+- SEO;
+- images/files;
+- CTA;
+- admin.
+
+Reuse entity hiện có nếu tương đương.
+Không tạo model duplicate.
+
+==================================================
+2. SLUG + RELATION
+==================================================
+
+Slug:
+- lowercase
+- không dấu
+- dùng "-"
+- unique
+
+Ví dụ:
+/san-pham-dich-vu/dong-phuc-cong-nhan
+
+ProductService phải liên kết:
+
+organizationId
+supplierProfileId nếu cần
+categoryId
+subcategoryId nếu có
+
+Internal ID dùng UUID.
+
+Đổi slug phải redirect URL cũ.
+
+==================================================
+3. PRODUCT SERVICE DATA MODEL
+==================================================
+
+ProductService cần tối thiểu:
+
+id
+organizationId
+slug
+
+title
+shortDescription
+description
+
+categoryId
+
+specifications
+
+suitableBuyer
+
+moq
+moqUnit
+
+minOrder?
+maxOrder?
+
+leadTimeMin?
+leadTimeMax?
+leadTimeUnit?
+
+sampleAvailable
+surveyAvailable
+
+serviceAreas[]
+
+industrialParkCoverage[]
+
+attachments[]
+mediaAssets[]
+evidence[]
+
+availabilityStatus
+availabilityCheckedAt
+
+status
+publishable
+
+updatedAt
+publishedAt
+
+Không ép mọi category có cùng field.
+
+Cho phép category-specific specifications.
+
+Ví dụ:
+May mặc:
+- chất liệu
+- kiểu may
+- in/thêu
+- size
+- MOQ
+
+Cơ khí:
+- vật liệu
+- dung sai
+- máy
+- kích thước gia công
+
+Solar:
+- công suất
+- loại hệ thống
+- phạm vi EPC
+- khảo sát
+
+==================================================
+4. UX/UI PAGE
+==================================================
+
+Thiết kế page theo thứ tự:
+
+01. HEADER
+
+Breadcrumb:
+Trang chủ
+→ Nhà cung ứng
+→ [Tên NCC]
+→ [Tên Product/Service]
+
+H1:
+[Tên sản phẩm / dịch vụ]
+
+Hiển thị:
+Tên NCC
+Category
+Địa bàn phục vụ
+Ngày cập nhật
+
+CTA:
+[GỬI YÊU CẦU]
+[XEM NHÀ CUNG ỨNG]
+
+--------------------------------------------------
+
+02. TỔNG QUAN
+
+Mô tả ngắn:
+- sản phẩm/dịch vụ là gì;
+- phù hợp với nhóm Buyer nào;
+- use case chính.
+
+Không dùng paragraph quảng cáo dài.
+
+--------------------------------------------------
+
+03. THÔNG SỐ / PHẠM VI CÔNG VIỆC
+
+Render dynamic theo category schema.
+
+Ví dụ:
+Chất liệu
+Quy cách
+Công suất
+Kích thước
+Phạm vi triển khai
+Điều kiện kỹ thuật
+
+Không hard-code field riêng trong component cho từng ngành.
+
+Dùng schema/config.
+
+--------------------------------------------------
+
+04. ĐIỀU KIỆN NHẬN ĐƠN
+
+Hiển thị:
+
+MOQ / quy mô phù hợp
+
+Lead time
+
+Có làm mẫu?
+
+Có khảo sát?
+
+Availability
+
+Ngày availability được cập nhật
+
+Nếu dữ liệu cũ:
+“Cần xác nhận lại”
+
+--------------------------------------------------
+
+05. ĐỊA BÀN PHỤC VỤ
+
+Province
+KCN
+Service area
+
+Không suy luận từ địa chỉ văn phòng.
+
+--------------------------------------------------
+
+06. BẰNG CHỨNG
+
+Evidence liên quan trực tiếp tới ProductService:
+
+Chứng nhận
+Dự án
+Ảnh sản phẩm
+Ảnh xưởng
+Máy móc
+Catalogue
+Technical document
+
+Mỗi evidence phải có:
+source
+status
+updated date
+expiry date nếu có
+
+SELF_DECLARED không được hiển thị như CONFIRMED.
+
+--------------------------------------------------
+
+07. THÔNG TIN CẦN XÁC NHẬN
+
+Block bắt buộc nếu có dữ liệu chưa đủ.
+
+Ví dụ:
+
+? Có thể giao trước 15/11
+? Có đáp ứng chất liệu X
+? Có nhận số lượng 500 tại thời điểm hiện tại
+
+Không dùng một điểm “uy tín” chung thay cho dữ liệu này.
+
+--------------------------------------------------
+
+08. SUPPLIER BLOCK
+
+Hiển thị:
+
+Logo
+Tên NCC
+Năng lực chính
+Địa bàn
+Ngày cập nhật
+
+CTA:
+[XEM HỒ SƠ NHÀ CUNG ỨNG]
+
+→ /doanh-nghiep/[slug]
+
+--------------------------------------------------
+
+09. SẢN PHẨM / DỊCH VỤ LIÊN QUAN
+
+Các ProductService khác của cùng NCC hoặc cùng category.
+
+Không tạo duplicate card content thủ công.
+
+--------------------------------------------------
+
+10. FINAL CTA
+
+“BẠN ĐANG CẦN SẢN PHẨM / DỊCH VỤ NÀY?”
+
+CTA:
+[GỬI YÊU CẦU]
+
+==================================================
+5. CTA GỬI YÊU CẦU
+==================================================
+
+Khi Buyer click:
+
+“GỬI YÊU CẦU”
+
+Tạo Requirement Draft có sẵn context:
+
+productServiceId
+supplierOrganizationId
+categoryId
+product title
+
+Sau đó dẫn:
+
+/dang-nhu-cau?draft={id}
+
+Không bắt Buyer nhập lại tên sản phẩm/NCC.
+
+Nếu đã có Requirement:
+cho chọn:
+
+“Dùng nhu cầu hiện có”
+
+hoặc:
+
+“Tạo nhu cầu mới”
+
+Không tạo Connection ngay khi chưa có xác nhận.
+
+==================================================
+6. SUPPI
+==================================================
+
+SUPPI trên page phải có thể trả lời:
+
+- Sản phẩm này phù hợp với ai?
+- MOQ bao nhiêu?
+- Lead time bao lâu?
+- Có làm mẫu không?
+- Phục vụ Đồng Nai không?
+- Có bằng chứng gì?
+- Thông tin nào vẫn cần xác nhận?
+
+SUPPI chỉ dùng dữ liệu:
+ProductService
+SupplierProfile
+Capability
+ServiceArea
+Evidence
+
+Nếu không có dữ liệu:
+trả:
+“Thông tin này hiện chưa được xác nhận.”
+
+Không invent.
+
+==================================================
+7. SEARCH + MATCHING
+==================================================
+
+ProductService phải được index để:
+
+/doanh-nghiep
+SUPPI
+Requirement Matching
+/nganh-nghe/[slug]
+/tu-khoa/[slug]
+
+có thể tìm thấy.
+
+Matching dùng ProductService data như:
+
+category
+specifications
+MOQ
+lead time
+service area
+sample/survey
+evidence
+availability
+
+Không dùng sponsorship/Founding Partner làm match factor.
+
+==================================================
+8. ADMIN
+==================================================
+
+Reuse:
+
+/admin/to-chuc/[id]
+
+Thêm tab:
+SẢN PHẨM / DỊCH VỤ
+
+Admin phải:
+
+- tạo ProductService;
+- sửa;
+- publish/unpublish;
+- quản lý slug;
+- chọn category;
+- nhập specifications;
+- MOQ;
+- lead time;
+- service area;
+- sample/survey;
+- evidence;
+- images/files;
+- availability;
+- updated date.
+
+Mọi mutation phải tạo AuditLog.
+
+Không cho xóa cứng ProductService đã từng:
+- được dùng trong Requirement;
+- Matching;
+- Connection.
+
+Dùng ARCHIVED.
+
+==================================================
+9. SEO
+==================================================
+
+Title:
+
+[Tên sản phẩm/dịch vụ] | [Tên nhà cung ứng] | CHUOICUNGUNG.COM
+
+Meta description:
+
+[Tên NCC] cung cấp [ProductService], phục vụ [địa bàn]. Xem quy cách, MOQ, lead time, bằng chứng và gửi nhu cầu kết nối.
+
+Canonical:
+
+/san-pham-dich-vu/[slug]
+
+Schema khi phù hợp:
+Product
+Service
+Organization
+
+Không tạo:
+fake Review
+fake AggregateRating
+fake Offer nếu không có giá/điều kiện thật.
+
+==================================================
+10. PUBLICATION RULE
+==================================================
+
+ProductService chỉ public khi:
+
+organization ACTIVE
+supplier profile ACTIVE
+productService ACTIVE
+publishable = true
+
+Nếu NCC bị suspended:
+ProductService không public.
+
+==================================================
+11. MOBILE
+==================================================
+
+Mobile ưu tiên:
+
+Tên sản phẩm
+NCC
+Thông số chính
+MOQ
+Lead time
+Service area
+Thông tin cần xác nhận
+Evidence
+CTA
+
+CTA:
+“GỬI YÊU CẦU”
+có thể sticky bottom.
+
+Không overflow tại 390px.
+
+==================================================
+12. QA
+==================================================
+
+Test:
+
+1. Slug unique + canonical đúng.
+2. ProductService liên kết đúng Supplier.
+3. Không duplicate Organization.
+4. Category data lấy DB thật.
+5. Dynamic specs hoạt động theo category.
+6. Service area không lấy từ office address.
+7. Expired evidence hiển thị đúng.
+8. SELF_DECLARED không thành CONFIRMED.
+9. Unknown data hiện “Cần xác nhận”.
+10. CTA tạo Requirement Draft có sẵn ProductService context.
+11. SUPPI không invent.
+12. Product unpublished không public.
+13. Admin update tạo AuditLog.
+14. Archived ProductService không mất historical relation.
+15. Mobile 390px hoạt động.
+
+==================================================
+13. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Model/table reused
+- Migration
+- Components
+- API/server actions
+- Search index updates
+- Admin updates
+- Real data vs mock data
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+Buyer nhìn trang ProductService phải hiểu:
+
+SẢN PHẨM/DỊCH VỤ LÀ GÌ
+→ CỦA NCC NÀO
+→ PHÙ HỢP VỚI AI
+→ QUY CÁCH / PHẠM VI GÌ
+→ MOQ / LEAD TIME RA SAO
+→ PHỤC VỤ Ở ĐÂU
+→ CÓ BẰNG CHỨNG GÌ
+→ CÒN GÌ CẦN XÁC NHẬN
+→ CÓ MUỐN GỬI YÊU CẦU HAY KHÔNG.

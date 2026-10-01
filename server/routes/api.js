@@ -438,29 +438,74 @@ router.get('/factories/:id', async (req, res) => {
   }
 });
 
-// 3. Demands (Đăng nhu cầu B2B) API
+// 3. Demands (Đăng nhu cầu B2B) API - Secured with PII Masking & State Management
 router.get('/demands', async (req, res) => {
   try {
     if (mongoose.connection.readyState === 1) {
-      const demands = await Demand.find().sort({ createdAt: -1 });
+      // Only approved demands are publicly accessible; strictly exclude PII fields
+      const demands = await Demand.find({ status: 'approved' })
+        .select('-authorEmail -authorPhone')
+        .sort({ createdAt: -1 })
+        .lean();
       return res.json({ success: true, count: demands.length, data: demands });
     }
     return res.json({ success: true, count: 0, data: [] });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ 
+      success: false, 
+      error: { code: 'DATABASE_ERROR', message: 'Không thể tải danh sách nhu cầu' } 
+    });
   }
 });
 
 router.post('/demands', async (req, res) => {
   try {
-    if (mongoose.connection.readyState === 1) {
-      const newDemand = new Demand(req.body);
-      const saved = await newDemand.save();
-      return res.status(201).json({ success: true, data: saved });
+    const { title, stageId, phaseId, category, authorName, authorCompany, authorEmail, authorPhone, location, budget, deadline, requirements } = req.body;
+
+    if (!title || !category || !requirements || !authorName || !authorEmail || !authorPhone || !location) {
+      return res.status(400).json({ 
+        success: false, 
+        error: { code: 'VALIDATION_ERROR', message: 'Vui lòng cung cấp đầy đủ thông tin bắt buộc' } 
+      });
     }
-    return res.status(201).json({ success: true, data: { ...req.body, _id: Date.now().toString() }, message: 'Saved in memory' });
+
+    // Force default status to 'pending' - client cannot self-approve
+    const demandPayload = {
+      title,
+      stageId: Number(stageId) || 1,
+      phaseId: String(phaseId || '1.1'),
+      category,
+      authorName,
+      authorCompany: authorCompany || '',
+      authorEmail,
+      authorPhone,
+      location,
+      budget: budget || '',
+      deadline: deadline || '',
+      requirements,
+      status: 'pending' // Explicit transition: new demands must wait for approval
+    };
+
+    if (mongoose.connection.readyState === 1) {
+      const newDemand = new Demand(demandPayload);
+      const saved = await newDemand.save();
+      // Mask PII on response
+      const safeData = saved.toObject();
+      delete safeData.authorEmail;
+      delete safeData.authorPhone;
+      return res.status(201).json({ success: true, data: safeData, message: 'Nhu cầu đã được ghi nhận và đang chờ duyệt' });
+    }
+
+    return res.status(201).json({ 
+      success: true, 
+      data: { ...demandPayload, _id: Date.now().toString() }, 
+      message: 'Nhu cầu đã được ghi nhận trong bộ nhớ tạm (dev mode)' 
+    });
   } catch (error) {
-    res.status(400).json({ success: false, error: error.message });
+    res.status(400).json({ 
+      success: false, 
+      error: { code: 'VALIDATION_ERROR', message: error.message } 
+    });
   }
 });
 
@@ -612,117 +657,6 @@ router.get('/industrial-parks/:id', async (req, res) => {
     }
 
     return res.status(404).json({ success: false, message: 'Không tìm thấy khu công nghiệp' });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-// 4.2. Global Search for Factories across all KCNs
-router.get('/factories', async (req, res) => {
-  try {
-    const { q, province, type, page = 1, limit = 20 } = req.query;
-    const pageNum = Math.max(1, parseInt(page) || 1);
-    const pageSize = Math.max(1, parseInt(limit) || 20);
-
-    let allFactories = [];
-    if (mongoose.connection.readyState === 1) {
-      let matchQuery = {};
-      if (province && province !== 'all') {
-        matchQuery.province = { $regex: province, $options: 'i' };
-      }
-
-      const kcns = await IndustrialPark.find(matchQuery).select('name province region factories');
-      kcns.forEach(k => {
-        if (k.factories && k.factories.length > 0) {
-          k.factories.forEach(f => {
-            allFactories.push({
-              ...f.toObject(),
-              industrialParkName: k.name,
-              industrialParkId: k.id,
-              province: k.province,
-              region: k.region
-            });
-          });
-        }
-      });
-    } else {
-      try {
-        const fs = await import('fs');
-        const path = await import('path');
-        const localJsonPath = path.resolve('server/data/industrialParksFull.json');
-        if (fs.existsSync(localJsonPath)) {
-          const kcns = JSON.parse(fs.readFileSync(localJsonPath, 'utf8'));
-          kcns.forEach(k => {
-            if (k.factories && k.factories.length > 0) {
-              k.factories.forEach(f => {
-                allFactories.push({
-                  ...f,
-                  industrialParkName: k.name,
-                  industrialParkId: k.id,
-                  province: k.province,
-                  region: k.region
-                });
-              });
-            }
-          });
-        }
-      } catch (e) {}
-    }
-
-    if (q) {
-      const qLower = q.toLowerCase();
-      allFactories = allFactories.filter(f => 
-        (f.name && f.name.toLowerCase().includes(qLower)) ||
-        (f.industry && f.industry.toLowerCase().includes(qLower)) ||
-        (f.address && f.address.toLowerCase().includes(qLower)) ||
-        (f.industrialParkName && f.industrialParkName.toLowerCase().includes(qLower))
-      );
-    }
-    if (type && type !== 'all') {
-      allFactories = allFactories.filter(f => f.type && f.type.toLowerCase().includes(type.toLowerCase()));
-    }
-
-    const total = allFactories.length;
-    const totalPages = Math.ceil(total / pageSize) || 1;
-    const paginated = allFactories.slice((pageNum - 1) * pageSize, pageNum * pageSize);
-
-    return res.json({
-      success: true,
-      count: paginated.length,
-      total,
-      totalPages,
-      currentPage: pageNum,
-      pageSize,
-      data: paginated
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
-
-// 5. Seed MongoDB with initial dataset
-router.post('/seed', async (req, res) => {
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      return res.status(503).json({ success: false, message: 'MongoDB chưa được kết nối. Vui lòng kiểm tra MONGODB_URI trong .env' });
-    }
-
-    // Seed enterprises
-    await Enterprise.deleteMany({});
-    await Enterprise.insertMany(enterprisesData);
-
-    // Seed industrial parks
-    await IndustrialPark.deleteMany({});
-    await IndustrialPark.insertMany(industrialParksData);
-
-    res.json({
-      success: true,
-      message: 'Khởi tạo dữ liệu mẫu lên MongoDB thành công!',
-      counts: {
-        enterprises: enterprisesData.length,
-        industrialParks: industrialParksData.length
-      }
-    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

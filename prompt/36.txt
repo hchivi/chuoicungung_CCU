@@ -1,0 +1,1507 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 36: CHI TIẾT GIAI ĐOẠN
+ROUTE: /giai-doan/[slug]
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+ĐÂY LÀ PAGE ÁP CHÓT CỦA P0 + P1.
+
+MỤC TIÊU:
+
+Xây /giai-doan/[slug] thành trang khám phá nhu cầu
+theo ngữ cảnh vòng đời nhà máy.
+
+Luồng:
+
+GIAI ĐOẠN
+→ NHÓM CÔNG VIỆC
+→ NHU CẦU
+→ CATEGORY / KEYWORD
+→ PRODUCT / SERVICE
+→ SUPPLIER
+→ PROGRAM
+→ GỬI NHU CẦU
+→ MATCHING
+→ CONNECTION
+
+Đây KHÔNG phải:
+
+- bài blog dài;
+- checklist bắt buộc theo thứ tự;
+- tiêu chuẩn quốc gia;
+- quy trình pháp lý chính thức;
+- một taxonomy mới song song với Category;
+- một directory Supplier mới.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/ban-do-6-giai-doan
+
+/giai-doan/[slug]
+
+/nganh-nghe/[slug]
+
+/tu-khoa/[slug]
+
+/san-pham-dich-vu/[slug]
+
+/doanh-nghiep
+
+/chuong-trinh
+
+/bo-ho-so/[slug]
+
+/dang-nhu-cau
+
+Reuse:
+
+Stage
+NeedGroup
+Category
+KeywordCluster
+Keyword
+ProductService
+SupplierProfile
+Capability
+Requirement
+Program
+SourcingDossier
+Catalogue
+FoundingPartnership
+Media
+Task
+AuditLog
+
+Không tạo taxonomy thứ hai.
+
+==================================================
+2. CANONICAL 6 GIAI ĐOẠN
+==================================================
+
+PHẢI GIỮ ĐÚNG TÊN HIỆN HÀNH:
+
+01.
+CHUẨN BỊ & ĐẦU TƯ
+
+02.
+THIẾT KẾ & XÂY DỰNG
+
+03.
+LẮP ĐẶT & HOÀN THIỆN
+
+04.
+VẬN HÀNH SẢN XUẤT
+
+05.
+NHÂN SỰ & HẬU CẦN
+
+06.
+MỞ RỘNG – TỐI ƯU – CHUYỂN ĐỔI
+
+Không tự đổi tên theo các draft cũ.
+
+==================================================
+3. 18 NHÓM CÔNG VIỆC
+==================================================
+
+Stage 01:
+
+1.1 KHẢO SÁT & ĐỊNH HƯỚNG
+1.2 PHÁP LÝ & THỦ TỤC
+1.3 CHỌN ĐỊA ĐIỂM & MẶT BẰNG
+
+Stage 02:
+
+2.1 THIẾT KẾ & QUY HOẠCH
+2.2 THI CÔNG XÂY DỰNG
+2.3 CƠ ĐIỆN & HẠ TẦNG KỸ THUẬT
+
+Stage 03:
+
+3.1 LẮP ĐẶT MÁY & DÂY CHUYỀN
+3.2 HOÀN THIỆN KHÔNG GIAN SẢN XUẤT
+3.3 KIỂM TRA & CHẠY THỬ
+
+Stage 04:
+
+4.1 CUNG ỨNG ĐẦU VÀO
+4.2 QUẢN LÝ SẢN XUẤT & KIỂM SOÁT
+4.3 GIAO NHẬN & PHÂN PHỐI
+
+Stage 05:
+
+5.1 TUYỂN DỤNG & LAO ĐỘNG
+5.2 ĐỜI SỐNG & PHÚC LỢI
+5.3 ĐỒNG PHỤC & BẢO HỘ
+
+Stage 06:
+
+6.1 MỞ RỘNG CÔNG SUẤT
+6.2 CHUẨN HÓA & ĐÁNH GIÁ
+6.3 CHUYỂN ĐỔI & TÁI CẤU TRÚC
+
+==================================================
+4. KHÔNG TRÌNH BÀY 6 GIAI ĐOẠN NHƯ TUẦN TỰ BẮT BUỘC
+==================================================
+
+Hard rule:
+
+Không dùng UX/copy ngụ ý:
+
+Stage 1 phải hoàn tất
+→ mới tới Stage 2
+→ mới tới Stage 3...
+
+Vì nhu cầu có thể xảy ra đồng thời.
+
+Ví dụ:
+
+Tuyển dụng
+PPE
+Logistics
+
+có thể phát sinh trước khi
+nhà máy vận hành hoàn chỉnh.
+
+Dùng wording:
+
+“Giai đoạn giúp định vị nhóm công việc.”
+
+Không dùng:
+
+“Bạn bắt buộc phải hoàn tất giai đoạn trước.”
+
+==================================================
+5. STAGE DATA MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+Stage {
+ id
+
+ code
+ slug
+
+ name
+
+ shortDescription
+
+ order
+
+ status
+ publishable
+
+ seoTitle?
+ seoDescription?
+
+ createdAt
+ updatedAt
+}
+
+Không hard-code toàn bộ content trong component.
+
+==================================================
+6. NEED GROUP
+==================================================
+
+NeedGroup {
+ id
+
+ stageId
+
+ code
+ slug
+
+ name
+
+ shortDescription
+
+ order
+
+ status
+ publishable
+
+ createdAt
+ updatedAt
+}
+
+Ví dụ:
+
+stageId = 5
+
+NeedGroup:
+5.3 Đồng phục & Bảo hộ
+
+==================================================
+7. RELATION TỚI TAXONOMY HIỆN TẠI
+==================================================
+
+NeedGroup phải relation tới:
+
+Category
+
+KeywordCluster
+
+ProductService
+
+không copy chúng.
+
+Ví dụ:
+
+5.3 Đồng phục & Bảo hộ
+→ Đồng phục công nhân
+→ Áo thun công nhân
+→ PPE
+→ Giày bảo hộ
+→ Nón bảo hộ
+
+Nhưng ProductService vẫn là entity chuẩn hiện tại.
+
+==================================================
+8. TAXONOMY CORE
+==================================================
+
+Giữ logic:
+
+GIAI ĐOẠN
+→ NHÓM NHU CẦU
+→ CHUYÊN MỤC
+→ KEYWORD / INTENT
+→ PRODUCT / SERVICE
+→ SUPPLIER
+
+Không biến:
+
+Stage
+hoặc NeedGroup
+
+thành replacement của Category.
+
+==================================================
+9. HERO
+==================================================
+
+H1 động:
+
+“GIAI ĐOẠN [XX] — [TÊN GIAI ĐOẠN]”
+
+Ví dụ:
+
+“GIAI ĐOẠN 05 — NHÂN SỰ & HẬU CẦN”
+
+Sub:
+
+“Khám phá các nhóm nhu cầu, sản phẩm, dịch vụ và nguồn cung thường liên quan đến giai đoạn này.”
+
+Hiển thị note nhỏ:
+
+“Các nhóm công việc có thể diễn ra đồng thời. Cấu trúc này được CHUOICUNGUNG.COM sử dụng để giúp doanh nghiệp định vị nhu cầu.”
+
+CTA chính:
+
+[TÔI ĐANG CÓ NHU CẦU]
+
+CTA phụ:
+
+[XEM BẢN ĐỒ 6 GIAI ĐOẠN]
+
+→ /ban-do-6-giai-doan
+
+==================================================
+10. PREVIOUS / NEXT STAGE
+==================================================
+
+Có navigation:
+
+← Giai đoạn trước
+
+Bản đồ 6 giai đoạn
+
+Giai đoạn tiếp theo →
+
+Nhưng KHÔNG dùng copy:
+
+“Bước tiếp theo bắt buộc”.
+
+Chỉ là navigation khám phá.
+
+==================================================
+11. 3 NEED GROUP CARDS
+==================================================
+
+Mỗi Stage có 3 card chính.
+
+Ví dụ Stage 05:
+
+5.1 Tuyển dụng & Lao động
+
+5.2 Đời sống & Phúc lợi
+
+5.3 Đồng phục & Bảo hộ
+
+Mỗi card hiển thị:
+
+Code
+
+Name
+
+Description
+
+Related categories
+
+Public needs count nếu data thật
+
+Supplier coverage nếu data thật
+
+CTA:
+
+[XEM NHÓM NHU CẦU]
+
+==================================================
+12. NEED GROUP INTERACTION
+==================================================
+
+Không nhất thiết tạo route mới cho từng NeedGroup
+nếu sitemap chưa phê duyệt.
+
+Có thể dùng:
+
+anchor
+tab
+accordion
+query state
+
+trong:
+
+/giai-doan/[slug]
+
+Ví dụ:
+
+/giai-doan/nhan-su-hau-can#5-3
+
+Không tự sinh thêm 18 SEO pages
+nếu chưa cần.
+
+==================================================
+13. SECTION CHO TỪNG NEED GROUP
+==================================================
+
+Mỗi NeedGroup gồm:
+
+1.
+Need explanation
+
+2.
+Relevant Categories
+
+3.
+Common Buyer intents / Keywords
+
+4.
+Product / Service examples
+
+5.
+Supplier discovery
+
+6.
+Public Requirements nếu có
+
+7.
+Buyer preparation guide
+
+8.
+Programs
+
+9.
+Sourcing Dossiers
+
+10.
+CTA đăng nhu cầu
+
+==================================================
+14. “BẠN CÓ THỂ ĐANG CẦN”
+==================================================
+
+Block:
+
+“BẠN CÓ THỂ ĐANG CẦN”
+
+Hiển thị các Category / KeywordCluster
+có relation thật với NeedGroup.
+
+Ví dụ 5.3:
+
+Đồng phục công nhân
+
+Áo phản quang
+
+Giày bảo hộ
+
+Nón bảo hộ
+
+Găng tay
+
+PPE
+
+Không hard-code keyword marketing.
+
+==================================================
+15. KEYWORD
+==================================================
+
+Keyword click dẫn:
+
+/tu-khoa/[slug]
+
+Reuse Page 09.
+
+Không tạo:
+
+/giai-doan/5/dong-phuc-cong-nhan
+
+nếu đã có canonical keyword URL.
+
+==================================================
+16. CATEGORY
+==================================================
+
+Category dẫn:
+
+/nganh-nghe/[slug]
+
+Reuse Page 08.
+
+Không duplicate content.
+
+==================================================
+17. PRODUCT / SERVICE
+==================================================
+
+ProductService dẫn:
+
+/san-pham-dich-vu/[slug]
+
+Reuse Page 07.
+
+Stage page chỉ discovery/context.
+
+==================================================
+18. BUYER GUIDE
+==================================================
+
+Block:
+
+“TRƯỚC KHI TÌM NHÀ CUNG ỨNG,
+BẠN NÊN CHUẨN BỊ GÌ?”
+
+Guide thay đổi theo NeedGroup.
+
+Ví dụ:
+
+5.3 Đồng phục & Bảo hộ
+
+Có thể hỏi:
+
+Loại sản phẩm
+
+Số lượng
+
+Đối tượng sử dụng
+
+Size
+
+Chất liệu / tiêu chuẩn nếu có
+
+In/thêu
+
+Deadline
+
+Địa điểm giao
+
+Sample requirement.
+
+Nhưng guide phải lấy từ configured schema
+của Category/Requirement Form.
+
+Không maintain hai checklist độc lập.
+
+==================================================
+19. CTA TỪ BUYER GUIDE
+==================================================
+
+CTA:
+
+[ĐĂNG NHU CẦU]
+
+→ /dang-nhu-cau
+
+Prefill:
+
+stageId
+needGroupId
+categoryId nếu user đã chọn
+keywordClusterId nếu có
+sourcePage.
+
+User vẫn review trước submit.
+
+==================================================
+20. SUPPI
+==================================================
+
+SUPPI trên Stage page có context:
+
+stageId
+needGroupId nếu selected
+
+Categories
+Keywords
+Requirement schemas
+Location optional.
+
+Prompt examples:
+
+“Tôi đang mở nhà máy mới, cần chuẩn bị những nhóm cung ứng nào?”
+
+“Tôi cần đồng phục và PPE cho 500 người.”
+
+“Tôi đang chạy thử dây chuyền và cần kiểm định.”
+
+SUPPI hỗ trợ:
+
+clarify
+identify related NeedGroup
+create RequirementDraft.
+
+Không tự xác định:
+legal compliance
+technical approval
+supplier verification.
+
+==================================================
+21. PUBLIC NEEDS
+==================================================
+
+Block:
+
+“NHU CẦU ĐANG ĐƯỢC PHÉP CHIA SẺ”
+
+Filter:
+
+Requirement.stageId / needGroup relation
+
+AND
+visibility = PUBLIC_SUMMARY
+
+AND
+public status phù hợp.
+
+Reuse Page 11 cards.
+
+Không duplicate Requirement.
+
+==================================================
+22. PUBLIC NEED PRIVACY
+==================================================
+
+Không hiển thị:
+
+Buyer contact
+
+Private company identity
+
+Budget
+
+Technical confidential files
+
+Supplier responses
+
+Quotes
+
+Internal CRM.
+
+Stage relation không override
+Requirement privacy.
+
+==================================================
+23. SUPPLIER DISCOVERY
+==================================================
+
+Block:
+
+“NHÀ CUNG ỨNG LIÊN QUAN”
+
+Query Supplier dựa:
+
+Capability
+Category
+ProductService
+ServiceArea
+selected NeedGroup
+
+Không chỉ query:
+
+supplier.stageId
+
+nếu capability relation có dữ liệu tốt hơn.
+
+==================================================
+24. SUPPLIER STAGE RELATION
+==================================================
+
+Một Supplier có thể phục vụ:
+
+nhiều Stage
+nhiều NeedGroup.
+
+Không giới hạn Supplier vào đúng một Stage.
+
+Nguồn cung nên được xác định từ:
+
+Capabilities
+Products
+Service Areas
+Evidence.
+
+==================================================
+25. KHÔNG DÙNG STAGE NHƯ CHỨNG NHẬN
+==================================================
+
+Supplier xuất hiện tại Stage 3
+không có nghĩa:
+
+“được CHUOICUNGUNG.COM chứng nhận cho Stage 3”.
+
+Chỉ nghĩa:
+
+structured profile có liên quan
+đến nhóm nhu cầu đó.
+
+==================================================
+26. SUPPLIER CARD
+==================================================
+
+Reuse Page 05 SupplierCard.
+
+Hiển thị:
+
+Organization
+
+Capability
+
+Product/Service
+
+Service Area
+
+Order condition
+
+Evidence summary
+
+Updated date
+
+Reason related to NeedGroup.
+
+CTA:
+
+[XEM NĂNG LỰC]
+
+[GỬI NHU CẦU]
+
+==================================================
+27. EXPLAINABLE RELEVANCE
+==================================================
+
+Ví dụ:
+
+“Xuất hiện ở 5.3 vì:
+
+✓ cung cấp đồng phục công nhân
+✓ phục vụ Đồng Nai
+✓ có thông tin nhận đơn theo yêu cầu”
+
+Không dùng:
+
+“97% phù hợp”.
+
+==================================================
+28. SEARCH / FILTER
+==================================================
+
+Trong Stage page có thể filter Supplier/Needs theo:
+
+NeedGroup
+
+Category
+
+Location
+
+KCN
+
+Product/Service
+
+Nhưng reuse shared filter system.
+
+Không xây Supplier Search thứ hai.
+
+==================================================
+29. PROGRAMS
+==================================================
+
+Block:
+
+“CHƯƠNG TRÌNH LIÊN QUAN”
+
+Reuse ProgramCard.
+
+Program relevance có thể từ:
+
+Category
+NeedGroup
+Location
+TargetRole
+
+Không tự gắn Program
+chỉ vì title có keyword tương tự.
+
+==================================================
+30. SOURCING DOSSIERS
+==================================================
+
+Block:
+
+“BỘ HỒ SƠ TUYỂN CHỌN”
+
+Reuse Page 35.
+
+Hiển thị public dossier liên quan:
+
+stageId
+needGroupId
+categoryId
+
+Ví dụ:
+
+“Nhà cung ứng đồng phục & bảo hộ cho nhà máy mới”
+
+CTA:
+
+[XEM BỘ HỒ SƠ]
+
+==================================================
+31. CATALOGUE
+==================================================
+
+Block optional:
+
+“CATALOGUE LIÊN QUAN”
+
+Reuse Page 30/31.
+
+Không hard-code PDF.
+
+==================================================
+32. MEDIA / GUIDE
+==================================================
+
+Có thể hiển thị:
+
+Guide
+Video
+Media
+
+nếu liên quan.
+
+Reuse Content/Media.
+
+Không tạo bài SEO rỗng
+chỉ để phủ từ khóa.
+
+==================================================
+33. FOUNDING PARTNER
+==================================================
+
+Nếu có Founding Partner:
+
+phải apply theo:
+
+Category
+KeywordCluster
+Location/KCN
+Term
+
+KHÔNG theo Stage chung chung
+trừ khi contract scope đã xác định.
+
+Label:
+
+“ĐỐI TÁC TÀI TRỢ CHUYÊN MỤC”
+
+Không chèn Partner
+lên đầu Supplier organic results.
+
+==================================================
+34. STAGE SPONSORSHIP
+==================================================
+
+Không tự bán:
+
+“Founding Partner Giai đoạn 5”
+
+nếu commercial model hiện tại
+đang quản lý Category/Keyword scope.
+
+Stage là navigation/context layer.
+
+Không tạo scope thương mại mới
+mà không có business decision.
+
+==================================================
+35. “KHOẢNG TRỐNG”
+==================================================
+
+Có thể hiển thị:
+
+“NHÓM ĐANG CẦN BỔ SUNG NGUỒN CUNG”
+
+chỉ nếu derive từ:
+
+Requirement aggregates
+SupplierMatch coverage
+Coordinator-confirmed data.
+
+Không suy luận chỉ vì:
+ít Supplier trong database.
+
+==================================================
+36. GAP ≠ MARKET SHORTAGE
+==================================================
+
+Không viết:
+
+“Thị trường đang thiếu Supplier X”
+
+nếu dữ liệu chỉ phản ánh platform.
+
+Dùng:
+
+“Trong các nhu cầu hiện được hệ thống xử lý,
+nhóm này đang cần bổ sung lựa chọn.”
+
+nếu thật sự có dữ liệu.
+
+==================================================
+37. STAGE DESCRIPTION
+==================================================
+
+Description phải:
+
+ngắn
+thực dụng
+không marketing quá mức.
+
+Ví dụ:
+
+Stage 04:
+
+“Nhóm công việc liên quan đến nguồn đầu vào,
+quản lý quá trình sản xuất và giao nhận đầu ra.”
+
+Không viết các claim kỹ thuật/pháp lý
+không có source.
+
+==================================================
+38. STAGE 01 CONTENT
+==================================================
+
+01. CHUẨN BỊ & ĐẦU TƯ
+
+NeedGroups:
+
+1.1 Khảo sát & Định hướng
+1.2 Pháp lý & Thủ tục
+1.3 Chọn địa điểm & Mặt bằng
+
+Không tự cung cấp tư vấn pháp lý
+như kết luận chắc chắn.
+
+Legal content nếu có:
+phải có source và ngày cập nhật.
+
+==================================================
+39. STAGE 02 CONTENT
+==================================================
+
+02. THIẾT KẾ & XÂY DỰNG
+
+NeedGroups:
+
+2.1 Thiết kế & Quy hoạch
+2.2 Thi công xây dựng
+2.3 Cơ điện & Hạ tầng kỹ thuật
+
+Supplier discovery có thể gồm:
+
+Design
+Construction
+M&E
+Infrastructure
+
+theo taxonomy thật.
+
+==================================================
+40. STAGE 03 CONTENT
+==================================================
+
+03. LẮP ĐẶT & HOÀN THIỆN
+
+NeedGroups:
+
+3.1 Lắp đặt máy & dây chuyền
+3.2 Hoàn thiện không gian sản xuất
+3.3 Kiểm tra & Chạy thử
+
+Các tiêu chí kỹ thuật
+phải dùng structured data/source.
+
+Không tự đánh giá thiết bị đạt chuẩn.
+
+==================================================
+41. STAGE 04 CONTENT
+==================================================
+
+04. VẬN HÀNH SẢN XUẤT
+
+NeedGroups:
+
+4.1 Cung ứng đầu vào
+4.2 Quản lý sản xuất & Kiểm soát
+4.3 Giao nhận & Phân phối
+
+Đây có thể là nhóm nhu cầu lặp lại.
+
+Cho phép:
+repeat requirement
+nếu core Requirement system hỗ trợ.
+
+Không tạo subscription tự động trong P1.
+
+==================================================
+42. STAGE 05 CONTENT
+==================================================
+
+05. NHÂN SỰ & HẬU CẦN
+
+NeedGroups:
+
+5.1 Tuyển dụng & Lao động
+5.2 Đời sống & Phúc lợi
+5.3 Đồng phục & Bảo hộ
+
+LƯU Ý:
+
+Phúc lợi chuyên biệt vẫn là service sau
+nếu module chưa triển khai.
+
+Không tạo page dịch vụ giả.
+
+5.3 có thể map mạnh tới:
+Uniform
+PPE
+Safety products
+
+theo taxonomy hiện tại.
+
+==================================================
+43. STAGE 06 CONTENT
+==================================================
+
+06. MỞ RỘNG – TỐI ƯU – CHUYỂN ĐỔI
+
+NeedGroups:
+
+6.1 Mở rộng công suất
+6.2 Chuẩn hóa & Đánh giá
+6.3 Chuyển đổi & Tái cấu trúc
+
+Không tự gọi:
+audit
+certification
+digital transformation
+
+là đã được platform xác minh.
+
+==================================================
+44. CROSS-STAGE RELATION
+==================================================
+
+Một Category có thể thuộc nhiều NeedGroup/Stage.
+
+Ví dụ:
+
+Logistics
+
+có thể liên quan:
+4.3
+5.x
+6.x
+
+nếu taxonomy xác định.
+
+Do đó relation cần many-to-many.
+
+Không duplicate Category
+để ép mỗi Category vào một Stage.
+
+==================================================
+45. TAXONOMY RELATION MODEL
+==================================================
+
+Có thể reuse/chuẩn hóa:
+
+NeedGroupCategory {
+ needGroupId
+ categoryId
+ relevanceType?
+ order?
+}
+
+NeedGroupKeywordCluster {
+ needGroupId
+ keywordClusterId
+}
+
+NeedGroupProductServiceRelation nếu cần.
+
+Không store taxonomy dưới dạng JSON blob
+nếu cần query/filter thường xuyên.
+
+==================================================
+46. ADMIN
+==================================================
+
+Reuse:
+
+/admin/giai-doan
+
+hoặc taxonomy admin hiện có.
+
+Admin phải quản lý:
+
+6 Stage
+
+18 NeedGroup
+
+Descriptions
+
+Ordering
+
+Category relations
+
+KeywordCluster relations
+
+Product/service relations
+
+Buyer guides
+
+Programs relations nếu curated
+
+Sourcing Dossiers
+
+SEO
+
+Publish status
+
+Audit.
+
+==================================================
+47. KHÓA CANONICAL STRUCTURE
+==================================================
+
+6 Stage canonical
+không nên bị user content editor:
+
+xóa
+duplicate
+đổi code tùy tiện.
+
+Các action cấu trúc lớn:
+restricted permission.
+
+Cho phép edit:
+
+description
+SEO
+relations
+order within approved rules.
+
+==================================================
+48. NEED GROUP CODE
+==================================================
+
+Codes:
+
+1.1
+1.2
+...
+6.3
+
+phải unique/canonical.
+
+Không tạo:
+
+05-03
+stage5group3
+5C
+
+thành entity khác.
+
+Aliases nếu cần
+map về canonical NeedGroup.
+
+==================================================
+49. OLD NAME / LEGACY DATA
+==================================================
+
+Nếu codebase hiện có taxonomy cũ:
+
+audit trước.
+
+Tạo mapping/migration.
+
+Không tạo song song:
+
+“Quy hoạch & Thiết kế”
+và
+“Thiết kế & Xây dựng”
+
+như 2 Stage khác nhau
+nếu đó là legacy naming.
+
+Canonical current names
+là 6 Stage ở prompt này.
+
+==================================================
+50. URL
+==================================================
+
+Suggested slug:
+
+/giai-doan/chuan-bi-dau-tu
+
+/giai-doan/thiet-ke-xay-dung
+
+/giai-doan/lap-dat-hoan-thien
+
+/giai-doan/van-hanh-san-xuat
+
+/giai-doan/nhan-su-hau-can
+
+/giai-doan/mo-rong-toi-uu-chuyen-doi
+
+Audit URL hiện có trước.
+
+Nếu URL cũ khác:
+301 redirect.
+
+==================================================
+51. SEO
+==================================================
+
+Dynamic title:
+
+[Giai đoạn] – Nhu Cầu & Nguồn Cung | CHUOICUNGUNG.COM
+
+Ví dụ:
+
+Nhân Sự & Hậu Cần – Nhu Cầu & Nguồn Cung | CHUOICUNGUNG.COM
+
+Meta:
+
+Khám phá các nhóm nhu cầu, chuyên mục, sản phẩm, dịch vụ, nhà cung ứng và chương trình liên quan đến [Giai đoạn].
+
+Canonical:
+
+/giai-doan/[slug]
+
+==================================================
+52. SEO RULE
+==================================================
+
+Chỉ có 6 canonical Stage pages.
+
+Không auto index mọi:
+
+filter
+NeedGroup query
+location combination
+
+trừ khi có chiến lược SEO riêng sau này.
+
+==================================================
+53. STRUCTURED DATA
+==================================================
+
+Use:
+
+CollectionPage
+BreadcrumbList
+ItemList
+
+Không dùng:
+HowTo
+
+nếu content không phải quy trình bắt buộc.
+
+Điểm này quan trọng vì 6 Stage
+không phải sequence bắt buộc.
+
+==================================================
+54. BREADCRUMB
+==================================================
+
+Trang chủ
+
+→ Bản đồ 6 giai đoạn
+
+→ [Stage]
+
+Category/product links bên trong
+giữ canonical riêng.
+
+==================================================
+55. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+Stage switcher
+
+3 NeedGroup cards/accordion
+
+Selected NeedGroup content
+
+Categories
+
+Buyer guide
+
+Public needs
+
+Suppliers
+
+Programs
+
+Dossiers
+
+CTA
+
+Không overflow 390px.
+
+Không dùng vòng tròn 3D nặng.
+
+==================================================
+56. PERFORMANCE
+==================================================
+
+Initial load:
+
+Stage
+NeedGroups
+Top categories
+small summary.
+
+Lazy load:
+
+Supplier lists
+Program lists
+Dossiers
+Catalogue/media.
+
+Không query toàn bộ Supplier
+của cả Stage ngay initial SSR.
+
+==================================================
+57. ANALYTICS
+==================================================
+
+Track:
+
+stage_view
+
+need_group_select
+
+category_click_from_stage
+
+keyword_click_from_stage
+
+product_click_from_stage
+
+supplier_click_from_stage
+
+public_need_click_from_stage
+
+program_click_from_stage
+
+dossier_click_from_stage
+
+submit_need_from_stage
+
+Không gọi:
+Stage view = purchase intent.
+
+==================================================
+58. SUPPI ANALYTICS
+==================================================
+
+Track:
+
+stage_suppi_open
+
+stage_suppi_requirement_draft
+
+need_group_suggested
+
+requirement_confirmed
+
+Nhưng AI suggestion
+không phải confirmed Need
+cho tới khi user xác nhận.
+
+==================================================
+59. SECURITY / PRIVACY
+==================================================
+
+Public Stage page chỉ query:
+
+published taxonomy
+
+public Supplier data
+
+public Requirement summaries
+
+public Programs
+
+public Dossiers
+
+public Catalogues.
+
+Không return:
+
+private Need
+SupplierResponse
+Quotation
+Meeting
+internal Match notes.
+
+==================================================
+60. DATA QUALITY
+==================================================
+
+Admin warnings:
+
+NeedGroup không có Category relation
+
+Category relation stale
+
+Keyword cluster duplicate
+
+Supplier relation only inferred without capability
+
+Public Need privacy conflict
+
+Program relation invalid
+
+Old Stage alias unresolved
+
+Broken canonical URL.
+
+==================================================
+61. QA
+==================================================
+
+Test tối thiểu:
+
+1. Chỉ 6 canonical Stage tồn tại.
+2. 18 NeedGroup đúng code/name.
+3. Stage names đúng canonical current taxonomy.
+4. Legacy names không tạo duplicate Stage.
+5. NeedGroups có thể hoạt động song song.
+6. UI không mô tả đây là quy trình bắt buộc.
+7. Category reuse canonical taxonomy.
+8. Keyword dẫn đúng /tu-khoa/[slug].
+9. Product dẫn đúng canonical ProductService.
+10. Supplier discovery reuse SupplierProfile.
+11. Public Need không lộ private Buyer data.
+12. Founding Partner không ảnh hưởng Supplier ranking.
+13. Program reuse ProgramCard.
+14. Dossier reuse Page 35.
+15. Need CTA prefill Stage/NeedGroup.
+16. SUPPI tạo Draft chứ không auto Need.
+17. Private data không xuất hiện trong SEO/SSR.
+18. Admin mutation có AuditLog.
+19. Mobile 390px hoạt động.
+
+==================================================
+62. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing taxonomy audited
+- Legacy mappings
+- Models reused
+- Migration
+- Stage implementation
+- 18 NeedGroups
+- Category relations
+- KeywordCluster relations
+- ProductService relations
+- Buyer guide integration
+- Supplier discovery
+- Requirement integration
+- Program integration
+- Dossier integration
+- Founding Partner handling
+- SUPPI integration
+- Admin taxonomy management
+- SEO
+- Security/privacy
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+6 STAGES
+→ 18 NEED GROUPS
+→ CATEGORY
+→ KEYWORD / BUYER INTENT
+→ PRODUCT / SERVICE
+→ SUPPLIER
+→ PROGRAM / DOSSIER
+→ REQUIREMENT
+→ MATCHING
+→ CONNECTION
+
+GIAI ĐOẠN
+KHÔNG PHẢI MỘT QUY TRÌNH BẮT BUỘC.
+
+Nó là LỚP NGỮ CẢNH
+giúp doanh nghiệp tìm đúng nhóm việc
+và đúng nguồn cung.
+
+CORE LOGIC PHẢI GIỮ:
+
+GIAI ĐOẠN
+→ NHU CẦU
+→ NĂNG LỰC
+→ ĐỊA BÀN
+→ KẾT NỐI.

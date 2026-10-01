@@ -1,0 +1,884 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 11: SÀN NHU CẦU
+ROUTE: /san-nhu-cau
+
+MỤC TIÊU:
+
+Xây /san-nhu-cau thành nơi Nhà cung ứng khám phá
+NHỮNG NHU CẦU B2B ĐƯỢC PHÉP CÔNG KHAI
+và phản hồi:
+
+“TÔI CÓ KHẢ NĂNG ĐÁP ỨNG”
+
+Đây KHÔNG phải marketplace bán hàng.
+Đây KHÔNG phải sàn đấu thầu tài chính.
+Không public mọi Requirement.
+
+Luồng chính:
+
+REQUIREMENT
+→ PUBLIC SUMMARY
+→ SUPPLIER DISCOVERY
+→ SUPPLIER RESPONSE
+→ ADMIN REVIEW
+→ SUPPLIER MATCH
+→ CONNECTION
+→ CHAINY FOLLOW-UP
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit route hiện tại:
+
+/san-nhu-cau
+
+Reuse:
+
+requirements
+requirement_versions
+categories
+keywords
+stages
+locations
+industrial_parks
+organizations
+supplier_profiles
+supplier_matches
+connections
+activities
+tasks
+
+Không tạo bảng demand/public-demand duplicate
+nếu Requirement hiện tại đã hỗ trợ visibility.
+
+==================================================
+2. PUBLICATION RULE
+==================================================
+
+Một Requirement CHỈ xuất hiện trên /san-nhu-cau khi:
+
+visibility = PUBLIC_SUMMARY
+
+AND
+
+requirement status phù hợp để tìm nguồn
+
+AND
+
+đã qua validation/moderation theo workflow hiện tại.
+
+Không public Requirement có:
+
+PRIVATE
+
+hoặc
+
+MATCHED_SUPPLIERS_ONLY
+
+Public listing phải tạo từ Requirement gốc.
+
+Không copy Requirement thành record độc lập chỉ để hiển thị.
+
+==================================================
+3. DỮ LIỆU PUBLIC
+==================================================
+
+Card được phép hiển thị:
+
+publicCode
+
+title / nhu cầu tóm tắt
+
+category
+
+keyword/use case nếu có
+
+stage nếu có
+
+province / area
+
+industrial park nếu được phép công bố
+
+quantity nếu buyer cho phép
+
+unit
+
+required date / deadline
+
+sample required
+
+survey required
+
+public requirements / conditions
+
+status public
+
+publishedAt
+
+response deadline nếu có
+
+==================================================
+4. TUYỆT ĐỐI KHÔNG PUBLIC
+==================================================
+
+Không trả ra API public:
+
+Buyer contact
+
+Tên cá nhân
+
+Điện thoại
+
+Email
+
+Ngân sách nội bộ
+
+Target price
+
+Private buyer company name
+nếu buyer chưa cho phép
+
+Confidential attachments
+
+Internal notes
+
+SUPPI conversation
+
+Admin notes
+
+Internal match score
+
+Other suppliers' responses
+
+Quotation
+
+Private technical documents
+
+Backend phải enforce permission.
+Không chỉ hide bằng CSS.
+
+==================================================
+5. UX/UI
+==================================================
+
+SECTION 01 — HERO
+
+H1:
+
+“SÀN NHU CẦU DOANH NGHIỆP”
+
+Sub:
+
+“Khám phá các nhu cầu đang tìm nguồn và phản hồi những cơ hội phù hợp với năng lực doanh nghiệp của bạn.”
+
+CTA Buyer:
+
+[ĐĂNG NHU CẦU]
+
+CTA Supplier:
+
+[HOÀN THIỆN HỒ SƠ NĂNG LỰC]
+
+Không sử dụng số liệu giả như:
+15.000 NCC
+500 nhà máy
+tổng giá trị giao dịch
+thời gian matching trung bình
+
+nếu database thật chưa hỗ trợ.
+
+--------------------------------------------------
+
+SECTION 02 — SEARCH
+
+Search:
+
+“Tìm nhu cầu theo sản phẩm, dịch vụ hoặc ngành...”
+
+Reuse taxonomy:
+
+Stage
+Category
+Keyword
+Product/Service
+
+--------------------------------------------------
+
+SECTION 03 — FILTERS
+
+Filters chính:
+
+Giai đoạn
+
+Nhóm nhu cầu / Category
+
+Sản phẩm / dịch vụ
+
+Tỉnh / thành
+
+KCN nếu public
+
+Thời gian cần
+
+Cần mẫu / khảo sát
+
+Trạng thái
+
+Không hiển thị quá nhiều filter ban đầu.
+
+Advanced filters có thể mở thêm.
+
+--------------------------------------------------
+
+SECTION 04 — DEMAND FEED
+
+Mỗi Requirement Card:
+
+[Mã]
+NC-2026-00125
+
+[Tên nhu cầu]
+Cần 500 bộ đồng phục công nhân
+
+Nhóm:
+Đồng phục & BHLĐ
+
+Khu vực:
+Đồng Nai
+
+Số lượng:
+500 bộ
+nếu được phép public
+
+Cần:
+Trước 15/11/2026
+
+Yêu cầu:
+Cần mẫu trước
+
+Trạng thái:
+Đang tìm nguồn
+
+CTA:
+
+[TÔI CÓ KHẢ NĂNG ĐÁP ỨNG]
+
+[XEM CHI TIẾT]
+
+Không hiển thị tên Buyer nếu chưa được phép.
+
+Có thể hiển thị mô tả dạng:
+
+“Nhà máy ngành điện tử tại Đồng Nai”
+
+nếu đó là public summary được Buyer cho phép.
+
+==================================================
+6. TRANG CHI TIẾT NHU CẦU
+==================================================
+
+Không bắt buộc tạo URL mới nếu sitemap hiện tại chưa có.
+
+Nếu hệ thống đã có hoặc cần modal/detail state,
+reuse cùng Requirement Public Summary.
+
+Không tự phát sinh hàng loạt route ngoài sitemap.
+
+Nếu cần route public riêng,
+phải báo trước trong output và CHƯA tự tạo
+nếu chưa được phê duyệt.
+
+==================================================
+7. CTA “TÔI CÓ KHẢ NĂNG ĐÁP ỨNG”
+==================================================
+
+Khi Supplier click:
+
+Nếu chưa login:
+
+→ login
+
+Sau login:
+
+check:
+
+Organization có role SUPPLIER không?
+
+SupplierProfile có tồn tại không?
+
+Nếu chưa có:
+
+CTA:
+
+[HOÀN THIỆN HỒ SƠ]
+
+→ /tao-ho-so
+
+Nếu có profile:
+
+hiển thị response form ngắn:
+
+- Tôi có khả năng cung cấp
+- Product/Service liên quan
+- Capability liên quan
+- Khu vực phục vụ
+- MOQ/Capacity nếu có
+- Lead time dự kiến
+- Có thể làm mẫu?
+- Ghi chú
+- File bổ sung nếu cần
+
+Không yêu cầu Supplier nhập lại:
+
+Tên công ty
+MST
+Logo
+Hồ sơ năng lực
+Capability
+Catalogue
+
+nếu database đã có.
+
+==================================================
+8. SUPPLIER RESPONSE
+==================================================
+
+Không tạo Connection ngay khi Supplier bấm.
+
+Flow:
+
+Supplier response
+↓
+Admin/SUPPI review
+↓
+SupplierMatch create/update
+↓
+Buyer/Coordinator review
+↓
+Permission to connect
+↓
+Connection
+↓
+CHAINY
+
+Tạo/reuse entity:
+
+supplier_requirement_responses
+
+hoặc nếu model hiện tại đã hỗ trợ chức năng này:
+reuse supplier_matches + response fields.
+
+Không tạo duplicate domain nếu không cần.
+
+Response cần:
+
+id
+requirementId
+supplierOrganizationId
+
+productServiceId?
+capabilityId?
+
+responseStatus
+
+capacityNote
+leadTimeNote
+
+sampleAvailable?
+surveyAvailable?
+
+message
+attachments
+
+submittedAt
+updatedAt
+
+==================================================
+9. RESPONSE STATUS
+==================================================
+
+Dùng trạng thái rõ:
+
+SUBMITTED
+
+UNDER_REVIEW
+
+NEED_MORE_INFO
+
+SHORTLISTED
+
+NOT_SUITABLE
+
+WITHDRAWN
+
+CONVERTED_TO_MATCH
+
+Không gọi SUBMITTED là “đã trúng”.
+
+==================================================
+10. DUPLICATE RESPONSE
+==================================================
+
+Một Supplier không được spam cùng Requirement nhiều lần.
+
+Nếu đã response:
+
+hiển thị:
+
+“Bạn đã phản hồi nhu cầu này.”
+
+CTA:
+
+[XEM / CẬP NHẬT PHẢN HỒI]
+
+Không tạo record duplicate.
+
+==================================================
+11. SUPPI
+==================================================
+
+SUPPI trên Sàn Nhu Cầu hỗ trợ Supplier:
+
+“Những nhu cầu nào phù hợp với năng lực của tôi?”
+
+“Tôi có đáp ứng yêu cầu này không?”
+
+“Hồ sơ của tôi còn thiếu gì để phản hồi?”
+
+SUPPI phải dùng:
+
+SupplierProfile
+Capabilities
+ProductsServices
+ServiceArea
+Requirement Public Summary
+
+Không tự tiết lộ dữ liệu private Buyer.
+
+Không invent thông tin Requirement.
+
+==================================================
+12. MATCHING
+==================================================
+
+Nếu Supplier đang login:
+
+có thể hiển thị:
+
+“Có liên quan đến năng lực của bạn”
+
+hoặc:
+
+“Cần kiểm tra thêm”
+
+dựa trên SupplierMatchingService.
+
+Không hiển thị:
+
+“Bạn phù hợp 95%”
+
+như một xác suất chắc chắn.
+
+Có thể giải thích:
+
+✓ Đúng nhóm sản phẩm
+✓ Phục vụ Đồng Nai
+? Lead time cần xác nhận
+
+Không dùng sponsorship/Founding Partner
+làm matching factor.
+
+==================================================
+13. SORT
+==================================================
+
+Cho phép:
+
+Mới nhất
+
+Sắp hết hạn
+
+Liên quan đến hồ sơ của tôi
+chỉ khi login Supplier
+
+Không dùng:
+
+Ai trả tiền nhiều hơn
+Founding Partner trước
+Sponsor trước
+
+==================================================
+14. REQUIREMENT EXPIRY
+==================================================
+
+Khi:
+
+deadline hết
+
+Buyer cancel
+
+Requirement closed
+
+Requirement paused
+
+thì card phải cập nhật hoặc ngừng nhận phản hồi.
+
+Không để CTA:
+
+“Tôi có khả năng đáp ứng”
+
+trên nhu cầu đã đóng.
+
+==================================================
+15. ADMIN
+==================================================
+
+Reuse:
+
+/admin/nhu-cau
+
+Bổ sung filter:
+
+PUBLIC_SUMMARY
+
+Admin cần quản lý:
+
+Nhu cầu nào đang public
+
+Ngày public
+
+Public summary
+
+Visibility
+
+Response deadline
+
+Supplier responses
+
+Số response thật
+
+Shortlist
+
+Moderation
+
+Close/publication state
+
+==================================================
+16. ADMIN SUPPLIER RESPONSES
+==================================================
+
+Trong:
+
+/admin/nhu-cau/[id]
+
+thêm section/tab:
+
+PHẢN HỒI NHÀ CUNG ỨNG
+
+Mỗi response hiển thị:
+
+Supplier
+Capability
+Product/Service
+Service area
+Lead time
+Sample
+Evidence
+Response date
+Status
+
+CTA Admin:
+
+[XEM HỒ SƠ]
+
+[YÊU CẦU BỔ SUNG]
+
+[ĐƯA VÀO SHORTLIST]
+
+[KHÔNG PHÙ HỢP]
+
+Khi chọn không phù hợp:
+bắt buộc reason.
+
+Nếu shortlist:
+
+create/update SupplierMatch.
+
+Không copy Supplier Profile.
+
+==================================================
+17. BUYER CONTROL
+==================================================
+
+Buyer trong Requirement Workspace phải có thể:
+
+Xem Supplier đã được Coordinator cho phép hiển thị
+
+Xem response summary phù hợp
+
+Yêu cầu kết nối
+
+Không mặc định thấy mọi Supplier response nếu workflow hiện tại yêu cầu moderation.
+
+Không expose Supplier A response cho Supplier B.
+
+==================================================
+18. ADMIN MODERATION
+==================================================
+
+Public Requirement phải có:
+
+public summary
+
+visibility
+
+publication state
+
+publishedAt
+
+publishedBy
+
+Không cho AI tự public Requirement.
+
+SUPPI chỉ có thể tạo/tóm tắt draft.
+
+Việc public phải theo permission/workflow đã chốt.
+
+==================================================
+19. DATABASE INDEX
+==================================================
+
+Tối ưu query public theo:
+
+visibility
+status
+category
+stage
+province
+industrialPark
+deadline
+publishedAt
+
+Không query conversation/private tables
+cho public listing.
+
+==================================================
+20. SEO
+==================================================
+
+Title:
+
+Sàn Nhu Cầu Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Meta:
+
+Khám phá các nhu cầu doanh nghiệp đang tìm nguồn theo ngành, địa bàn và thời gian. Nhà cung ứng có thể phản hồi những cơ hội phù hợp với năng lực.
+
+Canonical:
+
+/san-nhu-cau
+
+Index:
+listing page có thể index.
+
+Private Requirement:
+không index.
+
+Filter combinations:
+không tự động index hàng loạt.
+
+Không dùng structured data về:
+giá trị giao dịch
+offer
+tender
+rating
+
+nếu dữ liệu không thực sự hỗ trợ.
+
+==================================================
+21. MOBILE
+==================================================
+
+Mobile order:
+
+Hero
+
+Search
+
+Filter chips
+
+Requirement cards
+
+SUPPI suggestion
+
+CTA Supplier
+
+Filters mở bottom sheet.
+
+Card ưu tiên:
+
+Mã
+Tên nhu cầu
+Category
+Location
+Deadline
+Status
+CTA
+
+Không overflow 390px.
+
+==================================================
+22. NOTIFICATION
+==================================================
+
+Khi Supplier gửi response:
+
+Admin/Owner Requirement nhận notification.
+
+Khi response được shortlist:
+
+Supplier nhận notification.
+
+Khi cần bổ sung:
+
+Supplier nhận notification.
+
+Chỉ gửi Zalo nếu:
+- Zalo đã được tích hợp thật;
+- user đã link/consent;
+- policy hiện tại cho phép.
+
+Nếu chưa:
+dùng notification/email hiện có.
+
+==================================================
+23. SECURITY
+==================================================
+
+Test chống:
+
+IDOR Requirement
+
+Supplier xem private Buyer data
+
+Supplier xem response đối thủ
+
+Public API trả confidential attachment
+
+Unauthorized response update
+
+Fake organizationId từ frontend
+
+Backend phải derive organization
+từ authenticated membership.
+
+==================================================
+24. AUDIT LOG
+==================================================
+
+Log:
+
+Requirement published
+
+Visibility changed
+
+Public summary changed
+
+Supplier response submitted
+
+Response reviewed
+
+Supplier shortlisted
+
+Response rejected
+
+Requirement closed
+
+Admin actions phải ghi:
+actor
+time
+before
+after
+
+==================================================
+25. QA
+==================================================
+
+Test:
+
+1. Chỉ PUBLIC_SUMMARY Requirement xuất hiện.
+
+2. PRIVATE không xuất hiện.
+
+3. MATCHED_SUPPLIERS_ONLY không xuất hiện.
+
+4. Buyer contact không có trong public API response.
+
+5. Internal budget không public.
+
+6. Confidential attachments không public.
+
+7. Supplier chưa login → login trước response.
+
+8. Supplier chưa có profile → /tao-ho-so.
+
+9. Supplier có profile không phải nhập lại company data.
+
+10. Duplicate response không tạo duplicate record.
+
+11. Closed Requirement không nhận response.
+
+12. Supplier A không xem response Supplier B.
+
+13. Admin có thể shortlist response.
+
+14. Shortlist tạo/update SupplierMatch.
+
+15. SupplierMatch không duplicate Supplier Profile.
+
+16. SUPPI không lộ Buyer private information.
+
+17. No fake counters.
+
+18. No fake transaction value.
+
+19. Mobile 390px hoạt động.
+
+20. Mọi admin mutation tạo AuditLog.
+
+==================================================
+26. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration nếu có
+- Public Requirement query
+- Supplier response implementation
+- Matching integration
+- Admin implementation
+- Privacy/security implementation
+- SEO
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+BUYER ĐĂNG NHU CẦU
+→ CHỌN PUBLIC SUMMARY
+→ /san-nhu-cau
+→ SUPPLIER TÌM THẤY
+→ “TÔI CÓ KHẢ NĂNG ĐÁP ỨNG”
+→ SUPPLIER RESPONSE
+→ ADMIN/SUPPI REVIEW
+→ SHORTLIST
+→ SUPPLIER MATCH
+→ BUYER KẾT NỐI
+→ CHAINY THEO DÕI
+→ KẾT QUẢ
+
+Không biến /san-nhu-cau thành trang đăng tin rao vặt
+hoặc sàn đấu thầu mở.

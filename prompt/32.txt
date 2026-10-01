@@ -1,0 +1,1509 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 32: TÀI TRỢ
+ROUTE: /tai-tro
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /tai-tro thành trang tiếp nhận và quản lý
+đề xuất tài trợ cho các hoạt động cụ thể:
+
+- Chương trình kết nối
+- Catalogue / Ấn phẩm
+- Video / Thư viện ảnh / Nội dung
+- Vật phẩm
+- Hoạt động doanh nghiệp
+
+Đồng hành CHUYÊN MỤC / KEYWORD CLUSTER
+phải dẫn sang:
+
+/founding-partner
+
+Không trộn hai sản phẩm thương mại này.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit trước:
+
+/tai-tro
+/founding-partner
+/chuong-trinh
+/catalogue
+/yeu-cau-dich-vu
+/admin/founding-partner
+/admin/chuong-trinh
+/admin/catalogue
+/admin/yeu-cau-dich-vu
+
+Reuse:
+
+Organization
+Program
+Catalogue
+MediaAsset
+ServiceRequest
+PartnershipRequest
+Sponsorship
+Contract
+Entitlement
+Deliverable
+Payment/Finance nếu có
+Task
+AuditLog
+
+Không rebuild hệ thống Partnership.
+
+Không tạo Sponsor Organization duplicate.
+
+==================================================
+2. PHÂN BIỆT TÀI TRỢ VÀ FOUNDING PARTNER
+==================================================
+
+Hard rule:
+
+/tai-tro
+
+= tài trợ cho một:
+Program
+Catalogue
+Media/Content
+Merchandise
+Specific Activity
+
+/founding-partner
+
+= tài trợ:
+Category
+Keyword Cluster
+Location/KCN scope
+Placement
+Term
+
+Nếu user chọn:
+
+“Đồng hành chuyên mục”
+
+CTA phải dẫn:
+
+/founding-partner
+
+Không xử lý nó như Program Sponsorship.
+
+==================================================
+3. HERO
+==================================================
+
+H1:
+
+“ĐỒNG HÀNH CÙNG CHƯƠNG TRÌNH PHỤC VỤ DOANH NGHIỆP”
+
+Sub:
+
+“Lựa chọn chương trình, chuyên mục hoặc hoạt động phù hợp để đồng hành cùng CHUOICUNGUNG.COM. Mỗi gói thống nhất phạm vi hiện diện, nội dung, thời hạn và báo cáo quyền lợi đã bàn giao.”
+
+CTA chính:
+
+[GỬI ĐỀ XUẤT TÀI TRỢ]
+
+CTA phụ:
+
+[XEM CÁC HÌNH THỨC ĐỒNG HÀNH]
+
+==================================================
+4. 5 HÌNH THỨC
+==================================================
+
+Tạo 5 cards:
+
+01.
+TÀI TRỢ CHƯƠNG TRÌNH KẾT NỐI
+
+02.
+TÀI TRỢ CATALOGUE / ẤN PHẨM
+
+03.
+TÀI TRỢ VIDEO / THƯ VIỆN ẢNH / NỘI DUNG
+
+04.
+TÀI TRỢ VẬT PHẨM
+
+05.
+ĐỒNG HÀNH CHUYÊN MỤC
+
+Card 05 CTA:
+
+[TÌM HIỂU FOUNDING PARTNER]
+
+→ /founding-partner
+
+==================================================
+5. TÀI TRỢ CHƯƠNG TRÌNH
+==================================================
+
+Card:
+
+“TÀI TRỢ CHƯƠNG TRÌNH KẾT NỐI”
+
+Có thể gắn với:
+
+Program cụ thể
+
+hoặc yêu cầu tư vấn nếu Program chưa chọn.
+
+Quyền lợi có thể bao gồm
+CHỈ KHI ĐƯỢC THỎA THUẬN:
+
+Logo / recognition
+
+Booth
+
+Content placement
+
+Catalogue placement
+
+Media
+
+Materials
+
+Program participation
+
+Report
+
+Không hard-code rằng mọi sponsor đều nhận đủ.
+
+==================================================
+6. PROGRAM SELECTOR
+==================================================
+
+Nếu user chọn Program Sponsorship:
+
+hiển thị Programs:
+
+REGISTRATION_OPEN
+UPCOMING
+hoặc sponsorship-enabled status phù hợp.
+
+Fields:
+
+Program
+Role/interest
+Contribution type
+Expected benefits
+Contact
+
+Không cho sponsor chọn Program:
+CANCELLED
+hoặc không nhận tài trợ.
+
+==================================================
+7. TÀI TRỢ CATALOGUE
+==================================================
+
+Card:
+
+“TÀI TRỢ CATALOGUE / ẤN PHẨM”
+
+Có thể gắn:
+
+Catalogue
+Edition
+
+Quyền lợi có thể gồm:
+
+Sponsor placement
+Brand block
+Content page
+Back/front position nếu hợp đồng có
+Digital visibility
+Distribution report
+
+Nhưng không mặc định mọi vị trí.
+
+==================================================
+8. CATALOGUE SPONSORSHIP ≠ ENTRY APPROVAL
+==================================================
+
+Sponsor Catalogue
+không tự động:
+
+- trở thành Supplier đã duyệt;
+- được đưa vào organic Supplier list;
+- có capability verified;
+- được matching ưu tiên.
+
+Sponsored placement phải có label rõ.
+
+==================================================
+9. TÀI TRỢ MEDIA / CONTENT
+==================================================
+
+Card:
+
+“VIDEO / THƯ VIỆN ẢNH / NỘI DUNG”
+
+Có thể tài trợ:
+
+Program photo library
+Video production
+Content package
+Event documentation
+
+Reuse:
+
+MediaAsset
+ContentProject
+ProgramLibrary
+ServiceRequest
+
+Không tạo media workflow riêng.
+
+==================================================
+10. TÀI TRỢ VẬT PHẨM
+==================================================
+
+Card:
+
+“TÀI TRỢ VẬT PHẨM”
+
+Có thể gồm:
+
+Lanyard
+Badge
+Bag
+Notebook
+Shirt
+Gift
+Catalogue printing
+Booth materials
+
+Reuse Page 16:
+
+/dich-vu/vat-pham-su-kien
+
+Sponsorship chỉ quyết định:
+
+ai chi trả
+phạm vi quyền lợi
+deliverables.
+
+Không duplicate procurement workflow.
+
+==================================================
+11. ĐỒNG HÀNH CHUYÊN MỤC
+==================================================
+
+Card:
+
+“ĐỒNG HÀNH CHUYÊN MỤC”
+
+Text ngắn:
+
+“Nếu doanh nghiệp muốn đồng hành dài hạn theo chuyên mục hoặc cụm nhu cầu, hãy xem gói Founding Partner.”
+
+CTA:
+
+[XEM FOUNDING PARTNER]
+
+→ /founding-partner
+
+Không bán Category Sponsorship ở /tai-tro
+nếu nó thuộc Founding Partner.
+
+==================================================
+12. TÀI TRỢ KHÔNG PHẢI ĐẦU TƯ
+==================================================
+
+Hard rule:
+
+Sponsor
+≠ Investor
+≠ Shareholder
+≠ Co-founder
+
+Không dùng:
+
+Investment
+Equity
+Shareholder rights
+
+trong Sponsorship contract
+trừ khi tồn tại thỏa thuận hoàn toàn riêng.
+
+==================================================
+13. TÀI TRỢ KHÔNG PHẢI BẢO TRỢ
+==================================================
+
+Không sử dụng từ:
+
+“bảo trợ”
+
+cho một Organization
+chỉ vì họ tài trợ.
+
+Sponsor label:
+
+“NHÀ TÀI TRỢ”
+
+hoặc:
+
+“ĐỐI TÁC ĐỒNG HÀNH”
+
+theo hợp đồng.
+
+Bảo trợ tổ chức/pháp lý nếu có
+phải là relation riêng.
+
+==================================================
+14. TÀI TRỢ KHÔNG MUA QUYỀN MATCHING
+==================================================
+
+Sponsor không được:
+
+tăng SupplierMatching score
+
+đứng #1 Supplier Search
+
+nhận tất cả Buyer Leads
+
+xem Buyer private data
+
+xem Supplier quotations
+
+được guaranteed meeting
+
+được gọi là verified Supplier.
+
+==================================================
+15. CTA GỬI ĐỀ XUẤT
+==================================================
+
+CTA:
+
+[GỬI ĐỀ XUẤT TÀI TRỢ]
+
+Mở FormEngine hoặc route:
+
+/yeu-cau-dich-vu?service=tai-tro
+
+Reuse FormEngine Page 17.
+
+Không tạo form system thứ hai.
+
+==================================================
+16. FORM — THÔNG TIN CHUNG
+==================================================
+
+Fields:
+
+Organization
+
+Contact
+
+Email / phone
+
+Sponsorship type
+
+Program / Catalogue / Activity nếu có
+
+Location optional
+
+Expected term
+
+Contribution type
+
+Expected benefits
+
+Budget optional
+
+Description
+
+Attachment optional
+
+Consent.
+
+==================================================
+17. FORM DYNAMIC
+==================================================
+
+PROGRAM:
+
+Program
+Target participation
+Expected presence
+Contribution
+Benefits
+
+CATALOGUE:
+
+Catalogue / edition
+Placement interest
+Content interest
+Distribution interest
+
+MEDIA:
+
+Program/content
+Media format
+Usage context
+Brand requirements
+
+MERCHANDISE:
+
+Program
+Item category
+Contribution scope
+Branding requirements
+
+CATEGORY:
+
+redirect /founding-partner.
+
+==================================================
+18. CONTRIBUTION TYPE
+==================================================
+
+Support:
+
+CASH
+
+IN_KIND
+
+PRODUCT
+
+SERVICE
+
+MEDIA_SUPPORT
+
+PRINTING
+
+VENUE
+
+OTHER
+
+Không coi mọi Sponsorship
+là cash payment.
+
+==================================================
+19. BUDGET OPTIONAL
+==================================================
+
+Budget dự kiến:
+
+optional.
+
+Không bắt buộc user đưa ngân sách
+trước khi hiểu scope.
+
+Không dùng budget để tự kích hoạt package.
+
+==================================================
+20. REQUEST ≠ SPONSORSHIP
+==================================================
+
+Hard rule:
+
+Form submit
+→ Sponsorship Inquiry
+
+KHÔNG:
+
+Form submit
+→ ACTIVE SPONSOR
+
+Workflow:
+
+INQUIRY
+→ REVIEW
+→ SCOPE
+→ PROPOSAL
+→ NEGOTIATION
+→ CONTRACT
+→ ACTIVE
+→ DELIVERY
+→ ACCEPTANCE
+→ REPORT
+→ COMPLETED / EXPIRED
+
+==================================================
+21. STATUS
+==================================================
+
+Có thể chuẩn hóa:
+
+INQUIRY
+
+NEED_MORE_INFO
+
+SCOPE_CONFIRMED
+
+PROPOSAL_SENT
+
+NEGOTIATION
+
+CONTRACT_PENDING
+
+SCHEDULED
+
+ACTIVE
+
+DELIVERY_IN_PROGRESS
+
+WAITING_ACCEPTANCE
+
+COMPLETED
+
+EXPIRED
+
+CANCELLED
+
+Nếu schema hiện có:
+map thay vì destructive migration.
+
+==================================================
+22. SPONSORSHIP ENTITY
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+Sponsorship {
+ id
+
+ sponsorOrganizationId
+
+ sponsorshipType
+
+ programId?
+ catalogueId?
+ catalogueEditionId?
+ mediaProjectId?
+ serviceRequestId?
+
+ status
+
+ startDate?
+ endDate?
+
+ contractId?
+
+ ownerUserId
+
+ createdAt
+ updatedAt
+}
+
+Không dùng Sponsorship
+cho FoundingPartner nếu architecture đã tách.
+
+==================================================
+23. CONTRACT TYPE
+==================================================
+
+Contract phải phân biệt:
+
+PROGRAM_SPONSORSHIP
+
+CATALOGUE_SPONSORSHIP
+
+CONTENT_SPONSORSHIP
+
+MERCHANDISE_SPONSORSHIP
+
+FOUNDING_PARTNER
+
+Không để tất cả chỉ là:
+
+PARTNERSHIP_CONTRACT
+
+mà không biết scope.
+
+==================================================
+24. ENTITLEMENTS
+==================================================
+
+Mỗi Sponsorship Contract cần entitlement list.
+
+SponsorshipEntitlement {
+ id
+ sponsorshipId
+
+ type
+
+ quantity?
+
+ startAt?
+ endAt?
+
+ ownerUserId?
+
+ status
+
+ evidence[]
+
+ acceptedAt?
+ acceptedBy?
+
+ createdAt
+ updatedAt
+}
+
+Không lưu toàn bộ quyền lợi
+trong một paragraph contractNote.
+
+==================================================
+25. ENTITLEMENT EXAMPLES
+==================================================
+
+PROGRAM_LOGO
+
+PROGRAM_BOOTH
+
+PROGRAM_CONTENT
+
+PROGRAM_STAGE_RECOGNITION
+
+CATALOGUE_PLACEMENT
+
+CATALOGUE_CONTENT
+
+VIDEO_PRODUCTION
+
+PHOTO_LIBRARY
+
+MERCHANDISE_BRANDING
+
+REPORT
+
+OTHER
+
+Không assume mọi sponsor có mọi quyền.
+
+==================================================
+26. DELIVERY STATUS
+==================================================
+
+Mỗi entitlement:
+
+PLANNED
+
+IN_PROGRESS
+
+DELIVERED
+
+ACCEPTED
+
+NOT_APPLICABLE
+
+CANCELLED
+
+Mỗi entitlement có:
+
+owner
+deadline
+evidence
+acceptance.
+
+==================================================
+27. EVIDENCE
+==================================================
+
+Evidence có thể gồm:
+
+Program page URL
+
+Sponsor logo placement screenshot
+
+Catalogue page
+
+Video URL
+
+Photo gallery
+
+Booth photo
+
+Material handover
+
+Distribution evidence
+
+Report file.
+
+Không fake evidence.
+
+==================================================
+28. ACCEPTANCE
+==================================================
+
+Deliverable:
+
+DELIVERED
+≠ ACCEPTED.
+
+Nếu hợp đồng có nghiệm thu:
+
+record:
+
+acceptedBy
+acceptedAt
+note.
+
+Giữ history.
+
+==================================================
+29. RIGHTS + QUANTITY
+==================================================
+
+Mỗi hợp đồng phải biết:
+
+Quyền lợi gì?
+
+Bao nhiêu?
+
+Thời gian nào?
+
+Ai thực hiện?
+
+Bằng chứng đâu?
+
+Đã nghiệm thu chưa?
+
+Không chỉ ghi:
+
+“Gói tài trợ Gold”.
+
+Nếu vẫn dùng package name:
+package phải resolve thành entitlements cụ thể.
+
+==================================================
+30. EXPIRY
+==================================================
+
+Nếu entitlement có thời hạn:
+
+endDate tới hạn
+→ stop paid placement.
+
+Không xóa history.
+
+Có thể:
+
+EXPIRED
+→ renewal inquiry
+
+nhưng không tự gia hạn.
+
+==================================================
+31. PROGRAM SPONSOR DISPLAY
+==================================================
+
+Trên /chuong-trinh/[slug]:
+
+chỉ render Sponsor nếu:
+
+Sponsorship.status = ACTIVE
+
+AND entitlement hợp lệ
+
+AND currentDate trong term
+
+AND publicDisplay allowed.
+
+Label:
+
+“NHÀ TÀI TRỢ”
+
+hoặc contract-approved label.
+
+==================================================
+32. CATALOGUE SPONSOR DISPLAY
+==================================================
+
+Trên /catalogue/[slug]:
+
+chỉ render placement
+khi entitlement:
+
+active
+approved
+within edition/scope.
+
+Label rõ:
+
+“TÀI TRỢ”
+
+Không giả làm organic CatalogueEntry.
+
+==================================================
+33. MEDIA SPONSOR DISPLAY
+==================================================
+
+Trong Program Library:
+
+Sponsor recognition chỉ theo entitlement.
+
+Việc Sponsor tài trợ photo/video
+không cho họ quyền sở hữu
+mọi participant media nếu hợp đồng không nói vậy.
+
+Media usage rights phải riêng.
+
+==================================================
+34. VẬT PHẨM SPONSOR DISPLAY
+==================================================
+
+Ví dụ:
+
+“Vật phẩm được đồng hành bởi…”
+
+chỉ render khi:
+
+contract + entitlement cho phép.
+
+Không tự biến supplier vật phẩm
+thành Sponsor.
+
+==================================================
+35. USER DATA
+==================================================
+
+Sponsor không được mặc định nhận:
+
+Attendee contacts
+
+Buyer contacts
+
+Buyer Requirement private
+
+Supplier Quotes
+
+Meeting list private
+
+CRM notes.
+
+Nếu entitlement có lead/contact sharing:
+
+vẫn phải check:
+consent
+scope
+permission.
+
+==================================================
+36. REPORT
+==================================================
+
+Sponsor report có thể gồm:
+
+Entitlements planned
+
+Entitlements delivered
+
+Evidence
+
+Program/campaign activity metrics
+
+Catalogue distribution metrics
+
+QR scans
+
+Content views
+
+Contact requests
+chỉ nếu scope cho phép.
+
+Không trộn:
+view
+scan
+request
+buyer need
+deal.
+
+==================================================
+37. METRIC RULE
+==================================================
+
+IMPRESSION
+≠ ENGAGEMENT
+
+QR SCAN
+≠ CONTACT REQUEST
+
+CONTACT REQUEST
+≠ BUYER NEED
+
+BUYER NEED
+≠ MEETING
+
+MEETING
+≠ DEAL.
+
+Report phải dùng định nghĩa rõ.
+
+==================================================
+38. INCLUDED RIGHTS / NO DOUBLE CHARGE
+==================================================
+
+Nếu Sponsor package đã gồm:
+
+Video
+Catalogue placement
+Merchandise branding
+Program booth
+
+thì không tạo ServiceRequest
+thu phí lần nữa cho đúng entitlement đó.
+
+Chỉ mua thêm nếu vượt scope.
+
+==================================================
+39. FOUNDING PARTNER CROSS-CHECK
+==================================================
+
+Nếu Organization vừa có:
+
+Program Sponsorship
++
+Founding Partnership
+
+Admin phải hiển thị hai hợp đồng/phạm vi riêng.
+
+Không merge entitlement.
+
+Ví dụ:
+
+Founding Partner:
+Đồng phục công nhân / Đồng Nai / 12 tháng
+
+Program Sponsor:
+Ngày hội XYZ / 1 ngày.
+
+==================================================
+40. SPONSOR ORGANIZATION
+==================================================
+
+Reuse Organization master.
+
+Một Organization có thể:
+
+SUPPLIER
+SPONSOR
+FOUNDING_PARTNER
+FACTORY
+
+đồng thời.
+
+Không tạo SponsorCompany duplicate.
+
+==================================================
+41. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/tai-tro
+
+Listing columns:
+
+Sponsor
+
+Type
+
+Program/Catalogue/Activity
+
+Scope
+
+Contract
+
+Start
+
+End
+
+Status
+
+Entitlement progress
+
+Owner
+
+Next action
+
+Updated
+
+==================================================
+42. ADMIN DETAIL
+==================================================
+
+Tabs:
+
+OVERVIEW
+
+INQUIRY
+
+SCOPE
+
+PROPOSAL
+
+CONTRACT
+
+ENTITLEMENTS
+
+CONTENT
+
+PROGRAM
+
+CATALOGUE
+
+MEDIA
+
+MERCHANDISE
+
+DELIVERY
+
+EVIDENCE
+
+REPORT
+
+FINANCE
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+43. ADMIN INQUIRY QUEUE
+==================================================
+
+Queue:
+
+NEW SPONSORSHIP INQUIRIES
+
+Hiển thị:
+
+Organization
+Type
+Program
+Catalogue
+Budget optional
+Expected benefits
+Owner
+Status
+Next action
+
+Không để inquiry biến mất trong email.
+
+==================================================
+44. OWNER + NEXT ACTION
+==================================================
+
+Mỗi active sponsorship workflow cần:
+
+ownerUserId
+
+nextAction
+
+nextActionAt
+
+status.
+
+Nếu thiếu:
+Page 19 Admin warning.
+
+==================================================
+45. SCOPE CHECK
+==================================================
+
+Trước proposal:
+
+check:
+
+Target asset/activity tồn tại?
+
+Program nhận sponsorship?
+
+Catalogue edition đúng?
+
+Placement còn khả dụng?
+
+Existing contract overlap?
+
+Entitlement có deliver được?
+
+Không bán quyền không tồn tại.
+
+==================================================
+46. CONFLICT CHECK
+==================================================
+
+Ví dụ:
+
+Catalogue cover chỉ có 1 quyền exclusive.
+
+Nếu đã bán:
+flag conflict.
+
+Program title sponsor đã có.
+
+Nếu quyền exclusive:
+không bán chồng.
+
+Không dùng conflict logic của Founding keyword scope
+một cách máy móc;
+scope ở đây gắn asset/activity cụ thể.
+
+==================================================
+47. COMMERCIAL APPROVAL
+==================================================
+
+Proposal phải ghi:
+
+Scope
+
+Included rights
+
+Excluded rights
+
+Quantity
+
+Dates
+
+Production responsibilities
+
+Sponsor responsibilities
+
+Price/Contribution
+
+Payment
+
+Acceptance
+
+Cancellation
+
+Reporting.
+
+Không bán bằng package name mơ hồ.
+
+==================================================
+48. FINANCE
+==================================================
+
+Nếu Finance đã triển khai:
+
+Sponsorship revenue
+phải tách khỏi:
+
+Service revenue
+
+Founding Partner revenue
+
+Investment capital
+
+Loan
+
+Collected-on-behalf
+
+Partner commission.
+
+Không cộng bừa tất cả thành revenue.
+
+==================================================
+49. IN-KIND SPONSORSHIP
+==================================================
+
+Nếu contribution = IN_KIND:
+
+record:
+
+declared value optional
+
+actual delivered items/services
+
+acceptance
+
+evidence.
+
+Không tự ghi nhận cash revenue.
+
+==================================================
+50. ACCOUNT WORKSPACE
+==================================================
+
+Sponsor account có thể xem:
+
+Inquiry
+
+Proposal
+
+Contract scope
+
+Entitlements
+
+Deliverable status
+
+Evidence
+
+Reports
+
+Requests for sponsor action.
+
+Không xem:
+other sponsors
+Buyer CRM
+Finance internal margin.
+
+==================================================
+51. CTA FROM PROGRAM
+==================================================
+
+Nếu user bấm:
+
+“TÔI MUỐN TÀI TRỢ”
+
+từ:
+
+/chuong-trinh/[slug]
+
+route:
+
+/tai-tro?programId={id}
+
+Prefill:
+
+sponsorshipType = PROGRAM
+
+programId.
+
+==================================================
+52. CTA FROM CATALOGUE
+==================================================
+
+Nếu bấm Sponsor từ Catalogue:
+
+/tai-tro
+?catalogueId={id}
+&editionId={editionId}
+&type=catalogue
+
+Prefill context.
+
+==================================================
+53. CTA FROM MEDIA
+==================================================
+
+Nếu từ Program Library:
+
+/tai-tro
+?programId={id}
+&type=media
+
+Không tạo new Program.
+
+==================================================
+54. CTA FROM FOUNDING PARTNER
+==================================================
+
+Không route Founding Partner inquiry vào generic Sponsor type
+nếu user đã chọn:
+
+Category/Keyword sponsorship.
+
+Giữ:
+
+/founding-partner
+
+và contract type riêng.
+
+==================================================
+55. SEO
+==================================================
+
+Title:
+
+Tài Trợ Chương Trình & Hoạt Động Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Đồng hành cùng chương trình kết nối, catalogue, nội dung, thư viện ảnh và vật phẩm doanh nghiệp với phạm vi, quyền lợi, thời hạn và báo cáo được thống nhất rõ.
+
+Canonical:
+
+/tai-tro
+
+==================================================
+56. PUBLIC CLAIMS
+==================================================
+
+Không public:
+
+Sponsor amount
+
+Contract value
+
+Internal commission
+
+Private benefits
+
+Contact data
+
+Negotiation history.
+
+Public chỉ render:
+confirmed active relationship + allowed entitlements.
+
+==================================================
+57. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+Sponsorship type cards
+
+How it works
+
+Entitlement principle
+
+Program/Catalogue examples từ data thật
+
+CTA
+
+Không overflow 390px.
+
+==================================================
+58. ANALYTICS
+==================================================
+
+Track:
+
+sponsorship_page_view
+
+sponsorship_type_select
+
+program_sponsor_select
+
+catalogue_sponsor_select
+
+media_sponsor_select
+
+merchandise_sponsor_select
+
+founding_partner_redirect
+
+sponsorship_inquiry_start
+
+sponsorship_inquiry_submit
+
+proposal_sent
+
+contract_activated
+
+entitlement_delivered
+
+Không coi inquiry submit = sponsor signed.
+
+==================================================
+59. SECURITY
+==================================================
+
+Test:
+
+Cross-sponsor access
+
+Contract access
+
+Report access
+
+Finance permission
+
+Private Program data
+
+Buyer contact leakage
+
+Entitlement mutation permission
+
+Admin API RBAC.
+
+Backend enforce.
+
+==================================================
+60. QA
+==================================================
+
+Test tối thiểu:
+
+1. /tai-tro và /founding-partner tách đúng.
+2. Category sponsorship dẫn /founding-partner.
+3. Program CTA prefill Program.
+4. Catalogue CTA prefill Catalogue.
+5. Submit chỉ tạo Inquiry.
+6. Inquiry không auto Active.
+7. Sponsor Organization reuse Organization.
+8. Contract type tách đúng.
+9. Entitlement có quantity/time/owner/evidence/status.
+10. Expired placement tự dừng.
+11. Sponsor không ảnh hưởng SupplierMatching.
+12. Sponsor không nhận Buyer private data.
+13. Sponsored Catalogue placement có label.
+14. Program Sponsor không thành KCN/Association sponsor ngoài scope.
+15. Included right không bị charge lại.
+16. IN_KIND không ghi thành cash revenue.
+17. Reports tách scan/view/request/deal.
+18. Admin mutations có AuditLog.
+19. Mobile 390px hoạt động.
+
+==================================================
+61. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Sponsorship entity
+- Contract types
+- Entitlement implementation
+- Inquiry workflow
+- Program integration
+- Catalogue integration
+- Media integration
+- Merchandise integration
+- Founding Partner separation
+- Delivery/evidence tracking
+- Sponsor report
+- Finance separation
+- Account workspace
+- Admin implementation
+- RBAC/security
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+SPONSOR
+→ CHỌN HOẠT ĐỘNG
+→ GỬI ĐỀ XUẤT
+→ SCOPE
+→ PROPOSAL
+→ CONTRACT
+→ ACTIVE
+→ DELIVER ENTITLEMENTS
+→ EVIDENCE
+→ ACCEPTANCE
+→ REPORT
+→ COMPLETE / EXPIRE
+
+TÀI TRỢ
+KHÔNG ĐƯỢC BIẾN THÀNH:
+
+MUA MATCHING
+MUA BUYER DATA
+MUA GUARANTEED MEETING
+MUA VERIFIED BADGE.
+
+Mọi quyền lợi phải gắn với
+PHẠM VI + SỐ LƯỢNG + THỜI GIAN + BẰNG CHỨNG + NGHIỆM THU.

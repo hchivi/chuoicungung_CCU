@@ -1,46 +1,52 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   Search, Filter, MapPin, Building2, Heart, ChevronRight, 
   RotateCcw, ArrowRight, Layers, Sparkles, Table as TableIcon,
   LayoutGrid, Map as MapIcon, ChevronLeft, Factory, ExternalLink,
   ShieldCheck, CheckCircle2, TrendingUp, Compass, Award, Check,
-  Plane, Anchor, Download, Navigation, Truck, HardHat, Shirt
+  Plane, Anchor, Download, Navigation, Truck, HardHat, Shirt,
+  Target, Rocket, Handshake, BookOpen, AlertCircle
 } from 'lucide-react';
-import fullKcnFallback from '../data/industrialParksFull.json';
+import { useLanguage } from '../contexts/LanguageContext';
+import { 
+  getAllIndustrialParks, 
+  getIndustrialParksListing,
+  getProgramsForKcn
+} from '../data/industrialParksData';
+import { getAllPrograms } from '../data/programsData';
 import InteractiveVietnamMap from '../components/InteractiveVietnamMap';
 import KcnGisMap from '../components/kcn/KcnGisMap';
-import { vietnamMapRegions } from '../data/mockData';
-import { useLanguage } from '../contexts/LanguageContext';
-import { calculateKcnLogistics } from '../utils/kcnLogisticsUtils';
 import KcnCard from '../components/kcn/KcnCard';
 import KcnAdvancedLandFilter from '../components/kcn/KcnAdvancedLandFilter';
 import KcnCrossSellBanner from '../components/kcn/KcnCrossSellBanner';
-import KcnSiteVisitModal from '../components/kcn/KcnSiteVisitModal';
-import KcnBrochureModal from '../components/kcn/KcnBrochureModal';
 
 export default function IndustrialParksPage() {
   const { t, lang } = useLanguage();
-  const [kcnList, setKcnList] = useState(fullKcnFallback);
-  const [loading, setLoading] = useState(false);
-  
-  // Filter States
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSegment, setSelectedSegment] = useState('all');
-  const [selectedAreaRange, setSelectedAreaRange] = useState('all');
-  const [selectedIndustry, setSelectedIndustry] = useState('all');
-  const [selectedProvince, setSelectedProvince] = useState('all');
-  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Master KCN List from data engine
+  const allKcns = useMemo(() => getAllIndustrialParks(), []);
+
+  // Filter States (Section 6, 7)
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('q') || '');
+  const [selectedProvince, setSelectedProvince] = useState(searchParams.get('province') || 'all');
+  const [selectedRegion, setSelectedRegion] = useState(searchParams.get('region') || 'all');
+  const [selectedIndustry, setSelectedIndustry] = useState(searchParams.get('industry') || 'all');
+  const [quickFilters, setQuickFilters] = useState({
+    hasPublicFactories: false,
+    hasPublicRequirements: false,
+    hasActivePrograms: false,
+    hasSupplierCoverage: false,
+    hasCatalogue: false
+  });
+
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'table'
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(16);
-  const [sortBy, setSortBy] = useState('stt-asc');
+  const [sortBy, setSortBy] = useState('ecosystem'); // 'ecosystem' | 'name-asc' | 'factories-desc'
 
-  // Modal States
-  const [siteVisitModalData, setSiteVisitModalData] = useState({ isOpen: false, kcn: null, logistics: null });
-  const [brochureModalData, setBrochureModalData] = useState({ isOpen: false, kcn: null, logistics: null });
-
-  // Map Interactive States
+  // Map Interactive States (Section 23)
   const [mapActiveSelection, setMapActiveSelection] = useState({ type: 'region', name: 'Toàn quốc' });
   const [mapFlyToTarget, setMapFlyToTarget] = useState(null);
 
@@ -51,7 +57,7 @@ export default function IndustrialParksPage() {
       kcn: 480,
       factories: 14237,
       pct: "100%",
-      desc: "Toàn cảnh mạng lưới hạ tầng và quỹ đất công nghiệp trên 34 tỉnh/thành phố Việt Nam."
+      desc: "Toàn cảnh mạng lưới 480+ khu công nghiệp và hệ sinh thái doanh nghiệp tại 63 tỉnh/thành phố."
     },
     {
       name: "Vùng Kinh Tế Trọng Điểm Phía Bắc",
@@ -59,7 +65,7 @@ export default function IndustrialParksPage() {
       kcn: 185,
       factories: 5890,
       pct: "38.5%",
-      desc: "Hà Nội, Bắc Ninh, Hải Phòng, Quảng Ninh, Bắc Giang... Kết nối Sân bay Nội Bài & Cảng nước sâu Lạch Huyện."
+      desc: "Hà Nội, Bắc Ninh, Hải Phòng, Quảng Ninh, Bắc Giang... Trọng điểm bán dẫn, điện tử và công nghệ cao."
     },
     {
       name: "Vùng Kinh Tế Trọng Điểm Miền Trung",
@@ -67,7 +73,7 @@ export default function IndustrialParksPage() {
       kcn: 65,
       factories: 1420,
       pct: "13.5%",
-      desc: "Đà Nẵng, Quảng Nam, Quảng Ngãi (Dung Quất), Bình Định... Kết nối Cảng Tiên Sa & Sân bay Đà Nẵng."
+      desc: "Đà Nẵng, Quảng Nam (Chu Lai), Quảng Ngãi (Dung Quất)... Trung tâm cơ khí, ô tô và logistics."
     },
     {
       name: "Vùng Kinh Tế Trọng Điểm Phía Nam & ĐBSCL",
@@ -75,41 +81,14 @@ export default function IndustrialParksPage() {
       kcn: 230,
       factories: 6927,
       pct: "48.0%",
-      desc: "TP.HCM, Bình Dương, Đồng Nai, Bà Rịa - Vũng Tàu, Long An... Kết nối Cụm Cảng Cái Mép & Sân bay Long Thành."
+      desc: "TP.HCM, Bình Dương, Đồng Nai, Bà Rịa - Vũng Tàu, Long An... Cụm công nghiệp chế tạo lớn nhất cả nước."
     }
   ];
 
-  const handleMapSelectRegion = (regItem) => {
-    setMapActiveSelection({ type: 'region', name: regItem.name });
-    const targetName = regItem.filterRegion || 'Toàn quốc';
-    setMapFlyToTarget({ type: 'region', name: targetName, timestamp: Date.now() });
-  };
-
-  // Fetch from API fallback
-  useEffect(() => {
-    async function loadData() {
-      try {
-        setLoading(true);
-        const res = await fetch('/api/industrial-parks?limit=all');
-        if (res.ok) {
-          const json = await res.json();
-          if (json.data && json.data.length > 0) {
-            setKcnList(json.data);
-          }
-        }
-      } catch (err) {
-        console.warn('Dùng dữ liệu cục bộ 480 KCN:', err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadData();
-  }, []);
-
-  // Extract unique provinces
+  // Extract unique provinces with counts
   const provinceList = useMemo(() => {
     const counts = {};
-    kcnList.forEach(k => {
+    allKcns.forEach(k => {
       if (k.province) {
         counts[k.province] = (counts[k.province] || 0) + 1;
       }
@@ -118,141 +97,131 @@ export default function IndustrialParksPage() {
       name: p,
       count: counts[p]
     }));
-  }, [kcnList]);
+  }, [allKcns]);
 
-  // Total factories count
-  const totalFactoriesCount = useMemo(() => {
-    return kcnList.reduce((acc, k) => acc + (k.totalFactories || (k.factories ? k.factories.length : 0)), 0);
-  }, [kcnList]);
-
-  // Text normalizer for accent-insensitive search
-  const removeAccents = (str) => {
-    if (!str) return '';
-    return str
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[đĐ]/g, 'd')
-      .toLowerCase();
-  };
-
-  // Advanced B2B Land Multi-Criteria Filtering Engine
-  const filteredKCN = useMemo(() => {
-    const rawQ = searchTerm.trim();
-    const qClean = removeAccents(rawQ);
-
-    const result = kcnList.filter(kcn => {
-      const nameClean = removeAccents(kcn.name);
-      const provClean = removeAccents(kcn.province);
-      const locClean = removeAccents(kcn.location);
-
-      const matchesSearch = !qClean || nameClean.includes(qClean) || provClean.includes(qClean) || locClean.includes(qClean);
-      const matchesProvince = selectedProvince === 'all' || (kcn.province && kcn.province.toLowerCase() === selectedProvince.toLowerCase());
-      const matchesRegion = selectedRegion === 'all' || kcn.region === selectedRegion;
-
-      // Calculate logistics & land metrics for precise filtering
-      const logistics = calculateKcnLogistics(kcn);
-
-      // Segment filter
-      let matchesSegment = true;
-      if (selectedSegment === 'eco') {
-        matchesSegment = logistics.segment.includes('Sinh Thái');
-      } else if (selectedSegment === 'hitech') {
-        matchesSegment = logistics.segment.includes('Công Nghệ Cao');
-      } else if (selectedSegment === 'multi') {
-        matchesSegment = logistics.segment.includes('Đa Ngành');
-      } else if (selectedSegment === 'ccn') {
-        matchesSegment = logistics.segment.includes('Cụm Công Nghiệp');
-      }
-
-      // Ready land area filter
-      let matchesArea = true;
-      if (selectedAreaRange === '1-5') {
-        matchesArea = logistics.readyLandHa >= 1 && logistics.readyLandHa <= 5;
-      } else if (selectedAreaRange === '5-15') {
-        matchesArea = logistics.readyLandHa > 5 && logistics.readyLandHa <= 15;
-      } else if (selectedAreaRange === '15+') {
-        matchesArea = logistics.readyLandHa > 15;
-      }
-
-      // Industry filter
-      let matchesInd = true;
-      if (selectedIndustry !== 'all') {
-        const indMap = {
-          semiconductor: 'Bán dẫn',
-          mechanics: 'Cơ khí',
-          garment: 'Dệt may',
-          packaging: 'Bao bì',
-          food: 'Thực phẩm',
-          pharma: 'Dược phẩm',
-          logistics: 'Logistics'
-        };
-        const targetKeyword = indMap[selectedIndustry] || '';
-        matchesInd = logistics.priorityIndustries.some(i => i.toLowerCase().includes(targetKeyword.toLowerCase()));
-      }
-
-      return matchesSearch && matchesProvince && matchesRegion && matchesSegment && matchesArea && matchesInd;
+  // Query results from master IndustrialParks data engine (Section 6, 7, 26)
+  const listingResult = useMemo(() => {
+    return getIndustrialParksListing({
+      query: searchTerm,
+      province: selectedProvince,
+      region: selectedRegion,
+      industry: selectedIndustry,
+      hasPublicFactories: quickFilters.hasPublicFactories,
+      hasPublicRequirements: quickFilters.hasPublicRequirements,
+      hasActivePrograms: quickFilters.hasActivePrograms,
+      hasSupplierCoverage: quickFilters.hasSupplierCoverage,
+      hasCatalogue: quickFilters.hasCatalogue,
+      page: currentPage,
+      pageSize,
+      sortBy
     });
+  }, [searchTerm, selectedProvince, selectedRegion, selectedIndustry, quickFilters, currentPage, pageSize, sortBy]);
 
-    // Sorting
-    if (rawQ) {
-      result.sort((a, b) => {
-        const aClean = removeAccents(a.name);
-        const bClean = removeAccents(b.name);
-        const aExact = aClean.includes(qClean) ? 1 : 0;
-        const bExact = bClean.includes(qClean) ? 1 : 0;
-        if (aExact !== bExact) return bExact - aExact;
-        return (a.stt || 0) - (b.stt || 0);
-      });
-    } else {
-      if (sortBy === 'stt-asc') {
-        result.sort((a, b) => (a.stt || 0) - (b.stt || 0));
-      } else if (sortBy === 'name-asc') {
-        result.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
-      }
-    }
-
-    return result;
-  }, [kcnList, searchTerm, selectedProvince, selectedRegion, selectedSegment, selectedAreaRange, selectedIndustry, sortBy]);
-
-  // Pagination calculation
-  const totalPages = Math.ceil(filteredKCN.length / pageSize) || 1;
-  const paginatedKCN = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredKCN.slice(start, start + pageSize);
-  }, [filteredKCN, currentPage, pageSize]);
-
-  // Reset page when filters change
+  // Reset pagination on filter change
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, selectedProvince, selectedRegion, selectedSegment, selectedAreaRange, selectedIndustry]);
+  }, [searchTerm, selectedProvince, selectedRegion, selectedIndustry, quickFilters]);
+
+  // Featured Programs at KCNs (Section 16 & 17)
+  const featuredKcnPrograms = useMemo(() => {
+    const allProgs = getAllPrograms();
+    return allProgs.filter(p => p.industrialParkId || (p.location && p.location.includes('KCN'))).slice(0, 6);
+  }, []);
+
+  // SEO & Structured Data (Section 39, 40)
+  useEffect(() => {
+    document.title = 'Danh bạ khu công nghiệp | CHUOICUNGUNG.COM';
+
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = 'Khám phá khu công nghiệp theo địa bàn, nhà máy, nhóm ngành, nhu cầu, nhà cung ứng phục vụ khu vực và chương trình kết nối doanh nghiệp.';
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = 'https://chuoicungung.com/khu-cong-nghiep';
+
+    // Structured Data JSON-LD (Section 40)
+    const schemaScript = document.createElement('script');
+    schemaScript.type = 'application/ld+json';
+    schemaScript.id = 'kcn-listing-structured-data';
+    schemaScript.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          '@id': 'https://chuoicungung.com/khu-cong-nghiep#collection',
+          'name': 'Khu Công Nghiệp & Hệ Sinh Thái Doanh Nghiệp',
+          'url': 'https://chuoicungung.com/khu-cong-nghiep',
+          'description': 'Khám phá khu công nghiệp theo địa bàn, nhà máy, nhóm ngành, nhu cầu, nhà cung ứng phục vụ khu vực và chương trình kết nối doanh nghiệp.'
+        },
+        {
+          '@type': 'BreadcrumbList',
+          'itemListElement': [
+            {
+              '@type': 'ListItem',
+              'position': 1,
+              'name': 'Trang chủ',
+              'item': 'https://chuoicungung.com'
+            },
+            {
+              '@type': 'ListItem',
+              'position': 2,
+              'name': 'Khu công nghiệp & Địa bàn',
+              'item': 'https://chuoicungung.com/khu-cong-nghiep'
+            }
+          ]
+        }
+      ]
+    });
+
+    const oldSchema = document.getElementById('kcn-listing-structured-data');
+    if (oldSchema) oldSchema.remove();
+    document.head.appendChild(schemaScript);
+
+    return () => {
+      const toRemove = document.getElementById('kcn-listing-structured-data');
+      if (toRemove) toRemove.remove();
+    };
+  }, []);
 
   const handleResetFilters = () => {
     setSearchTerm('');
-    setSelectedSegment('all');
-    setSelectedAreaRange('all');
-    setSelectedIndustry('all');
     setSelectedProvince('all');
     setSelectedRegion('all');
+    setSelectedIndustry('all');
+    setQuickFilters({
+      hasPublicFactories: false,
+      hasPublicRequirements: false,
+      hasActivePrograms: false,
+      hasSupplierCoverage: false,
+      hasCatalogue: false
+    });
     setCurrentPage(1);
   };
 
-  const handleOpenSiteVisit = (kcn, logistics) => {
-    setSiteVisitModalData({ isOpen: true, kcn, logistics });
-  };
-
-  const handleOpenBrochure = (kcn, logistics) => {
-    setBrochureModalData({ isOpen: true, kcn, logistics });
+  const handleMapSelectRegion = (regItem) => {
+    setMapActiveSelection({ type: 'region', name: regItem.name });
+    const targetName = regItem.filterRegion || 'Toàn quốc';
+    setMapFlyToTarget({ type: 'region', name: targetName, timestamp: Date.now() });
   };
 
   return (
-    <div className="space-y-10 pb-20 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
+    <main className="space-y-10 pb-24 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
-      {/* 1. HERO DASHBOARD (Trung tâm Chỉ huy Vĩ mô - The Billion-Dollar Gateway)  */}
+      {/* 1. HERO SECTION (SECTION 5 SPEC 26.TXT)                                   */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[520px] flex items-center">
         
-        {/* Right Half Modern Industrial & Port Flycam Video with Smooth Gradient Blend */}
+        {/* Right Half Modern Industrial Video */}
         <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
           <video 
             autoPlay 
@@ -269,7 +238,7 @@ export default function IndustrialParksPage() {
             <source src="/images/industrial_drone_flycam_480p.webm" type="video/webm" />
             <img 
               src="/images/industrial_park_hero.jpg" 
-              alt="Vietnam Modern Eco Industrial Parks GIS Map Flycam"
+              alt="Tìm khu công nghiệp phù hợp"
               className="w-full h-full object-cover object-center scale-105"
             />
           </video>
@@ -277,58 +246,55 @@ export default function IndustrialParksPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
         </div>
 
-        {/* Top Content */}
+        {/* Hero Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
           <div className="max-w-3xl space-y-5 sm:space-y-6">
             
-            {/* Breadcrumb as per Doc Requirements */}
+            {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
               <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
                 <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <span className="text-[#0052cc] font-bold">
-                {lang === 'en' ? 'Vietnam Industrial Parks & Zones Map' : 'Bản Đồ Khu Công Nghiệp & Cụm Công Nghiệp'}
+                Khu Công Nghiệp &amp; Hệ Sinh Thái Doanh Nghiệp
               </span>
             </nav>
 
-            {/* High-Tech Authority Tagline */}
+            {/* Authority Badge */}
             <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
               <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
-              <span>CỔNG THÔNG TIN ĐỊA LÝ GIS & DỮ LIỆU ĐẦU TƯ VĨ MÔ QUỐC GIA</span>
+              <span>ĐIỂM ĐIỀU PHỐI HỆ SINH THÁI DOANH NGHIỆP THEO ĐỊA BÀN KCN</span>
             </div>
 
-            {/* Headline as per Doc */}
+            {/* H1 Title */}
             <div className="space-y-1.5">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                Mạng Lưới Quỹ Đất &amp;
+                Tìm khu công nghiệp phù hợp
               </h1>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
-                Hạ Tầng Công Nghiệp Việt Nam
-              </h2>
             </div>
 
-            {/* Subtitle */}
+            {/* Subtitle (Section 5) */}
             <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-2xl">
-              Cửa ngõ kết nối dòng vốn FDI với 480+ Khu công nghiệp, cụm công nghiệp sinh thái và toàn bộ hạ tầng logistics cảng biển, sân bay quốc tế. Tích hợp trực tiếp chuỗi cung ứng 18 Pha triển khai nhà máy.
+              Khám phá nhà máy, nhu cầu, nguồn cung và chương trình kết nối theo từng khu công nghiệp và địa bàn. Chương trình và dịch vụ hỗ trợ doanh nghiệp theo địa bàn.
             </p>
 
-            {/* Action Buttons */}
+            {/* CTAs */}
             <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <a
                 href="#danh-sach-kcn"
                 className="px-6 py-3 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <span>Khám Phá 480 KCN Quy Hoạch</span>
+                <span>LỌC KCN</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <a
-                href="#ban-do-kcn-section"
-                className="px-6 py-3 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading cursor-pointer"
+                href="#ban-do-kcn"
+                className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading cursor-pointer"
               >
-                <MapIcon className="w-3.5 h-3.5 text-[#0052cc]" />
-                <span>Bản Đồ GIS 3 Vùng Trọng Điểm</span>
+                <Compass className="w-4 h-4 text-[#0052cc]" />
+                <span>XEM BẢN ĐỒ</span>
               </a>
             </div>
 
@@ -337,56 +303,59 @@ export default function IndustrialParksPage() {
 
       </section>
 
+          </div>
+        </div>
+
+      </section>
+
       {/* ========================================================================= */}
-      {/* 2. REALTIME MACRO METRIC DASHBOARD (Đặt CHÍNH GIỮA LINE ở trên)          */}
+      {/* 2. ECOSYSTEM MACRO METRIC BANNER (Section 8, 9 - Không số liệu BĐS)       */}
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20">
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
-            {/* Metric 1 */}
+            {/* Metric 1: KCN */}
             <div className="flex items-center space-x-3.5 p-1 sm:p-0">
               <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
                 <Building2 className="w-5 h-5" />
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">480+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tổng KCN &amp; CCN Quy Hoạch</p>
+                <p className="text-[11px] text-slate-500 font-medium">Khu Công Nghiệp &amp; Cụm CN</p>
               </div>
             </div>
 
-            {/* Metric 2 */}
+            {/* Metric 2: Nhà máy FDI & Sản xuất */}
             <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
               <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Layers className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">132.500+ Ha</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tổng Quỹ Đất Sẵn Sàng</p>
-              </div>
-            </div>
-
-            {/* Metric 3 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">85.4%</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tỷ Lệ Lấp Đầy Trung Bình</p>
-              </div>
-            </div>
-
-            {/* Metric 4 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
                 <Factory className="w-5 h-5" />
               </div>
               <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
-                  {totalFactoriesCount ? totalFactoriesCount.toLocaleString('vi-VN') : '14.237+'}
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">Nhà Máy FDI Đang Vận Hành</p>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">14.237+</div>
+                <p className="text-[11px] text-slate-500 font-medium">Nhà Máy Hoạt Động Xác Thực</p>
+              </div>
+            </div>
+
+            {/* Metric 3: Nhu cầu mở */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Target className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">100+</div>
+                <p className="text-[11px] text-slate-500 font-medium">Nhu Cầu Mua Hàng &amp; Bài Toán KCN</p>
+              </div>
+            </div>
+
+            {/* Metric 4: Chương trình kết nối */}
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Rocket className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">11+</div>
+                <p className="text-[11px] text-slate-500 font-medium">Chương Trình Kết Nối Địa Bàn</p>
               </div>
             </div>
 
@@ -395,82 +364,87 @@ export default function IndustrialParksPage() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 3. MAIN WORKSPACE: STICKY ADVANCED LAND FILTER & KCN LISTING              */}
+      {/* 3. MAIN WORKSPACE: SEARCH, MULTI-FACET FILTER & KCN LISTING              */}
       {/* ========================================================================= */}
       <div id="danh-sach-kcn" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
-        {/* Sticky Advanced Land Filter Bar */}
+        {/* Sticky Ecosystem Filter Bar (Section 6, 7) */}
         <KcnAdvancedLandFilter
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          selectedSegment={selectedSegment}
-          setSelectedSegment={setSelectedSegment}
-          selectedIndustry={selectedIndustry}
-          setSelectedIndustry={setSelectedIndustry}
           selectedProvince={selectedProvince}
           setSelectedProvince={setSelectedProvince}
           provinceList={provinceList}
-          totalResults={filteredKCN.length}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+          selectedIndustry={selectedIndustry}
+          setSelectedIndustry={setSelectedIndustry}
+          quickFilters={quickFilters}
+          setQuickFilters={setQuickFilters}
+          totalResults={listingResult.total}
           viewMode={viewMode}
           setViewMode={setViewMode}
           onResetFilters={handleResetFilters}
         />
 
-        {/* VIEW 1: B2B GRID CARDS VIEW (16:9 Visuals with Logistics Radar) */}
+        {/* VIEW 1: B2B GRID CARDS VIEW (Section 8 & 9) */}
         {viewMode === 'grid' && (
           <div className="space-y-8">
             
-            {filteredKCN.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-3">
-                <Building2 className="w-12 h-12 text-slate-300 mx-auto" />
-                <h3 className="text-base font-bold text-slate-800 font-heading">
-                  Không tìm thấy khu công nghiệp phù hợp với tiêu chí lọc.
-                </h3>
-                <p className="text-xs text-slate-500 max-w-md mx-auto">
-                  Vui lòng thử thay đổi khoảng diện tích, phân khúc hoặc bấm đặt lại để xem toàn bộ 480 KCN.
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="px-4 py-2 bg-blue-50 text-[#0052cc] rounded-xl text-xs font-bold font-heading uppercase hover:bg-blue-100 transition cursor-pointer"
-                >
-                  Đặt lại bộ lọc
-                </button>
+            {listingResult.total === 0 ? (
+              /* Empty State (Section 41) */
+              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-4">
+                <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto">
+                  <AlertCircle className="w-8 h-8" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base sm:text-lg font-bold text-slate-800 font-heading">
+                    Chưa tìm thấy khu công nghiệp phù hợp với bộ lọc này.
+                  </h3>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto">
+                    Vui lòng thử mở rộng tìm kiếm theo tỉnh/thành lân cận hoặc bấm đặt lại bộ lọc.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
+                  <button
+                    onClick={handleResetFilters}
+                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition cursor-pointer"
+                  >
+                    XÓA BỘ LỌC
+                  </button>
+                  <Link
+                    to="/dang-nhu-cau"
+                    className="px-4 py-2 bg-[#0052cc] hover:bg-[#003d8f] text-white rounded-xl text-xs font-bold transition shadow-md"
+                  >
+                    GỬI NHU CẦU DOANH NGHIỆP
+                  </Link>
+                  <Link
+                    to="/dich-vu/to-chuc-ket-noi?source=industrial-park"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition"
+                  >
+                    ĐỀ XUẤT CHƯƠNG TRÌNH
+                  </Link>
+                </div>
               </div>
             ) : (
               <>
-                {/* First 8 Cards */}
+                {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {paginatedKCN.slice(0, 8).map((kcn) => (
+                  {listingResult.data.map((kcn) => (
                     <KcnCard
                       key={kcn.id}
                       kcn={kcn}
-                      onOpenSiteVisit={handleOpenSiteVisit}
-                      onOpenBrochure={handleOpenBrochure}
                     />
                   ))}
                 </div>
 
-                {/* 18-Phase Ecosystem Cross-Sell Banner Inserted Between Rows */}
+                {/* 18-Phase Ecosystem Cross-Sell Banner */}
                 <KcnCrossSellBanner />
-
-                {/* Remaining Cards on Current Page */}
-                {paginatedKCN.length > 8 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                    {paginatedKCN.slice(8).map((kcn) => (
-                      <KcnCard
-                        key={kcn.id}
-                        kcn={kcn}
-                        onOpenSiteVisit={handleOpenSiteVisit}
-                        onOpenBrochure={handleOpenBrochure}
-                      />
-                    ))}
-                  </div>
-                )}
               </>
             )}
 
             {/* Grid Pagination */}
-            {totalPages > 1 && (
+            {listingResult.totalPages > 1 && (
               <div className="flex justify-center items-center space-x-1 font-mono pt-4">
                 <button
                   disabled={currentPage === 1}
@@ -483,8 +457,8 @@ export default function IndustrialParksPage() {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter(page => page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2))
+                {Array.from({ length: listingResult.totalPages }, (_, i) => i + 1)
+                  .filter(page => page === 1 || page === listingResult.totalPages || (page >= currentPage - 2 && page <= currentPage + 2))
                   .map((page, idx, arr) => {
                     const showEllipsis = idx > 0 && page - arr[idx - 1] > 1;
                     return (
@@ -508,9 +482,9 @@ export default function IndustrialParksPage() {
                   })}
 
                 <button
-                  disabled={currentPage === totalPages}
+                  disabled={currentPage === listingResult.totalPages}
                   onClick={() => {
-                    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+                    setCurrentPage(prev => Math.min(listingResult.totalPages, prev + 1));
                     window.scrollTo({ top: 400, behavior: 'smooth' });
                   }}
                   className="p-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
@@ -523,7 +497,7 @@ export default function IndustrialParksPage() {
           </div>
         )}
 
-        {/* VIEW 2: TABLE VIEW (Standard Full Master Table) */}
+        {/* VIEW 2: TABLE VIEW (Section 8 Master Table) */}
         {viewMode === 'table' && (
           <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm space-y-0">
             <div className="overflow-x-auto">
@@ -531,30 +505,30 @@ export default function IndustrialParksPage() {
                 <thead>
                   <tr className="bg-slate-100/80 text-slate-700 font-extrabold uppercase font-heading border-b border-slate-200 text-[11px] tracking-wider whitespace-nowrap">
                     <th className="py-3.5 px-3 w-14 text-center font-mono shrink-0">STT</th>
-                    <th className="py-3.5 px-5 min-w-[200px]">TÊN KHU CÔNG NGHIỆP</th>
+                    <th className="py-3.5 px-5 min-w-[220px]">TÊN KHU CÔNG NGHIỆP</th>
                     <th className="py-3.5 px-4 min-w-[130px]">TỈNH THÀNH</th>
-                    <th className="py-3.5 px-4 min-w-[160px]">LOGISTICS CẢNG / SÂN BAY</th>
-                    <th className="py-3.5 px-4 text-center min-w-[120px]">SỐ NHÀ MÁY</th>
+                    <th className="py-3.5 px-4 text-center min-w-[110px]">NHÀ MÁY</th>
+                    <th className="py-3.5 px-4 text-center min-w-[120px]">NHU CẦU MỞ</th>
+                    <th className="py-3.5 px-4 min-w-[160px]">CHƯƠNG TRÌNH KCN</th>
                     <th className="py-3.5 px-4 text-right min-w-[160px] shrink-0">HÀNH ĐỘNG</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                  {paginatedKCN.length === 0 ? (
+                  {listingResult.total === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-12 text-center text-slate-400">
-                        Không tìm thấy khu công nghiệp nào phù hợp với bộ lọc.
+                      <td colSpan={7} className="py-12 text-center text-slate-400">
+                        Chưa tìm thấy khu công nghiệp phù hợp với bộ lọc này.
                       </td>
                     </tr>
                   ) : (
-                    paginatedKCN.map((kcn, idx) => {
-                      const logistics = calculateKcnLogistics(kcn);
+                    listingResult.data.map((kcn, idx) => {
                       return (
                         <tr 
                           key={kcn.id || idx}
                           className="hover:bg-blue-50/40 transition group cursor-pointer"
                         >
                           <td className="py-3.5 px-3 text-center font-mono font-bold text-slate-500 whitespace-nowrap">
-                            {kcn.stt || (currentPage - 1) * pageSize + idx + 1}
+                            {(currentPage - 1) * pageSize + idx + 1}
                           </td>
                           <td className="py-3.5 px-5">
                             <Link 
@@ -564,8 +538,8 @@ export default function IndustrialParksPage() {
                               <span>{kcn.name}</span>
                               <ChevronRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition text-[#0052cc] shrink-0" />
                             </Link>
-                            <span className="text-[10px] text-slate-400 block mt-0.5 font-medium">
-                              {logistics.segment}
+                            <span className="text-[10px] text-slate-400 block mt-0.5 font-medium truncate">
+                              {(kcn.primaryIndustries || []).slice(0, 3).join(' • ')}
                             </span>
                           </td>
                           <td className="py-3.5 px-4 whitespace-nowrap">
@@ -574,26 +548,42 @@ export default function IndustrialParksPage() {
                               <span>{kcn.province}</span>
                             </span>
                           </td>
-                          <td className="py-3.5 px-4 whitespace-nowrap font-mono text-[11px] text-slate-600">
-                            <div>✈️ {logistics.airport.code} ({logistics.airport.distanceKm}km)</div>
-                            <div>🚢 Cảng ({logistics.seaport.distanceKm}km)</div>
-                          </td>
                           <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-800 text-[11px] font-mono font-bold border border-slate-200 whitespace-nowrap">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-800 text-[11px] font-mono font-bold border border-slate-200">
                               <Factory className="w-3 h-3 mr-1 text-slate-500 shrink-0" />
-                              <span>{kcn.totalFactories || (kcn.factories ? kcn.factories.length : 0)} NM</span>
+                              <span>{kcn.publicFactoriesCount} NM</span>
                             </span>
                           </td>
+                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
+                              kcn.publicNeedsCount > 0 
+                                ? 'bg-amber-100 text-amber-900 border border-amber-300' 
+                                : 'bg-slate-100 text-slate-500'
+                            }`}>
+                              <Target className="w-3 h-3 mr-1 text-amber-600 shrink-0" />
+                              <span>{kcn.publicNeedsCount} Nhu cầu</span>
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 whitespace-nowrap text-xs">
+                            {kcn.programsCount > 0 ? (
+                              <span className="px-2 py-0.5 bg-emerald-50 text-emerald-800 font-bold rounded border border-emerald-200 text-[10.5px] flex items-center space-x-1 w-fit">
+                                <Rocket className="w-3 h-3 text-emerald-600" />
+                                <span>{kcn.programsCount} Chương trình</span>
+                              </span>
+                            ) : (
+                              <span className="text-slate-400 text-[11px]">Đang mở sourcing</span>
+                            )}
+                          </td>
                           <td className="py-3.5 px-4 text-right whitespace-nowrap shrink-0 space-x-1.5">
-                            <button
-                              onClick={() => handleOpenSiteVisit(kcn, logistics)}
-                              className="px-2.5 py-1 bg-gradient-to-r from-[#003d8f] to-[#0052cc] text-white rounded-lg text-xs font-bold transition font-heading uppercase cursor-pointer"
+                            <Link
+                              to={`/dang-nhu-cau?industrialParkId=${kcn.id}`}
+                              className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition font-heading inline-block cursor-pointer"
                             >
-                              Thực địa
-                            </button>
+                              Gửi nhu cầu
+                            </Link>
                             <Link
                               to={`/khu-cong-nghiep/${kcn.id}`}
-                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition font-heading uppercase inline-block cursor-pointer"
+                              className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition font-heading inline-block cursor-pointer"
                             >
                               Chi tiết
                             </Link>
@@ -610,8 +600,8 @@ export default function IndustrialParksPage() {
             <div className="p-4 bg-slate-50/70 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
               <div className="text-slate-500 font-medium">
                 Đang xem <strong className="text-slate-900">{(currentPage - 1) * pageSize + 1}</strong> đến{' '}
-                <strong className="text-slate-900">{Math.min(currentPage * pageSize, filteredKCN.length)}</strong> trong tổng số{' '}
-                <strong className="text-[#0052cc] font-bold">{filteredKCN.length}</strong> KCN
+                <strong className="text-slate-900">{Math.min(currentPage * pageSize, listingResult.total)}</strong> trong tổng số{' '}
+                <strong className="text-[#0052cc] font-bold">{listingResult.total}</strong> KCN
               </div>
 
               <div className="flex items-center space-x-1 font-mono">
@@ -623,8 +613,8 @@ export default function IndustrialParksPage() {
                   <ChevronLeft className="w-4 h-4" />
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1)
-                  .filter(page => page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2))
+                {Array.from({ length: listingResult.totalPages }, (_, i) => i + 1)
+                  .filter(page => page === 1 || page === listingResult.totalPages || (page >= currentPage - 2 && page <= currentPage + 2))
                   .map((page, idx, arr) => {
                     const showEllipsis = idx > 0 && page - arr[idx - 1] > 1;
                     return (
@@ -645,8 +635,8 @@ export default function IndustrialParksPage() {
                   })}
 
                 <button
-                  disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                  disabled={currentPage === listingResult.totalPages}
+                  onClick={() => setCurrentPage(prev => Math.min(listingResult.totalPages, prev + 1))}
                   className="p-2 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 disabled:opacity-40 cursor-pointer"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -659,9 +649,185 @@ export default function IndustrialParksPage() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. INTERACTIVE GIS MAP SECTION (3 VÙNG KINH TẾ TRỌNG ĐIỂM)                */}
+      {/* 4. SECTION 18: CHƯƠNG TRÌNH & DỊCH VỤ HỖ TRỢ THEO ĐỊA BÀN                */}
       {/* ========================================================================= */}
-      <section id="ban-do-kcn-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-10 border-t border-slate-200">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+          <div className="space-y-1">
+            <span className="px-2.5 py-0.5 bg-blue-50 text-[#0052cc] text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 18 • DỊCH VỤ HỆ SINH THÁI
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+              CHƯƠNG TRÌNH & DỊCH VỤ HỖ TRỢ DOANH NGHIỆP THEO ĐỊA BÀN
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Các gói giải pháp kết nối trực tiếp nguồn cung cấp địa phương với nhà máy FDI và ban quản lý KCN.
+            </p>
+          </div>
+
+          <Link
+            to="/dich-vu/to-chuc-ket-noi?source=industrial-park"
+            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1.5 shadow-md shrink-0 font-heading"
+          >
+            <Handshake className="w-4 h-4" />
+            <span>Đề xuất chương trình tại KCN</span>
+          </Link>
+        </div>
+
+        {/* 5 Blocks (Section 18) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          
+          {/* Service 1 */}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+              <Rocket className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
+              Ngày Hội Chuỗi Cung Ứng KCN
+            </h3>
+            <p className="text-[11.5px] text-slate-500 leading-relaxed">
+              Tổ chức phiên kết nối trực tiếp (Sourcing Day) theo cụm KCN trọng điểm nhằm thu hút NCC nội địa.
+            </p>
+          </div>
+
+          {/* Service 2 */}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <Handshake className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
+              Buyer–Supplier Matchmaking 1:1
+            </h3>
+            <p className="text-[11.5px] text-slate-500 leading-relaxed">
+              Ghép nối phiên làm việc riêng tư giữa phòng mua hàng nhà máy FDI với nhà cung ứng đạt chuẩn.
+            </p>
+          </div>
+
+          {/* Service 3 */}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+              <Target className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
+              Sourcing Theo Nhu Cầu Kỹ Thuật
+            </h3>
+            <p className="text-[11.5px] text-slate-500 leading-relaxed">
+              Định vị và thẩm định xưởng gia công cơ khí, bao bì, tự động hóa phục vụ trực tiếp cho nhà máy.
+            </p>
+          </div>
+
+          {/* Service 4 */}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
+              Kỷ Yếu Năng Lực &amp; Catalogue
+            </h3>
+            <p className="text-[11.5px] text-slate-500 leading-relaxed">
+              Xuất bản danh bạ năng lực nhà cung ứng công nghiệp phụ trợ theo từng phân khu và địa phương.
+            </p>
+          </div>
+
+          {/* Service 5 */}
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
+              <Building2 className="w-5 h-5" />
+            </div>
+            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
+              Liên Kết BQL &amp; Chủ Đầu Tư
+            </h3>
+            <p className="text-[11.5px] text-slate-500 leading-relaxed">
+              Phối hợp Ban Quản Lý Khu Kinh Tế / Ban Quản Lý KCN triển khai đề án gia tăng tỷ lệ nội địa hóa.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. SECTION 16: CHƯƠNG TRÌNH TẠI CÁC KHU VỰC CÔNG NGHIỆP                   */}
+      {/* ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
+          <div className="space-y-1">
+            <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-800 text-[10.5px] font-bold rounded-md font-mono">
+              SECTION 16 • LIÊN KẾT ĐỊA BÀN
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading">
+              CHƯƠNG TRÌNH TẠI CÁC KHU VỰC CÔNG NGHIỆP
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Các chương trình giao thương chuỗi cung ứng diễn ra thực địa tại các cụm KCN trọng điểm.
+            </p>
+          </div>
+
+          <Link
+            to="/chuong-trinh"
+            className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition flex items-center space-x-1.5 shadow-sm shrink-0 font-heading"
+          >
+            <span>Xem tất cả chương trình</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Programs Grid (Reuse Page 20 Layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {featuredKcnPrograms.map((prog) => (
+            <div
+              key={prog.id}
+              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md hover:border-blue-400 transition flex flex-col justify-between"
+            >
+              <div className="space-y-3">
+                <div className="relative aspect-video w-full overflow-hidden bg-slate-900">
+                  <img
+                    src={prog.coverImage || '/stage1_hero.jpg'}
+                    alt={prog.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute top-2.5 left-2.5">
+                    <span className="px-2.5 py-1 bg-slate-900/85 backdrop-blur-md text-amber-300 font-mono text-[10.5px] font-bold rounded-lg border border-amber-400/30">
+                      {prog.dates || 'Tháng 10/2026'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-2">
+                  <span className="px-2 py-0.5 bg-blue-50 text-[#0052cc] text-[10px] font-bold rounded font-mono">
+                    ĐỊA BÀN KCN LIÊN KẾT
+                  </span>
+                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2">
+                    {prog.title}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 flex items-center space-x-1 truncate">
+                    <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                    <span className="truncate">{prog.location}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 pt-2 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-[10.5px] font-semibold text-slate-500 truncate">
+                  {prog.organizerName || 'CHUOICUNGUNG.COM'}
+                </span>
+                <Link
+                  to={`/chuong-trinh/${prog.slug || prog.id}`}
+                  className="px-3.5 py-1.5 bg-[#0052cc] hover:bg-[#003d8f] text-white text-xs font-bold rounded-xl transition flex items-center space-x-1 shadow-2xs shrink-0"
+                >
+                  <span>Chi tiết</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 6. INTERACTIVE GIS MAP SECTION (Section 23 - Không làm blocker)           */}
+      {/* ========================================================================= */}
+      <section id="ban-do-kcn" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-6 border-t border-slate-200">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -676,7 +842,7 @@ export default function IndustrialParksPage() {
               Bản Đồ Quy Hoạch Vùng &amp; Quỹ Đất 3 Miền
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl">
-              Sa bàn địa lý tương tác phân chia 3 Vùng Kinh Tế Trọng Điểm (Bắc - Trung - Nam). Tự động tính toán cự ly đến Cảng biển nước sâu và Sân bay quốc tế.
+              Sa bàn địa lý tương tác phân chia 3 Vùng Kinh Tế Trọng Điểm (Bắc - Trung - Nam).
             </p>
           </div>
           
@@ -691,18 +857,18 @@ export default function IndustrialParksPage() {
           </div>
         </div>
 
-        {/* 2-Column Equal-Height Map Workspace */}
+        {/* 2-Column Map Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           
-          {/* Main GIS Leaflet Map with Floating Controls, Infrastructure Layers & Drawer */}
-          <div className="lg:col-span-8 xl:col-span-9 h-full min-h-[820px] rounded-3xl overflow-hidden shadow-2xl border border-slate-200">
+          {/* Main GIS Leaflet Map */}
+          <div className="lg:col-span-8 xl:col-span-9 h-full min-h-[750px] rounded-3xl overflow-hidden shadow-xl border border-slate-200">
             <KcnGisMap 
               height="100%" 
               externalFlyTo={mapFlyToTarget}
             />
           </div>
 
-          {/* Right Regional Analytics (4 cols on lg, 3 on xl) */}
+          {/* Right Regional Analytics */}
           <div className="lg:col-span-4 xl:col-span-3 space-y-5 text-xs">
             
             {/* THỐNG KÊ 3 VÙNG KINH TẾ TRỌNG ĐIỂM */}
@@ -715,7 +881,7 @@ export default function IndustrialParksPage() {
                   480 KCN
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Nhấp vào vùng để tự động phóng to (Zoom in) trên sa bàn:</p>
+              <p className="text-[11px] text-slate-400">Nhấp vào vùng để tự động phóng to trên sa bàn:</p>
               
               <div className="space-y-2">
                 {allRegionsMapList.map(reg => {
@@ -756,16 +922,16 @@ export default function IndustrialParksPage() {
             <div className="bg-gradient-to-br from-blue-900 to-indigo-950 text-white rounded-3xl p-5 shadow-sm space-y-3">
               <div className="flex items-center space-x-2 text-amber-300">
                 <Sparkles className="w-4 h-4" />
-                <h4 className="font-extrabold uppercase font-heading text-xs">Cổng Hỗ Trợ FDI 24/7</h4>
+                <h4 className="font-extrabold uppercase font-heading text-xs">Cổng Hỗ Trợ FDI &amp; KCN 24/7</h4>
               </div>
               <p className="text-[11px] text-blue-100 leading-relaxed">
-                Hỗ trợ trọn gói thủ tục thẩm định giấy phép IRC, ERC, ĐTM Môi Trường và PCCC theo tiêu chuẩn Nghị định 35/2022/NĐ-CP.
+                Hỗ trợ trọn gói kết nối nhà máy FDI, nhà thầu xây dựng công nghiệp và chuỗi cung ứng vật tư theo địa bàn.
               </p>
               <Link
                 to="/dang-nhu-cau"
                 className="block w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl text-center font-bold font-heading uppercase text-xs transition shadow-sm"
               >
-                Đăng Ký Khảo Sát Quỹ Đất
+                Gửi Nhu Cầu Tìm Nguồn Cung
               </Link>
             </div>
 
@@ -775,22 +941,40 @@ export default function IndustrialParksPage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 5. MODALS                                                                 */}
+      {/* 7. BOTTOM CTA SECTION (SECTION 19 & 20 SPEC 26.TXT)                      */}
       {/* ========================================================================= */}
-      <KcnSiteVisitModal
-        isOpen={siteVisitModalData.isOpen}
-        onClose={() => setSiteVisitModalData({ isOpen: false, kcn: null, logistics: null })}
-        kcn={siteVisitModalData.kcn}
-        logisticsInfo={siteVisitModalData.logistics}
-      />
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="bg-gradient-to-br from-slate-900 via-[#0B3558] to-slate-950 rounded-3xl p-6 sm:p-8 lg:p-10 text-white shadow-xl space-y-5 border border-slate-700 relative overflow-hidden">
+          <div className="relative z-10 max-w-3xl space-y-3">
+            <span className="px-2.5 py-0.5 bg-yellow-400 text-slate-950 text-[10px] font-black rounded-md font-mono uppercase tracking-wider">
+              KẾT NỐI HỆ SINH THÁI DOANH NGHIỆP KCN
+            </span>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-black font-heading">
+              Bạn là Nhà máy hoặc Đơn vị Quản lý / Vận hành KCN?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Gửi bài toán mua hàng của nhà máy, đề xuất tổ chức ngày hội kết nối chuỗi cung ứng hoặc đăng ký tham gia mạng lưới nhà cung ứng phục vụ KCN trên toàn quốc.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-2">
+              <Link
+                to="/dang-nhu-cau"
+                className="px-5 py-3 bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-md font-heading flex items-center space-x-1.5"
+              >
+                <Target className="w-4 h-4" />
+                <span>GỬI NHU CẦU MUA HÀNG</span>
+              </Link>
+              <Link
+                to="/dich-vu/to-chuc-ket-noi?source=industrial-park"
+                className="px-5 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md font-heading flex items-center space-x-1.5"
+              >
+                <Handshake className="w-4 h-4" />
+                <span>ĐỀ XUẤT CHƯƠNG TRÌNH TẠI KCN</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <KcnBrochureModal
-        isOpen={brochureModalData.isOpen}
-        onClose={() => setBrochureModalData({ isOpen: false, kcn: null, logistics: null })}
-        kcn={brochureModalData.kcn}
-        logisticsInfo={brochureModalData.logistics}
-      />
-
-    </div>
+    </main>
   );
 }

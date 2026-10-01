@@ -1,0 +1,1828 @@
+Page 03 là /dang-nhu-cau, nhưng từ page này tôi sẽ bắt đầu song song một phần rất quan trọng: ADMIN / BÀN ĐIỀU PHỐI.
+Lý do là từ lúc website bắt đầu nhận nhu cầu thật thì không thể chỉ làm frontend. Mỗi nhu cầu phải có người phụ trách, trạng thái, việc tiếp theo và lịch sử xử lý; tài liệu gốc cũng yêu cầu admin quản lý nhu cầu, matching, hồ sơ, chương trình, tài trợ, nội dung và tài chính.   Văn bản đã dán (2) Đồng thời một doanh nghiệp chỉ nên tồn tại dưới một organization, sau đó mang nhiều vai trò như buyer, supplier hoặc sponsor, thay vì bị tạo thành nhiều bản ghi công ty khác nhau.   Văn bản đã dán (2)
+PAGE 03 — ĐĂNG NHU CẦU
+1. Thông số page
+Hạng mục	Chốt triển khai
+Tên page	Đăng nhu cầu
+URL	/dang-nhu-cau
+Có draft	/dang-nhu-cau?draft={id}
+Ưu tiên	P0
+Người dùng chính	Nhà máy / người mua
+Người dùng phụ	Hội, KCN, tổ chức cần tìm nguồn
+Đăng nhập ban đầu	Không bắt buộc
+Đăng nhập bắt buộc	Trước khi xác nhận/lưu dài hạn/tìm nguồn
+Assistant	SUPPI
+Sau khi kết nối	CHAINY
+Mục tiêu	Conversation/Draft → Requirement chính thức
+Admin liên quan	/admin/nhu-cau
+
+
+Tài liệu đã xác định /dang-nhu-cau là một trong những page quan trọng nhất, không nên bắt buyer điền một form dài ngay từ đầu mà bắt đầu bằng mô tả tự nhiên rồi mới làm rõ số lượng, địa điểm, thời gian, tiêu chí và phạm vi chia sẻ.   Văn bản đã dán (2)
+2. PAGE 03 KHÔNG PHẢI FORM THÔNG THƯỜNG
+Luồng phải là:
+Người dùng
+↓
+Mô tả nhu cầu tự nhiên
+↓
+SUPPI đọc & chuẩn hóa
+↓
+Requirement Draft
+↓
+Làm rõ thông tin thiếu
+↓
+Người dùng kiểm tra
+↓
+Chọn quyền chia sẻ
+↓
+Đăng nhập nếu cần
+↓
+Xác nhận
+↓
+Tạo mã nhu cầu
+↓
+Admin tiếp nhận
+↓
+Tìm nguồn
+
+Không làm:
+30 ô input
+↓
+Submit
+↓
+"Cảm ơn"
+
+3. PAGE PHẢI HỖ TRỢ 2 CỬA VÀO
+Cửa 1 — Đi trực tiếp
+User vào:
+/dang-nhu-cau
+
+Page hỏi:
+BẠN ĐANG CẦN GÌ?
+SUPPI hỗ trợ từ đầu.
+Cửa 2 — Đi từ /tro-ly-ai
+User đã nói chuyện với SUPPI.
+Ví dụ đã có:
+500 bộ đồng phục công nhân
+Đồng Nai
+Tháng 10
+Cần xem mẫu
+
+Khi mở:
+/dang-nhu-cau?draft=abc123
+
+Form phải được điền sẵn.
+Không hỏi lại.
+4. UX DESKTOP
+Tôi đề nghị layout:
+┌─────────────────────────────────────────────────────────┐
+│ HEADER                                                  │
+├───────────────────────────────────┬─────────────────────┤
+│ FORM / REQUIREMENT                │ SUPPI               │
+│                                   │                     │
+│ 65–70%                            │ 30–35%              │
+│                                   │ Assistant Panel     │
+└───────────────────────────────────┴─────────────────────┘
+
+Bên trái:
+Nhu cầu
+Bên phải:
+SUPPI
+Mobile:
+SUPPI chuyển thành floating button / bottom sheet.
+5. HEADER PAGE
+Guest:
+← Trợ lý Chuỗi Cung Ứng
+
+ĐĂNG NHU CẦU
+
+                     Đăng nhập
+
+Đã login:
+← Trợ lý Chuỗi Cung Ứng
+
+ĐĂNG NHU CẦU
+
+                  🔔
+                  CÔNG TY ABC ▼
+
+6. HERO NHỎ
+Không cần hero marketing lớn.
+H1
+ĐĂNG NHU CẦU
+Sub
+Mô tả điều doanh nghiệp đang cần. SUPPI sẽ giúp làm rõ để tìm nhà cung ứng phù hợp hơn.
+Progress:
+1 Mô tả
+2 Làm rõ
+3 Liên hệ
+4 Chia sẻ
+5 Xác nhận
+
+7. BƯỚC 01 — MÔ TẢ NHU CẦU
+Headline:
+BẠN ĐANG CẦN GÌ?
+Dòng phụ:
+Hãy mô tả như cách bạn đang trao đổi với một nhà cung ứng.
+Textarea:
+Ví dụ: Nhà máy tại Long Thành cần 500 bộ đồng phục công nhân, muốn nhận mẫu trước khi đặt và cần hàng trong tháng 11.
+
+SUPPI panel:
+SUPPI — Tìm đúng nguồn
+Bạn không cần biết chính xác tên danh mục. Tôi sẽ giúp làm rõ yêu cầu.
+
+Upload:
+PDF
+Word
+Excel
+Ảnh
+Tài liệu kỹ thuật
+
+CTA:
+TIẾP TỤC VỚI SUPPI
+8. KHI USER GỬI STEP 01
+SUPPI extract.
+Ví dụ:
+Sản phẩm       Đồng phục công nhân
+Số lượng       500 bộ
+Địa bàn        Long Thành, Đồng Nai
+Thời gian      Tháng 11
+Cần mẫu        Có
+Chất liệu      Chưa rõ
+Ngân sách      Chưa rõ
+
+UI:
+SUPPI ĐÃ HIỂU NHƯ SAU
+Cho phép:
+Sửa
+hoặc
+Đúng, tiếp tục
+Không coi AI extraction là dữ liệu cuối cùng nếu user chưa xác nhận.
+9. BƯỚC 02 — LÀM RÕ NHU CẦU
+Tài liệu gốc yêu cầu các nhóm dữ liệu chính gồm nhóm nhu cầu, sản phẩm, số lượng, địa điểm, thời gian, tiêu chí, ngân sách tùy chọn, file và phạm vi chia sẻ.   Văn bản đã dán (2)
+Tôi đề nghị schema:
+NHÓM NHU CẦU
+Ví dụ:
+Đồng phục & BHLĐ
+Bao bì
+Logistics
+Cơ khí
+Máy móc
+M&E
+...
+
+Không hard-code nếu taxonomy đã có.
+SẢN PHẨM / DỊCH VỤ
+Đồng phục công nhân
+
+SỐ LƯỢNG
+500
+
+ĐƠN VỊ
+bộ
+
+ĐỊA ĐIỂM
+Tỉnh
+KCN
+Địa chỉ nếu cần
+
+THỜI GIAN CẦN
+Ưu tiên:
+Ngày cụ thể
+
+Nếu chưa biết:
+Trong 30 ngày
+Trong quý này
+Chưa xác định
+
+TIÊU CHÍ BẮT BUỘC
+Textarea / chips.
+NGÂN SÁCH
+Không bắt buộc
+Có:
+Từ
+Đến
+Đơn vị tiền
+
+Không public mặc định.
+CẦN MẪU?
+Có
+Không
+Chưa xác định
+
+CẦN KHẢO SÁT?
+Có
+Không
+Chưa xác định
+
+TÀI LIỆU
+Upload.
+10. OPTION RẤT QUAN TRỌNG
+Mỗi trường khó phải có:
+TÔI CHƯA XÁC ĐỊNH — CẦN SUPPI HỖ TRỢ
+Ví dụ user không biết vải gì.
+Không ép nhập.
+SUPPI đánh dấu:
+needs_clarification = true
+
+11. COMPLETENESS
+Hiển thị:
+Nhu cầu đã hoàn thiện: 72%
+
+Nhưng không nên dùng completeness như điều kiện cứng 100%.
+Một nhu cầu 70% vẫn có thể đủ để đội điều phối tiếp nhận.
+Có hai khái niệm:
+completeness_score
+ready_for_review
+
+Không đồng nhất.
+12. BƯỚC 03 — NGƯỜI LIÊN HỆ
+Nếu login rồi:
+auto-fill.
+Fields:
+Họ tên
+Tổ chức
+Chức vụ
+Điện thoại
+Email
+
+Nếu organization đã tồn tại:
+không tạo company mới.
+13. NẾU KHÁCH CHƯA CÓ ORGANIZATION
+Cho nhập:
+Tên doanh nghiệp / tổ chức
+Mã số thuế — tùy chọn ở bước đầu
+Website — tùy chọn
+
+Sau login:
+backend phải check duplicate.
+Không tự tạo:
+ABC Factory
+ABC Supplier
+
+thành hai organization.
+14. BƯỚC 04 — QUYỀN CHIA SẺ
+Đây là phần cực kỳ quan trọng.
+Headline:
+AI ĐƯỢC XEM NHU CẦU NÀY?
+OPTION 1
+RIÊNG TƯ
+Chỉ bạn, SUPPI và đội điều phối được xem.
+OPTION 2 — DEFAULT
+CHỈ NHÀ CUNG ỨNG PHÙ HỢP
+SUPPI và đội điều phối chỉ gửi nhu cầu tới những nhà cung ứng được lựa chọn.
+OPTION 3
+ĐĂNG TÓM TẮT TRÊN SÀN NHU CẦU
+Một số thông tin được phép sẽ xuất hiện trên /san-nhu-cau.
+15. DEFAULT
+Tôi chọn:
+MATCHED_SUPPLIERS_ONLY
+
+Không default public.
+16. DỮ LIỆU KHÔNG PUBLIC
+Bất kể lựa chọn nào, mặc định không public:
+Người liên hệ
+Điện thoại
+Email
+Ngân sách nội bộ
+File confidential
+Giá mục tiêu
+Ghi chú nội bộ
+Conversation
+
+17. MARKETING CONSENT PHẢI TÁCH RIÊNG
+Không gộp:
+Tôi đồng ý điều khoản và nhận quảng cáo.
+
+Phải tách:
+☐ Tôi đồng ý xử lý thông tin để thực hiện yêu cầu này.
+
+☐ Tôi muốn nhận thêm thông tin chương trình/cơ hội phù hợp.
+
+Checkbox marketing optional.
+18. BƯỚC 05 — REVIEW
+Headline:
+KIỂM TRA NHU CẦU
+Card summary:
+TÌM 500 BỘ ĐỒNG PHỤC CÔNG NHÂN
+
+Nhóm:
+Đồng phục & BHLĐ
+
+Số lượng:
+500 bộ
+
+Địa bàn:
+Long Thành, Đồng Nai
+
+Cần:
+Trước 15/11/2026
+
+Mẫu:
+Có
+
+Quyền chia sẻ:
+Chỉ NCC phù hợp
+
+Buttons:
+← Chỉnh sửa
+
+XÁC NHẬN & BẮT ĐẦU TÌM NGUỒN
+
+19. LOGIN TRIGGER
+Nếu guest bấm:
+XÁC NHẬN & BẮT ĐẦU TÌM NGUỒN
+mở modal:
+LƯU NHU CẦU VÀ BẮT ĐẦU TÌM NGUỒN
+Đăng nhập để SUPPI lưu nhu cầu này và để CHAINY theo dõi công việc sau khi kết nối.
+Buttons:
+ĐĂNG NHẬP
+TẠO TÀI KHOẢN
+Sau login:
+quay về Step 5.
+Không mất dữ liệu.
+20. SUBMIT — SERVER SIDE
+Flow chuẩn:
+CLIENT VALIDATION
+↓
+SERVER VALIDATION
+↓
+AUTH CHECK
+↓
+ORGANIZATION CHECK
+↓
+DEDUPLICATION
+↓
+CREATE REQUIREMENT
+↓
+CREATE VERSION
+↓
+CREATE OWNER/QUEUE
+↓
+CREATE INITIAL TASK
+↓
+AUDIT LOG
+↓
+NOTIFICATION
+↓
+RETURN TRACKING CODE
+
+Không tạo record chính ngay từ frontend.
+21. MÃ NHU CẦU
+Ví dụ:
+NC-2026-00125
+
+Không dùng database auto ID làm mã public.
+DB:
+id = UUID
+public_code = NC-2026-00125
+
+22. SAU SUBMIT
+Không hiện:
+Gửi thành công.
+
+Hiển thị:
+NHU CẦU ĐÃ ĐƯỢC TIẾP NHẬN ✓
+Mã:
+NC-2026-00125
+
+Trạng thái:
+Mới tiếp nhận
+
+Việc tiếp theo:
+Xác nhận yêu cầu
+
+Đội phụ trách:
+Chuỗi Cung Ứng
+
+Buttons:
+THEO DÕI NHU CẦU
+→ /tai-khoan/nhu-cau/[id]
+TRỞ VỀ SUPPI
+23. STATE MACHINE REQUIREMENT
+Backend code có thể dùng:
+NEW
+NEED_MORE_INFO
+VERIFIED
+SOURCING
+CONNECTING
+IN_PROGRESS
+CLOSED
+CANCELLED
+
+Hoặc chi tiết hơn như tài liệu:
+NEW
+↓
+NEED_MORE_INFO
+↓
+VERIFIED
+↓
+SOURCING
+↓
+SUPPLIER_INVITED
+↓
+RESPONSE_RECEIVED
+↓
+MEETING
+↓
+QUOTED
+↓
+NEGOTIATING
+↓
+CLOSED
+
+Tài liệu cũng yêu cầu không gom mọi kết quả vào một status “Success”.   Văn bản đã dán (2)
+Tôi khuyên:
+Requirement status chỉ giữ ở mức cao.
+Chi tiết theo từng NCC để ở supplier_matches.
+24. CLOSED REASON
+WON
+NOT_SUITABLE
+CANCELLED
+PAUSED
+EXPIRED
+UNKNOWN_RESULT
+
+25. VERSIONING
+Mỗi thay đổi lớn của requirement nên tạo:
+requirement_versions
+
+Ví dụ buyer đổi:
+500 bộ
+→ 2.000 bộ
+
+Không overwrite mà mất lịch sử.
+26. DATA MODEL PAGE 03
+Core:
+requirement_drafts
+requirements
+requirement_versions
+requirement_items
+requirement_attachments
+
+consents
+audit_logs
+
+27. REQUIREMENTS
+Ví dụ:
+Requirement {
+  id
+  publicCode
+
+  organizationId
+  createdByUserId
+
+  categoryId
+  productService
+
+  quantity
+  unit
+
+  provinceId
+  industrialParkId
+  locationText
+
+  requiredAt
+
+  budgetMin
+  budgetMax
+  budgetCurrency
+
+  specifications
+
+  sampleRequired
+  surveyRequired
+
+  visibility
+
+  status
+  closedReason
+
+  ownerUserId
+
+  nextAction
+  nextActionAt
+
+  sourceConversationId
+
+  createdAt
+  updatedAt
+}
+
+28. VISIBILITY
+Enum:
+PRIVATE
+
+MATCHED_SUPPLIERS_ONLY
+
+PUBLIC_SUMMARY
+
+29. FIELD SOURCE
+SUPPI-generated value phải lưu nguồn.
+Ví dụ:
+USER_ENTERED
+USER_CONFIRMED
+AI_EXTRACTED
+ADMIN_UPDATED
+DOCUMENT_EXTRACTED
+
+Nếu AI extract mà user chưa xác nhận:
+confirmed = false
+
+30. BACKEND SERVICES
+Page 03 cần:
+RequirementDraftService
+
+RequirementService
+
+RequirementValidationService
+
+RequirementVersionService
+
+ConsentService
+
+OrganizationService
+
+TaskService
+
+NotificationService
+
+AuditLogService
+
+Không nhét tất cả vào route handler.
+31. API / SERVER ACTION
+Tùy stack hiện tại.
+Logic tương đương:
+GET /api/requirement-drafts/{id}
+
+PATCH /api/requirement-drafts/{id}
+
+POST /api/requirements
+
+GET /api/requirements/{id}
+
+PATCH /api/requirements/{id}
+
+POST /api/requirements/{id}/confirm
+
+Upload:
+POST /api/requirements/attachments
+
+32. DUPLICATE DETECTION
+Nếu user submit 2 lần.
+Backend check:
+same organization
+same category/product
+same location
+close created time
+similar text
+
+Nếu suspected duplicate:
+không tự delete.
+Return:
+Có vẻ nhu cầu này đã tồn tại.
+
+Options:
+Mở nhu cầu cũ
+Vẫn tạo mới
+33. ZALO SYNC
+Khi user đã link Zalo:
+Sau submit có thể tạo CRM notification.
+Không gửi toàn bộ private requirement sang Zalo nếu không cần.
+Ví dụ:
+SUPPI đã ghi nhận nhu cầu NC-2026-00125. Hiện hệ thống đang kiểm tra thông tin trước khi tìm nguồn.
+
+Link:
+Xem nhu cầu
+34. ADMIN — TỪ PAGE 03 PHẢI BẮT ĐẦU
+Từ Page 03, Antigravity phải tạo Admin Core.
+Không chờ đến cuối website mới tạo admin.
+Admin base URL:
+/admin
+
+35. ADMIN SITEMAP GIAI ĐOẠN ĐẦU
+Tôi đề nghị:
+/admin
+/admin/nhu-cau
+/admin/nhu-cau/[id]
+
+/admin/to-chuc
+/admin/to-chuc/[id]
+
+/admin/nguoi-dung
+
+/admin/matching
+/admin/connections
+/admin/tasks
+
+/admin/chuong-trinh
+
+/admin/tai-tro
+/admin/founding-partner
+
+/admin/noi-dung
+
+/admin/tai-chinh
+
+/admin/cai-dat
+/admin/audit-log
+
+Không phải tất cả module cần full feature ngay.
+Nhưng navigation và quyền phải thiết kế ngay từ đầu.
+36. ADMIN — DASHBOARD
+Route:
+/admin
+
+Cards:
+Nhu cầu mới
+Cần bổ sung
+Đang tìm nguồn
+Đang kết nối
+Quá hạn xử lý
+
+Hồ sơ chờ duyệt
+Cuộc gặp sắp tới
+Báo giá đang chờ
+
+Chương trình đang chạy
+
+Việc cần làm hôm nay
+
+Không cần fancy chart trước.
+Quan trọng nhất:
+việc gì cần xử lý hôm nay?
+37. ADMIN — BÀN NHU CẦU
+Route:
+/admin/nhu-cau
+
+2 chế độ:
+TABLE
+Columns:
+Mã
+Tổ chức
+Loại tổ chức
+Nhu cầu
+Địa bàn
+Trạng thái
+Mức độ hoàn thiện
+Owner
+Next action
+Due
+Updated
+
+KANBAN
+MỚI
+↓
+CẦN BỔ SUNG
+↓
+ĐÃ XÁC NHẬN
+↓
+ĐANG TÌM NGUỒN
+↓
+ĐANG KẾT NỐI
+↓
+ĐANG TRAO ĐỔI
+↓
+ĐÓNG
+
+38. ADMIN NEED DETAIL
+Route:
+/admin/nhu-cau/[id]
+
+Tabs:
+Tổng quan
+
+Nội dung
+
+Doanh nghiệp
+
+SUPPI conversation
+
+NCC phù hợp
+
+Matching
+
+Kết nối
+
+Cuộc gặp
+
+Mẫu / khảo sát
+
+Báo giá
+
+Tasks
+
+Timeline
+
+Files
+
+Consents
+
+Audit log
+
+39. ADMIN — MỖI RECORD PHẢI CÓ
+OWNER
+
+STATUS
+
+NEXT ACTION
+
+NEXT ACTION DATE
+
+LAST UPDATED
+
+Tài liệu đã nhấn mạnh nếu không có owner thì hệ thống sẽ quay lại tình trạng “gặp xong rồi mất dấu”.   Văn bản đã dán (2)
+40. ADMIN ORGANIZATION — RẤT QUAN TRỌNG
+Route:
+/admin/to-chuc
+
+Đây là master registry của tất cả:
+Nhà máy
+Nhà cung ứng
+Hội / Hiệp hội
+KCN / Ban quản lý
+Nhà tài trợ
+Đối tác Đồng hành
+Doanh nghiệp nước ngoài
+Nhà đầu tư
+Chuyên gia / Đối tác
+
+Không tạo 9 database công ty khác nhau.
+41. MODEL ORGANIZATION
+Organization {
+  id
+
+  legalName
+  displayName
+
+  taxCode?
+
+  organizationType
+
+  roles[]
+
+  country
+  province
+  address
+
+  website
+
+  phone?
+  email?
+
+  status
+
+  profileCompleteness
+
+  createdAt
+  updatedAt
+}
+
+42. ORGANIZATION TYPE VS ROLE
+Phân biệt.
+Ví dụ:
+ABC Manufacturing
+organization_type:
+COMPANY
+
+Roles:
+BUYER
+SUPPLIER
+SPONSOR
+
+Hội Doanh nghiệp XYZ
+organization_type:
+ASSOCIATION
+
+Roles:
+ASSOCIATION
+PROGRAM_ORGANIZER
+PARTNER
+
+KCN ABC
+organization_type:
+INDUSTRIAL_PARK_OPERATOR
+
+Role:
+INDUSTRIAL_PARK
+PROGRAM_ORGANIZER
+
+43. ORGANIZATION TYPES
+COMPANY
+
+FACTORY_OPERATOR
+
+ASSOCIATION
+
+BUSINESS_NETWORK
+
+INDUSTRIAL_PARK_OPERATOR
+
+SPONSOR_ORGANIZATION
+
+INVESTMENT_ORGANIZATION
+
+EXPERT_ORGANIZATION
+
+GOVERNMENT_OR_PUBLIC_ORGANIZATION
+
+OTHER
+
+Không tự gắn government/public nếu chưa có cơ sở.
+44. ORGANIZATION ROLES
+BUYER
+SUPPLIER
+
+FACTORY
+
+ASSOCIATION
+
+INDUSTRIAL_PARK
+
+SPONSOR
+
+FOUNDING_PARTNER
+
+FDI
+
+INVESTOR
+
+EXPERT
+
+PROGRAM_ORGANIZER
+
+DEVELOPMENT_PARTNER
+
+Một org có nhiều role.
+45. ADMIN ORGANIZATION LIST
+Columns:
+Tên
+Loại
+Vai trò
+Địa bàn
+Hồ sơ %
+Trạng thái
+Người quản lý
+Updated
+
+Filters:
+Role
+Type
+Province
+KCN
+Status
+Completeness
+
+46. ADMIN ORGANIZATION DETAIL
+Route:
+/admin/to-chuc/[id]
+
+Tabs:
+Tổng quan
+Vai trò
+Người dùng
+Hồ sơ
+Năng lực
+Nhu cầu
+Kết nối
+Chương trình
+Hợp tác
+Tài trợ
+Tài liệu
+Timeline
+Audit
+
+Tab chỉ hiện nếu role phù hợp.
+47. ADMIN — QUẢN LÝ NHÀ MÁY
+Không cần table factory độc lập nếu không cần.
+Có thể có extension:
+factory_profiles
+
+Fields đặc thù:
+industry
+factoryType
+industrialPark
+employeeCount
+productionArea
+mainOutputs
+buyerNeeds[]
+supplierCapabilities[]
+
+Nhà máy có thể vừa mua vừa bán.
+48. ADMIN — QUẢN LÝ NHÀ CUNG ỨNG
+Extension:
+supplier_profiles
+
+Fields:
+capabilities
+products/services
+service areas
+MOQ
+capacity
+leadTime
+certifications
+sampleCapability
+surveyCapability
+factoryInfo
+machines
+evidence
+
+Không gộp mọi thứ vào organizations.
+49. ADMIN — HỘI / HIỆP HỘI
+Extension:
+association_profiles
+
+Fields:
+organizationId
+
+associationType
+scope
+industries
+geographicScope
+
+memberCount? 
+memberDataAccessScope
+
+programContact
+
+partnershipStatus
+
+Member count chỉ công bố nếu được xác nhận.
+50. ADMIN — KCN
+Extension:
+industrial_park_profiles
+
+Fields:
+name
+operatorOrganizationId
+
+province
+district
+
+industries[]
+
+factoryCount?
+
+programs[]
+
+localSupplierNeeds[]
+
+partnershipStatus
+
+51. ADMIN — SPONSOR
+Không chỉ thêm role.
+Hợp đồng tài trợ phải là entity:
+sponsorships
+
+Có:
+organizationId
+scope
+programId?
+categoryId?
+locationId?
+
+startDate
+endDate
+
+contract
+benefits
+deliveryStatus
+
+52. ADMIN — FOUNDING PARTNER
+Không gắn boolean:
+is_founding_partner = true
+
+Phải là:
+founding_partnerships
+
+Fields:
+organizationId
+
+categoryId
+keywordClusterId?
+locationId?
+industrialParkId?
+
+startDate
+endDate
+
+displayPosition
+
+entitlements
+
+status
+
+Founding Partner không được tự động lên #1 matching.
+53. ADMIN — USER
+Route:
+/admin/nguoi-dung
+
+User ≠ Organization.
+Một organization có nhiều users.
+Ví dụ:
+Buyer Manager
+Procurement
+Technical
+Finance
+Sales
+Marketing
+Admin
+
+54. INTERNAL STAFF ROLES
+Team CHUOICUNGUNG.COM:
+SUPER_ADMIN
+
+ADMIN
+
+COORDINATOR
+
+SOURCING
+
+PARTNERSHIP
+
+CONTENT
+
+FINANCE
+
+CUSTOMER_SUPPORT
+
+VIEWER
+
+55. PERMISSION MODEL
+Tài liệu đã quy định buyer chỉ xem nhu cầu của mình, supplier chỉ xem yêu cầu được mời, Hội/KCN xem phạm vi chương trình đã thống nhất, sponsor chỉ xem quyền lợi liên quan, coordinator xem record được phân công và admin có quyền đầy đủ.   Văn bản đã dán (2)
+Không dùng kiểu:
+isAdmin = true/false
+
+cho toàn hệ thống.
+Dùng RBAC + scope.
+56. ADMIN PERMISSION EXAMPLE
+requirements.read.all
+
+requirements.read.assigned
+
+requirements.update
+
+requirements.assign
+
+organizations.read
+
+organizations.verify
+
+supplier_matches.manage
+
+connections.manage
+
+programs.manage
+
+sponsorship.manage
+
+finance.read
+
+finance.update
+
+audit.read
+
+57. ADMIN CANNOT DO SILENT CHANGES
+Ví dụ admin sửa:
+quantity 500 → 5000
+
+Phải log:
+before
+after
+user
+time
+reason optional
+
+audit_logs
+58. ADMIN STATUS ORGANIZATION
+DRAFT
+PENDING
+ACTIVE
+INCOMPLETE
+NEEDS_REVIEW
+SUSPENDED
+ARCHIVED
+
+Đừng dùng:
+VERIFIED
+
+như status tổng nếu verification thực tế có nhiều field riêng.
+59. FIELD VERIFICATION
+Có thể dùng:
+data_claims
+
+Ví dụ:
+Claim:
+Capacity = 20.000 pcs/month
+
+Source:
+Supplier document
+
+Status:
+SELF_DECLARED
+
+Checked:
+No
+
+Sau:
+REVIEWED
+CONFIRMED
+EXPIRED
+CONFLICT
+
+60. ADMIN — GLOBAL SEARCH
+Admin search:
+Mã nhu cầu
+Tên công ty
+MST
+SĐT
+Email
+Nhà cung ứng
+KCN
+Hội
+Chương trình
+Invoice
+
+61. ADMIN — DUPLICATE ORGANIZATION
+Khi tạo org mới:
+check:
+taxCode
+domain
+phone
+legalName similarity
+
+Admin thấy:
+Có thể trùng với Công ty ABC.
+
+Buttons:
+Dùng organization cũ
+Merge
+Tạo riêng
+Merge chỉ admin có quyền cao.
+62. ADMIN — ACTIVITY TIMELINE
+Mọi object quan trọng nên có timeline:
+Nhu cầu được tạo
+SUPPI cập nhật draft
+Buyer xác nhận
+Owner được gán
+Đã mời NCC
+NCC phản hồi
+CHAINY tiếp quản
+Cuộc gặp
+Mẫu
+Báo giá
+Kết quả
+
+63. NOTIFICATION
+Page 03 submit:
+Admin notification:
+Nhu cầu mới:
+NC-2026-00125
+Đồng phục 500 bộ
+Đồng Nai
+
+Nếu auto assignment:
+Owner nhận notification.
+Buyer nhận:
+Đã tiếp nhận
+
+64. ASSIGNMENT
+Không cần AI assign phức tạp ban đầu.
+Rules:
+category
+location
+workload
+
+Nếu không match:
+Unassigned Queue
+
+Nhưng admin dashboard phải báo:
+CÓ 4 NHU CẦU CHƯA CÓ NGƯỜI PHỤ TRÁCH
+65. SLA / OVERDUE
+Mỗi next action:
+next_action
+next_action_at
+
+Nếu quá hạn:
+badge:
+QUÁ HẠN
+Không tự đổi requirement status.
+66. ADMIN COMMENTS
+Internal note:
+visibility = INTERNAL_ONLY
+
+Buyer không thấy.
+Không trộn với conversation user.
+67. ADMIN VS USER DATA
+Phải tách:
+Public data
+
+Shared business data
+
+Private organization data
+
+Internal admin data
+
+Không chỉ dùng một boolean private.
+68. ANALYTICS PAGE 03
+Track:
+requirement_page_view
+
+requirement_started
+
+requirement_ai_extracted
+
+requirement_step_completed
+
+attachment_uploaded
+
+visibility_selected
+
+login_required
+
+login_completed
+
+requirement_reviewed
+
+requirement_submitted
+
+requirement_duplicate_detected
+
+Không gửi content nhạy cảm vào analytics.
+69. SEO PAGE 03
+Title:
+Đăng Nhu Cầu | Tìm Nhà Cung Ứng Phù Hợp | CHUOICUNGUNG.COM
+
+Description:
+Mô tả nhu cầu của doanh nghiệp, để SUPPI hỗ trợ làm rõ yêu cầu và tìm nguồn cung phù hợp theo năng lực, địa bàn và thời gian.
+/dang-nhu-cau:
+index được.
+Nhưng:
+?draft=
+
+noindex.
+70. MOBILE
+Step form mobile:
+Header
+
+Progress
+
+Main field
+
+SUPPI hint
+
+Fields
+
+Sticky CTA
+
+SUPPI:
+button:
+💬 Hỏi SUPPI
+
+Mở bottom sheet.
+Không cố chia 2 cột.
+71. ACCESSIBILITY
+Form fields:
+label thật.
+Error ngay dưới field.
+Không dùng placeholder thay label.
+Keyboard navigation.
+Upload có description.
+Progress step có text.
+72. ACCEPTANCE TEST PAGE 03
+TEST 1 — Direct
+Guest vào /dang-nhu-cau.
+Nhập:
+Cần 500 bộ đồng phục tại Đồng Nai.
+
+Expected:
+SUPPI extract.
+Draft lưu tạm.
+TEST 2 — From SUPPI
+Có draft trước.
+Mở:
+/dang-nhu-cau?draft=x
+
+Expected:
+form populated.
+Không hỏi lại.
+TEST 3 — Unknown
+User:
+Tôi chưa biết chất liệu.
+
+Expected:
+không block submit.
+Flag:
+needs_clarification
+
+TEST 4 — Privacy
+Default:
+MATCHED_SUPPLIERS_ONLY
+
+Không public.
+TEST 5 — Login
+Guest đi tới Review.
+Login.
+Return:
+same Step 5.
+TEST 6 — Submit
+Expected:
+Requirement created
+Version created
+Owner/queue set
+Task created
+Audit created
+Tracking code returned
+
+TEST 7 — Admin
+Requirement xuất hiện ngay:
+/admin/nhu-cau
+
+TEST 8 — Permission
+Supplier không thể xem Requirement private.
+TEST 9 — Duplicate
+Double click submit không tạo 2 requirements.
+TEST 10 — Audit
+Admin edit phải có log.
+73. ANTIGRAVITY — PAGE 03 CHIA 6 PROMPT
+Anh tiếp tục chạy theo thứ tự.
+PROMPT 03-01 — AUDIT /dang-nhu-cau + ADMIN HIỆN TẠI
+PROJECT: CHUOICUNGUNG.COM
+PAGE 03: /dang-nhu-cau
+SCOPE: REQUIREMENT INTAKE + ADMIN CORE
+
+Ở bước này CHƯA redesign, CHƯA migration.
+
+Hãy audit:
+
+1. Route /dang-nhu-cau hiện tại.
+2. Các form/component hiện có.
+3. Form submit hiện đi đâu.
+4. Database/table nhận dữ liệu.
+5. Validation client/server.
+6. File upload.
+7. Login flow.
+8. Organization/company linking.
+9. Requirement/need status.
+10. Admin hiện tại.
+
+Audit toàn bộ admin routes hiện có.
+
+Đặc biệt tìm:
+- admin dashboard
+- organizations
+- factories
+- suppliers
+- associations
+- industrial parks
+- sponsors
+- users
+- roles
+- permissions
+- needs
+- tasks
+- matching
+- audit logs
+
+Không tạo code mới.
+
+Xuất:
+
+docs/pages/dang-nhu-cau/REQUIREMENT_CURRENT_AUDIT.md
+
+docs/admin/ADMIN_CURRENT_AUDIT.md
+
+DỪNG SAU AUDIT.
+
+PROMPT 03-02 — ORGANIZATION + ADMIN CORE DATA MODEL
+PROJECT: CHUOICUNGUNG.COM
+PHASE: ORGANIZATION + ADMIN CORE
+
+Dựa trên audit.
+
+MỤC TIÊU:
+Tất cả đối tượng trên CHUOICUNGUNG.COM dùng chung một Organization Registry.
+
+Không tạo duplicate company theo role.
+
+Organization có thể mang nhiều roles:
+
+BUYER
+SUPPLIER
+FACTORY
+ASSOCIATION
+INDUSTRIAL_PARK
+SPONSOR
+FOUNDING_PARTNER
+FDI
+INVESTOR
+EXPERT
+PROGRAM_ORGANIZER
+DEVELOPMENT_PARTNER
+
+Reuse database hiện tại nếu có.
+
+Tạo hoặc chuẩn hóa:
+
+organizations
+organization_users
+organization_roles
+
+users
+
+permissions
+role_permissions
+
+audit_logs
+
+Tạo role-specific extension chỉ khi dữ liệu thực sự khác:
+
+factory_profiles
+supplier_profiles
+association_profiles
+industrial_park_profiles
+
+Sponsor/Founding Partner phải dùng contract/partnership entities,
+không chỉ dùng boolean.
+
+Admin internal roles:
+
+SUPER_ADMIN
+ADMIN
+COORDINATOR
+SOURCING
+PARTNERSHIP
+CONTENT
+FINANCE
+CUSTOMER_SUPPORT
+VIEWER
+
+RBAC + scope.
+
+Không dùng một boolean isAdmin cho mọi quyền.
+
+Mỗi business record phải hỗ trợ:
+
+ownerUserId
+status
+nextAction
+nextActionAt
+lastUpdatedAt
+
+Tạo migration an toàn.
+
+Không destructive migration.
+
+Xuất:
+docs/admin/ADMIN_DATA_MODEL.md
+docs/admin/ADMIN_PERMISSION_MATRIX.md
+
+PROMPT 03-03 — REQUIREMENT FORM ENGINE
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /dang-nhu-cau
+PHASE: FORM ENGINE + UX
+
+Xây /dang-nhu-cau thành AI-assisted Requirement Form.
+
+Không tạo form 30 trường một màn hình.
+
+5 bước:
+
+1. Mô tả nhu cầu
+2. Làm rõ
+3. Người liên hệ
+4. Quyền chia sẻ
+5. Kiểm tra & xác nhận
+
+Step 1:
+textarea natural language
+attachments
+SUPPI panel
+
+Step 2:
+category
+product/service
+quantity
+unit
+location
+industrial park
+deadline
+specifications
+budget optional
+sample
+survey
+attachments
+
+Mỗi field khó hỗ trợ:
+“Tôi chưa xác định — cần SUPPI hỗ trợ.”
+
+Step 3:
+contact
+organization
+
+Reuse logged-in profile.
+
+Step 4 visibility:
+
+PRIVATE
+MATCHED_SUPPLIERS_ONLY
+PUBLIC_SUMMARY
+
+Default:
+MATCHED_SUPPLIERS_ONLY
+
+Consent xử lý requirement tách riêng marketing consent.
+
+Step 5:
+full review.
+
+Nếu guest:
+chỉ yêu cầu login khi user bấm
+“Xác nhận & bắt đầu tìm nguồn”.
+
+Guest session không được mất.
+
+Support:
+/dang-nhu-cau?draft={id}
+
+Load RequirementDraft từ SUPPI.
+
+Không nhập lại dữ liệu.
+
+PROMPT 03-04 — REQUIREMENT BACKEND
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /dang-nhu-cau
+PHASE: BACKEND
+
+Create/normalize:
+
+requirement_drafts
+requirements
+requirement_versions
+requirement_attachments
+
+consents
+audit_logs
+
+Requirement must have:
+
+UUID internal id
+public tracking code
+
+Example:
+NC-2026-00125
+
+Implement server-side:
+
+validation
+auth
+organization ownership
+deduplication
+draft conversion
+versioning
+visibility
+audit
+
+Workflow:
+
+CLIENT VALIDATION
+→ SERVER VALIDATION
+→ AUTH
+→ ORGANIZATION
+→ DEDUPLICATE
+→ CREATE REQUIREMENT
+→ CREATE VERSION
+→ ASSIGN OWNER/QUEUE
+→ CREATE NEXT TASK
+→ AUDIT
+→ NOTIFY
+→ RETURN CODE
+
+Do not publish automatically.
+
+Public summary only when:
+visibility = PUBLIC_SUMMARY
+AND moderation/approval rule passes.
+
+Status:
+NEW
+NEED_MORE_INFO
+VERIFIED
+SOURCING
+CONNECTING
+IN_PROGRESS
+CLOSED
+CANCELLED
+
+ClosedReason:
+WON
+NOT_SUITABLE
+CANCELLED
+PAUSED
+EXPIRED
+UNKNOWN_RESULT
+
+PROMPT 03-05 — ADMIN BÀN ĐIỀU PHỐI
+PROJECT: CHUOICUNGUNG.COM
+PHASE: ADMIN CORE UI
+
+Create/reuse admin shell:
+
+/admin
+
+/admin/nhu-cau
+/admin/nhu-cau/[id]
+
+/admin/to-chuc
+/admin/to-chuc/[id]
+
+/admin/nguoi-dung
+
+/admin/matching
+/admin/connections
+/admin/tasks
+
+Prepare nav placeholders for:
+/admin/chuong-trinh
+/admin/tai-tro
+/admin/founding-partner
+/admin/noi-dung
+/admin/tai-chinh
+/admin/audit-log
+
+Do not build fake modules.
+A future module may display “Chưa triển khai”.
+
+ADMIN DASHBOARD:
+
+New needs
+Needs more info
+Sourcing
+Connecting
+Overdue
+Unassigned
+Pending organization/profile
+Meetings
+Quotes
+Today's tasks
+
+ADMIN REQUIREMENTS:
+
+Table + Kanban.
+
+Columns:
+Code
+Organization
+Role/type
+Need
+Location
+Status
+Completeness
+Owner
+Next Action
+Due
+Updated
+
+Detail tabs:
+Overview
+Requirement
+Organization
+SUPPI conversation
+Supplier matches
+Connections
+Meetings
+Samples
+Quotes
+Tasks
+Timeline
+Files
+Consent
+Audit
+
+ADMIN ORGANIZATION:
+
+One registry for:
+Factories
+Suppliers
+Associations
+Industrial Parks
+Sponsors
+Founding Partners
+FDI
+Investors
+Experts
+
+Do not duplicate organizations.
+
+Filters:
+type
+role
+location
+status
+completeness
+
+Organization detail:
+Overview
+Roles
+Users
+Profile
+Capability
+Needs
+Connections
+Programs
+Partnership
+Sponsor
+Documents
+Timeline
+Audit
+
+Every mutation must write AuditLog.
+
+PROMPT 03-06 — QA
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /dang-nhu-cau + ADMIN CORE
+PHASE: QA
+
+Run end-to-end tests.
+
+TEST A:
+Guest direct need.
+
+TEST B:
+Draft from /tro-ly-ai.
+
+TEST C:
+Unknown information allowed.
+
+TEST D:
+Default privacy = MATCHED_SUPPLIERS_ONLY.
+
+TEST E:
+Guest login preserves all data.
+
+TEST F:
+Submit creates:
+requirement
+version
+owner/queue
+task
+audit
+tracking code.
+
+TEST G:
+Requirement appears in /admin/nhu-cau.
+
+TEST H:
+Admin assigns owner.
+
+TEST I:
+Admin changes next action and due date.
+
+TEST J:
+Audit records changes.
+
+TEST K:
+User A cannot read User B's requirement.
+
+TEST L:
+Supplier cannot see private need.
+
+TEST M:
+Organization is not duplicated when one company has multiple roles.
+
+TEST N:
+Double submit does not create duplicate requirement.
+
+TEST O:
+Mobile 390px.
+
+Generate:
+
+docs/pages/dang-nhu-cau/REQUIREMENT_QA.md
+docs/admin/ADMIN_CORE_QA.md
+
+Report:
+PASS
+FAIL
+BLOCKED
+NOT IMPLEMENTED
+
+Từ đây tôi đề nghị một quy tắc mới cho tất cả các page tiếp theo
+Mỗi khi chúng ta làm một page public mới, tôi sẽ viết song song phần Admin tương ứng.
+Ví dụ:
+Page Nhà cung ứng
+→ đồng thời làm:
+/admin/to-chuc/[id]/supplier
+Page Hội / Hiệp hội
+→ đồng thời làm:
+/admin/to-chuc/[id]/association
+Page KCN
+→ đồng thời làm:
+/admin/to-chuc/[id]/industrial-park
+Page Chương trình
+→ đồng thời làm:
+/admin/chuong-trinh
+Founding Partner
+→ đồng thời làm:
+/admin/founding-partner
+Như vậy tới cuối dự án anh sẽ không gặp tình trạng “website public đã xong nhưng team nội bộ không quản lý được dữ liệu.”
+Sau khi Page 03 hoàn thiện, Page 04 nên là /tai-khoan/nhu-cau/[id] — Không gian xử lý một nhu cầu, vì đây là nơi Nhà máy nhìn thấy SUPPI đang tìm nguồn gì, NCC nào phù hợp, CHAINY đang kết nối ai, mẫu/báo giá ra sao, việc tiếp theo là gì và kết quả cuối cùng. Tài liệu cũng đã xác định workspace này gồm Tổng quan, NCC, bằng chứng, mẫu/khảo sát, báo giá, trao đổi, timeline, việc tiếp theo và kết quả.   Văn bản đã dán (2)

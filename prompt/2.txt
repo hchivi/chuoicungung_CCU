@@ -1,0 +1,1693 @@
+Được. Page 02 sẽ là /tro-ly-ai — trung tâm làm việc với SUPPI & CHAINY. Đây là page quan trọng nhất sau Homepage vì nó biến website từ “nơi xem thông tin” thành nơi bắt đầu công việc.
+Tài liệu gốc đã chốt CHUOICUNGUNG.COM phải là hệ thống xử lý nhu cầu B2B chứ không phải danh bạ; SUPPI phụ trách làm rõ nhu cầu, tìm và so sánh nguồn, còn CHAINY phụ trách kết nối, phối hợp và nhắc việc. Văn bản đã dán (2) Văn bản đã dán (1)
+PAGE 02 — TRỢ LÝ AI SUPPI & CHAINY
+1. Thông số page
+Hạng mục
+Chốt triển khai
+Tên page
+Trợ lý Chuỗi Cung Ứng
+URL chính
+/tro-ly-ai
+Alias tùy chọn
+/chat → redirect 301/308 về /tro-ly-ai
+Canonical
+https://chuoicungung.com/tro-ly-ai
+Ưu tiên
+P0
+Đối tượng
+Tất cả
+Đăng nhập
+Không bắt buộc để hỏi
+Login bắt buộc khi
+Lưu dài hạn, đăng nhu cầu, tìm NCC đầy đủ, kết nối, theo dõi
+Assistant
+SUPPI + CHAINY
+Mục tiêu chính
+Conversation → Requirement/Opportunity → Matching → Connection → Result
+Data trung tâm
+CRM
+Channel
+Website; sau đó Zalo
+
+
+2. ĐỊNH VỊ PAGE
+Không gọi đây là:
+Chat AI
+Tôi đề nghị trên giao diện dùng:
+TRỢ LÝ CHUỖI CUNG ỨNG
+Headline:
+CHỈ CẦN NÓI BẠN ĐANG CẦN GÌ.
+Sub:
+SUPPI giúp làm rõ và tìm đúng nguồn.
+CHAINY giúp kết nối và theo việc đến kết quả.
+Dòng nhỏ:
+Bạn có thể bắt đầu bằng một câu hỏi, một nhu cầu, một năng lực hoặc một công việc đang cần xử lý.
+
+3. URL VÀ QUERY PARAMETER
+Route chính:
+/tro-ly-ai
+Có thể nhận context:
+/tro-ly-ai?role=factory
+/tro-ly-ai?role=supplier
+/tro-ly-ai?role=association
+/tro-ly-ai?role=industrial-park
+/tro-ly-ai?role=sponsor
+/tro-ly-ai?role=founding-partner
+/tro-ly-ai?role=fdi
+/tro-ly-ai?role=investor
+/tro-ly-ai?role=expert
+Intent:
+/tro-ly-ai?role=factory&intent=sourcing
+/tro-ly-ai?role=supplier&intent=opportunity
+Không đưa nguyên câu hỏi dài vào URL production nếu có thể tránh.
+Tốt hơn:
+/tro-ly-ai?session=abc123
+Message homepage được lưu temporary session rồi load lại.
+
+4. CẤU TRÚC DESKTOP
+Tôi đề nghị layout 3 vùng:
+┌──────────────────────────────────────────────────────┐
+│ HEADER                                               │
+├────────────┬──────────────────────────────┬───────────┤
+│ SIDEBAR    │ MAIN AI WORKSPACE            │ CONTEXT   │
+│            │                              │ PANEL     │
+│ 240px      │ flexible                     │ 320px     │
+└────────────┴──────────────────────────────┴───────────┘
+Context Panel chỉ xuất hiện khi có nhu cầu/công việc.
+Nếu chưa có:
+Main có thể rộng hơn.
+
+5. HEADER — GUEST
+← Trang chủ
+
+● SUPPI & CHAINY đang sẵn sàng
+
+              Lịch Ngày Hội
+              Hotline: 1900 8686
+              [ ĐĂNG NHẬP ]
+Dưới header, ngay phía trên conversation:
+Bạn đang dùng với tư cách Khách · Đăng nhập để lưu công việc
+Không popup bắt login.
+
+6. HEADER — ĐÃ ĐĂNG NHẬP
+← Trang chủ
+
+● SUPPI & CHAINY đang sẵn sàng
+
+             Lịch Ngày Hội
+             ✓ Zalo
+             🔔 3
+             CÔNG TY ABC ▼
+Dưới tên:
+Nhà máy · Đồng Nai
+Dropdown:
+Công việc của tôi
+Nhu cầu của tôi
+Kết nối của tôi
+Hồ sơ tổ chức
+Cài đặt
+Đăng xuất
+Nếu một user có nhiều tổ chức:
+Chuyển tổ chức
+Nếu một organization có nhiều role:
+Đổi vai trò
+
+7. SIDEBAR — BẢN CHUNG
+Tôi chốt sidebar như sau:
++ CUỘC TRÒ CHUYỆN MỚI
+
+
+CÔNG VIỆC CỦA TÔI
+
+Nhu cầu / yêu cầu
+Đang tìm kiếm
+Gợi ý phù hợp
+Kết nối đang xử lý
+Lịch hẹn & hoạt động
+Đề xuất / Báo giá
+Việc cần làm tiếp
+Kết quả
+
+
+HỒ SƠ & TỔ CHỨC
+
+Hồ sơ của tôi
+Năng lực & nhu cầu
+Địa bàn hoạt động
+Hồ sơ & tài liệu
+
+
+CƠ HỘI & CHƯƠNG TRÌNH
+
+Cơ hội dành cho tôi
+Kết nối tại KCN
+Ngày hội Chuỗi Cung Ứng
+Sự kiện sắp tới
+Chương trình kết nối
+
+
+HỢP TÁC & ĐỒNG HÀNH
+
+Đối tác Đồng hành Sáng lập
+Cơ hội tài trợ
+Hợp tác tổ chức
+Hợp tác quốc tế
+Cuối sidebar:
+🟢 SUPPI & CHAINY đang sẵn sàng
+Không dùng:
+AI Sourcing Live v2.6
+
+8. SIDEBAR THAY ĐỔI THEO ROLE
+Cấu trúc tổng không đổi nhưng label có thể đổi.
+Ví dụ Nhà máy:
+Nhu cầu đã đăng
+Nguồn đang tìm
+NCC phù hợp
+Kết nối đang xử lý
+Mẫu / khảo sát
+Báo giá
+Việc cần làm tiếp
+Kết quả
+Nhà cung ứng:
+Cơ hội của tôi
+Nhu cầu phù hợp
+Nhà máy tiềm năng
+Kết nối đang xử lý
+Yêu cầu mẫu
+Báo giá đã gửi
+Việc cần làm tiếp
+Kết quả
+Hội / Hiệp hội:
+Nhu cầu hội viên
+Doanh nghiệp tham gia
+Kết nối đang xử lý
+Chương trình
+Cuộc gặp
+Theo dõi sau chương trình
+Báo cáo
+Kết quả
+Nguồn tài liệu cũng yêu cầu trạng thái nhu cầu và từng kết nối NCC phải tách riêng vì một nhu cầu có thể có nhiều NCC ở các giai đoạn khác nhau. Markdown đã dán (3)
+
+9. MAIN EMPTY STATE
+Khi user vừa vào:
+Mascot SUPPI bên trái.
+Mascot CHAINY bên phải.
+Ở giữa:
+CHỈ CẦN NÓI BẠN ĐANG CẦN GÌ
+Sub:
+Nói như cách bạn đang trao đổi với một đồng nghiệp.
+SUPPI & CHAINY sẽ giúp biến yêu cầu đó thành công việc có thể xử lý.
+Ô nhập:
+Hãy mô tả nhu cầu, năng lực hoặc công việc bạn đang muốn giải quyết...
+Buttons phụ:
+📎 Tải tài liệu
+📷 Gửi hình ảnh
+📍 Chọn địa bàn
+🏭 Chọn KCN
+
+10. ROLE SELECTOR
+Ngay dưới ô chat:
+BẠN ĐANG THAM GIA VỚI VAI TRÒ NÀO?
+Nhà máy
+Nhà cung ứng
+Hội / Hiệp hội
+KCN / Ban quản lý
+Nhà tài trợ
+Đối tác Đồng hành
+Doanh nghiệp nước ngoài
+Nhà đầu tư
+Chuyên gia / Đối tác
+Role chưa chọn:
+SUPPI có thể hỏi:
+“Bạn đang tìm nguồn cho doanh nghiệp hay muốn giới thiệu năng lực cung ứng?”
+Không bắt chọn role trước khi chat nếu intent đã đủ rõ.
+
+11. BLOCK GỢI Ý
+Tiêu đề:
+BẠN MUỐN SUPPI & CHAINY HỖ TRỢ VIỆC GÌ?
+Sub:
+Gợi ý phổ biến dành cho [Vai trò]. Bấm để hỏi ngay hoặc nhập yêu cầu của riêng bạn.
+Desktop:
+6 cards đầu tiên.
+2 cột × 3 hàng.
+Button:
+Xem thêm 4 gợi ý
+Không đổ 10 card cùng lúc.
+
+12. 10 GỢI Ý — NHÀ MÁY
+Tìm nhà cung ứng
+Tìm nguồn gần nhà máy
+Tìm nguồn thay thế
+So sánh nhà cung ứng
+Tìm nguồn Việt Nam hóa
+Tìm nguồn gấp
+Yêu cầu mẫu
+Theo dõi báo giá
+Đặt lịch gặp
+Xem việc tiếp theo
+Ví dụ câu bấm:
+“Tìm giúp tôi nhà cung ứng phù hợp cho sản phẩm hoặc dịch vụ tôi đang cần.”
+
+13. 10 GỢI Ý — NHÀ CUNG ỨNG
+Tìm nhu cầu phù hợp
+Chuẩn hóa năng lực
+Kiểm tra hồ sơ
+Tìm đúng khách hàng
+Chọn địa bàn bán hàng
+Tham gia Trạm KCN
+Tham gia chương trình
+Theo dõi cơ hội
+Nâng cấp hiện diện
+Đối tác Đồng hành
+
+14. 10 GỢI Ý — HỘI / HIỆP HỘI
+Thu nhu cầu hội viên
+Kết nối nội bộ
+Tổ chức kết nối
+Ngày hội Chuỗi Cung Ứng
+Kết nối theo ngành
+Kết nối theo địa bàn
+Theo dõi sau sự kiện
+Báo cáo kết quả
+Tìm đối tác chương trình
+Hỗ trợ hội viên chưa có nguồn
+
+15. 10 GỢI Ý — KCN
+Tổng hợp nhu cầu
+Nhóm hàng thiếu nguồn
+Tìm nguồn địa phương
+Kết nối nhà máy
+Trạm Chuỗi Cung Ứng
+Ngày hội tại KCN
+Báo cáo địa bàn
+Phát triển nhà cung ứng
+Theo dõi kết nối
+Kết nối doanh nghiệp nước ngoài
+
+16. CÁC ROLE CÒN LẠI
+Các config tương ứng cho:
+Sponsor
+Founding Partner
+FDI
+Investor
+Expert
+Không hard-code JSX 9 lần.
+Dùng:
+roleConfig[role]
+Ví dụ:
+roleConfig = {
+  factory: {},
+  supplier: {},
+  association: {},
+  industrialPark: {},
+  sponsor: {},
+  foundingPartner: {},
+  fdi: {},
+  investor: {},
+  expert: {}
+}
+
+17. SUPPI VÀ CHAINY KHÔNG PHẢI 2 CHATBOT
+Đây là nguyên tắc phải ghi rõ cho dev.
+Conversation
+       ↓
+same conversation_id
+       ↓
+SUPPI
+       ↓
+Requirement / Opportunity
+       ↓
+Matching
+       ↓
+CHAINY
+       ↓
+Connection
+       ↓
+Result
+Chỉ thay:
+assistant_role
+Không tạo:
+suppi_conversation
+chainy_conversation
+riêng.
+
+18. INTENT DETECTION
+Không phải câu nào cũng tạo nhu cầu.
+Intent tối thiểu:
+GENERAL_QUESTION
+
+BUYER_REQUIREMENT
+SUPPLIER_SEARCH
+
+SUPPLIER_OPPORTUNITY
+SUPPLIER_PROFILE
+
+PROGRAM_INTEREST
+
+ASSOCIATION_PROGRAM
+
+KCN_SUPPORT
+
+SPONSORSHIP
+
+FOUNDING_PARTNER
+
+FDI_MARKET_ENTRY
+
+INVESTMENT
+
+EXPERT_SUPPORT
+
+EXISTING_WORK_FOLLOWUP
+Ví dụ:
+“SUPPI là ai?”
+= GENERAL_QUESTION
+Không tạo Requirement.
+
+“Tôi cần 500 bộ đồng phục tại Đồng Nai.”
+= BUYER_REQUIREMENT
+Tạo draft.
+
+“Công ty tôi làm CNC, có nhà máy nào đang cần không?”
+= SUPPLIER_OPPORTUNITY
+Tạo Opportunity Context, không ép thành buyer requirement.
+
+19. FLOW NHÀ MÁY
+User message
+↓
+Intent = BUYER_REQUIREMENT
+↓
+SUPPI extract data
+↓
+Requirement Draft
+↓
+SUPPI hỏi thiếu
+↓
+Draft cập nhật
+↓
+User xác nhận
+↓
+Login nếu cần
+↓
+Requirement ACTIVE
+↓
+Sourcing
+↓
+Supplier Matches
+↓
+Supplier confirms
+↓
+CHAINY
+↓
+Connection
+↓
+Next action
+↓
+Result
+
+20. SUPPI RESPONSE UI
+Không chỉ chat bubble.
+Sau khi hiểu nhu cầu:
+SUPPI ĐÃ HIỂU
+Card:
+ĐỒNG PHỤC CÔNG NHÂN
+
+Số lượng        500 bộ
+Địa bàn         Đồng Nai
+Thời gian       Tháng 10
+Xem mẫu         Có
+Chất liệu       Chưa xác định
+Ngân sách       Chưa xác định
+Progress:
+65% hoàn tất
+Dưới:
+SUPPI cần thêm 3 thông tin để bắt đầu tìm nguồn.
+
+21. REQUIREMENT DRAFT
+Model:
+RequirementDraft {
+  id
+  conversationId
+
+  userId?
+  organizationId?
+
+  role
+
+  title
+
+  categoryId?
+  subcategoryId?
+
+  productService
+  quantity?
+  unit?
+
+  province?
+  location?
+  industrialParkId?
+
+  deadline?
+
+  budgetMin?
+  budgetMax?
+
+  specifications?
+
+  certificationRequirements[]
+
+  sampleRequired?
+  surveyRequired?
+
+  deliveryRequirements?
+
+  attachments[]
+
+  notes?
+
+  visibility
+
+  completenessScore
+
+  status
+
+  createdFrom
+
+  createdAt
+  updatedAt
+}
+Status ban đầu:
+DRAFT_AI
+
+22. AUTO CREATE DRAFT
+SUPPI phát hiện nhu cầu thật:
+“Nhà máy tôi tại Đồng Nai cần 500 bộ đồng phục.”
+Hệ thống âm thầm:
+CREATE RequirementDraft
+UI hiện:
+✓ SUPPI đã tạo bản nháp nhu cầu
+Card:
+Tìm 500 bộ đồng phục công nhân
+CTA:
+Xem & hoàn thiện nhu cầu
+→
+/dang-nhu-cau?draft={id}
+Không redirect ngay.
+
+23. RIGHT CONTEXT PANEL
+Sau khi có draft, cột phải xuất hiện:
+NHU CẦU ĐANG LÀM
+NC-DRAFT
+
+Đồng phục công nhân
+500 bộ
+Đồng Nai
+
+Hoàn thiện 65%
+
+✓ Sản phẩm
+✓ Số lượng
+✓ Địa bàn
+? Deadline
+? Chất liệu
+? Ngân sách
+CTA:
+Hoàn thiện nhu cầu
+
+Sau khi matching:
+Context Panel đổi thành:
+NGUỒN PHÙ HỢP
+5 nguồn được tìm thấy
+
+2 đã xác nhận
+2 đang chờ
+1 không phù hợp
+
+Sau CHAINY:
+VIỆC TIẾP THEO
+NCC A gửi mẫu
+
+Hạn:
+30/09
+
+Đang chờ:
+Nhà cung ứng
+
+24. GUEST FLOW
+Guest được:
+Chat
+Chọn role
+Upload tạm
+SUPPI làm rõ
+Tạo draft tạm
+Xem Requirement Draft
+Guest không được:
+Publish
+Gửi NCC
+Request connection
+Xem dữ liệu NCC riêng tư
+Tạo CRM pipeline dài hạn
+Nhận notification dài hạn
+
+25. LOGIN TRIGGER
+Chỉ yêu cầu login khi user bấm:
+Lưu nhu cầu
+
+Xác nhận & tìm nguồn
+
+Đăng nhu cầu
+
+Kết nối
+
+Lưu công việc
+
+Nhận thông báo
+Modal:
+LƯU NHU CẦU VÀ BẮT ĐẦU TÌM NGUỒN
+Đăng nhập để SUPPI lưu nhu cầu này, tìm nhà cung ứng phù hợp và để CHAINY theo dõi công việc đến kết quả.
+Dòng nhỏ:
+Những thông tin bạn vừa trao đổi sẽ được giữ lại.
+Buttons:
+ĐĂNG NHẬP
+TẠO TÀI KHOẢN
+
+26. QUAN TRỌNG: LOGIN KHÔNG ĐƯỢC MẤT CONTEXT
+Trước login:
+guest_session_id
+Sau login:
+guest_session
+     ↓ merge
+user
+organization
+conversation
+draft
+attachments
+selected_role
+Không tạo conversation mới.
+
+27. DATABASE — PAGE 02
+Các bảng lõi:
+users
+
+organizations
+organization_roles
+
+assistant_sessions
+
+conversations
+conversation_participants
+messages
+
+requirement_drafts
+requirements
+
+supplier_matches
+
+connections
+
+activities
+next_actions
+
+attachments
+
+zalo_contacts
+external_message_mappings
+Không nhất thiết tạo tất cả ngay trong Sprint đầu.
+Nhưng schema phải chừa đường.
+
+28. CONVERSATION MODEL
+Conversation {
+  id
+
+  organizationId?
+  userId?
+
+  role
+
+  intent?
+
+  status
+
+  activeAssistant
+
+  requirementId?
+  connectionId?
+
+  source
+
+  createdAt
+  updatedAt
+}
+activeAssistant:
+SUPPI
+CHAINY
+HUMAN
+
+29. MESSAGE MODEL
+Message {
+  id
+
+  conversationId
+
+  requirementId?
+  connectionId?
+
+  senderType
+  senderId?
+
+  assistantRole?
+
+  channel
+
+  direction
+
+  text
+
+  attachments[]
+
+  externalMessageId?
+
+  syncStatus?
+
+  createdAt
+}
+channel:
+WEB
+ZALO
+SYSTEM
+
+30. KHÔNG LƯU AI OUTPUT THÀNH FACT NGAY
+Điểm này rất quan trọng.
+Ví dụ SUPPI suy ra:
+quantity = 500
+Nếu user nói rõ:
+được xem là:
+source = USER_CONFIRMED
+Nếu AI suy luận:
+source = AI_INFERRED
+Không nên trộn hai loại.
+Field nên có metadata:
+{
+ value: "500",
+ source: "USER_MESSAGE",
+ confidence: 0.98,
+ confirmed: true
+}
+
+31. BACKEND SERVICES
+Tôi đề nghị tách:
+ConversationService
+
+AssistantRouterService
+
+IntentDetectionService
+
+RequirementDraftService
+
+RequirementService
+
+SupplierMatchingService
+
+ConnectionService
+
+ActivityService
+
+NextActionService
+
+IdentityService
+
+ZaloIntegrationService
+Không để AI call nằm trực tiếp trong React component.
+
+32. API ĐỀ XUẤT
+Tạo session
+POST /api/assistant/sessions
+Gửi message
+POST /api/assistant/conversations/{id}/messages
+Load conversation
+GET /api/assistant/conversations/{id}
+Create/update draft
+POST /api/requirement-drafts
+PATCH /api/requirement-drafts/{id}
+Convert draft
+POST /api/requirement-drafts/{id}/confirm
+Role
+PATCH /api/assistant/conversations/{id}/role
+Upload
+POST /api/assistant/attachments
+Antigravity có thể điều chỉnh endpoint theo framework đang có.
+Không bắt dev tạo REST nếu project hiện tại dùng server actions/RPC.
+
+33. AI OUTPUT PHẢI STRUCTURED
+Không để AI trả text rồi parse bằng regex.
+Schema ví dụ:
+{
+  "intent": "BUYER_REQUIREMENT",
+  "assistant": "SUPPI",
+  "reply": "Tôi đã hiểu sơ bộ...",
+  "entities": {
+    "product_service": "Đồng phục công nhân",
+    "quantity": 500,
+    "unit": "bộ",
+    "location": "Đồng Nai",
+    "deadline": null,
+    "sample_required": true
+  },
+  "missing_fields": [
+    "deadline",
+    "specifications"
+  ],
+  "recommended_action": "ASK_CLARIFYING_QUESTION"
+}
+Backend validate schema trước khi lưu.
+
+34. SUPPI LOGIC
+SUPPI làm:
+Understand
+↓
+Extract
+↓
+Clarify
+↓
+Structure
+↓
+Search
+↓
+Compare
+↓
+Recommend next step
+SUPPI không được tự khẳng định:
+NCC này chắc chắn đáp ứng.
+Dùng:
+Có khả năng phù hợp
+Cần xác nhận
+Đã xác nhận có thể tiếp nhận
+
+35. CHAINY LOGIC
+CHAINY chỉ tiếp quản khi có:
+Requirement
++
+at least one confirmed party
++
+permission to connect
+Source tài liệu cũng định vị CHAINY ở phần đăng ký, kết nối, meeting và follow-up. Văn bản đã dán (2)
+CHAINY flow:
+CONNECT
+↓
+MEETING
+↓
+SAMPLE / SURVEY
+↓
+QUOTATION
+↓
+NEGOTIATION
+↓
+RESULT
+
+36. HANDOFF UI
+Khi chuyển:
+✓ SUPPI hoàn tất bước tìm nguồn
+Animation nhỏ.
+Sau đó:
+CHAINY TIẾP NHẬN
+Tôi sẽ giúp hai bên chuyển từ quan tâm sang làm việc.
+Không reset chat.
+Timeline hiển thị event:
+14:35
+SUPPI → CHAINY
+
+37. HUMAN HANDOFF
+Phải chừa khả năng người thật tiếp quản.
+Ví dụ:
+AI cannot confidently resolve
+↓
+Human Coordinator
+UI:
+Một điều phối viên CHUOICUNGUNG.COM đang hỗ trợ cuộc trao đổi này.
+activeAssistant = HUMAN
+Không giấu người dùng rằng người thật đang vào xử lý.
+
+38. ZALO — PAGE 02 CHỈ CHUẨN BỊ KIẾN TRÚC
+Trong P0 đầu tiên:
+Website chạy hoàn chỉnh trước.
+Nhưng database phải hỗ trợ:
+channel = ZALO
+Sau này:
+WEB
+   ↘
+     Conversation CRM
+   ↗
+ZALO
+Không tạo hai conversation riêng.
+
+39. ZALO UI
+Nếu chưa link:
+Header:
+[ Liên kết Zalo ]
+Tooltip:
+Nhận cập nhật và tiếp tục làm việc với SUPPI & CHAINY trên Zalo.
+Đã link:
+✓ Zalo đã liên kết
+Conversation header:
+Bạn có thể tiếp tục cuộc trò chuyện này trên Website hoặc Zalo.
+
+40. ZALO BACKEND
+Tách service:
+ZaloIntegrationService
+Không code API Zalo trực tiếp trong component.
+Phải hỗ trợ:
+OAuth/linking
+webhook
+send
+receive
+mapping
+dedupe
+retry
+sync status
+consent
+Phần tích hợp thực tế chỉ bật khi credential/quyền thật đã cấu hình.
+
+41. PRIVACY
+Chat có thể chứa:
+thông tin mua hàng;
+giá;
+người liên hệ;
+tài liệu kỹ thuật.
+Vì vậy:
+Không public conversation.
+Không index conversation.
+Không dùng message private làm public requirement nếu chưa confirm.
+Không expose:
+buyer_phone
+buyer_email
+private_attachment
+internal_budget
+ra frontend public.
+
+42. SEO
+Generic /tro-ly-ai có thể index nếu muốn landing page AI được SEO.
+Canonical:
+https://chuoicungung.com/tro-ly-ai
+Title:
+SUPPI & CHAINY | Trợ lý Chuỗi Cung Ứng B2B
+Description:
+SUPPI giúp làm rõ nhu cầu và tìm nguồn phù hợp; CHAINY hỗ trợ kết nối, theo dõi cuộc gặp, mẫu, báo giá và công việc tiếp theo.
+Nhưng URL có:
+?session=
+?conversation=
+?draft=
+phải:
+noindex, nofollow
+hoặc canonical về /tro-ly-ai tùy implementation.
+Conversation private tuyệt đối không index.
+
+43. MOBILE
+Mobile không dùng 3 cột.
+Layout:
+Header
+↓
+Role
+↓
+Conversation
+↓
+Composer sticky
+Sidebar → drawer.
+Context Panel → bottom sheet/tab:
+Chat
+Nhu cầu
+Công việc
+Ô input sticky bottom nhưng không che content.
+Mascot thu nhỏ.
+Không để mascot chiếm 40% viewport.
+
+44. EMPTY / LOADING / ERROR STATES
+Phải thiết kế đủ.
+Empty:
+Hãy nói với SUPPI bạn đang cần gì.
+Loading:
+SUPPI đang đọc yêu cầu...
+Matching:
+SUPPI đang tìm nguồn có khả năng phù hợp...
+Handoff:
+CHAINY đang chuẩn bị kết nối...
+Error:
+Chưa thể xử lý yêu cầu này. Nội dung của bạn đã được giữ lại. Thử lại.
+Không dùng:
+Something went wrong.
+
+45. ANALYTICS
+Track:
+assistant_page_view
+
+role_selected
+
+prompt_card_clicked
+
+message_sent
+
+intent_detected
+
+requirement_draft_created
+
+requirement_draft_updated
+
+login_prompt_shown
+
+login_completed
+
+requirement_confirmed
+
+sourcing_started
+
+supplier_match_viewed
+
+connection_requested
+
+suppi_chainy_handoff
+
+zalo_link_clicked
+
+zalo_linked
+Không log nội dung sensitive vào analytics event.
+
+46. ACCESSIBILITY
+Buttons có label thật.
+Không chỉ icon.
+Enter gửi tin.
+Shift+Enter xuống dòng.
+Screen reader nhận biết:
+SUPPI
+CHAINY
+User
+System event
+Contrast đủ.
+Status không chỉ biểu thị bằng màu.
+
+47. PERFORMANCE
+Chat phải hỗ trợ:
+streaming nếu backend cho phép.
+Nhưng:
+Không block toàn page khi AI đang trả lời.
+Lazy load lịch sử dài.
+Virtualize messages nếu conversation dài.
+Compress image upload.
+Attachment limit rõ ràng.
+
+48. SECURITY
+Backend phải kiểm tra:
+conversation ownership
+organization membership
+role permission
+requirement access
+attachment access
+Không tin organizationId từ frontend.
+Không cho user đổi URL để đọc conversation người khác.
+File URL dùng signed URL nếu private.
+Rate limit guest chat.
+Spam protection.
+
+49. PAGE 02 ĐƯỢC COI LÀ HOÀN THÀNH KHI
+Test scenario:
+CASE A — Guest hỏi
+User:
+“Nhà máy tôi ở Đồng Nai cần 500 bộ đồng phục công nhân.”
+Expected:
+No login
+↓
+SUPPI replies
+↓
+Intent = buyer requirement
+↓
+Draft created
+↓
+Context panel visible
+↓
+SUPPI asks missing info
+
+CASE B — Câu hỏi chung
+“Founding Partner là gì?”
+Expected:
+Answer
+↓
+NO Requirement Draft
+
+CASE C — Supplier
+“Công ty tôi gia công CNC, tôi muốn tìm nhà máy đang cần.”
+Expected:
+Intent = supplier opportunity
+↓
+Supplier workflow
+↓
+NO buyer requirement
+
+CASE D — Login
+Guest đã chat 5 message.
+Bấm:
+Xác nhận & tìm nguồn
+Expected:
+Login
+↓
+return
+↓
+same conversation
+same draft
+same role
+same attachments
+
+CASE E — SUPPI → CHAINY
+NCC xác nhận.
+Expected:
+same conversation
+same requirement
+assistant changes
+connection created
+next action created
+
+50. COMPONENT STRUCTURE
+Tôi đề nghị:
+AIWorkspace
+│
+├── WorkspaceHeader
+│
+├── WorkspaceSidebar
+│
+├── RoleSelector
+│
+├── Conversation
+│   ├── MessageList
+│   ├── AssistantMessage
+│   ├── UserMessage
+│   └── SystemEvent
+│
+├── ChatComposer
+│
+├── QuickActions
+│
+├── SuggestedPrompts
+│
+├── RequirementContextPanel
+│
+├── SupplierMatchesPanel
+│
+├── ConnectionPanel
+│
+├── NextActionCard
+│
+├── LoginModal
+│
+├── ZaloLinkButton
+│
+└── MobileWorkspaceDrawer
+
+51. THỨ TỰ LÀM VỚI ANTIGRAVITY
+Page này tôi chia thành 5 prompt.
+Anh chạy từng prompt, đừng ném tất cả vào một lần.
+
+PROMPT 02-01 — AUDIT /tro-ly-ai
+PROJECT: CHUOICUNGUNG.COM
+PAGE 02: SUPPI & CHAINY AI WORKSPACE
+TARGET ROUTE: /tro-ly-ai
+
+Ở bước này CHƯA xây AI, CHƯA migration database, CHƯA tích hợp Zalo.
+
+Hãy audit codebase hiện tại để chuẩn bị xây /tro-ly-ai.
+
+1. Kiểm tra /tro-ly-ai đã tồn tại chưa.
+
+2. Tìm toàn bộ component hiện có liên quan:
+- chat
+- chatbot
+- SUPPI
+- CHAINY
+- assistant
+- search
+- demand form
+- login
+- profile
+- dashboard
+- sidebar
+- notification
+
+3. Kiểm tra auth hiện tại:
+- guest session
+- login
+- signup
+- session storage
+- organization
+- role
+
+4. Kiểm tra database/model hiện tại có:
+- conversation
+- message
+- demand/requirement
+- supplier
+- matching
+- connection
+- task
+- program
+- organization role
+
+5. Kiểm tra:
+- file upload
+- notification
+- websocket/streaming
+- AI API nếu đang có
+- Zalo integration nếu có
+
+6. Không tự tạo model mới.
+
+7. Tạo:
+
+docs/pages/tro-ly-ai/AI_WORKSPACE_CURRENT_AUDIT.md
+
+Nội dung gồm:
+
+EXISTING
+REUSABLE
+MISSING
+CONFLICT
+TECHNICAL RISK
+
+8. Đề xuất mapping từ code hiện tại sang:
+
+WorkspaceHeader
+WorkspaceSidebar
+RoleSelector
+Conversation
+ChatComposer
+QuickActions
+RequirementContextPanel
+SupplierMatchesPanel
+ConnectionPanel
+LoginModal
+
+9. Nếu chưa có /tro-ly-ai:
+chỉ báo MISSING.
+CHƯA tạo route.
+
+10. DỪNG SAU AUDIT.
+
+PROMPT 02-02 — DATA MODEL + BACKEND
+Chỉ chạy sau khi audit ổn.
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /tro-ly-ai
+PHASE: DATA MODEL + BACKEND FOUNDATION
+
+Dựa trên audit đã hoàn thành.
+
+MỤC TIÊU:
+Xây nền dữ liệu cho một conversation duy nhất có thể được SUPPI, CHAINY và sau này Zalo cùng sử dụng.
+
+Không redesign UI trong bước này.
+
+1. Reuse model hiện tại nếu có.
+
+2. Chỉ migration những field/table thực sự thiếu.
+
+Data domain cần hỗ trợ:
+
+Organization
+OrganizationRole
+
+AssistantSession
+Conversation
+Message
+
+RequirementDraft
+Requirement
+
+SupplierMatch
+
+Connection
+
+Activity
+NextAction
+
+Attachment
+
+Không duplicate Company/Supplier nếu hệ thống đã có entity tương đương.
+
+3. Một Organization có thể có nhiều role.
+
+4. SUPPI và CHAINY phải dùng cùng:
+conversation_id
+requirement_id
+connection_id
+
+5. Message cần tối thiểu:
+id
+conversation_id
+sender_type
+sender_id
+assistant_role
+channel
+direction
+text
+attachments
+external_message_id
+sync_status
+created_at
+
+6. Conversation:
+id
+user_id
+organization_id
+role
+intent
+active_assistant
+requirement_id
+connection_id
+status
+source
+created_at
+updated_at
+
+7. RequirementDraft:
+product/service
+quantity
+unit
+location
+industrial park
+deadline
+budget optional
+specifications
+certifications
+sample
+survey
+delivery
+attachments
+visibility
+completeness
+status
+
+8. RequirementDraft không phải Requirement đã publish.
+
+9. Status:
+DRAFT_AI
+DRAFT_USER_REVIEW
+READY_FOR_CONFIRMATION
+CONFIRMED
+
+10. Tạo service layer:
+
+ConversationService
+RequirementDraftService
+AssistantRouterService
+
+Không gọi AI trực tiếp từ UI.
+
+11. Tạo API/server actions phù hợp stack hiện tại cho:
+create session
+send message
+get conversation
+update role
+get/update draft
+
+12. Guest:
+support temporary session.
+
+13. Authenticated:
+conversation gắn user + organization.
+
+14. Thiết kế guest → authenticated merge.
+
+15. Viết migration an toàn.
+
+Không xóa data cũ.
+Không rename destructive nếu chưa cần.
+
+16. Tạo tests cho:
+ownership
+guest session
+draft creation
+draft update
+login merge
+
+17. Xuất:
+docs/pages/tro-ly-ai/AI_WORKSPACE_DATA_MODEL.md
+docs/pages/tro-ly-ai/AI_WORKSPACE_API.md
+
+PROMPT 02-03 — UX/UI
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /tro-ly-ai
+PHASE: UX/UI
+
+Xây giao diện AI Workspace theo design system hiện tại.
+
+Không thay global design system.
+Không redesign các page khác.
+
+DESKTOP:
+
+Header
++
+Left Sidebar
++
+Main Conversation
++
+Context Panel khi có dữ liệu.
+
+HEADER GUEST:
+
+← Trang chủ
+● SUPPI & CHAINY đang sẵn sàng
+
+Right:
+Lịch Ngày Hội
+Hotline
+Đăng nhập
+
+HEADER AUTH:
+notification
+Zalo status placeholder
+organization
+role
+avatar
+
+SIDEBAR:
+
++ Cuộc trò chuyện mới
+
+CÔNG VIỆC CỦA TÔI
+Nhu cầu / yêu cầu
+Đang tìm kiếm
+Gợi ý phù hợp
+Kết nối đang xử lý
+Lịch hẹn & hoạt động
+Đề xuất / Báo giá
+Việc cần làm tiếp
+Kết quả
+
+HỒ SƠ & TỔ CHỨC
+Hồ sơ của tôi
+Năng lực & nhu cầu
+Địa bàn hoạt động
+Hồ sơ & tài liệu
+
+CƠ HỘI & CHƯƠNG TRÌNH
+Cơ hội dành cho tôi
+Kết nối tại KCN
+Ngày hội Chuỗi Cung Ứng
+Sự kiện
+Chương trình kết nối
+
+HỢP TÁC
+Đối tác Đồng hành
+Cơ hội tài trợ
+Hợp tác tổ chức
+Hợp tác quốc tế
+
+EMPTY STATE:
+
+Headline:
+“CHỈ CẦN NÓI BẠN ĐANG CẦN GÌ.”
+
+Sub:
+“SUPPI giúp làm rõ và tìm đúng nguồn.
+CHAINY giúp kết nối và theo việc đến kết quả.”
+
+Chat placeholder:
+“Hãy mô tả nhu cầu, năng lực hoặc công việc bạn đang muốn giải quyết...”
+
+ROLE SELECTOR:
+Factory
+Supplier
+Association
+Industrial Park
+Sponsor
+Founding Partner
+FDI
+Investor
+Expert
+
+QUICK ACTIONS:
+render từ role config.
+
+Không hardcode 9 giao diện riêng.
+
+Mobile:
+sidebar → drawer
+context → bottom sheet
+composer sticky bottom
+
+Không để mascot che CTA.
+
+Sử dụng mascot SUPPI và CHAINY hiện có trong project nếu đã có.
+Không tự tạo lại mascot.
+
+Không dùng mock count trong production UI.
+
+Xây:
+loading
+empty
+error
+offline
+login-required state.
+
+PROMPT 02-04 — SUPPI / CHAINY WORKFLOW
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /tro-ly-ai
+PHASE: ASSISTANT WORKFLOW
+
+MỤC TIÊU:
+Không tạo chatbot thông thường.
+
+Conversation phải có khả năng tạo và cập nhật business objects.
+
+1. Tạo intent classifier.
+
+Minimum intents:
+
+GENERAL_QUESTION
+BUYER_REQUIREMENT
+SUPPLIER_SEARCH
+SUPPLIER_OPPORTUNITY
+SUPPLIER_PROFILE
+PROGRAM_INTEREST
+ASSOCIATION_PROGRAM
+KCN_SUPPORT
+SPONSORSHIP
+FOUNDING_PARTNER
+FDI_MARKET_ENTRY
+INVESTMENT
+EXPERT_SUPPORT
+EXISTING_WORK_FOLLOWUP
+
+2. GENERAL_QUESTION:
+không tạo Requirement.
+
+3. BUYER_REQUIREMENT:
+tạo RequirementDraft.
+
+4. SUPPI phải extract structured data.
+
+5. AI output phải dùng validated structured schema.
+Không parse bằng regex.
+
+6. SUPPI:
+- hiểu;
+- extract;
+- hỏi thông tin thiếu;
+- cập nhật draft;
+- hiển thị completeness.
+
+7. Khi draft được tạo:
+hiển thị:
+“SUPPI đã tạo bản nháp nhu cầu”.
+
+Không redirect tự động.
+
+8. Có CTA:
+“Xem & hoàn thiện nhu cầu”
+
+→ /dang-nhu-cau?draft={id}
+
+9. Guest không được publish.
+
+10. Khi user muốn:
+Xác nhận & tìm nguồn
+Lưu
+Đăng
+Kết nối
+
+mà chưa login:
+show LoginModal.
+
+11. Sau login:
+merge guest session.
+Không mất:
+messages
+draft
+role
+attachments.
+
+12. CHAINY không tạo conversation mới.
+
+13. Khi có confirmed supplier / connection:
+activeAssistant = CHAINY
+
+14. Create Connection:
+requirement
+buyer
+supplier
+stage
+owner
+next_action
+due_date
+result
+
+15. Pipeline:
+Nhu cầu
+→ Tìm nguồn
+→ NCC xác nhận
+→ Kết nối
+→ Cuộc gặp
+→ Mẫu / khảo sát
+→ Báo giá
+→ Thương lượng
+→ Kết quả
+
+16. Support HUMAN handoff.
+
+17. Không để AI tự công bố:
+verified
+best
+guaranteed
+approved
+nếu database không có bằng chứng.
+
+18. Log events:
+conversation started
+intent detected
+draft created
+draft updated
+requirement confirmed
+suppi-chainy handoff
+connection created
+next action created
+result recorded.
+
+PROMPT 02-05 — QA + ZALO PREPARATION
+PROJECT: CHUOICUNGUNG.COM
+PAGE: /tro-ly-ai
+PHASE: FINAL QA + CHANNEL PREPARATION
+
+Không tích hợp Zalo production nếu chưa có credentials/quyền thật.
+
+1. Database Message phải hỗ trợ channel:
+
+WEB
+ZALO
+SYSTEM
+
+2. Tạo interface:
+ZaloIntegrationService
+
+nhưng không hardcode API credential.
+
+3. UI:
+nếu chưa linked:
+“Liên kết Zalo”
+
+nếu linked:
+“✓ Zalo đã liên kết”
+
+4. Conversation CRM phải là source of truth.
+
+Không tạo:
+website_chat database riêng
+zalo_chat database riêng.
+
+5. Test:
+
+A.
+Guest:
+“Nhà máy tôi ở Đồng Nai cần 500 bộ đồng phục công nhân.”
+
+Expected:
+SUPPI reply
+intent detected
+draft created
+no login
+no publish.
+
+B.
+“SUPPI là ai?”
+
+Expected:
+answer only
+no draft.
+
+C.
+Supplier:
+“Công ty tôi làm CNC và muốn tìm nhu cầu.”
+
+Expected:
+supplier workflow
+not buyer requirement.
+
+D.
+Guest chat 5 messages → login.
+
+Expected:
+same conversation
+same draft
+same role.
+
+E.
+Requirement + confirmed supplier.
+
+Expected:
+same conversation
+SUPPI → CHAINY
+connection created.
+
+F.
+Mobile 390px.
+
+Expected:
+no overflow
+composer usable
+drawer works.
+
+G.
+Security:
+User A cannot access User B conversation by URL.
+
+H.
+Private messages:
+not indexable.
+
+6. Performance:
+no duplicate API calls
+no console error
+no infinite retry
+no fake counts
+no mock conversation in production.
+
+7. Generate final report:
+
+docs/pages/tro-ly-ai/AI_WORKSPACE_QA.md
+
+Include:
+PASS
+FAIL
+BLOCKED
+NOT_IMPLEMENTED
+
+Không tuyên bố Zalo đã hoạt động nếu chưa test webhook thật.
+
+Sau khi Page 02 hoàn thành
+Đừng đánh giá page bằng việc:
+“Chat được rồi.”
+Page 02 chỉ được coi là hoàn thành khi flow này chạy:
+KHÁCH NÓI NHU CẦU
+→ SUPPI NHẬN DIỆN
+→ TẠO DRAFT
+→ SUPPI LÀM RÕ
+→ KHÔNG MẤT CONTEXT
+→ LOGIN KHI CẦN
+→ DRAFT ĐƯỢC GIỮ
+→ CHUẨN BỊ CHUYỂN SANG /dang-nhu-cau
+Và source tài liệu cũng đã xác định SUPPI nên tiến từ hướng dẫn biểu mẫu tới tạo draft và phát hiện thiếu thông tin; CHAINY từ theo dõi trạng thái tới điều phối trong phạm vi được phép. Văn bản đã dán (1)
+Page tiếp theo sau khi anh hoàn tất Page 02 sẽ là Page 03 — /dang-nhu-cau, và page đó tôi sẽ làm kỹ nhất ở phần AI-assisted form, Requirement Draft, quyền chia sẻ, login, publish, mã nhu cầu, CRM và luồng sang Supplier Matching.

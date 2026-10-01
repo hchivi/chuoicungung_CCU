@@ -186,10 +186,10 @@ export default function HeatmapProvincesTable({ lang = 'vi' }) {
           </div>
 
           <Link
-            to="/ban-do-viet-nam"
+            to="/khu-cong-nghiep"
             className="text-[11px] text-[#0052cc] font-bold hover:underline flex items-center shrink-0"
           >
-            Bản đồ GIS →
+            Bản đồ KCN GIS →
           </Link>
         </div>
       </div>

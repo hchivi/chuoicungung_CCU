@@ -3,6 +3,7 @@
 export const stagesData = [
   {
     id: 1,
+    slug: "chuan-bi-dau-tu",
     title: "Chuẩn bị & Đầu tư",
     titleEn: "Preparation & Investment",
     code: "GD-01",
@@ -18,6 +19,7 @@ export const stagesData = [
     phases: [
       {
         id: "1.1",
+        slug: "khao-sat-dinh-huong",
         stageId: 1,
         title: "Khảo sát & Định hướng",
         titleEn: "Feasibility & Strategic Survey",
@@ -42,6 +44,7 @@ export const stagesData = [
       },
       {
         id: "1.2",
+        slug: "phap-ly-thu-tuc",
         stageId: 1,
         title: "Pháp lý & Thủ tục",
         titleEn: "Legal Licensing & Procedures",
@@ -86,6 +89,7 @@ export const stagesData = [
       },
       {
         id: "1.3",
+        slug: "chon-dia-diem-mat-bang",
         stageId: 1,
         title: "Chọn địa điểm & Mặt bằng",
         titleEn: "Site Selection & Industrial Park",
@@ -112,6 +116,7 @@ export const stagesData = [
   },
   {
     id: 2,
+    slug: "thiet-ke-xay-dung",
     title: "Thiết kế & Xây dựng",
     titleEn: "Design & Construction",
     code: "GD-02",
@@ -127,6 +132,7 @@ export const stagesData = [
     phases: [
       {
         id: "2.1",
+        slug: "thiet-ke-quy-hoach",
         stageId: 2,
         title: "Thiết kế & Quy hoạch",
         titleEn: "Master Planning & Architecture",
@@ -140,8 +146,9 @@ export const stagesData = [
       },
       {
         id: "2.2",
+        slug: "thi-cong-xay-dung",
         stageId: 2,
-        title: "Thi công xây dựng",
+        title: "Thiết kế & Xây dựng",
         titleEn: "Civil & Structural Construction",
         summary: "Triển khai thi công móng, kết cấu bê tông, nhà xưởng kết cấu thép và hạ tầng nội khu.",
         summaryEn: "Foundation piling, concrete structure, pre-engineered steel erection and internal infrastructure.",
@@ -153,6 +160,7 @@ export const stagesData = [
       },
       {
         id: "2.3",
+        slug: "co-dien-ha-tang-ky-thuat",
         stageId: 2,
         title: "Cơ điện & Hạ tầng kỹ thuật",
         titleEn: "MEP & Technical Infrastructure",
@@ -168,6 +176,7 @@ export const stagesData = [
   },
   {
     id: 3,
+    slug: "lap-dat-hoan-thien",
     title: "Lắp đặt & Hoàn thiện",
     titleEn: "Installation & Commissioning",
     code: "GD-03",
@@ -183,6 +192,7 @@ export const stagesData = [
     phases: [
       {
         id: "3.1",
+        slug: "lap-dat-may-day-chuyen",
         stageId: 3,
         title: "Lắp đặt máy & Dây chuyền",
         titleEn: "Machinery Rigging & Production Lines",
@@ -196,6 +206,7 @@ export const stagesData = [
       },
       {
         id: "3.2",
+        slug: "hoan-thien-khong-gian-san-xuat",
         stageId: 3,
         title: "Hoàn thiện không gian sản xuất",
         titleEn: "Cleanroom Setup & Facility Fit-out",
@@ -209,6 +220,7 @@ export const stagesData = [
       },
       {
         id: "3.3",
+        slug: "kiem-tra-chay-thu",
         stageId: 3,
         title: "Kiểm tra & Chạy thử Nghiệm thu",
         titleEn: "Trial Runs & Safety Acceptance",
@@ -224,6 +236,7 @@ export const stagesData = [
   },
   {
     id: 4,
+    slug: "van-hanh-san-xuat",
     title: "Vận hành Sản xuất",
     titleEn: "Production Operations",
     code: "GD-04",
@@ -239,6 +252,7 @@ export const stagesData = [
     phases: [
       {
         id: "4.1",
+        slug: "cung-ung-dau-vao",
         stageId: 4,
         title: "Cung ứng đầu vào (NVL, linh kiện)",
         titleEn: "Input Sourcing (Raw Materials & Parts)",
@@ -252,6 +266,7 @@ export const stagesData = [
       },
       {
         id: "4.2",
+        slug: "quan-ly-san-xuat-kiem-soat",
         stageId: 4,
         title: "Quản lý sản xuất & Kiểm soát",
         titleEn: "Production Management & QA/QC",
@@ -265,6 +280,7 @@ export const stagesData = [
       },
       {
         id: "4.3",
+        slug: "giao-nhan-phan-phoi",
         stageId: 4,
         title: "Giao nhận & Phân phối",
         titleEn: "Warehousing & Outbound Logistics",
@@ -280,6 +296,7 @@ export const stagesData = [
   },
   {
     id: 5,
+    slug: "nhan-su-hau-can",
     title: "Nhân sự & Hậu cần",
     titleEn: "Workforce & Logistics",
     code: "GD-05",
@@ -295,6 +312,7 @@ export const stagesData = [
     phases: [
       {
         id: "5.1",
+        slug: "tuyen-dung-lao-dong",
         stageId: 5,
         title: "Tuyển dụng & Lao động",
         titleEn: "Staffing & Labor Recruitment",
@@ -308,6 +326,7 @@ export const stagesData = [
       },
       {
         id: "5.2",
+        slug: "doi-song-phuc-loi",
         stageId: 5,
         title: "Đời sống & Phúc lợi",
         titleEn: "Catering, Commuting & Welfare",
@@ -321,6 +340,7 @@ export const stagesData = [
       },
       {
         id: "5.3",
+        slug: "dong-phuc-bao-ho",
         stageId: 5,
         title: "Đồng phục & Bảo hộ (PPE)",
         titleEn: "Uniforms & PPE Safety Gear",
@@ -336,6 +356,7 @@ export const stagesData = [
   },
   {
     id: 6,
+    slug: "mo-rong-toi-uu-chuyen-doi",
     title: "Mở rộng – Tối ưu – Chuyển đổi",
     titleEn: "Expansion, Optimization & ESG",
     code: "GD-06",
@@ -351,6 +372,7 @@ export const stagesData = [
     phases: [
       {
         id: "6.1",
+        slug: "mo-rong-cong-suat",
         stageId: 6,
         title: "Mở rộng công suất & Nhà máy",
         titleEn: "Capacity Expansion & Phase 2",
@@ -364,6 +386,7 @@ export const stagesData = [
       },
       {
         id: "6.2",
+        slug: "chuan-hoa-danh-gia",
         stageId: 6,
         title: "Audit & ISO – Chuẩn hóa",
         titleEn: "Auditing, ISO & Standardization",
@@ -377,6 +400,7 @@ export const stagesData = [
       },
       {
         id: "6.3",
+        slug: "chuyen-doi-tai-cau-truc",
         stageId: 6,
         title: "Chuyển đổi số & Tối ưu hệ thống",
         titleEn: "Digital Transformation & ESG Green",

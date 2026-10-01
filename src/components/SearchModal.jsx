@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Building2, Factory, MapPin, Layers, ArrowRight, ShoppingBag } from 'lucide-react';
 import { stagesData, enterprisesData, industrialParksData, factoriesData, demandsMarketplaceData } from '../data/mockData';
+import { PHASE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export default function SearchModal({ isOpen, onClose }) {
@@ -84,7 +85,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     {filteredStages.map(p => (
                       <div
                         key={p.id}
-                        onClick={() => handleSelect(`/pha/${p.id}`)}
+                        onClick={() => handleSelect(`/pha/${p.slug || PHASE_ID_TO_SLUG_MAP[p.id] || p.id}`)}
                         className="flex items-center justify-between p-2 hover:bg-sky-50 rounded-lg cursor-pointer text-xs"
                       >
                         <div className="flex items-center space-x-2">
@@ -129,7 +130,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     {filteredEnterprises.map(e => (
                       <div
                         key={e.id}
-                        onClick={() => handleSelect(`/doanh-nghiep/${e.id}`)}
+                        onClick={() => handleSelect(`/nha-cung-ung/${e.id}`)}
                         className="flex items-center justify-between p-2 hover:bg-blue-50 rounded-lg cursor-pointer text-xs"
                       >
                         <div className="flex items-center space-x-2">
@@ -174,7 +175,7 @@ export default function SearchModal({ isOpen, onClose }) {
                     {filteredDemands.map(d => (
                       <div
                         key={d.id}
-                        onClick={() => handleSelect(`/nhu-cau`)}
+                        onClick={() => handleSelect(`/san-nhu-cau`)}
                         className="flex items-center justify-between p-2 hover:bg-purple-50 rounded-lg cursor-pointer text-xs"
                       >
                         <div className="flex items-center space-x-2">

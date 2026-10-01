@@ -3,18 +3,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Search, Filter, ShoppingBag, MapPin, Building2, Calendar,
   Clock, PlusCircle, ArrowRight, ChevronRight, RotateCcw,
-  DollarSign, CheckCircle2, AlertCircle, Sparkles, Award,
-  Users, Eye, Lock, ShieldCheck, Heart, Share2, Layers,
-  Phone, Mail, MessageSquare, X, LogIn, UserPlus, Zap,
-  TrendingUp, Flame, Timer, FileText, Send, Radio
+  CheckCircle2, AlertCircle, Sparkles, Users, Eye, ShieldCheck,
+  Send, Bot, ChevronDown, Check, X, FileText, Factory, Layers,
+  ExternalLink, HelpCircle
 } from 'lucide-react';
-import { demandsMarketplaceData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
-import OneClickApplyModal from '../components/demands/OneClickApplyModal';
-import KycPaywallModal from '../components/demands/KycPaywallModal';
-import FastRfqModal from '../components/demands/FastRfqModal';
-import LiveDemandToast from '../components/demands/LiveDemandToast';
-import B2bTradeNetworkCanvas from '../components/demands/B2bTradeNetworkCanvas';
+import { 
+  getPublicRequirements, 
+  evaluateSupplierRelevance,
+  getSupplierResponseForRequirement
+} from '../data/requirementsData';
+import { MASTER_SIX_STAGES } from '../data/sixStagesData';
+import SupplierResponseModal from '../components/demands/SupplierResponseModal';
+import SuppiDemandAssistantModal from '../components/demands/SuppiDemandAssistantModal';
+import AuthModal from '../components/auth/AuthModal';
 
 export default function DemandsPage() {
   const { t, lang } = useLanguage();
@@ -22,714 +24,853 @@ export default function DemandsPage() {
 
   // Search & Filter States
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPhase, setSelectedPhase] = useState('all');
-  const [selectedBudgetTier, setSelectedBudgetTier] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
-  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [selectedStage, setSelectedStage] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedProvince, setSelectedProvince] = useState('all');
+  const [selectedSampleReq, setSelectedSampleReq] = useState(false);
+  const [selectedSurveyReq, setSelectedSurveyReq] = useState(false);
+  const [sortBy, setSortBy] = useState('newest'); // newest | expiring_soon
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
-  // Fast-RFQ Box Quick State
-  const [quickRfqText, setQuickRfqText] = useState('');
-  const [quickRfqPhase, setQuickRfqPhase] = useState('1.1');
-  const [quickRfqAnonymous, setQuickRfqAnonymous] = useState(true);
+  // Authenticated user state from session
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ccu_user_session');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return {
+      isLoggedIn: false,
+      name: 'Khách vãng lai',
+      role: 'Guest',
+      orgName: '',
+      orgId: null,
+      industry: 'May mặc & Bảo hộ lao động',
+      location: 'Đồng Nai'
+    };
+  });
 
-  // Modals
-  const [applyModal, setApplyModal] = useState({ isOpen: false, demand: null });
-  const [paywallModal, setPaywallModal] = useState({ isOpen: false, demand: null });
-  const [fastRfqModalOpen, setFastRfqModalOpen] = useState(false);
+  // Modals state
+  const [responseModal, setResponseModal] = useState({ isOpen: false, requirement: null });
+  const [suppiModal, setSuppiModal] = useState({ isOpen: false, requirement: null });
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [detailModal, setDetailModal] = useState({ isOpen: false, requirement: null });
 
-  // Filter logic
-  const filteredDemands = useMemo(() => {
-    return demandsMarketplaceData.filter(d => {
-      // Search term filter
-      const matchesSearch = !searchTerm ||
-        d.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        d.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (d.anonymousBuyerName && d.anonymousBuyerName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (d.biddingCode && d.biddingCode.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (d.kcn && d.kcn.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (d.location && d.location.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Update session listener
+  const refreshUserSession = () => {
+    try {
+      const saved = localStorage.getItem('ccu_user_session');
+      if (saved) setCurrentUser(JSON.parse(saved));
+    } catch (e) {}
+  };
 
-      // Phase filter
-      const matchesPhase = selectedPhase === 'all' ||
-        d.phaseId === selectedPhase ||
-        String(d.stageId) === selectedPhase;
-
-      // Budget tier filter
-      let matchesBudget = true;
-      if (selectedBudgetTier === 'under-1b') {
-        matchesBudget = (d.budgetValue || 0) < 1000000000;
-      } else if (selectedBudgetTier === '1b-5b') {
-        matchesBudget = (d.budgetValue || 0) >= 1000000000 && (d.budgetValue || 0) <= 5000000000;
-      } else if (selectedBudgetTier === 'above-5b') {
-        matchesBudget = (d.budgetValue || 0) > 5000000000;
-      }
-
-      // Status filter
-      let matchesStatus = true;
-      if (selectedStatus === 'urgent') {
-        matchesStatus = d.isUrgent === true;
-      } else if (selectedStatus === 'open') {
-        matchesStatus = d.status.includes('Đang mở');
-      } else if (selectedStatus === 'anonymous') {
-        matchesStatus = d.isAnonymousBuyer === true;
-      }
-
-      // Location filter
-      const matchesLocation = selectedLocation === 'all' ||
-        (d.location && d.location.toLowerCase().includes(selectedLocation.toLowerCase()));
-
-      return matchesSearch && matchesPhase && matchesBudget && matchesStatus && matchesLocation;
+  // Lấy danh sách Nhu cầu công khai đã sanitize từ Service
+  const publicDemands = useMemo(() => {
+    return getPublicRequirements({
+      search: searchTerm,
+      stageId: selectedStage,
+      category: selectedCategory,
+      province: selectedProvince,
+      sampleRequired: selectedSampleReq,
+      surveyRequired: selectedSurveyReq,
+      sortBy: sortBy
     });
-  }, [searchTerm, selectedPhase, selectedBudgetTier, selectedStatus, selectedLocation]);
+  }, [searchTerm, selectedStage, selectedCategory, selectedProvince, selectedSampleReq, selectedSurveyReq, sortBy]);
 
+  // Danh mục chuyên mục duy nhất từ danh sách
+  const categoriesList = useMemo(() => {
+    const set = new Set();
+    publicDemands.forEach(d => {
+      if (d.category) set.add(d.category);
+    });
+    return Array.from(set);
+  }, [publicDemands]);
+
+  // Reset filters
   const handleResetFilters = () => {
     setSearchTerm('');
-    setSelectedPhase('all');
-    setSelectedBudgetTier('all');
-    setSelectedStatus('all');
-    setSelectedLocation('all');
+    setSelectedStage('all');
+    setSelectedCategory('all');
+    setSelectedProvince('all');
+    setSelectedSampleReq(false);
+    setSelectedSurveyReq(false);
+    setSortBy('newest');
   };
 
-  const handleQuickRfqSubmit = (e) => {
-    e.preventDefault();
-    setFastRfqModalOpen(true);
-  };
+  // SEO Schema, Document Title & Self-Canonical
+  useEffect(() => {
+    document.title = 'Sàn nhu cầu | CHUOICUNGUNG.COM';
 
-  const handleOpenApply = (demand) => {
-    setApplyModal({ isOpen: true, demand });
-  };
+    // Canonical link setup
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.rel = 'canonical';
+      document.head.appendChild(canonical);
+    }
+    canonical.href = 'https://chuoicungung.com/san-nhu-cau';
 
-  const handleOpenPaywall = (demand) => {
-    setPaywallModal({ isOpen: true, demand });
-  };
+    // Meta description setup
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = 'Sàn tiếp nhận và điều phối nhu cầu mua hàng công nghiệp, tìm nhà cung ứng phụ trợ, thiết bị nhà máy, bao bì, cơ khí và bảo trì tại 480+ KCN Việt Nam.';
+
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Sàn nhu cầu | CHUOICUNGUNG.COM",
+      "description": "Sàn tiếp nhận và điều phối nhu cầu mua hàng công nghiệp, tìm nhà cung ứng phụ trợ, thiết bị nhà máy, bao bì, cơ khí và bảo trì tại 480+ KCN Việt Nam.",
+      "url": "https://chuoicungung.com/san-nhu-cau",
+      "mainEntity": {
+        "@type": "ItemList",
+        "itemListElement": publicDemands.slice(0, 10).map((d, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": d.title,
+          "description": d.publicSummary,
+          "url": `https://chuoicungung.com/san-nhu-cau/${d.id}`
+        }))
+      }
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'san-nhu-cau-schema';
+    script.text = JSON.stringify(schemaData);
+    const old = document.getElementById('san-nhu-cau-schema');
+    if (old) old.remove();
+    document.head.appendChild(script);
+
+    return () => {
+      const el = document.getElementById('san-nhu-cau-schema');
+      if (el) el.remove();
+    };
+  }, [publicDemands]);
 
   return (
-    <div className="space-y-0 pb-20 font-sans bg-[#F8FAFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
-
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans pb-24 antialiased selection:bg-[#0052cc] selection:text-white">
+      
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION (Seamless Panoramic B2B Sourcing Hub Visual) */}
+      {/* SECTION 01 — HERO (DESIGN-TASTE B2B SOURCING COMMAND DECK)                 */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden bg-[#F4F8FA] border-b border-slate-200/80 pb-12 sm:pb-16">
+      <section className="bg-gradient-to-b from-[#061224] via-[#091830] to-[#0d213e] border-b border-slate-800/80 relative overflow-hidden text-white">
+        
+        {/* Subtle Optical Ambient Depth */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[350px] bg-gradient-to-br from-blue-600/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-[400px] h-[250px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Right Half Sourcing Photo with Smooth Gradient Blend & Dynamic Live Trade Network Overlay */}
-        <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
-          <img
-            src="/images/b2b_sourcing_demand_hero.jpg"
-            alt="B2B Sourcing Demands Marketplace"
-            className="w-full h-full object-cover object-center scale-105"
-          />
-          {/* Live Global Supply Chain Arc & RFQ Pulse Canvas */}
-          <B2bTradeNetworkCanvas className="z-[2] opacity-80" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 pb-14 sm:pb-16 relative z-10">
           
-          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 lg:via-[#F4F8FA]/60 to-transparent"></div>
-          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
-        </div>
+          {/* High-contrast Clean Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="flex items-center space-x-2 text-xs text-slate-400 font-medium mb-6">
+            <Link to="/" title="Trang chủ" className="inline-flex items-center hover:text-white transition">
+              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain brightness-110" />
+              <span className="ml-1.5 text-slate-300 hover:text-white">Trang chủ</span>
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+            <span className="text-sky-300 font-semibold">Sàn nhu cầu mua sắm B2B</span>
+          </nav>
 
-        {/* Top Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 relative z-10 w-full">
-          <div className="max-w-2xl space-y-5">
-
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
-              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="text-[#0052cc] font-bold">
-                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn B2B2C'}
-              </span>
-            </nav>
-
-            {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
-              <span>{lang === 'en' ? 'B2B2C SOURCING & PROCUREMENT HUB • 1,250+ PLANTS' : 'SÀN B2B2C • NGUỒN CUNG & NHU CẦU TOÀN DIỆN'}</span>
+          {/* Hero Core Header (Clean Editorial Layout) */}
+          <div className="max-w-4xl space-y-4">
+            
+            {/* Context Eyebrow */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-sky-300 text-xs font-mono font-bold tracking-wider uppercase shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>CỔNG GIAO DỊCH NHU CẦU &amp; TÌM NGUỒN CUNG ỨNG B2B</span>
             </div>
 
-            {/* Headline */}
-            <div className="space-y-1">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                {lang === 'en' ? 'B2B2C Marketplace' : 'Sàn Nhu Cầu B2B2C'}
-              </h1>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
-                {lang === 'en' ? 'Connecting Enterprise Trade' : 'Kết Nối Giao Thương Toàn Diện'}
-              </h2>
-            </div>
+            {/* Exact H1: Nhu cầu mua hàng và tìm nhà cung ứng */}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] xl:text-[48px] font-black tracking-tight text-white leading-[1.14] font-heading">
+              Nhu cầu mua hàng và tìm nhà cung ứng
+            </h1>
 
-            {/* Subtitle */}
-            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
-              {lang === 'en'
-                ? 'Directly connect manufacturing plants & enterprise corporations with certified industrial suppliers across Vietnam 18 phases.'
-                : 'Quy tụ nhu cầu tìm nguồn cung từ các nhà máy, tập đoàn & đối tác sáng lập — Đăng tải hỏi hàng nguyên phụ liệu, bao bì, linh kiện và giải pháp công nghiệp trực tiếp.'}
+            <p className="text-sm sm:text-base md:text-[16px] text-slate-300 leading-relaxed max-w-3xl font-normal">
+              Điều phối đơn hàng công nghiệp trực tiếp giữa các Nhà máy, Bên mua FDI và mạng lưới Nhà cung ứng phụ trợ tại 480+ KCN trên toàn quốc. Tiêu chuẩn kỹ thuật minh bạch, bảo mật danh tính doanh nghiệp cho đến khi phê duyệt Shortlist.
             </p>
 
-            {/* Dual Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
-              <button
-                onClick={() => setFastRfqModalOpen(true)}
-                className="px-6 py-3.5 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3 pt-3">
+              <Link
+                to="/dang-nhu-cau"
+                className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs sm:text-sm font-bold shadow-lg shadow-blue-900/30 hover:shadow-blue-800/50 hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer font-heading"
               >
-                <PlusCircle className="w-4 h-4" />
-                <span>{lang === 'en' ? 'Post Sourcing Demand' : 'Đăng Nhu Cầu Ngay'}</span>
-              </button>
+                <PlusCircle className="w-4 h-4 text-sky-200" />
+                <span>Đăng nhu cầu / Tìm cơ hội</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
 
-              <a
-                href="#bidding-feed"
-                className="px-6 py-3.5 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group cursor-pointer"
+              <button
+                type="button"
+                onClick={() => {
+                  if (!currentUser?.isLoggedIn) {
+                    setAuthModalOpen(true);
+                  } else {
+                    navigate('/tao-ho-so');
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/15 hover:border-white/30 font-semibold text-xs sm:text-sm hover:-translate-y-0.5 active:scale-98 transition-all cursor-pointer"
               >
-                <ShoppingBag className="w-4 h-4 text-[#0052cc] group-hover:scale-110 transition-transform" />
-                <span>{lang === 'en' ? 'Explore Demands' : 'Xem Nhu Cầu Mở'}</span>
-              </a>
+                <Building2 className="w-4 h-4 text-slate-400" />
+                <span>Hoàn thiện hồ sơ năng lực</span>
+              </button>
+            </div>
+
+            {/* Micro-Trust Signals — Minimalist & Executive */}
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2.5 pt-4 text-xs text-slate-400 font-medium border-t border-white/10 mt-6">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span>Bảo mật danh tính &amp; giá thầu 100%</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-sky-400 shrink-0" />
+                <span>Xác thực MST &amp; năng lực xưởng thực tế</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-amber-400 shrink-0" />
+                <span>Bóc tách bản vẽ &amp; phản hồi trong 24h</span>
+              </div>
             </div>
 
           </div>
+
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. REALTIME MACRO METRIC DASHBOARD (Khối Thống Kê 5 Cột Rộng Rãi, Độc Lập) */}
+      {/* SECTION 02 & 03 — SEARCH & FILTERS (ACCESSIBLE LABELS & IDS)              */}
       {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 pb-4">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-lg shadow-slate-200/50 p-5 sm:p-6 lg:p-7">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+      <section aria-label="Bộ lọc tìm kiếm nhu cầu mua hàng" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200/90 p-4 sm:p-5 space-y-4">
+          
+          {/* Main Search Input */}
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <label htmlFor="demand-search-input" className="sr-only">
+              Tìm nhu cầu theo sản phẩm, dịch vụ hoặc ngành
+            </label>
+            <input
+              id="demand-search-input"
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Tìm nhu cầu theo sản phẩm, dịch vụ hoặc ngành..."
+              aria-label="Tìm nhu cầu theo sản phẩm, dịch vụ hoặc ngành..."
+              className="w-full pl-10 pr-24 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm outline-none focus:bg-white focus:border-[#0052cc] focus:ring-2 focus:ring-blue-500/10 transition"
+            />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600"
+              >
+                Xóa
+              </button>
+            )}
+          </div>
+
+          {/* Primary Quick Filters */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
             
-            {/* Metric 1 */}
-            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">1.256+</div>
-                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Open Demands' : 'Nhu cầu đang mở'}</p>
-              </div>
+            {/* Giai đoạn (6 Stages) */}
+            <div className="space-y-1">
+              <label htmlFor="demand-stage-filter" className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Giai đoạn vòng đời
+              </label>
+              <select
+                id="demand-stage-filter"
+                aria-label="Lọc theo giai đoạn vòng đời"
+                value={selectedStage}
+                onChange={(e) => setSelectedStage(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#0052cc]"
+              >
+                <option value="all">Tất cả 6 giai đoạn</option>
+                {MASTER_SIX_STAGES.map(s => (
+                  <option key={s.id} value={s.id}>
+                    GĐ {s.order}: {s.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Metric 2 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">368</div>
-                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Posting Plants/Corps' : 'Nhà máy / DN đăng tin'}</p>
-              </div>
+            {/* Nhóm nhu cầu / Category */}
+            <div className="space-y-1">
+              <label htmlFor="demand-category-filter" className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Chuyên mục ngành
+              </label>
+              <select
+                id="demand-category-filter"
+                aria-label="Lọc theo chuyên mục ngành"
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#0052cc]"
+              >
+                <option value="all">Tất cả chuyên mục</option>
+                {categoriesList.map((cat, idx) => (
+                  <option key={idx} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Metric 3 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Layers className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">28</div>
-                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Manufacturing Sectors' : 'Nhóm ngành sản xuất'}</p>
-              </div>
+            {/* Tỉnh / thành */}
+            <div className="space-y-1">
+              <label htmlFor="demand-province-filter" className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Tỉnh / Khu vực
+              </label>
+              <select
+                id="demand-province-filter"
+                aria-label="Lọc theo tỉnh hoặc khu vực"
+                value={selectedProvince}
+                onChange={(e) => setSelectedProvince(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#0052cc]"
+              >
+                <option value="all">Toàn quốc</option>
+                <option value="Đồng Nai">Đồng Nai</option>
+                <option value="Bình Dương">Bình Dương</option>
+                <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                <option value="Long An">Long An</option>
+                <option value="Bắc Ninh">Bắc Ninh</option>
+                <option value="Bình Phước">Bình Phước</option>
+              </select>
             </div>
 
-            {/* Metric 4 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">356,8 Tỷ</div>
-                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Total Order Value' : 'Tổng giá trị đơn hàng'}</p>
-              </div>
-            </div>
-
-            {/* Metric 5 */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-4 lg:pl-6 col-span-2 sm:col-span-1">
-              <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Users className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">4.875+</div>
-                <p className="text-[11px] text-slate-500 font-medium">{lang === 'en' ? 'Supplier Interests' : 'Lượt NCC quan tâm'}</p>
-              </div>
+            {/* Sort Dropdown */}
+            <div className="space-y-1">
+              <label htmlFor="demand-sort-filter" className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                Sắp xếp theo
+              </label>
+              <select
+                id="demand-sort-filter"
+                aria-label="Sắp xếp danh sách nhu cầu"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-800 outline-none focus:border-[#0052cc]"
+              >
+                <option value="newest">Mới nhất</option>
+                <option value="expiring_soon">Sắp hết hạn phản hồi</option>
+              </select>
             </div>
 
           </div>
-        </div>
-      </div>
 
-      {/* ========================================================================= */}
-      {/* 3. FAST-RFQ BOX & MAIN CONTENT                                            */}
-      {/* ========================================================================= */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-6 sm:space-y-8">
-
-        {/* 2. FAST-RFQ BOX (Khu Vực Đăng Nhu Cầu Nhanh Trong 1 Phút) */}
-        <div className="rounded-3xl bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7] text-white p-5 sm:p-7 shadow-xl shadow-blue-900/20 border-2 border-blue-400/40 relative overflow-hidden">
-
-          <div className="relative z-10 space-y-4">
-
-            {/* Header Text */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div className="space-y-0.5">
-                <span className="text-[11px] font-mono font-bold tracking-widest text-amber-300 uppercase">
-                  FAST-RFQ • DÀNH CHO GIÁM ĐỐC MUA HÀNG FDI &amp; NHÀ MÁY
-                </span>
-                <h3 className="text-base sm:text-lg font-black font-heading text-white">
-                  Bạn cần tìm nhà cung cấp? Chỉ mất 1 phút để nhận báo giá từ 15,000+ đối tác xác thực.
-                </h3>
-              </div>
-
-              <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 text-xs text-blue-100 shrink-0">
-                <ShieldCheck className="w-4 h-4 text-emerald-300" />
-                <span>Chuẩn hóa dữ liệu ERP/Odoo</span>
-              </div>
-            </div>
-
-            {/* Fast-RFQ Interactive Form */}
-            <form onSubmit={handleQuickRfqSubmit} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-
-              {/* Big Text Input */}
-              <div className="md:col-span-5 relative">
+          {/* Advanced Filters Toggle (Cần mẫu / Cần khảo sát) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 text-xs">
+            <div className="flex flex-wrap items-center gap-3">
+              <label htmlFor="demand-sample-req" className="flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900">
                 <input
-                  type="text"
-                  value={quickRfqText}
-                  onChange={(e) => setQuickRfqText(e.target.value)}
-                  placeholder="Bạn đang cần gì? (VD: May 5.000 áo đồng phục ESD, Kéo 10 cont máy móc...)"
-                  className="w-full px-4 py-3 bg-white text-slate-900 rounded-2xl text-xs sm:text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-inner"
+                  id="demand-sample-req"
+                  type="checkbox"
+                  checked={selectedSampleReq}
+                  onChange={(e) => setSelectedSampleReq(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 border-slate-300"
                 />
-              </div>
+                <span className="font-medium">Chỉ xem nhu cầu cần gửi mẫu trước</span>
+              </label>
 
-              {/* Phase Dropdown */}
-              <div className="md:col-span-3">
-                <select
-                  value={quickRfqPhase}
-                  onChange={(e) => setQuickRfqPhase(e.target.value)}
-                  className="w-full px-3.5 py-3 bg-white text-slate-900 rounded-2xl text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
-                >
-                  <option value="1.1">Pha 1.1 - Khảo sát địa chất & Báo cáo FS</option>
-                  <option value="1.2">Pha 1.2 - Pháp lý đầu tư, ĐTM & Giấy phép</option>
-                  <option value="1.3">Pha 1.3 - Thuê đất KCN & Nhà xưởng xây sẵn</option>
-                  <option value="2.1">Pha 2.1 - Thiết kế quy hoạch 1/500 & BIM</option>
-                  <option value="2.2">Pha 2.2 - Thi công nhà thép tiền chế & Sàn</option>
-                  <option value="2.3">Pha 2.3 - Trạm biến áp 22kV, MEP & PCCC</option>
-                  <option value="3.1">Pha 3.1 - Lắp đặt cẩu trục 10T & Dây chuyền</option>
-                  <option value="3.2">Pha 3.2 - Phòng sạch Class 1000 & Sơn Epoxy</option>
-                  <option value="3.3">Pha 3.3 - Kiểm định an toàn & Nghiệm thu máy</option>
-                  <option value="4.1">Pha 4.1 - NVL kim loại, Linh kiện & Bao bì</option>
-                  <option value="4.2">Pha 4.2 - Gia công CNC, Khuôn mẫu & MES</option>
-                  <option value="4.3">Pha 4.3 - Logistics, Vận tải & Kho bãi KCN</option>
-                  <option value="5.1">Pha 5.1 - Tuyển dụng & Cung ứng lao động</option>
-                  <option value="5.2">Pha 5.2 - Suất ăn công nghiệp HACCP & Phúc lợi</option>
-                  <option value="5.3">Pha 5.3 - Đồng phục công nhân & Bảo hộ PPE</option>
-                  <option value="6.1">Pha 6.1 - Mở rộng nhà máy Pha 2 & Cải tạo</option>
-                  <option value="6.2">Pha 6.2 - Tư vấn ISO 9001 & Tiêu chuẩn ESG</option>
-                  <option value="6.3">Pha 6.3 - Robot AGV, Số hóa & Điện mặt trời</option>
-                </select>
-              </div>
+              <label htmlFor="demand-survey-req" className="flex items-center gap-1.5 cursor-pointer text-slate-600 hover:text-slate-900">
+                <input
+                  id="demand-survey-req"
+                  type="checkbox"
+                  checked={selectedSurveyReq}
+                  onChange={(e) => setSelectedSurveyReq(e.target.checked)}
+                  className="w-3.5 h-3.5 rounded text-blue-600 focus:ring-blue-500 border-slate-300"
+                />
+                <span className="font-medium">Yêu cầu khảo sát nhà xưởng</span>
+              </label>
+            </div>
 
-              {/* Toggle Anonymous */}
-              <div className="md:col-span-2 flex items-center justify-start md:justify-center bg-white/10 px-3 py-2.5 rounded-2xl border border-white/20">
-                <label className="flex items-center space-x-2 text-xs font-semibold text-white cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={quickRfqAnonymous}
-                    onChange={(e) => setQuickRfqAnonymous(e.target.checked)}
-                    className="rounded text-[#0052cc] focus:ring-amber-400 h-4 w-4"
-                  />
-                  <span className="flex items-center space-x-1">
-                    <Lock className="w-3 h-3 text-amber-300" />
-                    <span>Đấu thầu ẩn danh</span>
-                  </span>
-                </label>
-              </div>
+            {(searchTerm || selectedStage !== 'all' || selectedCategory !== 'all' || selectedProvince !== 'all' || selectedSampleReq || selectedSurveyReq) && (
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="text-blue-600 hover:text-blue-800 font-bold inline-flex items-center gap-1 text-[11px]"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Đặt lại bộ lọc
+              </button>
+            )}
+          </div>
 
-              {/* Dispatch Button */}
-              <div className="md:col-span-2">
-                <button
-                  type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-amber-400 via-amber-500 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-black text-xs sm:text-sm font-heading uppercase rounded-2xl shadow-lg shadow-amber-900/30 transition flex items-center justify-center space-x-1.5 cursor-pointer transform hover:-translate-y-0.5"
-                >
-                  <Zap className="w-4 h-4 fill-slate-950" />
-                  <span>Phát Lệnh Thu Mua</span>
-                </button>
-              </div>
+        </div>
+      </section>
 
-            </form>
-
+      {/* ========================================================================= */}
+      {/* SECTION 04 — DEMAND FEED (SECTION 04 SPEC 11.TXT) */}
+      {/* ========================================================================= */}
+      <section aria-label="Danh sách gói thầu và nhu cầu mua hàng B2B" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        
+        {/* Results Counter & Sourcing Rule Notice */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="text-xs text-slate-600">
+            Hiển thị <strong>{publicDemands.length}</strong> nhu cầu B2B được phép công bố trên hệ thống
+          </div>
+          <div className="text-[11px] text-slate-400 flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Thông tin liên hệ của Buyer được mã hóa và chỉ kết nối khi hồ sơ được Shortlist.</span>
           </div>
         </div>
 
-      </div>
-
-      {/* ========================================================================= */}
-      {/* MAIN CONTENT AREA: 2-COLUMN LAYOUT (Sidebar Filter 25% | Bidding Feed 75%) */}
-      {/* ========================================================================= */}
-      <section id="bidding-feed" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-
-          {/* ========================================================================= */}
-          {/* 3. BỘ LỌC SÀN GIAO DỊCH (Smart Bidding Filter - Cột Trái Sticky 25% ~ 3 Cols) */}
-          {/* ========================================================================= */}
-          <aside className="lg:col-span-4 xl:col-span-3 lg:sticky lg:top-24 space-y-5">
-
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-5">
-
-              {/* Sidebar Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4 text-[#0052cc]" />
-                  <h3 className="font-extrabold text-sm text-slate-900 font-heading uppercase">
-                    Bộ Lọc Săn Gói Thầu
-                  </h3>
-                </div>
-                <button
-                  onClick={handleResetFilters}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center space-x-1 transition cursor-pointer"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Đặt lại</span>
-                </button>
-              </div>
-
-              {/* Keyword Search */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Tìm kiếm từ khóa:</label>
-                <div className="relative">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Tên gói thầu, nguyên liệu, KCN..."
-                    className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-[#0052cc] focus:bg-white text-slate-900"
-                  />
-                </div>
-              </div>
-
-              {/* Filter by Phase (18 Pha) */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Lọc theo Pha Chuỗi Cung Ứng:</label>
-                <select
-                  value={selectedPhase}
-                  onChange={(e) => setSelectedPhase(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc] text-slate-800 cursor-pointer"
-                >
-                  <option value="all">Tất cả các Pha (18 Pha)</option>
-                  <optgroup label="GĐ 01: Khởi tạo & Pháp lý">
-                    <option value="1.1">Pha 1.1 - Logistics Siêu trường & Hải quan</option>
-                    <option value="1.2">Pha 1.2 - Pháp lý & Tư vấn đầu tư</option>
-                  </optgroup>
-                  <optgroup label="GĐ 02: Quy hoạch & Xây dựng">
-                    <option value="2.1">Pha 2.1 - Tổng thầu EPC & M&amp;E</option>
-                    <option value="2.2">Pha 2.2 - Xây dựng nhà xưởng</option>
-                    <option value="2.3">Pha 2.3 - Môi trường &amp; PCCC</option>
-                  </optgroup>
-                  <optgroup label="GĐ 04: Sản xuất & Gia công">
-                    <option value="4.1">Pha 4.1 - Bao bì, In ấn & Linh kiện</option>
-                    <option value="4.3">Pha 4.3 - Vận chuyển hàng hóa</option>
-                  </optgroup>
-                  <optgroup label="GĐ 05: Nhân sự & Hậu cần">
-                    <option value="5.1">Pha 5.1 - Tuyển dụng & Đào tạo lao động</option>
-                    <option value="5.3">Pha 5.3 - Đồng phục & Bảo hộ (PPE)</option>
-                  </optgroup>
-                  <optgroup label="GĐ 06: Vận hành & Nâng cấp">
-                    <option value="6.1">Pha 6.1 - Quà tặng, Bao bì & Phúc lợi</option>
-                    <option value="6.3">Pha 6.3 - Số hóa, MES & Tự động hóa</option>
-                  </optgroup>
-                </select>
-              </div>
-
-              {/* Filter by Budget Tier */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Quy mô Ngân sách Gói thầu:</label>
-                <div className="space-y-1 text-xs">
-                  {[
-                    { id: 'all', label: 'Tất cả quy mô' },
-                    { id: 'under-1b', label: 'Dưới 1 Tỷ VNĐ' },
-                    { id: '1b-5b', label: 'Từ 1 Tỷ - 5 Tỷ VNĐ' },
-                    { id: 'above-5b', label: 'Trên 5 Tỷ VNĐ (Dự án FDI lớn 🔥)' }
-                  ].map((tier) => (
-                    <label
-                      key={tier.id}
-                      className={`flex items-center space-x-2 p-2 rounded-xl border transition cursor-pointer ${selectedBudgetTier === tier.id
-                        ? 'bg-blue-50 border-blue-300 text-[#0052cc] font-bold'
-                        : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="budgetTier"
-                        value={tier.id}
-                        checked={selectedBudgetTier === tier.id}
-                        onChange={() => setSelectedBudgetTier(tier.id)}
-                        className="text-[#0052cc] focus:ring-blue-500"
-                      />
-                      <span>{tier.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Filter by Status */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Trạng thái Gói thầu:</label>
-                <div className="grid grid-cols-2 gap-1.5 text-xs">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedStatus(selectedStatus === 'urgent' ? 'all' : 'urgent')}
-                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${selectedStatus === 'urgent'
-                      ? 'bg-rose-50 border-rose-400 text-rose-700 font-bold'
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                      }`}
-                  >
-                    ⏳ Sắp đóng (Khẩn)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedStatus(selectedStatus === 'anonymous' ? 'all' : 'anonymous')}
-                    className={`p-2 rounded-xl border text-center transition font-semibold cursor-pointer ${selectedStatus === 'anonymous'
-                      ? 'bg-indigo-50 border-indigo-400 text-indigo-700 font-bold'
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-                      }`}
-                  >
-                    🛡️ FDI Ẩn danh
-                  </button>
-                </div>
-              </div>
-
-              {/* Filter by Location */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700">Khu vực / Tỉnh thành KCN:</label>
-                <select
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0052cc] text-slate-800"
-                >
-                  <option value="all">Toàn quốc (Tất cả tỉnh thành)</option>
-                  <option value="Đồng Nai">Đồng Nai (Amata, Long Thành, Nhơn Trạch)</option>
-                  <option value="Bình Dương">Bình Dương (VSIP I, II, III, Sóng Thần)</option>
-                  <option value="Bắc Ninh">Bắc Ninh (Yên Phong, Quế Võ, VSIP Bắc Ninh)</option>
-                  <option value="Hải Phòng">Hải Phòng (Deep C, Tràng Duệ, Nam Đình Vũ)</option>
-                  <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh (SHTP, Tân Thuận, Hiệp Phước)</option>
-                  <option value="Quảng Nam">Quảng Nam (Chu Lai, Tam Thăng)</option>
-                </select>
-              </div>
-
-              {/* Help Callout */}
-              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-xs space-y-1 text-amber-900">
-                <div className="flex items-center space-x-1.5 font-bold">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                  <span>Cảnh Báo Cạnh Tranh (FOMO)</span>
-                </div>
-                <p className="text-[11px] leading-relaxed text-amber-800">
-                  Mỗi gói thầu giới hạn tối đa 6 - 10 hồ sơ. Khi đủ số lượng, hệ thống sẽ tự động đóng thầu để Hội đồng Mua hàng đánh giá.
-                </p>
-              </div>
-
+        {/* Empty State */}
+        {publicDemands.length === 0 ? (
+          <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center mx-auto">
+              <ShoppingBag className="w-8 h-8" />
             </div>
+            <h3 className="text-base font-bold text-slate-800 font-heading">
+              Không tìm thấy nhu cầu phù hợp với bộ lọc hiện tại
+            </h3>
+            <p className="text-xs text-slate-500 max-w-md mx-auto">
+              Bạn có thể điều chỉnh lại từ khóa tìm kiếm, chuyên mục hoặc đặt lại bộ lọc để xem các nhu cầu khác.
+            </p>
+            <button
+              onClick={handleResetFilters}
+              className="px-4 py-2 bg-[#0052cc] text-white rounded-xl text-xs font-bold hover:bg-[#0047a5] transition"
+            >
+              Xem tất cả nhu cầu
+            </button>
+          </div>
+        ) : (
+          /* Grid of Requirement Cards */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {publicDemands.map((demand) => {
+              // Kiểm tra xem supplier đã response chưa (Anti-duplicate - Section 10)
+              const existingResponse = currentUser?.isLoggedIn 
+                ? getSupplierResponseForRequirement(demand.id, currentUser.orgId || currentUser.name)
+                : null;
 
-          </aside>
+              // Đánh giá mức độ phù hợp thực tế (Matching - Section 12)
+              const relevance = currentUser?.isLoggedIn
+                ? evaluateSupplierRelevance(demand, currentUser)
+                : null;
 
-          {/* ========================================================================= */}
-          {/* 4. LIVE BIDDING FEED (Bảng Tin Đấu Thầu Thực Chiến - Cột Phải 75% ~ 9 Cols) */}
-          {/* ========================================================================= */}
-          <main className="lg:col-span-8 xl:col-span-9 space-y-4">
+              const isClosed = demand.status === 'CLOSED';
 
-            {/* Feed Header */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-              <div className="flex items-center space-x-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <h2 className="text-base sm:text-lg font-black font-heading text-slate-900 uppercase">
-                  Bảng Tin Nhu Cầu
-                </h2>
-              </div>
-            </div>
-
-            {/* If no demands match */}
-            {filteredDemands.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-4">
-                <div className="w-16 h-16 rounded-2xl bg-blue-50 text-[#0052cc] flex items-center justify-center mx-auto text-2xl font-bold">
-                  🔍
-                </div>
-                <h3 className="text-base font-bold text-slate-800 font-heading">
-                  Không tìm thấy gói thầu phù hợp với bộ lọc
-                </h3>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  Hãy thử mở rộng tiêu chí tìm kiếm hoặc xóa các điều kiện lọc để xem thêm các cơ hội đấu thầu khác.
-                </p>
-                <button
-                  onClick={handleResetFilters}
-                  className="px-5 py-2.5 bg-[#0052cc] hover:bg-blue-700 text-white rounded-xl text-xs font-bold font-heading uppercase transition"
+              return (
+                <div
+                  key={demand.id}
+                  className="bg-white rounded-3xl border border-slate-200/90 hover:border-blue-400/80 shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between overflow-hidden group"
                 >
-                  Đặt lại bộ lọc
-                </button>
-              </div>
-            ) : (
-              /* Demands Cards List */
-              <div className="space-y-4">
-                {filteredDemands.map((demand) => {
-                  const percentFilled = demand.progressPercent || Math.round(((demand.currentBids || 3) / (demand.maxBids || 10)) * 100);
-                  const isUrgent = demand.isUrgent || demand.timeRemaining?.includes('Khẩn') || demand.timeRemaining?.includes('24h');
+                  
+                  {/* Card Header & Badges */}
+                  <div className="p-5 pb-3 space-y-3">
+                    
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="px-2.5 py-1 rounded-md bg-blue-50 text-[#0052cc] text-[11px] font-mono font-bold">
+                        {demand.publicCode}
+                      </span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        isClosed ? 'bg-slate-100 text-slate-500' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                      }`}>
+                        {isClosed ? 'Đã đóng tiếp nhận' : 'Đang tìm nguồn'}
+                      </span>
+                    </div>
 
-                  return (
-                    <div
-                      key={demand.id}
-                      className="bg-white rounded-3xl border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all duration-300 p-5 sm:p-6 space-y-4 group relative overflow-hidden"
-                    >
-                      {/* Top Badges & Meta */}
-                      <div className="flex flex-wrap items-center justify-between gap-2">
+                    {/* Title */}
+                    <h2 className="text-sm sm:text-base font-bold text-slate-900 font-heading group-hover:text-[#0052cc] transition line-clamp-2 leading-snug">
+                      {demand.title}
+                    </h2>
 
-                        <div className="flex items-center space-x-2">
-                          <span className="px-3 py-1 rounded-full bg-blue-50 text-[#0052cc] border border-blue-200 text-xs font-mono font-bold">
-                            {demand.phaseBadge || `Pha ${demand.phaseId}`}
-                          </span>
+                    {/* Buyer Summary Description (Section 04: "Nhà máy ngành điện tử tại Đồng Nai") */}
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                      <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span className="truncate">{demand.buyerDisplayName}</span>
+                    </div>
 
-                          <span className="text-[11px] font-mono text-slate-400 font-bold">
-                            {demand.biddingCode || `#${demand.id}`}
-                          </span>
-
-                          {demand.isAnonymousBuyer && (
-                            <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[10.5px] font-semibold border border-indigo-200">
-                              <Lock className="w-3 h-3" />
-                              <span>FDI Ẩn danh</span>
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Countdown Tag */}
-                        <div className={`px-3 py-1 rounded-full text-xs font-bold font-mono flex items-center space-x-1.5 ${isUrgent
-                          ? 'bg-rose-50 text-rose-700 border border-rose-200 animate-pulse'
-                          : 'bg-slate-100 text-slate-700 border border-slate-200'
-                          }`}>
-                          <Timer className="w-3.5 h-3.5" />
-                          <span>{demand.timeRemaining || demand.deadline}</span>
-                        </div>
-
+                    {/* Key Specs Matrix */}
+                    <div className="grid grid-cols-2 gap-2 pt-2 text-xs">
+                      
+                      {/* Nhóm ngành */}
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block font-heading uppercase">Chuyên mục</span>
+                        <span className="font-semibold text-slate-800 truncate block" title={demand.category}>
+                          {demand.category}
+                        </span>
                       </div>
 
-                      {/* Demand Title & Buyer */}
-                      <div className="space-y-1.5">
-                        <Link
-                          to={`/san-nhu-cau/${demand.id}`}
-                          className="text-base sm:text-lg font-black font-heading text-slate-900 group-hover:text-[#0052cc] transition-colors leading-snug block"
-                        >
-                          {demand.title}
-                        </Link>
-
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-600">
-                          <div className="flex items-center space-x-1 font-semibold text-slate-700">
-                            <Building2 className="w-3.5 h-3.5 text-blue-600" />
-                            <span>
-                              {demand.isAnonymousBuyer ? demand.anonymousBuyerName : demand.company}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center space-x-1 text-slate-500">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span>{demand.kcn || demand.location}</span>
-                          </div>
-                        </div>
+                      {/* Khu vực */}
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block font-heading uppercase">Khu vực</span>
+                        <span className="font-semibold text-slate-800 truncate block">
+                          {demand.province}
+                        </span>
                       </div>
 
-                      {/* Specs / Description snippet */}
-                      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                        {demand.description}
-                      </p>
+                      {/* Số lượng */}
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block font-heading uppercase">Số lượng</span>
+                        <span className="font-bold text-slate-900">
+                          {demand.quantity ? `${demand.quantity} ${demand.unit}` : 'Theo thỏa thuận'}
+                        </span>
+                      </div>
 
-                      {/* 5. FOMO Progress Bar & Dual Smart CTA */}
-                      <div className="pt-3 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-
-                        {/* Left: FOMO Progress & Budget */}
-                        <div className="space-y-1.5 flex-1 max-w-md">
-                          <div className="flex items-center justify-between text-xs">
-                            <div className="flex items-center space-x-1 font-bold text-amber-600">
-                              <Flame className="w-3.5 h-3.5 text-amber-500" />
-                              <span>
-                                Đã có {demand.currentBids || 4}/{demand.maxBids || 10} nhà cung cấp nộp hồ sơ
-                              </span>
-                            </div>
-                            <span className="font-mono font-black text-slate-800 text-xs">
-                              {demand.estBudget || demand.budget}
-                            </span>
-                          </div>
-
-                          {/* Progress bar */}
-                          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                            <div
-                              className={`h-full rounded-full transition-all duration-500 ${percentFilled >= 70 ? 'bg-rose-500' : percentFilled >= 40 ? 'bg-amber-500' : 'bg-blue-500'
-                                }`}
-                              style={{ width: `${percentFilled}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Right: Dual CTA Smart Paywall */}
-                        <div className="flex items-center space-x-2 shrink-0">
-
-                          {/* Button 1: 1-Click Apply */}
-                          <button
-                            onClick={() => handleOpenApply(demand)}
-                            className="px-4 py-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-orange-600 hover:to-orange-700 text-white font-extrabold text-xs font-heading uppercase rounded-xl shadow-md shadow-orange-500/20 transition flex items-center space-x-1.5 cursor-pointer transform hover:-translate-y-0.5"
-                          >
-                            <Zap className="w-3.5 h-3.5 fill-white" />
-                            <span>Nộp Hồ Sơ / Báo Giá</span>
-                          </button>
-
-                          {/* Button 2: Locked / KYC Paywall */}
-                          <button
-                            onClick={() => handleOpenPaywall(demand)}
-                            className="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition flex items-center space-x-1 cursor-pointer group/lock"
-                            title="Yêu cầu KYC Lớp 2 hoặc Lớp 3"
-                          >
-                            <Lock className="w-3.5 h-3.5 text-slate-500 group-hover/lock:text-amber-600" />
-                            <span>Mở Khóa Đấu Thầu</span>
-                          </button>
-
-                          {/* View Detail Link */}
-                          <Link
-                            to={`/san-nhu-cau/${demand.id}`}
-                            className="p-2.5 text-slate-400 hover:text-[#0052cc] rounded-xl hover:bg-blue-50 transition"
-                            title="Xem chi tiết gói thầu"
-                          >
-                            <ArrowRight className="w-4 h-4" />
-                          </Link>
-
-                        </div>
-
+                      {/* Thời hạn cần */}
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                        <span className="text-[10px] text-slate-400 block font-heading uppercase">Thời hạn</span>
+                        <span className="font-bold text-amber-700 truncate block font-mono">
+                          {demand.deadline || 'Sớm nhất'}
+                        </span>
                       </div>
 
                     </div>
-                  );
-                })}
+
+                    {/* Điều kiện mẫu / Khảo sát */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px]">
+                      {demand.sampleRequired && (
+                        <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 font-medium">
+                          Cần gửi mẫu trước
+                        </span>
+                      )}
+                      {demand.surveyRequired && (
+                        <span className="px-2 py-0.5 rounded-md bg-purple-50 text-purple-800 border border-purple-200 font-medium">
+                          Khảo sát hiện trường
+                        </span>
+                      )}
+                      {demand.stageName && (
+                        <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-medium">
+                          {demand.stageName}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Matching relevance badge (Section 12) */}
+                    {relevance && (
+                      <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-100 space-y-1 text-xs">
+                        <div className="font-bold text-blue-900 text-[11px] flex items-center justify-between">
+                          <span>{relevance.badgeText}</span>
+                        </div>
+                        <div className="space-y-0.5 text-[11px] text-slate-600">
+                          {relevance.checks.map((c, i) => (
+                            <div key={i} className="flex items-center gap-1">
+                              {c.pass === true ? (
+                                <span className="text-emerald-600 font-bold">✓</span>
+                              ) : c.pass === false ? (
+                                <span className="text-rose-500 font-bold">✗</span>
+                              ) : (
+                                <span className="text-amber-500 font-bold">?</span>
+                              )}
+                              <span>{c.title}: {c.note}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Already Responded Badge (Section 10) */}
+                    {existingResponse && (
+                      <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center justify-between">
+                        <span className="font-semibold text-[11px]">
+                          Đã phản hồi ({existingResponse.responseStatus})
+                        </span>
+                        <span className="text-[10px] text-amber-700">
+                          {new Date(existingResponse.submittedAt).toLocaleDateString('vi-VN')}
+                        </span>
+                      </div>
+                    )}
+
+                  </div>
+
+                  {/* Card Bottom CTA Bar (Section 04) */}
+                  <div className="p-4 pt-3 border-t border-slate-100 bg-slate-50/50 flex items-center gap-2">
+                    
+                    {/* View Details Button */}
+                    <button
+                      onClick={() => setDetailModal({ isOpen: true, requirement: demand })}
+                      className="flex-1 py-2 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-white hover:border-slate-300 transition text-center"
+                    >
+                      XEM CHI TIẾT
+                    </button>
+
+                    {/* Main CTA: “TÔI CÓ KHẢ NĂNG ĐÁP ỨNG” (Section 07 & 14) */}
+                    <button
+                      disabled={isClosed}
+                      onClick={() => setResponseModal({ isOpen: true, requirement: demand })}
+                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs ${
+                        isClosed 
+                          ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                          : existingResponse
+                            ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                            : 'bg-[#0052cc] hover:bg-[#0047a5] text-white shadow-blue-500/10'
+                      }`}
+                    >
+                      <Send className="w-3 h-3" />
+                      <span>{existingResponse ? 'CẬP NHẬT' : 'TÔI CÓ KHẢ NĂNG'}</span>
+                    </button>
+
+                  </div>
+
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+      </section>
+
+      {/* ========================================================================= */}
+      {/* SECTION 05 — RELATED SOURCING LINKS (BREADCRUMB & HUBS CÓ CĂN CỨ) */}
+      {/* ========================================================================= */}
+      <section aria-label="Tra cứu liên quan trong hệ sinh thái Chuỗi Cung Ứng" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 sm:p-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-5 mb-6">
+            <div>
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                <Layers className="w-5 h-5 text-blue-600" />
+                <span>Tra cứu liên kết trong Hệ sinh thái Chuỗi Cung Ứng</span>
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                Kết nối nhanh giữa dữ liệu nhu cầu mua sắm thực tế với mạng lưới nhà máy và hạ tầng công nghiệp.
+              </p>
+            </div>
+            <Link
+              to="/6-giai-doan"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 shrink-0"
+            >
+              <span>Xem cấu trúc 6 Giai đoạn &amp; 18 Pha</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Link
+              to="/ban-do-kcn"
+              className="group p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">
+                  Bản đồ 480+ KCN &amp; CCN
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Định vị các nhà máy, cụm công nghiệp vệ tinh và bán kính cung ứng theo tỉnh thành.
+                </p>
               </div>
-            )}
+              <div className="mt-3 text-[11px] font-semibold text-blue-600 flex items-center gap-1">
+                <span>Khám phá bản đồ</span>
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition" />
+              </div>
+            </Link>
 
-          </main>
+            <Link
+              to="/tra-cuu"
+              className="group p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <div className="text-sm font-bold text-slate-800 group-hover:text-emerald-600 transition">
+                  32.000+ Nhà cung ứng
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Dữ liệu nhà sản xuất phụ trợ, gia công cơ khí, bao bì, tự động hóa đã xác minh MST.
+                </p>
+              </div>
+              <div className="mt-3 text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                <span>Tra cứu nhà cung ứng</span>
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition" />
+              </div>
+            </Link>
 
+            <Link
+              to="/dang-nhu-cau"
+              className="group p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition">
+                  <PlusCircle className="w-5 h-5" />
+                </div>
+                <div className="text-sm font-bold text-slate-800 group-hover:text-amber-600 transition">
+                  Đăng gói mua sắm B2B
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Dành cho Buyer/Nhà máy: Tiếp nhận báo giá và hồ sơ năng lực tiêu chuẩn từ NCC xác thực.
+                </p>
+              </div>
+              <div className="mt-3 text-[11px] font-semibold text-amber-600 flex items-center gap-1">
+                <span>Mở gói tìm nguồn</span>
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition" />
+              </div>
+            </Link>
+
+            <Link
+              to="/dang-ky-ncc"
+              className="group p-4 bg-white rounded-xl border border-slate-200 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-between"
+            >
+              <div className="space-y-2">
+                <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition">
+                  <Factory className="w-5 h-5" />
+                </div>
+                <div className="text-sm font-bold text-slate-800 group-hover:text-indigo-600 transition">
+                  Đăng ký Nhà cung ứng
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Đưa hồ sơ xưởng sản xuất vào mạng lưới để nhận thông báo chào thầu tự động.
+                </p>
+              </div>
+              <div className="mt-3 text-[11px] font-semibold text-indigo-600 flex items-center gap-1">
+                <span>Tạo hồ sơ năng lực</span>
+                <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition" />
+              </div>
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* MODALS & REAL-TIME TOASTS */}
+      {/* SAFE DETAIL MODAL (REUSE PUBLIC SUMMARY, ZERO SENSITIVE DATA EXPOSED) */}
       {/* ========================================================================= */}
-      <OneClickApplyModal
-        isOpen={applyModal.isOpen}
-        demand={applyModal.demand}
-        onClose={() => setApplyModal({ isOpen: false, demand: null })}
-      />
+      {detailModal.isOpen && detailModal.requirement && (
+        <div className="fixed inset-0 z-[1100] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto font-sans">
+          <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative my-6 max-h-[90vh] overflow-y-auto space-y-6 text-slate-900 animate-in zoom-in-95 duration-200">
+            
+            <button
+              onClick={() => setDetailModal({ isOpen: false, requirement: null })}
+              className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
-      <KycPaywallModal
-        isOpen={paywallModal.isOpen}
-        demand={paywallModal.demand}
-        onClose={() => setPaywallModal({ isOpen: false, demand: null })}
-      />
+            {/* Header */}
+            <div className="space-y-2 border-b border-slate-100 pb-4 pr-10">
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-[#0052cc] font-mono font-bold text-xs">
+                  {detailModal.requirement.publicCode}
+                </span>
+                <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold text-xs">
+                  {detailModal.requirement.status === 'ACTIVE_SOURCING' ? 'Đang tìm nguồn' : 'Đã đóng'}
+                </span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 font-heading leading-snug">
+                {detailModal.requirement.title}
+              </h2>
+              <div className="text-xs text-slate-500">
+                Đăng bởi: <strong>{detailModal.requirement.buyerDisplayName}</strong>
+              </div>
+            </div>
 
-      <FastRfqModal
-        isOpen={fastRfqModalOpen}
-        initialData={{
-          title: quickRfqText,
-          phaseId: quickRfqPhase,
-          isAnonymous: quickRfqAnonymous
+            {/* Public Summary Details */}
+            <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="space-y-1">
+                <span className="font-extrabold uppercase text-slate-500 font-heading block">
+                  Mô tả nhu cầu tóm tắt:
+                </span>
+                <p className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                  {detailModal.requirement.publicSummary}
+                </p>
+              </div>
+
+              {detailModal.requirement.publicRequirements?.length > 0 && (
+                <div className="space-y-2">
+                  <span className="font-extrabold uppercase text-slate-500 font-heading block">
+                    Yêu cầu kỹ thuật & Điều kiện tham gia:
+                  </span>
+                  <ul className="space-y-1.5 list-disc list-inside bg-slate-50 p-4 rounded-2xl border border-slate-100 text-slate-600">
+                    {detailModal.requirement.publicRequirements.map((req, idx) => (
+                      <li key={idx}>{req}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Grid attributes */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Chuyên mục:</span>
+                  <strong className="text-slate-800">{detailModal.requirement.category}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Sản phẩm cần:</span>
+                  <strong className="text-slate-800">{detailModal.requirement.productService}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Địa bàn & KCN:</span>
+                  <strong className="text-slate-800">{detailModal.requirement.province} {detailModal.requirement.industrialPark ? `(${detailModal.requirement.industrialPark})` : ''}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Số lượng:</span>
+                  <strong className="text-slate-800">{detailModal.requirement.quantity ? `${detailModal.requirement.quantity} ${detailModal.requirement.unit}` : 'Thỏa thuận'}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Hạn tiếp nhận:</span>
+                  <strong className="text-amber-700 font-mono">{detailModal.requirement.deadline || 'Sớm nhất'}</strong>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px]">Gửi mẫu thử:</span>
+                  <strong className="text-slate-800">{detailModal.requirement.sampleRequired ? 'Bắt buộc' : 'Không bắt buộc'}</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Action */}
+            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+              <button
+                onClick={() => {
+                  const req = detailModal.requirement;
+                  setDetailModal({ isOpen: false, requirement: null });
+                  setSuppiModal({ isOpen: true, requirement: req });
+                }}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800"
+              >
+                <Bot className="w-4 h-4" />
+                <span>Hỏi SUPPI về điều kiện đáp ứng</span>
+              </button>
+
+              <button
+                disabled={detailModal.requirement.status === 'CLOSED'}
+                onClick={() => {
+                  const req = detailModal.requirement;
+                  setDetailModal({ isOpen: false, requirement: null });
+                  setResponseModal({ isOpen: true, requirement: req });
+                }}
+                className="py-2.5 px-6 rounded-xl bg-[#0052cc] hover:bg-[#0047a5] text-white text-xs font-bold shadow-md shadow-blue-500/20 transition flex items-center gap-1.5 disabled:opacity-50"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>TÔI CÓ KHẢ NĂNG ĐÁP ỨNG</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* RESPONSE MODAL, SUPPI MODAL & AUTH MODAL */}
+      {/* ========================================================================= */}
+      <SupplierResponseModal
+        isOpen={responseModal.isOpen}
+        onClose={() => setResponseModal({ isOpen: false, requirement: null })}
+        requirement={responseModal.requirement}
+        currentUser={currentUser}
+        onOpenAuth={() => setAuthModalOpen(true)}
+        onResponseSubmitted={() => {
+          // Re-render
+          refreshUserSession();
         }}
-        onClose={() => setFastRfqModalOpen(false)}
       />
 
-      {/* Zero-Reload Real-time Toast notification */}
-      <LiveDemandToast />
+      <SuppiDemandAssistantModal
+        isOpen={suppiModal.isOpen}
+        onClose={() => setSuppiModal({ isOpen: false, requirement: null })}
+        requirement={suppiModal.requirement}
+        currentUser={currentUser}
+      />
+
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => {
+          setAuthModalOpen(false);
+          refreshUserSession();
+        }}
+        initialTab="login"
+      />
 
     </div>
   );

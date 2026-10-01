@@ -1,0 +1,554 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 15: HỒ SƠ & TRUYỀN THÔNG DOANH NGHIỆP
+ROUTE: /dich-vu/truyen-thong-doanh-nghiep
+
+MỤC TIÊU:
+
+Xây page dịch vụ giúp doanh nghiệp:
+- chuẩn hóa hồ sơ năng lực;
+- tạo video giới thiệu ngắn;
+- chuẩn bị ảnh thực tế;
+- xây nội dung catalogue;
+- tái sử dụng cùng một bộ dữ liệu trên nhiều điểm tiếp xúc.
+
+Đây KHÔNG phải dịch vụ quảng cáo chung chung.
+
+Luồng phải là:
+
+DOANH NGHIỆP
+→ GỬI ĐỀ BÀI
+→ XÁC ĐỊNH HẠNG MỤC
+→ THU THẬP DỮ LIỆU
+→ SẢN XUẤT NỘI DUNG
+→ DOANH NGHIỆP DUYỆT
+→ BÀN GIAO / PUBLISH
+→ GẮN VÀO SUPPLIER PROFILE / PROGRAM / CATALOGUE
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/dich-vu/truyen-thong-doanh-nghiep
+
+Reuse:
+
+organizations
+supplier_profiles
+facilities
+capabilities
+products_services
+evidence
+media_assets
+catalogues
+service_requests
+programs
+attachments
+
+Không tạo một hồ sơ truyền thông tách biệt khỏi Supplier Profile nếu dữ liệu giống nhau.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“GIỚI THIỆU RÕ NĂNG LỰC ĐỂ NGƯỜI MUA DỄ TÌM HIỂU VÀ LIÊN HỆ”
+
+Sub:
+
+“CHUOICUNGUNG.COM hỗ trợ doanh nghiệp chuẩn hóa hồ sơ, xây dựng video giới thiệu và chuẩn bị hình ảnh, nội dung catalogue. Tài liệu được tổ chức theo sản phẩm, năng lực và địa bàn phục vụ để sử dụng trên website và trong các chương trình kết nối.”
+
+CTA chính:
+
+[NHẬN TƯ VẤN NỘI DUNG]
+
+→ /yeu-cau-dich-vu?service=truyen-thong-doanh-nghiep
+
+CTA phụ:
+
+[XEM HẠNG MỤC BÀN GIAO]
+
+==================================================
+3. HẠNG MỤC DỊCH VỤ
+==================================================
+
+CARD 01
+HỒ SƠ DOANH NGHIỆP
+
+Bao gồm:
+- thông tin pháp nhân do doanh nghiệp cung cấp;
+- sản phẩm/dịch vụ;
+- năng lực;
+- địa bàn phục vụ;
+- điều kiện nhận việc;
+- bằng chứng;
+- người liên hệ;
+- ngày cập nhật.
+
+Không gọi toàn bộ thông tin là “đã xác minh”.
+
+Mỗi loại dữ liệu phải giữ source/status.
+
+--------------------------------------------------
+
+CARD 02
+VIDEO GIỚI THIỆU KHOẢNG 1 PHÚT
+
+Nội dung gợi ý:
+
+1. Doanh nghiệp cung cấp gì?
+2. Phục vụ ai?
+3. Sản phẩm/quy trình chính
+4. Năng lực và điều kiện nhận việc
+5. Địa bàn phục vụ
+6. CTA liên hệ / QR về hồ sơ
+
+Báo giá phải quy định rõ:
+- thời lượng;
+- kịch bản;
+- địa điểm quay;
+- số vòng chỉnh sửa;
+- ngôn ngữ;
+- quyền sử dụng;
+- chi phí quay lại nếu có.
+
+Không hard-code mức giá nếu chưa được cấu hình trong hệ thống.
+
+--------------------------------------------------
+
+CARD 03
+ẢNH NĂNG LỰC & SẢN PHẨM
+
+Phải quản lý:
+
+- danh sách cảnh cần chụp;
+- địa điểm;
+- số lượng ảnh bàn giao;
+- số ảnh chỉnh sửa;
+- định dạng;
+- quyền sử dụng;
+- phạm vi công bố.
+
+Phân biệt:
+
+REAL_EVIDENCE
+và
+ILLUSTRATION / AI / MASCOT
+
+Ảnh AI hoặc mascot không được dùng như bằng chứng nhà xưởng, máy móc hay năng lực thực tế.
+
+--------------------------------------------------
+
+CARD 04
+NỘI DUNG CATALOGUE
+
+Bao gồm:
+
+- mô tả doanh nghiệp;
+- sản phẩm/dịch vụ;
+- năng lực chính;
+- địa bàn;
+- hình ảnh;
+- QR dẫn về Supplier Profile cập nhật.
+
+Phải tách rõ:
+
+content fee
+sponsored placement fee
+printing cost
+distribution cost
+
+Không gộp tất cả thành một quyền lợi mơ hồ.
+
+==================================================
+4. MỘT BỘ DỮ LIỆU — NHIỀU ĐIỂM SỬ DỤNG
+==================================================
+
+Block:
+
+“DÙNG MỘT BỘ HỒ SƠ CHO NHIỀU HOẠT ĐỘNG”
+
+Dữ liệu sau khi duyệt có thể dùng cho:
+
+Supplier Profile
+Website
+Tài liệu gửi Buyer
+Catalogue
+QR
+Màn hình gian hàng
+Chương trình
+Hiện diện từ xa
+
+Không copy nội dung thành nhiều source độc lập.
+
+Ưu tiên dùng cùng data/entity và render theo context.
+
+==================================================
+5. FORM YÊU CẦU
+==================================================
+
+Reuse:
+
+/yeu-cau-dich-vu
+
+Preselect:
+
+service = TRUYEN_THONG_DOANH_NGHIEP
+
+Form cần:
+
+Organization
+
+Người liên hệ
+
+Mục tiêu nội dung
+
+Hạng mục cần:
+- hồ sơ
+- video
+- ảnh
+- catalogue
+- nhiều hạng mục
+
+Sản phẩm/dịch vụ chính
+
+Địa điểm quay/chụp
+
+Tài liệu hiện có
+
+Logo/brand assets
+
+Ngôn ngữ cần sử dụng
+
+Kênh sử dụng
+
+Chương trình liên quan nếu có
+
+Người duyệt nội dung
+
+Thời gian cần
+
+Ngân sách optional
+
+Files
+
+Không bắt user nhập lại Organization data nếu đã login.
+
+==================================================
+6. SERVICE REQUEST + PROJECT
+==================================================
+
+Sau submit:
+
+tạo ServiceRequest.
+
+Sau khi scope/proposal accepted:
+
+có thể tạo ContentProject/MediaProject
+hoặc reuse entity tương đương hiện có.
+
+Project cần:
+
+organizationId
+serviceRequestId
+
+deliverables[]
+
+owner
+
+status
+
+dueDate
+
+reviewer
+
+revisionRound
+
+usageRights
+
+relatedProgramId?
+relatedCatalogueId?
+
+==================================================
+7. WORKFLOW
+==================================================
+
+Workflow:
+
+REQUEST
+→ NEED_MORE_INFO
+→ SCOPE_CONFIRMED
+→ PROPOSAL_SENT
+→ ACCEPTED
+→ CONTENT_PREPARATION
+→ PRODUCTION
+→ CLIENT_REVIEW
+→ REVISION
+→ APPROVED
+→ DELIVERED
+→ PUBLISHED / COMPLETED
+
+Không publish khi chưa APPROVED.
+
+==================================================
+8. APPROVAL
+==================================================
+
+Doanh nghiệp phải duyệt:
+
+copy
+ảnh
+video
+thông tin năng lực
+client/project references
+contact
+QR destination
+
+Lưu:
+
+approvedBy
+approvedAt
+version
+
+Nếu nội dung thay đổi sau approval:
+tạo version mới.
+
+Không overwrite lịch sử duyệt.
+
+==================================================
+9. MEDIA / EVIDENCE
+==================================================
+
+Media asset phải có:
+
+type
+source
+ownerOrganization
+capturedAt
+usageRights
+visibility
+
+relation:
+organization
+facility
+capability
+productService
+program
+catalogue
+
+Nếu ảnh/video được dùng như Evidence:
+phải có evidence relation riêng.
+
+Media đẹp ≠ Evidence đã xác nhận.
+
+==================================================
+10. VIDEO
+==================================================
+
+Video 1 phút phải có thể gắn vào:
+
+Supplier Profile
+Product/Service
+Program
+Catalogue
+
+Không upload cùng một video thành nhiều record duplicate.
+
+Cho phép:
+thumbnail
+duration
+language
+caption
+publish status
+
+==================================================
+11. CATALOGUE INTEGRATION
+==================================================
+
+Nếu có Catalogue module:
+
+reuse:
+catalogues
+catalogue_entries
+
+Content project có thể tạo draft CatalogueEntry.
+
+Không auto publish vào catalogue.
+
+Admin/editor phải review trước.
+
+==================================================
+12. PROGRAM INTEGRATION
+==================================================
+
+Nếu content package gắn với Program:
+
+reuse programId.
+
+Có thể bổ sung:
+- ảnh tham dự;
+- phỏng vấn;
+- video chương trình;
+- nội dung gian hàng.
+
+Nhưng số lượng, lịch và quyền sử dụng phải được xác nhận trước.
+
+Không mặc định mọi gói truyền thông bao gồm event coverage.
+
+==================================================
+13. ADMIN
+==================================================
+
+Reuse:
+
+/admin/dich-vu
+/admin/to-chuc
+/admin/noi-dung
+
+Admin cần quản lý:
+
+ServiceRequest
+Organization
+Deliverables
+Owner
+Status
+Due date
+Assets
+Versions
+Client approval
+Usage rights
+Related Profile
+Related Program
+Related Catalogue
+Invoice/quote relation nếu có
+Audit
+
+Admin phải nhìn rõ:
+
+Cái gì đang chờ doanh nghiệp
+Cái gì đang chờ team
+Cái gì đã duyệt
+Cái gì đã publish
+
+==================================================
+14. DATA QUALITY RULE
+==================================================
+
+Gói trả phí KHÔNG được tự tạo:
+
+Verified Supplier
+Trusted Supplier
+Top Supplier
+Certified Supplier
+
+Nếu hồ sơ có evidence:
+hiển thị đúng từng evidence/status.
+
+Thanh toán cho nội dung
+≠
+xác minh năng lực.
+
+==================================================
+15. COMMERCIAL RULE
+==================================================
+
+Proposal/Quote phải ghi rõ:
+
+Deliverables
+Số lượng
+Số vòng sửa
+Timeline
+Travel cost
+Additional shooting cost
+Additional language cost
+Usage rights
+Items not included
+
+Không hứa:
+views
+leads
+buyers
+deals
+
+nếu không có phạm vi đo lường/chứng minh.
+
+==================================================
+16. SEO + MOBILE
+==================================================
+
+SEO Title:
+
+Hồ Sơ, Video & Truyền Thông Doanh Nghiệp | CHUOICUNGUNG.COM
+
+Description:
+
+Chuẩn hóa hồ sơ năng lực, video giới thiệu, ảnh sản phẩm và nội dung catalogue để doanh nghiệp sử dụng trên website và chương trình kết nối.
+
+Canonical:
+
+/dich-vu/truyen-thong-doanh-nghiep
+
+Mobile order:
+
+Hero
+4 service cards
+Multi-use block
+Process
+CTA
+
+Không overflow 390px.
+
+==================================================
+17. QA
+==================================================
+
+Test:
+
+1. CTA giữ đúng service context.
+2. Hồ sơ reuse Organization/SupplierProfile.
+3. Media không duplicate vô lý.
+4. AI/mascot không được đánh dấu evidence thực tế.
+5. Client approval bắt buộc trước publish.
+6. Version history hoạt động.
+7. Video gắn được Supplier/Profile/Program.
+8. Catalogue integration reuse existing data.
+9. Trả phí không tạo verification badge.
+10. Private media không public.
+11. Admin update tạo AuditLog.
+12. Mobile 390px hoạt động.
+
+==================================================
+18. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Models reused
+- Migration
+- ServiceRequest workflow
+- Content/Media project implementation
+- Approval/version workflow
+- Supplier Profile integration
+- Catalogue integration
+- Program integration
+- Admin implementation
+- Real data vs mock
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+DOANH NGHIỆP
+→ GỬI YÊU CẦU
+→ CHỐT HẠNG MỤC
+→ CHUẨN HÓA DATA
+→ SẢN XUẤT PROFILE / VIDEO / PHOTO / CATALOGUE
+→ DOANH NGHIỆP DUYỆT
+→ BÀN GIAO
+→ PUBLISH VÀO ĐÚNG MODULE
+→ DÙNG LẠI TRONG SEARCH / PROGRAM / CATALOGUE
+
+Không biến page này thành dịch vụ quảng cáo chung chung.
+Nội dung phải giúp BUYER hiểu đúng năng lực doanh nghiệp.

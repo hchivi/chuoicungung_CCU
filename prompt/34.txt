@@ -1,0 +1,1754 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 34: HIỆN DIỆN TỪ XA
+ROUTE: /dich-vu/hien-dien-tu-xa
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây dịch vụ HIỆN DIỆN TỪ XA
+cho nhà cung ứng không trực tiếp có mặt tại Program
+nhưng muốn được giới thiệu đúng phạm vi.
+
+Luồng:
+
+SUPPLIER
+→ CHỌN PROGRAM
+→ GỬI HỒ SƠ / VIDEO / CATALOGUE / MẪU
+→ REVIEW
+→ CHỐT PHẠM VI ĐẠI DIỆN
+→ CHỐT QUYỀN LỢI
+→ CHUẨN BỊ NỘI DUNG
+→ HIỆN DIỆN TẠI PROGRAM
+→ GHI NHẬN TƯƠNG TÁC
+→ CHUYỂN YÊU CẦU ĐƯỢC PHÉP CHIA SẺ
+→ FOLLOW-UP
+→ REPORT
+
+Đây KHÔNG phải:
+
+- dịch vụ bán lead;
+- thuê người đi chào hàng vô hạn;
+- ủy quyền sales mặc định;
+- cam kết meeting;
+- cam kết quotation;
+- cam kết deal.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/dich-vu/hien-dien-tu-xa
+
+Reuse:
+
+Organization
+SupplierProfile
+ProductService
+Capability
+ServiceArea
+Program
+ProgramParticipationOption
+ProgramRegistration
+Catalogue
+MediaAsset
+ServiceRequest
+ContentProject / MediaProject nếu có
+Sample
+ConnectionRequest
+Task
+Report
+Entitlement
+Contract
+AuditLog
+
+Không tạo:
+
+RemoteSupplierProfile
+RemoteCatalogue
+RemoteProgram
+RemoteLead
+
+nếu entity hiện có đã hỗ trợ.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“GIỚI THIỆU DOANH NGHIỆP TẠI CHƯƠNG TRÌNH DÙ BẠN CHƯA THỂ CÓ MẶT”
+
+Sub:
+
+“Đưa hồ sơ, video, catalogue hoặc mẫu sản phẩm của doanh nghiệp đến chương trình phù hợp. Đội điều phối giới thiệu nội dung đã được duyệt, ghi nhận yêu cầu liên hệ và chuyển lại đầu việc theo phạm vi thỏa thuận.”
+
+CTA chính:
+
+[TÌM CHƯƠNG TRÌNH CÓ THỂ THAM GIA TỪ XA]
+
+CTA phụ:
+
+[GỬI HỒ SƠ ĐỂ ĐƯỢC TƯ VẤN]
+
+==================================================
+3. CTA PROGRAM
+==================================================
+
+CTA chính dẫn:
+
+/chuong-trinh
+?participation=remote
+
+hoặc filter tương đương hiện có.
+
+Chỉ hiển thị Program:
+
+ProgramParticipationOption
+có REMOTE_PRESENCE
+
+và còn nhận hồ sơ.
+
+Không tự gắn mọi Program
+là có thể tham gia từ xa.
+
+==================================================
+4. PROGRAM ELIGIBILITY
+==================================================
+
+Một Program chỉ được hiển thị
+trong danh sách Remote Presence nếu có:
+
+remotePresenceEnabled = true
+hoặc
+ParticipationOption tương đương
+
+và:
+
+status phù hợp
+deadline chưa hết
+scope còn mở.
+
+Không suy diễn từ:
+ONLINE/HYBRID
+rằng Remote Presence được phép.
+
+==================================================
+5. PROGRAM CARD
+==================================================
+
+Mỗi Program card cho Remote Presence hiển thị:
+
+Program title
+
+Date
+
+Location
+
+Category / theme
+
+Target roles
+
+Remote submission deadline
+
+Accepted content types
+
+Sample acceptance yes/no
+
+Participation fee / quote required
+
+Status
+
+CTA:
+
+[XEM ĐIỀU KIỆN]
+
+hoặc:
+
+[ĐĂNG KÝ HIỆN DIỆN TỪ XA]
+
+==================================================
+6. “NỘI DUNG DOANH NGHIỆP CÓ THỂ GỬI”
+==================================================
+
+Block bắt buộc:
+
+“NỘI DUNG DOANH NGHIỆP CÓ THỂ GỬI”
+
+Có thể gồm:
+
+Hồ sơ số
+
+Video giới thiệu
+
+Catalogue
+
+Tài liệu giới thiệu
+
+Ảnh sản phẩm
+
+Product sheets
+
+Mẫu trưng bày
+
+Mẫu sản phẩm nếu Program cho phép.
+
+Không mặc định mọi Program nhận vật mẫu.
+
+==================================================
+7. CHỌN SẢN PHẨM THỰC SỰ PHÙ HỢP
+==================================================
+
+Supplier phải chọn:
+
+ProductService
+
+Capability
+
+Category
+
+phù hợp với Program.
+
+Không upload toàn bộ catalogue
+rồi yêu cầu đội điều phối
+tự chọn sản phẩm để bán.
+
+SUPPI có thể hỗ trợ chọn:
+Product/Capability phù hợp với Program.
+
+==================================================
+8. REUSE SUPPLIER PROFILE
+==================================================
+
+Nếu Supplier đã có SupplierProfile:
+
+prefill:
+
+Company
+Capabilities
+Products
+ServiceArea
+Media
+Catalogue
+Contact person.
+
+Không yêu cầu nhập lại.
+
+Nếu profile thiếu:
+flag nhưng vẫn cho save draft.
+
+==================================================
+9. HỒ SƠ CẦN CHUẨN BỊ
+==================================================
+
+Checklist có thể gồm:
+
+Company profile
+
+1–3 ProductService phù hợp
+
+Capability summary
+
+Service area
+
+Order conditions
+
+Contact person
+
+Catalogue
+
+Video optional
+
+Photos
+
+Technical documents nếu phù hợp
+
+Sample details nếu gửi mẫu.
+
+Checklist cấu hình theo Program.
+
+==================================================
+10. “PHẦN VIỆC ĐƯỢC THỰC HIỆN”
+==================================================
+
+Block bắt buộc:
+
+“PHẦN VIỆC ĐƯỢC THỰC HIỆN”
+
+Có thể gồm:
+
+Kiểm tra tài liệu
+
+Chuẩn hóa bộ giới thiệu đã duyệt
+
+Bố trí vị trí giới thiệu theo gói
+
+Hiển thị hồ sơ/video/catalogue
+
+Trưng bày mẫu nếu Program cho phép
+
+Hỗ trợ người quan tâm gửi yêu cầu
+
+Ghi nhận câu hỏi
+
+Chuyển yêu cầu được phép chia sẻ
+
+Tổng hợp đầu việc
+
+Báo cáo quyền lợi đã bàn giao.
+
+==================================================
+11. KHÔNG DÙNG COPY “ĐẠI DIỆN BÁN HÀNG”
+==================================================
+
+Không viết:
+
+“Chúng tôi bán hàng thay bạn”
+
+“Đội ngũ đại diện thương mại của bạn”
+
+“Chốt đơn thay doanh nghiệp”
+
+trừ khi có hợp đồng/ủy quyền riêng thật.
+
+Default wording:
+
+“Giới thiệu nội dung đã được doanh nghiệp duyệt
+và chuyển yêu cầu về đúng đầu mối.”
+
+==================================================
+12. “PHẠM VI ĐẠI DIỆN”
+==================================================
+
+Block cực kỳ quan trọng:
+
+“PHẠM VI ĐỘI ĐIỀU PHỐI CÓ THỂ ĐẠI DIỆN”
+
+Cho phép doanh nghiệp xác định:
+
+CAN_PRESENT_APPROVED_PROFILE
+
+CAN_SHOW_APPROVED_VIDEO
+
+CAN_SHOW_CATALOGUE
+
+CAN_DISPLAY_SAMPLE
+
+CAN_EXPLAIN_APPROVED_PRODUCT_SUMMARY
+
+CAN_COLLECT_CONTACT_REQUEST
+
+CAN_FORWARD_APPROVED_MATERIALS
+
+CAN_RECORD_QUESTIONS
+
+CAN_SCHEDULE_FOLLOW_UP_REQUEST
+
+Không mặc định quyền ngoài phạm vi.
+
+==================================================
+13. DEFAULT RESTRICTIONS
+==================================================
+
+Default đội điều phối KHÔNG được:
+
+Báo giá
+
+Thay đổi giá
+
+Cam kết MOQ
+
+Cam kết lead time
+
+Cam kết tiêu chuẩn kỹ thuật
+
+Đàm phán điều khoản
+
+Chấp nhận purchase order
+
+Ký NDA thay doanh nghiệp
+
+Ký hợp đồng
+
+Cam kết warranty
+
+Cam kết payment terms.
+
+==================================================
+14. QUOTATION
+==================================================
+
+Nếu Buyer hỏi giá:
+
+Coordinator ghi nhận:
+
+QUOTE_REQUESTED
+
+và chuyển cho Supplier.
+
+Không tự báo giá
+từ dữ liệu catalogue cũ.
+
+Supplier trả lời qua workflow.
+
+==================================================
+15. TECHNICAL QUESTION
+==================================================
+
+Nếu câu hỏi vượt approved content:
+
+status:
+
+NEEDS_SUPPLIER_RESPONSE
+
+Record:
+
+question
+
+requesting party
+theo consent
+
+owner
+
+dueAt
+
+supplier responder.
+
+Không đoán câu trả lời.
+
+==================================================
+16. AUTHORIZATION EXCEPTION
+==================================================
+
+Nếu Supplier thực sự muốn
+đội điều phối làm thêm hành động:
+
+phải có:
+
+SpecificAuthorization {
+ id
+ serviceRequestId / contractId
+
+ actionType
+
+ scope
+
+ startAt
+ endAt
+
+ approvedBySupplier
+
+ evidence/document
+
+ status
+}
+
+Không dựa trên checkbox mơ hồ.
+
+==================================================
+17. “BẠN NHẬN LẠI GÌ”
+==================================================
+
+Block bắt buộc:
+
+“BẠN NHẬN LẠI GÌ?”
+
+Có thể gồm:
+
+Bằng chứng vị trí giới thiệu
+
+Ảnh trưng bày nếu có
+
+Video/display evidence
+
+Số lần tương tác theo định nghĩa
+
+QR scan
+
+Profile view
+
+Contact requests có consent
+
+Buyer questions
+
+Requests forwarded
+
+Tasks còn chờ Supplier
+
+Report quyền lợi.
+
+==================================================
+18. METRIC SEPARATION
+==================================================
+
+Hard rule:
+
+DISPLAY
+≠ INTERACTION
+
+QR SCAN
+≠ CONTACT REQUEST
+
+CONTACT REQUEST
+≠ BUYER NEED
+
+BUYER QUESTION
+≠ RFQ
+
+RFQ
+≠ QUOTATION
+
+QUOTATION
+≠ DEAL.
+
+Report phải tách từng metric.
+
+==================================================
+19. INTERACTION DEFINITION
+==================================================
+
+Không dùng từ:
+
+“interaction”
+
+mơ hồ.
+
+Nếu report interaction count:
+
+phải có event type.
+
+Ví dụ:
+
+PROFILE_OPEN
+
+VIDEO_VIEW
+
+QR_SCAN
+
+CATALOGUE_OPEN
+
+CONTACT_REQUEST
+
+QUESTION_RECORDED
+
+SAMPLE_INTEREST
+
+FOLLOW_UP_REQUEST.
+
+==================================================
+20. CONTACT REQUEST
+==================================================
+
+Nếu người tham dự muốn liên hệ Supplier:
+
+tạo:
+
+Contact/Connection Request
+
+với:
+
+programId
+supplierOrganizationId
+source = REMOTE_PRESENCE
+consent
+request type
+message
+createdAt.
+
+Không đưa contact Buyer trực tiếp
+cho Supplier nếu chưa được phép.
+
+==================================================
+21. DATA SHARING
+==================================================
+
+Chỉ chuyển:
+
+“danh sách yêu cầu liên hệ được đồng ý chia sẻ”.
+
+Không chuyển:
+
+toàn bộ attendee list
+
+all badge scans
+
+all Program registration contacts
+
+Buyer private requirements.
+
+==================================================
+22. BUYER NEED
+==================================================
+
+Nếu Buyer có Requirement phù hợp:
+
+chỉ link tới Supplier
+theo workflow SupplierMatching.
+
+Remote Presence
+không được bypass matching.
+
+Sponsor/payment không được tăng score.
+
+==================================================
+23. SAMPLE HANDLING
+==================================================
+
+Nếu Program nhận mẫu:
+
+quản lý:
+
+SampleSubmission {
+ id
+ programId
+ supplierOrganizationId
+ productServiceId?
+
+ description
+ quantity
+
+ dimensions?
+ weight?
+
+ shippingMethod?
+
+ receivedStatus
+
+ displayStatus
+
+ returnRequired
+
+ returnMethod?
+
+ returnAddress?
+
+ returnStatus
+
+ ownerUserId
+
+ evidence[]
+
+ createdAt
+ updatedAt
+}
+
+Reuse Sample nếu core model đủ.
+
+==================================================
+24. SAMPLE DEADLINE
+==================================================
+
+Program Remote option phải có:
+
+sampleSubmissionDeadline
+
+contentSubmissionDeadline
+
+Không dùng chung nếu timeline khác.
+
+==================================================
+25. SHIPPING COST
+==================================================
+
+Trang phải nêu rõ:
+
+Chi phí gửi mẫu
+
+Chi phí nhận lại mẫu
+
+Ai chịu phí
+
+Địa chỉ nhận
+
+Deadline
+
+Packaging requirement
+
+Không nói “gửi mẫu miễn phí”
+nếu chưa có scope.
+
+==================================================
+26. RETURN SAMPLE
+==================================================
+
+Options:
+
+NO_RETURN
+
+RETURN_TO_SUPPLIER
+
+PICKUP_BY_SUPPLIER
+
+DISPOSE_WITH_APPROVAL
+
+KEEP_FOR_FUTURE_PROGRAM
+chỉ nếu có consent.
+
+Không tự giữ mẫu vô thời hạn.
+
+==================================================
+27. SAMPLE EVIDENCE
+==================================================
+
+Có thể ghi:
+
+Received photo
+
+Condition
+
+Display photo
+
+Return evidence
+
+Không cần public.
+
+Dùng cho operational handover.
+
+==================================================
+28. PROGRAM SPECIFIC PACKAGE
+==================================================
+
+Mỗi Remote Presence package
+phải gắn:
+
+Program
+
+ParticipationOption
+
+Start/end/deadline
+
+Entitlements
+
+Deliverables
+
+Fee/quote method
+
+Không bán:
+
+“Hiện diện từ xa toàn hệ thống”
+mà không có Program scope.
+
+==================================================
+29. NHIỀU PROGRAM
+==================================================
+
+Nếu dịch vụ cover nhiều Program:
+
+phải liệt kê cụ thể từng Program.
+
+Ví dụ:
+
+Program A
+Program B
+Program C
+
+Không dùng wording:
+
+“xuất hiện tại mọi sự kiện trong năm”
+nếu contract không liệt kê scope.
+
+==================================================
+30. ENTITLEMENTS
+==================================================
+
+RemotePresenceEntitlement hoặc generic Entitlement:
+
+PROFILE_DISPLAY
+
+VIDEO_DISPLAY
+
+CATALOGUE_DISPLAY
+
+SAMPLE_DISPLAY
+
+QR_PLACEMENT
+
+CONTACT_REQUEST_COLLECTION
+
+FOLLOW_UP_REPORT
+
+OTHER
+
+Mỗi entitlement:
+
+quantity
+programId
+deadline
+owner
+status
+evidence
+acceptance.
+
+==================================================
+31. NO DOUBLE CHARGE
+==================================================
+
+Nếu Remote Presence đã nằm trong:
+
+Program Participation package
+
+Sponsorship package
+
+Founding Partner entitlement
+
+Membership package
+nếu có
+
+thì không thu phí lại cho cùng quyền lợi.
+
+Admin phải detect:
+
+INCLUDED_BY_EXISTING_ENTITLEMENT.
+
+==================================================
+32. FORM CTA
+==================================================
+
+CTA:
+
+[GỬI HỒ SƠ ĐỂ ĐƯỢC TƯ VẤN]
+
+→ /yeu-cau-dich-vu
+?service=hien-dien-tu-xa
+
+Nếu đi từ Program:
+
+?service=hien-dien-tu-xa
+&programId={programId}
+
+Reuse Page 17 FormEngine.
+
+==================================================
+33. FORM DYNAMIC FIELDS
+==================================================
+
+Theo nguồn phải có:
+
+Program
+
+Hình thức giới thiệu
+
+Hồ sơ
+
+Mẫu gửi
+
+Người phản hồi
+
+Phạm vi đại diện.
+
+Bổ sung triển khai:
+
+Organization
+
+SupplierProfile
+
+Selected ProductServices
+
+Catalogue
+
+Video
+
+Content deadline
+
+Sample details
+
+Return option
+
+Main responder
+
+Responder SLA optional
+
+Notes
+
+Consent.
+
+==================================================
+34. RESPONDER
+==================================================
+
+Mỗi Remote Presence request
+phải có đầu mối Supplier:
+
+responderUserId/contact
+
+email/phone phù hợp
+
+time zone nếu quốc tế
+
+preferred channel
+
+expected response time optional.
+
+Không để Coordinator
+không biết chuyển câu hỏi cho ai.
+
+==================================================
+35. SUPPLIER RESPONSE SLA
+==================================================
+
+Nếu package ghi:
+
+“phản hồi trong X giờ/ngày”
+
+phải là Supplier-confirmed SLA.
+
+Không tự hứa thay Supplier.
+
+Nếu không có:
+dùng wording:
+
+“Đầu mối phản hồi theo thời gian đã thống nhất.”
+
+==================================================
+36. REQUEST FLOW
+==================================================
+
+Flow:
+
+ServiceRequest
+→ NEED_MORE_INFO
+→ SCOPE_CONFIRMED
+→ PROPOSAL_SENT
+→ ACCEPTED
+→ CONTENT_PREPARATION
+→ CONTENT_APPROVED
+→ MATERIAL_RECEIVED
+→ READY_FOR_PROGRAM
+→ ACTIVE_IN_PROGRAM
+→ FOLLOW_UP
+→ WAITING_ACCEPTANCE
+→ COMPLETED
+
+Không cần tạo enum mới
+nếu existing ServiceRequest statuses
++ sub-workflow hỗ trợ đủ.
+
+==================================================
+37. CONTENT APPROVAL
+==================================================
+
+Trước Program:
+
+Supplier phải approve:
+
+Profile summary
+
+Product description
+
+Video
+
+Images
+
+Catalogue
+
+Allowed claims
+
+Coordinator introduction script.
+
+Không publish/introduction
+bằng content chưa duyệt.
+
+==================================================
+38. INTRODUCTION SCRIPT
+==================================================
+
+Mỗi package nên có:
+
+ApprovedIntroductionScript
+
+Ví dụ:
+
+“Công ty ABC cung cấp X,
+phục vụ Y,
+nhận đơn Z theo thông tin doanh nghiệp đã cung cấp.”
+
+Script có:
+
+version
+approvedBy
+approvedAt.
+
+Không để coordinator tự thêm claim.
+
+==================================================
+39. INFORMATION CONFIDENCE
+==================================================
+
+Nếu data là:
+
+SELF_DECLARED
+
+thì script không gọi:
+
+“đã xác minh”
+
+“đảm bảo”
+
+“chứng nhận bởi CHUOICUNGUNG.COM”.
+
+==================================================
+40. PAID PACKAGE ≠ VERIFICATION
+==================================================
+
+Hard rule:
+
+Mua Remote Presence
+KHÔNG tạo:
+
+Verified badge
+
+Approved Supplier badge
+
+Priority Matching
+
+Guaranteed Buyer access.
+
+==================================================
+41. PROGRAM DISPLAY
+==================================================
+
+Trên Program detail:
+
+Participation Mode:
+
+“HIỆN DIỆN TỪ XA”
+
+chỉ hiện khi Program support.
+
+Có thể hiển thị:
+conditions
+deadline
+fee/quote
+CTA.
+
+Không tự hiển thị tất cả Remote Suppliers
+nếu publication rights chưa cho phép.
+
+==================================================
+42. REMOTE SUPPLIER SHOWCASE
+==================================================
+
+Nếu public showcase:
+
+reuse SupplierCard/Profile.
+
+Label:
+
+“THAM GIA TỪ XA”
+
+Không tạo:
+“Official Supplier”
+hoặc:
+“Recommended Supplier”.
+
+==================================================
+43. QR
+==================================================
+
+QR có thể dẫn về:
+
+Supplier canonical profile
+
+ProductService
+
+Catalogue entry.
+
+Track context:
+
+programId
+remotePresenceId
+asset/entry.
+
+QR scan chỉ analytics.
+
+Không tự tạo contact.
+
+==================================================
+44. FOLLOW-UP
+==================================================
+
+Sau Program:
+
+CHAINY có thể hỗ trợ:
+
+Contact requests
+
+Questions
+
+RFQ requests
+
+Sample interest
+
+Follow-up due
+
+Supplier response
+
+Connection status.
+
+Mỗi active request:
+
+owner
+nextAction
+nextActionAt.
+
+==================================================
+45. CHAINY KHÔNG TỰ GỬI BÁO GIÁ
+==================================================
+
+CHAINY có thể:
+
+nhắc Supplier
+draft response
+summarize request
+
+Nhưng không tự:
+
+send quotation
+accept terms
+commit price
+
+nếu chưa authorized.
+
+==================================================
+46. SUPPI
+==================================================
+
+SUPPI hỗ trợ trước Program:
+
+Program relevance
+
+Selected product relevance
+
+Profile completeness
+
+Missing capability data
+
+Service area
+
+Buyer need alignment.
+
+Không tự gọi:
+
+“Program chắc chắn phù hợp”
+nếu chưa có data đủ.
+
+==================================================
+47. REPORT
+==================================================
+
+Remote Presence Report có thể gồm:
+
+Program
+
+Entitlements
+
+Deliverables
+
+Display evidence
+
+QR scans
+
+Profile views
+
+Video views
+
+Catalogue opens
+
+Contact requests
+
+Questions received
+
+RFQ requests
+
+Follow-up tasks
+
+Outcomes nếu được xác nhận.
+
+==================================================
+48. REPORT PRIVACY
+==================================================
+
+Không report cho Supplier:
+
+contacts không consent
+
+attendee list
+
+Buyer private Need
+
+other Supplier activity
+
+internal Program notes.
+
+==================================================
+49. PROOF OF DELIVERY
+==================================================
+
+Các bằng chứng:
+
+Booth/display photo
+
+Screen photo
+
+Video playback evidence
+
+Catalogue inclusion
+
+Sample display photo
+
+QR placement
+
+Coordinator log
+
+Program report.
+
+Mỗi entitlement map tới evidence.
+
+==================================================
+50. CLIENT ACCEPTANCE
+==================================================
+
+Sau Program:
+
+Supplier có thể:
+
+ACCEPT DELIVERY
+
+REQUEST CLARIFICATION
+
+REPORT MISSING DELIVERABLE
+
+Không dùng:
+“success”
+chỉ vì deliverable đã hoàn tất.
+
+==================================================
+51. SERVICE SUCCESS ≠ SALES SUCCESS
+==================================================
+
+Remote Presence service có thể:
+
+COMPLETED
+
+dù chưa có Buyer deal.
+
+Service completion nghĩa:
+
+đã bàn giao đúng scope.
+
+Không gọi:
+“kinh doanh thành công”
+nếu không có Outcome.
+
+==================================================
+52. NO PROGRAM AVAILABLE
+==================================================
+
+Nếu chưa có Program phù hợp:
+
+hiển thị:
+
+“HIỆN CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP ĐANG NHẬN HỒ SƠ TỪ XA.”
+
+CTA:
+
+[ĐĂNG KÝ QUAN TÂM]
+
+hoặc:
+
+[GỬI HỒ SƠ ĐỂ ĐƯỢC TƯ VẤN]
+
+Không bán package không có Program.
+
+==================================================
+53. INTEREST
+==================================================
+
+RemotePresenceInterest {
+ organizationId
+ categories[]
+ locations[]
+ programTypes[]
+ contact
+ consent
+ createdAt
+}
+
+Interest
+≠ ServiceRequest accepted
+≠ ProgramRegistration.
+
+==================================================
+54. PRICING
+==================================================
+
+Chỉ hiển thị fixed price nếu:
+
+deliverables
+quantity
+duration
+sample handling
+program
+exclusions
+
+đã đủ rõ.
+
+Nếu không:
+
+“NHẬN BÁO GIÁ”.
+
+Không fake package pricing.
+
+==================================================
+55. EXCLUSIONS
+==================================================
+
+Mỗi offer phải hiển thị:
+
+“KHÔNG BAO GỒM”
+
+ví dụ:
+
+Quotation preparation
+
+Technical negotiation
+
+Buyer travel
+
+Sample shipping
+
+Sample return
+
+Translation
+
+Custom video production
+
+Additional catalogue printing
+
+trừ khi package có.
+
+==================================================
+56. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/hien-dien-tu-xa
+
+hoặc filter dưới:
+
+/admin/yeu-cau-dich-vu
+
+Không duplicate ServiceRequest records.
+
+Listing:
+
+Request code
+
+Supplier
+
+Program
+
+Products
+
+Content status
+
+Sample status
+
+Program readiness
+
+Owner
+
+Next action
+
+Due
+
+Status.
+
+==================================================
+57. ADMIN DETAIL
+==================================================
+
+Tabs:
+
+OVERVIEW
+
+PROGRAM
+
+SUPPLIER
+
+PRODUCTS
+
+SCOPE
+
+ENTITLEMENTS
+
+CONTENT
+
+APPROVED SCRIPT
+
+MEDIA
+
+CATALOGUE
+
+SAMPLES
+
+CONTACT REQUESTS
+
+QUESTIONS / RFQ
+
+DELIVERY EVIDENCE
+
+REPORT
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+58. READINESS CHECKLIST
+==================================================
+
+Admin trước Program phải thấy:
+
+Program confirmed
+
+Package accepted
+
+Payment if required
+
+Supplier profile ready
+
+Products selected
+
+Content approved
+
+Video approved
+
+Catalogue approved
+
+Sample received if required
+
+Return instruction confirmed
+
+Responder confirmed
+
+Introduction script approved
+
+Nếu thiếu:
+READY_FOR_PROGRAM = false.
+
+==================================================
+59. PROGRAM DAY
+==================================================
+
+Coordinator mobile/admin interface có thể cho:
+
+Mark entitlement displayed
+
+Record question
+
+Create contact request
+
+Record sample interest
+
+Attach evidence
+
+Add internal task.
+
+Không nhập Buyer private data ngoài scope.
+
+==================================================
+60. POST-PROGRAM QUEUE
+==================================================
+
+Queue:
+
+Supplier response needed
+
+Contact requests waiting
+
+Questions unanswered
+
+RFQs waiting
+
+Sample returns pending
+
+Delivery acceptance pending
+
+Report pending.
+
+Tích hợp Page 19 Admin.
+
+==================================================
+61. CONTRACT
+==================================================
+
+Contract/Proposal phải xác định:
+
+Program(s)
+
+Deliverables
+
+Quantities
+
+Deadlines
+
+Representation scope
+
+Exclusions
+
+Sample handling
+
+Shipping
+
+Return policy
+
+Responder
+
+Reporting
+
+Price
+
+Payment
+
+Acceptance
+
+Cancellation/Postponement.
+
+==================================================
+62. PROGRAM POSTPONED/CANCELLED
+==================================================
+
+Nếu Program:
+
+POSTPONED
+
+CANCELLED
+
+Remote Presence request không bị xóa.
+
+Handle:
+
+reschedule
+credit
+refund
+material return
+
+theo contract/policy.
+
+Audit.
+
+==================================================
+63. FILE SECURITY
+==================================================
+
+Private content:
+
+technical documents
+pricing
+sample docs
+internal script
+contact requests
+
+không public.
+
+Backend permission.
+
+Public Supplier content chỉ khi approved.
+
+==================================================
+64. ACCOUNT WORKSPACE
+==================================================
+
+Supplier xem:
+
+Program
+
+ServiceRequest
+
+Selected products
+
+Approved materials
+
+Scope
+
+Entitlements
+
+Sample status
+
+Questions
+
+Contact requests được phép
+
+Tasks
+
+Report
+
+Acceptance.
+
+Không xem:
+Buyer private contact ngoài consent
+other suppliers
+internal admin notes.
+
+==================================================
+65. SEO
+==================================================
+
+Title:
+
+Hiện Diện Từ Xa Tại Chương Trình | CHUOICUNGUNG.COM
+
+Description:
+
+Giới thiệu hồ sơ, video, catalogue hoặc mẫu sản phẩm tại chương trình phù hợp khi doanh nghiệp chưa thể có mặt trực tiếp; phạm vi đại diện và quyền lợi được thống nhất rõ.
+
+Canonical:
+
+/dich-vu/hien-dien-tu-xa
+
+==================================================
+66. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+Available Programs
+
+What you can send
+
+What we do
+
+Representation scope
+
+What you receive
+
+Process
+
+CTA
+
+FAQ
+
+Không overflow 390px.
+
+==================================================
+67. ANALYTICS
+==================================================
+
+Track:
+
+remote_presence_page_view
+
+remote_program_view
+
+remote_program_select
+
+remote_service_start
+
+remote_service_submit
+
+remote_scope_confirmed
+
+remote_content_approved
+
+sample_received
+
+program_display_delivered
+
+contact_request_recorded
+
+supplier_followup_completed
+
+remote_report_delivered
+
+Không gọi QR scan/contact request = sale.
+
+==================================================
+68. QA
+==================================================
+
+Test tối thiểu:
+
+1. Chỉ Program hỗ trợ Remote Presence mới hiện.
+2. Program deadline được enforce.
+3. Supplier Profile được reuse.
+4. Products phải chọn cụ thể.
+5. Nội dung chưa approved không sử dụng.
+6. Coordinator chỉ nói trong approved script.
+7. Không tự báo giá/cam kết kỹ thuật.
+8. Specific authorization tách riêng nếu có.
+9. Contact chỉ chia sẻ khi consent.
+10. QR scan không tạo Buyer Need.
+11. Remote Presence không tăng Matching score.
+12. Paid package không tạo Verified badge.
+13. Sample shipping/return tracking hoạt động.
+14. No Program → chỉ Interest/Tư vấn.
+15. Included entitlement không double charge.
+16. Report tách view/scan/contact/RFQ/outcome.
+17. Service completion ≠ Deal success.
+18. Program cancelled giữ history.
+19. Admin mutation ghi AuditLog.
+20. Mobile 390px hoạt động.
+
+==================================================
+69. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- Remote Presence workflow
+- Program integration
+- Participation option integration
+- SupplierProfile/ProductService reuse
+- Representation scope
+- Authorization model nếu cần
+- Content approval
+- Introduction script
+- Sample workflow
+- Contact request workflow
+- Follow-up/CHAINY integration
+- Entitlements
+- Reporting
+- Account workspace
+- Admin implementation
+- Privacy/RBAC
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+SUPPLIER
+→ PROGRAM PHÙ HỢP
+→ PROFILE / PRODUCT / VIDEO / CATALOGUE / SAMPLE
+→ SCOPE
+→ APPROVAL
+→ REMOTE PRESENCE
+→ INTERACTIONS
+→ CONTACT REQUEST / QUESTION / RFQ
+→ SUPPLIER RESPONSE
+→ FOLLOW-UP
+→ REPORT
+
+ĐỘI ĐIỀU PHỐI
+CHỈ ĐẠI DIỆN TRONG PHẠM VI ĐÃ DUYỆT.
+
+Không tự:
+BÁO GIÁ
+CAM KẾT KỸ THUẬT
+ĐÀM PHÁN
+KÝ KẾT
+
+nếu không có ủy quyền riêng rõ ràng.

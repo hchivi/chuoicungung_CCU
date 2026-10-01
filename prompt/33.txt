@@ -1,0 +1,1441 @@
+PROJECT: CHUOICUNGUNG.COM
+PAGE 33: ĐỐI TÁC PHÁT TRIỂN
+ROUTE: /doi-tac-phat-trien
+
+PHASE:
+P1 — HOÀN THIỆN HỆ SINH THÁI
+
+MỤC TIÊU:
+
+Xây /doi-tac-phat-trien thành nơi tiếp nhận
+ĐỐI TÁC PHÁT TRIỂN / REFERRAL / BUSINESS DEVELOPMENT PARTNER
+
+phù hợp để:
+
+- giới thiệu khách mua dịch vụ;
+- phát triển nhóm doanh nghiệp tham gia chương trình;
+- giới thiệu đơn vị có nhu cầu tổ chức chương trình;
+- phối hợp triển khai trong phạm vi đã thống nhất.
+
+Đây KHÔNG phải:
+
+affiliate marketplace mở;
+MLM;
+bán database;
+cơ chế trả tiền để ưu ái Supplier;
+cơ chế tự tạo quan hệ Hội/KCN;
+cơ chế tự nhận hoa hồng khi chỉ gửi contact.
+
+==================================================
+1. AUDIT + REUSE
+==================================================
+
+Audit:
+
+/doi-tac-phat-trien
+
+Reuse:
+
+Organization
+User
+OrganizationRole
+ServiceRequest
+Program
+PartnershipRequest
+DevelopmentPartner
+Referral
+ReferralCode
+ReferralAttribution
+Contract
+Settlement
+Payment/Finance nếu có
+Task
+AuditLog
+
+Reuse Page 17 ServiceRequest
+và Page 19 Admin workflow.
+
+Không tạo:
+CRM thứ hai
+Organization duplicate
+Partner contact database riêng.
+
+==================================================
+2. HERO
+==================================================
+
+H1:
+
+“CÙNG PHÁT TRIỂN CHƯƠNG TRÌNH VÀ DỊCH VỤ CHO DOANH NGHIỆP”
+
+Sub:
+
+“CHUOICUNGUNG.COM tìm đối tác có mạng lưới doanh nghiệp và mong muốn phối hợp giới thiệu dịch vụ phù hợp. Phạm vi giới thiệu, trách nhiệm hỗ trợ và cơ chế ghi nhận được thống nhất trước khi triển khai.”
+
+CTA chính:
+
+[ĐĂNG KÝ TRAO ĐỔI HỢP TÁC]
+
+CTA phụ:
+
+[XEM HÌNH THỨC PHỐI HỢP]
+
+==================================================
+3. ĐỐI TƯỢNG PHÙ HỢP
+==================================================
+
+Có thể gồm:
+
+Tổ chức kết nối doanh nghiệp
+
+Hội / Hiệp hội
+
+Đơn vị tổ chức sự kiện
+
+Đối tác địa phương
+
+Đơn vị tư vấn doanh nghiệp
+
+Cá nhân có mạng lưới doanh nghiệp phù hợp
+
+Đối tác phát triển thị trường
+
+Không mặc định tất cả applicant được duyệt.
+
+==================================================
+4. HÌNH THỨC PHỐI HỢP
+==================================================
+
+Block:
+
+“HÌNH THỨC PHỐI HỢP”
+
+Cho phép chọn một hoặc nhiều:
+
+A.
+GIỚI THIỆU KHÁCH ĐẶT DỊCH VỤ NỘI DUNG
+
+Ví dụ:
+profile
+video
+photo
+catalogue
+
+B.
+GIỚI THIỆU KHÁCH ĐẶT VẬT PHẨM
+
+C.
+PHÁT TRIỂN NHÓM DOANH NGHIỆP THAM GIA PROGRAM
+
+D.
+GIỚI THIỆU ĐƠN VỊ CÓ NHU CẦU TỔ CHỨC PROGRAM
+
+E.
+PHỐI HỢP ĐỊA PHƯƠNG
+nếu được duyệt riêng.
+
+Không tạo commission mặc định cho mọi loại.
+
+==================================================
+5. SERVICE REFERRAL
+==================================================
+
+Referral có thể gắn với:
+
+ServiceRequest
+
+Ví dụ:
+
+Partner A
+→ giới thiệu Company B
+→ Company B gửi yêu cầu Video
+→ ServiceRequest DV-2026-...
+
+Referral phải relation tới ServiceRequest thật.
+
+Không chỉ lưu:
+name + phone + commission.
+
+==================================================
+6. PROGRAM DEVELOPMENT
+==================================================
+
+Đối tác có thể:
+
+giới thiệu nhóm Buyer
+
+giới thiệu nhóm Supplier
+
+giới thiệu đơn vị tổ chức
+
+hỗ trợ truyền thông Program
+
+hỗ trợ điều phối địa phương
+nếu agreement cho phép.
+
+Nhưng:
+
+Partner không được tự xác nhận Program participant.
+
+ProgramRegistration vẫn dùng Page 22.
+
+==================================================
+7. PARTNER ≠ ORGANIZER
+==================================================
+
+Được giới thiệu Program
+KHÔNG đồng nghĩa:
+
+Organizer
+
+Co-organizer
+
+Supporting Organization.
+
+Program role phải có:
+
+ProgramOrganization relation
++
+CONFIRMED status.
+
+==================================================
+8. PARTNER ≠ ASSOCIATION MEMBER
+==================================================
+
+Hard rule:
+
+Referral
+
+Sponsorship
+
+Program participation
+
+KHÔNG tự tạo:
+
+Association Membership.
+
+Không dùng Referral
+để gắn nhãn hội viên.
+
+==================================================
+9. PARTNER ≠ SUPPLIER PRIORITY
+==================================================
+
+Đối tác giới thiệu một Supplier
+không được:
+
+tăng SupplierMatching score
+
+bảo đảm shortlist
+
+bảo đảm Buyer meeting
+
+bảo đảm order.
+
+Matching vẫn dựa trên:
+
+Need
+Capability
+Location
+Timing
+Ability to respond.
+
+==================================================
+10. PARTNER ≠ BUYER INFLUENCE
+==================================================
+
+Không trả thưởng dựa trên:
+
+“Buyer chọn Supplier X”
+
+nếu điều đó tạo cơ chế ưu ái Supplier.
+
+Partner compensation nên gắn với:
+
+dịch vụ hợp lệ
+Program work
+commercial transaction đủ điều kiện
+
+theo policy đã duyệt.
+
+==================================================
+11. CÁCH GHI NHẬN
+==================================================
+
+Block:
+
+“CÁCH GHI NHẬN”
+
+Flow nguồn:
+
+1.
+Xác nhận thỏa thuận hợp tác
+
+2.
+Cấp mã hoặc referral link
+
+3.
+Ghi nhận yêu cầu hợp lệ
+
+4.
+Theo dõi ServiceRequest / Program / transaction
+
+5.
+Xác định trạng thái đủ điều kiện
+
+6.
+Đối soát
+
+7.
+Thanh toán/chứng từ nếu áp dụng.
+
+==================================================
+12. REFERRAL CODE
+==================================================
+
+Sau khi Partner APPROVED:
+
+có thể cấp:
+
+partnerCode
+
+hoặc:
+
+referralLink
+
+Ví dụ:
+
+?ref=DTPT-001
+
+Nhưng mã chỉ dùng attribution.
+
+Không dùng mã như quyền truy cập dữ liệu.
+
+==================================================
+13. REFERRAL MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+Referral {
+ id
+
+ developmentPartnerId
+
+ referralCode?
+
+ referredOrganizationId?
+ referredContactId?
+
+ serviceRequestId?
+ programId?
+ sponsorshipInquiryId?
+
+ referralType
+
+ status
+
+ firstCapturedAt
+
+ attributedAt?
+
+ qualificationStatus?
+
+ transactionId?
+
+ createdAt
+ updatedAt
+}
+
+Không tạo contact lead public.
+
+==================================================
+14. REFERRAL STATUS
+==================================================
+
+Có thể dùng:
+
+CAPTURED
+
+UNDER_REVIEW
+
+DUPLICATE
+
+EXISTING_CUSTOMER
+
+VALID
+
+INVALID
+
+CONVERTED_TO_REQUEST
+
+TRANSACTION_PENDING
+
+ELIGIBLE_FOR_SETTLEMENT
+
+SETTLED
+
+CANCELLED
+
+REFUNDED_ADJUSTMENT
+
+Không dùng một status:
+SUCCESS.
+
+==================================================
+15. ATTRIBUTION
+==================================================
+
+Attribution có thể dựa:
+
+Referral code
+
+Referral link
+
+Partner-selected source
+
+Manual attribution có evidence.
+
+Mỗi attribution cần:
+
+source
+timestamp
+partner
+target
+status.
+
+Không cho Partner tự nhận ownership
+một giao dịch đã tồn tại.
+
+==================================================
+16. KHÁCH CŨ
+==================================================
+
+Rule bắt buộc:
+
+Nếu customer đã tồn tại trước referral:
+
+flag:
+EXISTING_CUSTOMER
+
+Xử lý theo policy.
+
+Không tự tính referral eligible.
+
+==================================================
+17. REFERRAL TRÙNG
+==================================================
+
+Nếu nhiều Partner giới thiệu cùng một khách:
+
+flag:
+DUPLICATE_REFERRAL
+
+Use approved attribution rules.
+
+Ví dụ:
+
+first valid referral
+hoặc policy khác.
+
+Không tự ghi nhận cả hai.
+
+==================================================
+18. TRANSACTION HỦY
+==================================================
+
+Nếu transaction:
+
+cancelled
+refunded
+partially refunded
+
+Settlement phải điều chỉnh.
+
+Không giữ commission
+như thể transaction hoàn tất.
+
+==================================================
+19. ĐIỀU KIỆN “GIAO DỊCH HỢP LỆ”
+==================================================
+
+Không hard-code definition duy nhất.
+
+Policy per product phải xác định:
+
+ServiceRequest accepted?
+
+Contract signed?
+
+Payment received?
+
+Acceptance completed?
+
+Refund window?
+
+Chỉ khi đủ điều kiện
+mới Eligible for Settlement.
+
+==================================================
+20. COMMISSION / SHARE POLICY
+==================================================
+
+Chỉ công bố tỷ lệ/mức chia sẻ
+khi policy đã được duyệt theo từng product.
+
+Không hard-code:
+
+10%
+20%
+30%
+
+nếu chưa có chính sách thật.
+
+UI nếu chưa có policy:
+
+“Cơ chế ghi nhận và đối soát được thống nhất theo từng phạm vi hợp tác.”
+
+==================================================
+21. SETTLEMENT BASIS
+==================================================
+
+Mỗi policy phải xác định:
+
+Eligible products
+
+Eligible amount
+
+Excluded amount
+
+VAT included/excluded
+
+Discount treatment
+
+Refund treatment
+
+Payment timing
+
+Required documents
+
+Settlement cycle.
+
+==================================================
+22. PARTNER SHARE ≠ REVENUE SOURCE
+==================================================
+
+Khoản chia sẻ Partner phải quản lý như:
+
+customer acquisition / partner development cost
+
+theo accounting structure phù hợp.
+
+Không cộng “Partner commission”
+thành một dòng doanh thu mới.
+
+==================================================
+23. FORM ĐĂNG KÝ
+==================================================
+
+CTA:
+
+[ĐĂNG KÝ TRAO ĐỔI HỢP TÁC]
+
+Form fields theo tài liệu:
+
+Tên tổ chức hoặc cá nhân
+
+Vai trò
+
+Địa bàn
+
+Nhóm doanh nghiệp có thể tiếp cận
+
+Dịch vụ quan tâm
+
+Cách phối hợp
+
+Đầu mối liên hệ
+
+Bổ sung hợp lý:
+
+Website optional
+
+Organization nếu đã tồn tại
+
+Program interest optional
+
+Notes
+
+Consent.
+
+==================================================
+24. KHÔNG YÊU CẦU UPLOAD DANH BẠ
+==================================================
+
+Hard rule:
+
+KHÔNG yêu cầu Partner tải lên:
+
+Excel danh bạ
+
+phone contacts
+
+email database
+
+CRM export
+
+danh sách bên thứ ba
+
+để được xét duyệt.
+
+Form chỉ hỏi mô tả:
+
+“Nhóm doanh nghiệp bạn có thể tiếp cận”
+
+Ví dụ:
+
+Nhà máy KCN Đồng Nai
+
+Supplier cơ khí
+
+Doanh nghiệp Hội XYZ
+
+Không thu third-party contact list.
+
+==================================================
+25. APPLICATION ≠ APPROVED PARTNER
+==================================================
+
+Submit form:
+
+→ DevelopmentPartnerApplication
+
+KHÔNG:
+
+→ ACTIVE PARTNER.
+
+Flow:
+
+APPLICATION
+→ REVIEW
+→ NEED_MORE_INFO
+→ DISCUSSION
+→ AGREEMENT
+→ APPROVED
+→ ACTIVE
+
+==================================================
+26. PARTNER STATUS
+==================================================
+
+Có thể dùng:
+
+APPLIED
+
+UNDER_REVIEW
+
+NEED_MORE_INFO
+
+DISCUSSION
+
+AGREEMENT_PENDING
+
+APPROVED
+
+ACTIVE
+
+PAUSED
+
+ENDED
+
+REJECTED
+
+CANCELLED
+
+==================================================
+27. DEVELOPMENT PARTNER MODEL
+==================================================
+
+Reuse hoặc chuẩn hóa:
+
+DevelopmentPartner {
+ id
+
+ organizationId?
+ userId?
+
+ partnerType
+
+ geographicScopes[]
+ industryScopes[]
+
+ cooperationTypes[]
+
+ status
+
+ agreementId?
+
+ partnerCode?
+
+ startDate?
+ endDate?
+
+ ownerUserId
+
+ createdAt
+ updatedAt
+}
+
+Organization partner:
+reuse Organization.
+
+Individual partner:
+relation User/contact phù hợp.
+
+==================================================
+28. AGREEMENT
+==================================================
+
+Partner Agreement cần ghi:
+
+Scope
+
+Products/services eligible
+
+Program scope nếu có
+
+Territory nếu có
+
+Referral rules
+
+Duplicate rules
+
+Existing customer rules
+
+Cancellation/refund rules
+
+Settlement basis
+
+Payment timing
+
+Responsibilities
+
+Data access
+
+Marketing permissions
+
+Termination.
+
+==================================================
+29. TERRITORY
+==================================================
+
+Địa bàn Partner không mặc định là exclusive.
+
+Nếu có exclusive territory:
+phải có contract entitlement riêng.
+
+Không tự coi:
+
+“Partner Đồng Nai”
+
+= độc quyền Đồng Nai.
+
+==================================================
+30. “BẠN ĐƯỢC HỖ TRỢ GÌ”
+==================================================
+
+Block:
+
+“BẠN ĐƯỢC HỖ TRỢ GÌ?”
+
+Theo nguồn:
+
+Tài liệu sản phẩm đã duyệt
+
+Đầu mối xử lý
+
+Hướng dẫn giới thiệu
+
+Bảng theo dõi trong phạm vi được cấp quyền.
+
+Có thể bổ sung:
+
+Program links
+
+Approved marketing materials
+
+Referral code/link
+
+Không cho sửa nội dung core product.
+
+==================================================
+31. APPROVED MATERIALS
+==================================================
+
+Partner chỉ nên dùng:
+
+current approved product materials.
+
+Material có:
+
+version
+validFrom
+validUntil?
+status.
+
+Không tiếp tục dùng:
+old price
+old promise
+old program.
+
+==================================================
+32. PARTNER DASHBOARD
+==================================================
+
+Sau APPROVED:
+
+/tai-khoan/doi-tac-phat-trien
+hoặc account section tương đương.
+
+Hiển thị:
+
+Agreement scope
+
+Partner code/link
+
+Referrals
+
+Referral status
+
+Eligible transactions
+
+Settlement status
+
+Approved materials
+
+Support contact
+
+Tasks.
+
+Không show data ngoài scope.
+
+==================================================
+33. DASHBOARD PRIVACY
+==================================================
+
+Partner không mặc định xem:
+
+Full customer CRM
+
+Buyer private need
+
+Supplier quotations
+
+Internal margins
+
+Other Partner referrals
+
+Private Program attendee list.
+
+Chỉ show data cần cho referral tracking.
+
+==================================================
+34. REFERRAL DISPLAY
+==================================================
+
+Ví dụ row:
+
+REF-2026-00125
+
+Customer:
+Company ABC
+hoặc masked info nếu policy yêu cầu
+
+Source:
+Video service
+
+Status:
+Valid Request
+
+Transaction:
+Pending
+
+Settlement:
+Not eligible yet
+
+Không show unrelated internal data.
+
+==================================================
+35. MANUAL FIRST
+==================================================
+
+Giai đoạn P1:
+
+ưu tiên:
+
+controlled list
++
+manual attribution review
++
+manual settlement review
+
+trước.
+
+Không cần build:
+complex affiliate engine
+multi-level commission
+real-time payout.
+
+==================================================
+36. NO MLM
+==================================================
+
+Không hỗ trợ:
+
+Partner tuyển Partner để ăn %
+multi-tier commission
+downline
+network bonus
+
+trong P1.
+
+Development Partner chỉ relation trực tiếp
+với CHUOICUNGUNG.COM.
+
+==================================================
+37. ADMIN
+==================================================
+
+Tạo/reuse:
+
+/admin/doi-tac-phat-trien
+
+Listing:
+
+Partner
+
+Organization/Individual
+
+Type
+
+Location
+
+Cooperation scopes
+
+Status
+
+Agreement
+
+Valid referrals
+
+Pending settlement
+
+Owner
+
+Next action
+
+Updated.
+
+==================================================
+38. ADMIN APPLICATION DETAIL
+==================================================
+
+Tabs:
+
+OVERVIEW
+
+APPLICATION
+
+PROFILE
+
+SCOPE
+
+AGREEMENT
+
+REFERRALS
+
+TRANSACTIONS
+
+SETTLEMENTS
+
+MATERIALS
+
+TASKS
+
+TIMELINE
+
+AUDIT
+
+==================================================
+39. REVIEW
+==================================================
+
+Admin có:
+
+APPROVE FOR DISCUSSION
+
+REQUEST MORE INFO
+
+REJECT
+
+CREATE AGREEMENT DRAFT
+
+Không auto approve.
+
+Rejection có reason.
+
+==================================================
+40. REFERRAL REVIEW QUEUE
+==================================================
+
+Admin queue:
+
+REFERRALS NEED REVIEW
+
+Check:
+
+new customer?
+
+duplicate?
+
+source evidence?
+
+valid service?
+
+within agreement term?
+
+partner scope?
+
+If valid:
+VALID.
+
+If not:
+reason.
+
+==================================================
+41. SETTLEMENT
+==================================================
+
+Settlement không tự tính từ:
+
+form submission
+
+page click
+
+contact created.
+
+Chỉ dựa trên:
+
+eligible transaction
+theo approved policy.
+
+==================================================
+42. SETTLEMENT MODEL
+==================================================
+
+PartnerSettlement {
+ id
+
+ developmentPartnerId
+
+ periodStart
+ periodEnd
+
+ status
+
+ grossEligibleBase?
+
+ excludedAmount?
+
+ adjustmentAmount?
+
+ payableAmount?
+
+ paymentStatus
+
+ documentRefs[]
+
+ approvedBy?
+ approvedAt?
+
+ createdAt
+ updatedAt
+}
+
+Chỉ triển khai các monetary fields
+nếu Finance architecture đã sẵn sàng.
+
+==================================================
+43. SETTLEMENT STATUS
+==================================================
+
+DRAFT
+
+UNDER_REVIEW
+
+APPROVED
+
+PAYMENT_PENDING
+
+PAID
+
+ADJUSTED
+
+CANCELLED
+
+Không mark Paid
+nếu chưa có actual payment record/evidence.
+
+==================================================
+44. REFUND ADJUSTMENT
+==================================================
+
+Transaction hoàn/hủy:
+
+tạo adjustment.
+
+Không xóa settlement history.
+
+Giữ:
+
+original
+adjustment
+reason.
+
+==================================================
+45. ORGANIZATION AUTHORITY
+==================================================
+
+Nếu Partner là tổ chức:
+
+phải thống nhất
+đúng đầu mối có thẩm quyền.
+
+Không ký thỏa thuận chỉ với
+một user tự khai đại diện
+mà không có verification phù hợp.
+
+Reuse Organization membership/claim.
+
+==================================================
+46. ASSOCIATION / KCN PARTNERS
+==================================================
+
+Nếu Association/KCN tham gia Development Partner:
+
+không tự:
+
+gắn membership
+
+gắn official partnership
+
+gắn KCN endorsement
+
+trên public pages.
+
+Public relationship chỉ hiển thị
+khi agreement cho phép và relation confirmed.
+
+==================================================
+47. PUBLIC PARTNER LIST
+==================================================
+
+Không bắt buộc tạo
+danh sách public tất cả Development Partners.
+
+Nếu có block đối tác:
+
+chỉ Organization đã:
+ACTIVE
++
+publicDisplay allowed.
+
+Không public individuals nếu không cần.
+
+==================================================
+48. CONFLICT OF INTEREST
+==================================================
+
+Nếu Partner:
+
+giới thiệu Buyer
+và đồng thời Supplier muốn bán cho Buyer đó
+
+không được tự dùng referral role
+để tác động Supplier selection.
+
+Matching và Buyer decision
+vẫn độc lập.
+
+==================================================
+49. SERVICE REQUEST INTEGRATION
+==================================================
+
+Referral link tới:
+
+/yeu-cau-dich-vu
+
+có thể mang:
+
+referralCode
+
+sourcePartnerId tokenized/validated.
+
+Server resolve Partner.
+
+Không tin raw partnerId
+do frontend gửi.
+
+==================================================
+50. PROGRAM INTEGRATION
+==================================================
+
+Program referral:
+
+ProgramRegistration có source/referral relation.
+
+Nhưng:
+
+registration
+≠ transaction
+≠ commission.
+
+Chỉ tính nếu agreement định nghĩa rõ
+điều kiện hợp lệ.
+
+==================================================
+51. CATALOGUE / CONTENT / MERCHANDISE
+==================================================
+
+Referral có thể gắn:
+
+Catalogue ServiceRequest
+
+Content/Video ServiceRequest
+
+Merchandise ServiceRequest
+
+Program Organization request.
+
+Reuse cùng Referral system.
+
+Không tạo referral table riêng per product.
+
+==================================================
+52. UTM / ANALYTICS
+==================================================
+
+Có thể track:
+
+referral link visit
+
+request started
+
+request submitted
+
+valid request
+
+transaction eligible
+
+settlement completed.
+
+Không coi:
+
+link click = qualified referral.
+
+==================================================
+53. CONSENT / PRIVACY
+==================================================
+
+Partner chỉ nên giới thiệu link
+hoặc chuyển contact khi có cơ sở/consent phù hợp.
+
+Không yêu cầu upload
+third-party personal data.
+
+Nếu Partner nhập contact của người khác:
+
+phải có field:
+“Bạn xác nhận có quyền chuyển thông tin này”
+nếu workflow cho phép.
+
+Ưu tiên self-submit link.
+
+==================================================
+54. MARKETING CONSENT
+==================================================
+
+Referral consent
+≠ marketing consent.
+
+Customer được giới thiệu
+không tự subscribe newsletter.
+
+Tách consent.
+
+==================================================
+55. SEO
+==================================================
+
+Title:
+
+Đối Tác Phát Triển | CHUOICUNGUNG.COM
+
+Description:
+
+Phối hợp giới thiệu dịch vụ, phát triển nhóm doanh nghiệp tham gia chương trình và kết nối đơn vị có nhu cầu tổ chức với cơ chế ghi nhận, theo dõi và đối soát rõ ràng.
+
+Canonical:
+
+/doi-tac-phat-trien
+
+==================================================
+56. MOBILE
+==================================================
+
+Mobile:
+
+Hero
+
+Who fits
+
+Cooperation types
+
+How attribution works
+
+Partner support
+
+Application form CTA
+
+FAQ/policies
+
+Không overflow 390px.
+
+==================================================
+57. ANALYTICS
+==================================================
+
+Track:
+
+development_partner_page_view
+
+cooperation_type_select
+
+partner_application_start
+
+partner_application_submit
+
+partner_approved
+
+referral_link_visit
+
+referral_validated
+
+transaction_eligible
+
+settlement_completed
+
+Không gọi application = partner.
+
+==================================================
+58. SECURITY
+==================================================
+
+Test:
+
+fake referralCode
+
+partnerId manipulation
+
+cross-partner access
+
+settlement access
+
+customer data exposure
+
+manual attribution permission
+
+agreement access
+
+finance RBAC.
+
+Backend enforce.
+
+==================================================
+59. QA
+==================================================
+
+Test tối thiểu:
+
+1. Application không auto Partner.
+2. Không yêu cầu upload contact database.
+3. Approved Partner mới được cấp code/link.
+4. Referral code validate server-side.
+5. Existing customer được flag.
+6. Duplicate referral được phát hiện.
+7. Cancel/refund điều chỉnh settlement.
+8. Commission chỉ dùng policy approved.
+9. No hard-coded commission khi chưa có policy.
+10. Referral không ảnh hưởng SupplierMatching.
+11. Referral không tạo Association Membership.
+12. Partner không xem full customer CRM.
+13. Organization partner authority được kiểm tra.
+14. Referral link vào ServiceRequest giữ attribution.
+15. Marketing consent tách referral consent.
+16. Manual-first workflow hoạt động.
+17. Admin mutation có AuditLog.
+18. Mobile 390px hoạt động.
+
+==================================================
+60. OUTPUT
+==================================================
+
+Sau khi hoàn thành báo cáo:
+
+- Files changed
+- Existing models reused
+- Migration
+- DevelopmentPartner model
+- Application workflow
+- Agreement implementation
+- Referral model
+- Referral code/link
+- Attribution rules
+- Existing customer logic
+- Duplicate logic
+- Refund/cancellation adjustment
+- Settlement structure
+- ServiceRequest integration
+- Program integration
+- Account dashboard
+- Admin implementation
+- Privacy/RBAC
+- SEO
+- Analytics
+- Remaining mocks
+- QA PASS / FAIL / BLOCKED
+
+MỤC TIÊU CUỐI:
+
+PARTNER APPLIES
+→ REVIEW
+→ AGREEMENT
+→ APPROVED
+→ REFERRAL CODE / LINK
+→ VALID REQUEST
+→ REAL TRANSACTION
+→ ELIGIBILITY CHECK
+→ SETTLEMENT
+→ PAYMENT / ADJUSTMENT
+
+Không biến Development Partner thành
+một hệ thống affiliate chạy theo click.
+
+Không trả thưởng để tác động
+Buyer chọn Supplier nào.
+
+Đối tác phát triển phải giúp
+mở rộng PROGRAM + SERVICE + BUSINESS NETWORK
+nhưng vẫn giữ tính trung lập của
+Supplier Matching.
