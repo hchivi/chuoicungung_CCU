@@ -1,0 +1,365 @@
+ZALO CRM - lõi sản phẩm khác biệt nhất của CHUOICUNGUNG.COM: người dùng không cần học thêm một CRM mới. Nhà máy và NCC vẫn làm việc trên Zalo như thói quen hằng ngày, còn toàn bộ logic tìm nguồn, matching, tạo nhóm, điều phối và ghi nhận tiến độ nằm phía sau tại CHUOICUNGUNG.COM.
+Nhưng tôi sẽ chỉnh kiến trúc một chút để vừa đúng trải nghiệm anh muốn, vừa phù hợp khả năng hiện tại của Zalo.
+Mô hình nên chốt
+SUPPI = AI SOURCING
+SUPPI làm việc 1:1 với nhà máy và NCC trước khi match.
+CHAINY = AI CONNECTION & COORDINATION
+CHAINY tiếp quản sau khi hai bên đồng ý kết nối, tạo không gian làm việc chung và theo dõi đến kết quả.
+Luồng tổng thể:
+NHÀ MÁY → SUPPI → MATCHING → CHAINY → NHÓM ZALO → CÔNG VIỆC → KẾT QUẢ → CRM
+Đây chính là sản phẩm.
+
+Phía người dùng nhìn thấy rất đơn giản
+Nhà máy chỉ thấy trên Zalo:
+SUPPI | CHUOICUNGUNG.COM
+và có thể chat:
+Tôi đang cần 500 bộ đồng phục công nhân cho nhà máy ở Long Thành, cần giao tháng 11.
+SUPPI hỏi tiếp:
+Anh/chị cần áo hay cả bộ áo quần?
+ Có mẫu thiết kế chưa?
+ Có yêu cầu chất liệu không?
+ Có cần NCC gửi mẫu trước không?
+ Khoảng thời gian cần nhận mẫu?
+Sau đó SUPPI chuyển nội dung chat thành một Demand Record trong CRM.
+Ví dụ:
+NC-2026-00125
+500 bộ đồng phục
+Long Thành
+deadline tháng 11
+cần mẫu
+chất liệu chưa xác định
+buyer đồng ý nhận đề xuất NCC
+Nhà máy không cần biết phía sau có CRM phức tạp.
+
+SUPPI đi tìm NCC
+CRM tìm trong dữ liệu của CHUOICUNGUNG.COM:
+ngành nghề
+ sản phẩm
+ địa bàn
+ năng lực
+ quy mô đơn
+ thời gian
+ lịch sử phản hồi
+ thông tin đã xác nhận
+Ví dụ ra 20 NCC.
+SUPPI không lập tức giới thiệu 20 bên cho nhà máy.
+SUPPI chọn 5–7 NCC tiềm năng rồi chat riêng từng NCC:
+Chào anh/chị, SUPPI từ CHUOICUNGUNG.COM.
+ Hiện có một nhà máy tại Long Thành đang cần khoảng 500 bộ đồng phục công nhân, dự kiến giao trong tháng 11 và muốn nhận mẫu trước.
+ Anh/chị có khả năng đáp ứng yêu cầu này không?
+NCC trả lời:
+Có.
+SUPPI tiếp tục:
+MOQ bên mình?
+ Thời gian làm mẫu?
+ Lead time 500 bộ?
+ Có phục vụ Đồng Nai không?
+ Có thể cung cấp catalogue hoặc mẫu tương tự không?
+Tất cả câu trả lời quay ngược về CRM.
+
+SUPPI chấm xong thì mới chuyển cho CHAINY
+Ví dụ 7 NCC được hỏi:
+3 bên phù hợp.
+CRM có thể hiện:
+NCC A — phù hợp cao
+ Đồng Nai · MOQ 300 · 7 ngày mẫu · có xưởng.
+NCC B — phù hợp
+ TP.HCM · phục vụ Đồng Nai · 10 ngày mẫu.
+NCC C — cần xác nhận thêm
+ Bình Dương · giá phù hợp nhưng lead time chưa xác nhận.
+Nhà máy nhận:
+SUPPI đã tìm được 3 nhà cung ứng có khả năng phù hợp với yêu cầu NC-2026-00125. Anh/chị có muốn kết nối với NCC A không?
+Buyer chọn:
+Đồng ý kết nối.
+Đây là thời điểm SUPPI hoàn tất nhiệm vụ chính và chuyển case cho CHAINY.
+
+CHAINY TAKE CARE
+CHAINY nhắn riêng buyer:
+Anh/chị đã đồng ý kết nối với Công ty ABC. CHAINY có thể tạo nhóm làm việc để hai bên trao đổi trực tiếp. Anh/chị đồng ý tham gia nhóm không?
+Đồng thời hỏi NCC:
+Nhà máy đã đồng ý kết nối. Anh/chị có đồng ý tham gia nhóm làm việc với buyer và CHAINY không?
+Hai bên cùng đồng ý.
+↓
+CHAINY TẠO NHÓM
+Tên nhóm có thể chuẩn hóa:
+NC125 | Nhà máy ABC × NCC XYZ | CHUOICUNGUNG.COM
+Thành viên:
+CHAINY | CHUOICUNGUNG.COM
+ Buyer
+ NCC
+ Điều phối viên nếu cần.
+Về kỹ thuật, Zalo hiện có Group Management Function (GMF) cho Official Account; Zalo mô tả đây là nhóm do doanh nghiệp sở hữu và quản lý, và OpenAPI có thể tích hợp với CRM/hệ thống nội bộ. Zalo cũng đã hỗ trợ quản lý nhóm và tự động hóa qua OpenAPI.
+
+Khi vào nhóm, CHAINY không nên nói chuyện như chatbot CSKH
+CHAINY nên giống project coordinator.
+Tin đầu tiên:
+Chào anh/chị, CHAINY đã tạo nhóm để hỗ trợ hai bên xử lý nhu cầu NC-2026-00125 – Đồng phục 500 nhân sự tại Long Thành.
+Tóm tắt yêu cầu hiện tại:
+500 bộ
+sử dụng tại Long Thành
+cần nhận hàng trong tháng 11
+cần duyệt mẫu trước
+Việc tiếp theo: NCC XYZ gửi catalogue và đề xuất mẫu trước 27/09.
+CHAINY sẽ hỗ trợ ghi nhận các bước tiếp theo trong quá trình trao đổi.
+Ngay lập tức CRM tạo:
+CASE: NC-2026-00125
+MATCH: MT-00034
+
+BUYER: ABC
+SUPPLIER: XYZ
+
+STATUS:
+CONNECTED
+
+NEXT ACTION:
+NCC gửi catalogue
+
+OWNER:
+XYZ
+
+DUE DATE:
+27/09
+
+Từ đây CHAINY theo dõi công việc
+Ví dụ NCC gửi catalogue vào nhóm.
+CHAINY nhận webhook.
+CRM ghi:
+Catalogue received — 25/09 15:42
+CHAINY hỏi buyer:
+Anh/chị đã nhận được catalogue. Anh/chị muốn NCC chuẩn bị mẫu theo phương án nào?
+Buyer:
+Mẫu kaki xám và xanh navy.
+CRM tự update:
+NEXT ACTION:
+NCC chuẩn bị 2 mẫu
+
+OWNER:
+Supplier
+
+DUE:
+30/09
+
+Đến hạn mà NCC chưa gửi
+CHAINY:
+Anh/chị XYZ, theo kế hoạch mẫu dự kiến hoàn thành hôm nay. Anh/chị vui lòng cập nhật tình trạng để nhà máy theo dõi nhé.
+Nếu NCC trả lời:
+Mai gửi.
+CHAINY cập nhật:
+Due date → 01/10
+Không cần nhân viên nhập tay mọi việc.
+
+Khi gửi mẫu
+NCC:
+Mẫu đã gửi Grab, mã ABC123.
+CHAINY nhận diện:
+Event: SAMPLE_SENT
+↓
+CRM:
+Sample → Sent
+↓
+Buyer nhận:
+Mẫu đang được gửi. CHAINY sẽ nhắc anh/chị phản hồi sau khi nhận.
+
+Buyer phản hồi
+Chất liệu ổn, điều chỉnh màu đậm hơn một chút và gửi báo giá.
+AI hiểu được hai task:
+01. chỉnh màu mẫu
+02. gửi báo giá
+CRM:
+NEXT ACTIONS
+
+Supplier:
+Điều chỉnh mẫu màu navy
+
+Supplier:
+Gửi báo giá 500 bộ
+
+Due:
+04/10
+
+Sau đó là quotation
+NCC gửi PDF.
+CHAINY có thể đọc metadata/tài liệu và hỏi:
+Báo giá này áp dụng cho 500 bộ và có hiệu lực đến ngày 15/10 đúng không?
+NCC xác nhận.
+CRM ghi:
+QUOTE RECEIVED
+Không cần CHAINY tự quyết định giá tốt/xấu.
+
+Và kết quả cuối cùng
+Buyer:
+Bên tôi chọn NCC này làm tiếp.
+CHAINY:
+Cảm ơn anh/chị. CHAINY xin xác nhận trạng thái hiện tại là nhà máy đã lựa chọn NCC XYZ để tiếp tục thương lượng/triển khai. Đúng không?
+Buyer:
+Đúng.
+CRM mới ghi:
+SELECTED
+Nếu buyer nói:
+Chưa phù hợp giá.
+CRM:
+NOT SELECTED — PRICE
+Dữ liệu này cực kỳ giá trị.
+
+Điểm rất hay: NCC và nhà máy KHÔNG CẦN VÀO CRM
+Đây chính là điểm tôi cho rằng anh nên giữ.
+Buyer thấy
+Zalo.
+Supplier thấy
+Zalo.
+Điều phối viên thấy
+CRM CHUOICUNGUNG.COM.
+AI thấy
+Zalo conversation
+supplier profile
+buyer demand
+previous activity
+workflow rules.
+Một phía cực đơn giản.
+Một phía cực có cấu trúc.
+
+Nhưng có một thay đổi kỹ thuật quan trọng
+Tôi không khuyên thiết kế theo khái niệm “SUPPI và CHAINY tự động kết bạn như hai tài khoản Zalo cá nhân”.
+Cách đúng hơn là triển khai chúng dưới dạng Zalo Official Account, rồi kết nối OA với CRM CHUOICUNGUNG.COM qua Zalo OpenAPI.
+Zalo xác nhận OpenAPI hỗ trợ vận hành nhiều OA, nhắn tin theo UID, quản lý người dùng, webhook và tích hợp trực tiếp với CRM/CDP/ERP/chatbot.
+Với người chưa tương tác/quan tâm OA, luồng chủ động cần tuân theo cơ chế OA/ZBS và chính sách của Zalo, thay vì giả lập hành vi “kết bạn tự động” của tài khoản cá nhân. Zalo có ZBS Template Message để doanh nghiệp gửi tin theo UID hoặc số điện thoại trong các trường hợp được hỗ trợ.
+
+Tôi sẽ triển khai hai OA
+SUPPI | CHUOICUNGUNG.COM
+Avatar SUPPI.
+Description:
+Trợ lý tìm nguồn cung cho doanh nghiệp.
+Chuyên:
+Buyer requirement
+ Supplier qualification
+ Search
+ Matching.
+
+CHAINY | CHUOICUNGUNG.COM
+Avatar CHAINY.
+Description:
+Trợ lý kết nối và điều phối doanh nghiệp.
+Chuyên:
+Connection
+ Group
+ Meeting
+ Sample
+ Quote
+ Follow-up
+ Outcome.
+Điều này rất dễ hiểu về thương hiệu.
+
+Nhưng nhóm làm việc chỉ nên để CHAINY làm OA chủ
+Có một chi tiết kỹ thuật đáng lưu ý: tài liệu GMF của Zalo nói không thể mời thêm một OA vào một nhóm đã tồn tại.
+Vì vậy tôi không thiết kế:
+SUPPI OA
+CHAINY OA
+Buyer
+Supplier
+cùng xuất hiện trong một GMF.
+Mà thiết kế:
+Trước match
+SUPPI ↔ Buyer
+SUPPI ↔ Supplier
+Sau match
+handover.
+Trong group
+CHAINY OA ↔ Buyer ↔ Supplier
+Như vậy vai trò hai mascot còn rõ hơn.
+SUPPI tìm. CHAINY chăm sóc kết nối.
+
+CRM phía sau nên giống “AI Control Center”
+Không chỉ lưu chat.
+Mỗi conversation phải map vào:
+ORGANIZATION
+
+CONTACT
+
+DEMAND
+
+SUPPLIER
+
+MATCH
+
+ZALO USER UID
+
+CONVERSATION
+
+GMF GROUP
+
+TASK
+
+MEETING
+
+SAMPLE
+
+QUOTE
+
+NEXT ACTION
+
+OUTCOME
+Đây mới là phần moat của CHUOICUNGUNG.COM.
+
+Một màn hình điều phối viên có thể như sau
+NC-2026-00125
+Đồng phục 500 nhân sự
+Buyer
+ ABC Manufacturing
+SUPPI:
+✅ Nhu cầu đã xác nhận
+✅ 17 NCC được tìm thấy
+✅ 5 NCC được hỏi
+✅ 3 NCC có khả năng đáp ứng
+CHAINY:
+✅ Buyer đồng ý kết nối 2 NCC
+Group A
+ABC × NCC A
+Status: Báo giá
+Next: Buyer phản hồi trước 03/10
+Group B
+ABC × NCC B
+Status: Sample
+Next: NCC gửi mẫu 30/09
+Điều phối viên nhìn một màn hình biết toàn bộ.
+
+AI “tự học” nên định nghĩa cẩn thận
+Không để AI đơn giản đọc tất cả chat rồi tự thay đổi hành vi không kiểm soát.
+Tôi sẽ cho AI học theo 3 lớp:
+Knowledge: sản phẩm, ngành nghề, tiêu chí sourcing.
+History: các interaction trước đây được phép sử dụng.
+Outcome: NCC nào phản hồi, tiêu chí nào thường thiếu, vì sao buyer từ chối.
+Ví dụ sau 300 nhu cầu:
+SUPPI có thể nhận ra:
+Với đồng phục công nhân, buyer thường thiếu 5 thông tin:
+ số lượng, chất liệu, logo, size, deadline.
+Vậy lần sau SUPPI tự hỏi 5 câu đó.
+Đây là learning có cấu trúc, hữu ích hơn kiểu AI “tự học mọi thứ”.
+
+Quan trọng: AI không được tự quyết định mọi kết nối
+Tôi sẽ đặt nguyên tắc:
+AI có thể tự động
+Hỏi thông tin
+ Phân loại
+ Tìm candidate
+ Nhắc việc
+ Tóm tắt
+ Đề nghị kết nối
+ Chuẩn bị nhóm
+ Theo dõi deadline.
+Cần người dùng xác nhận
+Chia sẻ contact
+ Kết nối hai doanh nghiệp
+ Mời vào group
+ Chia sẻ tài liệu riêng
+ Xác nhận kết quả thương mại.
+Zalo cũng yêu cầu doanh nghiệp bảo đảm có sự đồng ý phù hợp khi thu thập, lưu trữ hoặc chia sẻ thông tin người dùng trong GMF.
+
+Một câu mô tả sản phẩm rất dễ hiểu
+Sau phần này, tôi sẽ định vị CHUOICUNGUNG.COM như sau:
+CHUOICUNGUNG.COM là nền tảng AI sourcing và kết nối B2B, hoạt động ngay trên Zalo. SUPPI tìm đúng nguồn cung; CHAINY đưa hai bên vào không gian làm việc chung, hỗ trợ trao đổi và theo dõi công việc đến khi có kết quả.
+Hoặc ngắn hơn:
+SUPPI tìm đúng nguồn.
+ CHAINY kết nối và theo đến cùng.
+Và điểm quan trọng nhất của mô hình này là: anh không cố kéo nhà máy và NCC ra khỏi Zalo để bắt họ dùng một phần mềm mới. Anh đưa AI và CRM của CHUOICUNGUNG.COM vào chính nơi họ đã quen làm việc — còn dữ liệu, matching, workflow và kết quả được CHUOICUNGUNG.COM quản lý phía sau.
+Đây có thể trở thành tính năng trung tâm của toàn bộ nền tảng, mạnh hơn rất nhiều so với việc chỉ có danh bạ, marketplace hay chatbot trên website.
+

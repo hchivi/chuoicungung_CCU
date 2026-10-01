@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import DifyChatWidget from './chat/DifyChatWidget';
 
 const DIRECTIONS = [
   'up-left',
@@ -99,6 +100,10 @@ export default function SuppliMascot() {
 
   const [directionChainy, setDirectionChainy] = useState('down-right');
   const [reactionChainy, setReactionChainy] = useState(null);
+
+  // Dify Chat Widget State
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatMode, setChatMode] = useState('SUPPI');
 
   const containerRef = useRef(null);
   const suppliButtonRef = useRef(null);
@@ -255,152 +260,163 @@ export default function SuppliMascot() {
 
 
   return (
-    <aside 
-      aria-label="Linh vật tương tác SUPPI & CHAINY"
-      onClick={() => {
-        handleBoopBoth();
-        navigate('/tro-ly-ai');
-      }}
-      title="Nhấn để trò chuyện cùng Trợ lý AI SUPPI & CHAINY"
-      className="fixed bottom-1 right-1 sm:bottom-3 sm:right-3 z-50 select-none print:hidden flex flex-col items-center pointer-events-auto cursor-pointer transition-all duration-300 ease-out origin-bottom-right scale-[0.52] sm:scale-[0.62] sm:hover:scale-[0.78] hover:scale-[0.56] active:scale-50 sm:active:scale-[0.60] opacity-90 hover:opacity-100 group"
-    >
-      {/* Mascots Container */}
-      <div className="relative">
+    <>
+      <aside 
+        aria-label="Linh vật tương tác SUPPI & CHAINY"
+        onClick={() => {
+          handleBoopBoth();
+          setIsChatOpen(prev => !prev);
+        }}
+        title="Nhấn để mở Khung chat AI SUPPI & CHAINY"
+        className="fixed bottom-1 right-1 sm:bottom-3 sm:right-3 z-50 select-none print:hidden flex flex-col items-center pointer-events-auto cursor-pointer transition-all duration-300 ease-out origin-bottom-right scale-[0.52] sm:scale-[0.62] sm:hover:scale-[0.78] hover:scale-[0.56] active:scale-50 sm:active:scale-[0.60] opacity-90 hover:opacity-100 group"
+      >
+        {/* Mascots Container */}
+        <div className="relative">
 
-        {/* 1. DUAL MASCOTS CONTAINER (STANDING CLOSER SIDE-BY-SIDE WITHOUT GROUND SHADOWS) */}
-        <div 
-          ref={containerRef}
-          className="pointer-events-auto flex items-end justify-center -space-x-9 sm:-space-x-10 cursor-pointer"
-        >
-        
-        {/* SUPPI (LEFT) */}
-        <button
-          ref={suppliButtonRef}
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleBoopSuppli(e);
-            navigate('/tro-ly-ai');
-          }}
-          aria-label="Tương tác với linh vật SUPPI"
-          className="relative cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 z-0"
-          style={{
-            width: 105,
-            height: 105,
-            padding: 0,
-            border: 0,
-            background: 'transparent',
-            appearance: 'none',
-            userSelect: 'none',
-          }}
-        >
-          {/* Squash & Stretch Span */}
-          <span
-            ref={suppliSquashRef}
+          {/* 1. DUAL MASCOTS CONTAINER (STANDING CLOSER SIDE-BY-SIDE WITHOUT GROUND SHADOWS) */}
+          <div 
+            ref={containerRef}
+            className="pointer-events-auto flex items-end justify-center -space-x-9 sm:-space-x-10 cursor-pointer"
+          >
+          
+          {/* SUPPI (LEFT) */}
+          <button
+            ref={suppliButtonRef}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleBoopSuppli(e);
+              setChatMode('SUPPI');
+              setIsChatOpen(true);
+            }}
+            aria-label="Trò chuyện cùng AI Sourcing SUPPI"
+            className="relative cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 z-0"
             style={{
-              position: 'relative',
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              transformOrigin: '50% 80%',
+              width: 105,
+              height: 105,
+              padding: 0,
+              border: 0,
+              background: 'transparent',
+              appearance: 'none',
+              userSelect: 'none',
             }}
           >
-            {/* Directions Layer */}
+            {/* Squash & Stretch Span */}
             <span
+              ref={suppliSquashRef}
               style={{
-                ...layer,
-                backgroundImage: `url(${SUPPLI_ASSETS.directions})`,
-                ...cell(DIRECTIONS.indexOf(directionSuppli)),
-                opacity: reactionSuppli ? 0 : 1,
-                filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                position: 'relative',
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                transformOrigin: '50% 80%',
               }}
-            />
+            >
+              {/* Directions Layer */}
+              <span
+                style={{
+                  ...layer,
+                  backgroundImage: `url(${SUPPLI_ASSETS.directions})`,
+                  ...cell(DIRECTIONS.indexOf(directionSuppli)),
+                  opacity: reactionSuppli ? 0 : 1,
+                  filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                }}
+              />
 
-            {/* Reactions Layer */}
-            <span
-              style={{
-                ...layer,
-                backgroundImage: `url(${SUPPLI_ASSETS.reactions})`,
-                ...cell(REACTIONS.indexOf(reactionSuppli ?? 'blink')),
-                opacity: reactionSuppli ? 1 : 0,
-                filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
-              }}
-            />
-          </span>
-        </button>
+              {/* Reactions Layer */}
+              <span
+                style={{
+                  ...layer,
+                  backgroundImage: `url(${SUPPLI_ASSETS.reactions})`,
+                  ...cell(REACTIONS.indexOf(reactionSuppli ?? 'blink')),
+                  opacity: reactionSuppli ? 1 : 0,
+                  filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                }}
+              />
+            </span>
+          </button>
 
-        {/* CHAINY (RIGHT) */}
-        <button
-          ref={chainyButtonRef}
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleBoopChainy(e);
-            navigate('/tro-ly-ai');
-          }}
-          aria-label="Tương tác với linh vật CHAINY"
-          className="relative cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 z-10"
-          style={{
-            width: 105,
-            height: 105,
-            padding: 0,
-            border: 0,
-            background: 'transparent',
-            appearance: 'none',
-            userSelect: 'none',
-          }}
-        >
-          {/* Squash & Stretch Span */}
-          <span
-            ref={chainySquashRef}
+          {/* CHAINY (RIGHT) */}
+          <button
+            ref={chainyButtonRef}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleBoopChainy(e);
+              setChatMode('CHAINY');
+              setIsChatOpen(true);
+            }}
+            aria-label="Trò chuyện cùng AI Điều phối CHAINY"
+            className="relative cursor-pointer focus:outline-none transition-transform hover:scale-105 active:scale-95 z-10"
             style={{
-              position: 'relative',
-              display: 'block',
-              width: '100%',
-              height: '100%',
-              transformOrigin: '50% 80%',
+              width: 105,
+              height: 105,
+              padding: 0,
+              border: 0,
+              background: 'transparent',
+              appearance: 'none',
+              userSelect: 'none',
             }}
           >
-            {/* Directions Layer */}
+            {/* Squash & Stretch Span */}
             <span
+              ref={chainySquashRef}
               style={{
-                ...layer,
-                backgroundImage: `url(${CHAINY_ASSETS.directions})`,
-                ...cell(DIRECTIONS.indexOf(directionChainy)),
-                opacity: reactionChainy ? 0 : 1,
-                filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                position: 'relative',
+                display: 'block',
+                width: '100%',
+                height: '100%',
+                transformOrigin: '50% 80%',
               }}
-            />
+            >
+              {/* Directions Layer */}
+              <span
+                style={{
+                  ...layer,
+                  backgroundImage: `url(${CHAINY_ASSETS.directions})`,
+                  ...cell(DIRECTIONS.indexOf(directionChainy)),
+                  opacity: reactionChainy ? 0 : 1,
+                  filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                }}
+              />
 
-            {/* Reactions Layer */}
-            <span
-              style={{
-                ...layer,
-                backgroundImage: `url(${CHAINY_ASSETS.reactions})`,
-                ...cell(REACTIONS.indexOf(reactionChainy ?? 'blink')),
-                opacity: reactionChainy ? 1 : 0,
-                filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
-              }}
-            />
+              {/* Reactions Layer */}
+              <span
+                style={{
+                  ...layer,
+                  backgroundImage: `url(${CHAINY_ASSETS.reactions})`,
+                  ...cell(REACTIONS.indexOf(reactionChainy ?? 'blink')),
+                  opacity: reactionChainy ? 1 : 0,
+                  filter: 'drop-shadow(0 8px 12px rgba(7,35,72,0.25))',
+                }}
+              />
+            </span>
+          </button>
+        </div>
+        </div>
+
+        {/* 2. CHAT TEXT (NO BACKGROUND / FRAMELESS / SÁT CHÂN MASCOTS) */}
+        <div className="-mt-3.5 sm:-mt-4 flex items-center justify-center gap-1.5 select-none pointer-events-none transition-transform duration-200 group-hover:scale-105">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0 shadow-sm" />
+          <span 
+            className="text-xs sm:text-[13px] font-black tracking-wider whitespace-nowrap"
+            style={{
+              filter: 'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 1px 3px rgba(15, 23, 42, 0.25))'
+            }}
+          >
+            <span className="text-[#0055d4]">SUPPI</span>
+            <span className="text-slate-600 mx-1 font-extrabold">&</span>
+            <span className="text-[#e11d48]">CHAINY</span>
           </span>
-        </button>
-      </div>
-      </div>
+        </div>
+      </aside>
 
-      {/* 2. CHAT TEXT (NO BACKGROUND / FRAMELESS / SÁT CHÂN MASCOTS) */}
-      <div className="-mt-3.5 sm:-mt-4 flex items-center justify-center gap-1.5 select-none pointer-events-none transition-transform duration-200 group-hover:scale-105">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0 shadow-sm" />
-        <span 
-          className="text-xs sm:text-[13px] font-black tracking-wider whitespace-nowrap"
-          style={{
-            filter: 'drop-shadow(0 1px 2px rgba(255, 255, 255, 0.95)) drop-shadow(0 1px 3px rgba(15, 23, 42, 0.25))'
-          }}
-        >
-          <span className="text-[#0055d4]">SUPPI</span>
-          <span className="text-slate-600 mx-1 font-extrabold">&</span>
-          <span className="text-[#e11d48]">CHAINY</span>
-        </span>
-      </div>
-    </aside>
+      {/* Dify Chat Widget Modal / Drawer */}
+      <DifyChatWidget 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        initialMode={chatMode} 
+      />
+    </>
   );
 }
