@@ -2423,6 +2423,32 @@ export default function AiWorkspacePage() {
     }
   }, [location.search]);
 
+  // Tiếp nhận lịch sử đoạn chat từ DifyChatWidget khi người dùng bấm mở rộng
+  useEffect(() => {
+    let sourceMsgs = location.state?.transferredMessages;
+    if (!sourceMsgs) {
+      try {
+        const raw = localStorage.getItem('ccu_active_chat_messages');
+        if (raw) {
+          sourceMsgs = JSON.parse(raw);
+        }
+      } catch (e) {}
+    }
+
+    if (Array.isArray(sourceMsgs) && sourceMsgs.length > 0) {
+      setMessages(prev => {
+        // Nếu đã có tin nhắn trong workspace thì không ghi đè trùng lặp
+        if (prev.length > 0) return prev;
+
+        return sourceMsgs.map((m, idx) => ({
+          ...m,
+          id: m.id || `transferred_${idx}_${Date.now()}`,
+          fromWidget: true
+        }));
+      });
+    }
+  }, [location.state]);
+
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAFC] font-sans antialiased text-slate-800">
 
@@ -3063,8 +3089,63 @@ export default function AiWorkspacePage() {
                 {messages.map(msg => (
                   <div key={msg.id} className="space-y-4 animate-in fade-in duration-300">
 
-                    {/* USER MESSAGE BUBBLE */}
-                    {msg.sender === 'user' && (
+                    {/* TRANSFERRED WIDGET MESSAGES (TỪ POPUP CHAT SANG TOÀN MÀN HÌNH) */}
+                    {msg.fromWidget && (
+                      <div className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'} my-2`}>
+                        {msg.sender === 'user' ? (
+                          <div className="max-w-xl p-4 rounded-2xl rounded-tr-xs bg-slate-100 text-black border border-slate-200/90 shadow-2xs space-y-1">
+                            <div className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+                              Khách
+                            </div>
+                            <p className="text-xs sm:text-sm font-medium leading-relaxed whitespace-pre-wrap text-black">
+                              {msg.text}
+                            </p>
+                            <div className="text-[10px] text-slate-400 text-right pt-0.5 font-mono">
+                              {msg.time || msg.timestamp || 'Vừa xong'}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={`max-w-2xl p-4 sm:p-5 rounded-3xl rounded-tl-xs shadow-md space-y-2.5 leading-relaxed ${
+                            msg.mode === 'CHAINY' 
+                              ? 'bg-rose-50/70 border border-rose-200 text-[#e11d48]' 
+                              : 'bg-blue-50/70 border border-blue-200 text-[#0052cc]'
+                          }`}>
+                            <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200/60">
+                              <img 
+                                src={msg.mode === 'CHAINY' ? "/mascots/CHAINY_2.png" : "/mascots/SUPPI_2.png"}
+                                alt={msg.mode}
+                                className={`w-8 h-8 rounded-full object-cover border-2 shadow-xs shrink-0 ${
+                                  msg.mode === 'CHAINY' ? 'border-rose-300' : 'border-blue-300'
+                                }`}
+                              />
+                              <div>
+                                <span className={`font-black text-xs sm:text-sm uppercase tracking-wide font-heading block ${
+                                  msg.mode === 'CHAINY' ? 'text-[#e11d48]' : 'text-[#0052cc]'
+                                }`}>
+                                  {msg.mode === 'CHAINY' ? 'CHAINY | Trợ lý kết nối' : 'SUPPI | Trợ lý tìm nguồn'}
+                                </span>
+                                <span className="text-[10px] text-slate-400">
+                                  Lịch sử trao đổi từ Chat Widget
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className={`whitespace-pre-line text-xs sm:text-sm font-medium leading-relaxed ${
+                              msg.mode === 'CHAINY' ? 'text-[#e11d48]' : 'text-[#0052cc]'
+                            }`}>
+                              {msg.text}
+                            </div>
+
+                            <div className="text-[10px] text-slate-400 text-right pt-1 font-mono">
+                              {msg.time || msg.timestamp || 'Vừa xong'}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* USER MESSAGE BUBBLE (NATIVE WORKSPACE) */}
+                    {!msg.fromWidget && msg.sender === 'user' && (
                       <div className="flex justify-end">
                         <div className="max-w-xl bg-gradient-to-r from-[#0052cc] to-sky-600 text-white rounded-2xl rounded-tr-xs p-4 shadow-md space-y-1">
                           <div className="text-[10px] text-blue-200 uppercase font-bold tracking-wider">
@@ -3081,7 +3162,7 @@ export default function AiWorkspacePage() {
                     )}
 
                     {/* AI ACKNOWLEDGMENT MESSAGE */}
-                    {msg.sender === 'ai_ack' && (
+                    {!msg.fromWidget && msg.sender === 'ai_ack' && (
                       <div className="flex justify-start">
                         <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2 shadow-2xs">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -3091,7 +3172,7 @@ export default function AiWorkspacePage() {
                     )}
 
                     {/* SYSTEM EVENT HANDOFF MESSAGE */}
-                    {msg.sender === 'system_event' && (
+                    {!msg.fromWidget && msg.sender === 'system_event' && (
                       <div className="p-3.5 rounded-2xl bg-gradient-to-r from-sky-100 via-indigo-100 to-pink-100 border border-indigo-200 text-xs text-indigo-950 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
                         <div className="flex items-center gap-2 font-bold">
                           <span className="px-2 py-0.5 rounded-md bg-indigo-600 text-white text-[10px] font-mono">
@@ -3105,8 +3186,8 @@ export default function AiWorkspacePage() {
                       </div>
                     )}
 
-                    {/* AI DUAL RESPONSE (SUPPI & CHAINY) */}
-                    {msg.sender === 'ai' && (
+                    {/* AI DUAL RESPONSE (SUPPI & CHAINY NATIVE WORKSPACE) */}
+                    {!msg.fromWidget && msg.sender === 'ai' && (
                       <div className="space-y-4">
 
                         {/* 0. INTENT ROUTER & ENTITY LINK STATUS BADGE */}

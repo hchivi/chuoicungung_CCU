@@ -6,7 +6,14 @@
 const GEMINI_API_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || 
   (typeof process !== 'undefined' && process.env?.VITE_GEMINI_API_KEY) || 
   'REDACTED';
-const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent';
+
+// Danh sách các model fallback theo thứ tự ưu tiên tốc độ và độ ổn định cao nhất
+const FALLBACK_MODELS = [
+  'gemini-3.1-flash-lite',
+  'gemini-3.5-flash',
+  'gemini-flash-latest',
+  'gemini-3.8-flash'
+];
 
 const SYSTEM_INSTRUCTION = `Bạn là Trí tuệ Nhân tạo chuyên gia tại CHUOICUNGUNG.COM (Nền tảng kết nối Chuỗi Cung Ứng Quốc Gia & Bản đồ 6 Giai đoạn vòng đời doanh nghiệp Việt Nam).
 
@@ -21,81 +28,101 @@ MỤC TIÊU VÀ SỨ MỆNH CỦA CHUOICUNGUNG.COM:
   6. Chuyển đổi số, Tối ưu ESG & Tái cấu trúc chuỗi cung ứng
 
 HAI VAI TRÒ CHUYÊN BIỆT:
-1. NẾU ĐANG LÀ SUPPI (AI SOURCING & THẨM ĐỊNH KỸ THUẬT):
-- Bạn làm việc 1:1 với người mua / nhà máy để bóc tách tiêu chuẩn kỹ thuật (không nói lý thuyết suông).
-- Luôn chủ động hỏi làm rõ 4–5 yếu tố cốt lõi để lập RFQ:
-  + Loại hàng hóa / quy cách kỹ thuật chi tiết
-  + Số lượng dự kiến & MOQ mong muốn
-  + Tiêu chuẩn chất liệu / chứng chỉ (ISO, CE, RoHS, ĐTM, PCCC...)
-  + Địa bàn giao hàng (tỉnh thành, khu công nghiệp)
-  + Thời hạn cần nhận mẫu thử (swatch, sample) & hạn giao hàng
-- Đóng gói nhu cầu thành Phiếu Nhu Cầu Chuẩn Hóa với mã định danh (Ví dụ: Mã hồ sơ: **NC-2026-XXXXX**).
-- Khẳng định mạng lưới 4,000+ nhà máy & xưởng sản xuất đã qua thẩm định KYC của CCU sẵn sàng khớp nối.
+1. SUPPI (AI SOURCING & TRỢ LÝ TÌM NGUỒN):
+- Bóc tách tiêu chuẩn kỹ thuật, quy cách hàng hóa, sản phẩm, gia công, nhà máy đạt chuẩn KYC.
+- Hỏi rõ các yếu tố cốt lõi: Số lượng (MOQ), tiêu chuẩn (ISO, ĐTM, PCCC...), địa bàn (KCN, tỉnh thành), thời gian giao mẫu và giao hàng.
+- Định hướng chuẩn hóa thành Phiếu Nhu Cầu Chuẩn Hóa trên CCU.
 
-2. NẾU ĐANG LÀ CHAINY (AI COORDINATOR & ĐIỀU PHỐI GIAO THƯƠNG):
-- Bạn là điều phối viên dự án chuyên nghiệp.
-- Khi người mua hoặc nhà xưởng đồng ý kết nối, hướng dẫn mở Nhóm làm việc 3 bên trên Zalo (Buyer + Supplier + Điều phối viên CCU).
-- Nhắc các mốc công việc: Gửi catalogue, gửi mẫu vật lý (Grab/Chuyển phát), duyệt mẫu, chốt báo giá, ký hợp đồng.
-- Luôn khuyến khích khách hàng bấm nút "Đồng bộ Zalo OA" hoặc quét mã QR Zalo để nhận thông báo đẩy tức thì.
+2. CHAINY (AI TRỢ LÝ KẾT NỐI & ĐIỀU PHỐI GIAO THƯƠNG):
+- Hướng dẫn kết nối trực tiếp, tạo nhóm làm việc 3 bên trên Zalo OA với điều phối viên CCU.
+- Theo dõi các mốc: Gửi catalogue, gửi mẫu vật lý, báo giá cạnh tranh, hợp đồng và tiến độ giao hàng.
 
-QUY TẮC PHONG CÁCH:
-- Giọng điệu chuyên nghiệp B2B, chuẩn mực công nghiệp, dứt khoát, am hiểu sâu sắc thị trường sản xuất Việt Nam.
-- Trình bày mạch lạc: Dùng gạch đầu dòng rõ ràng, in đậm các từ khóa kỹ thuật quan trọng.`;
+QUY TẮC:
+- Trả lời bằng tiếng Việt, ngắn gọn, súc tích, chuyên nghiệp B2B.
+- Dùng gạch đầu dòng rõ ràng, in đậm các từ khóa kỹ thuật.`;
+
+function generateSmartFallback(query, mode) {
+  const qLower = (query || '').toLowerCase();
+  if (mode === 'CHAINY' || qLower.includes('kết nối') || qLower.includes('zalo') || qLower.includes('báo giá')) {
+    return `Chào anh/chị, tôi là **CHAINY | Trợ lý kết nối** tại **CHUOICUNGUNG.COM**.\n\nTôi đã ghi nhận yêu cầu: "${query}".\n\n**Các bước hỗ trợ tiếp theo:**\n• Tạo nhóm làm việc 3 bên trên Zalo (Doanh nghiệp mua + Nhà cung ứng đạt chuẩn + Điều phối viên CCU)\n• Hỗ trợ nhận catalogue kỹ thuật & điều phối gửi mẫu vật lý tận nơi\n• Theo dõi tiến độ báo giá cạnh tranh và hỗ trợ thủ tục hợp đồng\n\nAnh/chị có thể bấm nút **"Mở Zalo OA"** để kết nối ngay với điều phối viên!`;
+  }
+
+  return `Chào anh/chị, tôi là **SUPPI | Trợ lý tìm nguồn** tại **CHUOICUNGUNG.COM**.\n\nTôi đã tiếp nhận yêu cầu tìm kiếm: "${query}".\n\nTừ mạng lưới **4,000+ nhà máy & xưởng sản xuất đã thẩm định KYC**, để khớp nối chính xác nhất, anh/chị vui lòng chia sẻ thêm một số tiêu chí:\n1. **Số lượng dự kiến / đợt đặt hàng** (MOQ mong muốn)\n2. **Quy cách kỹ thuật / tiêu chuẩn chất liệu** (tiêu chuẩn ISO, bản vẽ, mẫu swatch nếu có)\n3. **Địa bàn giao hàng** (tỉnh thành hoặc Khu công nghiệp ưu tiên)\n4. **Thời hạn cần nhận mẫu thử & thời hạn giao hàng**\n\nNgay khi có thêm thông tin, tôi sẽ xuất **Phiếu Nhu Cầu Chuẩn Hóa** và gửi danh sách 2–3 xưởng sản xuất tối ưu nhất cho anh/chị!`;
+}
 
 export async function askGeminiSourcingAgent({ query, userRole = 'Nhà máy sản xuất', mode = 'SUPPI', history = [] }) {
   if (!query || !query.trim()) return null;
 
-  try {
-    // Chuẩn bị các tin nhắn lịch sử gần nhất
-    const recentHistory = history.slice(-6).map(msg => ({
-      role: msg.sender === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.text || (typeof msg.suppi?.message === 'string' ? msg.suppi.message : '') }]
-    })).filter(h => h.parts[0].text);
+  // Chuẩn bị các tin nhắn lịch sử gần nhất
+  const recentHistory = history.slice(-6).map(msg => ({
+    role: msg.sender === 'user' ? 'user' : 'model',
+    parts: [{ text: msg.text || (typeof msg.suppi?.message === 'string' ? msg.suppi.message : '') }]
+  })).filter(h => h.parts[0].text);
 
-    const contents = [
-      ...recentHistory,
-      {
-        role: 'user',
-        parts: [
-          {
-            text: `[VAI TRÒ HIỆN TẠI: ${mode === 'CHAINY' ? 'CHAINY (AI Điều phối Zalo)' : 'SUPPI (AI Sourcing & Thẩm định)'}]
+  const contents = [
+    ...recentHistory,
+    {
+      role: 'user',
+      parts: [
+        {
+          text: `[VAI TRÒ HIỆN TẠI: ${mode === 'CHAINY' ? 'CHAINY (AI Trợ lý kết nối)' : 'SUPPI (AI Trợ lý tìm nguồn)'}]
 [ĐỐI TƯỢNG HỎI: ${userRole}]
 Nội dung trao đổi: "${query.trim()}"
 
 Hãy trả lời đúng phong cách và nghiệp vụ của ${mode === 'CHAINY' ? 'CHAINY' : 'SUPPI'} tại CHUOICUNGUNG.COM.`
-          }
-        ]
-      }
-    ];
-
-    const response = await fetch(`${GEMINI_ENDPOINT}?key=${GEMINI_API_KEY}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: SYSTEM_INSTRUCTION }]
-        },
-        contents,
-        generationConfig: {
-          temperature: 0.6,
-          maxOutputTokens: 4000
         }
-      })
-    });
-
-    if (!response.ok) {
-      console.warn('Gemini API response error status:', response.status);
-      return null;
+      ]
     }
+  ];
 
-    const data = await response.json();
-    const candidateParts = data?.candidates?.[0]?.content?.parts || [];
-    const candidateText = candidateParts.find(p => p.text)?.text;
-    return candidateText ? candidateText.trim() : null;
-  } catch (error) {
-    console.warn('Gemini Sourcing Agent fallback triggered:', error);
-    return null;
+  // Thử lần lượt các model trong danh sách fallback
+  for (const model of FALLBACK_MODELS) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: SYSTEM_INSTRUCTION }]
+          },
+          contents,
+          generationConfig: {
+            temperature: 0.5,
+            maxOutputTokens: 2000,
+            thinkingConfig: { thinkingBudget: 0 }
+          }
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        console.warn(`[GeminiSourcing] Model ${model} returned HTTP ${response.status}`);
+        continue;
+      }
+
+      const data = await response.json();
+      const candidateParts = data?.candidates?.[0]?.content?.parts || [];
+      const textParts = candidateParts.filter(p => !p.thought && p.text).map(p => p.text);
+      const candidateText = textParts.join('\n').trim() || candidateParts.find(p => p.text)?.text?.trim();
+
+      if (candidateText) {
+        return candidateText;
+      }
+    } catch (err) {
+      console.warn(`[GeminiSourcing] Model ${model} failed:`, err?.message || err);
+    }
   }
+
+  // Nếu tất cả các model đều gặp sự cố mạng hoặc quota, dùng smart local fallback
+  console.info('[GeminiSourcing] Sử dụng Smart Local Fallback chuyên ngành CCU');
+  return generateSmartFallback(query, mode);
 }
+

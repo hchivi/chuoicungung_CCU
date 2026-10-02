@@ -17,48 +17,80 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   const [showZaloModal, setShowZaloModal] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Khởi tạo lời chào ban đầu theo vai trò
+  // Khởi tạo và nạp lịch sử chat (từ localStorage nếu có)
   useEffect(() => {
-    if (messages.length === 0) {
-      if (mode === 'SUPPI') {
-        setMessages([
-          {
-            sender: 'ai',
-            mode: 'SUPPI',
-            text: 'Chào anh/chị, tôi là **SUPPI** — Trợ lý AI Sourcing tại **CHUOICUNGUNG.COM**.\n\nTôi có thể hỗ trợ anh/chị bóc tách tiêu chuẩn kỹ thuật, xác định mã ngành vòng đời và tìm kiếm nhà cung ứng xưởng thực tế đạt chuẩn KYC.',
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            suggestions: [
-              'Tìm 500 bộ đồng phục công nhân giao tháng 11',
-              'Tìm nhà xưởng gia công CNC chính xác tại miền Bắc',
-              'Tư vấn thủ tục ĐTM & PCCC cho nhà máy FDI'
-            ]
-          }
-        ]);
-      } else {
-        setMessages([
-          {
-            sender: 'ai',
-            mode: 'CHAINY',
-            text: 'Chào anh/chị, tôi là **CHAINY** — Trợ lý Điều phối & Kết nối Giao thương.\n\nSau khi SUPPI khớp nối được nhà cung ứng tiềm năng, tôi sẽ hỗ trợ hai bên tạo nhóm Zalo GMF, theo dõi tiến độ gửi mẫu, duyệt báo giá và quản lý hợp đồng.',
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            suggestions: [
-              'Kết nối ngay sang Zalo OA để nhận thông báo đẩy',
-              'Xem trạng thái tiến độ các phiếu nhu cầu của tôi',
-              'Mời điều phối viên CCU vào hỗ trợ dự án'
-            ]
-          }
-        ]);
+    try {
+      const saved = localStorage.getItem('ccu_active_chat_messages');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+          return;
+        }
       }
+    } catch (e) {}
+
+    // Lời chào ban đầu từ SUPPI
+    setMessages([
+      {
+        sender: 'ai',
+        mode: 'SUPPI',
+        text: 'Chào anh/chị, tôi là **SUPPI | Trợ lý tìm nguồn** tại **CHUOICUNGUNG.COM**.\n\nTôi có thể hỗ trợ anh/chị bóc tách tiêu chuẩn kỹ thuật, xác định mã ngành vòng đời và tìm kiếm nhà cung ứng xưởng thực tế đạt chuẩn KYC.',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        suggestions: [
+          'Tìm 500 bộ đồng phục công nhân giao tháng 11',
+          'Tìm nhà xưởng gia công CNC chính xác tại miền Bắc',
+          'Tư vấn thủ tục ĐTM & PCCC cho nhà máy FDI'
+        ]
+      }
+    ]);
+  }, []);
+
+  // Tự động lưu đoạn chat vào localStorage để khi mở rộng không bao giờ bị mất
+  useEffect(() => {
+    if (messages.length > 0) {
+      try {
+        localStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
+      } catch (e) {}
     }
-  }, [mode]);
+  }, [messages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
+  // Xử lý mở rộng sang trang Trợ lý AI toàn màn hình mà vẫn giữ nguyên đoạn chat
+  const handleExpandToWorkspace = () => {
+    try {
+      localStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
+      localStorage.setItem('ccu_active_chat_mode', mode);
+    } catch (e) {}
+    onClose?.();
+    navigate('/tro-ly-ai', {
+      state: {
+        transferredMessages: messages,
+        initialMode: mode,
+        fromWidget: true
+      }
+    });
+  };
+
   const handleSend = async (textToSend) => {
     const query = textToSend || inputQuery;
     if (!query.trim() || isLoading) return;
+
+    // Tự động nhận diện vai trò phù hợp: CHAINY cho kết nối/Zalo/báo giá, SUPPI cho tìm nguồn/kỹ thuật
+    const qLower = query.toLowerCase();
+    const isChainyQuery = qLower.includes('kết nối') || 
+                          qLower.includes('zalo') || 
+                          qLower.includes('báo giá') || 
+                          qLower.includes('tiến độ') || 
+                          qLower.includes('hợp đồng') || 
+                          qLower.includes('gặp') || 
+                          qLower.includes('chainy');
+
+    const activeMode = isChainyQuery ? 'CHAINY' : 'SUPPI';
+    setMode(activeMode);
 
     const userMsg = {
       sender: 'user',
@@ -74,7 +106,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
       const response = await sendDifyMessage({
         query,
         conversationId,
-        mode,
+        mode: activeMode,
         user: 'web_session_' + (localStorage.getItem('ccu_user_token') || 'guest')
       });
 
@@ -82,12 +114,18 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         setConversationId(response.conversation_id);
       }
 
+      const answerText = response?.answer || (
+        activeMode === 'CHAINY' 
+          ? 'Chào anh/chị, tôi là CHAINY | Trợ lý kết nối. Tôi đã ghi nhận yêu cầu và sẵn sàng kết nối qua nhóm Zalo OA.' 
+          : 'Chào anh/chị, tôi là SUPPI | Trợ lý tìm nguồn. Tôi đã tiếp nhận yêu cầu bóc tách và tìm xưởng sản xuất cho anh/chị.'
+      );
+
       const aiMsg = {
         sender: 'ai',
-        mode,
-        text: response?.answer || 'Đã ghi nhận yêu cầu. SUPPI & CHAINY đang xử lý dữ liệu...',
+        mode: activeMode,
+        text: answerText,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isZaloPrompt: query.toLowerCase().includes('kết nối') || query.toLowerCase().includes('zalo') || mode === 'CHAINY'
+        isZaloPrompt: isChainyQuery || qLower.includes('kết nối') || qLower.includes('zalo')
       };
 
       setMessages(prev => [...prev, aiMsg]);
@@ -97,8 +135,8 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         ...prev,
         {
           sender: 'ai',
-          mode,
-          text: 'Xin lỗi, kết nối đang bị gián đoạn. Anh/chị vui lòng thử lại hoặc bấm "Chuyển tiếp Zalo OA" bên dưới để được nhân sự hỗ trợ trực tiếp.',
+          mode: activeMode,
+          text: 'Xin lỗi, kết nối đang được làm mới. Anh/chị vui lòng thử lại hoặc bấm "Mở Zalo OA" bên dưới để được nhân sự hỗ trợ trực tiếp.',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -112,29 +150,25 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   return (
     <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-[1000] w-[92vw] sm:w-[420px] max-w-full h-[600px] max-h-[82vh] bg-white rounded-3xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 font-sans">
       
-      {/* 1. HEADER (SUPPI & CHAINY TABS + ZALO OA HANDOFF) */}
-      <div className={`p-3.5 sm:p-4 text-white transition-all flex items-center justify-between ${
-        mode === 'SUPPI' 
-          ? 'bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7]' 
-          : 'bg-gradient-to-r from-[#881337] via-[#e11d48] to-[#f43f5e]'
-      }`}>
+      {/* 1. HEADER (SUPPI & CHAINY MASCOT + HANDOFF + EXPAND) */}
+      <div className="p-3.5 sm:p-4 text-white transition-all flex items-center justify-between bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7]">
         <div className="flex items-center space-x-2.5">
-          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md p-1 border border-white/20 flex items-center justify-center shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md p-1 border border-white/20 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
             <img 
-              src="/logo_only.png" 
+              src="/mascots/SUPPI_2.png" 
               alt="Mascot" 
-              className="w-full h-full object-contain brightness-125"
+              className="w-full h-full object-cover rounded-xl"
             />
           </div>
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-black text-sm uppercase tracking-wide font-heading">
-                {mode === 'SUPPI' ? 'SUPPI • AI SOURCING' : 'CHAINY • AI COORDINATOR'}
+                SUPPI &amp; CHAINY • AI TRỢ LÝ
               </span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
             <p className="text-[11px] text-blue-100/90 font-medium">
-              {mode === 'SUPPI' ? 'Bộ não tìm nguồn & thẩm định kỹ thuật' : 'Điều phối nhóm Zalo & theo dõi tiến độ'}
+              Tìm nguồn cung ứng &amp; Điều phối kết nối giao thương
             </p>
           </div>
         </div>
@@ -149,14 +183,11 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
             <span className="px-1.5 py-0.5 rounded bg-blue-600 text-[10px]">Zalo</span>
           </button>
 
-          {/* Nút Mở rộng vào trang Trợ lý AI toàn màn hình */}
+          {/* Nút Mở rộng vào trang Trợ lý AI toàn màn hình — Vẫn giữ nguyên đoạn chat */}
           <button
-            onClick={() => {
-              onClose?.();
-              navigate('/tro-ly-ai');
-            }}
+            onClick={handleExpandToWorkspace}
             title="Mở rộng vào Trang Trợ lý AI đầy đủ"
-            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center justify-center cursor-pointer"
+            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95"
           >
             <Maximize2 className="w-4 h-4" />
           </button>
@@ -170,94 +201,105 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         </div>
       </div>
 
-      {/* 2. SUB-BAR: MODE SWITCHER */}
-      <div className="bg-slate-100/90 p-1.5 border-b border-slate-200/80 flex items-center gap-1">
-        <button
-          onClick={() => setMode('SUPPI')}
-          className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold font-heading uppercase transition flex items-center justify-center gap-1.5 cursor-pointer ${
-            mode === 'SUPPI'
-              ? 'bg-white text-[#0052cc] shadow-xs border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <span className="w-2 h-2 rounded-full bg-[#0052cc]" />
-          <span>SUPPI (Tìm Nguồn)</span>
-        </button>
-
-        <button
-          onClick={() => setMode('CHAINY')}
-          className={`flex-1 py-1.5 px-3 rounded-xl text-xs font-bold font-heading uppercase transition flex items-center justify-center gap-1.5 cursor-pointer ${
-            mode === 'CHAINY'
-              ? 'bg-white text-[#e11d48] shadow-xs border border-slate-200/60'
-              : 'text-slate-600 hover:text-slate-900'
-          }`}
-        >
-          <span className="w-2 h-2 rounded-full bg-[#e11d48]" />
-          <span>CHAINY (Điều Phối Zalo)</span>
-        </button>
-      </div>
-
-      {/* 3. MESSAGE STREAM LIST */}
+      {/* 2. MESSAGE STREAM LIST */}
       <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-slate-50/60 no-scrollbar text-xs">
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-          >
-            <div className={`max-w-[88%] p-3.5 rounded-2xl space-y-2 leading-relaxed ${
-              msg.sender === 'user'
-                ? 'bg-[#0052cc] text-white rounded-br-xs shadow-xs font-medium'
-                : 'bg-white text-slate-800 border border-slate-200/90 rounded-bl-xs shadow-xs'
-            }`}>
-              <div className="whitespace-pre-line text-[12.5px]">
-                {msg.text}
-              </div>
+        {messages.map((msg, idx) => {
+          const isUser = msg.sender === 'user';
+          const isChainy = msg.mode === 'CHAINY';
 
-              {/* Suggestions Chips */}
-              {msg.suggestions && (
-                <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                  <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider">
-                    Gợi ý thao tác nhanh:
+          return (
+            <div
+              key={idx}
+              className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
+            >
+              {/* KHÁCH (USER) — CHỮ MÀU ĐEN */}
+              {isUser ? (
+                <div className="max-w-[85%] p-3.5 rounded-2xl rounded-br-xs bg-slate-100 text-black border border-slate-200/90 shadow-2xs space-y-1">
+                  <div className="whitespace-pre-line text-[12.5px] font-medium text-black">
+                    {msg.text}
                   </div>
-                  {msg.suggestions.map((sug, sIdx) => (
-                    <button
-                      key={sIdx}
-                      onClick={() => handleSend(sug)}
-                      className="w-full text-left p-2 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-300 text-slate-700 hover:text-[#0052cc] text-xs font-semibold transition flex items-center justify-between group cursor-pointer"
-                    >
-                      <span className="line-clamp-1">{sug}</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-                  ))}
+                  <div className="text-[10px] text-slate-400 text-right">
+                    {msg.time}
+                  </div>
                 </div>
-              )}
+              ) : (
+                /* SUPPI HOẶC CHAINY */
+                <div className={`max-w-[88%] p-3.5 rounded-2xl rounded-bl-xs shadow-xs space-y-2 leading-relaxed ${
+                  isChainy 
+                    ? 'bg-rose-50/50 border border-rose-200/90 text-[#e11d48]' 
+                    : 'bg-blue-50/50 border border-blue-200/90 text-[#0052cc]'
+                }`}>
+                  {/* Header Trợ lý: Icon SUPPI_2.png hoặc CHAINY_2.png + Badge Tên */}
+                  <div className="flex items-center gap-2 pb-1.5 border-b border-slate-200/60">
+                    <img 
+                      src={isChainy ? "/mascots/CHAINY_2.png" : "/mascots/SUPPI_2.png"}
+                      alt={isChainy ? "CHAINY" : "SUPPI"}
+                      className={`w-6 h-6 rounded-full object-cover border shrink-0 ${
+                        isChainy ? 'border-rose-300' : 'border-blue-300'
+                      }`}
+                    />
+                    <span className={`font-black text-xs uppercase tracking-wide font-heading ${
+                      isChainy ? 'text-[#e11d48]' : 'text-[#0052cc]'
+                    }`}>
+                      {isChainy ? 'CHAINY | Trợ lý kết nối' : 'SUPPI | Trợ lý tìm nguồn'}
+                    </span>
+                  </div>
 
-              {/* Zalo OA Handoff Action inside message */}
-              {msg.isZaloPrompt && (
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="text-[11px] text-slate-600 font-medium">Nhận báo giá &amp; vào nhóm làm việc:</span>
-                  <button
-                    onClick={() => setShowZaloModal(true)}
-                    className="px-2.5 py-1 rounded-lg bg-[#0068ff] hover:bg-[#0052cc] text-white text-[11px] font-bold flex items-center gap-1 transition shadow-2xs"
-                  >
-                    <span>Mở Zalo OA</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </button>
+                  {/* Nội dung tin nhắn: chữ màu xanh cho SUPPI, chữ màu hồng cho CHAINY */}
+                  <div className={`whitespace-pre-line text-[12.5px] font-medium leading-relaxed ${
+                    isChainy ? 'text-[#e11d48]' : 'text-[#0052cc]'
+                  }`}>
+                    {msg.text}
+                  </div>
+
+                  {/* Suggestions Chips */}
+                  {msg.suggestions && (
+                    <div className="pt-2 border-t border-slate-200/60 space-y-1.5">
+                      <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider">
+                        Gợi ý thao tác nhanh:
+                      </div>
+                      {msg.suggestions.map((sug, sIdx) => (
+                        <button
+                          key={sIdx}
+                          onClick={() => handleSend(sug)}
+                          className="w-full text-left p-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-[#0052cc] text-xs font-semibold transition flex items-center justify-between group cursor-pointer shadow-2xs"
+                        >
+                          <span className="line-clamp-1">{sug}</span>
+                          <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Zalo OA Handoff Action inside message */}
+                  {msg.isZaloPrompt && (
+                    <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                      <span className="text-[11px] text-slate-600 font-medium">Nhận báo giá &amp; vào nhóm làm việc:</span>
+                      <button
+                        onClick={() => setShowZaloModal(true)}
+                        className="px-2.5 py-1 rounded-lg bg-[#0068ff] hover:bg-[#0052cc] text-white text-[11px] font-bold flex items-center gap-1 transition shadow-2xs cursor-pointer"
+                      >
+                        <span>Mở Zalo OA</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
+
+                  <div className="text-[10px] text-slate-400 pt-0.5 text-right">
+                    {msg.time}
+                  </div>
                 </div>
               )}
             </div>
+          );
+        })}
 
-            <span className="text-[10px] text-slate-400 mt-1 px-1">
-              {msg.time} {msg.mode ? `• ${msg.mode}` : ''}
-            </span>
-          </div>
-        ))}
-
+        {/* LOADING INDICATOR: ĐỔI THÀNH "đang chat..." */}
         {isLoading && (
           <div className="flex items-center space-x-2 p-3 bg-white rounded-2xl border border-slate-200/90 w-max shadow-2xs">
             <div className="w-2 h-2 rounded-full bg-[#0052cc] animate-ping" />
             <span className="text-xs text-slate-600 font-medium">
-              {mode === 'SUPPI' ? 'SUPPI đang quét dữ liệu 18 pha...' : 'CHAINY đang kiểm tra trạng thái...'}
+              đang chat...
             </span>
           </div>
         )}
@@ -265,7 +307,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 4. FOOTER INPUT BOX */}
+      {/* 3. FOOTER INPUT BOX */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -277,8 +319,8 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
           type="text"
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
-          placeholder={mode === 'SUPPI' ? 'Nhập nhu cầu: sản phẩm, số lượng, địa bàn...' : 'Yêu cầu CHAINY: kiểm tra mẫu, báo giá, tạo nhóm...'}
-          className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0052cc] focus:bg-white transition"
+          placeholder="Nhập nhu cầu tìm nguồn, nhà xưởng, sản phẩm hoặc điều phối Zalo..."
+          className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-black placeholder:text-slate-400 focus:outline-none focus:border-[#0052cc] focus:bg-white transition"
         />
 
         <button
@@ -286,7 +328,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
           disabled={!inputQuery.trim() || isLoading}
           className={`p-2.5 rounded-xl text-white font-bold transition flex items-center justify-center shrink-0 cursor-pointer ${
             inputQuery.trim() && !isLoading
-              ? mode === 'SUPPI' ? 'bg-[#0052cc] hover:bg-[#0047a5]' : 'bg-[#e11d48] hover:bg-[#be123c]'
+              ? 'bg-[#0052cc] hover:bg-[#0047a5]'
               : 'bg-slate-200 text-slate-400 cursor-not-allowed'
           }`}
         >
@@ -294,7 +336,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         </button>
       </form>
 
-      {/* 5. ZALO OA CONNECT MODAL OVERLAY */}
+      {/* 4. ZALO OA CONNECT MODAL OVERLAY */}
       {showZaloModal && (
         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 p-6 flex flex-col justify-center items-center text-center text-white space-y-4 animate-in fade-in duration-150">
           <div className="w-12 h-12 rounded-2xl bg-[#0068ff] p-2.5 flex items-center justify-center shadow-lg shadow-blue-500/30">

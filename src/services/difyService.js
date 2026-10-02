@@ -34,11 +34,11 @@ export async function sendDifyMessage({
     console.info('[DifyService] Tự động chuyển tiếp qua Direct Gemini Engine.');
     const geminiRes = await askGeminiSourcingAgent({
       query,
-      userRole: mode === 'SUPPI' ? 'Nhà máy / Người mua tìm nguồn' : 'Điều phối viên giao thương',
+      userRole: mode === 'CHAINY' ? 'Điều phối viên giao thương' : 'Nhà máy / Người mua tìm nguồn',
       mode
     });
     return {
-      answer: typeof geminiRes === 'string' ? geminiRes : (geminiRes?.markdown || 'Đã ghi nhận yêu cầu. SUPPI & CHAINY đang xử lý dữ liệu...'),
+      answer: typeof geminiRes === 'string' ? geminiRes : (geminiRes?.markdown || geminiRes?.text || ''),
       conversation_id: conversationId || `conv-local-${Date.now()}`,
       metadata: { engine: 'direct-gemini', mode }
     };
@@ -120,10 +120,11 @@ export async function sendDifyMessage({
     // Fallback an toàn sang Gemini
     const geminiFallback = await askGeminiSourcingAgent({
       query,
-      userRole: mode === 'SUPPI' ? 'Nhà máy sản xuất' : 'Doanh nghiệp B2B'
+      userRole: mode === 'CHAINY' ? 'Doanh nghiệp B2B' : 'Nhà máy sản xuất',
+      mode
     });
     return {
-      answer: geminiFallback?.markdown || 'Đã ghi nhận yêu cầu. SUPPI & CHAINY đang xử lý...',
+      answer: typeof geminiFallback === 'string' ? geminiFallback : (geminiFallback?.markdown || 'Tôi đã tiếp nhận yêu cầu và đang kết nối dữ liệu. Anh/chị có thể bấm Mở Zalo OA để trao đổi trực tiếp.'),
       conversation_id: conversationId,
       metadata: { engine: 'gemini-fallback-on-error', error: error.message }
     };
