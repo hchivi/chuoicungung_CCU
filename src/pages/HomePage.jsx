@@ -169,7 +169,7 @@ export default function HomePage() {
       {/* =========================================================================
           BLOCK 01 — HERO SEARCH (TASTE SKILL & HALLMARK REFINED)
          ========================================================================= */}
-      <section className="relative overflow-hidden min-h-[calc(100vh-68px)] lg:min-h-[88vh] flex flex-col justify-center items-center py-8 sm:py-10 lg:py-12 bg-gradient-to-b from-[#F0F6FF] via-[#F8FAFC] to-[#F8FAFC] border-b border-slate-200/80">
+      <section className="relative overflow-hidden min-h-[calc(100vh-68px)] lg:min-h-[88vh] flex flex-col justify-center items-center pt-4 sm:pt-6 lg:pt-8 pb-10 sm:pb-14 lg:pb-16 bg-gradient-to-b from-[#F0F6FF] via-[#F8FAFC] to-[#F8FAFC] border-b border-slate-200/80">
         
         {/* Interactive Neural Canvas Background (GIỮ NGUYÊN) */}
         <NetworkBackground />
@@ -177,8 +177,8 @@ export default function HomePage() {
         {/* Precision Optical Vignette */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(255,255,255,0.75),transparent_80%)] pointer-events-none" />
 
-        {/* Center Container: Title & Search Bar */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center space-y-4 sm:space-y-5">
+        {/* Center Container: Title & Search Bar (Di chuyển lên 1 chút để cân đối trên dưới) */}
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center space-y-4 sm:space-y-5 -mt-6 sm:-mt-10 lg:-mt-14">
           
           {/* Main H1 Title (Cập nhật chuẩn theo yêu cầu) */}
           <div className="space-y-2.5 sm:space-y-3">

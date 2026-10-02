@@ -80,17 +80,16 @@ const MatchmakingServicePage = lazy(() => import('./pages/MatchmakingServicePage
 const MediaBrandingServicePage = lazy(() => import('./pages/MediaBrandingServicePage'));
 const MerchandiseEventServicePage = lazy(() => import('./pages/MerchandiseEventServicePage'));
 
-// Elegant brand loading placeholder with rotating logo_only.png
+// Elegant brand loading placeholder with rotating logo_only.png centered on PC and mobile
 function PageLoadingFallback() {
   return (
-    <div className="min-h-[35vh] flex flex-col items-center justify-center p-6 space-y-3">
+    <div className="flex-1 min-h-[calc(100vh-280px)] sm:min-h-[calc(100vh-320px)] flex items-center justify-center p-6 w-full">
       <img 
         src="/logo_only.png" 
         alt="Logo Chuỗi Cung Ứng" 
-        className="w-10 h-10 sm:w-12 sm:h-12 object-contain animate-spin"
+        className="w-12 h-12 sm:w-14 sm:h-14 object-contain animate-spin"
         style={{ animationDuration: '2s' }}
       />
-      <span className="text-xs font-semibold text-slate-500 font-heading">Đang tải dữ liệu Chuỗi Cung Ứng...</span>
     </div>
   );
 }
@@ -172,7 +171,7 @@ function MainLayout({ children, onOpenSearch }) {
   return (
     <div className="flex flex-col min-h-screen">
       {!hideHeaderFooter && <Navbar onOpenSearch={onOpenSearch} />}
-      <div className="flex-1 min-w-0" id="main-content">
+      <div className="flex-1 min-w-0 flex flex-col" id="main-content">
         {children}
       </div>
       {!hideHeaderFooter && <Footer />}

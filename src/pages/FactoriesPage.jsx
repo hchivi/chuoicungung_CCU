@@ -10,7 +10,7 @@ import {
   Factory, Search, Filter, MapPin, Building2, CheckCircle2, 
   ShoppingBag, Zap, Calendar, ArrowRight, ChevronRight, RotateCcw,
   Sparkles, Layers, ShieldCheck, Globe, Handshake, Bot, HelpCircle,
-  ExternalLink, Package, ArrowUpRight
+  ExternalLink, Package, ArrowUpRight, Award
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import FactoryCard from '../components/factories/FactoryCard';
@@ -173,95 +173,147 @@ export default function FactoriesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50/50 pb-24 pt-4 font-sans text-slate-800">
+    <main className="min-h-screen bg-slate-50/50 pb-24 font-sans text-slate-800">
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      {/* ========================================================================= */}
+      {/* 1. HERO SECTION (Seamless Panoramic Smart Factory Visual - EXACT IMAGE 4) */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
+        
+        {/* Right Half Smart Factory & Illuminated Industrial Park Flycam Video with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            disablePictureInPicture
+            disableRemotePlayback
+            controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+            poster="/images/smart_factory_hero.jpg"
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+          >
+            <source src="/images/factory_illuminated_drone_1080p.webm" type="video/webm" />
+            <source src="/images/factory_illuminated_drone_480p.webm" type="video/webm" />
+            <img 
+              src="/images/smart_factory_hero.jpg" 
+              alt="Vietnam Smart Manufacturing Plant Flycam"
+              className="w-full h-full object-cover object-center scale-105"
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+        </div>
 
-        {/* ===================================================================== */}
-        {/* 1. HERO SECTION (SECTION 4 SPEC 28.TXT) */}
-        {/* ===================================================================== */}
-        <section 
-          aria-label="Hero Section"
-          className="relative bg-white rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm overflow-hidden space-y-6"
-        >
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-blue-50/60 via-slate-50/20 to-transparent pointer-events-none rounded-full blur-3xl"></div>
+        {/* Top Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
+          <div className="max-w-2xl space-y-5 sm:space-y-6">
+            
+            {/* Breadcrumb */}
+            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
+              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
+                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              </Link>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="text-[#0052cc] font-bold">Nhà Máy &amp; Cơ Sở Sản Xuất</span>
+            </nav>
 
-          <div className="relative z-10 max-w-3xl space-y-3">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 text-[#0052cc] text-xs font-bold font-mono">
-              <Factory className="w-3.5 h-3.5" />
-              <span>HỆ SINH THÁI NHÀ MÁY B2B</span>
+            {/* Tagline Badge */}
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
+              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
+              <span>HỆ THỐNG DỮ LIỆU NHÀ MÁY &amp; FDI VIỆT NAM</span>
             </div>
 
-            {/* H1 (Section 4) */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 font-heading leading-tight tracking-tight">
-              Danh bạ nhà máy sản xuất
-            </h1>
+            {/* Headline */}
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
+                Mạng Lưới Nhà Máy
+              </h1>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
+                Cơ Sở Sản Xuất Thông Minh
+              </h2>
+            </div>
 
-            {/* Sub (Section 4) */}
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Khám phá nhà máy theo ngành, khu công nghiệp và địa bàn. 
-              Nhà máy có thể gửi nhu cầu tìm nguồn cung hoặc giới thiệu sản phẩm và năng lực sản xuất khi phù hợp.
+            {/* Subtitle */}
+            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
+              Tra cứu danh sách 14.237+ nhà máy sản xuất, cơ sở chế tạo và doanh nghiệp FDI đang hoạt động thực tế trong 480 Khu công nghiệp trên toàn quốc.
             </p>
 
-            <p className="text-xs font-semibold text-blue-700 font-mono">
-              Gửi nhu cầu và tham gia chương trình phù hợp với nhà máy.
-            </p>
-
-            {/* Dual Hero CTAs (Section 4) */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            {/* Dual Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <a
                 href="#factory-list-section"
-                className="px-6 py-3 bg-[#0052cc] hover:bg-blue-600 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md shadow-blue-500/10 flex items-center space-x-2 font-heading cursor-pointer"
+                className="px-6 py-3 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
               >
-                <Search className="w-4 h-4" />
-                <span>Tìm nhà máy</span>
+                <span>Tra Cứu Nhà Máy</span>
               </a>
 
               <Link
-                to="/tao-ho-so"
-                className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm rounded-xl transition flex items-center space-x-2 font-heading"
+                to="/dang-nhu-cau"
+                className="px-6 py-3 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group"
               >
-                <Factory className="w-4 h-4 text-slate-600" />
-                <span>Cập nhật hồ sơ</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#0052cc] group-hover:scale-110 transition-transform" />
+                <span>Nhu Cầu Cung Ứng</span>
               </Link>
             </div>
+
           </div>
+        </div>
 
-          {/* Quick Ecosystem Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-100">
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-              <span className="text-[10.5px] font-bold text-slate-400 block font-heading uppercase">TỔNG SỐ NHÀ MÁY</span>
-              <div className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-0.5">
-                14.237+
+      </section>
+
+      {/* ========================================================================= */}
+      {/* STATS BAR (EXACT 4 STAT CARDS FROM IMAGE 4) */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+            
+            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
+                <Factory className="w-5 h-5" />
               </div>
-              <span className="text-[10px] text-emerald-600 font-bold">Xác thực đăng ký hoạt động</span>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">14.237+</div>
+                <p className="text-[11px] text-slate-500 font-medium">Nhà máy đang hoạt động</p>
+              </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-              <span className="text-[10.5px] font-bold text-slate-400 block font-heading uppercase">KHU CÔNG NGHIỆP</span>
-              <div className="text-xl sm:text-2xl font-black text-[#0052cc] font-heading mt-0.5">
-                480 KCN
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Building2 className="w-5 h-5" />
               </div>
-              <span className="text-[10px] text-slate-400">Phủ sóng 63 tỉnh thành</span>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">480 KCN</div>
+                <p className="text-[11px] text-slate-500 font-medium">Khu công nghiệp kết nối</p>
+              </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-              <span className="text-[10.5px] font-bold text-slate-400 block font-heading uppercase">NHU CẦU MUA MỞ</span>
-              <div className="text-xl sm:text-2xl font-black text-amber-600 font-heading mt-0.5">
-                120+ Gói
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0 shadow-2xs">
+                <Globe className="w-5 h-5" />
               </div>
-              <span className="text-[10px] text-amber-700 font-medium">Public Summary Verified</span>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">34</div>
+                <p className="text-[11px] text-slate-500 font-medium">Tỉnh thành toàn quốc</p>
+              </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100">
-              <span className="text-[10.5px] font-bold text-slate-400 block font-heading uppercase">NĂNG LỰC OEM / XUẤT KHẨU</span>
-              <div className="text-xl sm:text-2xl font-black text-slate-900 font-heading mt-0.5">
-                3.800+
+            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
+                <Award className="w-5 h-5" />
               </div>
-              <span className="text-[10px] text-slate-400">Sẵn sàng nhận đơn đặt hàng</span>
+              <div>
+                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">FDI &amp; B2B</div>
+                <p className="text-[11px] text-slate-500 font-medium">Nhu cầu mở kết nối</p>
+              </div>
             </div>
+
           </div>
-        </section>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 mt-8">
 
         {/* ===================================================================== */}
         {/* 2. GIẢI THÍCH 2 VAI TRÒ: MUA VS BÁN (SECTION 5 SPEC 28.TXT) */}
