@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   X, Send, Bot, MessageSquare, ArrowRight, ShieldCheck, 
   ExternalLink, QrCode, RefreshCw, ChevronRight, User, CheckCircle2,
-  FileText, Building2, Sparkles, Layers, PhoneCall
+  FileText, Building2, Sparkles, Layers, PhoneCall, Maximize2
 } from 'lucide-react';
 import { sendDifyMessage } from '../../services/difyService';
 
 export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' }) {
+  const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode); // 'SUPPI' or 'CHAINY'
   const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
@@ -145,6 +147,18 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
             className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1 text-xs font-bold cursor-pointer"
           >
             <span className="px-1.5 py-0.5 rounded bg-blue-600 text-[10px]">Zalo</span>
+          </button>
+
+          {/* Nút Mở rộng vào trang Trợ lý AI toàn màn hình */}
+          <button
+            onClick={() => {
+              onClose?.();
+              navigate('/tro-ly-ai');
+            }}
+            title="Mở rộng vào Trang Trợ lý AI đầy đủ"
+            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center justify-center cursor-pointer"
+          >
+            <Maximize2 className="w-4 h-4" />
           </button>
           
           <button

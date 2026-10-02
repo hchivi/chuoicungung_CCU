@@ -49,17 +49,6 @@ export default function Footer() {
                 <span><strong>Email Hỗ Trợ FDI:</strong> <a href="mailto:hotro@chuoicungung.com" className="text-white hover:text-[#5ABD76] transition">hotro@chuoicungung.com</a></span>
               </div>
             </div>
-
-            {/* AI Assistant Quick Link */}
-            <div className="pt-2">
-              <Link 
-                to="/tro-ly-ai"
-                className="inline-flex items-center space-x-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-[#5ABD76] hover:text-slate-950 text-white text-xs font-semibold transition border border-white/15 group shadow-xs"
-              >
-                <Bot className="w-4 h-4 text-[#5ABD76] group-hover:text-slate-950 transition-colors" />
-                <span>Trợ lý AI Suppi &amp; Chainy</span>
-              </Link>
-            </div>
           </div>
 
           {/* CỘT 2: HỆ SINH THÁI & DANH BẠ (3 COLS) */}
