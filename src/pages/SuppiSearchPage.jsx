@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Bot, ExternalLink, Loader2, MapPin, Search, Send, ShieldCheck, Sparkles } from 'lucide-react';
+import { sendDifyMessage } from '../services/difyService';
 
 const SUGGESTIONS = [
   'Tìm nhà cung ứng', 'Tìm sản phẩm/dịch vụ', 'Tìm nhà máy',
@@ -10,33 +11,14 @@ const SUGGESTIONS = [
 export default function SuppiSearchPage() {
   const [params] = useSearchParams();
   const initialQuery = params.get('q')?.trim() || '';
-  const [conversationId, setConversationId] = useState(null);
+  // The shared transport restores the owned conversation on the first send.
+  const [conversationId, setConversationId] = useState('ready');
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const sentInitial = useRef(false);
   const endRef = useRef(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function startConversation() {
-      try {
-        const response = await fetch('/api/suppi/conversations', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}'
-        });
-        const body = await response.json();
-        if (!response.ok) throw new Error(body.error || 'Không thể bắt đầu cuộc trao đổi');
-        if (!cancelled) setConversationId(body.data.id);
-      } catch (err) {
-        if (!cancelled) setError(err.message);
-      } finally {
-        if (!cancelled) setIsLoading(false);
-      }
-    }
-    startConversation();
-    return () => { cancelled = true; };
-  }, []);
 
   useEffect(() => {
     if (conversationId && initialQuery && !sentInitial.current) {
@@ -57,19 +39,14 @@ export default function SuppiSearchPage() {
     setError('');
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/suppi/conversations/${encodeURIComponent(conversationId)}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message })
-      });
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.error || 'SUPPI chưa thể xử lý yêu cầu');
+      const result = await sendDifyMessage({ query: message, mode: 'SUPPI' });
+      setConversationId(result.conversation_id);
       setMessages(current => [...current, {
         role: 'assistant',
-        text: body.data.message,
-        results: body.data.results || [],
-        draft: body.data.draft || null,
-        mode: body.data.mode
+        text: result.answer,
+        results: result.results || [],
+        draft: result.draft || null,
+        mode: result.mode
       }]);
     } catch (err) {
       setError(err.message);

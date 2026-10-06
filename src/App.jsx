@@ -63,6 +63,8 @@ const AuthPage = lazy(() => import('./pages/AuthPage'));
 const B2bTermsOfServicePage = lazy(() => import('./pages/B2bTermsOfServicePage'));
 const B2bPrivacyPolicyPage = lazy(() => import('./pages/B2bPrivacyPolicyPage'));
 const ToDzungPortfolioPage = lazy(() => import('./pages/ToDzungPortfolioPage'));
+const TonyDongPortfolioPage = lazy(() => import('./pages/TonyDongPortfolioPage'));
+const JennyTrinhPortfolioPage = lazy(() => import('./pages/JennyTrinhPortfolioPage'));
 const SupplyChainExpoPage = lazy(() => import('./pages/SupplyChainExpoPage'));
 const SupplyChainExpoRegistrationPage = lazy(() => import('./pages/SupplyChainExpoRegistrationPage'));
 const ProgramDetailPage = lazy(() => import('./pages/ProgramDetailPage'));
@@ -80,15 +82,15 @@ const MatchmakingServicePage = lazy(() => import('./pages/MatchmakingServicePage
 const MediaBrandingServicePage = lazy(() => import('./pages/MediaBrandingServicePage'));
 const MerchandiseEventServicePage = lazy(() => import('./pages/MerchandiseEventServicePage'));
 
-// Elegant brand loading placeholder with rotating logo_only.png centered on PC and mobile
+// Elegant brand loading placeholder with rotating logo_onlyc.png centered on PC and mobile
 function PageLoadingFallback() {
   return (
     <div className="flex-1 min-h-[calc(100vh-280px)] sm:min-h-[calc(100vh-320px)] flex items-center justify-center p-6 w-full">
       <img 
-        src="/logo_only.png" 
+        src="/logo_onlyc.png" 
         alt="Logo Chuỗi Cung Ứng" 
-        className="w-12 h-12 sm:w-14 sm:h-14 object-contain animate-spin"
-        style={{ animationDuration: '2s' }}
+        className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 object-contain animate-spin select-none pointer-events-none drop-shadow-md"
+        style={{ animationDuration: '2.5s' }}
       />
     </div>
   );
@@ -165,17 +167,22 @@ function MainLayout({ children, onOpenSearch }) {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
   const isToDzung = location.pathname.startsWith('/todzung');
+  const isTonyDong = location.pathname.startsWith('/tonydong');
+  const isJennyTrinh = location.pathname.startsWith('/jennytrinh') || location.pathname.startsWith('/mstrinh');
   const isAiWorkspace = location.pathname.startsWith('/tro-ly-ai') || location.pathname.startsWith('/ai');
-  const hideHeaderFooter = isAdmin || isToDzung || isAiWorkspace;
+  const hideHeaderFooter = isAdmin || isToDzung || isTonyDong || isJennyTrinh || isAiWorkspace;
+  const isPhotographicRoute = ['/doi-tac-phat-trien', '/dich-vu/to-chuc-ket-noi'].includes(location.pathname);
+  const isDemandMarketplace = location.pathname === '/san-nhu-cau';
+  const isLifecycleMap = location.pathname === '/ban-do-6-giai-doan';
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className={`flex flex-col min-h-screen ${hideHeaderFooter ? '' : 'ccu-public-shell'} ${(isPhotographicRoute || isDemandMarketplace || isLifecycleMap) ? 'ccu-photographic-route' : ''}`}>
       {!hideHeaderFooter && <Navbar onOpenSearch={onOpenSearch} />}
       <div className="flex-1 min-w-0 flex flex-col" id="main-content">
         {children}
       </div>
       {!hideHeaderFooter && <Footer />}
-      {!isAiWorkspace && !isAdmin && !isToDzung && <SuppliMascot />}
+      {!isAiWorkspace && !isAdmin && !isToDzung && !isJennyTrinh && <SuppliMascot />}
     </div>
   );
 }
@@ -426,6 +433,14 @@ export default function App() {
                 <Route path="/to-ngoc-dung" element={<Navigate to="/todzung" replace />} />
                 <Route path="/ong-to-ngoc-dung" element={<Navigate to="/todzung" replace />} />
                 <Route path="/giam-doc" element={<Navigate to="/todzung" replace />} />
+                <Route path="/tonydong" element={<TonyDongPortfolioPage />} />
+                <Route path="/tony-dong" element={<Navigate to="/tonydong" replace />} />
+                <Route path="/jennytrinh" element={<JennyTrinhPortfolioPage />} />
+                <Route path="/mstrinh" element={<Navigate to="/jennytrinh" replace />} />
+                <Route path="/chi-trinh" element={<Navigate to="/jennytrinh" replace />} />
+                <Route path="/ms-trinh" element={<Navigate to="/jennytrinh" replace />} />
+                <Route path="/jenny-trinh" element={<Navigate to="/jennytrinh" replace />} />
+                <Route path="/nguyen-thi-ha-trinh" element={<Navigate to="/jennytrinh" replace />} />
                 
                 {/* Pháp Lý & Bảo Mật B2B */}
                 <Route path="/phap-ly/thoa-thuan-dich-vu-b2b" element={<B2bTermsOfServicePage />} />

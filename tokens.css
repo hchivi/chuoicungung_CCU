@@ -1,0 +1,172 @@
+/* Approved assistant homepage stage and local design alternatives; not sitewide colors. */
+.ai-design-review, .ai-options, .ccu-assistant-duo {
+  --ai-paper: oklch(98.5% 0.004 155);
+  --ai-surface: oklch(99.8% 0.002 155);
+  --ai-mint: oklch(95% 0.019 155);
+  --ai-ink: oklch(29% 0.035 155);
+  --ai-muted: oklch(45% 0.021 155);
+  --ai-green: oklch(42% 0.09 155);
+  --ai-green-light: oklch(46% 0.1 155);
+  --ai-line: oklch(82% 0.024 155);
+  --ai-control-line: oklch(54% 0.03 155);
+  --ai-error: oklch(43% 0.16 25);
+  --ai-disabled: oklch(91% 0.008 155);
+  --ai-clear: oklch(99% 0.002 155 / 0%);
+  --ai-stage: oklch(91.8% 0.031 155);
+  --ai-outline-ink: oklch(48% 0.038 155);
+  --ai-suppi: oklch(46% 0.16 255);
+  --ai-suppi-light: oklch(51% 0.16 255);
+  --ai-chainy: oklch(53% 0.21 350);
+  --ai-chainy-light: oklch(56% 0.21 350);
+  --ai-layer-identity: 1;
+  --ai-layer-mascot: 2;
+  --ai-font-display: 'SpaceGrotesk', sans-serif;
+  --ai-font-body: 'Poppins', sans-serif;
+  --ai-space-xs: 4px;
+  --ai-space-sm: 8px;
+  --ai-space-md: 16px;
+  --ai-space-lg: 24px;
+  --ai-space-xl: 32px;
+  --ai-space-2xl: 48px;
+  --ai-space-3xl: 64px;
+  --ai-radius: 12px;
+  --ai-radius-media: 24px;
+  --ai-text-small: 14px;
+  --ai-text-body: 16px;
+  --ai-text-title: clamp(26px, 2.4vw, 36px);
+  --ai-text-display: clamp(32px, 4.6vw, 64px);
+  --ai-text-identity: clamp(48px, 9vw, 112px);
+  --ai-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ai-duration: 120ms;
+}
+/* Public marketing brand only. Private admin, ToDzung and AI workspaces do not inherit it. */
+/* Homepage invitation only; neutral cream note, not a sitewide palette change. */
+.expo-design-review {
+  --review-paper: #f5f8f6;
+  --review-ink: #183c2c;
+  --review-green: #006039;
+  --review-line: #bed0c4;
+  --review-mint: #e8f2eb;
+}
+.expo-home {
+  --expo-paper: #f5f8f6;
+  --expo-ink: #183c2c;
+  --expo-muted: #53675b;
+  --expo-green: #006039;
+  --expo-green-light: #127b4b;
+  --expo-green-deep: #005031;
+  --expo-surface: #ffffff;
+  --expo-mint: #e8f2eb;
+  --expo-line: #bed0c4;
+  --expo-media: #e2ece5;
+  --expo-note: oklch(94% 0.056 96);
+  --expo-ticket: oklch(99% 0.007 96);
+  --expo-error: oklch(43% 0.17 25);
+  --expo-clear: oklch(98% 0.01 155 / 0%);
+  --expo-space-xs: 4px;
+  --expo-space-sm: 8px;
+  --expo-space-md: 12px;
+  --expo-space-lg: 16px;
+  --expo-space-xl: 24px;
+  --expo-space-2xl: 32px;
+  --expo-space-3xl: 48px;
+  --expo-space-4xl: 64px;
+  --expo-radius: 12px;
+  --expo-radius-media: 24px;
+  --expo-ease-out: cubic-bezier(.16, 1, .3, 1);
+  --expo-duration: 150ms;
+}
+.ccu-public-shell {
+  --brand-green: #006039;
+  --brand-green-light: #127b4b;
+  --brand-green-hover: #158b54;
+  --brand-green-dark: #00472a;
+  --brand-on-green: #ffffff;
+  --brand-footer: #082415;
+  --brand-footer-text: #e1eee5;
+  --brand-mint: #edf6f0;
+  --brand-line: #cdded3;
+  --brand-shadow: rgb(0 60 35 / 18%);
+}
+/* Light page-family tokens remain scoped, including semantic error/success colors. */
+.mm-page {
+  --color-paper: oklch(98.5% 0.004 155);
+  --color-paper-2: oklch(96% 0.012 155);
+  --color-surface: oklch(99.8% 0.002 155);
+  --color-ink: oklch(27% 0.028 155);
+  --color-ink-2: oklch(38% 0.028 155);
+  --color-muted: oklch(46% 0.018 155);
+  --color-rule: oklch(86% 0.018 155);
+  --color-accent: oklch(42% 0.09 155);
+  --color-accent-ink: oklch(99% 0.004 155);
+  --color-accent-soft: oklch(94% 0.024 155);
+  --color-focus: oklch(58% 0.11 155);
+  --color-clear: oklch(98.5% 0.004 155 / 0%);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 80px;
+  --radius-control: 12px;
+  --radius-media: 24px;
+  --radius-pill: 999px;
+  --dur-short: 220ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* CCU bright service and partnership system, forest-green action palette. */
+.ec-page {
+  --color-paper: oklch(98.5% 0.004 155);
+  --color-paper-2: oklch(96% 0.012 155);
+  --color-surface: oklch(99.8% 0.002 155);
+  --color-ink: oklch(27% 0.028 155);
+  --color-ink-2: oklch(38% 0.028 155);
+  --color-muted: oklch(46% 0.018 155);
+  --color-rule: oklch(88% 0.016 155);
+  --color-input-rule: oklch(65% 0.025 155);
+  --color-accent: oklch(42% 0.09 155);
+  --color-accent-ink: oklch(99% 0.004 155);
+  --color-accent-soft: oklch(94% 0.024 155);
+  --color-focus: oklch(39% 0.08 155);
+  --color-clear: oklch(98.5% 0.004 155 / 0%);
+  --color-error: oklch(43% 0.17 25);
+  --color-error-soft: oklch(97% 0.013 25);
+  --color-success: oklch(39% 0.08 160);
+  --color-success-soft: oklch(96% 0.013 160);
+  --color-overlay: oklch(25% 0.03 155 / 45%);
+  --color-shadow: oklch(35% 0.03 155 / 8%);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --text-sm: .875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-title: clamp(1.75rem, 2.4vw, 2.5rem);
+  --text-display: clamp(2.25rem, 3.5vw, 3.75rem);
+  --radius-control: 12px;
+  --radius-media: 24px;
+  --radius-pill: 999px;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in: cubic-bezier(.7, 0, .84, 0);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+  --rule-width: 1px;
+}

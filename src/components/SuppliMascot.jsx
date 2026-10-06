@@ -88,11 +88,14 @@ export default function SuppliMascot() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Hide floating mascot on AI Workspace page or TODZUNG portfolio page
+  // Hide floating mascot on AI Workspace page or TODZUNG / JENNYTRINH portfolio page
   const isHiddenPage = 
     location.pathname.startsWith('/tro-ly-ai') || 
     location.pathname.startsWith('/ai') ||
-    location.pathname.startsWith('/todzung');
+    location.pathname.startsWith('/todzung') ||
+    location.pathname.startsWith('/tonydong') ||
+    location.pathname.startsWith('/jennytrinh') ||
+    location.pathname.startsWith('/mstrinh');
 
   // Initial orientations: focused at laptop (SUPPI looks down-left, CHAINY looks down-right)
   const [directionSuppli, setDirectionSuppli] = useState('down-left');

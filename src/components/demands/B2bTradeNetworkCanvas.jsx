@@ -13,6 +13,8 @@ export default function B2bTradeNetworkCanvas({ className = '' }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
     let animationFrameId;
 
     let width = (canvas.width = canvas.parentElement?.offsetWidth || 800);
@@ -243,16 +245,24 @@ export default function B2bTradeNetworkCanvas({ className = '' }) {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    const syncMotionPreference = () => {
+      cancelAnimationFrame(animationFrameId);
+      if (motionPreference.matches) ctx.clearRect(0, 0, width, height);
+      else render();
+    };
+    motionPreference.addEventListener('change', syncMotionPreference);
+    syncMotionPreference();
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      motionPreference.removeEventListener('change', syncMotionPreference);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
     <canvas 
+      aria-hidden="true"
       ref={canvasRef} 
       className={`absolute inset-0 w-full h-full pointer-events-none ${className}`}
     />

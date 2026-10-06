@@ -259,7 +259,7 @@ export default function IndustryCategoryPage() {
            ========================================================================= */}
         <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium flex-wrap gap-y-1">
           <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+            <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <Link to="/ban-do-6-giai-doan" className="hover:text-blue-600 transition">
@@ -538,7 +538,7 @@ export default function IndustryCategoryPage() {
                       alt={foundingPartner.name}
                       className="w-full h-full object-contain"
                       onError={(e) => {
-                        e.target.src = "/logo_only.png";
+                        e.target.src = "/logo_onlyc.png";
                       }}
                     />
                   </div>
@@ -647,7 +647,7 @@ export default function IndustryCategoryPage() {
                             className="w-full h-full object-cover rounded-xl"
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = "/logo_only.png";
+                              e.target.src = "/logo_onlyc.png";
                             }}
                           />
                         </div>

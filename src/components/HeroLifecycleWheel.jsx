@@ -207,10 +207,10 @@ export default function HeroLifecycleWheel({ activeStageId = null, onSelectStage
             </linearGradient>
           </defs>
 
-          {/* 1. ORIGINAL 6-PETAL FLOWER EMBLEM (logo_only.png) */}
+          {/* 1. ORIGINAL 6-PETAL FLOWER EMBLEM (logo_onlyc.png) */}
           <g filter="url(#flower-shadow-3d)">
             <image 
-              href="/logo_only.png" 
+              href="/logo_onlyc.png" 
               x="20" 
               y="20" 
               width="480" 

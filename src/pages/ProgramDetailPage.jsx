@@ -576,18 +576,16 @@ export default function ProgramDetailPage() {
           {/* Active Role Card Details */}
           {activeRoleTab === 'buyer' && (
             <div className="bg-white rounded-3xl border border-emerald-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-                  <Factory className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    VAI TRÒ NGƯỜI MUA / NHÀ MÁY
+              <div className="space-y-1.5 border-b border-slate-100 pb-4">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span className="text-[11px] font-mono font-black text-emerald-700 uppercase tracking-widest">
+                    VAI TRÒ NGƯỜI MUA / BÊN MUA FDI
                   </span>
-                  <h3 className="text-lg sm:text-xl font-black text-slate-950 font-heading">
-                    {program.audienceDetails?.buyer?.title || 'Dành cho Nhà máy / Phòng Mua hàng (Purchasing)'}
-                  </h3>
                 </div>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
+                  {program.audienceDetails?.buyer?.title || 'Dành cho Nhà máy / Phòng Mua hàng (Purchasing)'}
+                </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
@@ -641,18 +639,16 @@ export default function ProgramDetailPage() {
 
           {activeRoleTab === 'supplier' && (
             <div className="bg-white rounded-3xl border border-blue-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
-                  <Truck className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    VAI TRÒ NHÀ CUNG ỨNG
+              <div className="space-y-1.5 border-b border-slate-100 pb-4">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                  <span className="text-[11px] font-mono font-black text-blue-700 uppercase tracking-widest">
+                    VAI TRÒ NHÀ CUNG ỨNG NỘI ĐỊA
                   </span>
-                  <h3 className="text-lg sm:text-xl font-black text-slate-950 font-heading">
-                    {program.audienceDetails?.supplier?.title || 'Dành cho Nhà cung ứng / Nhà sản xuất phụ trợ'}
-                  </h3>
                 </div>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
+                  {program.audienceDetails?.supplier?.title || 'Dành cho Nhà cung ứng / Nhà sản xuất phụ trợ'}
+                </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
@@ -706,18 +702,16 @@ export default function ProgramDetailPage() {
 
           {activeRoleTab === 'partner' && (
             <div className="bg-white rounded-3xl border border-purple-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center shrink-0">
-                  <Handshake className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[11px] font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              <div className="space-y-1.5 border-b border-slate-100 pb-4">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-purple-600 animate-pulse"></span>
+                  <span className="text-[11px] font-mono font-black text-purple-700 uppercase tracking-widest">
                     VAI TRÒ ĐỐI TÁC HẠ TẦNG & HIỆP HỘI
                   </span>
-                  <h3 className="text-lg sm:text-xl font-black text-slate-950 font-heading">
-                    {program.audienceDetails?.partner?.title || 'Dành cho KCN, Hiệp hội & Đơn vị đồng hành'}
-                  </h3>
                 </div>
+                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
+                  {program.audienceDetails?.partner?.title || 'Dành cho KCN, Hiệp hội & Đơn vị đồng hành'}
+                </h3>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">

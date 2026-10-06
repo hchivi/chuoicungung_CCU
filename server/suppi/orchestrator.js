@@ -23,7 +23,9 @@ export function createSuppiOrchestrator({ conversationStore, executeTool, openAI
           instructions: `${SUPPI_DEVELOPER_PROMPT}\nConversation ID hiện tại: ${id}`,
           tools: SUPPI_TOOLS,
           model,
-          input: message.trim(),
+          input: !conversation.previous_response_id && conversation.messages?.length
+            ? [...conversation.messages.map(({ role, content }) => ({ role, content })), { role: 'user', content: message.trim() }]
+            : message.trim(),
           previousResponseId: conversation.previous_response_id
         });
         const searchResult = [...result.toolResults].reverse().find(item => item.name.startsWith('search_'));

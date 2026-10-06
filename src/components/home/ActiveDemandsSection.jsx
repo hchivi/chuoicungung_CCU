@@ -6,7 +6,7 @@ import { MapPin, Clock, ArrowRight, ShieldAlert, Cpu, Sparkles, CheckCircle2, Bu
 // B2B Demand Card Item Component
 function DemandCardItem({ demand }) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-xl hover:border-blue-400 transition-all duration-200 flex flex-col justify-between space-y-4 group relative w-full">
+    <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-xl hover:border-emerald-500/60 transition-all duration-200 flex flex-col justify-between space-y-4 group relative w-full">
       <div className="space-y-3.5">
         
         {/* Mã & Trạng thái đang tìm nguồn */}
@@ -26,7 +26,7 @@ function DemandCardItem({ demand }) {
           <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
             Sản phẩm / Dịch vụ cần tìm:
           </span>
-          <h3 className="font-black text-base sm:text-lg text-slate-900 group-hover:text-[#0052cc] font-heading leading-snug line-clamp-2 transition-colors">
+          <h3 className="font-black text-base sm:text-lg text-slate-900 group-hover:text-[#006039] font-heading leading-snug line-clamp-2 transition-colors">
             {demand.productName}
           </h3>
         </div>
@@ -37,7 +37,7 @@ function DemandCardItem({ demand }) {
           {/* Số lượng hoặc quy mô */}
           <div className="flex items-center justify-between gap-2">
             <span className="font-medium text-slate-500">Số lượng / Quy mô:</span>
-            <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded text-xs sm:text-sm">
+            <span className="font-mono font-bold text-[#006039] bg-emerald-50 border border-emerald-200/60 px-2.5 py-0.5 rounded text-xs sm:text-sm">
               {demand.quantity}
             </span>
           </div>
@@ -56,7 +56,7 @@ function DemandCardItem({ demand }) {
 
           {/* Yêu cầu kỹ thuật nổi bật */}
           <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs sm:text-sm text-slate-700 space-y-1">
-            <span className="font-bold text-slate-800 font-mono block text-[11px] uppercase text-blue-700">
+            <span className="font-bold text-[#006039] font-mono block text-[11px] uppercase">
               Yêu cầu kỹ thuật nổi bật:
             </span>
             <p className="line-clamp-2 leading-relaxed">
@@ -72,7 +72,7 @@ function DemandCardItem({ demand }) {
       <div className="pt-2 border-t border-slate-100">
         <Link
           to={demand.detailUrl}
-          className="w-full py-2.5 px-4 bg-slate-100 hover:bg-[#0052cc] hover:text-white text-slate-900 rounded-xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-2xs group-hover:bg-[#0052cc] group-hover:text-white"
+          className="w-full py-2.5 px-4 bg-slate-100 hover:bg-[#006039] hover:text-white text-slate-900 rounded-xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-2xs group-hover:bg-[#006039] group-hover:text-white"
         >
           <span>Xem nhu cầu</span>
           <ArrowRight className="w-4 h-4" />
@@ -219,8 +219,10 @@ export default function ActiveDemandsSection() {
       
       {/* Section Header (Centered, Strictly 1 Line Title) */}
       <div className="text-center max-w-5xl mx-auto space-y-2">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-          Nhu cầu doanh nghiệp đang tìm nguồn
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+          <span className="text-gradient-flow-green">
+            Nhu cầu doanh nghiệp đang tìm nguồn
+          </span>
         </h2>
 
         <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
@@ -230,7 +232,7 @@ export default function ActiveDemandsSection() {
         <div className="pt-1">
           <Link
             to="/san-nhu-cau"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#0052cc] hover:text-[#0041a8] bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl transition font-heading shadow-2xs"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#006039] hover:text-[#00472a] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 px-4 py-2 rounded-xl transition font-heading shadow-2xs"
           >
             <span>Xem tất cả nhu cầu đang mở</span>
             <ArrowRight className="w-3.5 h-3.5" />

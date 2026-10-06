@@ -891,7 +891,7 @@ export function getSuppliersServingKcn(kcnId) {
     slug: s.slug || s.id,
     name: s.name,
     shortName: s.shortName || s.name,
-    logo: s.avatar || s.logo || '/logo_only.png',
+    logo: s.avatar || s.logo || '/logo_onlyc.png',
     province: s.province || kcn.province,
     serviceArea: `Phục vụ địa bàn ${kcn.province} & KCN ${kcn.name}`,
     capability: s.description || 'Gia công chi tiết cơ khí chính xác, dập kim loại và xử lý bề mặt kỹ thuật cao.',

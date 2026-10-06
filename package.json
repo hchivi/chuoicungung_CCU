@@ -10,7 +10,7 @@
     "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='server/suppi/**/*.js' --test-coverage-lines=80 server/tests/*.test.js",
     "suppi:index": "node server/scripts/buildSuppiSearchDocuments.js",
     "build": "vite build && node server/scripts/generateTodzungHtml.js",
-    "build:zip": "npm run build && rm -f deploy_inet.zip && cd dist && zip -r ../deploy_inet.zip .",
+    "build:zip": "npm run build && rm -f deploy_inet.zip && cd dist && zip -r -q ../deploy_inet.zip .",
     "preview": "vite preview"
   },
   "dependencies": {

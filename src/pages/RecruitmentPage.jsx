@@ -242,7 +242,7 @@ export default function RecruitmentPage({ defaultTab }) {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (Identical to Image 1) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pb-16 sm:pb-20 lg:pb-24">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-16 sm:pb-20 lg:pb-24 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
         
         {/* Right Half Industrial Panoramic Visual with Seamless Gradient Fade & Dynamic Live Career Network Overlay */}
         <div className="absolute top-0 right-0 w-full lg:w-[60%] h-full pointer-events-none overflow-hidden z-0">
@@ -265,7 +265,7 @@ export default function RecruitmentPage({ defaultTab }) {
             {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
               <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+                <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <Link to="/tuyen-dung" className="hover:text-[#0052cc] transition">{lang === 'en' ? 'Recruitment' : 'Tuyển Dụng'}</Link>

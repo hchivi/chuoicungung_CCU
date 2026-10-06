@@ -148,7 +148,7 @@ export default function HomePage() {
       sample: "Có xưởng sản xuất",
       updatedAt: "20/09/2026",
       verifiedChips: ["ISO 9001", "Dây chuyền Flexo", "Giao xe tải"],
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-03",
@@ -159,7 +159,7 @@ export default function HomePage() {
       sample: "Kiểm tra đo CMM",
       updatedAt: "19/09/2026",
       verifiedChips: ["Máy CNC 5 trục", "Hồ sơ đối chiếu", "Bảo mật NDA"],
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     }
   ];
 
@@ -182,9 +182,9 @@ export default function HomePage() {
           
           {/* Main H1 Title (Cập nhật chuẩn theo yêu cầu) */}
           <div className="space-y-2.5 sm:space-y-3">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-black uppercase font-heading text-center leading-[1.22] sm:leading-[1.18] tracking-tight">
+            <h1 className="hero-display-title text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-black uppercase text-center leading-[1.22] sm:leading-[1.18] tracking-tight">
               <span className="text-[#072348] block lg:inline">NỀN TẢNG KẾT NỐI VÀ TÌM NGUỒN </span>
-              <span className="text-rainbow-gradient block sm:inline">CHUỖI CUNG ỨNG CÔNG NGHIỆP</span>
+              <span className="text-rainbow-gradient block sm:inline">CHUỖI CUNG ỨNG KHU CÔNG NGHIỆP</span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
               Tra cứu nhà máy, khu công nghiệp và kết nối đúng nhà cung ứng có năng lực thực tế tại Việt Nam.
@@ -282,9 +282,11 @@ export default function HomePage() {
           03. 6 GIAI ĐOẠN — BẢN ĐỒ 6 GIAI ĐOẠN & 18 PHA VÒNG ĐỜI DỰ ÁN
          ========================================================================= */}
       <section id="6-giai-doan" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4 pb-2">
-        <div className="text-center max-w-5xl mx-auto space-y-2">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[32px] xl:text-[36px] font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight">
-            Nhu cầu nhà máy phát sinh trong suốt vòng đời đầu tư và vận hành
+        <div className="text-center w-full max-w-7xl mx-auto space-y-2">
+          <h2 className="text-xs min-[420px]:text-sm sm:text-base md:text-xl lg:text-[23px] xl:text-[27px] 2xl:text-[30px] font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-nowrap">
+            <span className="text-gradient-flow-green">
+              Nhu cầu nhà máy phát sinh trong suốt vòng đời đầu tư và vận hành
+            </span>
           </h2>
 
           <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
@@ -316,8 +318,10 @@ export default function HomePage() {
       <section id="dich-vu" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="text-center max-w-5xl mx-auto space-y-2">
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-            DỊCH VỤ HỖ TRỢ KẾT NỐI
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+            <span className="text-gradient-flow-green">
+              DỊCH VỤ HỖ TRỢ KẾT NỐI
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
             Các giải pháp chuyên sâu giúp doanh nghiệp chuẩn bị hồ sơ kỹ thuật, thẩm định năng lực và tổ chức giao thương thực chất.
@@ -458,8 +462,10 @@ export default function HomePage() {
       <section id="hop-tac" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="text-center max-w-5xl mx-auto space-y-2">
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-            HỢP TÁC CÙNG CHUOICUNGUNG.COM
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+            <span className="text-gradient-flow-green">
+              HỢP TÁC CÙNG CHUOICUNGUNG.COM
+            </span>
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
             Hợp tác chiến lược cùng các đối tác sáng lập, nhà tài trợ, khu công nghiệp và tổ chức hiệp hội nâng tầm công nghiệp Việt Nam.
@@ -535,7 +541,7 @@ export default function HomePage() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-[#0052cc] hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between group"
+              className="bg-white rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-2xs hover:shadow-xl hover:border-emerald-500/70 hover:-translate-y-1 transition-all duration-300 text-left flex flex-col justify-between group"
             >
               <div className="space-y-3">
                 {/* Visual Photo Header */}
@@ -557,7 +563,7 @@ export default function HomePage() {
                 {/* Details & Highlights */}
                 <div className="px-1 space-y-2">
                   <div>
-                    <p className="text-[11px] font-mono text-[#0052cc] font-semibold">
+                    <p className="text-[11px] font-mono text-[#006039] font-semibold">
                       {item.subtitle}
                     </p>
                     <p className="text-xs text-slate-600 leading-relaxed font-normal mt-1">
@@ -580,10 +586,10 @@ export default function HomePage() {
               <div className="px-1 pt-3 mt-3.5 border-t border-slate-100">
                 <Link 
                   to={item.link} 
-                  className="w-full text-xs font-bold font-heading text-slate-900 group-hover:text-[#0052cc] flex items-center justify-between transition-colors"
+                  className="w-full text-xs font-bold font-heading text-slate-900 group-hover:text-[#006039] flex items-center justify-between transition-colors"
                 >
                   <span>{item.action}</span>
-                  <div className="w-6 h-6 rounded-lg bg-slate-100 group-hover:bg-[#0052cc] group-hover:text-white flex items-center justify-center transition-all shadow-2xs">
+                  <div className="w-6 h-6 rounded-lg bg-slate-100 group-hover:bg-[#006039] group-hover:text-white flex items-center justify-center transition-all shadow-2xs">
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </Link>

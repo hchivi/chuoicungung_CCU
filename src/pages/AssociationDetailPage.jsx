@@ -107,7 +107,7 @@ export default function AssociationDetailPage() {
             '@id': `https://chuoicungung.com/hoi-hiep-hoi/${assoc.slug || assoc.id}#organization`,
             'name': assoc.name,
             'url': `https://chuoicungung.com/hoi-hiep-hoi/${assoc.slug || assoc.id}`,
-            'logo': assoc.logo || 'https://chuoicungung.com/logo_only.png',
+            'logo': assoc.logo || 'https://chuoicungung.com/logo_onlyc.png',
             'address': {
               '@type': 'PostalAddress',
               'streetAddress': assoc.publicContact?.address || assoc.address || 'Việt Nam',
@@ -185,7 +185,7 @@ export default function AssociationDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto py-2">
           <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+            <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
           <Link to="/hoi-hiep-hoi" className="hover:text-blue-600 transition shrink-0">Hội / Hiệp Hội / Tổ Chức</Link>

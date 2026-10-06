@@ -20,10 +20,9 @@ export default function AssociationConstellationCanvas({ className = '' }) {
 
     window.addEventListener('resize', handleResize);
 
-    // Major Hubs with business association badges
+    // Major Hubs with business association badges (excluded HUBA over character head)
     const hubs = [
       { name: 'BNI Global', xPct: 0.35, yPct: 0.30, color: '#dc2626', size: 6, pulseColor: 'rgba(220, 38, 38, ' },
-      { name: 'HUBA Alliance', xPct: 0.65, yPct: 0.25, color: '#0052cc', size: 7, pulseColor: 'rgba(0, 82, 204, ' },
       { name: 'VCCI Vietnam', xPct: 0.50, yPct: 0.55, color: '#0284c7', size: 8, pulseColor: 'rgba(2, 132, 199, ' },
       { name: 'FIATA Logistics', xPct: 0.80, yPct: 0.60, color: '#059669', size: 6, pulseColor: 'rgba(5, 150, 105, ' },
       { name: 'FDI Bridge', xPct: 0.25, yPct: 0.70, color: '#7c3aed', size: 6, pulseColor: 'rgba(124, 58, 237, ' },

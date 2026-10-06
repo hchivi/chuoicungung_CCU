@@ -219,7 +219,7 @@ export default function IndustrialParkDetailPage() {
         <ol className="text-xs text-slate-500 flex items-center space-x-2 overflow-x-auto whitespace-nowrap py-1">
           <li>
             <Link to="/" className="hover:text-blue-600 flex items-center space-x-1">
-              <img src="/logo_only.png" alt="Chuỗi Cung Ứng" className="w-3.5 h-3.5 object-contain" />
+              <img src="/logo_onlyc.png" alt="Chuỗi Cung Ứng" className="w-3.5 h-3.5 object-contain" />
               <span>Trang chủ</span>
             </Link>
           </li>

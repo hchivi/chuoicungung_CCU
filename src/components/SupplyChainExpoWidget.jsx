@@ -18,7 +18,7 @@ export default function SupplyChainExpoWidget() {
         <div className="relative mb-2.5">
           <span className="animate-ping absolute -inset-0.5 rounded-full bg-white opacity-40" />
           <img 
-            src="/logo_only.png" 
+            src="/logo_onlyc.png" 
             alt="CCU Logo" 
             className="w-6 h-6 sm:w-7 sm:h-7 object-contain animate-[spin_8s_linear_infinite] drop-shadow-md relative z-10"
             onError={(e) => {

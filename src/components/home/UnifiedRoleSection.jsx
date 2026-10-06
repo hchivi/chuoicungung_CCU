@@ -111,13 +111,15 @@ export default function UnifiedRoleSection() {
         <div className="bg-white rounded-[calc(2.5rem-0.75rem)] p-6 sm:p-8 lg:p-10 shadow-xs relative overflow-hidden space-y-7">
           
           {/* Subtle Ambient Accents */}
-          <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-blue-50/50 rounded-full blur-3xl pointer-events-none -mr-28 -mt-28" />
+          <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-emerald-50/40 rounded-full blur-3xl pointer-events-none -mr-28 -mt-28" />
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-slate-50/90 rounded-full blur-2xl pointer-events-none -ml-20 -mb-20" />
 
-          {/* 1. Header: Strictly 1 Line Title */}
+          {/* 1. Header: Strictly 1 Line Title with Animated Brand Green Gradient */}
           <div className="relative z-10 text-center w-full max-w-5xl mx-auto px-2 space-y-2">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-              CHUOICUNGUNG.COM CÓ THỂ GIÚP GÌ CHO BẠN?
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+              <span className="text-gradient-flow-green">
+                CHUOICUNGUNG.COM CÓ THỂ GIÚP GÌ CHO BẠN?
+              </span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
               Chọn đúng vai trò của bạn để khám phá công cụ, luồng khớp lệnh và dịch vụ chuyên biệt.
@@ -138,8 +140,8 @@ export default function UnifiedRoleSection() {
                   onClick={() => setActiveId(role.id)}
                   className={`rounded-2xl p-3 sm:p-3.5 flex flex-col justify-between transition-all duration-300 cursor-pointer relative group bg-white ${
                     isActive
-                      ? 'border-2 border-[#0052cc] shadow-[0_14px_36px_rgba(0,82,204,0.16)] ring-4 ring-blue-500/10 -translate-y-1'
-                      : 'border border-slate-200/90 shadow-2xs hover:border-blue-300 hover:shadow-lg hover:-translate-y-1'
+                      ? 'border-2 border-[#006039] shadow-[0_14px_36px_rgba(0,96,57,0.16)] ring-4 ring-emerald-500/10 -translate-y-1'
+                      : 'border border-slate-200/90 shadow-2xs hover:border-emerald-400 hover:shadow-lg hover:-translate-y-1'
                   }`}
                 >
                   <div className="space-y-3.5">
@@ -165,7 +167,7 @@ export default function UnifiedRoleSection() {
 
                     {/* Content Details: Subtitle & Description */}
                     <div className="px-1 space-y-1.5">
-                      <p className="text-xs font-bold text-[#0052cc] font-mono tracking-tight line-clamp-1">
+                      <p className="text-xs font-bold text-[#006039] font-mono tracking-tight line-clamp-1">
                         {role.subtitle}
                       </p>
 
@@ -181,8 +183,8 @@ export default function UnifiedRoleSection() {
                           key={bIdx}
                           className={`px-2 py-0.5 rounded-md text-[11px] font-medium transition-colors ${
                             isActive
-                              ? 'bg-blue-50 text-blue-900 border border-blue-200/80 font-semibold'
-                              : 'bg-slate-50 text-slate-600 border border-slate-200/70'
+                              ? 'bg-emerald-50 text-[#006039] border border-emerald-200/90 font-semibold'
+                              : 'bg-slate-50 text-slate-700 border border-slate-200/70'
                           }`}
                         >
                           {badge}
@@ -193,7 +195,7 @@ export default function UnifiedRoleSection() {
 
                   {/* Card Footer: Clean Action Button */}
                   <div className="px-1 pt-3.5 mt-3.5 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#0052cc] group-hover:underline flex items-center gap-1 font-heading">
+                    <span className="text-xs font-bold text-[#006039] group-hover:underline flex items-center gap-1 font-heading">
                       Khám phá giải pháp
                     </span>
                     
@@ -205,8 +207,8 @@ export default function UnifiedRoleSection() {
                       }}
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all cursor-pointer shadow-2xs ${
                         isActive
-                          ? 'bg-[#0052cc] text-white shadow-sm shadow-blue-500/30'
-                          : 'bg-slate-100 text-slate-600 group-hover:bg-[#0052cc] group-hover:text-white'
+                          ? 'bg-[#006039] text-white shadow-sm shadow-emerald-900/30'
+                          : 'bg-slate-100 text-slate-700 group-hover:bg-[#006039] group-hover:text-white'
                       }`}
                       title={`Xem giải pháp cho ${role.title}`}
                     >

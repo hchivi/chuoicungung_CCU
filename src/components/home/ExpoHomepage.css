@@ -1,0 +1,91 @@
+/* Hallmark · component: B2B exhibition invitation · genre: modern-minimal · theme: locked CCU
+ * Component-scope: no page macrostructure/nav/footer rotation.
+ * States: default · hover · focus · active · disabled · loading · error · success
+ * Pre-emit critique: P4 H5 E4 S5 R5 V4. Approved invitation, no photo note.
+ */
+.expo-home { padding: var(--expo-space-2xl) var(--expo-space-lg) var(--expo-space-3xl); background: var(--expo-paper); color: var(--expo-ink); font-family: inherit; }
+.expo-home-shell { max-width: 1280px; margin-inline: auto; min-width: 0; padding: var(--expo-space-xl) var(--expo-space-lg); border: 1px solid var(--expo-line); border-radius: var(--expo-radius-media); background: var(--expo-ticket); color: var(--expo-ink); }
+.expo-home-salutation { margin: 0 0 var(--expo-space-xl); padding-bottom: var(--expo-space-md); border-bottom: 1px solid var(--expo-line); color: var(--expo-green); font-size: 14px; font-weight: 600; }
+.expo-home-masthead { display: grid; gap: var(--expo-space-xl); padding-bottom: var(--expo-space-xl); }
+.expo-home-title-group { min-width: 0; }
+.expo-home-kicker { display: flex; align-items: center; gap: var(--expo-space-md); margin: 0 0 var(--expo-space-lg); color: var(--expo-green); font-size: 14px; font-weight: 600; }
+.expo-home-kicker img { width: 32px; height: 32px; object-fit: contain; }
+.expo-home h2 { margin: 0; padding: 0; font-size: clamp(26px, 6.4vw, 40px); font-weight: 700; font-style: normal; line-height: 1.18; letter-spacing: -.04em; min-width: 0; overflow-wrap: anywhere; }
+.expo-home h2 span { display: block; padding: 0; color: var(--expo-green); }
+.expo-home-intro { margin: 0 0 var(--expo-space-lg); max-width: 38ch; font-size: 16px; line-height: 1.65; color: var(--expo-muted); }
+.expo-home-link { display: inline-flex; align-items: center; justify-content: center; gap: var(--expo-space-lg); min-height: 48px; max-width: 100%; color: var(--expo-green); background: var(--expo-clear); font-size: 15px; line-height: 1.3; font-weight: 600; white-space: nowrap; text-decoration: none; transition: transform var(--expo-duration) var(--expo-ease-out); }
+.expo-home-arrow-disc { display: grid; place-items: center; width: 48px; height: 48px; flex: 0 0 auto; border-radius: 50%; background: var(--expo-note); color: var(--expo-ink); }
+.expo-home-program { padding: var(--expo-space-xs) var(--expo-space-lg) var(--expo-space-xs) var(--expo-space-xl); border-radius: var(--expo-radius); background: var(--expo-green); color: var(--expo-surface); }
+.expo-home-program .expo-home-arrow-disc { background: var(--expo-clear); color: inherit; width: 40px; height: 40px; }
+.expo-home-link svg { flex: 0 0 auto; transition: transform var(--expo-duration) var(--expo-ease-out); }
+.expo-home-stage { position: relative; padding-bottom: var(--expo-space-xl); }
+.expo-home-media { margin: 0; position: relative; aspect-ratio: 3 / 2; border-radius: var(--expo-radius); overflow: clip; background: var(--expo-media); color: var(--expo-ink); }
+.expo-home-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+.expo-home-photo-loading { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; pointer-events: none; }
+.expo-home-photo-fallback { height: 100%; padding: var(--expo-space-xl); display: flex; flex-direction: column; justify-content: center; gap: var(--expo-space-lg); }
+.expo-home-photo-fallback p { margin: 0; font-size: 16px; line-height: 1.65; max-width: 48ch; }
+.expo-home-stage-caption { display: flex; align-items: center; flex-wrap: wrap; gap: var(--expo-space-sm); padding-top: var(--expo-space-xl); font-size: 14px; color: var(--expo-muted); }
+.expo-home-invitation-bottom { position: relative; border-top: 1px dashed var(--expo-line); padding-top: var(--expo-space-xl); display: grid; gap: var(--expo-space-xl); }
+.expo-home-invitation-bottom::before, .expo-home-invitation-bottom::after { content: ''; position: absolute; top: -12px; width: 24px; height: 24px; border: 1px solid var(--expo-line); border-radius: 50%; background: var(--expo-paper); pointer-events: none; }
+.expo-home-invitation-bottom::before { left: -29px; }
+.expo-home-invitation-bottom::after { right: -29px; }
+.expo-home-role-bar p { margin: 0 0 var(--expo-space-md); font-size: 14px; color: var(--expo-muted); }
+.expo-home-role-choices { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.4fr) minmax(0, .95fr); gap: var(--expo-space-xs); }
+.expo-home-role-choices button { display: flex; align-items: center; justify-content: center; gap: var(--expo-space-sm); min-height: 48px; padding: var(--expo-space-md) var(--expo-space-xs); border: 1px solid var(--expo-clear); border-radius: var(--expo-radius); color: var(--expo-ink); background: var(--expo-clear); font: inherit; font-size: 12px; line-height: 1.4; font-weight: 600; white-space: nowrap; cursor: pointer; transition: transform var(--expo-duration) var(--expo-ease-out); }
+.expo-home-role-choices button > svg:first-child { display: none; }
+.expo-home-role-check { display: none; }
+.expo-home-role-label:has(+ .expo-home-role-short) { display: none; }
+.expo-home-role-short { display: inline; }
+.expo-home-role-choices button[aria-pressed="true"], .expo-home-role-choices button[data-state="success"] { background: var(--expo-mint); color: var(--expo-green-deep); border-color: var(--expo-green); }
+.expo-home-role-choices button[aria-pressed="true"] .expo-home-role-check { display: block; width: 12px; height: 12px; flex: 0 0 auto; }
+.expo-home-role-choices button:disabled { opacity: .55; cursor: not-allowed; }
+.expo-home-role-choices button[data-state="loading"] { background: var(--expo-mint); cursor: wait; }
+.expo-home-role-choices button[data-state="error"] { border-color: var(--expo-error); color: var(--expo-error); }
+.expo-home-role-panel { display: grid; gap: var(--expo-space-xl); min-width: 0; }
+.expo-home-role-panel h3 { margin: 0 0 var(--expo-space-md); color: var(--expo-ink); font-size: 24px; line-height: 1.35; font-style: normal; font-weight: 700; letter-spacing: -.025em; overflow-wrap: anywhere; }
+.expo-home-role-panel p { margin: 0; font-size: 16px; line-height: 1.65; max-width: 65ch; color: var(--expo-muted); }
+.expo-home-benefits { list-style: none; padding: 0; margin: var(--expo-space-lg) 0 0; display: flex; flex-wrap: wrap; gap: var(--expo-space-md) var(--expo-space-xl); }
+.expo-home-benefits li { display: flex; align-items: center; gap: var(--expo-space-sm); font-size: 14px; color: var(--expo-green-deep); }
+.expo-home-benefits svg { flex: 0 0 auto; }
+.expo-home-primary { width: 100%; border: 1px solid var(--expo-green-deep); border-radius: var(--expo-radius); padding: var(--expo-space-md) var(--expo-space-xl); color: var(--expo-surface); background: linear-gradient(115deg, var(--expo-green-light), var(--expo-green-deep)); }
+.expo-home a:focus-visible, .expo-home button:focus-visible, .expo-home .is-focus { outline: 3px solid var(--expo-green); outline-offset: 4px; }
+.expo-home-link:active, .expo-home-role-choices button:active, .expo-home-role-choices .is-active { transform: translateY(1px); }
+.expo-home .is-hover { transform: translateY(-1px); }
+@media (hover: hover) and (pointer: fine) {
+  .expo-home-role-choices button:not(:disabled):hover { transform: translateY(-1px); }
+  .expo-home-link:hover svg { transform: translateX(3px); }
+}
+@media (min-width: 48rem) {
+  .expo-home { padding: var(--expo-space-3xl) var(--expo-space-xl) var(--expo-space-4xl); }
+  .expo-home-shell { padding: var(--expo-space-2xl); }
+  .expo-home-salutation { margin-bottom: var(--expo-space-2xl); }
+  .expo-home-masthead { gap: var(--expo-space-2xl); align-items: end; padding-bottom: var(--expo-space-2xl); }
+  .expo-home h2 { font-size: clamp(38px, 5vw, 64px); }
+  .expo-home-kicker { font-size: 16px; }
+  .expo-home-kicker img { width: 38px; height: 38px; }
+  .expo-home-invite-copy { padding-bottom: var(--expo-space-xs); }
+  .expo-home-media { aspect-ratio: 7 / 3; border-radius: var(--expo-radius-media); }
+  .expo-home-invitation-bottom::before { left: -45px; }
+  .expo-home-invitation-bottom::after { right: -45px; }
+  .expo-home-stage-caption { justify-content: flex-end; }
+  .expo-home-invitation-bottom { grid-template-columns: minmax(0, .43fr) minmax(0, 1fr); gap: var(--expo-space-3xl); padding-top: var(--expo-space-2xl); }
+  .expo-home-role-choices { display: flex; flex-direction: column; align-items: stretch; gap: var(--expo-space-sm); }
+  .expo-home-role-choices button { justify-content: flex-start; padding: var(--expo-space-md) var(--expo-space-lg); font-size: 14px; }
+  .expo-home-role-choices button > svg:first-child { display: block; flex: 0 0 auto; }
+  .expo-home-role-check { display: block; margin-left: auto; opacity: 0; }
+  .expo-home-role-label:has(+ .expo-home-role-short) { display: inline; }
+  .expo-home-role-short { display: none; }
+  .expo-home-role-choices button[aria-pressed="true"] .expo-home-role-check { width: 16px; height: 16px; opacity: 1; }
+  .expo-home-role-panel { min-height: 220px; align-content: start; gap: var(--expo-space-lg); }
+  .expo-home-role-panel h3 { font-size: 28px; }
+  .expo-home-primary { width: fit-content; }
+}
+@media (min-width: 64rem) {
+  .expo-home-masthead { grid-template-columns: minmax(0, 1fr) minmax(0, .46fr); }
+  .expo-home-role-panel { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+  .expo-home-invitation-bottom { grid-template-columns: minmax(0, .31fr) minmax(0, 1fr); gap: var(--expo-space-3xl); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .expo-home-link, .expo-home-link svg, .expo-home-role-choices button { transition: none; }
+  .expo-home-link:active, .expo-home-link:hover svg, .expo-home-role-choices button:hover, .expo-home-role-choices button:active { transform: none; }
+}

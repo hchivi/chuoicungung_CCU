@@ -1,0 +1,70 @@
+/* Hallmark · macrostructure: approved duo stage · genre: modern-minimal · design-system: design.md
+ * theme: studied-DNA (source: user-approved duo screenshot); anchor: CCU green / mint.
+ * User-approved blue SUPPI / pink CHAINY exception, original laptop sprites.
+ * Taste: DESIGN_VARIANCE 8 / MOTION_INTENSITY 3 / VISUAL_DENSITY 4.
+ * Local layer order: identity behind mascots; role captions and actions stay unobstructed.
+ * pre-emit critique: P4 H4 E4 S5 R4 V4.
+ * Scoped QA: contrast pass; mobile pass; original sprites and existing routes preserved.
+ */
+@import '../../../tokens.css';
+
+.ccu-assistant-duo { box-sizing: border-box; background: var(--ai-surface); color: var(--ai-ink); font: var(--ai-text-body)/1.6 var(--ai-font-body); padding: var(--ai-space-xl) var(--ai-space-md); border-radius: var(--ai-radius-media); overflow-x: clip; }
+.ccu-assistant-duo * { box-sizing: border-box; }
+.ccu-duo-heading h2 { font: 700 var(--ai-text-display)/1.08 var(--ai-font-display); letter-spacing: -.035em; margin: 0; overflow-wrap: anywhere; min-width: 0; }
+.ccu-duo-heading h2 span { color: var(--ai-green); }
+.ccu-duo-heading > p { max-width: 68ch; margin: var(--ai-space-md) 0 0; color: var(--ai-muted); }
+.ccu-duo-stage { display: grid; grid-template-columns: minmax(0, 1fr); position: relative; isolation: isolate; margin-top: var(--ai-space-xl); padding: var(--ai-space-lg) var(--ai-space-md); background: var(--ai-mint); border-radius: var(--ai-radius-media); }
+.ccu-duo-identity { display: grid; gap: var(--ai-space-xs); min-width: 0; z-index: var(--ai-layer-identity); }
+.ccu-duo-identity strong { font: 700 var(--ai-text-identity)/1.08 var(--ai-font-display); letter-spacing: -.05em; white-space: nowrap; }
+.ccu-duo-identity span { font-size: var(--ai-text-small); color: var(--ai-muted); }
+.ccu-duo-identity--suppi { color: var(--ai-suppi); }
+.ccu-duo-identity--chainy { color: var(--ai-chainy); justify-self: end; text-align: right; }
+.ccu-duo-pair { display: flex; align-items: center; justify-content: center; position: relative; z-index: var(--ai-layer-mascot); width: 100%; max-width: 460px; margin: 0 auto; pointer-events: none; }
+.ccu-duo-mascot { display: block; position: relative; flex: 0 0 58%; width: 58%; aspect-ratio: 1; overflow: clip; }
+.ccu-duo-mascot--chainy { margin-inline-start: -12%; }
+.ccu-duo-mascot img { position: absolute; width: 300%; height: 300%; max-width: none; top: -200%; left: 0; }
+.ccu-duo-mascot--chainy img { left: -200%; }
+.ccu-duo-mascot[data-media-state=loading] { background: var(--ai-mint); border-radius: var(--ai-radius-media); }
+.ccu-duo-image-fallback { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; gap: var(--ai-space-sm); background: var(--ai-mint); color: var(--ai-muted); font-size: var(--ai-text-small); }
+.ccu-duo-roles { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--ai-space-xl); margin-top: var(--ai-space-xl); }
+.ccu-duo-role { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: var(--ai-space-md); min-width: 0; }
+.ccu-duo-role--suppi { --duo-accent: var(--ai-suppi); }
+.ccu-duo-role--chainy { --duo-accent: var(--ai-chainy); }
+.ccu-duo-role > svg { color: var(--duo-accent); margin-top: var(--ai-space-xs); }
+.ccu-duo-role h3 { font: 700 22px/1.3 var(--ai-font-display); margin: 0; color: var(--duo-accent); }
+.ccu-duo-role h3 span { display: block; margin-top: var(--ai-space-xs); font-size: var(--ai-text-small); color: var(--ai-ink); letter-spacing: .02em; }
+.ccu-duo-role p { color: var(--ai-muted); font-size: var(--ai-text-body); margin: var(--ai-space-sm) 0 0; max-width: 52ch; }
+.ccu-duo-transfer { display: none; color: var(--ai-green); }
+.ccu-duo-action { display: inline-flex; align-items: center; justify-content: center; gap: var(--ai-space-md); grid-column: 2; justify-self: start; min-height: 48px; padding: 12px 20px; border: 1px solid var(--duo-accent); border-radius: var(--ai-radius); color: var(--ai-surface); font: 600 var(--ai-text-small)/1.5 var(--ai-font-body); white-space: nowrap; text-decoration: none; transition: transform var(--ai-duration) var(--ai-ease-out); }
+.ccu-duo-action--suppi { background: linear-gradient(120deg, var(--ai-suppi-light), var(--ai-suppi)); }
+.ccu-duo-action--chainy { background: linear-gradient(120deg, var(--ai-chainy-light), var(--ai-chainy)); }
+.ccu-duo-action:focus-visible { outline: 3px solid var(--ai-ink); outline-offset: 4px; }
+.ccu-duo-action:active { transform: translateY(1px); }
+.ccu-duo-action[aria-disabled=true], .ccu-duo-action[data-state=loading] { color: var(--ai-muted); background: var(--ai-disabled); border-color: var(--ai-control-line); cursor: not-allowed; transform: none; }
+.ccu-duo-action[data-state=error] { background: var(--ai-surface); color: var(--ai-error); border-color: var(--ai-error); }
+.ccu-duo-action[data-state=success] { background: var(--ai-mint); color: var(--ai-green); }
+@media (hover: hover) and (pointer: fine) {
+  .ccu-duo-action:not([aria-disabled=true]):not([data-state=loading]):hover { transform: translateY(-1px); }
+}
+@media (min-width: 48rem) {
+  .ccu-assistant-duo { padding: var(--ai-space-2xl); }
+  .ccu-duo-stage { display: flex; align-items: center; justify-content: center; min-height: 440px; padding: var(--ai-space-xl); position: relative; }
+  .ccu-duo-pair { width: min(100%, 600px); max-width: 600px; margin-inline: auto; transform: none; position: relative; z-index: var(--ai-layer-mascot); }
+  .ccu-duo-identity { position: absolute; gap: var(--ai-space-sm); }
+  .ccu-duo-identity strong { font-size: clamp(48px, 6vw, 64px); }
+  .ccu-duo-identity--suppi { top: var(--ai-space-lg); left: var(--ai-space-lg); }
+  .ccu-duo-identity--chainy { right: var(--ai-space-lg); bottom: var(--ai-space-md); }
+  .ccu-duo-roles { grid-template-columns: minmax(0, 1fr) 32px minmax(0, 1fr); gap: var(--ai-space-lg); }
+  .ccu-duo-transfer { display: block; align-self: center; }
+}
+@media (min-width: 64rem) {
+  .ccu-duo-stage { min-height: 520px; }
+  .ccu-duo-pair { width: min(100%, 680px); max-width: 680px; transform: none; }
+  .ccu-duo-identity strong { font-size: var(--ai-text-identity); }
+  .ccu-duo-identity--suppi { top: var(--ai-space-xl); left: var(--ai-space-xl); }
+  .ccu-duo-identity--chainy { right: var(--ai-space-xl); bottom: var(--ai-space-md); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ccu-duo-action { transition: none; }
+  .ccu-duo-action:hover, .ccu-duo-action:active { transform: none; }
+}

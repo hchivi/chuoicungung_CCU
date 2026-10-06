@@ -172,7 +172,7 @@ export default function FactoryDetailPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <nav className="flex items-center space-x-2 text-slate-500 overflow-x-auto whitespace-nowrap py-1">
             <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+              <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
             </Link>
             <span>&gt;</span>
             <Link to="/nha-may" className="hover:text-blue-600 font-medium">Danh bạ Nhà máy</Link>

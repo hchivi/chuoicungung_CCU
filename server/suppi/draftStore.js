@@ -63,7 +63,7 @@ export function createDraftStore({ model = null } = {}) {
     },
 
     async update(id, patch, { owner_id = null } = {}) {
-      const forbidden = ['status', 'submitted_at', 'published_at', 'id', 'conversation_id'];
+      const forbidden = ['status', 'submitted_at', 'published_at', 'id', 'conversation_id', 'owner_id', 'idempotency_key'];
       const safePatch = Object.fromEntries(
         Object.entries(patch).filter(([key]) => !forbidden.includes(key))
       );

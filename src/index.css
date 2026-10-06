@@ -1,43 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap');
+@import '../tokens.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Poppins Font Definitions */
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/FzPoppins/FZ Poppins-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/FzPoppins/FZ Poppins-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/FzPoppins/FZ Poppins-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/FzPoppins/FZ Poppins-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-.font-poppins, .font-poppins * {
-  font-family: 'Poppins', 'FZ Poppins', sans-serif !important;
-}
-
-/* Space Grotesk Font Definitions (Local & Fallback) */
+/* Space Grotesk Font Definitions (Dành riêng cho Title Image 1) */
 @font-face {
   font-family: 'SpaceGrotesk';
   src: url('/fonts/static/SpaceGrotesk-Regular.ttf') format('truetype');
@@ -96,25 +63,114 @@
 }
 
 :root {
-  --primary-blue: #0b3f6d;
+  --primary-color: #006039;
+  --rolex-green: #006039;
+  --rolex-green-light: #127b4b;
+  --rolex-green-dark: #004d2e;
+  --lacoste-green: #002b1b;
+  --primary-blue: #006039;
   --accent-cyan: #06b6d4;
   --accent-green: #10b981;
   --accent-amber: #f59e0b;
   --accent-purple: #8b5cf6;
 }
 
+/* ==========================================================================
+   ROLEX-STYLE BUTTONS & GRADIENTS (OFFICIAL #006039 PALETTE)
+   ========================================================================== */
+.btn-rolex,
+.btn-primary-rolex {
+  background: linear-gradient(180deg, #127b4b 0%, #006039 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px 0 rgba(0, 96, 57, 0.28) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-rolex:hover,
+.btn-primary-rolex:hover {
+  background: linear-gradient(180deg, #168e56 0%, #00472a 100%) !important;
+  box-shadow: 0 6px 20px 0 rgba(0, 96, 57, 0.42) !important;
+  transform: translateY(-1.5px);
+}
+.btn-rolex:active,
+.btn-primary-rolex:active {
+  transform: scale(0.98);
+}
+
+.btn-rolex-pill {
+  border-radius: 9999px !important;
+  background: linear-gradient(180deg, #127b4b 0%, #006039 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px 0 rgba(0, 96, 57, 0.3) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.btn-rolex-pill:hover {
+  background: linear-gradient(180deg, #168e56 0%, #00472a 100%) !important;
+  box-shadow: 0 8px 22px 0 rgba(0, 96, 57, 0.45) !important;
+  transform: translateY(-1.5px);
+}
+.btn-rolex-pill:active {
+  transform: scale(0.98);
+}
+
+.rolex-gradient-h {
+  background: linear-gradient(90deg, #00472a 0%, #006039 50%, #127b4b 100%) !important;
+}
+.rolex-gradient-h:hover {
+  background: linear-gradient(90deg, #003822 0%, #00472a 50%, #0f6c41 100%) !important;
+}
+
+/* ==========================================================================
+   ANIMATED GRADIENT TEXT FLOW (OFFICIAL CCU BRAND GREEN)
+   ========================================================================== */
+@keyframes text-flow-green {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.text-gradient-flow-green {
+  background: linear-gradient(
+    90deg,
+    #012616 0%,
+    #006039 18%,
+    #059669 35%,
+    #10b981 50%,
+    #059669 65%,
+    #006039 82%,
+    #012616 100%
+  ) !important;
+  background-size: 260% 100% !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #006039;
+  animation: text-flow-green 5s cubic-bezier(0.4, 0, 0.2, 1) infinite !important;
+  display: inline-block;
+  will-change: background-position;
+}
+
+
 @layer base {
   html, body {
-    @apply bg-slate-50 text-slate-900 antialiased font-sans;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply bg-slate-50 text-slate-900 antialiased;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400;
     overflow-x: clip;
     max-width: 100vw;
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
+    selection-background-color: #006039;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading tracking-tight;
+  ::selection {
+    background-color: #006039;
+    color: #ffffff;
   }
 }
 
@@ -175,13 +231,109 @@
   }
 }
 
-h1, h2, h3, h4, h5, h6,
-h1 *, h2 *, h3 *, h4 *, h5 *, h6 *,
-.font-heading, .font-heading *,
-.font-title, .font-title *,
-.font-grotesk, .font-grotesk * {
-  font-family: 'Space Grotesk', 'SpaceGrotesk', -apple-system, sans-serif !important;
+/* ==========================================================================
+   ADAMEVA-STYLE TYPOGRAPHY SYSTEM (SPACE GROTESK + POPPINS CHO CHUỖI CUNG ỨNG)
+   - Headings (H1, H2, H3, H4, H5, H6, Titles): 'Space Grotesk', sans-serif
+   - Body & Văn bản (p, li, span, input, buttons, tabs): 'Poppins', sans-serif
+   ========================================================================== */
+
+/* Title Image 1 (Hero Main Title): Space Grotesk Bold/Black */
+.hero-display-title,
+.hero-display-title * {
+  font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  padding-top: 0.1em;
+  padding-bottom: 0.08em;
+}
+
+/* ==========================================================================
+   KHOẢNG CÁCH TRÊN DƯỚI CHO DẤU TIẾNG VIỆT
+   ========================================================================== */
+
+/* H1: Space Grotesk Bold (700) */
+h1,
+h1 *,
+.text-h1, .h1 {
+  font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
+  font-weight: 700 !important;
   letter-spacing: -0.02em;
+  line-height: 1.32 !important;
+  padding-top: 0.08em;
+  padding-bottom: 0.06em;
+}
+
+/* H2: Space Grotesk Bold (700) */
+h2,
+h2 *,
+.text-h2, .h2 {
+  font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+  line-height: 1.34 !important;
+  padding-top: 0.08em;
+  padding-bottom: 0.06em;
+}
+
+/* H3, H4, H5, H6: Space Grotesk Bold (700) */
+h3, h3 *, h4, h4 *, h5, h5 *, h6, h6 *,
+.text-h3, .text-h4, .text-h5, .text-h6,
+.h3, .h4, .h5, .h6 {
+  font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+  line-height: 1.38 !important;
+  padding-top: 0.06em;
+  padding-bottom: 0.04em;
+}
+
+/* Toàn bộ chữ in hoa, navigation links, tabs, buttons có dấu tiếng Việt */
+.uppercase, [class*="uppercase"] {
+  line-height: 1.38 !important;
+}
+
+nav a, .nav-link, button, .btn {
+  line-height: 1.36;
+}
+
+/* All heading/title utility classes mapped to Space Grotesk across the site */
+.font-heading,
+.font-heading *,
+.font-title,
+.font-title *,
+.font-grotesk,
+.font-grotesk * {
+  font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
+}
+
+/* Nội dung văn bản thì sử dụng Poppins với khoảng cách dòng mượt mà */
+p, li, article, section p, main p, div > p, .font-content, .font-normal-text, .font-poppins, .font-sans, .font-arial {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: normal;
+  line-height: 1.65 !important;
+}
+
+/* ==========================================================================
+   LOGO HEADER XOAY (SMOOTH 360 ROTATION ANIMATION)
+   ========================================================================== */
+@keyframes logoSpinSmooth {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-logo-spin {
+  animation: logoSpinSmooth 16s linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.animate-logo-spin:hover {
+  animation-duration: 5s;
 }
 
 /* Custom Scrollbar */
@@ -878,4 +1030,53 @@ video::-internal-media-controls-picture-in-picture-button {
 .lucide-sparkles,
 svg.lucide-sparkles {
   display: none !important;
+}
+
+/* CCU public brand refresh · shared colors only; no route, data or layout redesign.
+   Lifecycle colors, errors and private workspaces retain their semantic palette. */
+.ccu-public-shell { --primary-color: var(--brand-green); --primary-blue: var(--brand-green); --lacoste-green: var(--brand-footer); }
+.ccu-public-shell.ccu-photographic-route #main-content { min-height: 100svh; }
+.ccu-public-shell ::selection { background: var(--brand-line); color: var(--brand-green-dark); }
+.ccu-public-shell .fp-page { --fp-blue: var(--brand-green); --fp-ink: var(--brand-footer); --fp-tint: var(--brand-mint); --fp-line: var(--brand-line); }
+.ccu-public-shell .service-request { --sr-accent: var(--brand-green); --sr-blue: var(--brand-green-dark); --sr-ink: var(--brand-footer); --sr-border: var(--brand-line); }
+.ccu-public-shell :is(.ec-button,.mm-button,.sr-button-primary,.fp-button:not(.fp-button-secondary),.btn-rolex,.btn-primary-rolex,.btn-rolex-pill),
+.ccu-public-shell :is(a,button).text-white:is([class*="bg-blue-6"],[class*="bg-blue-7"],[class*="bg-[#0052cc]"],[class*="from-blue-"],[class*="from-[#0052cc]"]) {
+  background: linear-gradient(180deg,var(--brand-green-light),var(--brand-green)) !important;
+  color: var(--color-accent-ink, var(--brand-on-green)) !important;
+  border-color: var(--brand-green);
+  transition: transform 220ms cubic-bezier(.16,1,.3,1), box-shadow 220ms cubic-bezier(.16,1,.3,1), background-color 220ms ease !important;
+}
+.ccu-public-shell :is(a,button)[class*="text-[#0052cc]"] { color: var(--brand-green); }
+.ccu-public-shell :is(a,button):is([class*="bg-blue-50"],[class*="bg-blue-100"]) { background-color: var(--brand-mint); color: var(--brand-green); }
+.ccu-public-shell [class*="from-[#0047a5]"][class*="via-[#0052cc]"] { background-image: linear-gradient(120deg,var(--brand-green),var(--brand-green-dark)); }
+.ccu-public-shell .fp-page :is(a,button,summary,input,select,textarea):focus-visible { outline-color: var(--brand-green); }
+.ccu-public-shell :is(a,button):focus-visible { outline: 3px solid var(--brand-green); outline-offset: 4px; }
+.ccu-public-shell .ccu-footer { background: var(--brand-footer); color: var(--brand-footer-text); border-color: var(--brand-green-dark); }
+.ccu-public-shell .ccu-nav-strip { background: var(--brand-green-dark); }
+.ccu-nav-strip :is(a,button):focus-visible { outline-color: var(--brand-on-green); }
+.ccu-footer :is(p,ul,div)[class*="text-emerald-"] { color: var(--brand-footer-text); }
+.ccu-footer a { overflow-wrap: anywhere; }
+.ccu-footer :is(a,button):focus-visible { outline-color: var(--brand-footer-text); }
+.ccu-public-shell header [class*="text-[#0084FF]"] { color: var(--brand-green); }
+.ccu-footer [class*="text-[#38bdf8]"] { color: var(--brand-footer-text); }
+/* Public page hero/title headings: uppercase presentation without rewriting copy,
+   slug, SEO text, detail cards or private admin/AI workspace titles. */
+.ccu-public-shell #main-content h1,
+.ccu-public-shell [data-hero-title] {
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+@media (hover:hover) {
+  .ccu-public-shell :is(.ec-button,.mm-button,.sr-button-primary,.fp-button:not(.fp-button-secondary),.btn-rolex,.btn-primary-rolex,.btn-rolex-pill):hover,
+  .ccu-public-shell :is(a,button).text-white:is([class*="bg-blue-6"],[class*="bg-blue-7"],[class*="bg-[#0052cc]"],[class*="from-blue-"],[class*="from-[#0052cc]"]):hover {
+    background: linear-gradient(180deg,var(--brand-green-hover),var(--brand-green-dark)) !important;
+    box-shadow: none !important;
+    transform: none;
+  }
+  .ccu-public-shell :is(a,button):is([class*="hover:bg-[#0052cc]"],[class*="hover:bg-blue-6"],[class*="hover:bg-blue-7"]):hover { background-color: var(--brand-green); border-color: var(--brand-green); }
+  .ccu-public-shell :is(a,button):is([class*="hover:text-[#0052cc]"],[class*="hover:text-blue-6"]):hover { color: var(--brand-green); }
+  .ccu-public-shell [class~="group/sub"]:hover [class*="group-hover/sub:bg-[#0052cc]"] { background-color: var(--brand-green); border-color: var(--brand-green); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .ccu-public-shell :is(.ec-button,.mm-button,.sr-button-primary,.fp-button,.btn-rolex,.btn-primary-rolex,.btn-rolex-pill) { transform: none !important; transition: none !important; }
 }

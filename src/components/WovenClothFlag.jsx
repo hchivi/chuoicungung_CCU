@@ -8,7 +8,7 @@ import * as THREE from 'three';
  *
  * Requirements:
  * - Flag contains ONLY:
- *   1. `logo_only` (/logo_only.png)
+ *   1. `logo_only` (/logo_onlyc.png)
  *   2. Text `NGÀY HỘI CHUỖI CUNG ỨNG`
  * - Pinned at top edge, waving with authentic Verlet cloth dynamics and wind turbulence.
  * - Sits right at the boundary between header and hero, directly under BrandLogo (Image 2).
@@ -54,7 +54,7 @@ export default function WovenClothFlag({ onClick, className = '' }) {
     // Draw Flag Texture function
     const logoImg = new Image();
     logoImg.crossOrigin = 'anonymous';
-    logoImg.src = '/logo_only.png';
+    logoImg.src = '/logo_onlyc.png';
 
     function renderFlagTexture() {
       if (!ctx) return;
@@ -96,7 +96,7 @@ export default function WovenClothFlag({ onClick, className = '' }) {
       }
       ctx.globalAlpha = 1;
 
-      // 4. Logo Only (/logo_only.png) - Large, crisp & centered (NO foggy white halo)
+      // 4. Logo Only (/logo_onlyc.png) - Large, crisp & centered (NO foggy white halo)
       const logoSize = 230;
       const logoX = (W - logoSize) / 2;
       const logoY = 70;

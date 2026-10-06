@@ -191,7 +191,7 @@ export default function SupplyChainPipelineFlow() {
               {/* Dynamic Aura when processing current active step */}
               <div className="absolute w-36 h-36 rounded-full bg-blue-500/20 animate-ping pointer-events-none -z-10"></div>
               <img 
-                src="/logo_only.png" 
+                src="/logo_onlyc.png" 
                 alt="Logo Chuỗi Cung Ứng" 
                 className="w-32 h-32 xl:w-38 xl:h-38 object-contain filter drop-shadow-xl animate-spin-slow transition duration-300 hover:scale-105" 
               />
@@ -249,7 +249,7 @@ export default function SupplyChainPipelineFlow() {
           {/* Mobile Central Hub Logo */}
           <div className="flex items-center justify-center space-x-2 py-1">
             <img 
-              src="/logo_only.png" 
+              src="/logo_onlyc.png" 
               alt="Logo Chuỗi Cung Ứng" 
               className="w-10 h-10 object-contain filter drop-shadow-md animate-spin-slow" 
             />

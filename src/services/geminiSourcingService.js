@@ -5,7 +5,7 @@
 
 const GEMINI_API_KEY = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) || 
   (typeof process !== 'undefined' && process.env?.VITE_GEMINI_API_KEY) || 
-  'REDACTED';
+  '';
 
 // Danh sách các model fallback theo thứ tự ưu tiên tốc độ và độ ổn định cao nhất
 const FALLBACK_MODELS = [

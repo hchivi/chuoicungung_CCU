@@ -65,7 +65,7 @@ export default function InteractivePhaseWheel({ activeStageId = null, onSelectSt
               onClick={() => navigate('/ban-do-6-giai-doan')}
             >
               <img 
-                src="/logo_only.png" 
+                src="/logo_onlyc.png" 
                 alt="Logo" 
                 className="w-24 h-24 sm:w-28 sm:h-28 object-contain" 
                 onError={(e) => { e.target.src = '/logo.png'; }}

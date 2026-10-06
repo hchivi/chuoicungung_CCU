@@ -7,13 +7,28 @@ import {
 } from 'lucide-react';
 import { sendDifyMessage } from '../../services/difyService';
 
+function renderChatMessageText(text, textColorClass) {
+  if (!text) return null;
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldContent = part.slice(2, -2);
+      return (
+        <strong key={index} className={`font-black ${textColorClass}`}>
+          {boldContent}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
+
 export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' }) {
   const navigate = useNavigate();
   const [mode, setMode] = useState(initialMode); // 'SUPPI' or 'CHAINY'
   const [messages, setMessages] = useState([]);
   const [inputQuery, setInputQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState('');
   const [showZaloModal, setShowZaloModal] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -35,7 +50,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
       {
         sender: 'ai',
         mode: 'SUPPI',
-        text: 'Chào anh/chị, tôi là **SUPPI | Trợ lý tìm nguồn** tại **CHUOICUNGUNG.COM**.\n\nTôi có thể hỗ trợ anh/chị bóc tách tiêu chuẩn kỹ thuật, xác định mã ngành vòng đời và tìm kiếm nhà cung ứng xưởng thực tế đạt chuẩn KYC.',
+        text: 'Chào anh/chị, tôi là **SUPPI | Trợ lý tìm nguồn** tại **CHUOICUNGUNG.COM**.\n\nTôi giúp làm rõ nhu cầu và tìm nguồn theo dữ liệu CCU được kết nối. Trạng thái xác minh và năng lực cần được đối chiếu từng hồ sơ. Anh/chị đang cần gì cho doanh nghiệp?',
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         suggestions: [
           'Tìm 500 bộ đồng phục công nhân giao tháng 11',
@@ -79,17 +94,32 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
     const query = textToSend || inputQuery;
     if (!query.trim() || isLoading) return;
 
-    // Tự động nhận diện vai trò phù hợp: CHAINY cho kết nối/Zalo/báo giá, SUPPI cho tìm nguồn/kỹ thuật
+    // Phân loại nội dung người dùng: Tìm nguồn (SUPPI) hay Kết nối (CHAINY)
     const qLower = query.toLowerCase();
     const isChainyQuery = qLower.includes('kết nối') || 
+                          qLower.includes('giao thương') || 
                           qLower.includes('zalo') || 
                           qLower.includes('báo giá') || 
                           qLower.includes('tiến độ') || 
                           qLower.includes('hợp đồng') || 
                           qLower.includes('gặp') || 
+                          qLower.includes('liên hệ') || 
                           qLower.includes('chainy');
 
-    const activeMode = isChainyQuery ? 'CHAINY' : 'SUPPI';
+    const isSuppiQuery = qLower.includes('tìm') || 
+                         qLower.includes('nguồn') || 
+                         qLower.includes('xưởng') || 
+                         qLower.includes('nhà máy') || 
+                         qLower.includes('gia công') || 
+                         qLower.includes('sản xuất') || 
+                         qLower.includes('vật liệu') || 
+                         qLower.includes('tiêu chuẩn') || 
+                         qLower.includes('kỹ thuật') || 
+                         qLower.includes('bóc tách') || 
+                         qLower.includes('kyc') || 
+                         qLower.includes('suppi');
+
+    const activeMode = isChainyQuery && !isSuppiQuery ? 'CHAINY' : 'SUPPI';
     setMode(activeMode);
 
     const userMsg = {
@@ -105,24 +135,16 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
     try {
       const response = await sendDifyMessage({
         query,
-        conversationId,
-        mode: activeMode,
-        user: 'web_session_' + (localStorage.getItem('ccu_user_token') || 'guest')
+        // Share the transport's conversation key with the AI workspace.
+        // The backend owns intent routing and anonymous-session identity.
       });
 
-      if (response?.conversation_id) {
-        setConversationId(response.conversation_id);
-      }
-
-      const answerText = response?.answer || (
-        activeMode === 'CHAINY' 
-          ? 'Chào anh/chị, tôi là CHAINY | Trợ lý kết nối. Tôi đã ghi nhận yêu cầu và sẵn sàng kết nối qua nhóm Zalo OA.' 
-          : 'Chào anh/chị, tôi là SUPPI | Trợ lý tìm nguồn. Tôi đã tiếp nhận yêu cầu bóc tách và tìm xưởng sản xuất cho anh/chị.'
-      );
+      const answerText = response.answer;
+      setMode(response.mode);
 
       const aiMsg = {
         sender: 'ai',
-        mode: activeMode,
+        mode: response.mode,
         text: answerText,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         isZaloPrompt: isChainyQuery || qLower.includes('kết nối') || qLower.includes('zalo')
@@ -136,7 +158,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         {
           sender: 'ai',
           mode: activeMode,
-          text: 'Xin lỗi, kết nối đang được làm mới. Anh/chị vui lòng thử lại hoặc bấm "Mở Zalo OA" bên dưới để được nhân sự hỗ trợ trực tiếp.',
+          text: err.message || 'Chưa kết nối được trợ lý CCU. Anh/chị vui lòng thử lại.',
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
@@ -150,25 +172,26 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   return (
     <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-[1000] w-[92vw] sm:w-[420px] max-w-full h-[600px] max-h-[82vh] bg-white rounded-3xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 font-sans">
       
-      {/* 1. HEADER (SUPPI & CHAINY MASCOT + HANDOFF + EXPAND) */}
+      {/* 1. HEADER (AVATAR mascot_duo.png + CHAT VỚI SUPPI & CHAINY) */}
       <div className="p-3.5 sm:p-4 text-white transition-all flex items-center justify-between bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7]">
         <div className="flex items-center space-x-2.5">
-          <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-md p-1 border border-white/20 flex items-center justify-center shrink-0 overflow-hidden shadow-xs">
+          <div className="w-13 h-13 sm:w-14 sm:h-14 flex items-center justify-center shrink-0">
             <img 
-              src="/mascots/SUPPI_2.png" 
-              alt="Mascot" 
-              className="w-full h-full object-cover rounded-xl"
+              src="/mascot_duo.png" 
+              alt="Mascot Duo" 
+              onError={(e) => { e.currentTarget.src = "/mascots/mascot_duo.png"; }}
+              className="w-full h-full object-contain filter drop-shadow-md"
             />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-black text-sm uppercase tracking-wide font-heading">
-                SUPPI &amp; CHAINY • AI TRỢ LÝ
+              <span className="font-black text-sm uppercase tracking-wide font-heading text-white">
+                CHAT VỚI SUPPI &amp; CHAINY
               </span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             </div>
             <p className="text-[11px] text-blue-100/90 font-medium">
-              Tìm nguồn cung ứng &amp; Điều phối kết nối giao thương
+              Tìm nguồn cung ứng &amp; Kết nối giao thương
             </p>
           </div>
         </div>
@@ -223,25 +246,28 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
                   </div>
                 </div>
               ) : (
-                /* SUPPI HOẶC CHAINY */
+                /* SUPPI (TÌM NGUỒN - CHỮ XANH) HOẶC CHAINY (KẾT NỐI - CHỮ HỒNG) */
                 <div className={`max-w-[88%] p-3.5 rounded-2xl rounded-bl-xs shadow-xs space-y-2 leading-relaxed ${
                   isChainy 
-                    ? 'bg-rose-50/50 border border-rose-200/90 text-[#e11d48]' 
-                    : 'bg-blue-50/50 border border-blue-200/90 text-[#0052cc]'
+                    ? 'bg-rose-50/60 border border-rose-200/90 text-[#e11d48]' 
+                    : 'bg-blue-50/60 border border-blue-200/90 text-[#0052cc]'
                 }`}>
-                  {/* Header Trợ lý: Icon SUPPI_2.png hoặc CHAINY_2.png + Badge Tên */}
+                  {/* Header Trợ lý: Icon type_suppi.png hoặc type_chainy.png + Badge Tên */}
                   <div className="flex items-center gap-2 pb-1.5 border-b border-slate-200/60">
                     <img 
-                      src={isChainy ? "/mascots/CHAINY_2.png" : "/mascots/SUPPI_2.png"}
+                      src={isChainy ? "/mascots/type_chainy.png" : "/mascots/type_suppi.png"}
                       alt={isChainy ? "CHAINY" : "SUPPI"}
-                      className={`w-6 h-6 rounded-full object-cover border shrink-0 ${
+                      onError={(e) => {
+                        e.currentTarget.src = isChainy ? "/type_chainy.png" : "/type_suppi.png";
+                      }}
+                      className={`w-7 h-7 rounded-full object-cover border shrink-0 shadow-2xs ${
                         isChainy ? 'border-rose-300' : 'border-blue-300'
                       }`}
                     />
                     <span className={`font-black text-xs uppercase tracking-wide font-heading ${
                       isChainy ? 'text-[#e11d48]' : 'text-[#0052cc]'
                     }`}>
-                      {isChainy ? 'CHAINY | Trợ lý kết nối' : 'SUPPI | Trợ lý tìm nguồn'}
+                      {isChainy ? 'CHAINY | TRỢ LÝ KẾT NỐI' : 'SUPPI | TRỢ LÝ TÌM NGUỒN'}
                     </span>
                   </div>
 
@@ -249,14 +275,14 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
                   <div className={`whitespace-pre-line text-[12.5px] font-medium leading-relaxed ${
                     isChainy ? 'text-[#e11d48]' : 'text-[#0052cc]'
                   }`}>
-                    {msg.text}
+                    {renderChatMessageText(msg.text, isChainy ? 'text-[#e11d48]' : 'text-[#0052cc]')}
                   </div>
 
                   {/* Suggestions Chips */}
                   {msg.suggestions && (
                     <div className="pt-2 border-t border-slate-200/60 space-y-1.5">
-                      <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider">
-                        Gợi ý thao tác nhanh:
+                      <div className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider font-heading">
+                        GỢI Ý THAO TÁC NHANH:
                       </div>
                       {msg.suggestions.map((sug, sIdx) => (
                         <button
@@ -355,7 +381,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
           {/* QR Code Container */}
           <div className="bg-white p-3 rounded-2xl shadow-xl">
             <img 
-              src="/logo_only.png" 
+              src="/logo_onlyc.png" 
               alt="Zalo OA QR" 
               className="w-32 h-32 object-contain p-2 bg-slate-50 rounded-xl border border-slate-100"
             />

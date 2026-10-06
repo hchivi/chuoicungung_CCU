@@ -163,7 +163,7 @@ export default function AssociationApiMotionGraphic3D() {
           </div>
 
           {/* ===================================================================== */}
-          {/* NODE 2: [logo_only.png] CENTER HUB - 3 COLS */}
+          {/* NODE 2: [logo_onlyc.png] CENTER HUB - 3 COLS */}
           {/* ===================================================================== */}
           <div
             onClick={() => setActiveStep(2)}
@@ -186,17 +186,17 @@ export default function AssociationApiMotionGraphic3D() {
               </span>
             </div>
 
-            {/* 3D Gyroscope Glowing Center with logo_only.png */}
+            {/* 3D Gyroscope Glowing Center with logo_onlyc.png */}
             <div className="relative my-2">
               {/* Outer Glowing Spinning Rings */}
               <div className="absolute -inset-4 rounded-full border border-blue-400/40 border-dashed animate-[spin_10s_linear_infinite]"></div>
               <div className="absolute -inset-2 rounded-full border border-sky-400/50 border-dotted animate-[spin_6s_linear_infinite_reverse]"></div>
               <div className="absolute -inset-3 bg-gradient-to-r from-blue-500/20 via-sky-400/20 to-indigo-500/20 rounded-full blur-md animate-pulse"></div>
 
-              {/* Center logo_only.png without border box */}
+              {/* Center logo_onlyc.png without border box */}
               <div className="relative w-20 h-20 sm:w-24 sm:h-24 p-1 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <img
-                  src="/logo_only.png"
+                  src="/logo_onlyc.png"
                   alt="Chuỗi Cung Ứng Core Matchmaking"
                   className="w-full h-full object-contain filter drop-shadow-lg"
                 />

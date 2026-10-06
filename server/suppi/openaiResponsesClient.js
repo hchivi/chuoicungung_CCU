@@ -102,8 +102,14 @@ export async function runResponsesToolLoop({
     const calls = (response?.output || []).filter(item => item?.type === 'function_call');
     
     if (calls.length === 0) {
+      const text = response?.output_text || (response?.output || [])
+        .filter(item => item.type === 'message')
+        .flatMap(item => item.content || [])
+        .filter(item => item.type === 'output_text')
+        .map(item => item.text || '').join('\n');
+      if (!text.trim()) throw new Error('SUPPI chưa nhận được nội dung trả lời từ model.');
       return { 
-        text: response?.output_text || '', 
+        text,
         responseId: response?.id || null, 
         usage: response?.usage || null, 
         toolResults 

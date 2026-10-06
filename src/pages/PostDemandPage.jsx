@@ -419,7 +419,7 @@ export default function PostDemandPage() {
         {/* Breadcrumb có căn cứ */}
         <nav aria-label="Breadcrumb" className="text-xs text-slate-500 flex items-center space-x-2 flex-wrap">
           <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Chuỗi Cung Ứng" className="w-4 h-4 object-contain shrink-0" />
+            <img src="/logo_onlyc.png" alt="Chuỗi Cung Ứng" className="w-4 h-4 object-contain shrink-0" />
           </Link>
           <span className="text-slate-300">/</span>
           <Link to="/san-nhu-cau" className="hover:text-[#0052cc] transition font-medium">Nhu cầu mua sắm B2B</Link>

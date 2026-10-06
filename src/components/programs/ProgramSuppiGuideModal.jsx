@@ -40,7 +40,7 @@ export default function ProgramSuppiGuideModal({ onClose, onSelectTopic }) {
               src="/public/mascots/SUPPI_2.png" 
               alt="SUPPI Assistant" 
               className="w-12 h-12 object-contain bg-white/10 rounded-2xl p-1"
-              onError={(e) => { e.target.src = '/logo_only.png'; }}
+              onError={(e) => { e.target.src = '/logo_onlyc.png'; }}
             />
             <div>
               <div className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider mb-1">

@@ -1,23 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import {
-  Radio, CheckCircle2, AlertTriangle, ShieldCheck, ArrowRight,
-  Clock, MapPin, Calendar, Building2, Package, FileText, Video,
-  Send, HelpCircle, ChevronRight, Eye, QrCode, FileCheck,
-  Check, X, Sparkles, RefreshCw, Layers, ExternalLink, Info,
-  Smartphone, UserCheck, MessageSquare, AlertCircle, BookmarkCheck
-} from 'lucide-react';
-import {
-  REPRESENTATION_SCOPE_FLAGS,
-  DEFAULT_RESTRICTIONS,
-  REMOTE_PRESENCE_STATUSES,
-  SAMPLE_RETURN_OPTIONS,
-  EXCLUSION_ITEMS,
-  getEligibleRemotePrograms,
-  getAllRemoteRequests,
-  submitRemotePresenceRequest,
-  submitRemotePresenceInterest
-} from '../data/remotePresenceData.js';
+import { Video, Send, Check, AlertCircle, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
+import { REPRESENTATION_SCOPE_FLAGS, SAMPLE_RETURN_OPTIONS, getEligibleRemotePrograms, submitRemotePresenceRequest, submitRemotePresenceInterest } from '../data/remotePresenceData.js';
+
+import { PageIntro, Action, Photo, SectionHeading, ProcessStrip, ClosingNote, Modal } from '../components/services/EcosystemPageKit';
 
 export default function RemotePresenceServicePage() {
   const navigate = useNavigate();
@@ -129,7 +115,7 @@ export default function RemotePresenceServicePage() {
       return;
     }
     if (rawProducts.length > 3) {
-      setFormError('Chỉ được chọn tối đa 3 sản phẩm/năng lực trọng tâm phù hợp nhất (Section 7).');
+      setFormError('Chọn tối đa 3 sản phẩm hoặc năng lực trọng tâm để giới thiệu.');
       return;
     }
 
@@ -174,317 +160,132 @@ export default function RemotePresenceServicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 antialiased">
-      {/* 1. HERO SECTION (Section 2) */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-850 to-blue-950 text-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px] opacity-10"></div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold uppercase tracking-wider mb-6">
-            <Radio className="w-4 h-4 text-blue-400 animate-pulse" />
-            Dịch vụ B2B ủy thác nội dung chính ngạch
-          </div>
-          
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white max-w-4xl leading-tight">
-            GIỚI THIỆU DOANH NGHIỆP TẠI CHƯƠNG TRÌNH DÙ BẠN CHƯA THỂ CÓ MẶT
-          </h1>
-          
-          <p className="mt-6 text-lg sm:text-xl text-slate-300 max-w-3xl leading-relaxed">
-            Đưa hồ sơ, video, catalogue hoặc mẫu sản phẩm của doanh nghiệp đến chương trình phù hợp. Đội điều phối giới thiệu nội dung đã được duyệt, ghi nhận yêu cầu liên hệ và chuyển lại đầu việc theo phạm vi thỏa thuận.
-          </p>
-
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a
-              href="#danh-sach-chuong-trinh"
-              className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-base shadow-lg shadow-blue-600/30 transition-all gap-2"
-            >
-              <span>Tìm Chương Trình Có Thể Tham Gia Từ Xa</span>
-              <ChevronRight className="w-5 h-5" />
-            </a>
-            <a
-              href="#dang-ky-hien-dien"
-              className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-base transition-all gap-2"
-            >
-              <span>Gửi Hồ Sơ Để Được Tư Vấn</span>
-              <Send className="w-4 h-4 text-blue-400" />
-            </a>
-          </div>
-
-          {/* 4 Ranh giới cốt lõi (Section 2) */}
-          <div className="mt-12 pt-8 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-3.5 text-center">
-              <span className="text-xs font-semibold text-rose-300 block">KHÔNG PHẢI</span>
-              <p className="text-sm font-medium text-slate-200 mt-1">Dịch vụ bán lead ảo</p>
-            </div>
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-3.5 text-center">
-              <span className="text-xs font-semibold text-rose-300 block">KHÔNG PHẢI</span>
-              <p className="text-sm font-medium text-slate-200 mt-1">Cam kết doanh số / chốt đơn</p>
-            </div>
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-3.5 text-center">
-              <span className="text-xs font-semibold text-blue-300 block">ĐIỀU PHỐI VIÊN</span>
-              <p className="text-sm font-medium text-slate-200 mt-1">Chỉ nói trong kịch bản đã duyệt</p>
-            </div>
-            <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-3.5 text-center">
-              <span className="text-xs font-semibold text-emerald-300 block">BẢO MẬT & TRUNG LẬP</span>
-              <p className="text-sm font-medium text-slate-200 mt-1">Không thiên vị thuật toán Matching</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. CHƯƠNG TRÌNH ĐANG NHẬN HIỆN DIỆN TỪ XA (Section 3, 4, 5) */}
-      <section id="danh-sach-chuong-trinh" className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
-          <div>
-            <div className="text-blue-600 font-semibold text-xs tracking-wider uppercase mb-1">Cơ hội kết nối thực tế</div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Chương Trình Đang Nhận Hồ Sơ Hiện Diện Từ Xa</h2>
-            <p className="text-slate-600 text-sm mt-1 max-w-2xl">
-              Chỉ các chương trình có cấu hình <span className="font-semibold text-slate-800">remotePresenceEnabled</span> và còn hạn nộp hồ sơ mới được hiển thị tại đây.
-            </p>
-          </div>
-          <button
-            onClick={() => setShowInterestModal(true)}
-            className="text-sm font-semibold text-blue-700 hover:text-blue-800 bg-blue-50 border border-blue-200 px-4 py-2 rounded-lg self-start md:self-auto"
-          >
-            Đăng ký nhận tin khi có chương trình mới
-          </button>
+    <div className="ec-page ec-remote-page">
+      {/* ========================================================================= */}
+      {/* HERO SECTION (MATCHES IMAGE 2 LAYOUT & BALANCED COMPACT TITLE)            */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-hidden bg-white border-b border-slate-100 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
+        {/* Right Half Panoramic Showcase Visual with Smooth Gradient Fade matching Image 2 */}
+        <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+          <img 
+            src="/images/ecosystem/remote-presence.jpg" 
+            alt="Điều phối viên trao đổi cùng khách tại bàn trưng bày hồ sơ và mẫu cơ khí" 
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 lg:via-white/35 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
         </div>
 
-        {eligiblePrograms.length === 0 ? (
-          <div className="bg-white border border-slate-200 rounded-xl p-8 text-center shadow-sm">
-            <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-slate-800">Hiện chưa có chương trình phù hợp đang nhận hồ sơ từ xa</h3>
-            <p className="text-slate-600 text-sm mt-2 max-w-md mx-auto">
-              Ban điều phối đang khảo sát nhu cầu cho các kỳ tiếp theo. Hãy để lại thông tin để nhận thông báo sớm nhất.
+        {/* Content Container Aligned Exactly with Image 2 */}
+        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+          
+          {/* Breadcrumb */}
+          <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
+            <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <Link to="/dich-vu" className="hover:text-slate-900 transition">Dịch vụ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <span className="text-slate-900 font-medium" aria-current="page">Hiện diện từ xa</span>
+          </nav>
+
+          <div className="max-w-xl">
+            
+            {/* Category Label */}
+            <p className="text-sm font-semibold text-[#008060] tracking-wide mb-3">
+              Hiện diện từ xa &amp; Đại diện ủy thác
             </p>
-            <button
-              onClick={() => setShowInterestModal(true)}
-              className="mt-4 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm"
-            >
-              Đăng Ký Quan Tâm
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eligiblePrograms.map((prog) => (
-              <div
-                key={prog.id}
-                className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+
+            {/* H1 Title - Balanced Compact Size */}
+            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-black font-heading tracking-tight leading-[1.12] text-slate-950 uppercase mb-4">
+              Không đến trực tiếp.<br />Vẫn giới thiệu được năng lực.
+            </h1>
+
+            {/* Lede (Tagline) */}
+            <p className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug mb-3">
+              Đúng hồ sơ &amp; mẫu chi tiết.<br />Rõ việc để đi tiếp.
+            </p>
+
+            {/* Subtitle / Description */}
+            <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl mb-6">
+              Gửi hồ sơ, catalogue và mẫu sản phẩm. Đội điều phối giới thiệu nội dung đã duyệt, ghi nhận nhu cầu và chuyển về doanh nghiệp.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              <a
+                href="#danh-sach-chuong-trinh"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-b from-[#00A86B] to-[#008060] hover:from-[#00925c] hover:to-[#007054] text-white text-sm font-bold shadow-sm transition active:scale-95"
               >
-                <div className="p-5">
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-xs font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                      {prog.publicCode}
-                    </span>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                      Đang nhận hồ sơ
-                    </span>
-                  </div>
+                <span>Chọn chương trình</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
 
-                  <h3 className="text-base font-bold text-slate-900 leading-snug line-clamp-2 hover:text-blue-600">
-                    {prog.title}
-                  </h3>
+              <a
+                href="#dang-ky-hien-dien"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#008060] hover:text-[#005e46] transition p-2"
+              >
+                <span>Gửi hồ sơ</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
 
-                  <div className="mt-4 space-y-2 text-xs text-slate-600">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-slate-400 shrink-0" />
-                      <span>{prog.date} ({prog.time})</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                      <span className="line-clamp-1">{prog.location}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Building2 className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-                      <span className="line-clamp-1">{prog.category}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-rose-600 font-medium pt-1 border-t border-slate-100">
-                      <Clock className="w-4 h-4 shrink-0" />
-                      <span>Hạn chót: {new Date(prog.remoteSubmissionDeadline).toLocaleDateString('vi-VN')}</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Tiếp nhận mẫu:</span>
-                      <span className={prog.acceptsSample ? 'font-semibold text-emerald-700' : 'text-slate-400'}>
-                        {prog.acceptsSample ? 'Có (theo quy chuẩn)' : 'Không nhận mẫu'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Mức phí tham gia:</span>
-                      <span className="font-bold text-blue-700">
-                        {prog.feeType === 'FIXED' ? `${prog.feeAmount.toLocaleString('vi-VN')} đ` : 'Nhận báo giá'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-slate-50 border-t border-slate-100">
-                  <a
-                    href="#dang-ky-hien-dien"
-                    onClick={() => setSelectedProgramId(prog.id)}
-                    className="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg transition-colors gap-1.5"
-                  >
-                    <span>Chọn Chương Trình Này</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* 3. NỘI DUNG DOANH NGHIỆP CÓ THỂ GỬI & LƯU Ý SẢN PHẨM (Section 6, 7) */}
-      <section className="py-16 bg-white border-y border-slate-200 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Chuẩn bị nội dung</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Nội Dung Doanh Nghiệp Có Thể Gửi</h2>
-            <p className="text-slate-600 text-sm mt-2">
-              Chúng tôi không nhận tài liệu thô để tự chọn sản phẩm. Doanh nghiệp cần chọn <span className="font-bold text-slate-800">1–3 sản phẩm hoặc năng lực cốt lõi</span> phù hợp nhất với nhóm Buyer của sự kiện.
-            </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <FileText className="w-7 h-7 text-blue-600 mb-2" />
-              <h4 className="font-bold text-sm text-slate-800">Hồ Sơ Số (Profile)</h4>
-              <p className="text-xs text-slate-600 mt-1">Bản tóm tắt năng lực 1 trang, chứng chỉ ISO/IATF và diện tích xưởng.</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <Video className="w-7 h-7 text-indigo-600 mb-2" />
-              <h4 className="font-bold text-sm text-slate-800">Video 1 Phút</h4>
-              <p className="text-xs text-slate-600 mt-1">Clip ngắn giới thiệu dây chuyền máy móc, phòng QC và sản phẩm chủ lực.</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <FileCheck className="w-7 h-7 text-emerald-600 mb-2" />
-              <h4 className="font-bold text-sm text-slate-800">Catalogue / Tờ Rơi</h4>
-              <p className="text-xs text-slate-600 mt-1">Catalogue bản in hoặc brochure A4 song ngữ kèm mã QR quét tải số.</p>
-            </div>
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200">
-              <Package className="w-7 h-7 text-amber-600 mb-2" />
-              <h4 className="font-bold text-sm text-slate-800">Mẫu Đối Chứng</h4>
-              <p className="text-xs text-slate-600 mt-1">Vật mẫu thực tế (nếu chương trình chấp nhận) để khách đối chứng dung sai.</p>
-            </div>
-          </div>
-
-          {/* SUPPI Advisor Note (Section 7, 46) */}
-          <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-            <div className="text-xs text-blue-900 leading-relaxed">
-              <span className="font-bold">Gợi ý từ trợ lý SUPPI:</span> Đừng gửi danh bạ hàng ngàn mã sản phẩm. Tại một sự kiện B2B 1:1, Buyer chỉ có từ 5–10 phút để nắm bắt năng lực. Tập trung vào 1 dòng chi tiết máy hoặc thế mạnh sản xuất vượt trội nhất sẽ giúp điều phối viên giới thiệu hiệu quả gấp nhiều lần.
-            </div>
+          <div className="mt-8 pt-6 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 text-xs sm:text-sm text-slate-500">
+            <p className="font-medium text-slate-700">Mỗi sự kiện đều có biên bản bàn giao và danh sách đối tác quan tâm.</p>
+            <a href="#danh-sach-chuong-trinh" className="inline-flex items-center gap-1 text-[#008060] font-semibold hover:underline">
+              Xem các chương trình sắp diễn ra <ChevronDown size={16} aria-hidden="true" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* 4. PHẦN VIỆC ĐƯỢC THỰC HIỆN & PHẠM VI ĐẠI DIỆN (Section 10, 11, 12, 13) */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Cột trái: Phần việc được thực hiện */}
-          <div>
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Trách nhiệm đội ngũ</span>
-            <h2 className="text-2xl font-bold text-slate-900 mt-1">Phần Việc Được Thực Hiện Tại Sự Kiện</h2>
-            <p className="text-slate-600 text-sm mt-2 mb-6">
-              Đội điều phối địa phương thực thi nhiệm vụ theo đúng kịch bản đã được doanh nghiệp phê duyệt trước giờ khai mạc.
-            </p>
+      <div className="ec-outcomes ec-container">
+        {[['Hồ sơ đã duyệt', 'Giới thiệu đúng thông tin doanh nghiệp cung cấp.'], ['Mẫu & Catalogue', 'Có vật liệu để khách xem và trao đổi cụ thể.'], ['Ghi nhận nhu cầu', 'Chuyển câu hỏi và yêu cầu liên hệ về đầu mối.'], ['Bạn trực tiếp chốt', 'Báo giá và hợp đồng do doanh nghiệp quyết định.']].map(([title, text]) => <div key={title}><h3>{title}</h3><p>{text}</p></div>)}
+      </div>
 
-            <div className="space-y-3">
-              {[
-                'Kiểm tra và chuẩn hóa bộ tư liệu giới thiệu doanh nghiệp',
-                'Bố trí vị trí trưng bày catalogue, standee hoặc khay mẫu theo gói',
-                'Trình chiếu video giới thiệu xưởng trên màn hình kết nối luân phiên',
-                'Trình bày thông tin năng lực theo đúng kịch bản duyệt (Approved Script)',
-                'Hỗ trợ khách tham quan quét mã QR hồ sơ hoặc nhận tài liệu số',
-                'Ghi nhận câu hỏi chuyên môn và chuyển về đầu mối của doanh nghiệp',
-                'Thu thập danh thiếp / yêu cầu kết nối khi người tham gia có consent',
-                'Báo cáo nghiệm thu bằng chứng trưng bày và số liệu tương tác sau sự kiện'
-              ].map((task, idx) => (
-                <div key={idx} className="flex items-start gap-3 bg-white border border-slate-200 p-3 rounded-lg text-xs text-slate-700">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>{task}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Cột phải: Ranh giới & 11 Điều cấm tuyệt đối (Section 13) */}
-          <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-rose-500/20 border border-rose-400/30 text-rose-300 text-xs font-semibold uppercase mb-4">
-                <ShieldCheck className="w-4 h-4 text-rose-400" />
-                Ranh giới đại diện & Điều cấm tuyệt đối
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Đội Điều Phối KHÔNG Phải Là Đội Sales Bán Hàng</h3>
-              <p className="text-slate-300 text-xs leading-relaxed mb-6">
-                Để bảo vệ quyền lợi thương mại và bí mật kinh doanh của doanh nghiệp, điều phối viên tại hiện trường tuân thủ nghiêm ngặt 11 nguyên tắc cấm:
-              </p>
-
-              <div className="space-y-2 text-xs text-slate-300">
-                {DEFAULT_RESTRICTIONS.slice(0, 7).map((res) => (
-                  <div key={res.id} className="flex items-start gap-2.5">
-                    <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                    <span>{res.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400 italic">
-              Khi Buyer hỏi giá hoặc yêu cầu kỹ thuật chuyên sâu, điều phối viên ghi nhận và chuyển thành phiếu <span className="text-amber-300 font-semibold">QUOTE_REQUESTED</span> để doanh nghiệp tự mình phản hồi.
-            </div>
-          </div>
+      <section className="ec-section ec-container ec-pair">
+        <Photo src="/images/services/matchmaking-samples-v1.jpg" alt="Catalogue và các mẫu chi tiết cơ khí trên bàn trao đổi" />
+        <div className="ec-feature-copy">
+          <h2>Mang đúng phần khách cần xem.</h2>
+          <p>Chọn tối đa 3 sản phẩm hoặc năng lực trọng tâm. Mỗi hồ sơ có tài liệu được phép giới thiệu và một người phụ trách phản hồi.</p>
+          <ul className="ec-feature-list">
+            {['Hồ sơ năng lực và thông tin liên hệ.', 'Video ngắn, catalogue hoặc mẫu phù hợp.', 'Câu hỏi cần ghi nhận và phạm vi được giới thiệu.'].map(text => <li key={text}><Check size={20} strokeWidth={1.5} aria-hidden="true" />{text}</li>)}
+          </ul>
+          <p className="ec-note">Điều phối viên không tự báo giá, đàm phán hay ký thay doanh nghiệp. Việc gửi mẫu, bảo quản và hoàn trả được thống nhất trước chương trình.</p>
+          <Action to="/dich-vu/truyen-thong-doanh-nghiep" secondary>Chuẩn bị hồ sơ & Video</Action>
         </div>
       </section>
 
-      {/* 5. ĐO LƯỜNG MINH BẠCH & TÁCH BẠCH METRIC (Section 18, 19, 47, 51) */}
-      <section className="py-16 bg-slate-100 border-y border-slate-200 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Báo cáo & Đo lường</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Báo Cáo Minh Bạch Từng Loại Tương Tác</h2>
-            <p className="text-slate-600 text-sm mt-2">
-              Chúng tôi tôn trọng sự thật và từ chối các số liệu gộp mơ hồ. Báo cáo nghiệm thu phân tách rõ ràng từng hành vi của khách tham quan:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="bg-white p-4 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-slate-400 block mb-1">CẤP ĐỘ 1: HIỂN THỊ</span>
-              <p className="text-base font-bold text-slate-800">Lượt Xem Hồ Sơ & Video</p>
-              <p className="text-xs text-slate-500 mt-1">Số lần mở hồ sơ số hoặc xem clip xưởng tại màn hình</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-indigo-500 block mb-1">CẤP ĐỘ 2: TƯƠNG TÁC</span>
-              <p className="text-base font-bold text-slate-800">Quét QR & Mở Catalogue</p>
-              <p className="text-xs text-slate-500 mt-1">Khách chủ động lưu tài liệu về điện thoại</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-amber-500 block mb-1">CẤP ĐỘ 3: QUAN TÂM</span>
-              <p className="text-base font-bold text-slate-800">Yêu Cầu Liên Hệ Có Consent</p>
-              <p className="text-xs text-slate-500 mt-1">Danh thiếp và yêu cầu kết nối được đồng ý chia sẻ</p>
-            </div>
-            <div className="bg-white p-4 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-emerald-600 block mb-1">CẤP ĐỘ 4: CHUYỂN GIAO</span>
-              <p className="text-base font-bold text-slate-800">Câu Hỏi Buyer & RFQ</p>
-              <p className="text-xs text-slate-500 mt-1">Phiếu câu hỏi kỹ thuật chuyển giao cho xưởng phản hồi</p>
-            </div>
-          </div>
-
-          {/* Hard rule reminder (Section 18, 51) */}
-          <div className="mt-8 bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 leading-relaxed text-center max-w-3xl mx-auto">
-            <span className="font-bold">Nguyên tắc nghiệm thu cốt lõi:</span> Dịch vụ Hiện diện từ xa hoàn tất (<span className="font-semibold text-slate-900">COMPLETED</span>) khi toàn bộ quyền lợi và bằng chứng bàn giao đã được thực hiện đủ. Dịch vụ không cam kết thay cho kết quả chốt đơn thương mại của doanh nghiệp.
-          </div>
-        </div>
+      <section id="danh-sach-chuong-trinh" className="ec-section ec-container">
+        <SectionHeading title="Chọn nơi doanh nghiệp sẽ hiện diện.">Các chương trình trong hệ thống đang mở tiếp nhận hồ sơ từ xa.</SectionHeading>
+        {eligiblePrograms.length ? <div className="ec-programs">
+          {eligiblePrograms.map(prog => <article key={prog.id} className="ec-program">
+            <h3>{prog.title}</h3>
+            <div className="ec-program-meta"><span>{prog.date}</span><span>{prog.location}</span></div>
+            {prog.remoteSubmissionDeadline && <p>Hạn gửi hồ sơ: {prog.remoteSubmissionDeadline}</p>}
+            <div className="ec-actions"><Action onClick={() => {
+              setSelectedProgramId(prog.id);
+              document.getElementById('dang-ky-hien-dien')?.scrollIntoView({ behavior: 'smooth' });
+            }}>Chọn tham gia</Action></div>
+          </article>)}
+        </div> : <div className="ec-empty"><h3>Chưa có chương trình nhận hồ sơ từ xa.</h3><p>Để lại đầu mối liên hệ nếu doanh nghiệp muốn nhận thông tin về chương trình tiếp theo.</p></div>}
+        <div className="ec-actions"><Action onClick={() => setShowInterestModal(true)} secondary>Nhận tin chương trình mới</Action><Action to="/chuong-trinh" secondary>Xem tất cả chương trình</Action></div>
       </section>
 
-      {/* 6. FORM ĐĂNG KÝ HIỆN DIỆN TỪ XA (Section 32, 33, 34) */}
-      <section id="dang-ky-hien-dien" className="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      <section className="ec-section ec-container">
+        <SectionHeading title="Chuẩn bị một lần. Theo dõi từng bước." />
+        <ProcessStrip steps={[['Chọn chương trình', 'Xem ngành, địa bàn và hạn gửi hồ sơ.'], ['Duyệt nội dung', 'Chốt tài liệu, sản phẩm và phạm vi giới thiệu.'], ['Giới thiệu tại chỗ', 'Điều phối viên ghi nhận câu hỏi và đầu mối.'], ['Bạn tiếp nối', 'Doanh nghiệp trực tiếp phản hồi và làm việc.']]} />
+      </section>
+
+      <section id="dang-ky-hien-dien" className="ec-registration ec-container">
+        <div className="ec-form-shell ec-intake">
           <div className="bg-gradient-to-r from-blue-700 to-indigo-800 px-6 py-6 text-white">
             <div className="text-xs font-semibold uppercase tracking-wider text-blue-200">Tiếp nhận hồ sơ</div>
-            <h2 className="text-2xl font-bold mt-1">Đăng Ký Hiện Diện Từ Xa</h2>
+            <h2 className="text-2xl font-bold mt-1">Gửi hồ sơ hiện diện từ xa</h2>
             <p className="text-sm text-blue-100 mt-1">
               Điền thông tin doanh nghiệp và sản phẩm trọng tâm để được bộ phận điều phối thẩm định phạm vi giới thiệu.
             </p>
@@ -495,10 +296,10 @@ export default function RemotePresenceServicePage() {
               <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
                 <Check className="w-8 h-8 stroke-[3]" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900">Tiếp Nhận Hồ Sơ Thành Công!</h3>
+              <h3 className="text-2xl font-bold text-slate-900">Hồ sơ đã được ghi nhận</h3>
               <p className="text-slate-600 text-sm max-w-lg mx-auto">
                 Mã hồ sơ yêu cầu: <span className="font-mono font-bold text-blue-700 text-base">{submittedRequestCode}</span>.
-                Điều phối viên khu vực sẽ liên hệ với đầu mối phản hồi trong vòng 24 giờ làm việc để thống nhất kịch bản giới thiệu.
+                Bước tiếp theo là thống nhất phạm vi giới thiệu với đầu mối phản hồi của doanh nghiệp.
               </p>
               <div className="pt-4 flex justify-center gap-3">
                 <button
@@ -518,7 +319,7 @@ export default function RemotePresenceServicePage() {
           ) : (
             <form onSubmit={handleFormSubmit} className="p-6 sm:p-8 space-y-6">
               {formError && (
-                <div className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center gap-2">
+                <div role="alert" className="p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{formError}</span>
                 </div>
@@ -526,14 +327,17 @@ export default function RemotePresenceServicePage() {
 
               {/* 1. Chọn chương trình */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                <label htmlFor="remote-field-1" className="block text-xs font-bold text-slate-700 uppercase mb-2">
                   1. Chương trình tham gia từ xa <span className="text-rose-500">*</span>
                 </label>
-                <select
+                <select id="remote-field-1"
+                  required
+                  disabled={!eligiblePrograms.length}
                   value={selectedProgramId}
                   onChange={(e) => setSelectedProgramId(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-lg text-sm text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
+                  {!eligiblePrograms.length && <option value="">Chưa có chương trình nhận hồ sơ</option>}
                   {eligiblePrograms.map((prog) => (
                     <option key={prog.id} value={prog.id}>
                       [{prog.publicCode}] {prog.title} ({prog.date})
@@ -545,10 +349,10 @@ export default function RemotePresenceServicePage() {
               {/* 2. Thông tin doanh nghiệp */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                  <label htmlFor="remote-field-2" className="block text-xs font-bold text-slate-700 uppercase mb-2">
                     2. Tên doanh nghiệp <span className="text-rose-500">*</span>
                   </label>
-                  <input
+                  <input id="remote-field-2"
                     type="text"
                     required
                     placeholder="VD: Công ty Cơ khí Chính xác ABC"
@@ -558,10 +362,10 @@ export default function RemotePresenceServicePage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
+                  <label htmlFor="remote-field-3" className="block text-xs font-bold text-slate-700 uppercase mb-2">
                     Mã số thuế (Tùy chọn)
                   </label>
-                  <input
+                  <input id="remote-field-3"
                     type="text"
                     placeholder="VD: 0312345678"
                     value={taxCode}
@@ -574,12 +378,12 @@ export default function RemotePresenceServicePage() {
               {/* 3. Sản phẩm trọng tâm (1-3 sản phẩm) */}
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="block text-xs font-bold text-slate-700 uppercase">
+                  <label htmlFor="remote-products" className="block text-xs font-bold text-slate-700 uppercase">
                     3. Sản phẩm / Năng lực cốt lõi muốn giới thiệu (Tối đa 3) <span className="text-rose-500">*</span>
                   </label>
                   <span className="text-xs text-slate-500">Mỗi sản phẩm cách nhau bởi dấu phẩy hoặc xuống dòng</span>
                 </div>
-                <textarea
+                <textarea id="remote-products"
                   rows={2}
                   required
                   placeholder="VD: Gia công đồ gá Jig kiểm tra; Tiện chi tiết nhôm chính xác; Đúc áp lực vỏ động cơ"
@@ -611,8 +415,8 @@ export default function RemotePresenceServicePage() {
                   <div className="mt-4 pt-4 border-t border-slate-200 space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       <div className="sm:col-span-2">
-                        <label className="block text-xs font-semibold text-slate-600 mb-1">Mô tả mẫu sản phẩm</label>
-                        <input
+                        <label htmlFor="remote-field-4" className="block text-xs font-semibold text-slate-600 mb-1">Mô tả mẫu sản phẩm</label>
+                        <input id="remote-field-4"
                           type="text"
                           placeholder="VD: 02 chi tiết trục tiện mẫu kích thước 15x5cm"
                           value={sampleDetails}
@@ -621,8 +425,8 @@ export default function RemotePresenceServicePage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-semibold text-slate-600 mb-1">Số lượng mẫu</label>
-                        <input
+                        <label htmlFor="remote-field-5" className="block text-xs font-semibold text-slate-600 mb-1">Số lượng mẫu</label>
+                        <input id="remote-field-5"
                           type="number"
                           min={1}
                           max={5}
@@ -634,8 +438,8 @@ export default function RemotePresenceServicePage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-600 mb-1">Phương án xử lý mẫu sau sự kiện</label>
-                      <select
+                      <label htmlFor="remote-field-6" className="block text-xs font-semibold text-slate-600 mb-1">Phương án xử lý mẫu sau sự kiện</label>
+                      <select id="remote-field-6"
                         value={returnOption}
                         onChange={(e) => setReturnOption(e.target.value)}
                         className="w-full px-3 py-2 bg-white border border-slate-300 rounded text-xs text-slate-800"
@@ -647,7 +451,7 @@ export default function RemotePresenceServicePage() {
                         ))}
                       </select>
                       <span className="text-[11px] text-slate-500 block mt-1">
-                        Lưu ý: Doanh nghiệp chịu cước phí chuyển phát mẫu hai chiều theo quy định (Section 25).
+                        Cước gửi và hoàn trả mẫu cần được xác nhận trước chương trình.
                       </span>
                     </div>
                   </div>
@@ -656,13 +460,13 @@ export default function RemotePresenceServicePage() {
 
               {/* 5. Đầu mối phản hồi của doanh nghiệp */}
               <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
-                <label className="block text-xs font-bold text-slate-800 uppercase mb-3">
+                <h3 className="text-base mb-3">
                   5. Đầu Mối Tiếp Nhận Câu Hỏi & Báo Giá (Responder) <span className="text-rose-500">*</span>
-                </label>
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Họ tên người phụ trách</label>
-                    <input
+                    <label htmlFor="remote-field-7" className="block text-xs font-semibold text-slate-600 mb-1">Họ tên người phụ trách</label>
+                    <input id="remote-field-7"
                       type="text"
                       required
                       placeholder="VD: Trần Văn Minh"
@@ -672,8 +476,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Chức vụ / Vai trò</label>
-                    <input
+                    <label htmlFor="remote-field-8" className="block text-xs font-semibold text-slate-600 mb-1">Chức vụ / Vai trò</label>
+                    <input id="remote-field-8"
                       type="text"
                       placeholder="VD: Giám đốc Kỹ thuật / Trưởng phòng Kinh doanh"
                       value={responderRole}
@@ -682,8 +486,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại liên hệ</label>
-                    <input
+                    <label htmlFor="remote-field-9" className="block text-xs font-semibold text-slate-600 mb-1">Số điện thoại liên hệ</label>
+                    <input id="remote-field-9"
                       type="tel"
                       required
                       placeholder="VD: 0912 345 678"
@@ -693,8 +497,8 @@ export default function RemotePresenceServicePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">Email nhận câu hỏi Buyer</label>
-                    <input
+                    <label htmlFor="remote-field-10" className="block text-xs font-semibold text-slate-600 mb-1">Email nhận câu hỏi Buyer</label>
+                    <input id="remote-field-10"
                       type="email"
                       required
                       placeholder="VD: minh.tv@congty.com"
@@ -705,9 +509,9 @@ export default function RemotePresenceServicePage() {
                   </div>
                 </div>
 
-                <div className="mt-3 flex items-center justify-between text-xs text-slate-600">
-                  <span>Thời gian phản hồi cam kết (SLA):</span>
-                  <select
+                <div className="mt-3 grid gap-2 text-xs text-slate-600">
+                  <label htmlFor="remote-response-time">Thời gian doanh nghiệp cam kết phản hồi:</label>
+                  <select id="remote-response-time"
                     value={slaHours}
                     onChange={(e) => setSlaHours(Number(e.target.value))}
                     className="bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-800"
@@ -722,7 +526,7 @@ export default function RemotePresenceServicePage() {
               {/* 6. Phạm vi đại diện */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-2">
-                  6. Phạm vi cho phép điều phối viên đại diện (Section 12)
+                  6. Phạm vi được phép giới thiệu
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   {Object.values(REPRESENTATION_SCOPE_FLAGS).map((scope) => (
@@ -761,10 +565,11 @@ export default function RemotePresenceServicePage() {
 
                 <button
                   type="submit"
-                  className="mt-6 w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2"
+                  disabled={!eligiblePrograms.length}
+                  className="mt-6 w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-xl shadow-lg shadow-blue-600/20 transition-transform flex items-center justify-center gap-2"
                 >
                   <Send className="w-5 h-5" />
-                  <span>Gửi Hồ Sơ Đăng Ký Hiện Diện Từ Xa</span>
+                  <span>Gửi hồ sơ</span>
                 </button>
               </div>
             </form>
@@ -772,127 +577,26 @@ export default function RemotePresenceServicePage() {
         </div>
       </section>
 
-      {/* 7. FAQ & CHÍNH SÁCH BẢO HỘ THƯƠNG HIỆU */}
-      <section className="py-16 bg-slate-100 border-t border-slate-200 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto space-y-6">
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-bold text-slate-900">Câu Hỏi Thường Gặp & Cam Kết Minh Bạch</h3>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-white p-5 rounded-xl border border-slate-200">
-              <h4 className="font-bold text-sm text-slate-800">
-                Nếu đối tác tham quan hỏi giá trực tiếp tại bàn thì điều phối viên xử lý thế nào?
-              </h4>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Điều phối viên tuân thủ nghiêm ngặt quy định: không tự ý phát ngôn về giá cả. Chúng tôi ghi nhận chính xác nhu cầu số lượng, quy cách vào phiếu <span className="font-semibold text-blue-700">QUOTE_REQUESTED</span> và chuyển tiếp về đầu mối của doanh nghiệp qua Zalo/Email để quý công ty trực tiếp gửi báo giá chính thức.
-              </p>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-slate-200">
-              <h4 className="font-bold text-sm text-slate-800">
-                Hiện diện từ xa có giúp tăng điểm Matching hoặc được gắn tick xanh không?
-              </h4>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Không. Thuật toán kết nối SupplierMatching hoàn toàn độc lập và trung lập, chỉ dựa trên năng lực xưởng, máy móc và vị trí địa lý. Mua gói hiện diện từ xa không làm tăng điểm ưu ái và không thay thế cho quy trình thẩm định cấp tick xanh (Section 22, 40).
-              </p>
-            </div>
-
-            <div className="bg-white p-5 rounded-xl border border-slate-200">
-              <h4 className="font-bold text-sm text-slate-800">
-                Nếu chương trình bị hoãn hoặc hủy vì lý do bất khả kháng?
-              </h4>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                Bản ghi yêu cầu và quyền lợi của doanh nghiệp được bảo lưu 100% trong hệ thống. Ban điều phối sẽ hỗ trợ chuyển sang kỳ tổ chức tiếp theo hoặc hoàn trả chi phí/hàng mẫu theo hợp đồng thỏa thuận (Section 62).
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="ec-section ec-container ec-qa">
+        <div><h3>Khách hỏi giá thì sao?</h3><p>Điều phối viên ghi lại số lượng, quy cách và thông tin liên hệ để doanh nghiệp tự gửi báo giá.</p></div>
+        <div><h3>Có được ưu tiên kết quả tìm kiếm?</h3><p>Không. Dịch vụ hiện diện không thay thế xác minh năng lực và không thay đổi matching nguồn cung.</p></div>
       </section>
 
-      {/* MODAL: ĐĂNG KÝ QUAN TÂM KHI CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP */}
-      {showInterestModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
-            <button
-              onClick={() => { setShowInterestModal(false); setInterestSuccess(false); }}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      <ClosingNote title="Chưa có bộ hồ sơ sẵn sàng?" description="Chuẩn hóa hồ sơ, hình ảnh và video trước khi gửi doanh nghiệp đến một chương trình.">
+        <Action to="/dich-vu/truyen-thong-doanh-nghiep">Xem dịch vụ nội dung</Action>
+      </ClosingNote>
 
-            {interestSuccess ? (
-              <div className="text-center py-6 space-y-3">
-                <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
-                <h4 className="text-lg font-bold text-slate-900">Đã Lưu Thông Tin Quan Tâm!</h4>
-                <p className="text-xs text-slate-600">
-                  Khi có chương trình tại địa bàn hoặc ngành hàng phù hợp, điều phối viên sẽ gửi thông báo sớm nhất cho quý doanh nghiệp.
-                </p>
-                <button
-                  onClick={() => { setShowInterestModal(false); setInterestSuccess(false); }}
-                  className="mt-4 px-4 py-2 bg-blue-600 text-white text-xs font-semibold rounded-lg"
-                >
-                  Đóng
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleInterestSubmit} className="space-y-4">
-                <div>
-                  <h4 className="text-base font-bold text-slate-900">Đăng Ký Nhận Thông Báo Chương Trình</h4>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Nhận thông tin khi có sự kiện kết nối mở cổng hiện diện từ xa tại tỉnh thành của bạn.
-                  </p>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Tên doanh nghiệp</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="VD: Công ty Cơ khí Việt Hàn"
-                    value={interestOrg}
-                    onChange={(e) => setInterestOrg(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Người liên hệ</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="VD: Nguyễn Văn Nam"
-                    value={interestContact}
-                    onChange={(e) => setInterestContact(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Số điện thoại Zalo</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="VD: 0987 654 321"
-                    value={interestPhone}
-                    onChange={(e) => setInterestPhone(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded text-xs text-slate-800"
-                  />
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg transition-colors"
-                  >
-                    Xác Nhận Đăng Ký
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+      {showInterestModal && <Modal title="Nhận tin chương trình mới" onClose={() => { setShowInterestModal(false); setInterestSuccess(false); }}>
+        {interestSuccess ? <div role="status"><h3>Thông tin đã được ghi nhận.</h3><p>Doanh nghiệp đã đăng ký quan tâm chương trình hiện diện từ xa.</p><div className="ec-actions"><Action onClick={() => { setShowInterestModal(false); setInterestSuccess(false); }}>Đóng</Action></div></div> :
+          <form onSubmit={handleInterestSubmit} className="ec-form-shell space-y-4">
+            <p>Để lại đầu mối nhận thông tin. Việc đăng ký không tạo yêu cầu tham gia hay nghĩa vụ thanh toán.</p>
+            <div><label htmlFor="interest-company">Tên doanh nghiệp</label><input id="interest-company" className="w-full" required value={interestOrg} onChange={e => setInterestOrg(e.target.value)} autoComplete="organization" /></div>
+            <div><label htmlFor="interest-contact">Người liên hệ</label><input id="interest-contact" className="w-full" required value={interestContact} onChange={e => setInterestContact(e.target.value)} autoComplete="name" /></div>
+            <div><label htmlFor="interest-phone">Số điện thoại</label><input id="interest-phone" className="w-full" type="tel" required value={interestPhone} onChange={e => setInterestPhone(e.target.value)} autoComplete="tel" /></div>
+            <p className="text-sm">Khi gửi, bạn đồng ý để CCU liên hệ về chương trình hiện diện từ xa.</p>
+            <button type="submit" className="ec-button">Đăng ký nhận tin</button>
+          </form>}
+      </Modal>}
     </div>
   );
 }

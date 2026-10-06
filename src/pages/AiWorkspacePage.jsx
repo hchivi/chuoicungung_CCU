@@ -25,7 +25,7 @@ import {
 import { PROGRAMS_DATA } from '../data/programsData';
 import { stageSuppliers } from '../data/stageSuppliersData';
 import { STRATEGIC_FOUNDING_PARTNERS } from '../data/strategicFoundingPartners';
-import { askGeminiSourcingAgent } from '../services/geminiSourcingService';
+import { sendDifyMessage, resetAssistantConversation } from '../services/difyService';
 import FormattedAiMessage from '../components/FormattedAiMessage';
 
 // Suggested Tasks by Role based on SUPPICHAINY.txt
@@ -941,6 +941,7 @@ export default function AiWorkspacePage() {
 
   // Start new chat
   const handleNewChat = () => {
+    resetAssistantConversation();
     const newConv = {
       id: 'conv_' + Date.now(),
       entityType: null,
@@ -2205,198 +2206,46 @@ export default function AiWorkspacePage() {
   };
 
   // Submit Prompt to Suppi & Chainy
-  const handleSendMessage = (textToSend) => {
+  const handleSendMessage = async (textToSend) => {
     const query = (textToSend || inputPrompt).trim();
     if (!query || isProcessing) return;
-
     const userRoleObj = ROLES.find(r => r.id === selectedRole) || ROLES[0];
-
-    // Append user message
-    const userMsg = {
-      id: Date.now(),
-      sender: 'user',
-      role: userRoleObj.label,
-      text: query,
+    setMessages(prev => [...prev, {
+      id: Date.now(), sender: 'user', role: userRoleObj.label, text: query,
       timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages(prev => [...prev, userMsg]);
+    }]);
     setInputPrompt('');
     setIsProcessing(true);
-
-    // Add to history
-    setChatHistory(prev => [
-      { id: Date.now(), title: query.slice(0, 38) + (query.length > 38 ? '...' : ''), time: 'Vừa xong', role: userRoleObj.label },
-      ...prev.slice(0, 8)
-    ]);
-
-    // Check if we are currently in an active REQUIREMENT DRAFT and user is providing follow-up answers/refinements
-    const activeDraft = currentDraft || conversation.activeEntityDraft;
-    const isAlreadyNeedEntity = conversation.entityType === 'need' && activeDraft;
-    const lowerQuery = query.toLowerCase();
-
-    // Check if user is explicitly switching to another distinct topic
-    const isTopicSwitch =
-      lowerQuery.includes('suppi là gì') ||
-      lowerQuery.includes('chainy là ai') ||
-      lowerQuery.includes('suppi là ai') ||
-      lowerQuery.includes('chainy là gì') ||
-      lowerQuery.includes('tài trợ') ||
-      lowerQuery.includes('sponsor') ||
-      lowerQuery.includes('thị trường việt nam') ||
-      lowerQuery.includes('fdi') ||
-      lowerQuery.includes('đối tác sáng lập') ||
-      lowerQuery.includes('ngày hội') ||
-      lowerQuery.includes('hội chợ') ||
-      lowerQuery.includes('gọi vốn');
-
-    if (isAlreadyNeedEntity && !isTopicSwitch) {
-      // 5. MỖI CÂU TRẢ LỜI TIẾP THEO CỦA USER CẬP NHẬT DRAFT REALTIME
-      const updatedDraft = updateRequirementDraftRealtime({
-        prevDraft: activeDraft,
-        newText: query,
-        roleLabel: userRoleObj.label,
-        currentUser
-      });
-
-      setCurrentDraft(updatedDraft);
-      try {
-        localStorage.setItem('ccu_requirement_draft', JSON.stringify(updatedDraft));
-        localStorage.setItem('ccu_draft_' + updatedDraft.id, JSON.stringify(updatedDraft));
-      } catch (e) {}
-
-      const updatedConv = {
-        ...conversation,
-        entityType: 'need',
-        entityId: updatedDraft.id,
-        currentIntent: 'BUYER_REQUIREMENT',
-        activeEntityDraft: updatedDraft
-      };
-      setConversation(updatedConv);
-      try {
-        localStorage.setItem('ccu_active_conversation', JSON.stringify(updatedConv));
-      } catch (e) {}
-
-      setTimeout(() => {
-        const aiResponse = {
-          id: Date.now() + 1,
-          sender: 'ai',
-          intent: 'BUYER_REQUIREMENT',
-          entityType: 'need',
-          entityId: updatedDraft.id,
-          draft: updatedDraft,
-          clarification: {
-            question: "SUPPI đã cập nhật trực tiếp vào bản nháp nhu cầu. Bạn muốn làm rõ thêm thông tin nào trước khi xem lại form?",
-            options: [
-              "Thời gian nhận hàng đợt 1: Trong 2 tuần",
-              "Hình thức thanh toán: Tạm ứng 30% - Thanh toán theo lô",
-              "Bổ sung quy cách đóng gói: Thùng 50 bộ có bọc nilon"
-            ]
-          },
-          suppi: {
-            name: "SUPPI",
-            role: "Trinh sát Nguồn cung B2B",
-            avatar: "/mascots/SUPPI_2.png",
-            color: "blue",
-            message: `✓ SUPPI đã cập nhật bản nháp nhu cầu #${updatedDraft.id} realtime theo phản hồi của bạn. Độ hoàn thiện hồ sơ hiện đạt ${updatedDraft.completenessScore}%. Bạn có thể bấm "Xem & hoàn thiện nhu cầu" bất kỳ lúc nào để chuyển sang form chuẩn hóa mà không phải nhập lại.`,
-            findings: [
-              {
-                name: updatedDraft.location?.includes('Đồng Nai') ? "Công ty Cổ phần May Mặc Đông Nam" : "Công ty May Công Nghiệp Tiêu Chuẩn CCU",
-                location: updatedDraft.industrialParkId || updatedDraft.location || "Đồng Nai",
-                matchRate: "98%",
-                kyc: "KYC Kim Cương",
-                phase: "Pha 4.2 - May mặc công nghiệp & Đồng phục",
-                capacity: "Đáp ứng đúng thông số vừa bổ sung: " + (updatedDraft.specifications?.slice(0, 50) || "Đạt chuẩn ISO")
-              }
-            ]
-          },
-          chainy: {
-            name: "CHAINY",
-            role: "Điều phối & Đôn đốc",
-            avatar: "/mascots/CHAINY_2.png",
-            color: "pink",
-            actions: [
-              { title: "Xem & hoàn thiện nhu cầu trên form chuẩn", desc: `Mở /dang-nhu-cau?draft=${updatedDraft.id} với dữ liệu đã điền sẵn 100%.` },
-              { title: "Khởi tạo RFQ và gửi NCC phù hợp", desc: "Gửi cấu hình nhu cầu cho các xưởng đã xác thực." }
-            ]
-          },
-          conversation: updatedConv,
-          timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-        };
-
-        setMessages(prev => [...prev, aiResponse]);
-        setIsProcessing(false);
-      }, 700);
-      return;
-    }
-
-    // 1. CLASSIFY INTENT FIRST (Section 9: Intent Router — Không phải tin nhắn nào cũng tạo nhu cầu)
-    const detectedIntent = classifyIntent(query, userRoleObj.id, conversation);
-
-    // 2. CREATE ENTITY DRAFT ACCORDING TO INTENT (Flexible Entity Linking)
-    const entityResult = createEntityDraft({
-      intent: detectedIntent,
-      query,
-      userRoleObj,
-      currentUser,
-      currentConv: conversation
-    });
-
-    // 3. UPDATE CONVERSATION ENTITY LINKS (conversation.entityType, conversation.entityId)
-    const updatedConv = {
-      id: conversation.id || ('conv_' + Date.now()),
-      entityType: entityResult.entityType,
-      entityId: entityResult.entityId,
-      currentIntent: detectedIntent,
-      activeEntityDraft: entityResult.draft
-    };
-    setConversation(updatedConv);
+    setChatHistory(prev => [{ id: Date.now(), title: query.slice(0, 38), time: 'Vừa xong', role: userRoleObj.label }, ...prev.slice(0, 8)]);
     try {
-      localStorage.setItem('ccu_active_conversation', JSON.stringify(updatedConv));
-    } catch (e) {}
-
-    // 4. SYNC TO CURRENT DRAFT IF INTENT IS PROCUREMENT NEED
-    if (entityResult.entityType === 'need' && entityResult.draft) {
-      setCurrentDraft(entityResult.draft);
-      try {
-        localStorage.setItem('ccu_requirement_draft', JSON.stringify(entityResult.draft));
-        localStorage.setItem('ccu_draft_' + entityResult.draft.id, JSON.stringify(entityResult.draft));
-      } catch (e) {}
-    }
-
-    // 5. ENRICHED SUPPI AI SOURCING AGENT (GEMINI 3.5 FLASH LITE WITH LOCAL FALLBACK)
-    (async () => {
-      try {
-        const liveAiAnswer = await askGeminiSourcingAgent({
-          query,
-          userRole: userRoleObj.label,
-          history: messages
-        });
-        if (liveAiAnswer && entityResult.suppi) {
-          entityResult.suppi.message = liveAiAnswer;
-          entityResult.suppi.isLiveAi = true;
-        }
-      } catch (err) {
-        console.warn('Gemini Sourcing Agent fallback triggered:', err);
-      }
-
-      const aiResponse = {
-        id: Date.now() + 1,
-        sender: 'ai',
-        intent: detectedIntent,
-        entityType: entityResult.entityType,
-        entityId: entityResult.entityId,
-        draft: entityResult.draft,
-        clarification: entityResult.clarification,
-        suppi: entityResult.suppi,
-        chainy: entityResult.chainy,
-        conversation: updatedConv,
+      const response = await sendDifyMessage({ query });
+      const nextConversation = { ...conversation, backendConversationId: response.conversation_id };
+      setConversation(nextConversation);
+      try { localStorage.setItem('ccu_active_conversation', JSON.stringify(nextConversation)); } catch {}
+      const findings = (response.results || []).map(item => ({
+        name: item.name, location: item.location || 'Chưa có địa bàn trong hồ sơ',
+        matchRate: 'Theo tiêu chí', kyc: item.verification_status === 'VERIFIED' ? 'Có trạng thái xác minh' : 'Chưa xác minh',
+        capacity: (item.match_signals || []).map(signal => signal.value).join('; ') || 'Cần xác nhận năng lực',
+        url: item.url
+      }));
+      if (response.draft) setCurrentDraft(response.draft);
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1, sender: 'ai', intent: 'GENERAL_QUESTION',
+        draft: response.draft || null, entityType: response.draft ? 'need' : null, entityId: response.draft?.id || null,
+        suppi: { name: 'SUPPI', role: 'Tìm nguồn có căn cứ', message: response.mode === 'SUPPI' ? response.answer : 'Ngữ cảnh tìm nguồn được giữ trong cuộc trao đổi; chưa thực hiện hành động kết nối bên ngoài.',
+          isLiveAi: response.engine === 'openai' || response.engine === 'dify', findings },
+        chainy: { name: 'CHAINY', role: 'Chuẩn bị kết nối — chưa thực thi', actions: response.mode === 'CHAINY' ? [{ title: 'Nội dung CHAINY', desc: response.answer }] : [] },
+        conversation: nextConversation,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-      };
-
-      setMessages(prev => [...prev, aiResponse]);
-      setIsProcessing(false);
-    })();
+      }]);
+    } catch (error) {
+      setMessages(prev => [...prev, {
+        id: Date.now() + 1, sender: 'ai', intent: 'GENERAL_QUESTION',
+        suppi: { name: 'SUPPI', role: 'Trợ lý CCU', message: error.message, findings: [], isLiveAi: false },
+        chainy: { name: 'CHAINY', role: 'Chưa thực hiện hành động bên ngoài', actions: [] },
+        timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+      }]);
+    } finally { setIsProcessing(false); }
   };
 
   const handleKeyDown = (e) => {
@@ -3112,8 +2961,11 @@ export default function AiWorkspacePage() {
                           }`}>
                             <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200/60">
                               <img 
-                                src={msg.mode === 'CHAINY' ? "/mascots/CHAINY_2.png" : "/mascots/SUPPI_2.png"}
+                                src={msg.mode === 'CHAINY' ? "/mascots/type_chainy.png" : "/mascots/type_suppi.png"}
                                 alt={msg.mode}
+                                onError={(e) => {
+                                  e.currentTarget.src = msg.mode === 'CHAINY' ? "/type_chainy.png" : "/type_suppi.png";
+                                }}
                                 className={`w-8 h-8 rounded-full object-cover border-2 shadow-xs shrink-0 ${
                                   msg.mode === 'CHAINY' ? 'border-rose-300' : 'border-blue-300'
                                 }`}
@@ -3122,7 +2974,7 @@ export default function AiWorkspacePage() {
                                 <span className={`font-black text-xs sm:text-sm uppercase tracking-wide font-heading block ${
                                   msg.mode === 'CHAINY' ? 'text-[#e11d48]' : 'text-[#0052cc]'
                                 }`}>
-                                  {msg.mode === 'CHAINY' ? 'CHAINY | Trợ lý kết nối' : 'SUPPI | Trợ lý tìm nguồn'}
+                                  {msg.mode === 'CHAINY' ? 'CHAINY | TRỢ LÝ KẾT NỐI' : 'SUPPI | TRỢ LÝ TÌM NGUỒN'}
                                 </span>
                                 <span className="text-[10px] text-slate-400">
                                   Lịch sử trao đổi từ Chat Widget

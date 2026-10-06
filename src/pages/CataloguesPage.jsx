@@ -21,7 +21,8 @@ import {
   RefreshCw,
   QrCode,
   Download,
-  AlertCircle
+  AlertCircle,
+  PlusCircle
 } from 'lucide-react';
 import { 
   getAllCatalogues, 
@@ -172,122 +173,124 @@ export default function CataloguesPage() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
       
-      {/* 1. Breadcrumbs */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <nav className="flex items-center space-x-2 text-xs text-slate-500 overflow-x-auto whitespace-nowrap">
-            <Link to="/" className="hover:text-blue-600 transition">Trang chủ</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="font-bold text-slate-800">Catalogue & Ấn Phẩm Doanh Nghiệp</span>
-          </nav>
+      {/* ========================================================================= */}
+      {/* 1. HERO SECTION (MATCHES IMAGE 2 LAYOUT & TEXT HIERARCHY)                */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-hidden bg-white border-b border-slate-100 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
+        
+        {/* Right Half Catalogue Showcase Visual with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+          <img 
+            src="/images/catalogue_hero.jpg" 
+            alt="B2B Supply Chain Catalogues & Publications" 
+            className="w-full h-full object-cover object-[62%_center] scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 lg:via-white/35 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
         </div>
-      </div>
 
-      {/* 2. Hero Section (Section 2 Spec 30.txt) */}
-      <header className="relative bg-gradient-to-b from-[#072847] via-[#0b3f6d] to-[#0052cc] text-white pt-10 sm:pt-14 pb-14 sm:pb-20 overflow-hidden">
-        {/* Subtle grid pattern background */}
-        <div 
-          className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" 
-        />
+        {/* Content Container Aligned Exactly with Image 2 */}
+        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+          
+          {/* Breadcrumb */}
+          <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
+            <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <span className="text-slate-900 font-medium" aria-current="page">Catalogue &amp; Ấn phẩm</span>
+          </nav>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="max-w-3xl space-y-4 sm:space-y-6">
+          <div className="max-w-xl">
             
-            {/* Top Pill */}
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-sky-200 text-xs font-bold uppercase tracking-wider backdrop-blur-xs">
-              <BookOpen className="w-3.5 h-3.5 text-amber-300" />
-              <span>Hạ Tầng Ấn Phẩm & Hồ Sơ Số Chuỗi Cung Ứng</span>
-            </div>
-
-            {/* H1 Title (Section 2) */}
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black font-heading leading-tight tracking-tight text-white">
-              CATALOGUE NHÀ CUNG ỨNG THEO NHU CẦU DOANH NGHIỆP
-            </h1>
-
-            {/* Subtitle (Section 2) */}
-            <p className="text-sm sm:text-base md:text-lg text-blue-100 leading-relaxed max-w-2xl font-normal">
-              Tìm hồ sơ nhà cung ứng theo chuyên mục, địa bàn hoặc chương trình kết nối. Mỗi ấn phẩm có thời điểm phát hành và mã QR dẫn trực tiếp về thông tin doanh nghiệp đang được cập nhật trên CHUOICUNGUNG.COM.
+            {/* Category Label */}
+            <p className="text-sm font-semibold text-[#008060] tracking-wide mb-3">
+              Ấn phẩm xúc tiến &amp; Hồ sơ số doanh nghiệp
             </p>
 
-            {/* CTA Buttons (Section 2) */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              {/* Primary CTA */}
+            {/* H1 Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">
+              Catalogue B2B<br />theo nhu cầu thật.
+            </h1>
+
+            {/* Lede (Tagline) */}
+            <p className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug mb-3">
+              Đúng hồ sơ năng lực.<br />Rõ dữ liệu xác thực.
+            </p>
+
+            {/* Description */}
+            <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl mb-6">
+              Tìm hồ sơ nhà cung ứng theo chuyên mục, địa bàn hoặc chương trình kết nối. Bản in luôn có mã QR trực tiếp tới dữ liệu sản phẩm và chứng nhận xác thực mới nhất.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <button
                 onClick={scrollToGrid}
                 type="button"
-                className="py-3 px-6 bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-950 font-black text-xs sm:text-sm rounded-xl transition shadow-lg flex items-center space-x-2 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-b from-[#00A86B] to-[#008060] hover:from-[#00925c] hover:to-[#007054] text-white text-sm font-bold shadow-sm transition active:scale-95 cursor-pointer"
               >
-                <span>XEM CATALOGUE</span>
+                <span>Xem catalogue</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {/* Secondary CTA */}
               <button
                 onClick={() => handleOpenParticipation()}
                 type="button"
-                className="py-3 px-6 bg-white/15 hover:bg-white/25 active:bg-white/30 border border-white/30 text-white font-bold text-xs sm:text-sm rounded-xl transition flex items-center space-x-2 backdrop-blur-xs cursor-pointer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#008060] hover:text-[#005e46] transition p-2 cursor-pointer"
               >
-                <Sparkles className="w-4 h-4 text-amber-300" />
-                <span>ĐĂNG KÝ GIỚI THIỆU DOANH NGHIỆP</span>
+                <span>Đăng ký giới thiệu doanh nghiệp</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
 
           </div>
         </div>
-      </header>
 
-      {/* 3. Core Ecosystem Philosophy Strip (Section 3: Catalogue KHÔNG PHẢI blog PDF tĩnh) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 relative z-20">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
-          
-          <div className="flex items-start space-x-3.5 pt-2 sm:pt-0 sm:px-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div className="space-y-0.5">
-              <div className="text-xs font-bold text-slate-900 font-heading">Doanh Nghiệp Đã Duyệt</div>
-              <div className="text-[11px] text-slate-500 leading-snug">
-                Chỉ hồ sơ đạt chuẩn KYC và được kiểm tra năng lực xưởng mới xuất bản.
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 2. STATS BAR (EXACT 4 STAT CARDS FROM IMAGE 2) */}
+      {/* ========================================================================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-10 sm:-mt-12 lg:-mt-14">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+            
+            <div className="p-2 sm:p-0 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">TIÊU CHUẨN KYC</span>
               </div>
+              <div className="text-base sm:text-lg font-black text-slate-950 font-heading tracking-tight">Doanh Nghiệp Đã Duyệt</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Chỉ hồ sơ đạt chuẩn KYC mới xuất bản</p>
             </div>
-          </div>
 
-          <div className="flex items-start space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-              <QrCode className="w-5 h-5" />
-            </div>
-            <div className="space-y-0.5">
-              <div className="text-xs font-bold text-slate-900 font-heading">QR Dẫn Về Hồ Sơ Số</div>
-              <div className="text-[11px] text-slate-500 leading-snug">
-                Bản in tĩnh luôn có cầu nối tới dữ liệu sản phẩm và chứng nhận mới nhất.
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">DỮ LIỆU ĐỒNG BỘ</span>
               </div>
+              <div className="text-base sm:text-lg font-black text-slate-950 font-heading tracking-tight">QR Dẫn Về Hồ Sơ Số</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Bản in liên kết trực tiếp dữ liệu sản phẩm</p>
             </div>
-          </div>
 
-          <div className="flex items-start space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-              <Printer className="w-5 h-5" />
-            </div>
-            <div className="space-y-0.5">
-              <div className="text-xs font-bold text-slate-900 font-heading">Số Liệu In Thực Tế</div>
-              <div className="text-[11px] text-slate-500 leading-snug">
-                Công bố chính xác số bản in xác nhận và số lượng đã phát hành.
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">MINH BẠCH ẤN BẢN</span>
               </div>
+              <div className="text-base sm:text-lg font-black text-slate-950 font-heading tracking-tight">Số Liệu In Thực Tế</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Công bố chính xác số lượng phát hành</p>
             </div>
-          </div>
 
-          <div className="flex items-start space-x-3.5 pt-3 sm:pt-0 sm:px-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
-              <Globe className="w-5 h-5" />
-            </div>
-            <div className="space-y-0.5">
-              <div className="text-xs font-bold text-slate-900 font-heading">Quy Trình Digital-First</div>
-              <div className="text-[11px] text-slate-500 leading-snug">
-                Phát hành bản số tương tác trước khi quyết định in ấn và phân phối.
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">TƯƠNG TÁC ĐA KÊNH</span>
               </div>
+              <div className="text-base sm:text-lg font-black text-slate-950 font-heading tracking-tight">Quy Trình Digital-First</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Bản số tương tác trước khi in ấn</p>
             </div>
-          </div>
 
+          </div>
         </div>
       </div>
 

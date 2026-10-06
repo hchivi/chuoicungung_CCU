@@ -217,12 +217,12 @@ export default function IndustrialParksPage() {
     <main className="space-y-10 pb-24 font-sans bg-[#FBFBFC] min-h-screen text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white">
       
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION (SECTION 5 SPEC 26.TXT)                                   */}
+      {/* 1. HERO SECTION (MATCHES IMAGE 2 LAYOUT & TEXT HIERARCHY)                */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[520px] flex items-center">
+      <section className="relative overflow-hidden bg-white border-b border-slate-100 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
         
-        {/* Right Half Modern Industrial Video */}
-        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+        {/* Right Half Modern Industrial Video with Smooth Gradient Blend */}
+        <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <video 
             autoPlay 
             loop 
@@ -232,7 +232,7 @@ export default function IndustrialParksPage() {
             disableRemotePlayback
             controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
             poster="/images/industrial_park_hero.jpg"
-            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
           >
             <source src="/images/industrial_drone_flycam.webm" type="video/webm" />
             <source src="/images/industrial_drone_flycam_480p.webm" type="video/webm" />
@@ -242,59 +242,58 @@ export default function IndustrialParksPage() {
               className="w-full h-full object-cover object-center scale-105"
             />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 lg:via-white/35 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
         </div>
 
-        {/* Hero Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
-          <div className="max-w-3xl space-y-5 sm:space-y-6">
+        {/* Content Container Aligned Exactly with Image 2 */}
+        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+          
+          {/* Breadcrumb */}
+          <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
+            <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <span className="text-slate-900 font-medium" aria-current="page">Khu công nghiệp &amp; Địa bàn</span>
+          </nav>
+
+          <div className="max-w-xl">
             
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
-              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="text-[#0052cc] font-bold">
-                Khu Công Nghiệp &amp; Hệ Sinh Thái Doanh Nghiệp
-              </span>
-            </nav>
-
-            {/* Authority Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
-              <span>ĐIỂM ĐIỀU PHỐI HỆ SINH THÁI DOANH NGHIỆP THEO ĐỊA BÀN KCN</span>
-            </div>
-
-            {/* H1 Title */}
-            <div className="space-y-1.5">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                Tìm khu công nghiệp phù hợp
-              </h1>
-            </div>
-
-            {/* Subtitle (Section 5) */}
-            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-2xl">
-              Khám phá nhà máy, nhu cầu, nguồn cung và chương trình kết nối theo từng khu công nghiệp và địa bàn. Chương trình và dịch vụ hỗ trợ doanh nghiệp theo địa bàn.
+            {/* Category Label */}
+            <p className="text-sm font-semibold text-[#008060] tracking-wide mb-3">
+              Hạ tầng &amp; Hệ sinh thái công nghiệp
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+            {/* H1 Title */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">
+              Quy hoạch KCN<br />hệ sinh thái địa bàn.
+            </h1>
+
+            {/* Lede (Tagline) */}
+            <p className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug mb-3">
+              Đúng địa bàn đầu tư.<br />Rõ liên kết hạ tầng.
+            </p>
+
+            {/* Subtitle / Description */}
+            <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl mb-6">
+              Khám phá nhà máy, nhu cầu, nguồn cung và chương trình kết nối theo từng khu công nghiệp và địa bàn. Dữ liệu chuẩn hóa hỗ trợ xúc tiến và hợp tác chuỗi cung ứng.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <a
                 href="#danh-sach-kcn"
-                className="px-6 py-3 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-b from-[#00A86B] to-[#008060] hover:from-[#00925c] hover:to-[#007054] text-white text-sm font-bold shadow-sm transition active:scale-95"
               >
-                <span>LỌC KCN</span>
+                <span>Lọc khu công nghiệp</span>
                 <ArrowRight className="w-4 h-4" />
               </a>
 
               <a
                 href="#ban-do-kcn"
-                className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading cursor-pointer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#008060] hover:text-[#005e46] transition p-2 cursor-pointer"
               >
-                <Compass className="w-4 h-4 text-[#0052cc]" />
-                <span>XEM BẢN ĐỒ</span>
+                <Compass className="w-4 h-4" />
+                <span>Xem bản đồ KCN</span>
               </a>
             </div>
 
@@ -307,51 +306,47 @@ export default function IndustrialParksPage() {
       {/* 2. ECOSYSTEM MACRO METRIC BANNER (Section 8, 9 - Không số liệu BĐS)       */}
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/5 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
             {/* Metric 1: KCN */}
-            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
-                <Building2 className="w-5 h-5" />
+            <div className="p-2 sm:p-3 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span>
+                <span>QUY HOẠCH QUỐC GIA</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">480+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Khu Công Nghiệp &amp; Cụm CN</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">480+</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Khu Công Nghiệp &amp; Cụm CN</p>
             </div>
 
             {/* Metric 2: Nhà máy FDI & Sản xuất */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Factory className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>XÁC THỰC HOẠT ĐỘNG</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">14.237+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Nhà Máy Hoạt Động Xác Thực</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">14.237+</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Nhà Máy Hoạt Động Xác Thực</p>
             </div>
 
             {/* Metric 3: Nhu cầu mở */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Target className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                <span>BÀI TOÁN BÊN MUA</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">100+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Nhu Cầu Mua Hàng &amp; Bài Toán KCN</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">100+</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Nhu Cầu Mua Hàng &amp; Bài Toán KCN</p>
             </div>
 
             {/* Metric 4: Chương trình kết nối */}
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Rocket className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-600"></span>
+                <span>XÚC TIẾN THƯƠNG MẠI</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">11+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Chương Trình Kết Nối Địa Bàn</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">11+</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Chương Trình Kết Nối Địa Bàn</p>
             </div>
 
           </div>
@@ -673,68 +668,83 @@ export default function IndustrialParksPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           
           {/* Service 1 */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
-            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-              <Rocket className="w-5 h-5" />
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-400 transition shadow-xs flex flex-col justify-between group">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">01 / SOURCING</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              </div>
+              <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug group-hover:text-emerald-700 transition">
+                Ngày Hội Chuỗi Cung Ứng KCN
+              </h3>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed">
+                Tổ chức phiên kết nối trực tiếp (Sourcing Day) theo cụm KCN trọng điểm nhằm thu hút NCC nội địa.
+              </p>
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
-              Ngày Hội Chuỗi Cung Ứng KCN
-            </h3>
-            <p className="text-[11.5px] text-slate-500 leading-relaxed">
-              Tổ chức phiên kết nối trực tiếp (Sourcing Day) theo cụm KCN trọng điểm nhằm thu hút NCC nội địa.
-            </p>
           </div>
 
           {/* Service 2 */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              <Handshake className="w-5 h-5" />
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-400 transition shadow-xs flex flex-col justify-between group">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">02 / MATCHING</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+              </div>
+              <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug group-hover:text-blue-700 transition">
+                Buyer–Supplier Matchmaking 1:1
+              </h3>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed">
+                Ghép nối phiên làm việc riêng tư giữa phòng mua hàng nhà máy FDI với nhà cung ứng đạt chuẩn.
+              </p>
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
-              Buyer–Supplier Matchmaking 1:1
-            </h3>
-            <p className="text-[11.5px] text-slate-500 leading-relaxed">
-              Ghép nối phiên làm việc riêng tư giữa phòng mua hàng nhà máy FDI với nhà cung ứng đạt chuẩn.
-            </p>
           </div>
 
           {/* Service 3 */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
-            <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
-              <Target className="w-5 h-5" />
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-400 transition shadow-xs flex flex-col justify-between group">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">03 / AUDIT</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              </div>
+              <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug group-hover:text-amber-700 transition">
+                Sourcing Theo Nhu Cầu Kỹ Thuật
+              </h3>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed">
+                Định vị và thẩm định xưởng gia công cơ khí, bao bì, tự động hóa phục vụ trực tiếp cho nhà máy.
+              </p>
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
-              Sourcing Theo Nhu Cầu Kỹ Thuật
-            </h3>
-            <p className="text-[11.5px] text-slate-500 leading-relaxed">
-              Định vị và thẩm định xưởng gia công cơ khí, bao bì, tự động hóa phục vụ trực tiếp cho nhà máy.
-            </p>
           </div>
 
           {/* Service 4 */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
-            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold">
-              <BookOpen className="w-5 h-5" />
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-400 transition shadow-xs flex flex-col justify-between group">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">04 / PROFILE</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+              </div>
+              <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug group-hover:text-purple-700 transition">
+                Kỷ Yếu Năng Lực &amp; Catalogue
+              </h3>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed">
+                Xuất bản danh bạ năng lực nhà cung ứng công nghiệp phụ trợ theo từng phân khu và địa phương.
+              </p>
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
-              Kỷ Yếu Năng Lực &amp; Catalogue
-            </h3>
-            <p className="text-[11.5px] text-slate-500 leading-relaxed">
-              Xuất bản danh bạ năng lực nhà cung ứng công nghiệp phụ trợ theo từng phân khu và địa phương.
-            </p>
           </div>
 
           {/* Service 5 */}
-          <div className="p-4 bg-white rounded-2xl border border-slate-200 space-y-2 hover:border-blue-400 transition shadow-2xs">
-            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center font-bold">
-              <Building2 className="w-5 h-5" />
+          <div className="p-4 bg-white rounded-2xl border border-slate-200 hover:border-slate-400 transition shadow-xs flex flex-col justify-between group">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 font-mono">05 / ECOSYSTEM</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+              </div>
+              <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug group-hover:text-teal-700 transition">
+                Liên Kết BQL &amp; Chủ Đầu Tư
+              </h3>
+              <p className="text-[11.5px] text-slate-500 leading-relaxed">
+                Phối hợp Ban Quản Lý Khu Kinh Tế / Ban Quản Lý KCN triển khai đề án gia tăng tỷ lệ nội địa hóa.
+              </p>
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug">
-              Liên Kết BQL &amp; Chủ Đầu Tư
-            </h3>
-            <p className="text-[11.5px] text-slate-500 leading-relaxed">
-              Phối hợp Ban Quản Lý Khu Kinh Tế / Ban Quản Lý KCN triển khai đề án gia tăng tỷ lệ nội địa hóa.
-            </p>
           </div>
 
         </div>

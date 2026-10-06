@@ -1,158 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Layers, ArrowRight, CheckCircle2, ChevronRight, Sparkles, 
-  Building2, Factory, Users, ShieldCheck, MapPin, Search, Compass,
-  FolderOpen, Zap, Landmark, Award, FileText, Check, Download,
-  Activity, ArrowUpRight
-} from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Compass, HardHat, Wrench, Factory, Users, Leaf, ChevronDown, Check, Building2, Network } from 'lucide-react';
 import { stagesData } from '../data/mockData';
-import InteractiveExplodedFlower3D from '../components/InteractiveExplodedFlower3D';
-import MoUModal from '../components/six-stages/MoUModal';
-import ThreeLayerKYCSection from '../components/six-stages/ThreeLayerKYCSection';
-import LiveMatchTicker from '../components/six-stages/LiveMatchTicker';
-import CaseStudiesSection from '../components/six-stages/CaseStudiesSection';
-import StickyPhaseCTA from '../components/six-stages/StickyPhaseCTA';
 import { useLanguage } from '../contexts/LanguageContext';
+import { resolveMapSelection, selectMapStage, selectMapPhase, getMapContext, mapKeywordHref, mapStageStyle } from './sixStagesMapUi';
+import SixStagesLifecycleBoard from './SixStagesLifecycleBoard';
+import './SixStagesMapPage.css';
 
-// 6 Primary Stage Themes
-const STAGE_THEMES = {
-  1: {
-    name: 'purple',
-    primary: '#8b5cf6',
-    activeTabClass: 'bg-gradient-to-r from-purple-700 to-indigo-700 text-white shadow-lg shadow-purple-900/25 ring-2 ring-purple-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-purple-50 text-slate-700 hover:text-purple-900',
-    tabBadgeActive: 'bg-white text-purple-950 font-black',
-    tabBadgeInactive: 'bg-purple-100 text-purple-800 font-bold',
-    phaseBadge: 'bg-purple-700 text-white',
-    phaseBadgeSelected: 'bg-purple-800 text-white',
-    phaseCardSelected: 'bg-purple-50/25 border-purple-500 shadow-xl ring-2 ring-purple-500/20 scale-[1.01]',
-    phaseActiveText: 'text-purple-700',
-    phaseActiveChevron: 'text-purple-600',
-    feedBorder: 'border-2 border-purple-200/90 shadow-purple-900/5',
-    feedPhaseBadge: 'bg-purple-700 text-white',
-    feedSubTitle: 'text-purple-600',
-    feedCtaBtn: 'bg-purple-50 hover:bg-purple-600 text-purple-900 hover:text-white',
-    stdCodeColor: 'text-purple-700',
-    counterBorder: 'border-purple-200/80 hover:border-purple-400',
-    counterText: 'text-purple-700',
-  },
-  2: {
-    name: 'emerald',
-    primary: '#10b981',
-    activeTabClass: 'bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg shadow-emerald-900/25 ring-2 ring-emerald-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-900',
-    tabBadgeActive: 'bg-white text-emerald-950 font-black',
-    tabBadgeInactive: 'bg-emerald-100 text-emerald-800 font-bold',
-    phaseBadge: 'bg-emerald-700 text-white',
-    phaseBadgeSelected: 'bg-emerald-800 text-white',
-    phaseCardSelected: 'bg-emerald-50/25 border-emerald-500 shadow-xl ring-2 ring-emerald-500/20 scale-[1.01]',
-    phaseActiveText: 'text-emerald-700',
-    phaseActiveChevron: 'text-emerald-600',
-    feedBorder: 'border-2 border-emerald-200/90 shadow-emerald-900/5',
-    feedPhaseBadge: 'bg-emerald-700 text-white',
-    feedSubTitle: 'text-emerald-600',
-    feedCtaBtn: 'bg-emerald-50 hover:bg-emerald-600 text-emerald-900 hover:text-white',
-    stdCodeColor: 'text-emerald-700',
-    counterBorder: 'border-emerald-200/80 hover:border-emerald-400',
-    counterText: 'text-emerald-700',
-  },
-  3: {
-    name: 'orange',
-    primary: '#f97316',
-    activeTabClass: 'bg-gradient-to-r from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-900/25 ring-2 ring-orange-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-orange-900',
-    tabBadgeActive: 'bg-white text-orange-950 font-black',
-    tabBadgeInactive: 'bg-orange-100 text-orange-800 font-bold',
-    phaseBadge: 'bg-orange-600 text-white',
-    phaseBadgeSelected: 'bg-orange-700 text-white',
-    phaseCardSelected: 'bg-orange-50/25 border-orange-500 shadow-xl ring-2 ring-orange-500/20 scale-[1.01]',
-    phaseActiveText: 'text-orange-700',
-    phaseActiveChevron: 'text-orange-600',
-    feedBorder: 'border-2 border-orange-200/90 shadow-orange-900/5',
-    feedPhaseBadge: 'bg-orange-600 text-white',
-    feedSubTitle: 'text-orange-600',
-    feedCtaBtn: 'bg-orange-50 hover:bg-orange-600 text-orange-900 hover:text-white',
-    stdCodeColor: 'text-orange-700',
-    counterBorder: 'border-orange-200/80 hover:border-orange-400',
-    counterText: 'text-orange-700',
-  },
-  4: {
-    name: 'blue',
-    primary: '#0284c7',
-    activeTabClass: 'bg-gradient-to-r from-blue-600 to-cyan-700 text-white shadow-lg shadow-blue-900/25 ring-2 ring-blue-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-900',
-    tabBadgeActive: 'bg-white text-blue-950 font-black',
-    tabBadgeInactive: 'bg-blue-100 text-blue-800 font-bold',
-    phaseBadge: 'bg-blue-600 text-white',
-    phaseBadgeSelected: 'bg-blue-700 text-white',
-    phaseCardSelected: 'bg-blue-50/25 border-blue-500 shadow-xl ring-2 ring-blue-500/20 scale-[1.01]',
-    phaseActiveText: 'text-blue-700',
-    phaseActiveChevron: 'text-blue-600',
-    feedBorder: 'border-2 border-blue-200/90 shadow-blue-900/5',
-    feedPhaseBadge: 'bg-blue-600 text-white',
-    feedSubTitle: 'text-blue-600',
-    feedCtaBtn: 'bg-blue-50 hover:bg-blue-600 text-blue-900 hover:text-white',
-    stdCodeColor: 'text-blue-700',
-    counterBorder: 'border-blue-200/80 hover:border-blue-400',
-    counterText: 'text-blue-700',
-  },
-  5: {
-    name: 'amber',
-    primary: '#d97706',
-    activeTabClass: 'bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-lg shadow-amber-900/25 ring-2 ring-amber-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900',
-    tabBadgeActive: 'bg-white text-amber-950 font-black',
-    tabBadgeInactive: 'bg-amber-100 text-amber-900 font-bold',
-    phaseBadge: 'bg-amber-600 text-white',
-    phaseBadgeSelected: 'bg-amber-700 text-white',
-    phaseCardSelected: 'bg-amber-50/25 border-amber-500 shadow-xl ring-2 ring-amber-500/20 scale-[1.01]',
-    phaseActiveText: 'text-amber-700',
-    phaseActiveChevron: 'text-amber-600',
-    feedBorder: 'border-2 border-amber-200/90 shadow-amber-900/5',
-    feedPhaseBadge: 'bg-amber-600 text-white',
-    feedSubTitle: 'text-amber-600',
-    feedCtaBtn: 'bg-amber-50 hover:bg-amber-600 text-amber-900 hover:text-white',
-    stdCodeColor: 'text-amber-700',
-    counterBorder: 'border-amber-200/80 hover:border-amber-400',
-    counterText: 'text-amber-700',
-  },
-  6: {
-    name: 'rose',
-    primary: '#e11d48',
-    activeTabClass: 'bg-gradient-to-r from-rose-600 to-red-700 text-white shadow-lg shadow-rose-900/25 ring-2 ring-rose-400 scale-[1.02]',
-    inactiveTabClass: 'bg-slate-100 hover:bg-rose-50 text-slate-700 hover:text-rose-900',
-    tabBadgeActive: 'bg-white text-rose-950 font-black',
-    tabBadgeInactive: 'bg-rose-100 text-rose-800 font-bold',
-    phaseBadge: 'bg-rose-600 text-white',
-    phaseBadgeSelected: 'bg-rose-700 text-white',
-    phaseCardSelected: 'bg-rose-50/25 border-rose-500 shadow-xl ring-2 ring-rose-500/20 scale-[1.01]',
-    phaseActiveText: 'text-rose-700',
-    phaseActiveChevron: 'text-rose-600',
-    feedBorder: 'border-2 border-rose-200/90 shadow-rose-900/5',
-    feedPhaseBadge: 'bg-rose-600 text-white',
-    feedSubTitle: 'text-rose-600',
-    feedCtaBtn: 'bg-rose-50 hover:bg-rose-600 text-rose-900 hover:text-white',
-    stdCodeColor: 'text-rose-700',
-    counterBorder: 'border-rose-200/80 hover:border-rose-400',
-    counterText: 'text-rose-700',
-  }
-};
+const STAGE_ICONS = [Compass, HardHat, Wrench, Factory, Users, Leaf];
 
-// Helper slugify function for keyword detail links
-const slugify = (text) => {
-  if (!text) return '';
-  return text
-    .toString()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[đĐ]/g, 'd')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-};
-
-// Từ khóa sản phẩm / dịch vụ nổi bật 2 dòng theo 18 Pha kỹ thuật (chữ thường, chuẩn B2B)
 export const PHASE_ORIENTATION_KEYWORDS = {
   "1.1": [
     ["khảo sát địa chất", "báo cáo khả thi FS", "nghiên cứu thị trường", "định hướng đầu tư", "tư vấn tiền khả thi", "quy hoạch dự án"],
@@ -229,644 +85,158 @@ export const PHASE_ORIENTATION_KEYWORDS = {
 };
 
 export default function SixStagesMapPage() {
-  const { t, lang } = useLanguage();
-  
-  // State persistence via localStorage
-  const [selectedStageId, setSelectedStageId] = useState(() => {
+  const { lang } = useLanguage();
+  const copy = (vi, en) => lang === 'en' ? en : vi;
+  const stageTitle = stage => lang === 'en' ? stage.titleEn : stage.title;
+  const phaseTitle = phase => lang === 'en' ? phase.titleEn : phase.title;
+  const scrollFrame = useRef(null);
+  useEffect(() => () => window.cancelAnimationFrame(scrollFrame.current), []);
+  const revealSection = (id, headingId) => {
+    window.cancelAnimationFrame(scrollFrame.current);
+    scrollFrame.current = window.requestAnimationFrame(() => {
+      document.getElementById(headingId)?.focus({ preventScroll: true });
+      document.getElementById(id)?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+      scrollFrame.current = null;
+    });
+  };
+  const [selection, setSelection] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_selected_stage');
-      if (saved === 'all') return 'all';
-      return saved ? parseInt(saved, 10) : 1;
+      return resolveMapSelection(localStorage.getItem('ccu_selected_stage') || '1', localStorage.getItem('ccu_selected_phase') || '1.2');
     } catch {
-      return 1;
+      return resolveMapSelection('1', '1.2');
     }
   });
-
-  const [selectedPhaseId, setSelectedPhaseId] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ccu_selected_phase');
-      return saved || '1.2';
-    } catch {
-      return '1.2';
-    }
-  });
-
-  const [isMoUOpen, setIsMoUOpen] = useState(false);
-
-  // Sync state changes to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('ccu_selected_stage', selectedStageId.toString());
-      localStorage.setItem('ccu_selected_phase', selectedPhaseId);
-    } catch (e) {
-      // ignore
-    }
-  }, [selectedStageId, selectedPhaseId]);
+      localStorage.setItem('ccu_selected_stage', String(selection.stageId));
+      localStorage.setItem('ccu_selected_phase', selection.phaseId);
+    } catch { /* Browsing still works when storage is unavailable. */ }
+  }, [selection]);
 
-  // Find parent stage of selected phase
-  let currentPhase = null;
-  let parentStageOfPhase = stagesData[0];
-  for (const s of stagesData) {
-    const found = s.phases.find(p => p.id === selectedPhaseId);
-    if (found) {
-      currentPhase = found;
-      parentStageOfPhase = s;
-      break;
-    }
-  }
-  if (!currentPhase) {
-    currentPhase = stagesData[0].phases[0];
-    parentStageOfPhase = stagesData[0];
-  }
-
-  const currentStage = selectedStageId === 'all' 
-    ? parentStageOfPhase 
-    : (stagesData.find(s => s.id === selectedStageId) || stagesData[0]);
-
-  const currentTheme = STAGE_THEMES[currentStage.id] || STAGE_THEMES[1];
-
-  const handleStageChange = (stageId) => {
-    setSelectedStageId(stageId);
-    if (stageId === 'all') return;
-    const targetStage = stagesData.find(s => s.id === stageId);
-    if (targetStage && targetStage.phases.length > 0) {
-      const phaseInStage = targetStage.phases.some(p => p.id === selectedPhaseId);
-      if (!phaseInStage) {
-        setSelectedPhaseId(targetStage.phases[0].id);
-      }
-    }
+  const { stage: currentStage, phase: currentPhase } = getMapContext(selection);
+  const isOverview = selection.stageId === 'all';
+  const visibleStages = isOverview ? stagesData : [currentStage];
+  const StageIcon = STAGE_ICONS[currentStage.id - 1];
+  const changeStage = id => {
+    window.cancelAnimationFrame(scrollFrame.current);
+    scrollFrame.current = null;
+    setSelection(previous => selectMapStage(previous, id));
   };
-
-  // Standards map for the dynamic feed
-  const phaseStandardsMap = {
-    "1.1": [
-      { code: "VCCI-STD-01", name: "Quy chuẩn Khảo sát Thị trường & Khả thi KCN", req: "Bắt buộc" },
-      { code: "QCVN 01:2021", name: "Quy chuẩn Kỹ thuật Quốc gia về Quy hoạch", req: "Bắt buộc" },
-      { code: "ESG Readiness", name: "Đánh giá sơ bộ tác động môi trường & xã hội", req: "Khuyến nghị" }
-    ],
-    "1.2": [
-      { code: "Luật Đầu tư 2020", name: "Quy định cấp phép đầu tư IRC / ERC cho FDI", req: "Bắt buộc" },
-      { code: "QCVN 06:2022/BXD", name: "Quy chuẩn An toàn Cháy cho Nhà & Công trình", req: "Bắt buộc" },
-      { code: "ISO 14001:2015", name: "Đánh giá Tác động Môi trường (ĐTM) & Giấy phép", req: "Bắt buộc" },
-      { code: "TCVN PCCC", name: "Thẩm duyệt & Nghiệm thu Phòng cháy chữa cháy", req: "Bắt buộc" }
-    ],
-    "1.3": [
-      { code: "TCVN 12870:2020", name: "Quy chuẩn Khu Công Nghiệp Sinh Thái Xanh", req: "Khuyến nghị" },
-      { code: "Quy hoạch 1/2000", name: "Mặt bằng KCN đã hoàn thiện hạ tầng kỹ thuật", req: "Bắt buộc" }
-    ],
-    "2.1": [
-      { code: "BIM Level 2", name: "Mô hình hóa thông tin công trình xây dựng", req: "Khuyến nghị" },
-      { code: "LEED / LOTUS", name: "Tiêu chuẩn Công trình Xanh Công nghiệp", req: "Khuyến nghị" }
-    ],
-    "2.2": [
-      { code: "TCVN 5574:2018", name: "Tiêu chuẩn Thiết kế Kết cấu Bê tông cốt thép", req: "Bắt buộc" },
-      { code: "QCVN 03:2012", name: "Phân cấp Công trình Xây dựng Công nghiệp", req: "Bắt buộc" }
-    ],
-    "2.3": [
-      { code: "Nghị định 136/2020", name: "Hệ thống Báo cháy tự động & Sprinkler", req: "Bắt buộc" },
-      { code: "NFPA 13/72", name: "Chuẩn PCCC Quốc tế cho Nhà máy FDI", req: "Khuyến nghị" }
-    ],
-    "3.1": [
-      { code: "ISO 14644-1", name: "Tiêu chuẩn Phòng Sạch Cleanroom Class 100-1000", req: "Bắt buộc" },
-      { code: "ASHRAE 90.1", name: "Tiêu chuẩn Hiệu quả Năng lượng Hệ thống HVAC", req: "Khuyến nghị" }
-    ],
-    "3.2": [
-      { code: "JIS / DIN / ASTM", name: "Dung sai Lắp đặt & Căn chỉnh Máy móc", req: "Bắt buộc" },
-      { code: "CE Marking", name: "Chứng nhận Tiêu chuẩn Châu Âu cho Dây chuyền", req: "Bắt buộc" }
-    ],
-    "3.3": [
-      { code: "ISO 9001:2015", name: "Quy trình Đo kiểm & Nghiệm thu Bàn giao (SAT)", req: "Bắt buộc" },
-      { code: "Hiệu chuẩn Quatest", name: "Kiểm định An toàn Thiết bị Áp lực & Điện", req: "Bắt buộc" }
-    ],
-    "4.1": [
-      { code: "RoHS / REACH", name: "Kiểm soát Hóa chất Nguy hại trong Linh kiện", req: "Bắt buộc" },
-      { code: "ASTM / JIS", name: "Chứng chỉ Xuất xưởng CO/CQ Nguyên vật liệu", req: "Bắt buộc" }
-    ],
-    "4.2": [
-      { code: "IATF 16949", name: "Hệ thống Quản lý Chất lượng Ngành Ô tô / Xe máy", req: "Bắt buộc" },
-      { code: "IPC-A-610", name: "Tiêu chuẩn Chấp nhận Cụm Bo mạch Điện tử", req: "Bắt buộc" },
-      { code: "Dung sai ±0.005mm", name: "Kiểm định Đo lường Tọa độ CMM 3D", req: "Bắt buộc" }
-    ],
-    "4.3": [
-      { code: "ISO 22000 / HACCP", name: "Bao bì Tiếp xúc Thực phẩm An toàn", req: "Bắt buộc" },
-      { code: "FSC Certified", name: "Chứng chỉ Nguồn gốc Gỗ / Thùng Carton Bền vững", req: "Khuyến nghị" }
-    ],
-    "5.1": [
-      { code: "ISO 28000:2007", name: "Hệ thống Quản lý An ninh Chuỗi Cung ứng", req: "Bắt buộc" },
-      { code: "FIATA / IATA", name: "Tiêu chuẩn Vận tải & Logistics Đa phương thức", req: "Bắt buộc" }
-    ],
-    "5.2": [
-      { code: "OEKO-TEX 100", name: "An toàn Sinh thái Đồng phục & Đồ bảo hộ", req: "Bắt buộc" },
-      { code: "HACCP / ISO 22000", name: "Chứng nhận An toàn Vệ sinh Thực phẩm Suất ăn", req: "Bắt buộc" }
-    ],
-    "5.3": [
-      { code: "Big4 Audit Ready", name: "Chuẩn mực Kế toán & Thuế Doanh nghiệp FDI", req: "Bắt buộc" },
-      { code: "Luật Lao động 2019", name: "Tuân thủ Quy chế Nhân sự & Bảo hiểm", req: "Bắt buộc" }
-    ],
-    "6.1": [
-      { code: "SCADA / Industry 4.0", name: "Chuẩn Kết nối Tự động hóa & Đo lường OEE", req: "Khuyến nghị" },
-      { code: "TPM / 5S", name: "Hệ thống Bảo trì Năng suất Toàn diện", req: "Bắt buộc" }
-    ],
-    "6.2": [
-      { code: "ISO 14064", name: "Kiểm kê Khí nhà kính & Báo cáo Phát thải Scope 1-2", req: "Bắt buộc" },
-      { code: "CBAM / ESG Matrix", name: "Cơ chế Điều chỉnh Biên giới Carbon Quốc tế", req: "Khuyến nghị" }
-    ],
-    "6.3": [
-      { code: "M&A Industrial Standard", name: "Thẩm định Pháp lý & Tài chính Mở rộng", req: "Bắt buộc" },
-      { code: "Chuyển giao Công nghệ", name: "Đăng ký Sở hữu Trí tuệ & Bằng Sáng chế", req: "Bắt buộc" }
-    ]
+  const changePhase = id => {
+    setSelection(previous => selectMapPhase(previous, id));
+    revealSection('sm-phase-detail', 'sm-detail-title');
   };
-
-  const currentStandards = phaseStandardsMap[selectedPhaseId] || phaseStandardsMap["1.2"];
-
-  // Verified VIP Suppliers for the dynamic feed
-  const vipSuppliers = [
-    {
-      id: 1,
-      name: "Tập Đoàn Đầu Tư & Phát Triển KCN DEEP C",
-      badge: "Kim Cương 💎",
-      badgeCol: "bg-blue-100 text-blue-800 border-blue-300",
-      roles: ["Chủ đầu tư KCN", "Pha 1.3", "Pha 2.1"],
-      verifiedISO: ["ISO 14001", "Eco-IP Standard", "VCCI Member"],
-      location: "Hải Phòng & Quảng Ninh",
-      verifiedRevenue: "500+ Triệu USD"
-    },
-    {
-      id: 2,
-      name: "Công Ty Tư Vấn Pháp Lý & Đầu Tư VietAn Law",
-      badge: "Vàng 🥇",
-      badgeCol: "bg-amber-100 text-amber-900 border-amber-300",
-      roles: ["Tư vấn cấp phép FDI", "Pha 1.2", "PCCC"],
-      verifiedISO: ["Luật sư Đoàn VN", "ERP Connected", "VCCI Certified"],
-      location: "Hà Nội & TP.HCM",
-      verifiedRevenue: "150+ Dự án FDI"
-    },
-    {
-      id: 3,
-      name: "Mạng Lưới Logistics Quốc Tế PORTALINK",
-      badge: "Kim Cương 💎",
-      badgeCol: "bg-blue-100 text-blue-800 border-blue-300",
-      roles: ["Thông quan & Kho bãi", "Pha 5.1", "Pha 1.2"],
-      verifiedISO: ["ISO 28000", "FIATA Standard", "Hải quan điện tử"],
-      location: "Bình Dương, Hải Phòng, Bắc Ninh",
-      verifiedRevenue: "2.400+ Container/Tháng"
-    },
-    {
-      id: 4,
-      name: "Hệ Thống Sản Xuất Chuyên Gia Đồng Phục",
-      badge: "Vàng 🥇",
-      badgeCol: "bg-amber-100 text-amber-900 border-amber-300",
-      roles: ["Đồng phục & PPE", "Pha 5.2", "ESG Supply"],
-      verifiedISO: ["OEKO-TEX 100", "ISO 9001:2015", "ERP VIP"],
-      location: "TP.HCM & Bình Dương",
-      verifiedRevenue: "50.000+ Bộ/Tháng"
-    },
-    {
-      id: 5,
-      name: "Công Ty Cơ Khí Chính Xác Tiến Bộ CNC",
-      badge: "Kim Cương 💎",
-      badgeCol: "bg-blue-100 text-blue-800 border-blue-300",
-      roles: ["Gia công Jig & Khuôn", "Pha 4.2", "Bán dẫn"],
-      verifiedISO: ["IATF 16949", "CMM ±0.005mm", "Samsung Tier 1"],
-      location: "Bắc Ninh & Thái Nguyên",
-      verifiedRevenue: "1.200+ Tỷ VNĐ"
-    }
-  ];
-
-  // Render individual Phase Card with 2-row Marquee Animation
-  const renderPhaseCard = (phase, stageTheme) => {
-    const isSelected = phase.id === selectedPhaseId;
-    const rawKeywords = PHASE_ORIENTATION_KEYWORDS[phase.id] || [];
-    const row1 = Array.isArray(rawKeywords[0]) ? rawKeywords[0] : rawKeywords.slice(0, Math.ceil(rawKeywords.length / 2));
-    const row2 = Array.isArray(rawKeywords[1]) ? rawKeywords[1] : rawKeywords.slice(Math.ceil(rawKeywords.length / 2));
-
-    const repeatedRow1 = [...row1, ...row1, ...row1];
-    const repeatedRow2 = [...row2, ...row2, ...row2];
-
-    return (
-      <div
-        key={phase.id}
-        onClick={() => setSelectedPhaseId(phase.id)}
-        className={`p-4 sm:p-5 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between space-y-3.5 group ${
-          isSelected
-            ? stageTheme.phaseCardSelected
-            : 'bg-white hover:bg-slate-50/80 border-slate-200/90 shadow-xs hover:border-slate-300'
-        }`}
-      >
-        <div className="space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className={`font-mono font-black text-xs px-2.5 py-1 rounded shadow-xs ${
-              isSelected ? stageTheme.phaseBadgeSelected : stageTheme.phaseBadge
-            }`}>
-              Pha {phase.id}
-            </span>
-            <span className={`text-[10.5px] font-bold px-2 py-0.5 rounded-full ${
-              isSelected ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
-            }`}>
-              {phase.totalEnterprises || 80}+ DN Xác Thực
-            </span>
-          </div>
-
-          <h3 className="text-sm sm:text-base font-black text-[#072348] uppercase font-heading leading-snug">
-            {lang === 'en' ? phase.titleEn : phase.title}
-          </h3>
-
-          <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-            {lang === 'en' ? phase.summaryEn : phase.summary}
-          </p>
-
-          {/* TỪ KHÓA SẢN PHẨM / DỊCH VỤ NỔI BẬT - 2 DÒNG MARQUEE CHẠY CHẬM MƯỢT CÓ HOVER VÀ LINK DATABASE */}
-          <div className="pt-2 border-t border-slate-100/90 space-y-1.5">
-            <div className="text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-slate-500 font-heading text-center">
-              {lang === 'en' ? 'FEATURED PRODUCTS / SERVICES:' : 'TỪ KHÓA SẢN PHẨM / DỊCH VỤ NỔI BẬT:'}
-            </div>
-
-            <div className="relative overflow-hidden w-full space-y-1.5 py-0.5">
-              {/* Left & Right Edge Blur Fade Overlays */}
-              <div className={`pointer-events-none absolute inset-y-0 left-0 w-5 z-10 bg-gradient-to-r ${isSelected ? 'from-purple-50/90' : 'from-white'} to-transparent`} />
-              <div className={`pointer-events-none absolute inset-y-0 right-0 w-5 z-10 bg-gradient-to-l ${isSelected ? 'from-purple-50/90' : 'from-white'} to-transparent`} />
-
-              {/* Marquee Row 1 (Slow Left) */}
-              <div className="flex overflow-hidden py-0.5">
-                <div className="animate-marquee-slow-left flex items-center space-x-1.5">
-                  {repeatedRow1.map((kw, kwIdx) => {
-                    const kwSlug = slugify(kw);
-                    return (
-                      <Link
-                        key={`r1-${kwIdx}`}
-                        to={`/tu-khoa/${kwSlug}?q=${encodeURIComponent(kw)}`}
-                        onClick={(e) => e.stopPropagation()}
-                        title={`Tra cứu doanh nghiệp & tiêu chuẩn: ${kw}`}
-                        className={`text-[9.5px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all duration-200 inline-flex items-center shadow-2xs hover:scale-105 active:scale-95 flex-shrink-0 ${
-                          isSelected
-                            ? 'bg-purple-100/90 text-purple-900 border border-purple-200/90 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600'
-                            : 'bg-slate-100 text-slate-700 border border-slate-200/80 hover:bg-blue-600 hover:text-white hover:border-blue-600'
-                        }`}
-                      >
-                        #{kw}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Marquee Row 2 (Slow Right) */}
-              <div className="flex overflow-hidden py-0.5">
-                <div className="animate-marquee-slow-right flex items-center space-x-1.5">
-                  {repeatedRow2.map((kw, kwIdx) => {
-                    const kwSlug = slugify(kw);
-                    return (
-                      <Link
-                        key={`r2-${kwIdx}`}
-                        to={`/tu-khoa/${kwSlug}?q=${encodeURIComponent(kw)}`}
-                        onClick={(e) => e.stopPropagation()}
-                        title={`Tra cứu doanh nghiệp & tiêu chuẩn: ${kw}`}
-                        className={`text-[9.5px] font-medium px-2.5 py-1 rounded-full whitespace-nowrap transition-all duration-200 inline-flex items-center shadow-2xs hover:scale-105 active:scale-95 flex-shrink-0 ${
-                          isSelected
-                            ? 'bg-purple-100/90 text-purple-900 border border-purple-200/90 font-semibold hover:bg-purple-600 hover:text-white hover:border-purple-600'
-                            : 'bg-slate-100 text-slate-700 border border-slate-200/80 hover:bg-blue-600 hover:text-white hover:border-blue-600'
-                        }`}
-                      >
-                        #{kw}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
-          <span className={isSelected ? stageTheme.phaseActiveText : 'text-slate-400'}>
-            {isSelected ? '● Đang mở dòng khớp lệnh' : 'Bấm để tra cứu chi tiết'}
-          </span>
-          <ChevronRight className={`w-4 h-4 transition-transform ${isSelected ? `${stageTheme.phaseActiveChevron} rotate-90` : 'text-slate-400'}`} />
-        </div>
-      </div>
-    );
-  };
+  const stageHref = `/giai-doan/${currentStage.slug}`;
+  const phaseHref = `/pha/${currentPhase.slug}`;
 
   return (
-    <div className="space-y-10 sm:space-y-12 pb-28 bg-slate-50/70 font-sans overflow-x-hidden">
-
-      {/* 1. HERO HEADER (BẢNG CHỈ HUY QUỐC GIA) */}
-      <section className="relative overflow-hidden pt-6 pb-6 sm:pt-8 sm:pb-8 bg-gradient-to-b from-white via-slate-50/80 to-slate-100/60 border-b border-slate-200">
-        
-        {/* Ambient Glows */}
-        <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-        <div className="absolute bottom-0 right-10 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-5 sm:space-y-6">
-          
-          {/* Breadcrumb */}
-          <div className="flex items-center space-x-2 text-xs sm:text-sm text-slate-500">
-            <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-            </Link>
-            <span>&gt;</span>
-            <span className="text-[#072348] font-black font-heading uppercase">Sa Bàn 6 Giai Đoạn &amp; 18 Pha</span>
-          </div>
-
-          {/* Main Title */}
-          <div className="text-center max-w-4xl mx-auto space-y-2.5">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#072348] tracking-normal uppercase font-heading leading-tight">
-              <span>BẢN ĐỒ CHUỖI CUNG ỨNG QUỐC GIA </span>
-              <span className="text-rainbow-gradient">THEO 6 GIAI ĐOẠN &amp; 18 PHA</span>
-            </h1>
-            <p className="text-xs sm:text-sm md:text-base text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed">
-              Hệ thống sa bàn điều phối dòng chảy năng lực sản xuất, kết nối chính xác Nhà máy FDI, KCN và Nhà cung cấp B2B đã qua thẩm định 3 Lớp.
-            </p>
-          </div>
-
-          {/* 3 COUNTER ANIMATION METRIC CARDS */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-purple-200/80 shadow-md text-center space-y-1 hover:border-purple-400 transition">
-              <span className="text-3xl sm:text-4xl font-black text-purple-700 font-mono">6</span>
-              <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Giai Đoạn Vòng Đời</div>
-              <div className="text-[11px] text-slate-500">Chuẩn hóa tuần tự khép kín</div>
-            </div>
-
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-emerald-200/80 shadow-md text-center space-y-1 hover:border-emerald-400 transition">
-              <span className="text-3xl sm:text-4xl font-black text-emerald-600 font-mono">18</span>
-              <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Pha Kỹ Thuật</div>
-              <div className="text-[11px] text-slate-500">Định vị rõ ràng đầu ra &amp; chuẩn ISO</div>
-            </div>
-
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border-2 border-blue-200/80 shadow-md text-center space-y-1 hover:border-blue-400 transition">
-              <span className="text-3xl sm:text-4xl font-black text-blue-600 font-mono">24.000+</span>
-              <div className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">Doanh Nghiệp Đã Xác Thực</div>
-              <div className="text-[11px] text-slate-500">Thẩm định qua 3 Lớp KYC B2B</div>
-            </div>
-          </div>
-
+    <div className="six-stages-map">
+      <section className="sm-hero sm-hero-cinematic relative overflow-hidden bg-[#003822] min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
+        {/* Right Half Panoramic Factory Background with Smooth Gradient Fade matching Image 2 */}
+        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+          <img 
+            className="w-full h-full object-cover object-center scale-105" 
+            src="/images/six-stages-industrial-lifecycle-v1.jpg" 
+            fetchpriority="high" 
+            alt={copy('Toàn cảnh không gian công nghiệp với nhà xưởng, khu xây dựng và hạ tầng giao thông', 'Industrial landscape with manufacturing halls, construction and transport infrastructure')} 
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#003822] via-[#003822]/90 md:via-[#003822]/60 lg:via-[#003822]/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#003822] via-transparent to-transparent"></div>
         </div>
-      </section>
 
-      {/* 2. MACRO VIEW (STICKY HORIZONTAL PROCESS FLOW - TAB TẤT CẢ(6 GĐ) + 6 GIAI ĐOẠN) */}
-      <section className="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-sm py-3 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto no-scrollbar py-1">
-            
-            {/* TAB TẤT CẢ (18 PHA) */}
-            <button
-              type="button"
-              onClick={() => handleStageChange('all')}
-              className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-[12.5px] font-black uppercase font-heading whitespace-nowrap transition-all duration-200 cursor-pointer flex-shrink-0 ${
-                selectedStageId === 'all'
-                  ? 'bg-gradient-to-r from-slate-900 to-blue-950 text-amber-300 shadow-md shadow-slate-900/25 ring-2 ring-amber-400 scale-[1.02]'
-                  : 'bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
-              }`}
-            >
-              <span className={`w-5 h-5 rounded-lg flex items-center justify-center font-mono text-[10px] ${
-                selectedStageId === 'all' ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-200 text-slate-700 font-bold'
-              }`}>
-                6
-              </span>
-              <span>{lang === 'en' ? 'ALL (6 STAGES)' : 'TẤT CẢ (6 GĐ)'}</span>
-            </button>
-
-            {stagesData.map((stage) => {
-              const isSelected = stage.id === selectedStageId;
-              const theme = STAGE_THEMES[stage.id] || STAGE_THEMES[1];
-              return (
-                <button
-                  key={stage.id}
-                  type="button"
-                  onClick={() => handleStageChange(stage.id)}
-                  className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-[12.5px] font-black uppercase font-heading whitespace-nowrap transition-all duration-200 cursor-pointer flex-shrink-0 ${
-                    isSelected
-                      ? theme.activeTabClass
-                      : theme.inactiveTabClass
-                  }`}
-                >
-                  <span className={`w-5 h-5 rounded-lg flex items-center justify-center font-mono text-[10px] ${
-                    isSelected ? theme.tabBadgeActive : theme.tabBadgeInactive
-                  }`}>
-                    {stage.id}
-                  </span>
-                  <span>{lang === 'en' ? stage.titleEn : stage.title}</span>
-                </button>
-              );
-            })}
+        <div className="sm-wrap sm-hero-inner relative z-10 w-full">
+          <nav className="sm-breadcrumb" aria-label={copy('Đường dẫn', 'Breadcrumb')}>
+            <Link to="/"><img src="/logo_only.png" width="18" height="18" alt={copy('Trang chủ', 'Home')} /></Link>
+            <span aria-hidden="true">/</span><span>{copy('Bản đồ 6 giai đoạn', 'Six-stage map')}</span>
+          </nav>
+          <div className="sm-hero-copy">
+            <span className="sm-eyebrow">{copy('Định vị nhu cầu. Kết nối đúng nguồn.', 'Locate your need. Find the right source.')}</span>
+            <h1>{copy('BẢN ĐỒ CHUỖI CUNG ỨNG QUỐC GIA', 'NATIONAL SUPPLY CHAIN MAP')} <span>{copy('THEO 6 GIAI ĐOẠN & 18 PHA', 'ACROSS 6 STAGES & 18 PHASES')}</span></h1>
+            <p>{copy('Xác định giai đoạn hiện tại, chọn đúng nhu cầu và tìm nguồn cung phù hợp.', 'Find your current stage, identify your need and connect with relevant sources.')}</p>
+            <div className="sm-actions">
+              <a href="#lifecycle-explorer" onClick={event => { event.preventDefault(); revealSection('lifecycle-explorer', 'sm-explorer-heading'); }} className="sm-button sm-primary">{copy('Khám phá bản đồ', 'Explore the map')}<ArrowRight size={18} aria-hidden="true" /></a>
+              <Link to="/dang-nhu-cau" className="sm-text-link">{copy('Tôi có nhu cầu cụ thể', 'I have a specific need')}<ArrowUpRight size={17} aria-hidden="true" /></Link>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* 3. MICRO VIEW (18 PHA CARDS & ACCORDION TABS) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        
-        <div className="flex items-center justify-between">
-          <div className="space-y-0.5">
-            <span className={`text-[11px] font-black uppercase tracking-wider font-heading ${currentTheme.feedSubTitle}`}>
-              {selectedStageId === 'all' ? 'Toàn Cảnh 6 Giai Đoạn & 18 Pha Kỹ Thuật' : `Giai Đoạn ${currentStage.id}: ${lang === 'en' ? currentStage.titleEn : currentStage.title}`}
-            </span>
-            <h2 className="text-base sm:text-lg font-black text-[#072348] uppercase font-heading">
-              Chọn Pha Kỹ Thuật Để Tra Cứu Bộ Tiêu Chuẩn & Doanh Nghiệp Khớp Lệnh
-            </h2>
-          </div>
-          <span className="text-xs font-bold text-slate-500 hidden sm:block">
-            {selectedStageId === 'all' ? '18 Pha Kỹ Thuật Khép Kín' : '3 Pha Kỹ Thuật Phân Cấp'}
-          </span>
+      <nav className="sm-stage-rail" aria-label={copy('Đi nhanh đến một giai đoạn', 'Jump to a stage')}>
+        <div className="sm-wrap">
+          {stagesData.map(stage => <button type="button" key={stage.id} data-hero-stage={stage.id} style={mapStageStyle(stage.id)} aria-pressed={selection.stageId === stage.id} aria-controls="lifecycle-explorer" onClick={() => { changeStage(stage.id); revealSection('lifecycle-explorer', 'sm-explorer-heading'); }}>
+            <span>{String(stage.id).padStart(2, '0')}</span><strong>{stageTitle(stage)}</strong><ArrowUpRight size={15} aria-hidden="true" />
+          </button>)}
         </div>
+      </nav>
 
-        {/* Phase Cards View: Render All 6 Stages or Single Stage */}
-        {selectedStageId === 'all' ? (
-          <div className="space-y-8">
-            {stagesData.map((stage) => {
-              const stageTheme = STAGE_THEMES[stage.id] || STAGE_THEMES[1];
-              return (
-                <div key={stage.id} className="space-y-3 bg-white/60 p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-xs">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-                    <div className="flex items-center space-x-2.5">
-                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center font-mono text-xs font-black text-white ${stageTheme.phaseBadge}`}>
-                        {stage.id}
-                      </span>
-                      <h3 className="text-sm sm:text-base font-black text-[#072348] uppercase font-heading">
-                        Giai Đoạn {stage.id}: {lang === 'en' ? stage.titleEn : stage.title}
-                      </h3>
-                    </div>
-                    <span className="text-[11px] font-bold text-slate-400">
-                      3 Pha Kỹ Thuật
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {stage.phases.map((phase) => renderPhaseCard(phase, stageTheme))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {currentStage.phases.map((phase) => renderPhaseCard(phase, currentTheme))}
-          </div>
-        )}
-
-      </section>
-
-      {/* 4. DYNAMIC FEED (BẢNG KHỚP LỆNH THỰC CHIẾN 2 CỘT) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        
-        <div className={`bg-white rounded-3xl ${currentTheme.feedBorder} p-6 sm:p-8 space-y-6 shadow-xl`}>
-          
-          {/* Feed Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
-            <div className="flex items-center space-x-3">
-              <span className={`w-10 h-10 rounded-2xl ${currentTheme.feedPhaseBadge} flex items-center justify-center font-mono font-black text-sm shadow-md`}>
-                {currentPhase.id}
-              </span>
-              <div>
-                <div className={`text-[10.5px] font-extrabold uppercase tracking-wider font-heading ${currentTheme.feedSubTitle}`}>
-                  KHUNG KHỚP LỆNH NĂNG LỰC THỰC CHIẾN
-                </div>
-                <h3 className="text-base sm:text-xl font-black text-[#072348] uppercase font-heading">
-                  {currentPhase.title}
-                </h3>
-              </div>
-            </div>
-
-            <Link
-              to={`/giai-doan/${currentStage.id}/pha/${currentPhase.id}`}
-              className={`inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase font-heading tracking-wide transition shadow-2xs ${currentTheme.feedCtaBtn}`}
-            >
-              <span>Xem Toàn Bộ {currentPhase.totalEnterprises || 80}+ Nhà Cung Cấp</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* 2 Columns: Left = Standards & ESG, Right = Verified VIP Suppliers */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
-            {/* Cột Trái (5 Cols): Bộ Tiêu Chuẩn Kỹ Thuật / ESG Bắt Buộc */}
-            <div className="lg:col-span-5 bg-slate-50/80 rounded-2xl p-5 border border-slate-200/80 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Award className={`w-4 h-4 ${currentTheme.stdCodeColor}`} />
-                  <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">
-                    Tiêu Chuẩn Kỹ Thuật & ESG Bắt Buộc
-                  </h4>
-                </div>
-                <span className="text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded">
-                  FDI Criteria
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {currentStandards.map((std, sIdx) => (
-                  <div key={sIdx} className="p-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className={`font-mono font-black text-xs ${currentTheme.stdCodeColor}`}>{std.code}</span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        std.req === 'Bắt buộc' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
-                      }`}>
-                        {std.req}
-                      </span>
-                    </div>
-                    <div className="text-xs text-slate-700 font-medium leading-snug">
-                      {std.name}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2 text-center">
-                <Link
-                  to="/dang-nhu-cau"
-                  className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold font-heading uppercase flex items-center justify-center space-x-1.5 transition"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Tải Checklist Nghiệm Thu Pha {currentPhase.id}</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Cột Phải (7 Cols): Danh Sách Nhà Cung Cấp VIP Đã Gắn Huy Hiệu */}
-            <div className="lg:col-span-7 space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                  <h4 className="text-xs sm:text-sm font-black text-slate-900 uppercase font-heading">
-                    Nhà Cung Cấp VIP Sẵn Sàng Nhận Khớp Lệnh
-                  </h4>
-                </div>
-                <span className="text-[11px] font-bold text-slate-500 font-mono">
-                  Ưu Tiên Top 1% KYC
-                </span>
-              </div>
-
-              <div className="space-y-3">
-                {vipSuppliers.slice(0, 3).map((supp) => (
-                  <div
-                    key={supp.id}
-                    className="p-4 rounded-2xl bg-white hover:bg-blue-50/40 border border-slate-200/90 hover:border-blue-300 shadow-2xs hover:shadow-md transition-all space-y-2.5"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center space-x-2">
-                        <Building2 className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                        <h5 className="font-extrabold text-[#072348] text-xs sm:text-sm font-heading leading-tight">
-                          {supp.name}
-                        </h5>
-                      </div>
-                      <span className={`text-[10.5px] font-black px-2.5 py-0.5 rounded-full border ${supp.badgeCol} flex-shrink-0`}>
-                        {supp.badge}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1.5">
-                      {supp.verifiedISO.map((iso, iIdx) => (
-                        <span key={iIdx} className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-semibold">
-                          ✔ {iso}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-100">
-                      <span>Khu vực: <strong>{supp.location}</strong></span>
-                      <span>Quy mô: <strong className="text-emerald-700 font-mono">{supp.verifiedRevenue}</strong></span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-
-          </div>
-
+      <section id="lifecycle-explorer" className="sm-explorer sm-wrap" aria-labelledby="sm-explorer-heading">
+        <div className="sm-section-heading">
+          <div><span className="sm-eyebrow">{copy('Bức tranh tổng thể', 'The big picture')}</span><h2 id="sm-explorer-heading" tabIndex={-1}>{copy('Tìm đúng điểm bắt đầu.', 'Find your starting point.')}</h2></div>
+          <p>{copy('Chọn một giai đoạn trên bản đồ. Mỗi thẻ mở 3 pha cùng công việc và nhóm nhu cầu tương ứng.', 'Choose a stage on the map. Each card opens three phases with related tasks and needs.')}</p>
         </div>
+        <div className="sm-explorer-grid">
+          <SixStagesLifecycleBoard stages={stagesData} lang={lang} selection={selection} onSelect={id => { changeStage(id); revealSection('sm-phase-list', 'sm-phases-heading'); }} />
 
-      </section>
-
-      {/* 5. 3D EXPLODED FLOWER VIEW */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        <div className="text-center max-w-2xl mx-auto space-y-2">
-          <h2 className="text-xl sm:text-2xl font-black text-[#072348] uppercase font-heading">
-            Sa Bàn Tương Tác 3D Toàn Cảnh 6 Giai Đoạn
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600">
-            Xem tổng thể liên kết giữa các giai đoạn và chuyển động của dòng chảy giá trị công nghiệp.
-          </p>
+          <article id="sm-stage-panel" className="sm-stage-panel" style={mapStageStyle(currentStage.id)}>
+            <div className="sm-stage-photo"><img key={currentStage.id} src={`/stage${currentStage.id}_hero.jpg`} width="1376" height="768" loading="lazy" alt={stageTitle(currentStage)} /></div>
+            <div className="sm-stage-copy">
+              <div className="sm-stage-label"><StageIcon size={18} aria-hidden="true" /><span>{copy('Giai đoạn', 'Stage')} {String(currentStage.id).padStart(2, '0')}</span><span>{currentStage.phases.length} {copy('pha', 'phases')}</span></div>
+              <h2>{stageTitle(currentStage)}</h2>
+              <p>{lang === 'en' ? currentStage.summaryEn : currentStage.summary}</p>
+              <Link to={stageHref} className="sm-text-link">{copy('Khám phá giai đoạn này', 'Explore this stage')}<ArrowUpRight size={17} aria-hidden="true" /></Link>
+            </div>
+          </article>
         </div>
-        <InteractiveExplodedFlower3D />
+        <p className="sm-visually-hidden" role="status" aria-live="polite">{copy('Đang xem', 'Viewing')}: {isOverview ? copy('Tất cả 6 giai đoạn', 'All six stages') : stageTitle(currentStage)}. {copy('Pha', 'Phase')} {currentPhase.id}: {phaseTitle(currentPhase)}.</p>
       </section>
 
-      {/* 6. QUY TRÌNH XÁC THỰC 3 LỚP (KYC B2B) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ThreeLayerKYCSection />
+      <section id="sm-phase-list" className="sm-phases sm-wrap" aria-labelledby="sm-phases-heading">
+        <div className="sm-section-heading">
+          <div><span className="sm-eyebrow">{isOverview ? copy('Toàn bộ 18 pha', 'All 18 phases') : copy(`3 pha trong giai đoạn ${currentStage.id}`, `3 phases in stage ${currentStage.id}`)}</span><h2 id="sm-phases-heading" tabIndex={-1}>{copy('Bạn đang cần gì ở giai đoạn này?', 'What do you need at this stage?')}</h2></div>
+          <button type="button" className="sm-view-toggle" aria-pressed={isOverview} onClick={() => changeStage(isOverview ? currentStage.id : 'all')}>
+            {isOverview ? copy('Thu gọn về giai đoạn đang chọn', 'Focus on selected stage') : copy('Xem toàn bộ 6 giai đoạn', 'View all six stages')}<ArrowUpRight size={17} aria-hidden="true" />
+          </button>
+        </div>
+        {visibleStages.map(stage => <div key={stage.id} className="sm-phase-group" style={mapStageStyle(stage.id)}>
+          {isOverview && <div className="sm-group-heading"><span>{String(stage.id).padStart(2, '0')}</span><div><h3>{stageTitle(stage)}</h3><p>{lang === 'en' ? stage.summaryEn : stage.summary}</p></div><Link to={`/giai-doan/${stage.slug}`} aria-label={copy(`Xem giai đoạn ${stage.id}: ${stage.title}`, `Explore stage ${stage.id}: ${stage.titleEn}`)}><ArrowUpRight size={21} aria-hidden="true" /></Link></div>}
+          <div className="sm-phase-grid">
+            {stage.phases.map(phase => <article key={phase.id} className={`sm-phase-card ${selection.phaseId === phase.id ? 'is-selected' : ''}`}>
+              <button type="button" data-phase-select={phase.id} aria-pressed={selection.phaseId === phase.id} aria-controls="sm-phase-detail" onClick={() => changePhase(phase.id)}>
+                <div className="sm-phase-top"><span>{copy('Pha', 'Phase')} {phase.id}</span>{selection.phaseId === phase.id ? <Check size={20} aria-hidden="true" /> : <ArrowUpRight size={20} aria-hidden="true" />}</div>
+                <h3>{phaseTitle(phase)}</h3>
+                <p>{lang === 'en' ? phase.summaryEn : phase.summary}</p>
+                <span className="sm-phase-hint">{selection.phaseId === phase.id ? copy('Đang xem nội dung bên dưới', 'Details shown below') : copy('Xem công việc & nhóm nhu cầu', 'See tasks & related needs')}<ArrowRight size={16} aria-hidden="true" /></span>
+              </button>
+              <details className="sm-keyword-details">
+                <summary>{copy('Từ khóa sản phẩm / dịch vụ', 'Product / service keywords')}<ChevronDown size={15} aria-hidden="true" /></summary>
+                <div className="sm-keywords">{(PHASE_ORIENTATION_KEYWORDS[phase.id] || []).flat().map(keyword => <Link key={keyword} to={mapKeywordHref(keyword)}>{keyword}<ArrowUpRight size={13} aria-hidden="true" /></Link>)}</div>
+              </details>
+            </article>)}
+          </div>
+        </div>)}
       </section>
 
-      {/* 7. CASE STUDIES / THỰC CHỨNG TÍCH HỢP */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <CaseStudiesSection />
+      <section id="sm-phase-detail" className="sm-detail-wrap" style={mapStageStyle(currentStage.id)} aria-labelledby="sm-detail-title">
+        <div className="sm-wrap">
+          <div className="sm-detail-heading"><div><span className="sm-eyebrow">{copy('Đưa nhu cầu vào đúng ngữ cảnh', 'Put your need in context')}</span><h2 id="sm-detail-title" tabIndex={-1}><span>{currentPhase.id}</span>{phaseTitle(currentPhase)}</h2></div><Link data-current-phase-link to={phaseHref} className="sm-button sm-primary">{copy('Xem chi tiết pha', 'Explore this phase')}<ArrowUpRight size={18} aria-hidden="true" /></Link></div>
+          <a href="#sm-phase-list" onClick={event => { event.preventDefault(); revealSection('sm-phase-list', 'sm-phases-heading'); }} className="sm-back-link">{copy('Trở lại danh sách pha', 'Back to phases')}<ArrowUpRight size={15} aria-hidden="true" /></a>
+          <div className="sm-detail-grid">
+            <div className="sm-task-column"><h3>{copy('Công việc cần triển khai', 'Tasks to undertake')}</h3><ul className="sm-task-list">{currentPhase.tasks.map(task => <li key={task}><Check size={17} aria-hidden="true" /><span>{task}</span></li>)}</ul>
+              {currentPhase.outputs && <details className="sm-outputs"><summary>{copy('Đầu ra của pha', 'Phase outputs')}<ChevronDown size={16} aria-hidden="true" /></summary><ul>{currentPhase.outputs.map(output => <li key={output}>{output}</li>)}</ul></details>}
+            </div>
+            <div className="sm-needs-column"><h3>{copy('Nhóm nhu cầu thường gặp', 'Common needs')}</h3><div className="sm-need-links">{currentPhase.commonDemands.map(need => <Link key={need} to={mapKeywordHref(need)}>{need}<ArrowUpRight size={18} aria-hidden="true" /></Link>)}</div>
+              <div className="sm-participants"><h3>{copy('Ai tham gia pha này?', 'Who participates?')}</h3><p>{currentPhase.roles.join(' · ')}</p></div>
+            </div>
+          </div>
+          <div className="sm-detail-next"><span>{copy('Đã xác định được nhu cầu?', 'Know what you need?')}</span><Link to="/dang-nhu-cau" className="sm-text-link">{copy('Đăng nhu cầu để bắt đầu tìm nguồn', 'Post a need and start sourcing')}<ArrowRight size={17} aria-hidden="true" /></Link></div>
+        </div>
       </section>
 
-      {/* 8. STICKY FLOATING CTA BAR */}
-      <StickyPhaseCTA activePhase={currentPhase} activeStage={currentStage} />
-
-      {/* MODAL XEM CHI TIẾT VĂN BẢN BẢO TRỢ / MOU */}
-      <MoUModal isOpen={isMoUOpen} onClose={() => setIsMoUOpen(false)} />
-
+      <section className="sm-next sm-wrap" aria-labelledby="sm-next-title">
+        <div><span className="sm-eyebrow">{copy('Từ bản đồ đến hành động', 'From the map to action')}</span><h2 id="sm-next-title">{copy('Tìm đúng vai trò. Mở đúng kết nối.', 'Find your role. Start the right connection.')}</h2><p>{copy('Nhà máy tìm nguồn. Nhà cung ứng tìm cơ hội. KCN và hội cùng kết nối hệ sinh thái.', 'Factories find sources. Suppliers find opportunities. Industrial parks and associations connect the ecosystem.')}</p></div>
+        <div className="sm-directory-links">
+          {[['/nha-cung-ung', copy('Tìm nhà cung ứng', 'Find suppliers'), Building2], ['/san-nhu-cau', copy('Xem nhu cầu công khai', 'Browse public needs'), Factory], ['/khu-cong-nghiep', copy('Khám phá khu công nghiệp', 'Explore industrial parks'), Compass], ['/hiep-hoi', copy('Kết nối hội / hiệp hội', 'Connect with associations'), Network]].map(([href, label, Icon]) => <Link key={href} to={href}><Icon size={22} aria-hidden="true" /><span>{label}</span><ArrowUpRight size={20} aria-hidden="true" /></Link>)}
+        </div>
+      </section>
     </div>
   );
 }

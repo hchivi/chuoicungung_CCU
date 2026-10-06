@@ -1,0 +1,77 @@
+// Page copy from founding_partner.rtf. These are proposed commercial packages,
+// not matching weights, verified status, or changes to existing partner records.
+export const FOUNDING_PLANS = [
+  {
+    id: 'starter', name: 'Starter', english: 'Khởi đầu', price: '6', billing: 'VNĐ / 6 tháng',
+    badge: 'Khởi đầu linh hoạt',
+    budget: 'Starter: 6 triệu VNĐ / 6 tháng', period: '6_MONTHS',
+    focus: 'Thử nghiệm 6 tháng', scope: '1 nhóm năng lực chính',
+    summary: 'Bắt đầu từ một năng lực rõ ràng, với thời gian đồng hành ngắn hơn.',
+    target: 'Nhà cung ứng hoặc doanh nghiệp dịch vụ muốn chuẩn bị hồ sơ, xác định nhóm khách hàng phù hợp và thử nghiệm cách hiện diện trên CCU trước khi lập kế hoạch dài hơn.',
+    features: [
+      'Rà soát thông tin hồ sơ và xác định một nhóm năng lực chính.',
+      'Trình bày sản phẩm hoặc dịch vụ tiêu biểu, kèm tài liệu doanh nghiệp cung cấp.',
+      'Liên kết các danh mục, từ khóa và địa bàn phù hợp với năng lực đã đối chiếu.',
+      'Thống nhất hạng mục hiện diện và cách kiểm tra trong thời gian 6 tháng.',
+      'Xem lại phạm vi sau giai đoạn thử nghiệm trước khi quyết định tiếp tục.',
+    ],
+  },
+  {
+    id: 'silver', name: 'Bạc', english: 'Hiện diện thường xuyên', price: '12', billing: 'VNĐ / năm',
+    badge: 'Hiện diện 12 tháng',
+    budget: 'Bạc: 12 triệu VNĐ / năm', period: '12_MONTHS',
+    focus: 'Xây dựng hiện diện', scope: '1 nhóm năng lực chính',
+    summary: 'Một nhóm năng lực cùng các sản phẩm, từ khóa và địa bàn liên quan.',
+    target: 'Doanh nghiệp có một lĩnh vực cung ứng chủ lực, muốn trình bày hồ sơ và tài liệu nhất quán trong năm, thay vì chia nhỏ ngân sách cho từng từ khóa hoặc từng địa bàn.',
+    features: [
+      'Xác định một nhóm năng lực chính và các sản phẩm, dịch vụ liên quan.',
+      'Chuẩn bị hồ sơ năng lực, danh mục sản phẩm và catalogue hiện có.',
+      'Liên kết các từ khóa, danh mục và địa bàn liên quan hợp lý, không khóa cứng số từ khóa.',
+      'Thống nhất khối hiện diện có nhãn tài trợ, vị trí và thời hạn theo thỏa thuận.',
+      'Lập danh sách hạng mục bàn giao và cách cập nhật thông tin trong năm.',
+    ],
+  },
+  {
+    id: 'gold', name: 'Vàng', english: 'Mở rộng năng lực', price: '24', billing: 'VNĐ / năm',
+    badge: '★ ĐƯỢC CHỌN NHIỀU NHẤT',
+    isPopular: true,
+    budget: 'Vàng: 24 triệu VNĐ / năm', period: '12_MONTHS',
+    focus: 'Mở rộng nhóm năng lực', scope: 'Khoảng 3 nhóm năng lực',
+    summary: 'Cho doanh nghiệp có nhiều nhóm sản phẩm hoặc dịch vụ liên quan.',
+    target: 'Doanh nghiệp có khoảng ba nhóm năng lực có thể chứng minh bằng sản phẩm, quy trình hoặc tài liệu. Mỗi nhóm cần được diễn đạt riêng để khách hàng hiểu đúng khả năng đáp ứng.',
+    features: [
+      'Rà soát và tổ chức phạm vi khoảng 3 nhóm năng lực, chốt lại theo hồ sơ thực tế.',
+      'Phân biệt sản phẩm, dịch vụ và nhu cầu khách hàng phù hợp với từng nhóm.',
+      'Liên kết nhiều danh mục, từ khóa và địa bàn liên quan trong cùng phạm vi đã thống nhất.',
+      'Lập kế hoạch hồ sơ, catalogue và nội dung giới thiệu cho từng nhóm năng lực.',
+      'Thống nhất các khối tài trợ, tiến độ bàn giao và cách đối soát hạng mục.',
+    ],
+  },
+  {
+    id: 'diamond', name: 'Kim Cương', english: 'Phạm vi rộng', price: '48', billing: 'VNĐ / năm',
+    badge: '👑 ĐỐI TÁC CHIẾN LƯỢC',
+    isFlagship: true,
+    budget: 'Kim Cương: 48 triệu VNĐ / năm', period: '12_MONTHS',
+    focus: 'Phạm vi năng lực rộng', scope: 'Khoảng 5 nhóm năng lực',
+    summary: 'Tổ chức nhiều nhóm năng lực trong một kế hoạch đồng hành thống nhất.',
+    target: 'Nhà sản xuất hoặc doanh nghiệp cung ứng đa nhóm năng lực, có phạm vi hoạt động rộng và cần phối hợp nội dung giữa các nhóm. Đây không phải quyền sở hữu hay quyền quản trị CCU.',
+    features: [
+      'Tổ chức phạm vi khoảng 5 nhóm năng lực hoặc phương án rộng hơn cần trao đổi riêng.',
+      'Làm rõ sản phẩm, dịch vụ, địa bàn và khả năng đáp ứng của từng nhóm.',
+      'Liên kết các điểm hiện diện phù hợp, không tính phí riêng từng từ khóa hoặc địa bàn.',
+      'Lập kế hoạch nội dung đồng bộ giữa các nhóm năng lực và tài liệu hiện có.',
+      'Thống nhất đầu việc, tiến độ, vị trí tài trợ và minh chứng bàn giao theo thỏa thuận.',
+    ],
+  },
+];
+
+export const FOUNDING_FAQS = [
+  ['Một nhóm năng lực được hiểu thế nào?', 'Là một nhóm sản phẩm hoặc dịch vụ mà doanh nghiệp thực sự có khả năng đáp ứng, có thể mô tả bằng quy trình, thiết bị, sản phẩm và tài liệu. Ví dụ: gia công CNC là một nhóm năng lực; các cách tìm “gia công chi tiết CNC” hay “xưởng CNC” không mặc nhiên trở thành hai nhóm tính phí riêng. Phạm vi được đối chiếu trước khi thống nhất.'],
+  ['Một gói có thể xuất hiện ở nhiều danh mục và địa bàn không?', 'Có thể, nếu các danh mục, sản phẩm, từ khóa và địa bàn đó liên quan hợp lý với năng lực đã xác nhận trong phạm vi đồng hành. Không phải trả phí riêng cho từng từ khóa hoặc địa bàn. Điều này không có nghĩa là doanh nghiệp tự động xuất hiện ở mọi danh mục hay mọi địa phương.'],
+  ['Khoảng 3 hoặc 5 nhóm năng lực có phải giới hạn cứng?', 'Đây là định hướng để chọn gói, không phải quota từ khóa. CCU và doanh nghiệp cần đối chiếu các nhóm thực tế, mức độ liên quan và hạng mục triển khai. Khi phạm vi rộng hơn hoặc thay đổi đáng kể, cần thống nhất lại đề xuất trước khi thực hiện.'],
+  ['Tham gia có giúp SUPPI ưu tiên doanh nghiệp không?', 'Không. SUPPI đối chiếu nhu cầu, năng lực, địa bàn, thời gian và khả năng đáp ứng. Việc thanh toán không mua thứ hạng tìm kiếm tự nhiên. Khối nội dung tài trợ phải có nhãn và được phân biệt với kết quả phù hợp do hệ thống tìm kiếm trả về.'],
+  ['Có cam kết khách hàng tiềm năng hoặc đơn hàng không?', 'Không cam kết số lead, số lượt liên hệ hay đơn hàng. Gói đồng hành giúp tổ chức và trình bày thông tin trong phạm vi đã thống nhất. Quyết định mua phụ thuộc nhu cầu thực tế, điều kiện cung ứng và trao đổi giữa các doanh nghiệp.'],
+  ['Founding Partner có phải xác minh, chứng nhận hay góp vốn?', 'Không. Tên chương trình không tạo tư cách đồng sáng lập, nhà đầu tư, cổ đông, quyền quản trị hay chứng nhận chất lượng. Đối chiếu tài liệu để xác định phạm vi đồng hành không thay thế quy trình xác minh doanh nghiệp hoặc chứng nhận chuyên ngành.'],
+  ['Video, sự kiện và nội dung sản xuất riêng có mặc định trong gói?', 'Không mặc định. Doanh nghiệp có thể đề xuất video, bài viết, catalogue hoặc hoạt động kết nối. Nội dung có sẵn và nội dung cần sản xuất mới phải được phân biệt; khối lượng, chi phí, thuế và hạng mục bổ sung cần được xác nhận trong đề xuất thương mại trước khi ký kết.'],
+  ['Tôi chưa biết nên chọn gói nào thì làm gì?', 'Bắt đầu bằng một mô tả ngắn về sản phẩm, dịch vụ, địa bàn phục vụ và nhóm khách hàng mong muốn. Có thể để ngân sách ở “Cần tư vấn gói phù hợp”. Chọn gói trên trang chỉ là bước chuẩn bị đề xuất, không phải thanh toán hay kích hoạt hợp tác.'],
+];

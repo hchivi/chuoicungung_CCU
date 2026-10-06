@@ -176,12 +176,12 @@ export default function FactoriesPage() {
     <main className="min-h-screen bg-slate-50/50 pb-24 font-sans text-slate-800">
       
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION (Seamless Panoramic Smart Factory Visual - EXACT IMAGE 4) */}
+      {/* 1. HERO SECTION (MATCHES IMAGE 2 LAYOUT & TEXT HIERARCHY)                */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-24 sm:pb-28 lg:pb-32 min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center">
+      <section className="relative overflow-hidden bg-white border-b border-slate-100 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
         
         {/* Right Half Smart Factory & Illuminated Industrial Park Flycam Video with Smooth Gradient Blend */}
-        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <video 
             autoPlay 
             loop 
@@ -191,7 +191,7 @@ export default function FactoriesPage() {
             disableRemotePlayback
             controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
             poster="/images/smart_factory_hero.jpg"
-            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
+            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
           >
             <source src="/images/factory_illuminated_drone_1080p.webm" type="video/webm" />
             <source src="/images/factory_illuminated_drone_480p.webm" type="video/webm" />
@@ -201,59 +201,58 @@ export default function FactoriesPage() {
               className="w-full h-full object-cover object-center scale-105"
             />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 md:via-white/70 lg:via-white/35 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
         </div>
 
-        {/* Top Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
-          <div className="max-w-2xl space-y-5 sm:space-y-6">
+        {/* Content Container Aligned Exactly with Image 2 */}
+        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+          
+          {/* Breadcrumb */}
+          <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
+            <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <span className="text-slate-900 font-medium" aria-current="page">Nhà máy &amp; Cơ sở sản xuất</span>
+          </nav>
+
+          <div className="max-w-xl">
             
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5">
-              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="text-[#0052cc] font-bold">Nhà Máy &amp; Cơ Sở Sản Xuất</span>
-            </nav>
+            {/* Category Label */}
+            <p className="text-sm font-semibold text-[#008060] tracking-wide mb-3">
+              Hệ thống dữ liệu nhà máy &amp; FDI Việt Nam
+            </p>
 
-            {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
-              <span>HỆ THỐNG DỮ LIỆU NHÀ MÁY &amp; FDI VIỆT NAM</span>
-            </div>
+            {/* H1 Title */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">
+              Mạng lưới nhà máy<br />cơ sở sản xuất.
+            </h1>
 
-            {/* Headline */}
-            <div className="space-y-1">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight text-slate-950 leading-[1.1]">
-                Mạng Lưới Nhà Máy
-              </h1>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-heading tracking-tight bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0284c7] bg-clip-text text-transparent leading-[1.1]">
-                Cơ Sở Sản Xuất Thông Minh
-              </h2>
-            </div>
+            {/* Lede (Tagline) */}
+            <p className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug mb-3">
+              Đúng năng lực chế tạo.<br />Rõ quy mô để hợp tác.
+            </p>
 
-            {/* Subtitle */}
-            <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed max-w-xl">
+            {/* Subtitle / Description */}
+            <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl mb-6">
               Tra cứu danh sách 14.237+ nhà máy sản xuất, cơ sở chế tạo và doanh nghiệp FDI đang hoạt động thực tế trong 480 Khu công nghiệp trên toàn quốc.
             </p>
 
-            {/* Dual Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <a
                 href="#factory-list-section"
-                className="px-6 py-3 bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0066d6] hover:from-[#003d8f] hover:to-[#004fa8] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide transform hover:-translate-y-0.5 cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-b from-[#00A86B] to-[#008060] hover:from-[#00925c] hover:to-[#007054] text-white text-sm font-bold shadow-sm transition active:scale-95"
               >
-                <span>Tra Cứu Nhà Máy</span>
+                <span>Tra cứu nhà máy</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
 
               <Link
                 to="/dang-nhu-cau"
-                className="px-6 py-3 bg-white hover:bg-slate-50 text-[#072348] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#008060] hover:text-[#005e46] transition p-2"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#0052cc] group-hover:scale-110 transition-transform" />
-                <span>Nhu Cầu Cung Ứng</span>
+                <span>Nhu cầu cung ứng</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -266,47 +265,43 @@ export default function FactoriesPage() {
       {/* STATS BAR (EXACT 4 STAT CARDS FROM IMAGE 4) */}
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-14 sm:-mt-16 lg:-mt-20">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
+        <div className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-900/5 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
-            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
-                <Factory className="w-5 h-5" />
+            <div className="p-2 sm:p-3 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>XÁC THỰC MÃ SỐ THUẾ</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">14.237+</div>
-                <p className="text-[11px] text-slate-500 font-medium">Nhà máy đang hoạt động</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">14.237+</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Nhà máy đang hoạt động</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Building2 className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span>
+                <span>HẠ TẦNG KCN TOÀN QUỐC</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">480 KCN</div>
-                <p className="text-[11px] text-slate-500 font-medium">Khu công nghiệp kết nối</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">480 KCN</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Khu công nghiệp kết nối</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Globe className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                <span>ĐỊA BÀN TRỌNG ĐIỂM</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">34</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tỉnh thành toàn quốc</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">34</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Tỉnh thành toàn quốc</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
-                <Award className="w-5 h-5" />
+            <div className="p-2 sm:p-3 pt-4 sm:pt-3 sm:pl-6 flex flex-col justify-center">
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                <span>KẾT NỐI KHÔNG TRUNG GIAN</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">FDI &amp; B2B</div>
-                <p className="text-[11px] text-slate-500 font-medium">Nhu cầu mở kết nối</p>
-              </div>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 font-heading tracking-tight mt-1">FDI &amp; B2B</div>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">Nhu cầu mở kết nối</p>
             </div>
 
           </div>
@@ -339,17 +334,13 @@ export default function FactoriesPage() {
             {/* Card 01: Nhà Máy Mua (Buy Side) */}
             <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50/60 to-slate-50 border border-blue-200/80 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                    <ShoppingBag className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-slate-900 text-base font-heading">
-                      1. NHÀ MÁY MUA (BUY SIDE)
-                    </h3>
-                    <span className="text-[11px] text-slate-500 font-mono">Thu mua nguyên vật liệu & dịch vụ vận hành</span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded bg-blue-100 text-[#0052cc] font-mono text-[10px] font-bold">BUY SIDE</span>
+                  <h3 className="font-black text-slate-900 text-base font-heading">
+                    1. NHÀ MÁY MUA (BUY SIDE)
+                  </h3>
                 </div>
+                <div className="text-[11px] text-slate-500 font-mono">Thu mua nguyên vật liệu &amp; dịch vụ vận hành</div>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Nhà máy cần nguồn cung: nguyên vật liệu kim loại/nhựa, bao bì carton, thiết bị bảo hộ PPE, 
@@ -378,17 +369,13 @@ export default function FactoriesPage() {
             {/* Card 02: Nhà Máy Bán (Sell Side) */}
             <div className="p-6 rounded-2xl bg-gradient-to-br from-emerald-50/60 to-slate-50 border border-emerald-200/80 space-y-3 flex flex-col justify-between">
               <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
-                    <Zap className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h3 className="font-black text-slate-900 text-base font-heading">
-                      2. NHÀ MÁY BÁN (SELL SIDE)
-                    </h3>
-                    <span className="text-[11px] text-slate-500 font-mono">Giới thiệu sản phẩm & nhận gia công OEM</span>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold">SELL SIDE</span>
+                  <h3 className="font-black text-slate-900 text-base font-heading">
+                    2. NHÀ MÁY BÁN (SELL SIDE)
+                  </h3>
                 </div>
+                <div className="text-[11px] text-slate-500 font-mono">Giới thiệu sản phẩm &amp; nhận gia công OEM</div>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
                   Nhà máy cung ứng: năng lực sản xuất máy móc CNC, gia công đúc ép dập, sản phẩm đầu ra đã hoàn thiện, 

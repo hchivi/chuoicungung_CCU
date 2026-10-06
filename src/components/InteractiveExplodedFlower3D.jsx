@@ -190,7 +190,7 @@ export default function InteractiveExplodedFlower3D() {
             <div className="w-32 h-32 sm:w-40 sm:h-40 xl:w-48 xl:h-48 flex items-center justify-center relative">
               <div className="absolute inset-0 rounded-full bg-blue-400/10 blur-xl"></div>
               <img 
-                src="/logo_only.png" 
+                src="/logo_onlyc.png" 
                 alt="Logo Chuỗi Cung Ứng" 
                 className="w-full h-full object-contain filter drop-shadow-md animate-spin-slow"
               />

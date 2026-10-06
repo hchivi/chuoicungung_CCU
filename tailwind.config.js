@@ -8,22 +8,24 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#f0f7ff',
-          100: '#e0effe',
-          200: '#bae0fd',
-          300: '#7cc7fb',
-          400: '#38a8f6',
-          500: '#0e8ce4',
-          600: '#026fc3',
-          700: '#03589e',
-          800: '#074b82',
-          900: '#0b3f6d',
-          950: '#072847',
+          50: '#f0f9f4',
+          100: '#dcf1e5',
+          200: '#bce4cd',
+          300: '#8ecea9',
+          400: '#55b37f',
+          500: '#26955c',
+          600: '#127b4b',
+          700: '#006039', // Official Rolex Green
+          800: '#044d2e',
+          900: '#023821',
+          950: '#012616',
         },
         primary: {
-          DEFAULT: '#0b3f6d',
-          dark: '#072847',
-          light: '#0e8ce4',
+          DEFAULT: '#006039', // Rolex Green
+          dark: '#00472a',
+          light: '#127b4b',
+          rolex: '#006039',
+          lacoste: '#002b1b',
         },
         accent: {
           blue: '#1d4ed8',
@@ -35,9 +37,14 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['FzPoppins', 'Poppins', 'system-ui', '-apple-system', 'sans-serif'],
-        heading: ['SpaceGrotesk', 'Space Grotesk', 'sans-serif'],
-        title: ['SpaceGrotesk', 'Space Grotesk', 'sans-serif'],
+        sans: ['Poppins', 'Arial', 'sans-serif'],
+        body: ['Poppins', 'Arial', 'sans-serif'],
+        poppins: ['Poppins', 'Arial', 'sans-serif'],
+        heading: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
+        title: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
+        hero: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
+        grotesk: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
+        arial: ['Poppins', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         'card': '0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',

@@ -103,7 +103,7 @@ export default function DemandWorkspacePage() {
       quoteTotal: '97.500.000 VNĐ',
       quoteFile: 'BaoGia_DetMaySG_2026.xlsx',
       sampleStatus: 'Chuẩn bị gửi mẫu áo test',
-      avatar: '/logo_only.png',
+      avatar: '/logo_onlyc.png',
       isTopPick: false
     },
     {
@@ -119,7 +119,7 @@ export default function DemandWorkspacePage() {
       quoteTotal: '105.000.000 VNĐ',
       quoteFile: null,
       sampleStatus: 'Chưa gửi mẫu',
-      avatar: '/logo_only.png',
+      avatar: '/logo_onlyc.png',
       isTopPick: false
     }
   ]);
@@ -260,7 +260,7 @@ export default function DemandWorkspacePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-4">
         <div className="text-xs text-slate-500 flex flex-wrap items-center space-x-2">
           <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-            <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+            <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
           </Link>
           <span>&gt;</span>
           <Link to="/tai-khoan" className="hover:text-[#0052cc]">Tài khoản</Link>

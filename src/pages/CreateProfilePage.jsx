@@ -217,7 +217,7 @@ export default function CreateProfilePage() {
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-xs text-slate-400 font-medium">
             <Link to="/" title="Trang chủ" className="inline-flex items-center hover:text-white transition">
-              <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain brightness-200" />
+              <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain brightness-200" />
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
             <span className="text-blue-400 font-bold">Tạo hồ sơ tổ chức</span>

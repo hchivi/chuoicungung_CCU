@@ -1,0 +1,9 @@
+{
+  "scannedAt": "2026-10-03",
+  "framework": "React 18 + Vite 6",
+  "fonts": { "display": "SpaceGrotesk", "body": "Poppins", "source": "src/index.css and tailwind.config.js; self-hosted" },
+  "palette": "CCU blue inherited; page-only Atelier warm neutrals and restrained champagne accent",
+  "motion": "motion and gsap installed; this page uses only CSS press/disclosure transitions",
+  "spacing": "Tailwind 3; page-only named 4pt scale",
+  "scope": "/dich-vu/to-chuc-ket-noi only; preserve shared navigation/footer, backend, database and routes"
+}

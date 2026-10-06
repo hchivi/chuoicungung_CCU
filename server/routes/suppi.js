@@ -72,7 +72,8 @@ router.get('/conversations/:id', async (req, res, next) => {
   try {
     const suppi = await getOrchestrator();
     const conversation = await suppi.getConversation(req.params.id);
-    if (!conversation) return res.status(404).json({ success: false, error: 'Không tìm thấy cuộc trao đổi' });
+    // Cookie-owned conversations are accessible only through /api/assistants.
+    if (!conversation || conversation.owner_id) return res.status(404).json({ success: false, error: 'Không tìm thấy cuộc trao đổi' });
     res.json({ success: true, data: conversation });
   } catch (error) { next(error); }
 });
@@ -80,6 +81,8 @@ router.get('/conversations/:id', async (req, res, next) => {
 router.post('/conversations/:id/messages', async (req, res, next) => {
   try {
     const suppi = await getOrchestrator();
+    const conversation = await suppi.getConversation(req.params.id);
+    if (!conversation || conversation.owner_id) return res.status(404).json({ success: false, error: 'Không tìm thấy cuộc trao đổi' });
     const result = await suppi.sendMessage(req.params.id, req.body?.message || '');
     res.json({ success: true, data: result });
   } catch (error) {
@@ -92,16 +95,17 @@ router.post('/conversations/:id/messages', async (req, res, next) => {
 router.get('/requirement-drafts/:id', async (req, res, next) => {
   try {
     const draft = await draftStore.get(req.params.id);
-    if (!draft) return res.status(404).json({ success: false, error: 'Không tìm thấy bản nháp' });
+    if (!draft || draft.owner_id) return res.status(404).json({ success: false, error: 'Không tìm thấy bản nháp' });
     res.json({ success: true, data: draft });
   } catch (error) { next(error); }
 });
 
 router.patch('/requirement-drafts/:id', async (req, res, next) => {
   try {
-    const draft = await draftStore.update(req.params.id, req.body || {});
-    if (!draft) return res.status(404).json({ success: false, error: 'Không tìm thấy bản nháp' });
-    res.json({ success: true, data: draft });
+    const draft = await draftStore.get(req.params.id);
+    if (!draft || draft.owner_id) return res.status(404).json({ success: false, error: 'Không tìm thấy bản nháp' });
+    const updated = await draftStore.update(req.params.id, req.body || {});
+    res.json({ success: true, data: updated });
   } catch (error) { next(error); }
 });
 

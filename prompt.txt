@@ -1,0 +1,191 @@
+PROJECT: CHUOICUNGUNG.COM
+
+TASK:
+Thiết kế và code 1 section mới trên homepage với concept:
+“6 BÁNH RĂNG = 6 GIAI ĐOẠN”
+
+Mục tiêu:
+Thể hiện trực quan 6 giai đoạn của CHUOICUNGUNG.COM bằng 6 bánh răng ăn khớp với nhau, chuyển động liên tục nhưng tinh tế.
+
+Thông điệp chính:
+“6 GIAI ĐOẠN – MỘT CHUỖI VẬN HÀNH LIÊN TỤC”
+
+Sub:
+“Từ chuẩn bị đầu tư đến vận hành và mở rộng, mỗi giai đoạn phát sinh những nhu cầu khác nhau. CHUOICUNGUNG.COM giúp doanh nghiệp tìm đúng nguồn cung và kết nối đúng năng lực tại từng thời điểm.”
+
+Dùng asset:
+logo_only.png
+
+Có thể dùng logo_only.png làm pattern/shape visual bên trong từng bánh răng hoặc làm tâm bánh răng, nhưng không làm sai nhận diện logo.
+
+6 bánh răng:
+
+1. CHUẨN BỊ & ĐẦU TƯ
+Keywords:
+- Khảo sát
+- Pháp lý
+- Mặt bằng
+
+2. THIẾT KẾ & XÂY DỰNG
+Keywords:
+- Thiết kế
+- Xây dựng
+- M&E
+
+3. LẮP ĐẶT & HOÀN THIỆN
+Keywords:
+- Máy móc
+- Dây chuyền
+- Chạy thử
+
+4. VẬN HÀNH SẢN XUẤT
+Keywords:
+- Nguyên liệu
+- Sản xuất
+- Logistics
+
+5. NHÂN SỰ & HẬU CẦN
+Keywords:
+- Tuyển dụng
+- Phúc lợi
+- Đồng phục & Bảo hộ
+
+6. MỞ RỘNG – TỐI ƯU – CHUYỂN ĐỔI
+Keywords:
+- Mở rộng
+- Chuẩn hóa
+- Chuyển đổi
+
+Yêu cầu visual:
+- 6 bánh răng phải nhìn rõ là đang ăn khớp với nhau.
+- Bố cục tạo cảm giác toàn bộ hệ thống là một cơ chế vận hành liên tục.
+- Không làm 6 bánh răng cùng xoay nhanh vì sẽ rối.
+- Tất cả quay rất chậm, các bánh răng liền kề xoay ngược chiều nhau.
+- Mỗi 2.5–3 giây, highlight lần lượt 1 bánh răng.
+- Bánh răng active:
+  + sáng hơn nhẹ
+  + scale rất nhỏ 1.02–1.04
+  + keyword bên trong thay đổi bằng fade/slide nhẹ
+- Các bánh răng còn lại vẫn chuyển động nhưng opacity/visual emphasis thấp hơn.
+
+Yêu cầu content trong bánh răng:
+- Hiển thị số:
+  01 / 02 / 03 / 04 / 05 / 06
+- Hiển thị tên giai đoạn ngắn
+- Hiển thị 1 keyword chính tại một thời điểm
+- keyword thay đổi tuần tự trong 3 từ khóa của giai đoạn đó
+
+Ví dụ bánh 05:
+“NHÂN SỰ & HẬU CẦN”
+sau đó keyword lần lượt:
+“Tuyển dụng”
+→ “Phúc lợi”
+→ “Đồng phục & Bảo hộ”
+
+Yêu cầu interaction:
+- Hover desktop:
+  + pause hoặc giảm tốc độ bánh răng đang hover
+  + làm nổi bánh răng đó
+  + hiển thị đầy đủ 3 keyword
+- Click/tap:
+  + dẫn đến route tương ứng:
+    /giai-doan/[slug]
+  + hoặc mở mini detail nếu architecture hiện tại phù hợp
+- Ưu tiên link trực tiếp tới page giai đoạn.
+
+Suggested slugs:
+- /giai-doan/chuan-bi-dau-tu
+- /giai-doan/thiet-ke-xay-dung
+- /giai-doan/lap-dat-hoan-thien
+- /giai-doan/van-hanh-san-xuat
+- /giai-doan/nhan-su-hau-can
+- /giai-doan/mo-rong-toi-uu-chuyen-doi
+
+Nếu route hiện tại khác:
+reuse route hiện có,
+không tự tạo duplicate route.
+
+Yêu cầu UX:
+- Section không chỉ để trang trí.
+- Người xem phải hiểu:
+  1. Có 6 giai đoạn
+  2. Mỗi giai đoạn có nhu cầu khác nhau
+  3. Các giai đoạn liên kết thành một chuỗi
+  4. Có thể click để khám phá chi tiết
+
+CTA dưới block:
+Primary:
+“KHÁM PHÁ BẢN ĐỒ 6 GIAI ĐOẠN”
+→ /ban-do-6-giai-doan
+
+Secondary:
+“ĐĂNG NHU CẦU”
+→ /dang-nhu-cau
+
+Yêu cầu responsive:
+Desktop:
+- 6 bánh răng bố trí thành cụm cơ học, không nhất thiết 1 hàng thẳng.
+- Có thể dùng bố cục 3 bánh lớn + 3 bánh nhỏ nếu nhìn tự nhiên hơn.
+- Phải thấy rõ tính interlocking.
+
+Tablet:
+- giảm kích thước hợp lý
+- vẫn giữ cảm giác bánh răng ăn khớp.
+
+Mobile:
+- không ép 6 bánh răng quá nhỏ.
+- có thể chuyển thành 2 hàng x 3 hoặc horizontal scroll.
+- animation giảm nhẹ.
+- ưu tiên readability và performance.
+- không horizontal overflow ngoài khu vực cho phép.
+
+Yêu cầu kỹ thuật:
+- ưu tiên CSS animation hoặc GSAP nhẹ.
+- không dùng WebGL/Three.js nếu không cần.
+- animation phải mượt.
+- respect prefers-reduced-motion.
+- không gây CLS.
+- không dùng fixed height quá lớn.
+- không tạo khoảng trắng dư.
+- dữ liệu 6 giai đoạn và keywords phải nằm trong array/config để dễ chỉnh sửa.
+- không hard-code rải rác.
+- component reusable.
+
+SEO/accessibility:
+- section phải có H2 thật:
+  “6 Giai Đoạn – Một Chuỗi Vận Hành Liên Tục”
+- text trong DOM, không render toàn bộ bằng canvas.
+- mỗi bánh răng có aria-label rõ ràng.
+- link semantic.
+- không dùng animation làm mất khả năng đọc.
+
+Visual style:
+- hiện đại
+- B2B
+- sạch
+- chuyên nghiệp
+- bám brand CHUOICUNGUNG.COM
+- có thể dùng 6 màu brand cho 6 bánh răng nhưng không quá sặc sỡ
+- tránh gradient/glow quá mạnh
+- không làm giống game
+
+Logic nội dung:
+6 bánh răng = 6 giai đoạn của hệ thống.
+Bên trong mỗi giai đoạn là các nhóm nhu cầu khác nhau.
+Từ đó người dùng đi sâu vào:
+Nhu cầu → Giải pháp → Nhà cung ứng phù hợp.
+
+Cuối cùng:
+1. Audit component/page hiện tại trước.
+2. Reuse design system hiện có.
+3. Không rebuild homepage.
+4. Không sửa các section khác nếu không cần.
+5. Implement section hoàn chỉnh.
+6. Test desktop/tablet/mobile.
+7. Báo cáo:
+   - files changed
+   - component created/modified
+   - route links used
+   - animation method
+   - responsive behavior
+   - performance considerations.

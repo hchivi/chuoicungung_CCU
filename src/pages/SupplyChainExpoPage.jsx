@@ -323,14 +323,14 @@ export default function SupplyChainExpoPage() {
       {/* ========================================================
           1. HERO HEADER SECTION (Matching exact panoramic banner)
       ======================================================== */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-6 sm:pt-10 lg:pt-12 pb-20 sm:pb-24 lg:pb-28 min-h-[440px] sm:min-h-[480px] lg:min-h-[500px] flex items-center">
+      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-10 sm:pt-14 lg:pt-16 pb-20 sm:pb-24 lg:pb-28 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
         
         {/* Right Half B2B Supply Chain Expo Background with Smooth Gradient Fade */}
         <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
           <img 
             src="/images/supply_chain_expo_hero.jpg" 
             alt="Chương trình kết nối doanh nghiệp B2B & Ngày hội Chuỗi Cung Ứng" 
-            className="w-full h-full object-cover object-center scale-105"
+            className="w-full h-full object-cover object-[62%_center] scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/30 to-transparent"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
@@ -343,7 +343,7 @@ export default function SupplyChainExpoPage() {
             {/* Breadcrumb */}
             <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar whitespace-nowrap py-0.5">
               <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+                <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
               <Link 
@@ -362,15 +362,6 @@ export default function SupplyChainExpoPage() {
               )}
             </nav>
 
-            {/* Tagline Badge with Rotating Logo */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <img 
-                src="/logo_only.png" 
-                alt="Logo CCU" 
-                className="w-3.5 h-3.5 object-contain animate-[spin_8s_linear_infinite]" 
-              />
-              <span>SỰ KIỆN KẾT NỐI B2B HÀNG ĐẦU VIỆT NAM 2026 - 2027</span>
-            </div>
 
             {/* Headline H1 (Requested: "Chương trình kết nối doanh nghiệp") */}
             <div className="space-y-1">
@@ -419,44 +410,40 @@ export default function SupplyChainExpoPage() {
         <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
-            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
-              <div className="w-11 h-11 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Calendar className="w-5 h-5" />
+            <div className="p-2 sm:p-0 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">LỊCH TRÌNH 2025–2026</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">7+ Kỳ Sự Kiện</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tại các KCN 3 Miền</p>
-              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">7+ Kỳ Triển Lãm</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Tổ chức trực tiếp tại các KCN 3 miền</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Factory className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">BÊN MUA THAM GIA</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">500+ Nhà Máy</div>
-                <p className="text-[11px] text-slate-500 font-medium">Tìm kiếm đối tác cung ứng</p>
-              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">500+ Nhà Máy</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Tìm kiếm đối tác & công bố bài toán cung ứng</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0 shadow-2xs">
-                <Building2 className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-sky-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">HỆ THỐNG DỮ LIỆU</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">24.000+ NCC</div>
-                <p className="text-[11px] text-slate-500 font-medium">18 Pha năng lực chuẩn hóa</p>
-              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">24.000+ NCC</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">18 Pha năng lực & tiêu chuẩn công nghiệp</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0 shadow-2xs">
-                <Handshake className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">KẾT NỐI B2B</span>
               </div>
-              <div>
-                <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">Khớp Lệnh 1:1</div>
-                <p className="text-[11px] text-slate-500 font-medium">B2B Matchmaking tại chỗ</p>
-              </div>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">Khớp Lệnh 1:1</div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Ghép nối phòng mua hàng trực tiếp tại sự kiện</p>
             </div>
 
           </div>

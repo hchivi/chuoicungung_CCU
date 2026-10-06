@@ -1,0 +1,15 @@
+BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:Đồng Thành Tuyên (Tony Dong)
+N;CHARSET=UTF-8:Đồng;Thành Tuyên;;;
+ORG;CHARSET=UTF-8:CHUỖI CUNG ỨNG
+TITLE;CHARSET=UTF-8:TONY DONG
+TEL;TYPE=CELL:0768 676 787
+item1.EMAIL;TYPE=INTERNET:tony.dong@chuoicungung.com
+item1.X-ABLabel:email
+item2.URL:https://chuoicungung.com/tonydong
+item2.X-ABLabel:website
+item3.ADR:;;36 Mạc Đĩnh Chi, Phường Tân Định, Thành phố Hồ Chí Minh;;;;
+item3.X-ABLabel:địa chỉ
+NOTE;CHARSET=UTF-8:ĐỒNG THÀNH TUYÊN | TONY DONG - Với hơn 10 năm kinh nghiệm thực chiến trong lĩnh vực công nghệ số, Fintech, Web3 và phát triển bền vững (ESG), tôi là nhà lãnh đạo chiến lược và nhà sáng lập các hệ sinh thái đổi mới sáng tạo, tiên phong kết nối nguồn lực, thúc đẩy chuyển đổi số và phát triển xanh cho doanh nghiệp trong nước và quốc tế.
+END:VCARD

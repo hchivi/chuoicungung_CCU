@@ -177,78 +177,71 @@ export default function AssociationsPage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION (TUÂN THỦ SECTION 3 ĐẶC TẢ 24.TXT) */}
       {/* ========================================================================= */}
-      <section className="relative overflow-visible bg-[#F4F8FA] border-b border-slate-200/90 pt-8 sm:pt-12 lg:pt-14 pb-20 sm:pb-24 lg:pb-28 min-h-[460px] flex items-center">
+      {/* ========================================================================= */}
+      {/* 1. HERO SECTION (MATCHES IMAGE 2 LAYOUT & TEXT HIERARCHY)                */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-hidden bg-white border-b border-slate-100 min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] flex items-center">
 
-        {/* Video & Constellation Background */}
-        <div className="absolute top-0 right-0 w-full lg:w-[68%] xl:w-[64%] h-full pointer-events-none overflow-hidden z-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            disablePictureInPicture
-            poster="/images/association_summit_hero.jpg"
-            className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none transition-opacity duration-1000"
-          >
-            <source src="/images/vietnam_financial_centers_flycam_1080p.webm" type="video/webm" />
-            <img src="/images/association_summit_hero.jpg" alt="Toàn cảnh trung tâm tài chính" className="w-full h-full object-cover" />
-          </video>
+        {/* Summit Panorama Background */}
+        <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
+          <img
+            src="/images/association_summit_hero.jpg"
+            alt="Hội và hiệp hội trong chuỗi cung ứng"
+            className="w-full h-full object-cover object-[62%_center] scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
+          />
           <AssociationConstellationCanvas className="opacity-75 z-[2]" />
-          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-[#F4F8FA] via-[#F4F8FA]/90 md:via-[#F4F8FA]/60 lg:via-[#F4F8FA]/40 to-transparent"></div>
-          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-[#F4F8FA] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-r from-white via-white/95 md:via-white/70 lg:via-white/35 to-transparent"></div>
+          <div className="absolute inset-0 z-[3] bg-gradient-to-t from-white via-transparent to-transparent"></div>
         </div>
 
-        {/* Hero Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-2 relative z-10 w-full">
-          <div className="max-w-2xl space-y-4 sm:space-y-5">
+        {/* Content Container Aligned Exactly with Image 2 */}
+        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+          
+          {/* Breadcrumb */}
+          <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
+            <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
+            <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />
+            <span className="text-slate-900 font-medium" aria-current="page">Hội &amp; Hiệp hội</span>
+          </nav>
 
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar py-0.5">
-              <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
-              </Link>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              <span className="text-[#0052cc] font-bold">Hội / Hiệp Hội & Tổ Chức</span>
-            </nav>
+          <div className="max-w-xl">
 
-            {/* Badge H1 Heading Standard */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50/95 backdrop-blur-md border border-blue-200/80 text-[#0047a5] text-[11px] font-bold font-heading tracking-wide shadow-2xs">
-              <span className="w-2 h-2 rounded-full bg-[#0052cc] animate-pulse"></span>
-              <span>PHASE P1 — HOÀN THIỆN HỆ SINH THÁI</span>
-            </div>
-
-            {/* H1 Heading */}
-            <div className="space-y-1.5">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight text-slate-950 leading-[1.15]">
-                Hội và hiệp hội trong chuỗi cung ứng
-              </h1>
-              <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed max-w-xl">
-                Khám phá các tổ chức đang triển khai chương trình, kết nối nhu cầu và hỗ trợ doanh nghiệp theo ngành, địa bàn và cộng đồng hội viên.
-              </p>
-            </div>
-
-            {/* Thông điệp phụ */}
-            <p className="text-xs sm:text-sm text-[#0052cc] font-semibold flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-              <span>Duy trì hoạt động hỗ trợ hội viên trước và sau mỗi chương trình.</span>
+            {/* Category Label */}
+            <p className="text-sm font-semibold text-[#008060] tracking-wide mb-3">
+              Tổ chức ngành nghề &amp; Mạng lưới B2B
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            {/* H1 Heading */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">
+              Hội và hiệp hội<br />trong chuỗi cung ứng.
+            </h1>
+
+            {/* Lede (Tagline) */}
+            <p className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight leading-snug mb-3">
+              Đúng tổ chức chuyên môn.<br />Rõ cộng đồng hội viên.
+            </p>
+
+            {/* Description */}
+            <p className="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl mb-6">
+              Khám phá các tổ chức đang triển khai chương trình, kết nối nhu cầu và hỗ trợ doanh nghiệp theo ngành, địa bàn. Duy trì hoạt động đồng hành trước và sau mỗi chương trình.
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <a
                 href="#danh-sach-hiep-hoi"
-                className="px-6 py-3 bg-[#0052cc] hover:bg-[#003d8f] text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-blue-900/20 transition flex items-center space-x-2 font-heading tracking-wide cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-b from-[#00A86B] to-[#008060] hover:from-[#00925c] hover:to-[#007054] text-white text-sm font-bold shadow-sm transition active:scale-95"
               >
-                <Search className="w-4 h-4" />
-                <span>TÌM HỘI / HIỆP HỘI</span>
+                <span>Tìm hội / hiệp hội</span>
+                <ArrowRight className="w-4 h-4" />
               </a>
 
               <Link
                 to="/tao-ho-so?type=association"
-                className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-900 hover:text-[#0052cc] text-xs sm:text-sm font-bold rounded-xl border border-slate-200 hover:border-blue-300 shadow-2xs transition flex items-center space-x-2 font-heading group"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#008060] hover:text-[#005e46] transition p-2"
               >
-                <PlusCircle className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
-                <span>CẬP NHẬT HỒ SƠ</span>
+                <span>Cập nhật hồ sơ</span>
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -261,55 +254,51 @@ export default function AssociationsPage() {
       {/* 2. STATS BAR (REAL DATA SOURCE COMPLIANT - SECTION 7 & 14) */}
       {/* ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30 -mt-10 sm:-mt-12">
-        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5">
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-300/30 p-4 sm:p-5 lg:p-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
 
-            <div className="flex items-center space-x-3.5 p-1 sm:p-0">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 text-[#0052cc] flex items-center justify-center shrink-0">
-                <Landmark className="w-5 h-5" />
+            <div className="p-2 sm:p-0 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">ĐỐI TÁC HIỆP HỘI</span>
               </div>
-              <div>
-                <div className="text-lg sm:text-xl font-black text-slate-950 font-mono tracking-tight">
-                  {listingData.total}+
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">Hội & Hiệp hội đối tác</p>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
+                {listingData.total}+
               </div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Hội & Hiệp hội bảo trợ chuyên môn</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
-                <Rocket className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">CHƯƠNG TRÌNH MỞ</span>
               </div>
-              <div>
-                <div className="text-lg sm:text-xl font-black text-slate-950 font-mono tracking-tight">
-                  {openPrograms.length}+
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">Chương trình kết nối đang mở</p>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
+                {openPrograms.length}+
               </div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Chương trình kết nối đang triển khai</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">PHÁP NHÂN MINH BẠCH</span>
               </div>
-              <div>
-                <div className="text-lg sm:text-xl font-black text-slate-950 font-mono tracking-tight">
-                  100%
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">Pháp nhân B2B xác thực</p>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
+                100%
               </div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Pháp nhân B2B xác thực độc lập</p>
             </div>
 
-            <div className="flex items-center space-x-3.5 pt-3 sm:pt-0 sm:pl-6">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
-                <Users className="w-5 h-5" />
+            <div className="pt-3 sm:pt-0 sm:pl-6 space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 font-mono">DỮ LIỆU THỰC</span>
               </div>
-              <div>
-                <div className="text-lg sm:text-xl font-black text-slate-950 font-mono tracking-tight">
-                  Xác nhận thật
-                </div>
-                <p className="text-[11px] text-slate-500 font-medium">Không dùng member marketing</p>
+              <div className="text-xl sm:text-2xl font-black text-slate-950 font-mono tracking-tight">
+                Xác Nhận Thật
               </div>
+              <p className="text-[11.5px] text-slate-500 leading-snug">Không dùng member marketing ảo</p>
             </div>
 
           </div>

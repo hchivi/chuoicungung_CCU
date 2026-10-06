@@ -38,6 +38,10 @@ Thumbs.db
 *.rar
 ziK6pLVQ
 deploy_inet.zip
+_backup_unused_assets/
+archive_uploads/
+catalog/
+
 archive_uploads/
 server/data/enterprisesFull.json
 catalog/

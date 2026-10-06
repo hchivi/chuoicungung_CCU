@@ -1,0 +1,87 @@
+/* Hallmark · component: exhibition design alternatives · genre: modern-minimal · theme: CCU
+ * Pre-emit critique: P4 H4 E4 S5 R4 V5. Local preview only, no production import.
+ */
+.expo-design-review { color: var(--review-ink); background: var(--review-paper); }
+.expo-design-review-bar { max-width: 1280px; margin-inline: auto; padding: 24px 16px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.expo-design-review-bar h1 { margin: 4px 0; font-size: clamp(24px, 3vw, 32px); font-style: normal; font-weight: 700; overflow-wrap: anywhere; }
+.expo-design-review-bar p { margin: 0; font-size: 14px; }
+.expo-design-review-bar a { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; white-space: nowrap; color: var(--review-green); }
+.expo-design-review-options { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 16px; max-width: 1280px; margin-inline: auto; }
+.expo-design-review-options button { min-height: 48px; padding: 12px 20px; border: 1px solid var(--review-line); border-radius: 12px; background: var(--review-paper); color: var(--review-ink); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer; }
+.expo-design-review-options button[aria-pressed="true"] { background: var(--review-green); color: var(--review-paper); border-color: var(--review-green); }
+.expo-design-review button:focus-visible, .expo-design-review a:focus-visible { outline: 3px solid var(--review-green); outline-offset: 4px; }
+.expo-design-review-options button:active { transform: translateY(1px); }
+.expo-design-review-description { max-width: 1280px; min-height: 48px; margin: 0 auto; padding: 8px 16px 24px; font-size: 14px; }
+.expo-design-review-foot { padding: 24px 16px; max-width: 1280px; margin-inline: auto; border-top: 1px solid var(--review-line); font-size: 14px; }
+.expo-option-photo { position: relative; margin: 0; aspect-ratio: 3 / 2; overflow: clip; border-radius: var(--expo-radius-media); background: var(--expo-media); color: var(--expo-ink); }
+.expo-option-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.expo-option-photo-error { padding: var(--expo-space-xl); height: 100%; display: flex; gap: var(--expo-space-lg); flex-direction: column; justify-content: center; }
+.expo-option-photo-error p { font-size: 16px; }
+.expo-option-photo-loading { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font-size: 14px; }
+.expo-option-table-head p { margin: 0 0 var(--expo-space-md); font-size: 16px; color: var(--expo-muted); }
+.expo-option-table-head h2 { margin-bottom: var(--expo-space-lg); }
+.expo-option-table-scene { position: relative; }
+.expo-option-table-scene .expo-option-photo { border-radius: 0; }
+.expo-option-roles { display: flex; flex-direction: column; gap: var(--expo-space-sm); padding-block: var(--expo-space-xl); }
+.expo-option-roles button { display: flex; align-items: center; gap: var(--expo-space-md); min-height: 48px; padding: var(--expo-space-md) var(--expo-space-lg); border: 1px solid var(--expo-green); border-radius: var(--expo-radius); background: var(--expo-paper); color: var(--expo-ink); font: inherit; font-size: 14px; white-space: nowrap; cursor: pointer; transition: transform var(--expo-duration) var(--expo-ease-out); }
+.expo-option-roles button > svg { flex: 0 0 auto; }
+.expo-option-check { margin-left: auto; opacity: 0; }
+.expo-option-roles button[aria-pressed="true"] { color: var(--expo-surface); background: var(--expo-green); }
+.expo-option-roles button[aria-pressed="true"] .expo-option-check { opacity: 1; }
+.expo-option-roles button:disabled { cursor: not-allowed; opacity: .55; }
+.expo-option-roles button:active { transform: translateY(1px); }
+.expo-option-table-hint { margin: 0 0 var(--expo-space-xl); font-size: 14px; color: var(--expo-muted); }
+.expo-option-story { border-top: 1px solid var(--expo-line); padding-top: var(--expo-space-xl); display: grid; gap: var(--expo-space-xl); }
+.expo-option-story h3 { margin: 0 0 var(--expo-space-md); font-size: 26px; line-height: 1.35; font-style: normal; font-weight: 700; overflow-wrap: anywhere; }
+.expo-option-story p { margin: 0; max-width: 65ch; font-size: 16px; color: var(--expo-muted); }
+.expo-option-story ul { padding: 0; margin: var(--expo-space-lg) 0 0; display: flex; flex-wrap: wrap; gap: var(--expo-space-md) var(--expo-space-xl); list-style: none; }
+.expo-option-story li { display: flex; align-items: center; gap: var(--expo-space-sm); font-size: 14px; color: var(--expo-green-deep); }
+.expo-option-story li svg { flex: 0 0 auto; }
+.expo-option-program { display: inline-flex; align-items: center; gap: var(--expo-space-md); min-height: 48px; margin-top: var(--expo-space-lg); color: var(--expo-green); font-size: 14px; white-space: nowrap; }
+.expo-option-poster-scene { position: relative; }
+.expo-option-poster-paper { position: relative; margin-top: -32px; padding: var(--expo-space-xl); background: var(--expo-paper); color: var(--expo-ink); border-radius: var(--expo-radius); }
+.expo-option-poster-paper > p { margin: 0 0 var(--expo-space-lg); font-size: 16px; }
+.expo-option-poster-paper > p:last-child { margin: var(--expo-space-lg) 0 0; color: var(--expo-muted); }
+.expo-option-poster-paper h2 { font-size: clamp(24px, 6.4vw, 40px); }
+.expo-option-poster-sign { display: flex; align-items: center; gap: var(--expo-space-lg); margin: var(--expo-space-md) 0; padding: var(--expo-space-lg) var(--expo-space-xl); background: var(--expo-note); color: var(--expo-ink); border-radius: var(--expo-radius); width: fit-content; font-size: 16px; }
+.expo-review-state-grid { display: grid; gap: 12px; margin-top: 16px; }
+.expo-review-state-grid article { display: grid; gap: 8px; }
+.expo-review-state-grid article p { font-size: 14px; margin: 0; }
+.expo-review-state-grid .expo-home-role-choices { display: block; }
+.expo-review-state-grid .expo-home-role-choices button { width: 100%; justify-content: center; font-size: 14px; }
+@media (hover: hover) and (pointer: fine) {
+  .expo-design-review-options button:not([aria-pressed="true"]):hover { background: var(--review-mint); }
+  .expo-option-roles button:hover { transform: translateY(-1px); }
+}
+@media (min-width: 48rem) {
+  .expo-design-review-bar, .expo-design-review-options, .expo-design-review-description { padding-inline: 24px; }
+  .expo-option-table-head { max-width: 880px; }
+  .expo-option-table-scene { margin-inline: auto; max-width: 1120px; }
+  .expo-option-table-scene .expo-option-photo { width: 85%; margin-inline: auto; }
+  .expo-option-table-scene .expo-option-roles { display: block; padding: 0; }
+  .expo-option-table-scene button { position: absolute; min-width: 180px; }
+  .expo-option-table-scene [data-option-role="buyer"] { left: 0; bottom: 24%; }
+  .expo-option-table-scene [data-option-role="supplier"] { right: 0; bottom: 24%; }
+  .expo-option-table-scene [data-option-role="organizer"] { top: 7%; left: 50%; translate: -50% 0; }
+  .expo-option-table-hint { text-align: center; margin: var(--expo-space-xl) 0; }
+  .expo-option-story { grid-template-columns: minmax(0, 1fr) auto; align-items: center; min-height: 190px; }
+  .expo-option-story .expo-home-primary { width: fit-content; }
+  .expo-option-poster-scene { padding-bottom: var(--expo-space-3xl); }
+  .expo-option-poster-scene .expo-option-photo { aspect-ratio: 2 / 1; }
+  .expo-option-poster-scene .expo-option-photo img { object-position: 50% 35%; }
+  .expo-option-poster-paper { position: absolute; left: 0; bottom: 0; width: 54%; margin: 0; padding: var(--expo-space-2xl) var(--expo-space-2xl) var(--expo-space-xl) 0; border-radius: 0 var(--expo-radius-media) 0 0; }
+  .expo-option-poster-paper h2 { font-size: clamp(36px, 4vw, 58px); }
+  .expo-option-poster-sign { position: absolute; top: var(--expo-space-xl); right: var(--expo-space-xl); margin: 0; }
+  .expo-option--poster .expo-option-roles { flex-direction: row; flex-wrap: wrap; }
+  .expo-review-state-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 30rem) {
+  .expo-design-review-bar { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .expo-design-review-options { flex-direction: column; }
+  .expo-option-roles button { gap: var(--expo-space-sm); padding-inline: var(--expo-space-sm); font-size: 13px; }
+  .expo-option-check { width: 12px; height: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .expo-option-roles button { transition: none; }
+  .expo-option-roles button:hover, .expo-option-roles button:active, .expo-design-review-options button:active { transform: none; }
+}

@@ -1,0 +1,15 @@
+BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:Nguyễn Thị Hà Trinh
+N;CHARSET=UTF-8:Nguyễn;Thị Hà Trinh;;;
+ORG;CHARSET=UTF-8:CHUỖI CUNG ỨNG
+TITLE;CHARSET=UTF-8:JENNY TRINH
+TEL;TYPE=CELL:0937 151 290
+item1.EMAIL;TYPE=INTERNET:trinh@chuoicungung.vn
+item1.X-ABLabel:email
+item2.URL:https://chuoicungung.com/jennytrinh
+item2.X-ABLabel:website
+item3.ADR:;;29 Quách Văn Tuấn, Phường Bảy Hiền, Thành phố Hồ Chí Minh;;;;
+item3.X-ABLabel:địa chỉ
+NOTE;CHARSET=UTF-8:JENNY TRINH - Kết nối và đồng hành cùng đối tác, khách hàng trong lĩnh vực may mặc, thời trang, đồng phục doanh nghiệp và quà tặng, hướng đến các giải pháp sản xuất tối ưu, chất lượng và hợp tác bền vững.
+END:VCARD

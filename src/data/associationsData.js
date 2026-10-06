@@ -520,7 +520,7 @@ export function getFullAssociationData(orgIdOrSlug, userContext = null) {
         province: rawAssoc.region || 'Toàn quốc',
         address: rawAssoc.address || 'Hà Nội, Việt Nam',
         orgType: 'Hội / Hiệp hội',
-        logo: rawAssoc.logo || '/logo_only.png',
+        logo: rawAssoc.logo || '/logo_onlyc.png',
         roles: ['ASSOCIATION'],
         isClaimed: false,
         isPublished: true,

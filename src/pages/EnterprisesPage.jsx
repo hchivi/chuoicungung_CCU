@@ -598,7 +598,7 @@ export default function EnterprisesPage() {
             {/* Breadcrumb */}
             <nav aria-label="Breadcrumb" className="flex items-center justify-center space-x-2 text-xs text-slate-500 font-medium overflow-x-auto no-scrollbar touch-scroll whitespace-nowrap py-0.5 max-w-full">
               <Link to="/" title="Trang chủ" className="inline-flex items-center hover:opacity-80 transition shrink-0 p-0.5">
-                <img src="/logo_only.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
+                <img src="/logo_onlyc.png" alt="Trang chủ" className="w-4 h-4 object-contain shrink-0" />
                 <span className="ml-1.5 text-slate-600 hover:text-[#0052cc]">Trang chủ</span>
               </Link>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />

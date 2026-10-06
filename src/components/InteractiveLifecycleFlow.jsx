@@ -157,16 +157,16 @@ export default function InteractiveLifecycleFlow({ onStageSelect = null }) {
           style={{ backgroundColor: currentStage.color }}
         ></div>
 
-        {/* TOP HEADER: Central Core Typography "CHUỖI CUNG ỨNG . COM" & Asset logo_only.png Integration */}
+        {/* TOP HEADER: Central Core Typography "CHUỖI CUNG ỨNG . COM" & Asset logo_onlyc.png Integration */}
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-100">
 
-          {/* Brand Core Hub with logo_only.png watermark/emblem */}
+          {/* Brand Core Hub with logo_onlyc.png watermark/emblem */}
           <div className="flex items-center space-x-3.5">
 
-            {/* Elegant Emblem using logo_only.png */}
+            {/* Elegant Emblem using logo_onlyc.png */}
             <div className="relative w-12 h-12 rounded-2xl bg-white shadow-md border border-slate-100 p-1.5 flex items-center justify-center flex-shrink-0 group hover:scale-105 transition-transform duration-300">
               <img
-                src="/logo_only.png"
+                src="/logo_onlyc.png"
                 alt="Supply Chain Icon"
                 className="w-full h-full object-contain"
                 onError={(e) => { e.target.src = '/logo.png'; }}

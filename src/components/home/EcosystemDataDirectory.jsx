@@ -139,8 +139,10 @@ export default function EcosystemDataDirectory() {
 
           {/* Section Header with synchronized font size and centered layout */}
           <div className="relative z-10 text-center max-w-5xl mx-auto space-y-2">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-              Tra cứu hệ sinh thái chuỗi cung ứng
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+              <span className="text-gradient-flow-green">
+                Tra cứu hệ sinh thái chuỗi cung ứng
+              </span>
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
               Kết quả được tìm từ dữ liệu đang có trong hệ thống và giải thích theo ngành nghề, địa bàn, năng lực, quy mô và yêu cầu thực tế.

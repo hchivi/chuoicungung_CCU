@@ -7,7 +7,7 @@ import {
 
 function SupplierCardItem({ supp }) {
   return (
-    <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-xl hover:border-blue-400 transition-all duration-200 flex flex-col justify-between space-y-4 group relative w-full">
+    <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-xl hover:border-emerald-400 transition-all duration-200 flex flex-col justify-between space-y-4 group relative w-full">
       <div className="space-y-3.5">
         
         {/* Mã NCC & Trạng thái đã đối chiếu */}
@@ -16,8 +16,8 @@ function SupplierCardItem({ supp }) {
             {supp.code || `NCC-2026-${supp.id.replace('ncc-', '00')}`}
           </span>
           
-          <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-50 text-[#006039] border border-emerald-200/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
             <span>{supp.status}</span>
           </span>
         </div>
@@ -27,13 +27,13 @@ function SupplierCardItem({ supp }) {
           <span className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
             Doanh nghiệp sản xuất / Cung ứng:
           </span>
-          <h3 className="font-black text-base sm:text-lg text-slate-900 group-hover:text-[#0052cc] font-heading leading-snug line-clamp-2 transition-colors">
+          <h3 className="font-black text-base sm:text-lg text-slate-900 group-hover:text-[#006039] font-heading leading-snug line-clamp-2 transition-colors">
             {supp.name}
           </h3>
 
           <div className="flex flex-wrap gap-1.5 pt-1">
             {supp.capabilities.map((cap, cIdx) => (
-              <span key={cIdx} className="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-100">
+              <span key={cIdx} className="px-2.5 py-0.5 rounded-md bg-emerald-50 text-[#006039] text-xs font-semibold border border-emerald-200/60">
                 {cap}
               </span>
             ))}
@@ -46,7 +46,7 @@ function SupplierCardItem({ supp }) {
           {/* Quy mô đơn hàng phù hợp */}
           <div className="flex items-center justify-between gap-2">
             <span className="font-medium text-slate-500">Quy mô tiếp nhận:</span>
-            <span className="font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded text-xs sm:text-sm text-right">
+            <span className="font-mono font-bold text-[#006039] bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded text-xs sm:text-sm text-right">
               {supp.orderScale}
             </span>
           </div>
@@ -60,14 +60,14 @@ function SupplierCardItem({ supp }) {
           {/* Nhà máy & Thiết bị */}
           {supp.factoryEquipment && (
             <div className="flex items-start gap-2 text-slate-600">
-              <Factory className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+              <Factory className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
               <span className="line-clamp-2"><strong>Cơ sở & Thiết bị:</strong> {supp.factoryEquipment}</span>
             </div>
           )}
 
           {/* Chứng nhận và nguồn xác minh */}
           <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70 text-xs sm:text-sm text-slate-700 space-y-1.5 mt-1">
-            <span className="font-bold text-slate-800 font-mono block text-[11px] uppercase text-blue-700">
+            <span className="font-bold text-[#006039] font-mono block text-[11px] uppercase">
               Chứng nhận & Kiểm định xác minh:
             </span>
             <div className="flex flex-wrap gap-1.5">
@@ -87,7 +87,7 @@ function SupplierCardItem({ supp }) {
       <div className="pt-2 border-t border-slate-100">
         <Link
           to="/nha-cung-ung"
-          className="w-full py-2.5 px-4 bg-slate-100 hover:bg-[#0052cc] hover:text-white text-slate-900 rounded-xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-2xs group-hover:bg-[#0052cc] group-hover:text-white"
+          className="w-full py-2.5 px-4 bg-slate-100 hover:bg-[#006039] hover:text-white text-slate-900 rounded-xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-2xs group-hover:bg-[#006039] group-hover:text-white"
         >
           <span>Xem năng lực chi tiết</span>
           <ArrowRight className="w-4 h-4" />
@@ -151,7 +151,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO 9001:2015", "RoHS", "REACH Compliant"],
       updatedAt: "28/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-07",
@@ -163,7 +163,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO 14001:2015", "Chứng nhận xuất khẩu FDI"],
       updatedAt: "24/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     }
   ];
 
@@ -178,7 +178,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO 9001:2015", "FSC CoC Chain of Custody", "RoHS"],
       updatedAt: "22/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-05",
@@ -190,7 +190,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO 9001:2015", "Giấy phép hóa chất công nghiệp"],
       updatedAt: "26/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-08",
@@ -202,7 +202,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO/IEC 17025", "Bộ KH&CN chỉ định"],
       updatedAt: "21/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     }
   ];
 
@@ -217,7 +217,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["ISO 9001:2015", "Cam kết bảo mật NDA FDI", "Đạt chuẩn CMM"],
       updatedAt: "20/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-06",
@@ -229,7 +229,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["Chứng chỉ khử trùng ISPM 15", "ISO 9001:2015"],
       updatedAt: "27/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     },
     {
       id: "ncc-09",
@@ -241,7 +241,7 @@ export default function VerifiedSuppliersSection() {
       certifications: ["CE Marking", "ISO 9001:2015"],
       updatedAt: "23/09/2026",
       status: "Đã đối chiếu",
-      logo: "/logo_only.png"
+      logo: "/logo_onlyc.png"
     }
   ];
 
@@ -250,8 +250,10 @@ export default function VerifiedSuppliersSection() {
       
       {/* Section Header (Centered, Strictly 1 Line Title) */}
       <div className="text-center max-w-5xl mx-auto space-y-2">
-        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black text-slate-950 uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
-          Khám phá nguồn cung theo năng lực thực tế
+        <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
+          <span className="text-gradient-flow-green">
+            Khám phá nguồn cung theo năng lực thực tế
+          </span>
         </h2>
 
         <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto text-center leading-relaxed font-normal">
@@ -261,7 +263,7 @@ export default function VerifiedSuppliersSection() {
         <div className="pt-1">
           <Link
             to="/nha-cung-ung"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#0052cc] hover:text-[#0041a8] bg-blue-50 hover:bg-blue-100 px-4 py-2 rounded-xl transition font-heading shadow-2xs"
+            className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#006039] hover:text-[#00472a] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 px-4 py-2 rounded-xl transition font-heading shadow-2xs"
           >
             <span>Tìm tất cả nhà cung ứng đã đối chiếu</span>
             <ArrowRight className="w-3.5 h-3.5" />

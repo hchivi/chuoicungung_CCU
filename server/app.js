@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import apiRoutes from './routes/api.js';
 import suppiRoutes from './routes/suppi.js';
+import { createAssistantRouter } from './routes/assistants.js';
 import { handleCanonicalRedirects } from './routes/redirects.js';
 import { handleRobotsTxt, handleSitemapXml } from './routes/seo.js';
 import { 
@@ -14,7 +15,7 @@ import {
   sessionOwnershipMiddleware 
 } from './middleware/security.js';
 
-export function createApp() {
+export function createApp({ assistantService = null } = {}) {
   const app = express();
 
   // 1. Security & Core Middleware
@@ -89,6 +90,7 @@ export function createApp() {
 
   // 5. API Routes
   app.use('/api', generalLimiter);
+  app.use('/api/assistants', writeLimiter, createAssistantRouter({ service: assistantService }));
   app.use('/api/suppi', writeLimiter, sessionOwnershipMiddleware, suppiRoutes);
   app.use('/api', apiRoutes);
 

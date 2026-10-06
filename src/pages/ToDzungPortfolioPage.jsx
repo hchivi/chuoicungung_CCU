@@ -288,6 +288,66 @@ const AutoFitTitle = ({ text, lines, maxFontSize = 26, minFontSize = 10, syncGro
   );
 };
 
+// Auto-Fitting Executive Name Heading that dynamically scales font-size to fit container width on mobile
+const AutoFitNameHeading = ({ children, maxFontSize = 32, minFontSize = 12, className = "" }) => {
+  const containerRef = useRef(null);
+  const textRef = useRef(null);
+  const [fontSize, setFontSize] = useState(null);
+
+  useEffect(() => {
+    const adjustFontSize = () => {
+      if (!containerRef.current || !textRef.current) return;
+
+      // Temporarily set font size to max to measure natural unconstrained scroll width
+      textRef.current.style.fontSize = `${maxFontSize}px`;
+
+      const containerWidth = containerRef.current.clientWidth;
+      if (containerWidth <= 0) return;
+
+      const textWidth = textRef.current.scrollWidth;
+      if (textWidth > 0) {
+        if (textWidth > containerWidth) {
+          const ratio = containerWidth / textWidth;
+          const target = Math.max(minFontSize, Math.floor(maxFontSize * ratio * 0.96));
+          setFontSize(target);
+          textRef.current.style.fontSize = `${target}px`;
+        } else {
+          setFontSize(maxFontSize);
+          textRef.current.style.fontSize = `${maxFontSize}px`;
+        }
+      }
+    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(adjustFontSize);
+    }
+    adjustFontSize();
+
+    const ro = new ResizeObserver(adjustFontSize);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener('resize', adjustFontSize);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', adjustFontSize);
+    };
+  }, [maxFontSize, minFontSize]);
+
+  return (
+    <div ref={containerRef} className="w-full max-w-full overflow-hidden flex items-center justify-center lg:justify-start">
+      <div className="animated-underline-6colors pb-1 inline-block max-w-full">
+        <h1
+          ref={textRef}
+          className={`font-black text-slate-900 font-heading tracking-tight leading-tight whitespace-nowrap ${className}`}
+          style={{ fontSize: fontSize ? `${fontSize}px` : 'clamp(14px, 4.4vw, 32px)' }}
+        >
+          {children}
+        </h1>
+      </div>
+    </div>
+  );
+};
+
 // ========================================================
 // LANGUAGES LIST & TRANSLATION DICTIONARIES
 // ========================================================
@@ -308,7 +368,7 @@ const translations = {
     company: "CHUỖI CUNG ỨNG",
     share: "Chia sẻ",
     copied: "Đã copy",
-    saveContact: "Lưu Danh Bạ",
+    saveContact: "Lưu DB",
     saveShort: "LƯU",
     flipQr: "Mã QR",
     introBadge: "TODZUNG",
@@ -355,7 +415,7 @@ const translations = {
     // Sticky bottom bar
     callNow: "Gọi Ngay",
     mobileChatZalo: "Chat Zalo",
-    saveVCard: "Lưu danh bạ",
+    saveVCard: "Lưu DB",
     mobileQr: "Mã QR",
 
     // QR Modal
@@ -960,6 +1020,8 @@ export default function ToDzungPortfolioPage() {
   const portraitCardRef = useRef(null);
   const tiltWrapperRef = useRef(null);
   const flipCoreRef = useRef(null);
+  const frontFaceRef = useRef(null);
+  const backFaceRef = useRef(null);
   const mirrorSheenRef = useRef(null);
   const holoGlowRef = useRef(null);
   const backMirrorSheenRef = useRef(null);
@@ -975,16 +1037,11 @@ export default function ToDzungPortfolioPage() {
 
   const t = translations[lang] || translations.vi;
 
-  // Dedicated handlers for card flip ensuring mobile tap flips back and forth cleanly
-  const handleMouseEnter = () => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  // Dedicated handlers for card tilt & hover flip
+  const handleCardMouseEnter = () => {
+    // Only flip on hover if pointing device supports hover (desktop/laptop)
+    if (typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches) {
       setIsHovered(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      setIsHovered(false);
     }
   };
 
@@ -1003,7 +1060,7 @@ export default function ToDzungPortfolioPage() {
 
   const handleCardMouseLeave = () => {
     targetTiltRef.current = { x: 0, y: 0 };
-    handleMouseLeave();
+    setIsHovered(false);
   };
 
   const handleCardTouchMove = (e) => {
@@ -1026,7 +1083,6 @@ export default function ToDzungPortfolioPage() {
     if (e && e.target && (e.target.closest('a') || e.target.closest('button'))) {
       return;
     }
-    setIsHovered(false);
     setIsFlipped((prev) => !prev);
   };
 
@@ -1167,15 +1223,28 @@ export default function ToDzungPortfolioPage() {
     if (threeSceneRef.current?.particles) {
       gsap.to(threeSceneRef.current.particles.rotation, {
         y: showBack ? "+=1.8" : "-=1.8",
-        duration: 0.8,
+        duration: 0.65,
         ease: 'power2.out'
       });
     }
 
+    // Keep both faces visible so GPU handles crossover cleanly without disappearance
+    if (frontFaceRef.current) {
+      frontFaceRef.current.style.visibility = 'visible';
+      frontFaceRef.current.style.opacity = '1';
+    }
+    if (backFaceRef.current) {
+      backFaceRef.current.style.visibility = 'visible';
+      backFaceRef.current.style.opacity = '1';
+    }
+
+    // Cancel in-flight card rotation
+    gsap.killTweensOf(flipCoreRef.current);
+
     // GSAP 3D Card Rotation with tactile lift
     gsap.to(flipCoreRef.current, {
       rotateY: showBack ? 180 : 0,
-      duration: 0.8,
+      duration: 0.65,
       ease: 'power3.inOut',
       transformPerspective: 1200,
       transformOrigin: '50% 50%'
@@ -1188,11 +1257,11 @@ export default function ToDzungPortfolioPage() {
         { x: showBack ? '-150%' : '150%', opacity: 0 },
         {
           x: showBack ? '150%' : '-150%',
-          opacity: 0.55,
-          duration: 0.7,
+          opacity: 0.45,
+          duration: 0.65,
           ease: 'power2.inOut',
           onComplete: () => {
-            gsap.set(shimmerRef.current, { opacity: 0 });
+            if (shimmerRef.current) gsap.set(shimmerRef.current, { opacity: 0 });
           }
         }
       );
@@ -1267,6 +1336,23 @@ export default function ToDzungPortfolioPage() {
       window.addEventListener('deviceorientation', handleOrientation, true);
       window.addEventListener('deviceorientationabsolute', handleOrientation, true);
       window.addEventListener('devicemotion', handleMotion, true);
+
+      // Support iOS 13+ Safari Permission on user gesture (tap/touch anywhere)
+      const enableGyroOnIos = async () => {
+        if (
+          typeof DeviceOrientationEvent !== 'undefined' &&
+          typeof DeviceOrientationEvent.requestPermission === 'function'
+        ) {
+          try {
+            const state = await DeviceOrientationEvent.requestPermission();
+            if (state === 'granted') {
+              window.addEventListener('deviceorientation', handleOrientation, true);
+            }
+          } catch (err) {}
+        }
+      };
+      window.addEventListener('touchstart', enableGyroOnIos, { once: true, passive: true });
+      window.addEventListener('click', enableGyroOnIos, { once: true });
     }
 
     // High-performance 60fps render loop for physical tilt & subtle mirror sheen
@@ -1287,55 +1373,47 @@ export default function ToDzungPortfolioPage() {
       currentX += (effTargetX - currentX) * 0.12;
       currentY += (effTargetY - currentY) * 0.12;
 
-      // 1. Tilt 3D Wrapper (subtle, elegant 11-degree tilt)
+      // 1. Tilt 3D Wrapper (subtle, elegant 12-degree tilt)
       if (tiltWrapperRef.current) {
-        const rotY = currentX * 11; // degrees
-        const rotX = -currentY * 11; // degrees
+        const rotY = currentX * 12; // degrees
+        const rotX = -currentY * 12; // degrees
         tiltWrapperRef.current.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
       }
 
-      // 2. Corner Specular Mirror Light Sheen
-      // Mặc định ánh sáng phản chiếu ở góc trên trái & phải. Khi nghiêng máy, ánh sáng lan sang góc dưới trái/phải tương ứng.
-      const leftX = Math.max(0, Math.min(25, 10 + currentX * 12));
-      const leftY = currentY <= 0 ? (14 + currentY * 10) : (14 + currentY * 72);
-      const leftOpacity = Math.max(0.12, Math.min(0.85, 0.45 - currentX * 0.35 + Math.abs(currentY) * 0.15));
-
-      const rightX = Math.max(75, Math.min(100, 90 + currentX * 12));
-      const rightY = currentY <= 0 ? (14 + currentY * 10) : (14 + currentY * 72);
-      const rightOpacity = Math.max(0.12, Math.min(0.85, 0.45 + currentX * 0.35 + Math.abs(currentY) * 0.15));
+      // 2. Corner & Sliding Specular Mirror Light Sheen (Hiệu ứng phản chiếu gương khi nghiêng điện thoại)
+      const angle = 45 + currentX * 30;
+      const beamPos = 50 + currentX * 55 + currentY * 25;
+      const glareX = 50 + currentX * 40;
+      const glareY = 35 + currentY * 35;
 
       if (mirrorSheenRef.current) {
         mirrorSheenRef.current.style.opacity = '1';
         mirrorSheenRef.current.style.background = `
-          radial-gradient(
-            circle 260px at ${leftX.toFixed(1)}% ${leftY.toFixed(1)}%,
-            rgba(255, 255, 255, ${(0.42 * leftOpacity).toFixed(3)}) 0%,
-            rgba(255, 255, 255, ${(0.14 * leftOpacity).toFixed(3)}) 35%,
-            transparent 70%
+          linear-gradient(
+            ${angle.toFixed(1)}deg,
+            transparent ${Math.max(0, beamPos - 35).toFixed(1)}%,
+            rgba(255, 255, 255, 0.40) ${beamPos.toFixed(1)}%,
+            rgba(255, 255, 255, 0.15) ${(beamPos + 10).toFixed(1)}%,
+            transparent ${Math.min(100, beamPos + 35).toFixed(1)}%
           ),
           radial-gradient(
-            circle 260px at ${rightX.toFixed(1)}% ${rightY.toFixed(1)}%,
-            rgba(255, 255, 255, ${(0.42 * rightOpacity).toFixed(3)}) 0%,
-            rgba(255, 255, 255, ${(0.14 * rightOpacity).toFixed(3)}) 35%,
+            circle 280px at ${glareX.toFixed(1)}% ${glareY.toFixed(1)}%,
+            rgba(255, 255, 255, 0.48) 0%,
             transparent 70%
           )
         `;
       }
 
       if (backMirrorSheenRef.current) {
+        const backGlareX = 50 - currentX * 40;
+        const backGlareY = 35 + currentY * 35;
         backMirrorSheenRef.current.style.opacity = '1';
         backMirrorSheenRef.current.style.background = `
           radial-gradient(
-            circle 240px at ${(100 - rightX).toFixed(1)}% ${rightY.toFixed(1)}%,
-            rgba(0, 105, 56, ${(0.08 * rightOpacity).toFixed(3)}) 0%,
-            rgba(255, 255, 255, ${(0.22 * rightOpacity).toFixed(3)}) 30%,
-            transparent 65%
-          ),
-          radial-gradient(
-            circle 240px at ${(100 - leftX).toFixed(1)}% ${leftY.toFixed(1)}%,
-            rgba(0, 105, 56, ${(0.08 * leftOpacity).toFixed(3)}) 0%,
-            rgba(255, 255, 255, ${(0.22 * leftOpacity).toFixed(3)}) 30%,
-            transparent 65%
+            circle 260px at ${backGlareX.toFixed(1)}% ${backGlareY.toFixed(1)}%,
+            rgba(0, 105, 56, 0.12) 0%,
+            rgba(255, 255, 255, 0.25) 30%,
+            transparent 70%
           )
         `;
       }
@@ -1375,7 +1453,7 @@ export default function ToDzungPortfolioPage() {
     websiteDisplay: "chuoicungung.vn",
     facebookUrl: "https://fb.com/dzung.tnd",
     facebookDisplay: "fb.com/dzung.tnd",
-    avatar: "/images/to_ngoc_dung_real.jpg"
+    avatar: "/images/anh_Dung.jpg"
   };
 
   // 1. Garment Ecosystem
@@ -1717,7 +1795,7 @@ export default function ToDzungPortfolioPage() {
     >
 
       {/* ========================================================
-          PAGE LOAD INTRO: 3D logo_only.png transitions & shrinks into Avatar Logo
+          PAGE LOAD INTRO: 3D logo_onlyc.png transitions & shrinks into Avatar Logo
       ======================================================== */}
       <div
         ref={introOverlayRef}
@@ -1729,7 +1807,7 @@ export default function ToDzungPortfolioPage() {
           className="relative w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center will-change-transform"
         >
           <img
-            src="/logo_only.png"
+            src="/logo_onlyc.png"
             alt="Loading..."
             className="w-full h-full object-contain drop-shadow-2xl"
           />
@@ -1749,21 +1827,19 @@ export default function ToDzungPortfolioPage() {
           ======================================================== */}
           <div ref={leftColRef} className="flex-1 min-w-0 flex flex-col justify-start space-y-4 sm:space-y-4.5 order-2 md:order-1 w-full">
 
-            {/* Main Name & Action Buttons (Lưu Danh Bạ, QR, Đổi Ngôn Ngữ, Chia sẻ) */}
+            {/* Main Name & Action Buttons (Lưu DB, QR, Đổi Ngôn Ngữ, Chia sẻ) */}
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-3 sm:gap-4 pb-1 sm:pb-2 w-full">
-              <div className="space-y-0.5 min-w-0 w-full lg:w-auto flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="space-y-0.5 min-w-0 flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
                 <p className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest font-heading">
                   {t.greeting}
                 </p>
-                <div className="animated-underline-6colors pb-1 inline-block max-w-full">
-                  <h1 className="text-[23px] min-[360px]:text-[25px] min-[390px]:text-[27px] min-[414px]:text-[29px] sm:text-2xl md:text-3xl lg:text-[26px] xl:text-[32px] font-black text-slate-900 font-heading tracking-tight leading-tight whitespace-nowrap">
-                    TÔ NGỌC DŨNG <span className="text-[#006938] font-black">| TODZUNG</span>
-                  </h1>
-                </div>
+                <AutoFitNameHeading maxFontSize={32} minFontSize={12}>
+                  TÔ NGỌC DŨNG <span className="text-[#006938] font-black">| TODZUNG</span>
+                </AutoFitNameHeading>
               </div>
 
               {/* Action Buttons + Language Switcher: 4 buttons full width on mobile, inline on desktop */}
-              <div className="w-full lg:w-auto grid grid-cols-4 sm:flex items-center gap-1.5 sm:gap-2 shrink-0 lg:mb-1">
+              <div className="w-full lg:w-auto grid grid-cols-4 sm:flex items-center justify-center lg:justify-end gap-1.5 sm:gap-2 shrink-0 lg:mb-1">
 
                 {/* 1. Lưu Danh Bạ (Mobile: icon + Localized Short Text) */}
                 <button
@@ -1772,14 +1848,13 @@ export default function ToDzungPortfolioPage() {
                   title={t.saveContact}
                 >
                   <Download className="w-3.5 h-3.5 shrink-0" />
-                  <span className="sm:hidden font-black truncate">{t.saveShort || "LƯU"}</span>
-                  <span className="hidden sm:inline truncate">{t.saveContact}</span>
+                  
+                  <span className="truncate">{t.saveContact}</span>
                 </button>
 
                 {/* 2. Mã QR (Với chữ QR Code) */}
                 <button
                   onClick={() => {
-                    setIsHovered(false);
                     setIsFlipped((prev) => !prev);
                   }}
                   className="w-full sm:w-auto flex items-center justify-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-2 text-[10.5px] min-[380px]:text-xs font-bold text-slate-700 bg-white border border-slate-200/90 hover:bg-[#f0fdf4] hover:text-[#006938] hover:border-emerald-300 rounded-xl transition-all shadow-xs active:scale-95 font-heading shrink-0 truncate"
@@ -1838,12 +1913,8 @@ export default function ToDzungPortfolioPage() {
 
             {/* Profile Introduction Statement with Revolving 6-Color Rainbow Border (Image 3) */}
             <div
-              onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.02)}
-              onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-              onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.02)}
-              onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
               className="relative rounded-2xl p-[2px] clickup-revolving-border shadow-md shadow-[#006938]/10 text-left transition-all duration-300 hover:shadow-xl hover:shadow-[#006938]/20 group"
-              style={{ transformStyle: 'preserve-3d' }}
+              
             >
               <div className="relative z-10 rounded-[14px] p-3.5 sm:p-5 bg-white overflow-hidden flex items-center">
                 <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#006938]" />
@@ -1866,12 +1937,8 @@ export default function ToDzungPortfolioPage() {
 
               {/* Row 1: Address Card (Official Google Maps Pin) */}
               <div
-                onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#EA4335]/50 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                style={{ transformStyle: 'preserve-3d' }}
+                className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#EA4335]/50 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                
               >
                 <div className="flex items-center gap-3 sm:gap-3.5 min-w-0">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform">
@@ -1917,12 +1984,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* Phone */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -1957,12 +2020,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* Zalo with Official Real Zalo Logo Image */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#0068FF]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#0068FF]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform overflow-hidden">
@@ -1995,12 +2054,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* WhatsApp */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#25D366]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#25D366]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs overflow-hidden">
@@ -2028,12 +2083,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* Facebook */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#1877F2]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#1877F2]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs overflow-hidden">
@@ -2066,12 +2117,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* Email */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -2097,12 +2144,8 @@ export default function ToDzungPortfolioPage() {
 
                 {/* Website */}
                 <div
-                  onMouseMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onMouseLeave={(e) => reset3DTilt(e.currentTarget)}
-                  onTouchMove={(e) => apply3DTilt(e, e.currentTarget, 0.03)}
-                  onTouchEnd={(e) => reset3DTilt(e.currentTarget)}
-                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
-                  style={{ transformStyle: 'preserve-3d' }}
+                  className="p-3 sm:p-4 rounded-2xl bg-white border border-slate-200/90 hover:border-[#006938]/60 transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-between group shadow-xs hover:shadow-md cursor-default"
+                  
                 >
                   <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
                     <a
@@ -2113,7 +2156,7 @@ export default function ToDzungPortfolioPage() {
                       title="Truy cập chuoicungung.com"
                     >
                       <img
-                        src="/logo_only.png"
+                        src="/logo_onlyc.png"
                         alt="CCU Logo"
                         className="w-full h-full object-contain animate-[spin_6s_linear_infinite] drop-shadow-xs"
                       />
@@ -2124,15 +2167,6 @@ export default function ToDzungPortfolioPage() {
                       </span>
                       <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-xs sm:text-[12px] md:text-[13px] font-bold text-[#006938] leading-tight">
                         <a
-                          href="https://chuoicungung.vn"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline shrink-0"
-                        >
-                          chuoicungung.vn
-                        </a>
-                        <span className="text-slate-400 font-normal shrink-0">-</span>
-                        <a
                           href="https://chuoicungung.com"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -2140,11 +2174,20 @@ export default function ToDzungPortfolioPage() {
                         >
                           chuoicungung.com
                         </a>
+                        <span className="text-slate-400 font-normal shrink-0">-</span>
+                        <a
+                          href="https://chuoicungung.vn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline shrink-0"
+                        >
+                          chuoicungung.vn
+                        </a>
                       </div>
                     </div>
                   </div>
                   <a
-                    href="https://chuoicungung.vn"
+                    href="https://chuoicungung.com"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1.5 sm:p-2 text-[#006938] hover:bg-[#f0fdf4] rounded-xl transition-colors shrink-0 ml-1.5"
@@ -2168,14 +2211,14 @@ export default function ToDzungPortfolioPage() {
             {/* 3D Flip Card Container with Three.js Aura & Gyroscope */}
             <div
               ref={portraitCardRef}
-              onMouseEnter={handleMouseEnter}
+              onMouseEnter={handleCardMouseEnter}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
               onTouchMove={handleCardTouchMove}
               onTouchEnd={handleCardTouchEnd}
               onTouchCancel={handleCardTouchEnd}
               onClick={handleToggleFlip}
-              className="relative w-full max-w-[340px] sm:max-w-[360px] md:max-w-[290px] lg:max-w-[320px] xl:max-w-[350px] h-[480px] sm:h-[510px] md:h-[480px] lg:h-[485px] xl:h-[495px] cursor-pointer select-none touch-manipulation"
+              className="relative w-full max-w-[340px] sm:max-w-[360px] md:max-w-[290px] lg:max-w-[320px] xl:max-w-[350px] h-[480px] sm:h-[510px] md:h-[480px] lg:h-[485px] xl:h-[495px] cursor-pointer select-none touch-manipulation group"
               style={{ perspective: 1200 }}
               title={showBack ? t.flipToFrontNotice : t.flipToBackNotice}
             >
@@ -2195,22 +2238,19 @@ export default function ToDzungPortfolioPage() {
               <div
                 ref={tiltWrapperRef}
                 className="relative w-full h-full rounded-[32px] will-change-transform"
-                style={{
-                  transformStyle: 'preserve-3d'
-                }}
+                style={{ transformStyle: 'preserve-3d', WebkitTransformStyle: 'preserve-3d' }}
               >
                 {/* Flippable 3D Core - Driven by GSAP power3.inOut */}
                 <div
                   ref={flipCoreRef}
                   className="relative w-full h-full rounded-[32px]"
-                  style={{
-                    transformStyle: 'preserve-3d'
-                  }}
+                  style={{ transformStyle: 'preserve-3d', WebkitTransformStyle: 'preserve-3d' }}
                 >
 
-                  {/* FRONT FACE: Studio Portrait with ClickUp Revolving 6-Color Rainbow Border */}
+                  {/* FRONT FACE: Studio Portrait */}
                   <div
-                    className="absolute inset-0 w-full h-full rounded-[32px] p-[2.5px] clickup-revolving-border shadow-2xl shadow-slate-900/20 flex flex-col overflow-hidden"
+                    ref={frontFaceRef}
+                    className="absolute inset-0 w-full h-full rounded-[32px] p-[2.5px] bg-gradient-to-br from-emerald-400/40 via-slate-200 to-[#006938]/40 shadow-2xl shadow-slate-900/15 flex flex-col overflow-hidden"
                     style={{
                       position: 'absolute',
                       top: 0,
@@ -2219,10 +2259,12 @@ export default function ToDzungPortfolioPage() {
                       height: '100%',
                       transform: 'rotateY(0deg)',
                       backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden'
+                      WebkitBackfaceVisibility: 'hidden',
+                      opacity: 1,
+                      visibility: 'visible'
                     }}
                   >
-                    <div className="relative z-10 rounded-[30px] overflow-hidden bg-slate-950 w-full h-full shadow-inner flex-1 flex flex-col">
+                    <div className="relative z-10 rounded-[30px] overflow-hidden bg-white w-full h-full shadow-inner flex-1 flex flex-col">
                       <img
                         src={profile.avatar}
                         alt={profile.name}
@@ -2240,7 +2282,7 @@ export default function ToDzungPortfolioPage() {
                         title="Truy cập chuoicungung.com"
                       >
                         <img
-                          src="/logo_only.png"
+                          src="/logo_onlyc.png"
                           alt="CCU Logo"
                           className="w-full h-full object-contain animate-[spin_8s_linear_infinite]"
                         />
@@ -2261,9 +2303,10 @@ export default function ToDzungPortfolioPage() {
                     </div>
                   </div>
 
-                  {/* BACK FACE: High-Res QR Code & Quick Actions (ClickUp Revolving 6-Color Rainbow Border) */}
+                  {/* BACK FACE: High-Res QR Code & Quick Actions */}
                   <div
-                    className="absolute inset-0 w-full h-full rounded-[32px] p-[2.5px] clickup-revolving-border shadow-2xl shadow-slate-900/10 flex flex-col justify-between text-slate-900 text-center overflow-hidden"
+                    ref={backFaceRef}
+                    className="absolute inset-0 w-full h-full rounded-[32px] p-[2.5px] bg-gradient-to-br from-emerald-400/40 via-slate-200 to-[#006938]/40 shadow-2xl shadow-slate-900/10 flex flex-col justify-between text-slate-900 text-center overflow-hidden"
                     style={{
                       position: 'absolute',
                       top: 0,
@@ -2272,7 +2315,9 @@ export default function ToDzungPortfolioPage() {
                       height: '100%',
                       transform: 'rotateY(180deg)',
                       backfaceVisibility: 'hidden',
-                      WebkitBackfaceVisibility: 'hidden'
+                      WebkitBackfaceVisibility: 'hidden',
+                      opacity: 1,
+                      visibility: 'visible'
                     }}
                   >
                     <div className="relative z-10 rounded-[30px] overflow-hidden bg-white p-5 sm:p-6 w-full h-full flex flex-col items-center justify-between shadow-xs">
