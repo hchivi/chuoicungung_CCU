@@ -1,0 +1,187 @@
+/* Hallmark · macrostructure: scoped directory workbench · theme: CCU inherited bright · lifecycle matrix / A–Z index / photo-led records. */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4. Shared hero and chrome are intentionally preserved. */
+.sd-directory .sd-explorer, .sd-directory .sd-workspace { color: var(--sd-ink); }
+.sd-directory .sd-explorer *, .sd-directory .sd-workspace * { min-width: 0; }
+.sd-directory [data-stage="1"] { --sd-stage: var(--sd-stage-one); }
+.sd-directory [data-stage="2"] { --sd-stage: var(--sd-stage-two); }
+.sd-directory [data-stage="3"] { --sd-stage: var(--sd-stage-three); }
+.sd-directory [data-stage="4"] { --sd-stage: var(--sd-stage-four); }
+.sd-directory [data-stage="5"] { --sd-stage: var(--sd-stage-five); }
+.sd-directory [data-stage="6"] { --sd-stage: var(--sd-stage-six); }
+.sd-directory .sd-explorer { display: grid; gap: 24px; }
+.sd-directory .sd-phase-section, .sd-directory .sd-catalogue { background: var(--sd-paper); border: 1px solid var(--sd-rule); border-radius: var(--sd-radius); padding: 24px; }
+.sd-directory .sd-section-head { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+.sd-directory .sd-section-head h2 { font-size: clamp(22px, 2.1vw, 28px); line-height: 1.25; font-weight: 750; letter-spacing: -.025em; color: var(--sd-ink); }
+.sd-directory .sd-section-head p { margin-top: 8px; font-size: var(--sd-small); color: var(--sd-muted); line-height: 1.5; }
+.sd-directory .sd-button, .sd-directory .sd-text-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; font-size: var(--sd-small); font-weight: 700; line-height: 1.3; border-radius: var(--sd-control-radius); cursor: pointer; text-decoration: none; transition: background-color var(--sd-short) var(--sd-ease), color var(--sd-short) var(--sd-ease); }
+.sd-directory .sd-button { border: 1px solid var(--sd-rule); }
+.sd-directory .sd-button-primary { background: linear-gradient(110deg, var(--sd-accent), var(--sd-accent-dark)); color: var(--sd-accent-ink); border-color: var(--sd-accent); }
+.sd-directory .sd-button-outline { background: var(--sd-paper); color: var(--sd-accent); }
+.sd-directory .sd-button-outline[aria-pressed="true"] { background: var(--sd-selected); color: var(--sd-accent); border-color: var(--sd-accent); }
+.sd-directory .sd-text-button { padding: 8px; color: var(--sd-accent); background: transparent; border: 0; }
+.sd-directory .sd-stage-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--sd-rule); }
+.sd-directory .sd-stage { padding: 16px 12px 0; border-inline-end: 1px solid var(--sd-rule); border-top: 3px solid var(--sd-stage); }
+.sd-directory .sd-stage:first-child { padding-inline-start: 0; }
+.sd-directory .sd-stage:last-child { padding-inline-end: 0; border-inline-end: 0; }
+.sd-directory .sd-stage-heading { display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-height: 100px; text-align: left; gap: 8px; color: var(--sd-ink); padding: 8px; border-radius: var(--sd-control-radius); background: transparent; }
+.sd-directory .sd-stage-heading strong { font-size: 15px; line-height: 1.4; font-weight: 700; }
+.sd-directory .sd-stage-number { font-size: 22px; line-height: 1; font-weight: 750; font-variant-numeric: tabular-nums; color: var(--sd-stage); }
+.sd-directory .sd-stage-heading[aria-pressed="true"] { color: var(--sd-ink); background: var(--sd-selected); }
+.sd-directory .sd-phase-options { display: grid; gap: 4px; margin-top: 12px; }
+.sd-directory .sd-phase-options button { display: flex; width: 100%; gap: 8px; align-items: flex-start; border: 1px solid transparent; border-radius: var(--sd-control-radius); padding: 10px 6px; text-align: left; font-size: var(--sd-small); line-height: 1.45; min-height: 68px; color: var(--sd-muted); background: transparent; }
+.sd-directory .sd-phase-options .sd-phase-id { font-size: 13px; font-weight: 750; color: var(--sd-stage); font-variant-numeric: tabular-nums; flex-shrink: 0; padding-top: 1px; }
+.sd-directory .sd-phase-options button[aria-pressed="true"] { border-color: var(--sd-stage); background: var(--sd-soft); color: var(--sd-ink); font-weight: 700; }
+.sd-directory .sd-phase-options svg { flex-shrink: 0; margin-top: 3px; }
+.sd-directory .sd-alphabet { display: flex; overflow-x: auto; padding: 4px 0 12px; gap: 4px; border-bottom: 1px solid var(--sd-rule); scrollbar-width: thin; }
+.sd-directory .sd-alphabet button { flex: 0 0 auto; min-width: 44px; height: 44px; padding: 8px; border-radius: var(--sd-control-radius); background: var(--sd-soft); color: var(--sd-ink); font-size: 16px; font-weight: 750; }
+.sd-directory .sd-alphabet button:first-child { padding-inline: 16px; }
+.sd-directory .sd-alphabet button[aria-pressed="true"] { background: var(--sd-accent); color: var(--sd-accent-ink); }
+.sd-directory .sd-catalogue-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .43fr); gap: 32px; margin-top: 24px; }
+.sd-directory .sd-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: var(--sd-small); color: var(--sd-muted); margin-bottom: 12px; }
+.sd-directory .sd-panel-head h3 { font-size: 18px; line-height: 1.4; color: var(--sd-ink); font-weight: 750; }
+.sd-directory .sd-panel-head h3 span { color: var(--sd-accent); }
+.sd-directory .sd-category-search { display: flex; align-items: center; gap: 12px; background: var(--sd-paper); color: var(--sd-muted); border: 1px solid var(--sd-input-rule); border-radius: var(--sd-control-radius); padding: 0 12px; margin-bottom: 16px; }
+.sd-directory .sd-category-search input { width: 100%; min-height: 44px; font-size: var(--sd-body); color: var(--sd-ink); background: transparent; border: 0; padding: 10px 0; }
+.sd-directory .sd-category-search input::placeholder { color: var(--sd-muted); }
+.sd-directory .sd-category-search:focus-within { outline: 2px solid var(--sd-focus); outline-offset: 2px; }
+.sd-directory .sd-category-search input:focus-visible { outline: none; }
+.sd-directory .sd-industry-list { max-height: 288px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 3px; }
+.sd-directory .sd-industry-list a { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; padding: 10px 8px; border-bottom: 1px solid var(--sd-rule); font-size: var(--sd-small); color: var(--sd-ink); line-height: 1.45; text-decoration: none; }
+.sd-directory .sd-category-count { display: flex; align-items: center; gap: 8px; flex-shrink: 0; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--sd-muted); }
+.sd-directory .sd-more { margin-top: 12px; }
+.sd-directory .sd-keyword-panel { background: var(--sd-soft); color: var(--sd-ink); padding: 20px; border-radius: var(--sd-control-radius); }
+.sd-directory .sd-keyword-panel > p { font-size: var(--sd-small); color: var(--sd-muted); margin-bottom: 12px; }
+.sd-directory .sd-keyword-list { display: grid; max-height: 320px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 3px; }
+.sd-directory .sd-keyword-list a { display: flex; align-items: center; gap: 8px; padding: 10px 0; min-height: 44px; color: var(--sd-ink); font-size: var(--sd-small); line-height: 1.4; text-decoration: none; border-bottom: 1px solid var(--sd-rule); }
+.sd-directory .sd-keyword-list a > span { flex: 1; }
+.sd-directory .sd-keyword-list svg { flex-shrink: 0; }
+.sd-directory .sd-chevron-open { transform: rotate(180deg); }
+.sd-directory .sd-clear-filter { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; margin-bottom: 12px; border-radius: var(--sd-control-radius); font-size: var(--sd-small); color: var(--sd-accent); background: var(--sd-selected); text-align: left; overflow-wrap: anywhere; }
+.sd-directory .sd-small-empty { padding: 20px 0; font-size: var(--sd-small); color: var(--sd-muted); }
+.sd-directory .sd-workspace > div { grid-template-columns: 260px minmax(0, 1fr); }
+.sd-directory .sd-sidebar, .sd-directory #supplier-results-list { grid-column: auto; }
+@media (min-width: 1024px) {
+  .sd-directory .sd-sidebar {
+    position: sticky;
+    top: 160px;
+    align-self: start;
+    max-height: calc(100vh - 170px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    padding-right: 4px;
+    z-index: 20;
+  }
+}
+.sd-directory .sd-filters { background: var(--sd-paper); color: var(--sd-ink); border: 1px solid var(--sd-rule); border-radius: var(--sd-radius); padding: 20px; }
+.sd-directory .sd-filter-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--sd-rule); }
+.sd-directory .sd-filter-heading h2 { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 750; }
+.sd-directory .sd-filter-heading h2 span { display: grid; place-items: center; min-width: 24px; height: 24px; border-radius: 50%; font-size: 13px; background: var(--sd-selected); color: var(--sd-accent); }
+.sd-directory .sd-filter-body fieldset { margin: 20px 0 0; padding: 0 0 20px; border-bottom: 1px solid var(--sd-rule); }
+.sd-directory .sd-filter-body fieldset:last-child { border: 0; padding-bottom: 0; }
+.sd-directory .sd-filter-body legend { font-size: var(--sd-small); font-weight: 750; margin-bottom: 8px; }
+.sd-directory .sd-radio-row, .sd-directory .sd-checkbox-row { display: flex; gap: 10px; align-items: center; min-height: 48px; padding: 8px 4px; font-size: var(--sd-small); line-height: 1.45; cursor: pointer; border-radius: var(--sd-control-radius); }
+.sd-directory .sd-radio-row input, .sd-directory .sd-checkbox-row input { flex-shrink: 0; width: 18px; height: 18px; accent-color: var(--sd-accent); }
+.sd-directory .sd-radio-row strong { display: block; font-size: var(--sd-small); font-weight: 650; }
+.sd-directory .sd-radio-row small { display: block; font-size: 13px; color: var(--sd-muted); }
+.sd-directory .sd-radio-row > svg { margin-left: auto; color: var(--sd-accent); }
+.sd-directory .sd-radio-row:has(input:checked), .sd-directory .sd-checkbox-row:has(input:checked) { background: var(--sd-selected); color: var(--sd-accent); }
+.sd-directory .sd-provinces { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.sd-directory .sd-provinces button { padding: 8px 10px; border-radius: var(--sd-control-radius); min-height: 44px; font-size: var(--sd-small); color: var(--sd-muted); background: var(--sd-soft); }
+.sd-directory .sd-provinces button[aria-pressed="true"] { color: var(--sd-accent); background: var(--sd-selected); font-weight: 750; box-shadow: inset 0 -2px var(--sd-accent); }
+.sd-directory .sd-filter-body select { width: 100%; min-height: 44px; border: 1px solid var(--sd-input-rule); border-radius: var(--sd-control-radius); padding: 8px; font-size: 16px; color: var(--sd-ink); background: var(--sd-paper); }
+.sd-directory .sd-field-label { display: block; font-size: 13px; line-height: 1.45; font-weight: 600; color: var(--sd-muted); margin-bottom: 8px; }
+.sd-directory .sd-mobile-filter-toggle { display: none; }
+.sd-directory .sd-supplier-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.sd-directory .sd-supplier-grid[data-view="list"] { grid-template-columns: minmax(0, 1fr); }
+.sd-directory .sd-supplier-card { display: flex; flex-direction: column; overflow: hidden; background: var(--sd-paper); color: var(--sd-ink); border: 1px solid var(--sd-rule); border-radius: var(--sd-radius); }
+.sd-directory .sd-card-gallery { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: 80px 80px; gap: 3px; background: var(--sd-soft); color: var(--sd-muted); }
+.sd-directory .sd-card-photo { position: relative; display: grid; place-items: center; overflow: hidden; background: var(--sd-soft); color: var(--sd-muted); }
+.sd-directory .sd-card-photo:first-child { grid-row: span 2; }
+.sd-directory .sd-card-photo > img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; z-index: 1; }
+.sd-directory .sd-card-photo > img[hidden] { display: none; }
+.sd-directory .sd-photo-empty { grid-column: 1 / -1; grid-row: 1 / -1; display: grid; place-content: center; justify-items: center; gap: 8px; font-size: var(--sd-small); }
+.sd-directory .sd-card-body { padding: 20px; flex: 1; }
+.sd-directory .sd-company-heading { display: flex; gap: 12px; align-items: flex-start; }
+.sd-directory .sd-company-avatar { width: 44px; height: 44px; flex-shrink: 0; object-fit: contain; border: 1px solid var(--sd-rule); border-radius: var(--sd-control-radius); }
+.sd-directory .sd-company-heading h3 { font-size: 17px; font-weight: 750; line-height: 1.4; letter-spacing: -.015em; overflow-wrap: anywhere; }
+.sd-directory .sd-company-heading h3 a { color: var(--sd-ink); text-decoration: none; }
+.sd-directory .sd-company-heading p { margin-top: 8px; color: var(--sd-muted); font-size: var(--sd-small); line-height: 1.45; }
+.sd-directory .sd-card-location { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: var(--sd-small); color: var(--sd-muted); }
+.sd-directory .sd-card-phases { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--sd-rule); }
+.sd-directory .sd-card-phases > a { display: flex; gap: 8px; align-items: baseline; min-height: 44px; padding: 8px 10px; margin-top: 4px; background: var(--sd-soft); color: var(--sd-ink); border-radius: var(--sd-control-radius); font-size: var(--sd-small); line-height: 1.4; text-decoration: none; border-inline-start: 3px solid var(--sd-stage, var(--sd-accent)); }
+.sd-directory .sd-card-phases b { white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--sd-stage, var(--sd-accent)); }
+.sd-directory .sd-card-specs { display: flex; gap: 20px; font-size: var(--sd-small); margin-top: 16px; }
+.sd-directory .sd-card-specs dt { color: var(--sd-muted); }
+.sd-directory .sd-card-specs dd { margin-top: 4px; font-weight: 650; }
+.sd-directory .sd-confirmation { padding: 12px; font-size: var(--sd-small); background: var(--sd-amber-paper); color: var(--sd-amber-ink); margin-top: 12px; border-radius: var(--sd-control-radius); }
+.sd-directory .sd-card-keywords { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px; }
+.sd-directory .sd-card-keywords a { display: inline-flex; gap: 6px; align-items: center; min-height: 44px; max-width: 100%; padding: 8px 0; color: var(--sd-muted); font-size: 13px; text-decoration: none; }
+.sd-directory .sd-card-keywords a svg { flex-shrink: 0; }
+.sd-directory .sd-card-keywords a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sd-directory .sd-card-bottom { border-top: 1px solid var(--sd-rule); padding: 16px 20px 20px; }
+.sd-directory .sd-contact-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.sd-directory .sd-contact-label { display: flex; align-items: center; gap: 4px; color: var(--sd-muted); font-size: 13px; }
+.sd-directory .sd-masked-phone { display: block; color: var(--sd-ink); font-size: var(--sd-small); font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 4px; }
+.sd-directory .sd-contact-actions { display: flex; gap: 4px; }
+.sd-directory .sd-contact-actions button { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--sd-control-radius); background: var(--sd-soft); color: var(--sd-accent); }
+.sd-directory .sd-card-cta { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.sd-directory .sd-card-cta .sd-button { white-space: nowrap; }
+.sd-directory .sd-add-requirement { width: 100%; margin-bottom: 12px; }
+.sd-directory .sd-supplier-card[data-view="list"] { display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+.sd-directory .sd-supplier-card[data-view="list"] .sd-card-gallery { height: 100%; grid-template-rows: 1fr 1fr; grid-row: span 2; }
+.sd-directory .sd-supplier-card[data-view="list"] .sd-card-bottom { grid-column: 2; }
+.sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) :is(button, a, input, select, [tabindex]):focus-visible { outline: 2px solid var(--sd-focus); outline-offset: 3px; box-shadow: 0 0 0 3px var(--sd-paper); }
+.sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) button:active:not(:disabled) { transform: translateY(1px); }
+.sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) :is(button, input, select):disabled { opacity: .55; cursor: not-allowed; }
+.sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) [aria-invalid="true"] { border-color: var(--sd-error); }
+.sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) [aria-busy="true"] { cursor: progress; }
+@media (hover: hover) {
+  .sd-directory .sd-button-primary:hover { background: var(--sd-accent-dark); color: var(--sd-accent-ink); }
+  .sd-directory :is(.sd-button-outline, .sd-text-button):hover { background: var(--sd-selected); color: var(--sd-accent); }
+  .sd-directory :is(.sd-phase-options button, .sd-stage-heading, .sd-alphabet button, .sd-radio-row, .sd-checkbox-row, .sd-provinces button, .sd-contact-actions button):hover { background: var(--sd-selected); }
+  .sd-directory .sd-alphabet button[aria-pressed="true"]:hover { background: var(--sd-accent-dark); }
+  .sd-directory :is(.sd-industry-list, .sd-keyword-list) a:hover { color: var(--sd-accent); background: var(--sd-selected); }
+  .sd-directory .sd-company-heading h3 a:hover, .sd-directory .sd-card-keywords a:hover { color: var(--sd-accent); text-decoration: underline; text-underline-offset: 3px; }
+}
+@media (max-width: 1199px) {
+  .sd-directory .sd-stage-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 0; }
+  .sd-directory .sd-stage-heading { min-height: 80px; }
+  .sd-directory .sd-stage:nth-child(3) { border-inline-end: 0; }
+  .sd-directory .sd-stage:nth-child(4) { padding-inline-start: 0; }
+  .sd-directory .sd-phase-options button { min-height: 48px; }
+}
+@media (max-width: 1023px) {
+  .sd-directory .sd-workspace > div { grid-template-columns: minmax(0, 1fr); }
+  .sd-directory .sd-mobile-filter-toggle { display: flex; justify-content: space-between; width: 100%; padding: 12px 0 0; min-height: 44px; font-size: var(--sd-small); color: var(--sd-accent); }
+  .sd-directory .sd-filter-body[data-mobile-open="false"] { display: none; }
+  .sd-directory .sd-filter-body[data-mobile-open="true"] { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .sd-directory .sd-catalogue-columns { grid-template-columns: minmax(0, 1fr) minmax(220px, .5fr); gap: 24px; }
+}
+@media (max-width: 639px) {
+  .sd-directory .sd-phase-section, .sd-directory .sd-catalogue { padding: 20px 16px; }
+  .sd-directory .sd-section-head { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .sd-directory .sd-stage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 0; }
+  .sd-directory .sd-stage { padding-inline: 8px; }
+  .sd-directory .sd-stage:nth-child(odd) { padding-inline-start: 0; border-inline-end: 1px solid var(--sd-rule); }
+  .sd-directory .sd-stage:nth-child(even) { padding-inline-start: 8px; padding-inline-end: 0; border-inline-end: 0; }
+  .sd-directory .sd-stage-heading { min-height: 90px; padding: 8px 4px; }
+  .sd-directory .sd-stage-heading strong { font-size: var(--sd-small); }
+  .sd-directory .sd-phase-options button { flex-direction: column; gap: 4px; padding: 8px 4px; min-height: 88px; }
+  .sd-directory .sd-phase-options button svg { position: absolute; margin-left: 32px; }
+  .sd-directory .sd-catalogue-columns { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .sd-directory .sd-keyword-list { grid-template-columns: 1fr; }
+  .sd-directory .sd-filter-body[data-mobile-open="true"] { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .sd-directory .sd-supplier-grid { grid-template-columns: minmax(0, 1fr); }
+  .sd-directory .sd-supplier-card[data-view="list"] { display: flex; }
+  .sd-directory .sd-supplier-card[data-view="list"] .sd-card-gallery { height: auto; grid-template-rows: 80px 80px; }
+  .sd-directory .sd-card-body { padding: 16px; }
+  .sd-directory .sd-card-bottom { padding: 16px; }
+}
+@media (max-width: 359px) {
+  .sd-directory .sd-card-cta { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) * { transition-duration: 0ms; animation: none; scroll-behavior: auto; }
+  .sd-directory :is(.sd-explorer, .sd-filters, .sd-supplier-card) button:active { transform: none; }
+}

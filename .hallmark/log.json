@@ -1,5 +1,17 @@
 [
   {
+    "date": "2026-10-06",
+    "macrostructure": "Scoped B2B directory workbench: lifecycle matrix / A–Z index / photo-led supplier records",
+    "theme": "Modern-minimal, inherited bright CCU forest green and runtime typography",
+    "enrichment": "Existing record/avatar and thumbnail sources preserved; no regenerated images",
+    "brief": "Redesign four supplier-directory discovery blocks while retaining 18-phase, alphabet, industry, keyword, filtering and masked-contact behavior",
+    "nav": "existing shared navigation and hero preserved",
+    "footer": "existing shared footer preserved",
+    "scope": "/nha-cung-ung below-hero explorer, filter and records only",
+    "variation": "six full-label lifecycle columns, industry index plus keyword side rail, native filters and two-column photo-first records",
+    "verification": "7 scoped tests; eight browser widths and filter interactions; 12 text token pairs at least 4.5:1; full suite 87/91 with four pre-existing unrelated failures"
+  },
+  {
     "date": "2026-10-05",
     "macrostructure": "Network Contribution Selector / Visual Format Catalogue with Guided Process",
     "theme": "Modern-minimal, bright CCU forest green, inherited SpaceGrotesk and Poppins",

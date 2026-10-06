@@ -1,16 +1,15 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   Search, MapPin, Building2, ShieldCheck, Layers, Tag,
   ChevronDown, ChevronUp, ChevronRight, Check, Wrench, Factory, Cpu,
   Truck, Users, Leaf, Sparkles, Flame, Zap, PackageCheck, CheckCircle2, Award
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
-import FoundingPartnerCard from './FoundingPartnerCard';
 import categoriesAlphabetical from '../data/categoriesAlphabetical.json';
 import phaseTaxonomyAlphabetical from '../data/phaseTaxonomyAlphabetical.json';
-import { slugify } from '../pages/IndustryCategoryPage';
 import { detectPhaseAndStage } from '../utils/companyUtils';
+import SupplierDirectoryExplorer from './suppliers/SupplierDirectoryExplorer';
 
 // Exact 18-Phase Reference mapped strictly from stagesData (Stage 1 to 6)
 export const MASTER_18_PHASES = [
@@ -349,7 +348,6 @@ export default function SupplierTopNavigationBlocks({
 }) {
   const { lang } = useLanguage();
   const navigate = useNavigate();
-  const [isLetterMenuOpen, setIsLetterMenuOpen] = useState(true);
 
   // Auto-detect matching phase & stage from category or keyword if phase is 'all'
   const detectedContext = useMemo(() => {
@@ -552,333 +550,27 @@ export default function SupplierTopNavigationBlocks({
     }
   };
 
-  // Render Sub-Block: 18 Pha / 6 Giai đoạn
-  const renderPhasesBlock = () => (
-    <div key="phases-block" className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
-      {/* Header Bar */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-xs font-black shadow-xs">
-            <Layers className="w-3.5 h-3.5" />
-          </div>
-          <h2 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide font-heading">
-            {lang === 'en' ? '6 Lifecycle Stages (18 Structured Phases):' : 'PHÂN LOẠI THEO 18 PHA VÒNG ĐỜI (6 GIAI ĐOẠN):'}
-          </h2>
-        </div>
-
-        <button
-          onClick={handleAllPhasesClick}
-          className={`px-3 py-1 rounded-xl text-xs font-bold transition flex items-center space-x-1 cursor-pointer ${
-            effectivePhase === 'all' && effectiveStage === 'all'
-              ? 'bg-[#0052cc] text-white shadow-xs'
-              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-          }`}
-        >
-          <span>{lang === 'en' ? 'All 18 Phases' : 'Tất cả 18 Pha'}</span>
-        </button>
-      </div>
-
-      {/* 6 Stage Columns with Active Highlight for effectiveStage / effectivePhase */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {stageColumns.map((col) => {
-          const isStageSelected = effectiveStage === String(col.id);
-          const isColActive = effectiveStage === 'all' || isStageSelected;
-
-          return (
-            <div 
-              key={col.id}
-              className={`p-3 rounded-2xl border transition flex flex-col space-y-2.5 ${
-                isStageSelected 
-                  ? `${col.bgLight} ${col.border} shadow-md ring-2 ring-blue-500/30` 
-                  : isColActive 
-                  ? 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-xs' 
-                  : 'bg-slate-50/60 border-slate-200/60 opacity-60'
-              }`}
-            >
-              {/* Stage Column Header */}
-              <button
-                onClick={() => handleStageClick(String(col.id))}
-                className={`w-full flex items-center space-x-1.5 p-1.5 rounded-xl transition text-left cursor-pointer min-h-[42px] ${
-                  isStageSelected 
-                    ? col.activeHeader 
-                    : 'hover:bg-slate-100/80 text-slate-800'
-                }`}
-                title={lang === 'en' ? `Filter by ${col.name}: ${col.title}` : `Lọc theo ${col.name}: ${col.title}`}
-              >
-                <span 
-                  style={{ backgroundColor: isStageSelected ? 'transparent' : col.color }}
-                  className={`text-[10px] font-black px-1.5 py-0.5 rounded font-mono shadow-2xs whitespace-nowrap shrink-0 ${
-                    isStageSelected ? 'bg-white/20 text-white' : 'text-white'
-                  }`}
-                >
-                  {col.name}
-                </span>
-                <span className="text-[10.5px] font-black uppercase font-heading leading-tight line-clamp-2 tracking-tight flex-1">
-                  {col.title}
-                </span>
-              </button>
-
-              {/* 3 Vertical Phase Pills */}
-              <div className="flex flex-col space-y-1.5 flex-1 justify-between">
-                {col.phases.map((phase) => {
-                  const isSelected = effectivePhase === phase.id;
-                  const Icon = phase.icon || Wrench;
-                  const phaseLabel = lang === 'en' && phase.enTitle ? phase.enTitle : phase.title;
-
-                  return (
-                    <button
-                      key={phase.id}
-                      onClick={() => handlePhaseClick(phase.id, String(phase.stage))}
-                      className={`w-full p-2.5 rounded-xl text-left text-xs font-bold transition flex items-start space-x-2 border leading-tight cursor-pointer ${
-                        isSelected
-                          ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-500/25 scale-[1.02] ring-2 ring-emerald-400/40'
-                          : 'bg-slate-50/90 hover:bg-white text-slate-700 border-slate-200 hover:border-slate-300 shadow-2xs hover:scale-[1.01]'
-                      }`}
-                      title={phaseLabel}
-                    >
-                      <Icon className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isSelected ? 'text-white' : 'text-slate-400'}`} />
-                      <span className="line-clamp-2 text-[11px] font-semibold">{phaseLabel}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-
-  // Render Sub-Block: Founding Partner Spotlight
-  const renderPartnerBlock = () => (
-    <FoundingPartnerCard 
-      key="partner-block"
-      selectedPhase={effectivePhase} 
-      selectedStage={effectiveStage} 
-    />
-  );
-
-  // Render Sub-Block: Mục lục A-Z
-  const renderAlphabetBlock = () => (
-    <div key="alphabet-block" className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
-      {/* Header Bar */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
-        <div className="flex items-center space-x-2.5 flex-wrap gap-y-1.5">
-          <div className="px-2 py-1 bg-yellow-400 text-slate-950 rounded-lg text-xs font-black font-mono shadow-2xs">
-            A-Z
-          </div>
-          <h2 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide font-heading">
-            {lang === 'en' ? 'SUPPLIER TAXONOMY & KEYWORDS BY ALPHABET (A-Z):' : 'MỤC LỤC DANH MỤC NGÀNH NGHỀ & TỪ KHÓA THEO BẢNG CHỮ CÁI (A-Z):'}
-          </h2>
-          <button
-            onClick={() => handleSelectLetter('TẤT CẢ')}
-            className={`text-[11px] font-bold px-2.5 py-1 rounded-md border transition cursor-pointer ${
-              selectedLetter === 'TẤT CẢ' 
-                ? 'bg-yellow-400 text-slate-950 border-yellow-500 font-black shadow-xs' 
-                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
-            }`}
-          >
-            {lang === 'en' ? 'ALL (21.7k+)' : 'TẤT CẢ (21.680+)'}
-          </button>
-        </div>
-
-        <button
-          onClick={() => setIsLetterMenuOpen(!isLetterMenuOpen)}
-          className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center space-x-1 py-1 px-2.5 rounded-lg hover:bg-slate-100 transition cursor-pointer"
-        >
-          <span>{isLetterMenuOpen ? (lang === 'en' ? 'Collapse A-Z' : 'Thu gọn A-Z') : (lang === 'en' ? 'Expand A-Z' : 'Mở rộng A-Z')}</span>
-          {isLetterMenuOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-        </button>
-      </div>
-
-      {/* Alphabet Bar (A-Z) */}
-      {isLetterMenuOpen && (
-        <div className="space-y-4">
-          
-          {/* 24 Letters Row + ALL Button */}
-          <div className="bg-slate-50/80 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80">
-            <div className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-              {/* TẤT CẢ Button */}
-              <button
-                onClick={() => handleSelectLetter('TẤT CẢ')}
-                className={`min-w-[50px] sm:min-w-[60px] py-1.5 sm:py-2 px-1.5 rounded-xl transition flex flex-col items-center justify-center border text-center cursor-pointer ${
-                  selectedLetter === 'TẤT CẢ'
-                    ? 'bg-yellow-400 text-slate-950 font-black border-yellow-500 shadow-sm ring-2 ring-yellow-400/40 z-10'
-                    : 'bg-white text-slate-800 border-slate-200 hover:bg-yellow-50 hover:text-yellow-950 hover:border-yellow-300 shadow-2xs'
-                }`}
-                title="Tất cả 21.680+ Nhà Cung Ứng & Cơ Sở Chế Tạo"
-              >
-                <span className="leading-none text-[10px] sm:text-xs font-black tracking-tight uppercase">TẤT CẢ</span>
-                <span className={`text-[8px] sm:text-[9px] font-mono leading-none mt-1 font-bold ${
-                  selectedLetter === 'TẤT CẢ' ? 'text-slate-950 font-extrabold' : 'text-slate-500'
-                }`}>
-                  (21.7k)
-                </span>
-              </button>
-
-              {ALPHABET_LETTERS.map((letter) => {
-                const isActive = selectedLetter === letter;
-                const count = dynamicLetterCounts[letter] || 0;
-                const hasSuppliers = count > 0;
-                const formattedCount = count >= 1000 ? `${(count / 1000).toFixed(1)}k` : count;
-
-                return (
-                  <button
-                    key={letter}
-                    onClick={() => handleSelectLetter(letter)}
-                    className={`flex-1 min-w-[26px] sm:min-w-[32px] md:min-w-[36px] py-1.5 sm:py-2 px-0.5 rounded-xl transition flex flex-col items-center justify-center border text-center cursor-pointer ${
-                      isActive
-                        ? 'bg-yellow-400 text-slate-950 font-black border-yellow-500 shadow-sm ring-2 ring-yellow-400/40 z-10'
-                        : hasSuppliers
-                        ? 'bg-white text-slate-800 border-slate-200 hover:bg-yellow-50 hover:text-yellow-950 hover:border-yellow-300 shadow-2xs'
-                        : 'bg-slate-50/60 text-slate-300 border-slate-100 opacity-50'
-                    }`}
-                    title={`${lang === 'en' ? 'Letter' : 'Chữ cái'} ${letter} (${count.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} ${lang === 'en' ? 'suppliers' : 'nhà cung cấp'})`}
-                  >
-                    <span className="leading-none text-xs sm:text-sm font-black tracking-tight">{letter}</span>
-                    <span className={`text-[8px] sm:text-[9px] font-mono leading-none mt-1 font-bold ${
-                      isActive ? 'text-slate-950 font-extrabold' : hasSuppliers ? 'text-slate-500' : 'text-slate-300'
-                    }`}>
-                      ({formattedCount})
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Category Tags Cloud */}
-          {categoriesForLetter.length > 0 && (
-            <div className="pt-2.5 border-t border-slate-100 bg-slate-50/70 p-3 sm:p-4 rounded-2xl border space-y-2.5 animate-in fade-in duration-200">
-              <div className="text-xs font-bold text-slate-700 flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center space-x-2">
-                  <Tag className="w-4 h-4 text-blue-600" />
-                  <span>
-                    {selectedLetter === 'TẤT CẢ' 
-                      ? (lang === 'en' ? 'Top Key Industry Categories' : 'Các nhóm ngành nghề trọng điểm toàn quốc')
-                      : (lang === 'en' ? 'Industry categories starting with ' : 'Danh mục ngành nghề bắt đầu bằng chữ ')}
-                    {selectedLetter !== 'TẤT CẢ' && (
-                      <strong className="text-yellow-700 font-mono text-sm"> [{selectedLetter}]</strong>
-                    )} ({selectedLetter === 'TẤT CẢ' ? Math.min(categoriesForLetter.length, 60) : categoriesForLetter.length} {lang === 'en' ? 'categories' : 'ngành'}):
-                  </span>
-                </div>
-                
-                {selectedCategory !== 'all' && (
-                  <button
-                    onClick={() => {
-                      if (onSelectCategory) {
-                        onSelectCategory('all');
-                      } else {
-                        navigate('/nha-cung-ung');
-                      }
-                    }}
-                    className="text-[11px] text-rose-600 hover:text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200 cursor-pointer"
-                  >
-                    {lang === 'en' ? `Clear: ${selectedCategory} ✕` : `Bỏ chọn ngành: ${selectedCategory} ✕`}
-                  </button>
-                )}
-              </div>
-
-              {/* Category Pills with Active Highlight */}
-              <div className="flex flex-wrap gap-1.5 max-h-[160px] overflow-y-auto pr-1">
-                {(selectedLetter === 'TẤT CẢ' ? categoriesForLetter.slice(0, 60) : categoriesForLetter).map((cat, idx) => {
-                  const isSelected = selectedCategory === cat.name;
-                  return (
-                    <Link
-                      key={idx}
-                      to={`/nganh-nghe/${slugify(cat.name)}?name=${encodeURIComponent(cat.name)}`}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-medium transition flex items-center gap-1.5 border truncate max-w-[320px] group ${
-                        isSelected
-                          ? 'bg-[#0052cc] text-white font-black border-[#0052cc] shadow-md ring-2 ring-blue-400/40 scale-105'
-                          : 'bg-white text-slate-700 border-slate-200 hover:bg-yellow-50 hover:text-yellow-950 hover:border-yellow-300'
-                      }`}
-                      title={`${cat.name} (${cat.count} ${lang === 'en' ? 'suppliers' : 'nhà cung cấp'})`}
-                    >
-                      <Tag className={`w-3 h-3 shrink-0 ${isSelected ? 'text-white' : 'text-slate-400 group-hover:text-yellow-600'}`} />
-                      <span className="truncate">{cat.name}</span>
-                      <span className={`text-[10px] font-mono shrink-0 font-bold ${isSelected ? 'text-blue-100' : 'text-slate-500'}`}>
-                        ({cat.count.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')})
-                      </span>
-                      {isSelected && <Check className="w-3 h-3 text-white ml-0.5" />}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Related Keywords Cloud with Active Highlight */}
-          <div className="pt-3 border-t border-slate-100 bg-slate-50/80 p-3 sm:p-4 rounded-2xl border space-y-2.5">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center space-x-2">
-                <div className="w-5 h-5 rounded-md bg-amber-500 text-white flex items-center justify-center text-[10px] font-black shadow-2xs">
-                  🔑
-                </div>
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide font-heading">
-                  {lang === 'en' ? 'RELATED SEARCH KEYWORDS' : 'TỪ KHÓA LIÊN QUAN TỚI NGÀNH NGHỀ'}
-                  {effectivePhase !== 'all' && (
-                    <span className="ml-1.5 text-amber-700 font-mono text-xs lowercase">
-                      ({lang === 'en' ? `for phase ${effectivePhase}` : `theo pha ${effectivePhase}`}):
-                    </span>
-                  )}
-                </h3>
-              </div>
-
-              {selectedKeyword && (
-                <button
-                  onClick={() => {
-                    if (onSelectKeyword) {
-                      onSelectKeyword('');
-                    } else {
-                      navigate('/nha-cung-ung');
-                    }
-                  }}
-                  className="text-[11px] text-amber-700 hover:text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 cursor-pointer"
-                >
-                  {lang === 'en' ? `Clear keyword: "${selectedKeyword}" ✕` : `Xóa từ khóa: "${selectedKeyword}" ✕`}
-                </button>
-              )}
-            </div>
-
-            {/* Keyword Pills with Active Highlight */}
-            <div className="flex flex-wrap gap-1.5">
-              {keywordsList.map((kw, idx) => {
-                const queryVal = kw.query || kw.labelVi;
-                const isSelected = selectedKeyword && (selectedKeyword.toLowerCase() === queryVal.toLowerCase() || selectedKeyword.toLowerCase() === kw.labelVi.toLowerCase());
-                
-                return (
-                  <Link
-                    key={idx}
-                    to={`/tu-khoa/${slugify(queryVal)}?q=${encodeURIComponent(queryVal)}`}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-medium transition flex items-center space-x-1.5 border group ${
-                      isSelected
-                        ? 'bg-amber-600 text-white font-black border-amber-600 shadow-md ring-2 ring-amber-400/40 scale-105'
-                        : 'bg-white text-slate-700 border-slate-200 hover:bg-amber-50 hover:text-amber-950 hover:border-amber-300'
-                    }`}
-                  >
-                    <span className="truncate">{kw.labelVi}</span>
-                    <span className={`text-[10px] font-mono font-bold ${isSelected ? 'text-amber-100' : 'text-slate-400 group-hover:text-amber-700'}`}>
-                      ({kw.count || 45})
-                    </span>
-                    {isSelected && <Check className="w-3 h-3 text-white ml-0.5" />}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-
-        </div>
-      )}
-
-    </div>
-  );
-
-  // Return blocks in the requested order: Founding Partner -> 18 Phases -> A-Z Alphabet
   return (
     <div className="space-y-8">
-      {renderPartnerBlock()}
-      {renderPhasesBlock()}
-      {renderAlphabetBlock()}
+      <SupplierDirectoryExplorer
+        phases={MASTER_18_PHASES}
+        categories={categoriesForLetter}
+        letters={ALPHABET_LETTERS}
+        keywords={keywordsList}
+        selectedLetter={selectedLetter}
+        effectivePhase={effectivePhase}
+        effectiveStage={effectiveStage}
+        selectedCategory={selectedCategory}
+        selectedKeyword={selectedKeyword}
+        letterCounts={dynamicLetterCounts}
+        onAllPhases={handleAllPhasesClick}
+        onStage={handleStageClick}
+        onPhase={handlePhaseClick}
+        onLetter={handleSelectLetter}
+        onCategory={onSelectCategory}
+        onKeyword={onSelectKeyword}
+        lang={lang}
+      />
     </div>
   );
 }

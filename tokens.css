@@ -122,6 +122,37 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+/* CCU supplier discovery workbench. */
+.sd-directory {
+  --sd-ink: #16372b;
+  --sd-muted: #52655d;
+  --sd-paper: #ffffff;
+  --sd-soft: #f3f7f4;
+  --sd-rule: #d8e3dc;
+  --sd-input-rule: #82998b;
+  --sd-accent: #006039;
+  --sd-accent-dark: #004c2d;
+  --sd-accent-ink: #ffffff;
+  --sd-selected: #e7f2e9;
+  --sd-focus: #162d69;
+  --sd-error: #a92a31;
+  --sd-amber-ink: #79521b;
+  --sd-amber-paper: #fcf7ec;
+  --sd-stage-one: #7351c3;
+  --sd-stage-two: #245fc0;
+  --sd-stage-three: #00758a;
+  --sd-stage-four: #087547;
+  --sd-stage-five: #976208;
+  --sd-stage-six: #b63753;
+  --sd-radius: 16px;
+  --sd-control-radius: 8px;
+  --sd-small: 14px;
+  --sd-body: 16px;
+  --sd-space: 24px;
+  --sd-short: 160ms;
+  --sd-ease: cubic-bezier(.16, 1, .3, 1);
+}
+
 /* CCU bright service and partnership system, forest-green action palette. */
 .ec-page {
   --color-paper: oklch(98.5% 0.004 155);

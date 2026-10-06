@@ -15,7 +15,6 @@ import phaseTaxonomyAlphabetical from '../data/phaseTaxonomyAlphabetical.json';
 import enterprisesFullList from '../data/enterprisesFull.json';
 import { useLanguage } from '../contexts/LanguageContext';
 import { slugify } from './IndustryCategoryPage';
-import FoundingPartnerCard from '../components/FoundingPartnerCard';
 import {
   getCompanyMonogram,
   getMonogramGradient,
@@ -23,13 +22,15 @@ import {
   getEnterpriseAvatarImage,
   getCategoryBannerImage,
   getEnterpriseKYCLevel,
-  getEnterprisePhone,
-  maskPhoneNumber,
   getEnterpriseThumbnails
 } from '../utils/companyUtils';
 import SupplierTopNavigationBlocks from '../components/SupplierTopNavigationBlocks';
 import SupplierRequestQuoteModal from '../components/suppliers/SupplierRequestQuoteModal';
 import SupplierRegistrationModal from '../components/suppliers/SupplierRegistrationModal';
+import SupplierDirectoryCard from '../components/suppliers/SupplierDirectoryCard';
+import SupplierDirectoryFilters from '../components/suppliers/SupplierDirectoryFilters';
+import { getSupplierMaskedPhone } from '../components/suppliers/supplierDirectoryModel';
+import '../components/suppliers/SupplierDirectory.css';
 
 // 24 Latin Alphabet Letters matching directory
 const ALPHABET_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X'];
@@ -456,6 +457,14 @@ export default function EnterprisesPage() {
     }, { replace: false });
   };
 
+  const resetDirectoryFilters = () => {
+    setSelectedLetter('TẤT CẢ');
+    setFilterApiReady(false);
+    setFilterFastQuote(false);
+    setFilterIsoCertified(false);
+    updateFilterUrl({ q: '', phase: 'all', stage: 'all', category: 'all', province: 'Toàn quốc', kyc: 'all', letter: 'TẤT CẢ' });
+  };
+
   // User Voting System state with LocalStorage persistence
   const [votes, setVotes] = useState(() => {
     try {
@@ -581,7 +590,7 @@ export default function EnterprisesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] pb-24 font-sans select-none text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white space-y-8">
+    <main className="sd-directory min-h-screen bg-[#F8FAFC] pb-24 font-sans text-slate-900 antialiased selection:bg-[#0052cc] selection:text-white space-y-8">
 
       {/* =========================================================================
           1. BLOCK 1: GLOBAL SEARCH BOX & HERO BANNER
@@ -916,215 +925,27 @@ export default function EnterprisesPage() {
       {/* =========================================================================
           MAIN WORKSPACE LAYOUT (2 COLUMNS: STICKY LEFT SIDEBAR + RIGHT SUPPLIER GRID)
          ========================================================================= */}
-      <div id="danh-sach-nha-cung-ung" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div id="danh-sach-nha-cung-ung" className="sd-workspace max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
           {/* =======================================================================
               BLOCK 2: SMART FILTER PANEL (STICKY LEFT SIDEBAR)
              ======================================================================= */}
-          <aside className="lg:col-span-3 lg:sticky lg:top-20 space-y-4">
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-sm space-y-5">
-
-              {/* Sidebar Header */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div className="flex items-center space-x-2">
-                  <Filter className="w-4 h-4 text-[#0052cc]" />
-                  <h3 className="text-sm font-black text-slate-900 uppercase font-heading tracking-wider">
-                    Bộ Lọc Thông Minh
-                  </h3>
-                </div>
-
-                <button
-                  onClick={() => {
-                    setSelectedLetter('TẤT CẢ');
-                    setFilterApiReady(false);
-                    setFilterFastQuote(false);
-                    setFilterIsoCertified(false);
-                    updateFilterUrl({ q: '', phase: 'all', stage: 'all', category: 'all', province: 'Toàn quốc', kyc: 'all' });
-                  }}
-                  className="text-[11px] font-bold text-slate-400 hover:text-rose-600 transition flex items-center gap-1 cursor-pointer"
-                  title="Đặt lại tất cả bộ lọc"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Đặt lại</span>
-                </button>
-              </div>
-
-              {/* 1. KYC LEVELS FILTER */}
-              <div className="space-y-2.5">
-                <label className="text-xs font-black text-slate-900 uppercase tracking-wider font-mono flex items-center justify-between">
-                  <span>Cấp Độ Xác Thực KYC</span>
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                </label>
-
-                <div className="space-y-1.5">
-                  {[
-                    { id: 'all', label: 'Tất cả cấp độ', icon: '🌐', count: enterprisesFullList.length },
-                    { id: 'diamond', label: 'Kim Cương (Hiệp hội/BNI)', icon: '💎', color: 'text-sky-700 bg-sky-50 border-sky-200' },
-                    { id: 'gold', label: 'Vàng (Nhà xưởng/Thực địa)', icon: '🥇', color: 'text-amber-800 bg-amber-50 border-amber-200' },
-                    { id: 'silver', label: 'Bạc (Pháp nhân & MST)', icon: '🥈', color: 'text-slate-700 bg-slate-100 border-slate-200' },
-                  ].map((kycOption) => {
-                    const isSelected = selectedKyc === kycOption.id;
-                    return (
-                      <button
-                        key={kycOption.id}
-                        onClick={() => updateFilterUrl({ kyc: kycOption.id })}
-                        className={`w-full p-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between border cursor-pointer ${isSelected
-                            ? 'bg-[#0052cc] text-white border-[#0052cc] shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200/80 hover:bg-slate-100'
-                          }`}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <span>{kycOption.icon}</span>
-                          <span className="text-[11px]">{kycOption.label}</span>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* 2. TECH INFRASTRUCTURE & STANDARDS TOGGLES */}
-              <div className="space-y-2.5 border-t border-slate-100 pt-4">
-                <label className="text-xs font-black text-slate-900 uppercase tracking-wider font-mono flex items-center justify-between">
-                  <span>Hạ Tầng & Tiêu Chuẩn</span>
-                  <Cpu className="w-3.5 h-3.5 text-indigo-600" />
-                </label>
-
-                <div className="space-y-2">
-                  <label htmlFor="filter-api-ready" className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition cursor-pointer">
-                    <div className="flex items-center space-x-2">
-                      <Zap className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
-                      <span className="text-xs font-bold text-slate-800">Sẵn sàng kết nối API / ERP</span>
-                    </div>
-                    <input
-                      id="filter-api-ready"
-                      name="filterApiReady"
-                      aria-label="Sẵn sàng kết nối API / ERP"
-                      type="checkbox"
-                      checked={filterApiReady}
-                      onChange={(e) => setFilterApiReady(e.target.checked)}
-                      className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
-                    />
-                  </label>
-
-                  <label htmlFor="filter-fast-quote" className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition cursor-pointer">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span className="text-xs font-bold text-slate-800">Báo giá nhanh 24h</span>
-                    </div>
-                    <input
-                      id="filter-fast-quote"
-                      name="filterFastQuote"
-                      aria-label="Báo giá nhanh 24h"
-                      type="checkbox"
-                      checked={filterFastQuote}
-                      onChange={(e) => setFilterFastQuote(e.target.checked)}
-                      className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
-                    />
-                  </label>
-
-                  <label htmlFor="filter-iso-certified" className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition cursor-pointer">
-                    <div className="flex items-center space-x-2">
-                      <Award className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                      <span className="text-xs font-bold text-slate-800">Chứng nhận ISO / ESG</span>
-                    </div>
-                    <input
-                      id="filter-iso-certified"
-                      name="filterIsoCertified"
-                      aria-label="Chứng nhận ISO / ESG"
-                      type="checkbox"
-                      checked={filterIsoCertified}
-                      onChange={(e) => setFilterIsoCertified(e.target.checked)}
-                      className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 cursor-pointer"
-                    />
-                  </label>
-                </div>
-              </div>
-
-              {/* 3. PROVINCES & GEOGRAPHY FILTER */}
-              <div className="space-y-2.5 border-t border-slate-100 pt-4">
-                <label className="text-xs font-black text-slate-900 uppercase tracking-wider font-mono flex items-center justify-between">
-                  <span>Khu Vực Địa Lý</span>
-                  <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                </label>
-
-                {/* Quick Province Chips */}
-                <div className="flex flex-wrap gap-1">
-                  {QUICK_PROVINCE_CHIPS.map((prov) => {
-                    const isSelected = selectedProvince === prov;
-                    return (
-                      <button
-                        key={prov}
-                        onClick={() => updateFilterUrl({ province: prov })}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${isSelected
-                            ? 'bg-[#0052cc] text-white shadow-2xs'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                          }`}
-                      >
-                        {prov === 'Toàn quốc' ? '📍 Tất cả' : prov}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Full 63 Provinces Dropdown */}
-                <label htmlFor="filter-province-select" className="sr-only">Chọn tỉnh thành</label>
-                <select
-                  id="filter-province-select"
-                  aria-label="Chọn tỉnh thành"
-                  value={selectedProvince}
-                  onChange={(e) => updateFilterUrl({ province: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:ring-2 focus:ring-blue-500/20 cursor-pointer outline-none"
-                >
-                  {PROVINCES.map((prov) => (
-                    <option key={prov} value={prov}>
-                      {prov === "Toàn quốc" ? "📍 Toàn quốc (34 Tỉnh thành)" : `📍 ${prov}`}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 4. ACTIVE 18 PHASES COORDINATE SHORTCUTS */}
-              <div className="space-y-2 border-t border-slate-100 pt-4">
-                <label className="text-xs font-black text-slate-900 uppercase tracking-wider font-mono flex items-center justify-between">
-                  <span>Pha Kỹ Thuật (18 Pha)</span>
-                  <Layers className="w-3.5 h-3.5 text-emerald-600" />
-                </label>
-
-                <div className="max-h-52 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
-                  <button
-                    onClick={() => updateFilterUrl({ phase: 'all', stage: 'all' })}
-                    className={`w-full p-2 rounded-lg text-xs font-bold text-left transition flex items-center justify-between cursor-pointer ${selectedPhase === 'all'
-                        ? 'bg-blue-50 text-[#0052cc] font-black'
-                        : 'text-slate-600 hover:bg-slate-50'
-                      }`}
-                  >
-                    <span>Toàn bộ 18 Pha</span>
-                    {selectedPhase === 'all' && <Check className="w-3 h-3 text-[#0052cc]" />}
-                  </button>
-
-                  {MASTER_18_PHASES.map((p) => {
-                    const isSelected = selectedPhase === p.id;
-                    return (
-                      <button
-                        key={p.id}
-                        onClick={() => updateFilterUrl({ phase: isSelected ? 'all' : p.id, stage: String(p.stage) })}
-                        className={`w-full p-2 rounded-lg text-xs font-semibold text-left transition flex items-center justify-between cursor-pointer ${isSelected
-                            ? 'bg-emerald-50 text-emerald-800 font-bold'
-                            : 'text-slate-600 hover:bg-slate-50'
-                          }`}
-                      >
-                        <span className="truncate">Pha {p.id}: {p.title.split(' ')[1]}</span>
-                        {isSelected && <Check className="w-3 h-3 text-emerald-600" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-            </div>
+          <aside className="sd-sidebar lg:col-span-3 space-y-4 lg:sticky lg:top-[160px] lg:self-start lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto pr-1">
+            <SupplierDirectoryFilters
+              selectedKyc={selectedKyc}
+              selectedProvince={selectedProvince}
+              selectedPhase={selectedPhase}
+              selectedStage={selectedStage}
+              phases={MASTER_18_PHASES}
+              provinces={PROVINCES}
+              quickProvinces={QUICK_PROVINCE_CHIPS}
+              filters={{ api: filterApiReady, fast: filterFastQuote, iso: filterIsoCertified }}
+              activeCount={Number(selectedKyc !== 'all') + Number(selectedProvince !== 'Toàn quốc') + Number(selectedPhase !== 'all' || selectedStage !== 'all') + Number(filterApiReady) + Number(filterFastQuote) + Number(filterIsoCertified)}
+              onChange={updateFilterUrl}
+              onToggle={(key, value) => ({ api: setFilterApiReady, fast: setFilterFastQuote, iso: setFilterIsoCertified })[key](value)}
+              onReset={resetDirectoryFilters}
+            />
 
             {/* In-flow Lead Capture Card inside Sidebar (Không che bộ lọc, không đè mascot) */}
             <div className="bg-gradient-to-br from-[#072348] via-[#0052cc] to-[#0284c7] text-white rounded-3xl p-5 shadow-sm border border-blue-400/20 space-y-3">
@@ -1153,47 +974,6 @@ export default function EnterprisesPage() {
              ======================================================================= */}
           <section id="supplier-results-list" className="lg:col-span-9 space-y-5">
 
-            {/* Inline Dismissible Lead Alert Banner (In-flow tự nhiên, không che giao diện) */}
-            {isBottomBannerVisible && (
-              <div className="bg-gradient-to-r from-[#072348] via-[#0052cc] to-[#0284c7] text-white rounded-2xl p-4 shadow-sm border border-blue-400/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center space-x-3">
-                  <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-amber-300" />
-                  </div>
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                      <span className="text-[10.5px] font-bold text-sky-200 uppercase tracking-wider font-mono">
-                        Dành riêng cho Doanh Nghiệp &amp; Nhà Máy SME
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm font-bold text-white mt-0.5">
-                      Đối thủ của bạn đang nhận Lead từ khối FDI mỗi ngày.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2 shrink-0 self-end sm:self-auto">
-                  <button
-                    type="button"
-                    onClick={() => setIsRegistrationModalOpen(true)}
-                    className="px-4 py-2 bg-white hover:bg-amber-50 text-[#0052cc] font-black text-xs rounded-xl shadow transition transform hover:scale-105 cursor-pointer whitespace-nowrap"
-                  >
-                    Đăng Ký Hồ Sơ Ngay
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsBottomBannerVisible(false)}
-                    className="p-1.5 rounded-lg text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer"
-                    title="Đóng thông báo"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Results Header & Sort Info */}
             <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center space-x-2.5">
@@ -1201,7 +981,7 @@ export default function EnterprisesPage() {
                 <h3 className="text-sm sm:text-base font-black text-slate-950 font-heading">
                   {lang === 'en' ? 'Verified Industrial Suppliers' : 'Danh Sách Nhà Cung Cấp & Cơ Sở Chế Tạo B2B'}
                 </h3>
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#0052cc] text-xs font-mono font-bold">
+                <span aria-live="polite" aria-atomic="true" className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#0052cc] text-xs font-mono font-bold">
                   {totalCount.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} {lang === 'en' ? 'suppliers' : 'doanh nghiệp'}
                 </span>
               </div>
@@ -1212,6 +992,8 @@ export default function EnterprisesPage() {
                 <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-2xs">
                   <button
                     onClick={() => setViewMode('grid')}
+                    aria-pressed={viewMode === 'grid'}
+                    aria-label="Chế độ xem dạng ô"
                     className={`p-1.5 rounded-lg transition-all cursor-pointer ${
                       viewMode === 'grid'
                         ? 'bg-white text-[#0052cc] shadow-xs font-bold'
@@ -1223,6 +1005,8 @@ export default function EnterprisesPage() {
                   </button>
                   <button
                     onClick={() => setViewMode('list')}
+                    aria-pressed={viewMode === 'list'}
+                    aria-label="Chế độ xem dạng hàng"
                     className={`p-1.5 rounded-lg transition-all cursor-pointer ${
                       viewMode === 'list'
                         ? 'bg-white text-[#0052cc] shadow-xs font-bold'
@@ -1302,20 +1086,6 @@ export default function EnterprisesPage() {
               </div>
             )}
 
-            {/* Dedicated Commercial Founding Partner Showcase (Section 5 Spec) */}
-            <div className="bg-slate-50/80 p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-xs">
-              <div className="flex items-center justify-between mb-3 px-1">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
-                  <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 font-mono">
-                    ĐỐI TÁC ĐỒNG HÀNH CHUỖI CUNG ỨNG (FOUNDING PARTNERS)
-                  </h3>
-                </div>
-                <span className="text-[11px] text-slate-500 font-medium">Doanh nghiệp tiêu biểu cam kết chất lượng</span>
-              </div>
-              <FoundingPartnerCard selectedPhase={selectedPhase} selectedStage={selectedStage} />
-            </div>
-
             {/* Supplier Cards (Grid or List View Mode) */}
             {displayedEnterprises.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
@@ -1325,314 +1095,39 @@ export default function EnterprisesPage() {
                 <h4 className="text-lg font-bold text-slate-900 font-heading">
                   {lang === 'en' ? 'No matching suppliers found' : 'Không tìm thấy nhà cung ứng phù hợp'}
                 </h4>
-                <p className="text-xs text-slate-500 max-w-md mx-auto">
-                  Vui lòng thử tìm với từ khóa khác hoặc bấm nút "Đặt lại" để xem toàn bộ danh bạ hơn 24.000 nhà cung ứng.
+                <p className="text-sm text-slate-600 max-w-md mx-auto">
+                  Thử từ khoá khác, chọn lại pha hoặc đặt lại bộ lọc để xem toàn bộ danh bạ.
                 </p>
                 <button
                   onClick={() => {
-                    setSelectedLetter('TẤT CẢ');
-                    setFilterApiReady(false);
-                    setFilterFastQuote(false);
-                    setFilterIsoCertified(false);
-                    updateFilterUrl({ q: '', phase: 'all', stage: 'all', category: 'all', province: 'Toàn quốc', kyc: 'all' });
+                    resetDirectoryFilters();
                   }}
                   className="px-6 py-2.5 bg-[#0052cc] text-white text-xs font-bold rounded-xl shadow-md transition hover:bg-[#0041a8] cursor-pointer"
                 >
-                  Xem toàn bộ 24.000+ nhà cung ứng
+                  Đặt lại bộ lọc
                 </button>
               </div>
             ) : (
-              <div className={viewMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" : "space-y-4"}>
-                {displayedEnterprises.map((ent) => {
+              <div className="sd-supplier-grid" data-view={viewMode}>
+                {displayedEnterprises.map(ent => {
                   const entId = ent.id || ent._id || ent.taxCode || ent.name;
-                  const totalVotes = getEnterpriseBaseVotes(ent) + (votes[String(entId)] || 0);
-                  const userAction = userVoteActions[String(entId)] || 0;
                   const entSlug = ent.slug || slugify(ent.name || '');
-                  const detailUrl = `/nha-cung-ung/${entSlug || ent.id || ent._id}${location.search ? location.search : ''}`;
-                  const kyc = getEnterpriseKYCLevel(ent);
-                  const thumbnails = getEnterpriseThumbnails(ent);
-                  const rawPhone = getEnterprisePhone(ent);
-                  const maskedPhone = maskPhoneNumber(rawPhone);
-                  const phaseId = (ent.phases && ent.phases[0]) || '4.1';
-                  const provinceStr = ent.province && ent.province !== 'Toàn quốc' ? ent.province : '';
-                  const hasProvinceInName = provinceStr && ent.name.toLowerCase().includes(provinceStr.toLowerCase());
-                  const displayName = provinceStr && !hasProvinceInName ? `${ent.name} (${provinceStr})` : ent.name;
-
-                  const entKeywords = Array.from(new Set([
-                    ...(Array.isArray(ent.products) ? ent.products : []),
-                    ...(Array.isArray(ent.productGroups) ? ent.productGroups.flatMap(g => g.items || []) : []),
-                    ...(Array.isArray(ent.keywords) ? ent.keywords : []),
-                    ent.category,
-                    ent.industry
-                  ].filter(Boolean))).slice(0, 3);
-
-                  const websiteUrl = ent.website 
-                    ? (ent.website.startsWith('http') ? ent.website : `https://${ent.website}`) 
-                    : (ent.sourceUrl || ent.url || `https://www.google.com/search?q=${encodeURIComponent(ent.name + ' ' + (ent.province || ''))}`);
-
-                  // Render single enterprise card
-                  return (
-                    <div
-                      key={entId}
-                      className={`bg-white rounded-3xl border border-slate-200/90 p-5 shadow-xs hover:shadow-xl hover:border-[#0052cc]/50 hover:-translate-y-0.5 transition-all duration-300 flex ${
-                        viewMode === 'list' 
-                          ? 'flex-col lg:flex-row lg:items-center justify-between gap-6' 
-                          : 'flex-col justify-between space-y-4'
-                      } group relative`}
-                    >
-                      {/* Left / Top Header: Logo on Left + Company Name next to Logo */}
-                      <div className={viewMode === 'list' ? "flex-1 space-y-3" : "space-y-3"}>
-                        
-                        {/* Row 1: Logo & Company Name side-by-side */}
-                        <div className="flex items-start gap-3">
-                          {/* Avatar / Logo */}
-                          <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-[#0052cc]/50 transition-colors">
-                            <img
-                              src={getEnterpriseAvatarImage(ent)}
-                              alt={ent.name}
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover rounded-xl transition-transform duration-300 group-hover:scale-105"
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                const fallbackUrl = getCategoryBannerImage(ent.category || ent.industry || ent.name);
-                                if (e.target.src !== fallbackUrl) {
-                                  e.target.src = fallbackUrl;
-                                }
-                              }}
-                            />
-                          </div>
-
-                          {/* Company Name + Category */}
-                          <div className="min-w-0 flex-1">
-                            <Link
-                              to={detailUrl}
-                              className="font-black text-xs sm:text-[13px] text-slate-950 group-hover:text-[#0052cc] transition line-clamp-2 font-heading leading-snug block"
-                              title={displayName}
-                            >
-                              <span>{ent.name}</span>
-                              {provinceStr && !hasProvinceInName && (
-                                <span className="text-slate-600 font-bold ml-1">
-                                  ({provinceStr})
-                                </span>
-                              )}
-                            </Link>
-
-                            <div className="text-[11px] text-slate-500 truncate mt-0.5" title={ent.category || ent.industry}>
-                              {ent.category || ent.industry || "Chế tạo & Cung ứng"}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Operational Parameters: Region, MOQ, Lead Time & Confirmation Warnings */}
-                        <div className="pt-2 border-t border-slate-100/80 space-y-2">
-                          <div className="flex items-center justify-between gap-2 flex-wrap">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <Link
-                                to={`/giai-doan-cung-ung/pha/${phaseId}`}
-                                className="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold rounded-lg font-mono border border-emerald-200 transition-colors flex items-center gap-1"
-                                title={`Xem chi tiết Pha ${phaseId}`}
-                              >
-                                <span>Pha {phaseId}</span>
-                              </Link>
-                              <span className="px-2 py-0.5 rounded-lg bg-blue-50 text-blue-700 text-[10.5px] font-bold border border-blue-200/80 flex items-center gap-1">
-                                <MapPin className="w-3 h-3 text-blue-600" />
-                                <span>{provinceStr || 'Toàn quốc'}</span>
-                              </span>
-                            </div>
-
-                            {/* Operational specs chips: MOQ & Lead time */}
-                            <div className="flex items-center gap-2 text-[10.5px] font-mono text-slate-600">
-                              <span>MOQ: <strong>{ent.moq || '100 - 500'}</strong></span>
-                              <span>•</span>
-                              <span>Lead time: <strong>{ent.leadTime || '7-14 ngày'}</strong></span>
-                            </div>
-                          </div>
-
-                          {/* "Thông tin cần xác nhận" block with ? icon (Section 5 Spec) */}
-                          <div className="p-2 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-900 flex items-start gap-1.5">
-                            <HelpCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                            <div className="leading-tight">
-                              <span className="font-bold">Cần xác nhận: </span>
-                              <span className="text-amber-800">
-                                {ent.needsConfirmation || 'Kiểm tra công suất ca 3, tồn kho vật tư & thời gian thử mẫu thực tế'}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* "Vì sao được đề xuất?" if activeRequirement exists */}
-                          {activeRequirement && (
-                            <div className="p-2 rounded-xl bg-blue-50/70 border border-blue-200/80 text-[11px] text-blue-900 flex items-start gap-1.5">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
-                              <div className="leading-tight">
-                                <span className="font-bold">Khớp với nhu cầu: </span>
-                                <span className="text-blue-800">
-                                  Đáp ứng danh mục {ent.category || ent.industry || 'sản xuất'}, sẵn sàng giao tại {activeRequirement.kcn || activeRequirement.location || 'khu vực'}.
-                                </span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* SHOWCASE PRODUCT THUMBNAILS & KEYWORDS */}
-                        <div className="space-y-1.5 pt-1">
-                          <div className="flex items-center justify-between text-[11px]">
-                            <span className="font-bold text-slate-700 flex items-center gap-1">
-                              <Sparkles className="w-3 h-3 text-amber-500" />
-                              Từ khóa nhà cung cấp nổi bật
-                            </span>
-                          </div>
-
-                          {/* Actual Supplier Keywords Pills */}
-                          {entKeywords.length > 0 && (
-                            <div className="flex flex-wrap gap-1">
-                              {entKeywords.map((kw, kIdx) => (
-                                <Link
-                                  key={kIdx}
-                                  to={`/tu-khoa/${slugify(kw)}?q=${encodeURIComponent(kw)}`}
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 text-[10.5px] font-medium transition max-w-full truncate"
-                                  title={`Tìm kiếm từ khóa: ${kw}`}
-                                >
-                                  <Tag className="w-2.5 h-2.5 text-amber-600 shrink-0" />
-                                  <span className="truncate">{kw}</span>
-                                </Link>
-                              ))}
-                            </div>
-                          )}
-
-                          <div className="grid grid-cols-3 gap-1.5 pt-0.5">
-                            {thumbnails.map((imgUrl, tIdx) => (
-                              <div
-                                key={tIdx}
-                                className="h-16 rounded-xl bg-slate-100 overflow-hidden border border-slate-200/80 relative group/thumb cursor-pointer"
-                              >
-                                <img
-                                  src={imgUrl}
-                                  alt={`Product showcase ${tIdx + 1}`}
-                                  className="w-full h-full object-cover group-hover/thumb:scale-125 transition-transform duration-300"
-                                />
-                                <div className="absolute inset-0 bg-slate-900/10 group-hover/thumb:bg-transparent transition-colors" />
-                              </div>
-                            ))}
-                          </div>
-                          <p className="text-[10px] text-slate-400 font-mono text-center">
-                            3 Hình ảnh sản phẩm / Năng lực thực tế
-                          </p>
-                        </div>
-
-                      </div>
-
-                      {/* Bottom / Right Section: Masked Phone & Quick Contact Icons (Zalo, WhatsApp, Email, Web) + CTAs */}
-                      <div className={`pt-3 border-t border-slate-100 space-y-2.5 ${viewMode === 'list' ? 'lg:border-t-0 lg:border-l lg:pl-6 lg:w-72 lg:pt-0 shrink-0' : ''}`}>
-
-                        {/* Masked Phone with direct Contact Icons */}
-                        <div className="flex items-center justify-between bg-slate-50/90 rounded-xl py-1.5 px-3 border border-slate-200/80">
-                          <div className="flex items-center space-x-1.5 text-xs min-w-0">
-                            <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            <span className="font-mono font-bold text-slate-800 text-[11px] tracking-wide truncate">
-                              {maskedPhone}
-                            </span>
-                          </div>
-
-                          {/* Quick Contact Icons (Zalo, WhatsApp, Email, Web) */}
-                          <div className="flex items-center gap-1 shrink-0">
-                            {/* Zalo Icon */}
-                            <a
-                              href={`https://zalo.me/${rawPhone ? rawPhone.replace(/\D/g, '') : '0582877799'}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="w-6 h-6 rounded-lg bg-blue-50 hover:bg-blue-100 p-0.5 border border-blue-200/60 shadow-2xs transition flex items-center justify-center overflow-hidden"
-                              title="Nhắn tin Zalo"
-                            >
-                              <img src="/images/icons/zalo-icon.png" alt="Zalo" className="w-full h-full object-contain rounded-xs" />
-                            </a>
-                            {/* WhatsApp */}
-                            <a
-                              href={`https://wa.me/84${rawPhone ? rawPhone.replace(/\D/g, '').replace(/^0/, '') : '912345678'}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="w-6 h-6 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
-                              title="WhatsApp"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                            </a>
-                            {/* Email */}
-                            <a
-                              href={`mailto:${ent.email || 'hotro@chuoicungung.com'}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="w-6 h-6 rounded-lg bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
-                              title="Gửi Email"
-                            >
-                              <Mail className="w-3.5 h-3.5" />
-                            </a>
-                            {/* Website */}
-                            <a
-                              href={websiteUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              className="w-6 h-6 rounded-lg bg-slate-600 hover:bg-slate-700 text-white flex items-center justify-center text-[10px] shadow-2xs transition"
-                              title={ent.website ? `Truy cập Website: ${ent.website}` : `Tra cứu thông tin ${ent.name}`}
-                            >
-                              <Globe className="w-3.5 h-3.5" />
-                            </a>
-                          </div>
-                        </div>
-
-                        {/* Multi-Action CTAs: Add to Requirement (Mode 2) / Request Quote / Ask SUPPI / Details */}
-                        <div className="space-y-2">
-                          {activeRequirement && (
-                            <button
-                              onClick={() => handleAddSupplierToRequirement(ent)}
-                              disabled={addedSupplierIds.includes(entId)}
-                              className={`w-full py-2 px-2 text-xs font-bold rounded-xl transition flex items-center justify-center space-x-1 font-heading cursor-pointer ${
-                                addedSupplierIds.includes(entId)
-                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
-                              }`}
-                            >
-                              {addedSupplierIds.includes(entId) ? (
-                                <>
-                                  <Check className="w-3.5 h-3.5 text-emerald-700" />
-                                  <span>Đã thêm vào Nhu cầu #{activeRequirement.id}</span>
-                                </>
-                              ) : (
-                                <>
-                                  <Plus className="w-3.5 h-3.5" />
-                                  <span>Thêm vào Nhu cầu #{activeRequirement.id}</span>
-                                </>
-                              )}
-                            </button>
-                          )}
-
-                          <div className="grid grid-cols-2 gap-2 pt-1">
-                            <button
-                              type="button"
-                              onClick={() => setQuoteModalSupplier(ent)}
-                              className="py-2.5 px-3 bg-gradient-to-r from-[#0047a5] to-[#0052cc] hover:from-[#003d8f] hover:to-[#0047a5] text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center justify-center space-x-1.5 font-heading cursor-pointer"
-                              title={`Mô tả nhu cầu mua hàng / gia công gửi tới ${ent.name}`}
-                            >
-                              <Send className="w-3.5 h-3.5 shrink-0" />
-                              <span className="truncate">Mô tả nhu cầu</span>
-                            </button>
-
-                            <Link
-                              to={detailUrl}
-                              className="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 hover:text-[#0052cc] font-bold text-xs rounded-xl transition flex items-center justify-center space-x-1.5 font-heading text-center"
-                              title={`Xem hồ sơ năng lực chi tiết của ${ent.name}`}
-                            >
-                              <span className="truncate">Xem hồ sơ</span>
-                              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-                            </Link>
-                          </div>
-                        </div>
-
-                      </div>
-
-                    </div>
-                  );
+                  const detailUrl = `/nha-cung-ung/${entSlug || ent.id || ent._id}${location.search || ''}`;
+                  return <SupplierDirectoryCard
+                    key={entId}
+                    supplier={ent}
+                    phases={MASTER_18_PHASES}
+                    selectedPhase={selectedPhase}
+                    images={getEnterpriseThumbnails(ent)}
+                    avatar={getEnterpriseAvatarImage(ent)}
+                    maskedPhone={getSupplierMaskedPhone(ent)}
+                    detailUrl={detailUrl}
+                    viewMode={viewMode}
+                    onQuote={setQuoteModalSupplier}
+                    requirement={activeRequirement}
+                    added={addedSupplierIds.includes(entId)}
+                    onAdd={handleAddSupplierToRequirement}
+                  />;
                 })}
               </div>
             )}

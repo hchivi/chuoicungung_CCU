@@ -8,6 +8,8 @@ Scope: the five existing bright service/partnership pages plus the 2026-10-05 re
 
 ## Position
 
+2026-10-06 supplier directory addition: `/nha-cung-ung` keeps its hero, data and routes. The four discovery blocks use a bright B2B workbench: six numbered lifecycle columns with all eighteen full phase labels, an A–Z industry index plus a keyword side rail, compact native filter controls, and photo-led supplier records. Use variance 5, motion 2, density 6. Preserve the existing image sources and recorded phase associations; prioritise a selected phase only when the supplier actually serves it. Keep contact numbers masked with request-to-connect actions, and never display fabricated MOQ, delivery time or generic capacity claims. Shared chrome is out of scope. Colors and controls are scoped to `.sd-directory`.
+
 Customer-first B2B: show what a factory, supplier, KCN, association or partner can do here, then give one clear next step. Short content, useful photography and transparent boundaries. No invented customer counts, performance metrics, endorsements or guaranteed matching outcomes.
 
 ## Visual system
