@@ -252,10 +252,10 @@ export default function ServicesCenterPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
           {services.map((srv) => {
             const SERVICE_IMAGES = {
-              'to-chuc-ket-noi': '/images/services/service_vn_matchmaking.jpg',
+              'to-chuc-ket-noi': '/images/services/executive_uniform_meeting.jpg',
               'vat-pham-su-kien': '/images/services/service_vn_corporate_gifts.jpg',
               'truyen-thong-doanh-nghiep': '/images/services/service_vn_media_profile.jpg',
-              'hien-dien-tu-xa': '/images/roles/role_vn_sponsor_pavilion.jpg'
+              'hien-dien-tu-xa': '/images/services/executive_uniform_booth.jpg'
             };
             const serviceImg = SERVICE_IMAGES[srv.slug] || '/images/b2b_services_hero.jpg';
 
