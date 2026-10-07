@@ -168,8 +168,8 @@ export default function RemotePresenceServicePage() {
         {/* Right Half Panoramic Showcase Visual with Smooth Gradient Fade matching Image 2 */}
         <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
-            src="/images/ecosystem/remote-presence.jpg" 
-            alt="Điều phối viên trao đổi cùng khách tại bàn trưng bày hồ sơ và mẫu cơ khí" 
+            src="/images/services/executive_uniform_booth.jpg" 
+            alt="Điều phối viên trao đổi cùng khách tại bàn trưng bày hồ sơ và mẫu đồng phục" 
             className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
             loading="eager"
             fetchpriority="high"

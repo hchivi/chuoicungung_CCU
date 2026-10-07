@@ -7,7 +7,7 @@ import './MatchmakingServicePage.css';
 const REQUEST_URL = '/yeu-cau-dich-vu?service=to-chuc-ket-noi';
 // Replace these illustrations with approved event photographs when available.
 const PHOTOS = {
-  meeting: '/images/services/matchmaking-meeting-v1.jpg',
+  meeting: '/images/services/executive_uniform_meeting.jpg',
   samples: '/images/services/matchmaking-samples-v1.jpg',
 };
 
