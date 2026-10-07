@@ -1,5 +1,6 @@
 import React from 'react';
 import { Search } from 'lucide-react';
+import GlassAiButton from './GlassAiButton';
 
 export default function ClickUpBrainSearchBar({
   searchQuery,
@@ -59,14 +60,8 @@ export default function ClickUpBrainSearchBar({
             />
           </div>
 
-          {/* Submit CTA Button */}
-          <button
-            type="submit"
-            className="h-11 sm:h-12 px-6 sm:px-9 bg-[#006039] hover:bg-[#004d2e] text-white rounded-xl sm:rounded-2xl font-bold text-xs sm:text-sm shadow-md shadow-emerald-900/20 transition flex items-center justify-center space-x-2 whitespace-nowrap uppercase tracking-wider cursor-pointer flex-shrink-0"
-          >
-            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span>TÌM KIẾM</span>
-          </button>
+          {/* Submit Glass AI Button (ThreeUI Glass AI Button style) */}
+          <GlassAiButton type="submit" text="TÌM KIẾM" />
         </form>
 
       </div>
