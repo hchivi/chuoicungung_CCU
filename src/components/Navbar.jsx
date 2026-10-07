@@ -321,31 +321,31 @@ export default function Navbar() {
                                 to={sub.path}
                                 className={`flex items-center p-2 rounded-xl transition group/sub ${
                                   isSubActive
-                                    ? 'bg-blue-50/90 text-blue-950 font-bold border border-blue-200/90 shadow-2xs'
-                                    : 'hover:bg-slate-50 border border-transparent'
+                                    ? 'bg-emerald-50/90 text-emerald-950 font-bold border border-emerald-200/90 shadow-2xs'
+                                    : 'hover:bg-emerald-50/80 border border-transparent hover:border-emerald-200/70 hover:shadow-2xs'
                                 }`}
                               >
                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center mr-2.5 shrink-0 transition-all duration-200 shadow-2xs ${
                                   isSubActive
-                                    ? 'bg-[#0052cc] text-white border-[#0052cc] shadow-xs'
-                                    : 'bg-slate-50 border-slate-200/90 text-slate-700 group-hover/sub:bg-[#0052cc] group-hover/sub:text-white group-hover/sub:border-[#0052cc]'
+                                    ? 'bg-[#006039] text-white border-[#006039] shadow-xs'
+                                    : 'bg-slate-50 border-slate-200/90 text-slate-700 group-hover/sub:bg-[#006039] group-hover/sub:text-white group-hover/sub:border-[#006039]'
                                 }`}>
                                   <SubIcon className="w-4 h-4" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className={`text-xs font-bold transition-colors flex items-center justify-between ${
-                                    isSubActive ? 'text-[#0052cc] font-extrabold' : 'text-slate-900 group-hover/sub:text-[#0052cc]'
+                                    isSubActive ? 'text-[#006039] font-extrabold' : 'text-slate-900 group-hover/sub:text-[#006039]'
                                   }`}>
                                     <span>{sub.name}</span>
                                   </div>
                                   <div className={`text-[11px] truncate mt-0.5 ${
-                                    isSubActive ? 'text-blue-700/80 font-medium' : 'text-slate-400'
+                                    isSubActive ? 'text-emerald-700/80 font-medium' : 'text-slate-400 group-hover/sub:text-emerald-700/80'
                                   }`}>{sub.desc}</div>
                                 </div>
                                 <ChevronRight className={`w-3.5 h-3.5 transition-all ml-1 shrink-0 ${
                                   isSubActive
-                                    ? 'text-[#0052cc] opacity-100 translate-x-0.5'
-                                    : 'text-slate-300 group-hover/sub:text-[#0052cc] group-hover/sub:translate-x-0.5 opacity-0 group-hover/sub:opacity-100'
+                                    ? 'text-[#006039] opacity-100 translate-x-0.5'
+                                    : 'text-slate-300 group-hover/sub:text-[#006039] group-hover/sub:translate-x-0.5 opacity-0 group-hover/sub:opacity-100'
                                 }`} />
                               </Link>
                             );
@@ -380,30 +380,30 @@ export default function Navbar() {
                                 className={`flex items-center p-2 rounded-xl transition group/sub ${
                                   isSubActive
                                     ? 'bg-emerald-50/90 text-emerald-950 font-bold border border-emerald-200/90 shadow-2xs'
-                                    : 'hover:bg-slate-50 border border-transparent'
+                                    : 'hover:bg-emerald-50/80 border border-transparent hover:border-emerald-200/70 hover:shadow-2xs'
                                 }`}
                               >
                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center mr-2.5 shrink-0 transition-all duration-200 shadow-2xs ${
                                   isSubActive
-                                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                                    : 'bg-slate-50 border-slate-200/90 text-slate-700 group-hover/sub:bg-emerald-600 group-hover/sub:text-white group-hover/sub:border-emerald-600'
+                                    ? 'bg-[#006039] text-white border-[#006039] shadow-xs'
+                                    : 'bg-slate-50 border-slate-200/90 text-slate-700 group-hover/sub:bg-[#006039] group-hover/sub:text-white group-hover/sub:border-[#006039]'
                                 }`}>
                                   <SubIcon className="w-4 h-4" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className={`text-xs font-bold transition-colors flex items-center justify-between ${
-                                    isSubActive ? 'text-emerald-800 font-extrabold' : 'text-slate-900 group-hover/sub:text-emerald-700'
+                                    isSubActive ? 'text-[#006039] font-extrabold' : 'text-slate-900 group-hover/sub:text-[#006039]'
                                   }`}>
                                     <span>{sub.name}</span>
                                   </div>
                                   <div className={`text-[11px] truncate mt-0.5 ${
-                                    isSubActive ? 'text-emerald-700/80 font-medium' : 'text-slate-400'
+                                    isSubActive ? 'text-emerald-700/80 font-medium' : 'text-slate-400 group-hover/sub:text-emerald-700/80'
                                   }`}>{sub.desc}</div>
                                 </div>
                                 <ChevronRight className={`w-3.5 h-3.5 transition-all ml-1 shrink-0 ${
                                   isSubActive
-                                    ? 'text-emerald-600 opacity-100 translate-x-0.5'
-                                    : 'text-slate-300 group-hover/sub:text-emerald-600 group-hover/sub:translate-x-0.5 opacity-0 group-hover/sub:opacity-100'
+                                    ? 'text-[#006039] opacity-100 translate-x-0.5'
+                                    : 'text-slate-300 group-hover/sub:text-[#006039] group-hover/sub:translate-x-0.5 opacity-0 group-hover/sub:opacity-100'
                                 }`} />
                               </Link>
                             );
