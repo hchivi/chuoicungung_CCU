@@ -36,10 +36,9 @@ export default function Navbar() {
       return currentFull === subPath;
     }
     if (location.pathname === subPath) {
-      if (location.search && subPath === '/hop-tac') return false;
       return true;
     }
-    const baseRoutes = ['/dich-vu', '/he-sinh-thai', '/hop-tac', '/nha-cung-ung', '/khu-cong-nghiep', '/nha-may', '/hiep-hoi', '/catalogue', '/ban-do-6-giai-doan', '/chuong-trinh'];
+    const baseRoutes = ['/dich-vu', '/he-sinh-thai', '/hop-tac', '/nha-cung-ung', '/khu-cong-nghiep', '/nha-may', '/hiep-hoi', '/catalogue', '/ban-do-6-giai-doan', '/chuong-trinh', '/doi-tac-phat-trien'];
     if (!baseRoutes.includes(subPath) && location.pathname.startsWith(subPath)) {
       return true;
     }
@@ -423,12 +422,24 @@ export default function Navbar() {
                         </div>
                         <div className="space-y-0.5 mt-1.5">
                           {[
-                            { name: 'Trung tâm Hợp tác Toàn diện (Hub)', path: '/hop-tac', icon: Handshake, desc: 'Cổng kết nối 7 hình thức đồng hành' },
-                            { name: 'Founding Partner (Đồng hành sáng lập)', path: '/founding-partner', icon: Crown, desc: 'Đồng hành ngành hàng & cụm từ khóa' },
-                            { name: 'Nhà tài trợ & Bảo trợ sự kiện', path: '/tai-tro', icon: Award, desc: 'Tài trợ các kỳ Ngày hội KCN & kỷ yếu' },
-                            { name: 'Đối tác Phát triển (Referral B2B)', path: '/doi-tac-phat-trien', icon: Share2, desc: 'Mạng lưới phát triển dịch vụ & hoa hồng' },
-                            { name: 'Cố vấn & Hội đồng chuyên môn', path: '/hop-tac?type=ADVISOR', icon: GraduationCap, desc: 'Đóng góp tiêu chuẩn & thẩm định hồ sơ' },
-                            { name: 'Nhà đầu tư chiến lược', path: '/hop-tac?type=INVESTOR', icon: TrendingUp, desc: 'Đầu tư phát triển hạ tầng số công nghiệp' },
+                            {
+                              name: lang === 'en' ? 'Comprehensive Partnership Hub' : 'Trung tâm Hợp tác Toàn diện (Hub)',
+                              path: '/hop-tac',
+                              icon: Handshake,
+                              desc: lang === 'en' ? 'B2B Partners, Advisors & Strategic Investors' : 'Mạng lưới Đối tác B2B, Cố vấn & Nhà đầu tư'
+                            },
+                            {
+                              name: 'Founding Partner (Đồng hành sáng lập)',
+                              path: '/founding-partner',
+                              icon: Crown,
+                              desc: lang === 'en' ? 'Exclusive category & keyword partnership' : 'Đồng hành ngành hàng & cụm từ khóa'
+                            },
+                            {
+                              name: lang === 'en' ? 'Sponsors & Event Patrons' : 'Nhà tài trợ & Bảo trợ sự kiện',
+                              path: '/tai-tro',
+                              icon: Award,
+                              desc: lang === 'en' ? 'Industrial Park Days & Sourcing catalogues' : 'Tài trợ các kỳ Ngày hội KCN & kỷ yếu'
+                            },
                           ].map((sub, sIdx) => {
                             const SubIcon = sub.icon;
                             const isSubActive = isSubItemActive(sub.path);
