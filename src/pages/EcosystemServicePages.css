@@ -8,7 +8,9 @@
 .ec-page { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); padding-bottom: var(--space-3xl); overflow-x: clip; }
 .ec-page *, .ec-page *::before, .ec-page *::after { box-sizing: border-box; }
 .ec-page :is(h1,h2,h3,h4) { color: var(--color-ink); font-family: var(--font-display); font-style: normal; letter-spacing: -.035em; text-wrap: balance; overflow-wrap: anywhere; min-width: 0; }
-.ec-page h1 { font-size: clamp(40px, 4.6vw, 68px); line-height: 1.08; font-weight: 700; margin: 0; }
+.ec-page h1 { font-size: 36px; line-height: 1.08; font-weight: 900; letter-spacing: -.025em; text-transform: uppercase; margin: 0 0 16px; }
+@media (min-width: 640px) { .ec-page h1 { font-size: 48px; } }
+@media (min-width: 1024px) { .ec-page h1 { font-size: 54px; } }
 .ec-page h2 { font-size: var(--text-title); line-height: 1.2; font-weight: 700; }
 .ec-page h3 { font-size: var(--text-lg); line-height: 1.3; font-weight: 700; }
 .ec-page p { color: var(--color-muted); line-height: 1.65; text-wrap: pretty; }

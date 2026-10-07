@@ -116,7 +116,7 @@ export default function MatchmakingServicePage() {
         <div className="mm-hero-grid" style={{ gridTemplateColumns: 'minmax(0, 1fr)' }}>
           <div className="mm-hero-copy max-w-xl">
             <p className="mm-service-label">Tổ chức kết nối doanh nghiệp</p>
-            <h1 id="mm-title">Kết nối từ<br />{' '}nhu cầu thật.</h1>
+            <h1 id="mm-title" className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">Kết nối từ<br />{' '}nhu cầu thật.</h1>
             <p className="mm-lede">Đúng người để trao đổi.<br />{' '}Rõ việc để đi tiếp.</p>
             <p className="mm-hero-description">CCU cùng doanh nghiệp, KCN và hội chuẩn bị nhu cầu, điều phối cuộc gặp, theo dõi đầu việc.</p>
             <div className="mm-actions">

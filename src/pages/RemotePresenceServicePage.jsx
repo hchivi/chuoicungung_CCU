@@ -198,8 +198,8 @@ export default function RemotePresenceServicePage() {
               Hiện diện từ xa &amp; Đại diện ủy thác
             </p>
 
-            {/* H1 Title - Balanced Compact Size */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-black font-heading tracking-tight leading-[1.12] text-slate-950 uppercase mb-4">
+            {/* H1 Title */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">
               Không đến trực tiếp.<br />Vẫn giới thiệu được năng lực.
             </h1>
 

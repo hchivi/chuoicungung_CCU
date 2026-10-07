@@ -5,7 +5,9 @@
 .mm-page { background: var(--color-paper); color: var(--color-ink); font-family: var(--font-body); overflow-x: clip; }
 .mm-page *, .mm-page *::before, .mm-page *::after { box-sizing: border-box; }
 .mm-page :is(h1,h2,h3) { font-family: var(--font-display); letter-spacing: -.035em; font-style: normal; text-wrap: balance; overflow-wrap: anywhere; }
-.mm-page h1 { font-size: clamp(40px,4.8vw,68px); line-height: 1.06; font-weight: 700; }
+.mm-page h1 { font-size: 36px; line-height: 1.08; font-weight: 900; letter-spacing: -.025em; text-transform: uppercase; margin-bottom: 16px; }
+@media (min-width: 640px) { .mm-page h1 { font-size: 48px; } }
+@media (min-width: 1024px) { .mm-page h1 { font-size: 54px; } }
 .mm-page h2 { font-size: clamp(28px,2.6vw,40px); line-height: 1.2; font-weight: 600; }
 .mm-page h3 { font-size: 24px; line-height: 1.25; font-weight: 600; }
 .mm-page p, .mm-page dd { line-height: 1.7; color: var(--color-muted); }

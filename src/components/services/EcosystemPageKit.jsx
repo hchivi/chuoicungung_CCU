@@ -6,7 +6,7 @@ import '../../pages/EcosystemServicePages.css';
 export function PageIntro({ label, title, description, children, className = '' }) {
   return <div className={`ec-intro ${className}`}>
     <span className="ec-service-label">{label}</span>
-    <h1>{title}</h1>
+    <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black font-heading tracking-tight leading-[1.08] text-slate-950 uppercase mb-4">{title}</h1>
     <p className="ec-lede">{description}</p>
     <div className="ec-actions">{children}</div>
   </div>;
