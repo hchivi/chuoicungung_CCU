@@ -108,7 +108,7 @@ export default function ServicesCenterPage() {
         {/* Background Panoramic B2B Meeting Visual (Boss in Image 2 context) */}
         <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
-            src="/images/services/executive_b2b_handshake.jpg" 
+            src="/images/roles/role_vn_association_delegates.jpg" 
             alt="Dịch vụ hỗ trợ kết nối B2B" 
             className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-30 sm:opacity-45 lg:opacity-100 transition-opacity duration-700"
           />

@@ -220,8 +220,8 @@ export default function SponsorshipPage() {
         {/* Right Half Panoramic Showcase Visual with Smooth Gradient Fade matching Image 2 */}
         <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
-            src="/images/ecosystem/remote-presence.jpg" 
-            alt="Không gian giới thiệu sản phẩm và hồ sơ doanh nghiệp tại bàn kết nối" 
+            src="/images/roles/role_vn_sponsor_pavilion.jpg" 
+            alt="Lãnh đạo trao đổi cùng đối tác tại khu triển lãm kết nối giao thương B2B" 
             className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-25 sm:opacity-40 lg:opacity-100 transition-opacity"
             loading="eager"
             fetchpriority="high"

@@ -108,8 +108,8 @@ export default function PartnershipHubPage() {
         {/* Right Half Panoramic Showcase Visual with Smooth Gradient Fade matching Image 2 */}
         <div className="absolute top-0 right-0 w-full lg:w-[66%] xl:w-[60%] h-full pointer-events-none overflow-hidden z-0">
           <img 
-            src="/images/ecosystem/partnership.jpg" 
-            alt="Đại diện doanh nghiệp trao đổi hợp tác tại phòng họp sáng" 
+            src="/images/roles/role_vn_partner_signing.jpg" 
+            alt="Lãnh đạo và đối tác chiến lược ký kết thỏa thuận hợp tác tại phòng họp hướng Bitexco" 
             className="w-full h-full object-cover object-center scale-105 pointer-events-none select-none opacity-25 sm:opacity-40 lg:opacity-100 transition-opacity"
             loading="eager"
             fetchpriority="high"
