@@ -76,6 +76,14 @@
 }
 
 /* ==========================================================================
+   HERO STANDARD CONTAINER (MATCHES EXACTLY IMAGE 2 .mm-container ALIGNMENT)
+   ========================================================================== */
+.hero-standard-container {
+  width: min(1280px, calc(100% - 48px));
+  margin-inline: auto;
+}
+
+/* ==========================================================================
    ROLEX-STYLE BUTTONS & GRADIENTS (OFFICIAL #006039 PALETTE)
    ========================================================================== */
 .btn-rolex,

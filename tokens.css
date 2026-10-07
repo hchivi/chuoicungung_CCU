@@ -151,6 +151,126 @@
   --sd-space: 24px;
   --sd-short: 160ms;
   --sd-ease: cubic-bezier(.16, 1, .3, 1);
+  --sd-shadow: oklch(30% 0.025 155 / 7%);
+}
+
+/* Scoped exhibition catalogue, inheriting CCU brand and runtime font stack. */
+.pd-discovery, .pd-card {
+  --pd-paper: oklch(99.8% 0.002 155);
+  --pd-soft: oklch(97% 0.009 155);
+  --pd-green-soft: oklch(94% 0.024 155);
+  --pd-ink: oklch(27% 0.028 155);
+  --pd-muted: oklch(45% 0.018 155);
+  --pd-rule: oklch(86% 0.016 155);
+  --pd-input-rule: oklch(62% 0.025 155);
+  --pd-accent: var(--brand-green, #006039);
+  --pd-accent-dark: var(--brand-green-dark, #00472a);
+  --pd-on-accent: oklch(99.8% 0.002 155);
+  --pd-focus: oklch(36% 0.12 265);
+  --pd-amber: oklch(40% 0.08 75);
+  --pd-amber-soft: oklch(96% 0.025 85);
+  --pd-error: oklch(43% 0.17 25);
+  --pd-error-soft: oklch(97% 0.013 25);
+  --pd-shadow: oklch(30% 0.025 155 / 7%);
+  --pd-radius: 16px;
+  --pd-control: 8px;
+  --pd-short: 160ms;
+  --pd-ease: cubic-bezier(.16, 1, .3, 1);
+  --pd-gap: 24px;
+}
+
+/* Scoped publication library, book-led cards and labelled native filters. */
+.cl-discovery, .cl-card, .cl-results {
+  --cl-paper: oklch(99.8% 0.002 155);
+  --cl-soft: oklch(95.5% 0.012 155);
+  --cl-mint: oklch(93% 0.027 155);
+  --cl-warm: oklch(95% 0.022 85);
+  --cl-ink: oklch(27% 0.028 155);
+  --cl-muted: oklch(45% 0.018 155);
+  --cl-accent: oklch(42% 0.09 155);
+  --cl-rule: oklch(83% 0.025 155);
+  --cl-input-rule: oklch(62% 0.025 155);
+  --cl-book-rule: oklch(78% 0.02 155);
+  --cl-page-edge: oklch(89% 0.012 85);
+  --cl-shadow: oklch(27% 0.028 155 / 16%);
+  --cl-focus: oklch(36% 0.12 265);
+  --cl-clear: oklch(99.8% 0.002 155 / 0%);
+  --cl-space-xs: 8px;
+  --cl-space-sm: 12px;
+  --cl-space-md: 16px;
+  --cl-space-lg: 24px;
+  --cl-space-xl: 32px;
+  --cl-radius: 16px;
+  --cl-control-radius: 8px;
+  --cl-small: .875rem;
+  --cl-body: 1rem;
+  --cl-title: clamp(1.125rem, 1.6vw, 1.375rem);
+  --cl-arrow: 1.5rem;
+  --cl-section-title: clamp(1.75rem, 2.6vw, 2.25rem);
+}
+
+/* Scoped ecosystem closing CTA; inherits the existing runtime font pair. */
+.ad-discovery {
+  --ad-paper: #f8faf7;
+  --ad-white: #ffffff;
+  --ad-ink: #183b30;
+  --ad-muted: #52665c;
+  --ad-green: #006039;
+  --ad-green-hover: #00472a;
+  --ad-on-green: #ffffff;
+  --ad-blue: #dceaff;
+  --ad-blue-ink: #214d89;
+  --ad-mint: #dceee1;
+  --ad-mint-ink: #255b3e;
+  --ad-rose: #f7e0e8;
+  --ad-rose-ink: #83364f;
+  --ad-yellow: #f8eeba;
+  --ad-yellow-ink: #69531b;
+  --ad-rule: #cbd9cf;
+  --ad-input-rule: #81968a;
+  --ad-focus: #21569d;
+  --ad-clear: transparent;
+  --ad-shadow: #173c3114;
+  --ad-font-display: 'Space Grotesk', 'SpaceGrotesk', sans-serif;
+  --ad-font-body: 'Poppins', sans-serif;
+  --ad-small: .875rem;
+  --ad-body: 1rem;
+  --ad-display: clamp(2rem, 3.5vw, 3.125rem);
+  --ad-card-title: 1.25rem;
+  --ad-radius: 24px;
+  --ad-control-radius: 12px;
+  --ad-space-xs: 8px;
+  --ad-space-sm: 12px;
+  --ad-space-md: 16px;
+  --ad-space-lg: 24px;
+  --ad-space-xl: 32px;
+  --ad-space-2xl: 48px;
+  --ad-space-3xl: 64px;
+}
+
+.ecosystem-connect {
+  --connect-paper: oklch(99.8% 0.002 155);
+  --connect-soft: oklch(95% 0.018 155);
+  --connect-ink: oklch(27% 0.028 155);
+  --connect-muted: oklch(45% 0.018 155);
+  --connect-forest: oklch(30% 0.055 155);
+  --connect-accent: oklch(42% 0.09 155);
+  --connect-highlight: oklch(88% 0.09 145);
+  --connect-on-forest: oklch(90% 0.018 155);
+  --connect-rule: oklch(83% 0.025 155);
+  --connect-focus: oklch(36% 0.12 265);
+  --connect-space-xs: 8px;
+  --connect-space-sm: 12px;
+  --connect-space-md: 16px;
+  --connect-space-lg: 24px;
+  --connect-space-xl: 32px;
+  --connect-radius: 24px;
+  --connect-control-radius: 8px;
+  --connect-small: .875rem;
+  --connect-body: 1rem;
+  --connect-arrow: 1.5rem;
+  --connect-title: clamp(1.5rem, 2.1vw, 1.875rem);
+  --connect-display: clamp(2rem, 3.5vw, 3.25rem);
 }
 
 /* CCU bright service and partnership system, forest-green action palette. */

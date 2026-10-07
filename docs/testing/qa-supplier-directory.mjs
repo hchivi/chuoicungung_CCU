@@ -61,9 +61,10 @@ try {
   assert.equal(await page.$$eval('.sd-industry-list a', elements => elements.length), 0);
   await click('.sd-small-empty button');
   await page.waitForFunction(() => !location.search);
-  await click('input[value="gold"]');
+  await page.select('#filter-kyc-select', 'gold');
   await page.waitForFunction(() => new URLSearchParams(location.search).get('kyc') === 'gold');
   await page.select('#filter-province-select', 'Đà Nẵng');
+  await click('.sd-standards summary');
   await click('#filter-api-ready');
   await click('#filter-fast-quote');
   await click('#filter-iso-certified');

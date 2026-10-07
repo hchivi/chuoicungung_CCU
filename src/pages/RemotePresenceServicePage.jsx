@@ -180,7 +180,7 @@ export default function RemotePresenceServicePage() {
         </div>
 
         {/* Content Container Aligned Exactly with Image 2 */}
-        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+        <div className="hero-standard-container relative z-10 py-8 sm:py-10" style={{ width: 'min(1280px, calc(100% - 48px))', marginInline: 'auto' }}>
           
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">

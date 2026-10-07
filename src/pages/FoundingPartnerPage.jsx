@@ -140,7 +140,7 @@ export default function FoundingPartnerPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
       </div>
 
-      <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+      <div className="hero-standard-container relative z-10 py-8 sm:py-10" style={{ width: 'min(1280px, calc(100% - 48px))', marginInline: 'auto' }}>
         <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn">
           <Link to="/" className="hover:text-slate-900 transition">Trang chủ</Link>
           <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" aria-hidden="true" />

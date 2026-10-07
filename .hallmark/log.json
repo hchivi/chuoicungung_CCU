@@ -1,5 +1,15 @@
 [
   {
+    "date": "2026-10-07",
+    "macrostructure": "Split Studio (scoped ecosystem CTA)",
+    "theme": "Inherited modern-minimal CCU forest green and bright paper",
+    "enrichment": "Existing local CNC workshop photograph",
+    "brief": "Replace centered blue ecosystem closing banner with a photographic statement and two customer-specific entry paths",
+    "scope": "/he-sinh-thai closing CTA only; shared chrome and other sections unchanged",
+    "variation": "Asymmetric forest-green statement with integrated image; two stacked white action rows, not a catalogue or centered banner",
+    "verification": "17 scoped/adjacent tests; eight browser widths; two live CTA navigations; nine contrast pairs; production build"
+  },
+  {
     "date": "2026-10-06",
     "macrostructure": "Scoped B2B directory workbench: lifecycle matrix / A–Z index / photo-led supplier records",
     "theme": "Modern-minimal, inherited bright CCU forest green and runtime typography",

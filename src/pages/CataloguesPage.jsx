@@ -1,36 +1,12 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  BookOpen, 
-  Search, 
-  Filter, 
-  Sparkles, 
-  Globe, 
-  Printer, 
-  Building2, 
-  MapPin, 
-  Layers, 
-  Calendar, 
-  Clock, 
-  ShieldCheck, 
-  Crown, 
-  ArrowRight, 
-  CheckCircle2, 
-  FileText, 
-  ChevronRight,
-  RefreshCw,
-  QrCode,
-  Download,
-  AlertCircle,
-  PlusCircle
-} from 'lucide-react';
+import { Sparkles, ShieldCheck, Crown, ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
 import { 
   getAllCatalogues, 
-  CATALOGUE_TYPES, 
-  CATALOGUE_STATUSES,
   UPCOMING_EDITIONS_CALL_FOR_PAPERS
 } from '../data/cataloguesData';
 import CatalogueCard from '../components/catalogues/CatalogueCard';
+import CatalogueDiscovery from '../components/catalogues/CatalogueDiscovery';
 import CatalogueParticipationModal from '../components/catalogues/CatalogueParticipationModal';
 import CatalogueOnlineViewerModal from '../components/catalogues/CatalogueOnlineViewerModal';
 
@@ -170,6 +146,15 @@ export default function CataloguesPage() {
     listTopRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const resetFilters = () => {
+    setSearchTerm('');
+    setSelectedType('ALL');
+    setSelectedCategory('ALL');
+    setSelectedProvince('ALL');
+    setSelectedFormat('ALL');
+    setShowArchived(false);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-20">
       
@@ -190,7 +175,7 @@ export default function CataloguesPage() {
         </div>
 
         {/* Content Container Aligned Exactly with Image 2 */}
-        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+        <div className="hero-standard-container relative z-10 py-8 sm:py-10" style={{ width: 'min(1280px, calc(100% - 48px))', marginInline: 'auto' }}>
           
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
@@ -294,201 +279,35 @@ export default function CataloguesPage() {
         </div>
       </div>
 
-      {/* 4. Search & Filter Bar (Section 7 & 8) */}
-      <div ref={listTopRef} className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 space-y-5">
-        
-        {/* Search Input Box */}
-        <div className="bg-white p-3 sm:p-4 rounded-3xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center gap-3">
-          
-          <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input 
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm theo tên catalogue, chuyên mục, KCN, tỉnh thành, chương trình hoặc tên doanh nghiệp..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 rounded-2xl text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 border border-slate-200 focus:bg-white focus:border-blue-600 outline-none transition"
-            />
-            {searchTerm && (
-              <button 
-                onClick={() => setSearchTerm('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Quick Clear / Reset Filters */}
-          <div className="flex items-center space-x-2 w-full md:w-auto justify-end">
-            {(selectedType !== 'ALL' || selectedCategory !== 'ALL' || selectedProvince !== 'ALL' || selectedFormat !== 'ALL' || searchTerm) && (
-              <button
-                onClick={() => {
-                  setSelectedType('ALL');
-                  setSelectedCategory('ALL');
-                  setSelectedProvince('ALL');
-                  setSelectedFormat('ALL');
-                  setSearchTerm('');
-                  setShowArchived(false);
-                }}
-                className="py-2.5 px-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-xs font-bold transition flex items-center space-x-1"
-                type="button"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Đặt lại bộ lọc</span>
-              </button>
-            )}
-
-            <button
-              onClick={() => setShowArchived(!showArchived)}
-              className={`py-2.5 px-3 rounded-2xl text-xs font-bold transition flex items-center space-x-1 border ${
-                showArchived 
-                  ? 'bg-slate-800 text-white border-slate-800' 
-                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-              }`}
-              type="button"
-            >
-              <span>{showArchived ? 'Đang xem: Lưu trữ' : 'Ấn phẩm lưu trữ'}</span>
-            </button>
-          </div>
-
-        </div>
-
-        {/* Filter Chips / Dropdowns Bar */}
-        <div className="space-y-3">
-          
-          {/* Catalogue Type Chips (Section 21) */}
-          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-            <span className="text-slate-400 font-bold shrink-0 mr-1 text-[11px] uppercase tracking-wider">
-              Loại ấn phẩm:
-            </span>
-            <button
-              onClick={() => setSelectedType('ALL')}
-              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition cursor-pointer ${
-                selectedType === 'ALL'
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              Tất cả ({catalogues.length})
-            </button>
-
-            {Object.values(CATALOGUE_TYPES).map(t => {
-              const count = catalogues.filter(c => c.catalogueType === t.id).length;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => setSelectedType(t.id)}
-                  className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition cursor-pointer flex items-center space-x-1 ${
-                    selectedType === t.id
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                >
-                  <span>{t.shortName}</span>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                    selectedType === t.id ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
-                  }`}>
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Secondary Dropdown Filters */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            
-            {/* Category Dropdown */}
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-            >
-              <option value="ALL">Mọi chuyên mục ngành</option>
-              {uniqueCategories.map(cat => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-
-            {/* Province Dropdown */}
-            <select
-              value={selectedProvince}
-              onChange={(e) => setSelectedProvince(e.target.value)}
-              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-            >
-              <option value="ALL">Mọi địa bàn / KCN</option>
-              {uniqueProvinces.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
-
-            {/* Format Dropdown (Online / Print / Both) */}
-            <select
-              value={selectedFormat}
-              onChange={(e) => setSelectedFormat(e.target.value)}
-              className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 outline-none focus:border-blue-600 transition shadow-2xs"
-            >
-              <option value="ALL">Mọi định dạng phát hành</option>
-              <option value="ONLINE_ONLY">Bản số trực tuyến</option>
-              <option value="PRINT_CONFIRMED">Bản in phát tay</option>
-              <option value="BOTH">Song hành (Số & Bản in)</option>
-            </select>
-
-            {/* Total Results Summary */}
-            <div className="p-2.5 bg-slate-100/80 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center justify-between">
-              <span>Kết quả lọc:</span>
-              <span className="text-[#0052cc] font-mono">{filteredCatalogues.length} ấn phẩm</span>
-            </div>
-
-          </div>
-
-        </div>
-
+      {/* Catalogue discovery preserves existing filter state and handlers. */}
+      <div ref={listTopRef} id="thu-vien-catalogue" className="max-w-7xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
+        <CatalogueDiscovery
+          catalogues={catalogues} resultCount={filteredCatalogues.length}
+          filters={{ search: searchTerm, type: selectedType, category: selectedCategory, province: selectedProvince, format: selectedFormat, archived: showArchived }}
+          categories={uniqueCategories} provinces={uniqueProvinces}
+          onFilterChange={(field, value) => {
+            const setters = { search: setSearchTerm, type: setSelectedType, category: setSelectedCategory, province: setSelectedProvince, format: setSelectedFormat, archived: setShowArchived };
+            setters[field]?.(value);
+          }}
+          onReset={resetFilters}
+        />
       </div>
 
-      {/* 5. Catalogue Cards Listing Grid (Section 9) */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
-        
+      <main id="cl-results" className="cl-results max-w-7xl mx-auto px-4 sm:px-6 pt-8">
         {filteredCatalogues.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCatalogues.map((cat) => (
-              <CatalogueCard
-                key={cat.id}
-                catalogue={cat}
-                onQuickViewOnline={handleQuickViewOnline}
-                onDownloadPdf={handleDownloadPdf}
-              />
+          <div className="cl-grid">
+            {filteredCatalogues.map(cat => (
+              <CatalogueCard key={cat.id} catalogue={cat}
+                onQuickViewOnline={handleQuickViewOnline} onDownloadPdf={handleDownloadPdf} />
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center space-y-4">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 mx-auto flex items-center justify-center text-xl font-bold">
-              📚
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-base font-bold text-slate-900">
-                Không tìm thấy catalogue phù hợp với tiêu chí lọc
-              </h3>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
-                Vui lòng thử tìm với từ khóa khác hoặc điều chỉnh lại bộ lọc chuyên mục và địa bàn.
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedType('ALL');
-                setSelectedCategory('ALL');
-                setSelectedProvince('ALL');
-                setSelectedFormat('ALL');
-              }}
-              className="py-2 px-4 rounded-xl bg-blue-600 text-white text-xs font-bold"
-            >
-              Hiển thị tất cả ấn phẩm
-            </button>
+          <div className="cl-empty">
+            <h2 className="font-heading">{showArchived ? 'Chưa có ấn phẩm lưu trữ phù hợp' : 'Không tìm thấy ấn phẩm phù hợp'}</h2>
+            <p>{showArchived ? 'Chưa có ấn phẩm lưu trữ khớp với bộ lọc. Bạn có thể trở lại thư viện đang phát hành.' : 'Thử từ khoá khác hoặc bỏ bớt điều kiện về chuyên mục, địa bàn và định dạng.'}</p>
+            <button type="button" onClick={resetFilters}>Xem tất cả ấn phẩm</button>
           </div>
         )}
-
       </main>
 
       {/* 6. Block: THAM GIA ẤN PHẨM TIẾP THEO (Section 25 Spec 30.txt) */}

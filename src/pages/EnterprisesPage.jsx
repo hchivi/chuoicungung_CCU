@@ -931,7 +931,7 @@ export default function EnterprisesPage() {
           {/* =======================================================================
               BLOCK 2: SMART FILTER PANEL (STICKY LEFT SIDEBAR)
              ======================================================================= */}
-          <aside className="sd-sidebar lg:col-span-3 space-y-4 lg:sticky lg:top-[160px] lg:self-start lg:max-h-[calc(100vh-170px)] lg:overflow-y-auto pr-1">
+          <aside className="sd-sidebar">
             <SupplierDirectoryFilters
               selectedKyc={selectedKyc}
               selectedProvince={selectedProvince}
@@ -948,22 +948,18 @@ export default function EnterprisesPage() {
             />
 
             {/* In-flow Lead Capture Card inside Sidebar (Không che bộ lọc, không đè mascot) */}
-            <div className="bg-gradient-to-br from-[#072348] via-[#0052cc] to-[#0284c7] text-white rounded-3xl p-5 shadow-sm border border-blue-400/20 space-y-3">
-              <div className="flex items-center space-x-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                <span className="text-[10px] font-bold text-sky-200 uppercase tracking-wider font-mono">
-                  Dành riêng cho Doanh Nghiệp &amp; SME
-                </span>
-              </div>
-              <p className="text-xs font-bold text-white leading-snug">
-                Đối thủ của bạn đang nhận Lead từ khối FDI mỗi ngày.
-              </p>
+            <div className="sd-register-note">
+              <details>
+              <summary>Hồ sơ doanh nghiệp</summary>
+              <h3>Giới thiệu năng lực doanh nghiệp.</h3>
+              <p>Bổ sung ngành nghề, pha cung ứng và hình ảnh trong hồ sơ của bạn.</p>
+              </details>
               <button
                 type="button"
                 onClick={() => setIsRegistrationModalOpen(true)}
-                className="w-full py-2.5 px-3 bg-white hover:bg-amber-50 text-[#0052cc] font-black text-xs rounded-xl shadow transition transform hover:scale-[1.02] cursor-pointer text-center"
+                className="sd-button sd-button-primary"
               >
-                Đăng Ký Hồ Sơ Ngay
+                Đăng ký hồ sơ
               </button>
             </div>
 
@@ -975,30 +971,25 @@ export default function EnterprisesPage() {
           <section id="supplier-results-list" className="lg:col-span-9 space-y-5">
 
             {/* Results Header & Sort Info */}
-            <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center space-x-2.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <h3 className="text-sm sm:text-base font-black text-slate-950 font-heading">
-                  {lang === 'en' ? 'Verified Industrial Suppliers' : 'Danh Sách Nhà Cung Cấp & Cơ Sở Chế Tạo B2B'}
+            <div className="sd-results-heading">
+              <div className="sd-results-intro">
+                <p>{lang === 'en' ? 'Industrial capability directory' : 'Danh mục năng lực doanh nghiệp'}</p>
+                <h3>
+                  {lang === 'en' ? 'Find your next supplier.' : 'Tìm đối tác cho nhu cầu thực tế.'}
                 </h3>
-                <span aria-live="polite" aria-atomic="true" className="px-2.5 py-0.5 rounded-full bg-blue-100 text-[#0052cc] text-xs font-mono font-bold">
+                <span aria-live="polite" aria-atomic="true" className="sd-results-count">
                   {totalCount.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} {lang === 'en' ? 'suppliers' : 'doanh nghiệp'}
                 </span>
               </div>
 
               {/* Right: View Mode Toggle & Active Filter Badges */}
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="sd-results-tools">
                 {/* View Mode: Grid vs List */}
-                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-2xs">
+                <div className="sd-view-toggle" role="group" aria-label={lang === 'en' ? 'Result layout' : 'Cách hiển thị kết quả'}>
                   <button
                     onClick={() => setViewMode('grid')}
                     aria-pressed={viewMode === 'grid'}
                     aria-label="Chế độ xem dạng ô"
-                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                      viewMode === 'grid'
-                        ? 'bg-white text-[#0052cc] shadow-xs font-bold'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
                     title="Chế độ xem dạng ô (Grid)"
                   >
                     <LayoutGrid className="w-4 h-4" />
@@ -1007,11 +998,6 @@ export default function EnterprisesPage() {
                     onClick={() => setViewMode('list')}
                     aria-pressed={viewMode === 'list'}
                     aria-label="Chế độ xem dạng hàng"
-                    className={`p-1.5 rounded-lg transition-all cursor-pointer ${
-                      viewMode === 'list'
-                        ? 'bg-white text-[#0052cc] shadow-xs font-bold'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
                     title="Chế độ xem dạng hàng (List)"
                   >
                     <List className="w-4 h-4" />

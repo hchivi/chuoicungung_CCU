@@ -20,6 +20,8 @@ import {
 
 // Page 20 Subcomponents
 import ProgramCard from '../components/programs/ProgramCard';
+import ProgramDiscoveryMenu from '../components/programs/ProgramDiscoveryMenu';
+import ProgramInvitationSignup from '../components/programs/ProgramInvitationSignup';
 import ProgramInterestModal from '../components/programs/ProgramInterestModal';
 import ProgramSuppiGuideModal from '../components/programs/ProgramSuppiGuideModal';
 import ProgramCompletedRecapModal from '../components/programs/ProgramCompletedRecapModal';
@@ -66,6 +68,7 @@ export default function SupplyChainExpoPage() {
     consent: true
   });
   const [subSubmitted, setSubSubmitted] = useState(false);
+  const [subError, setSubError] = useState('');
 
   // Selected event for detail view (matching by ID or alias)
   const selectedEvent = useMemo(() => {
@@ -226,8 +229,9 @@ export default function SupplyChainExpoPage() {
   // Handle Bottom Subscription Submit
   const handleBottomSubSubmit = (e) => {
     e.preventDefault();
+    setSubError('');
     if (!subFormData.consent) {
-      alert('Vui lòng tích đồng ý nhận thông tin để tiếp tục.');
+      setSubError('Vui lòng đồng ý nhận thông tin để lưu lựa chọn.');
       return;
     }
 
@@ -250,6 +254,8 @@ export default function SupplyChainExpoPage() {
       localStorage.setItem('ccu_lead_consents', JSON.stringify(existing));
     } catch (err) {
       console.warn('LocalStorage error:', err);
+      setSubError('Không thể lưu trên trình duyệt này. Vui lòng kiểm tra quyền lưu trữ rồi thử lại.');
+      return;
     }
 
     setSubSubmitted(true);
@@ -777,206 +783,20 @@ export default function SupplyChainExpoPage() {
         /* ========================================================
             2. MAIN PROGRAMS LIST, TABS & COMPREHENSIVE FILTERS
         ======================================================== */
-        <div id="danh-sach-chuong-trinh" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div id="danh-sach-chuong-trinh" className="pd-discovery max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
           
-          {/* Section Header */}
-          <div className="border-b border-slate-200 pb-5 space-y-2">
-            <div className="text-xs font-black uppercase tracking-wider text-orange-600 font-heading flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>DANH SÁCH HOẠT ĐỘNG & SỰ KIỆN CHUỖI CUNG ỨNG B2B</span>
-            </div>
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-              <h2 className="text-2xl sm:text-3xl font-black font-heading text-slate-900 tracking-tight">
-                Chọn Điểm Đến & Khám Phá Nhu Cầu Cung - Cầu
-              </h2>
-              <div className="text-xs font-medium text-slate-500">
-                Hiển thị <strong>{filteredPrograms.length}</strong> / {PROGRAMS_DATA.length} chương trình
-              </div>
-            </div>
-          </div>
+          <ProgramDiscoveryMenu
+            programs={PROGRAMS_DATA}
+            resultCount={filteredPrograms.length}
+            activeType={activeTypeTab}
+            filters={{ search: searchKw, status: filterStatus, zone: filterZone, industry: filterIndustry, role: filterRole, format: filterFormat, time: filterTime }}
+            hasActiveFilters={hasActiveFilters}
+            onTypeChange={setActiveTypeTab}
+            onFilterChange={(key, value) => ({ search: setSearchKw, status: setFilterStatus, zone: setFilterZone, industry: setFilterIndustry, role: setFilterRole, format: setFilterFormat, time: setFilterTime }[key])(value)}
+            onReset={resetFilters}
+          />
 
-          {/* 5 PROGRAM TYPES TABS (Horizontal Pill Tabs) */}
-          <div className="overflow-x-auto no-scrollbar pb-2">
-            <div className="flex items-center gap-2 min-w-max">
-              {PROGRAM_TYPES.map(tab => {
-                const isActive = activeTypeTab === tab.id;
-                const count = tab.id === 'all' 
-                  ? PROGRAMS_DATA.length 
-                  : PROGRAMS_DATA.filter(p => p.type === tab.id).length;
-
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTypeTab(tab.id)}
-                    className={`px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center gap-2 cursor-pointer shadow-2xs ${
-                      isActive 
-                        ? 'bg-[#0052cc] text-white shadow-md shadow-blue-500/20 scale-[1.02]' 
-                        : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/90'
-                    }`}
-                  >
-                    <span>{tab.name}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
-                      isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* COMPREHENSIVE FILTER BAR */}
-          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 space-y-4">
-            
-            {/* Top Row: Search Input + Fast Status Select */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {/* Search input: Name, Industry, Need */}
-              <div className="md:col-span-2 relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Tìm tên chương trình, KCN, ngành hàng hoặc nhóm nhu cầu mua sắm..."
-                  value={searchKw}
-                  onChange={(e) => setSearchKw(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition"
-                />
-                {searchKw && (
-                  <button
-                    onClick={() => setSearchKw('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-
-              {/* Status Filter */}
-              <div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
-                >
-                  <option value="all">Tất cả trạng thái (7 trạng thái)</option>
-                  {PROGRAM_STATUSES.map(s => (
-                    <option key={s.id} value={s.id}>{s.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            {/* Bottom Row: 5 Multi-select filters */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1">
-              
-              {/* 1. Zone Filter */}
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                  <MapPin className="w-3 h-3 text-orange-500" />
-                  <span>Địa bàn / KCN</span>
-                </label>
-                <select
-                  value={filterZone}
-                  onChange={(e) => setFilterZone(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
-                >
-                  {PROGRAM_ZONES.map(z => (
-                    <option key={z.id} value={z.id}>{z.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 2. Industry / Need Filter */}
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                  <Tag className="w-3 h-3 text-emerald-500" />
-                  <span>Ngành hàng / Nhu cầu</span>
-                </label>
-                <select
-                  value={filterIndustry}
-                  onChange={(e) => setFilterIndustry(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium truncate"
-                >
-                  {PROGRAM_INDUSTRIES.map(ind => (
-                    <option key={ind} value={ind}>{ind}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 3. Role Filter (Buyer, Supplier, Partner) */}
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                  <Users className="w-3 h-3 text-blue-500" />
-                  <span>Vai trò tham gia</span>
-                </label>
-                <select
-                  value={filterRole}
-                  onChange={(e) => setFilterRole(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
-                >
-                  {PROGRAM_ROLES.map(r => (
-                    <option key={r.id} value={r.id}>{r.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 4. Format Filter (In-person, Online, Hybrid) */}
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                  <Globe className="w-3 h-3 text-indigo-500" />
-                  <span>Hình thức tổ chức</span>
-                </label>
-                <select
-                  value={filterFormat}
-                  onChange={(e) => setFilterFormat(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
-                >
-                  {PROGRAM_FORMATS.map(f => (
-                    <option key={f.id} value={f.id}>{f.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* 5. Time Filter */}
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 mb-1 flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-purple-500" />
-                  <span>Thời gian</span>
-                </label>
-                <select
-                  value={filterTime}
-                  onChange={(e) => setFilterTime(e.target.value)}
-                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
-                >
-                  <option value="all">Tất cả thời gian</option>
-                  <option value="upcoming">Sắp diễn ra</option>
-                  <option value="past">Đã diễn ra</option>
-                </select>
-              </div>
-
-            </div>
-
-            {/* Active Filters Reset Bar */}
-            {hasActiveFilters && (
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                <span className="text-slate-500">
-                  Đang lọc theo các điều kiện đã chọn
-                </span>
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="inline-flex items-center gap-1 text-[#0052cc] hover:text-blue-800 font-bold hover:underline cursor-pointer"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Đặt lại tất cả bộ lọc</span>
-                </button>
-              </div>
-            )}
-
-          </div>
-
-          {/* 3 THẺ 1 DÒNG (GRID 3 COLUMNS) REUSABLE PROGRAM CARD */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 items-stretch">
+          <div className="pd-program-grid">
             {filteredPrograms.map((program) => (
               <ProgramCard
                 key={program.id}
@@ -991,32 +811,31 @@ export default function SupplyChainExpoPage() {
 
           {/* Empty State adhering to Section 31 */}
           {filteredPrograms.length === 0 && (
-            <div className="text-center py-16 bg-white rounded-3xl border border-slate-200/90 p-8 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-[#0052cc] flex items-center justify-center mx-auto text-2xl font-bold">
-                🔍
-              </div>
-              <h4 className="text-slate-900 font-black text-lg font-heading">
-                Hiện chưa có chương trình đang mở phù hợp.
+            <div className="pd-empty">
+              <Search size={28} aria-hidden="true" />
+              <h4>
+                Chưa có chương trình khớp bộ lọc.
               </h4>
-              <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                Hệ thống liên tục cập nhật các kỳ sự kiện và phiên kết nối mới theo nhu cầu từ các KCN. Quý doanh nghiệp có thể để lại thông tin để nhận thông báo sớm nhất hoặc chủ động đề xuất tổ chức.
+              <p>
+                Thử đổi từ khoá hoặc mở rộng địa bàn. Bạn cũng có thể nhận thông tin chương trình mới theo nhu cầu.
               </p>
-              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <div className="pd-empty-actions">
+                <button type="button" className="pd-primary" onClick={resetFilters}>Xoá bộ lọc<RotateCcw size={16} aria-hidden="true" /></button>
                 <button
                   type="button"
                   onClick={() => {
                     const el = document.getElementById('dang-ky-thong-tin-phu-hop');
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition shadow-sm"
+                  className="pd-secondary"
                 >
-                  ĐĂNG KÝ NHẬN THÔNG TIN
+                  Nhận thông tin
                 </button>
                 <Link
                   to="/dich-vu/to-chuc-ket-noi"
-                  className="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 rounded-xl text-xs font-bold transition shadow-2xs"
+                  className="pd-text-button"
                 >
-                  ĐỀ XUẤT TỔ CHỨC CHƯƠNG TRÌNH
+                  Đề xuất chương trình
                 </Link>
               </div>
             </div>
@@ -1026,152 +845,14 @@ export default function SupplyChainExpoPage() {
               3. KHỐI TIẾP THEO: "CHƯA CÓ CHƯƠNG TRÌNH PHÙ HỢP?"
               Đăng ký nhận thông tin theo địa bàn & chuyên mục (ccu_lead_consents)
           ======================================================== */}
-          <div id="dang-ky-thong-tin-phu-hop" className="rounded-3xl bg-gradient-to-br from-[#072348] via-[#0b3368] to-[#0052cc] p-6 sm:p-10 text-white shadow-xl space-y-6">
-            
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/15 pb-6">
-              <div className="space-y-1.5 max-w-2xl">
-                <span className="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-300/30 uppercase font-heading">
-                  ĐĂNG KÝ THEO DÕI NĂNG ĐỘNG
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black font-heading">
-                  Chưa có chương trình phù hợp với địa bàn và ngành hàng của bạn?
-                </h3>
-                <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-                  Để lại thông tin để hệ thống điều phối thông báo cho doanh nghiệp ngay khi có Ngày hội Chuỗi Cung Ứng hoặc phiên Sourcing Day 1:1 mở tại KCN mục tiêu của bạn.
-                </p>
-              </div>
-
-              <div className="shrink-0 text-xs text-blue-200 bg-white/10 p-3 rounded-2xl border border-white/10 max-w-xs">
-                🔒 <strong>Chính sách dữ liệu:</strong> Cam kết bảo mật thông tin, chỉ gửi các chương trình khớp lệnh nhu cầu chính xác.
-              </div>
-            </div>
-
-            {/* Subscription Form */}
-            {subSubmitted ? (
-              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 text-center space-y-2 border border-white/20">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                <h4 className="text-lg font-bold text-white">Đăng ký nhận thông tin thành công!</h4>
-                <p className="text-xs text-blue-100 max-w-md mx-auto">
-                  Hệ thống đã lưu sự đồng ý và hồ sơ quan tâm của bạn. Đội điều phối CHUOICUNGUNG.COM sẽ chủ động gửi thư mời ngay khi có chương trình tại <strong>{subFormData.zone}</strong>.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleBottomSubSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-slate-900">
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Họ và tên *</label>
-                    <input 
-                      type="text" 
-                      required
-                      placeholder="Nguyễn Văn A" 
-                      value={subFormData.name}
-                      onChange={(e) => setSubFormData({ ...subFormData, name: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Tên công ty / Nhà máy *</label>
-                    <input 
-                      type="text" 
-                      required
-                      placeholder="Công ty TNHH Sản Xuất..." 
-                      value={subFormData.company}
-                      onChange={(e) => setSubFormData({ ...subFormData, company: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Email nhận thư mời *</label>
-                    <input 
-                      type="email" 
-                      required
-                      placeholder="purchasing@company.vn" 
-                      value={subFormData.email}
-                      onChange={(e) => setSubFormData({ ...subFormData, email: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Số điện thoại / Zalo *</label>
-                    <input 
-                      type="tel" 
-                      required
-                      placeholder="0912 345 678" 
-                      value={subFormData.phone}
-                      onChange={(e) => setSubFormData({ ...subFormData, phone: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-slate-900">
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Địa bàn / KCN mong muốn</label>
-                    <select
-                      value={subFormData.zone}
-                      onChange={(e) => setSubFormData({ ...subFormData, zone: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
-                    >
-                      <option value="Miền Nam">Miền Nam (Bình Dương, Đồng Nai, TP.HCM, Long An...)</option>
-                      <option value="Miền Bắc">Miền Bắc (Hà Nội, Hải Phòng, Bắc Ninh, Thái Nguyên...)</option>
-                      <option value="Miền Trung">Miền Trung (Đà Nẵng, Quảng Nam, Quảng Ngãi...)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Chuyên mục / Ngành hàng</label>
-                    <select
-                      value={subFormData.industry}
-                      onChange={(e) => setSubFormData({ ...subFormData, industry: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
-                    >
-                      {PROGRAM_INDUSTRIES.filter(i => i !== 'Tất cả ngành hàng').map(i => (
-                        <option key={i} value={i}>{i}</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-blue-100 mb-1">Vai trò của bạn</label>
-                    <select
-                      value={subFormData.role}
-                      onChange={(e) => setSubFormData({ ...subFormData, role: e.target.value })}
-                      className="w-full p-2.5 bg-white rounded-xl text-xs focus:ring-2 focus:ring-amber-400 outline-none font-medium"
-                    >
-                      <option value="supplier">Nhà cung ứng (Supplier)</option>
-                      <option value="buyer">Người mua / Nhà máy (Buyer)</option>
-                      <option value="partner">KCN / Ban quản lý / Hiệp hội</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Consent checkbox (Stored separately per requirements) */}
-                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <label className="flex items-start gap-2.5 text-xs text-blue-100 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      required
-                      checked={subFormData.consent}
-                      onChange={(e) => setSubFormData({ ...subFormData, consent: e.target.checked })}
-                      className="w-4 h-4 rounded text-[#0052cc] mt-0.5"
-                    />
-                    <span>
-                      Tôi đồng ý nhận thông báo về các chương trình kết nối và cơ hội chuỗi cung ứng phù hợp từ CHUOICUNGUNG.COM (Dữ liệu được lưu trữ và quản trị riêng theo thỏa thuận dịch vụ).
-                    </span>
-                  </label>
-
-                  <button
-                    type="submit"
-                    className="px-7 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs font-heading shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0 flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <span>Đăng Ký Nhận Thông Báo</span>
-                    <Send className="w-4 h-4" />
-                  </button>
-                </div>
-              </form>
-            )}
-
-          </div>
+          <ProgramInvitationSignup
+            data={subFormData}
+            industries={PROGRAM_INDUSTRIES.filter(industry => industry !== "Tất cả ngành hàng")}
+            onChange={setSubFormData}
+            onSubmit={handleBottomSubSubmit}
+            submitted={subSubmitted}
+            error={subError}
+          />
 
         </div>
       )}

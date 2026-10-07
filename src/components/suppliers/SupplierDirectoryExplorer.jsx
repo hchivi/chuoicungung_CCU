@@ -6,11 +6,14 @@ import { findDirectoryCategories } from './supplierDirectoryModel';
 
 export default function SupplierDirectoryExplorer({ phases, categories, letters, keywords, selectedLetter, effectivePhase, effectiveStage, selectedCategory, selectedKeyword, letterCounts, onAllPhases, onStage, onPhase, onLetter, onCategory, onKeyword, lang }) {
   const [expanded, setExpanded] = useState(true);
+  // Floating-panel visibility must not remove in-flow content and shift result controls.
+  const [stickyExpanded, setStickyExpanded] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [navHeight, setNavHeight] = useState(106);
   const [query, setQuery] = useState('');
   const [showAll, setShowAll] = useState(false);
   const anchorRef = useRef(null);
+  const pinnedRef = useRef(null);
   const wasStickyRef = useRef(false);
 
   const categoryMatches = useMemo(() => findDirectoryCategories(categories, query), [categories, query]);
@@ -38,14 +41,14 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
         if (!wasStickyRef.current) {
           wasStickyRef.current = true;
           setIsSticky(true);
-          setExpanded(false); // Auto-collapse when scrolling down
+          setStickyExpanded(false);
         }
       } else if (rect.top > currentNavH + 30) {
         // When the user scrolls back up and reaches block image 4:
         if (wasStickyRef.current) {
           wasStickyRef.current = false;
           setIsSticky(false);
-          setExpanded(true); // Auto-expand when scrolling back up
+          setStickyExpanded(false);
         }
       }
     };
@@ -57,6 +60,17 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Keep the filter frame below the actual header + A–Z bar, including expansion.
+  useEffect(() => {
+    const root = anchorRef.current?.closest('.sd-directory');
+    if (!root) return;
+    const update = () => root.style.setProperty('--sd-sidebar-top', `${navHeight + (pinnedRef.current?.offsetHeight || 0) + 12}px`);
+    update();
+    const observer = new ResizeObserver(update);
+    if (pinnedRef.current) observer.observe(pinnedRef.current);
+    return () => { observer.disconnect(); root.style.removeProperty('--sd-sidebar-top'); };
+  }, [isSticky, navHeight]);
 
   const renderColumns = () => (
     <div className="sd-catalogue-columns">
@@ -128,6 +142,8 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
     {/* Pinned Sticky Bar for Block Image 4 (Appears when scrolled down, collapsed by default, expandable on demand) */}
     {isSticky && (
       <div
+        ref={pinnedRef}
+        data-expanded={stickyExpanded}
         className="sd-catalogue-pinned fixed left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-md transition-all duration-200"
         style={{ top: `${navHeight}px` }}
       >
@@ -173,17 +189,18 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
 
             <button
               className="sd-text-button !min-h-8 !py-1 !px-2.5 text-xs shrink-0 whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg"
-              onClick={() => setExpanded(value => !value)}
-              aria-expanded={expanded}
-              title={expanded ? (english ? 'Collapse' : 'Thu gọn') : (english ? 'Expand' : 'Mở danh mục')}
+              onClick={() => setStickyExpanded(value => !value)}
+              aria-expanded={stickyExpanded}
+              aria-controls="sd-pinned-catalogue-content"
+              title={stickyExpanded ? (english ? 'Collapse' : 'Thu gọn') : (english ? 'Expand' : 'Mở danh mục')}
             >
-              <span>{expanded ? (english ? 'Collapse' : 'Thu gọn') : (english ? 'Expand' : 'Mở rộng')}</span>
-              <ChevronDown size={14} className={expanded ? 'rotate-180 transition-transform' : 'transition-transform'} />
+              <span>{stickyExpanded ? (english ? 'Collapse' : 'Thu gọn') : (english ? 'Expand' : 'Mở rộng')}</span>
+              <ChevronDown size={14} className={stickyExpanded ? 'rotate-180 transition-transform' : 'transition-transform'} />
             </button>
           </div>
 
-          {expanded && (
-            <div className="mt-3 pt-3 border-t border-slate-200/80 max-h-[55vh] overflow-y-auto bg-white rounded-2xl p-4 shadow-xl border border-slate-200 animate-in fade-in duration-200">
+          {stickyExpanded && (
+            <div id="sd-pinned-catalogue-content" className="mt-3 pt-3 border-t border-slate-200/80 max-h-[55vh] overflow-y-auto bg-white rounded-2xl p-4 shadow-xl border border-slate-200 animate-in fade-in duration-200">
               {renderColumns()}
             </div>
           )}

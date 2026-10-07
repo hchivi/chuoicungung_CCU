@@ -6,6 +6,7 @@ import {
   Calendar, Database, Search, ArrowUpRight, Check, Award
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import EcosystemConnectSection from '../components/ecosystem/EcosystemConnectSection';
 
 export default function EcosystemOverviewPage() {
   const { t, lang } = useLanguage();
@@ -117,7 +118,7 @@ export default function EcosystemOverviewPage() {
         </div>
 
         {/* Content Container Aligned Exactly with Image 2 */}
-        <div className="w-[min(1280px,calc(100%-48px))] mx-auto relative z-10 w-full py-8 sm:py-10">
+        <div className="hero-standard-container relative z-10 py-8 sm:py-10" style={{ width: 'min(1280px, calc(100% - 48px))', marginInline: 'auto' }}>
           
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm text-slate-500 mb-6" aria-label="Đường dẫn trang">
@@ -478,38 +479,7 @@ export default function EcosystemOverviewPage() {
       {/* 05. ACTION CTA BANNER                                                     */}
       {/* ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14">
-        
-        <div className="bg-gradient-to-r from-[#072847] via-[#0052cc] to-[#072847] rounded-3xl p-8 sm:p-12 text-white text-center shadow-xl space-y-6 relative overflow-hidden">
-          
-          <div className="max-w-2xl mx-auto space-y-2">
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-black font-heading tracking-tight leading-tight">
-              Bắt đầu kết nối cùng Hệ sinh thái Chuỗi Cung Ứng
-            </h3>
-            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-              Cho dù bạn là Nhà máy cần tìm xưởng gia công hay Nhà cung ứng muốn mở rộng đơn hàng FDI, nền tảng luôn sẵn sàng hỗ trợ.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Link
-              to="/dang-nhu-cau"
-              className="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-100 text-[#0052cc] rounded-xl font-black text-xs sm:text-sm uppercase font-heading tracking-wider shadow-md hover:-translate-y-0.5 transition flex items-center justify-center gap-2"
-            >
-              <span>ĐĂNG NHU CẦU MUA SẮM</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              to="/tao-ho-so"
-              className="w-full sm:w-auto px-7 py-3.5 bg-blue-600/80 hover:bg-blue-600 border border-white/20 text-white rounded-xl font-black text-xs sm:text-sm uppercase font-heading tracking-wider transition hover:-translate-y-0.5 flex items-center justify-center gap-2"
-            >
-              <span>GIỚI THIỆU NĂNG LỰC DOANH NGHIỆP</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-        </div>
-
+        <EcosystemConnectSection />
       </section>
 
     </main>

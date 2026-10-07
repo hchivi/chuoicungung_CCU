@@ -92,6 +92,8 @@ test('filter controls keep KYC, all technical switches, province and phase selec
   const html = render(Filters, { phases, selectedKyc: 'gold', selectedProvince: 'Toàn quốc', selectedPhase: 'all', provinces: ['Toàn quốc', 'Đà Nẵng'], quickProvinces: ['Toàn quốc', 'Đà Nẵng'], filters: { api: true, fast: false, iso: false }, onChange: () => {}, onToggle: () => {}, onReset: () => {}, activeCount: 1 });
   for (const id of ['filter-api-ready', 'filter-fast-quote', 'filter-iso-certified', 'filter-province-select']) assert.match(html, new RegExp(`id="${id}"`));
   assert.match(html, /value="5.3"/);
-  assert.match(html, /<input[^>]*checked=""[^>]*value="gold"/);
+  assert.match(html, /<option[^>]*value="gold"[^>]*selected=""/);
+  assert.match(html, /for="filter-kyc-select"/);
+  assert.match(html, /<details[^>]*class="sd-quick-regions"/);
   assert.match(html, /Đặt lại/);
 });
