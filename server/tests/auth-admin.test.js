@@ -5,6 +5,7 @@ import { createAuthService } from '../auth/service.js';
 import { createAuthRouter } from '../routes/auth.js';
 import { createAdminRouter } from '../routes/admin.js';
 import { createAssistantSession } from '../assistants/session.js';
+import { createApp } from '../app.js';
 
 const user = { id: '11111111-1111-4111-8111-111111111111', email: 'staff@example.invalid', email_confirmed_at: '2026-01-01', user_metadata: { role: 'admin' } };
 function fixture(role = null) {
@@ -77,4 +78,38 @@ test('schema keeps roles/audit private, checks roles again in transactional RPCs
   const fs = await import('node:fs/promises'); const sql = await fs.readFile(new URL('../migrations/20261008_auth_admin.sql', import.meta.url), 'utf8');
   assert.match(sql, /ENABLE ROW LEVEL SECURITY/); assert.match(sql, /REVOKE ALL[\s\S]*anon, authenticated/);
   assert.match(sql, /FOR UPDATE/); assert.match(sql, /ccu_staff_roles/); assert.doesNotMatch(sql, /INSERT INTO public\.ccu_staff_roles/i);
+});
+test('expired access with a refresh cookie cannot silently become an anonymous account', async () => {
+  const f = fixture();
+  await assert.rejects(f.service.identify({ headers: { cookie: 'ccu_refresh=private-refresh' } }), { code: 'AUTH_REQUIRED' });
+});
+test('refresh restores verified identity and logout clears account plus guest cookies', async t => {
+  const f = fixture(); const base = await serve(t, f);
+  const r = await fetch(`${base}/auth/session`, { headers: { cookie: 'ccu_access=expired; ccu_refresh=private-refresh' } });
+  assert.equal(r.status, 200); assert.equal((await r.json()).data.user.id, user.id);
+  assert.match(r.headers.get('set-cookie'), /HttpOnly/);
+  const logout = await fetch(`${base}/auth/logout`, { method: 'POST', headers });
+  assert.equal(logout.status, 200); assert.match(logout.headers.get('set-cookie'), /ccu_session_v2=;/);
+});
+test('content changes require admin and valid phase; conflicts do not report saved', async t => {
+  const f = fixture('moderator'); const base = await serve(t, f);
+  const patch = body => fetch(`${base}/admin/data/suppliers/s1`, { method: 'PATCH', headers, body: JSON.stringify({ patch: { phase: '5.3' }, note: 'Correct classification', expectedUpdatedAt: '2026-01-01', ...body }) });
+  assert.equal((await patch()).status, 403);
+  f.state.role = 'admin'; assert.equal((await patch({ patch: { phase: '9.9' } })).status, 400);
+  assert.equal((await patch()).status, 200);
+  f.client.rpc = async () => ({ error: { code: '40001' } });
+  assert.equal((await patch()).status, 409);
+});
+test('app wires real auth/admin and requires explicit same-site origin for their mutations', async t => {
+  const f = fixture();
+  const repository = { health: async () => {}, all: async () => [], invalidate() {} };
+  const app = createApp({ client: f.client, repository, authService: f.service });
+  const server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve)); t.after(() => server.close());
+  const base = `http://127.0.0.1:${server.address().port}`;
+  assert.equal((await fetch(`${base}/api/auth/session`)).status, 200);
+  assert.equal((await fetch(`${base}/api/admin/submissions`)).status, 401);
+  for (const origin of [undefined, 'https://attacker.invalid', 'null']) {
+    assert.equal((await fetch(`${base}/api/auth/login`, { method: 'POST', headers: { 'content-type': 'application/json', ...(origin ? { origin } : {}) }, body: JSON.stringify({ email: user.email, password: 'synthetic' }) })).status, 403);
+  }
+  assert.equal((await fetch(`${base}/api/auth/login`, { method: 'POST', headers: { ...headers, origin: 'http://localhost:3000' }, body: JSON.stringify({ email: user.email, password: 'synthetic' }) })).status, 200);
 });
