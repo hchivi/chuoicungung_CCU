@@ -11,7 +11,7 @@ export function getAssistantConfiguration(env = process.env) {
   if (!['auto', 'single'].includes(routingMode)) throw new AssistantError('AI_ROUTING_INVALID', 'GEMINI_ROUTING phải là auto hoặc single.', 503);
   return { provider, configured: Boolean(key && !/your_|xxxxxxxx/.test(key)),
     model,
-    routing: { mode: routingMode, simple_model: model, complex_model: provider === 'gemini' ? env.GEMINI_COMPLEX_MODEL || 'gemini-3.8-flash' : model, automatic_fallback: false },
+    routing: { mode: routingMode, simple_model: model, complex_model: provider === 'gemini' ? env.GEMINI_COMPLEX_MODEL || 'gemini-3.5-flash' : model, automatic_fallback: false },
     model_verified: false };
 }
 
