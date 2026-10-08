@@ -57,6 +57,8 @@ export function createAdminRouter({ client, authService, invalidate = () => {} }
       if (['phases','stages'].includes(key) ? !Array.isArray(value) || value.length > 18 || value.some(v => !['string','number'].includes(typeof v)) : !['string','number'].includes(typeof value)) throw invalid();
       if (key === 'phases' && value.some(v => !/^[1-6]\.[1-3]$/.test(String(v)))) throw invalid();
       if (key === 'stages' && value.some(v => !/^[1-6]$/.test(String(v)))) throw invalid();
+      if (key === 'phase' && !/^[1-6]\.[1-3]$/.test(String(value))) throw invalid();
+      if (key === 'stage' && !/^[1-6]$/.test(String(value))) throw invalid();
     }
     const data = await safeRpc(client.rpc('ccu_admin_patch_content', { p_collection: collection, p_id: req.params.id, p_patch: patch, p_note: note.trim(), p_expected_updated_at: expectedUpdatedAt, p_actor: req.authIdentity.user.id }));
     invalidate(collection);

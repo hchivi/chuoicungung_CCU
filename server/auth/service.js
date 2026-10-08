@@ -48,7 +48,11 @@ export function createAuthService({ client, authClientFactory = () => {
     return { email, password: input.password };
   };
   return {
-    async identify(req) { const token = readCookies(req).ccu_access; if (!token) return null; return verified(token); },
+    async identify(req) {
+      const cookies = readCookies(req);
+      if (!cookies.ccu_access) { if (cookies.ccu_refresh) throw denied(); return null; }
+      return verified(cookies.ccu_access);
+    },
     async session(req, res) {
       const cookies = readCookies(req);
       if (!cookies.ccu_access && !cookies.ccu_refresh) return null;
