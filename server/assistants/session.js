@@ -6,6 +6,10 @@ const ephemeralSecret = crypto.randomBytes(32).toString('hex');
 export function createAssistantSession({ secret = process.env.ASSISTANT_SESSION_SECRET || process.env.SESSION_SECRET || ((process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) ? crypto.createHmac('sha256', process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY).update('ccu-cookie-signing-v2').digest('hex') : ephemeralSecret) } = {}) {
   const sign = id => crypto.createHmac('sha256', secret).update(id).digest('hex');
   return (req, res, next) => {
+    if (req.authIdentity?.user?.id) {
+      req.assistantOwnerId = `auth:${req.authIdentity.user.id}`;
+      return next();
+    }
     const token = String(req.headers.cookie || '').split(';').map(part => part.trim()).find(part => part.startsWith(`${COOKIE}=`))?.slice(COOKIE.length + 1) || '';
     const [id, signature] = token.split('.');
     let valid = false;
