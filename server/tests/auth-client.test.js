@@ -31,3 +31,13 @@ test('all admin views gate by server session, no legacy role picker or simulated
   assert.doesNotMatch(form, /setTimeout|alert\(|localStorage|isVerified/);
   assert.match(form, /authAction/);
 });
+test('a pending private read cannot repopulate cache after account changes', async () => {
+  const { clearPrivateSubmissions, loadPrivateSubmissions, getPrivateSubmissions } = await import('../../src/services/submissionService.js');
+  const original = globalThis.fetch; let finish;
+  globalThis.fetch = () => new Promise(resolve => { finish = resolve; });
+  try {
+    const pending = loadPrivateSubmissions(); clearPrivateSubmissions();
+    finish(new Response(JSON.stringify({ success: true, source: 'supabase', data: [{ id: 'old', kind: 'demand', data: { title: 'Previous account' }, status: 'PENDING' }] })));
+    await pending; assert.equal(getPrivateSubmissions('demand').length, 0);
+  } finally { globalThis.fetch = original; }
+});

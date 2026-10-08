@@ -22,7 +22,7 @@ function fixture(role = null) {
     refreshSession: async () => ({ data: { session, user }, error: null }),
     resetPasswordForEmail: async () => ({ error: null })
   } };
-  return { client, calls, state, service: createAuthService({ client, authClientFactory: () => auth }) };
+  return { client, auth, calls, state, service: createAuthService({ client, authClientFactory: () => auth }) };
 }
 async function serve(t, fixture) {
   const app = express(); app.use(express.json());
@@ -112,4 +112,47 @@ test('app wires real auth/admin and requires explicit same-site origin for their
     assert.equal((await fetch(`${base}/api/auth/login`, { method: 'POST', headers: { 'content-type': 'application/json', ...(origin ? { origin } : {}) }, body: JSON.stringify({ email: user.email, password: 'synthetic' }) })).status, 403);
   }
   assert.equal((await fetch(`${base}/api/auth/login`, { method: 'POST', headers: { ...headers, origin: 'http://localhost:3000' }, body: JSON.stringify({ email: user.email, password: 'synthetic' }) })).status, 200);
+});
+test('auth validates inputs, recovery and password changes; provider failures stay safe', async t => {
+  const f = fixture(); const base = await serve(t, f);
+  const post = (action, body) => fetch(`${base}/auth/${action}`, { method: 'POST', headers, body: JSON.stringify(body) });
+  assert.equal((await post('login', {email:'invalid',password:'x'})).status,400);
+  assert.equal((await post('register', {email:user.email,password:'short'})).status,400);
+  assert.equal((await post('forgot-password', {email:'invalid'})).status,400);
+  assert.equal((await post('forgot-password', {email:user.email})).status,200);
+  assert.equal((await post('recovery', {})).status,401);
+  const recovery = await post('recovery',{access_token:'valid',refresh_token:'private-refresh'});
+  assert.equal(recovery.status,200); assert.doesNotMatch(await recovery.text(), /private-refresh/);
+  assert.equal((await post('password',{password:'short'})).status,400);
+  f.auth.auth.setSession=async()=>({error:null});
+  f.auth.auth.updateUser=async()=>({data:{user},error:null});
+  f.auth.auth.getSession=async()=>({data:{session:{access_token:'valid',refresh_token:'private-refresh'}}});
+  assert.equal((await post('password',{password:'synthetic-new-password'})).status,200);
+  f.auth.auth.setSession=async()=>({error:{status:401}});
+  assert.equal((await post('password',{password:'synthetic-new-password'})).status,401);
+  for (const [upstream, expected] of [[400,400],[429,429],[503,503]]) {
+    f.auth.auth.signInWithPassword=async()=>({error:{status:upstream,message:'secret diagnostic'}});
+    const r=await post('login',{email:user.email,password:'synthetic-password'}); assert.equal(r.status,expected); assert.doesNotMatch(await r.text(),/secret diagnostic/);
+  }
+  f.auth.auth.signUp=async()=>({error:{status:400}});
+  assert.equal((await post('register',{email:user.email,password:'synthetic-password'})).status,400);
+  f.auth.auth.resetPasswordForEmail=async()=>({error:{status:503}});
+  assert.equal((await post('forgot-password',{email:user.email})).status,503);
+  f.auth.auth.refreshSession=async()=>({error:{status:401}});
+  const failedRefresh=await fetch(`${base}/auth/session`,{headers:{cookie:'ccu_refresh=expired'}});
+  assert.equal(failedRefresh.status,401); assert.match(failedRefresh.headers.get('set-cookie'),/ccu_access=;/);
+});
+test('staff directory, audit and patch validation cover protected fields and RPC failures', async t => {
+  const f=fixture('admin'); const base=await serve(t,f);
+  assert.equal((await fetch(`${base}/admin/audit`,{headers})).status,200);
+  assert.equal((await fetch(`${base}/admin/data/programs?q=cnc&page=2`,{headers})).status,200);
+  assert.equal((await fetch(`${base}/admin/submissions?status=PENDING&kind=demand`,{headers})).status,200);
+  const body={patch:{phases:['1.1','5.3'],stages:[1,5]},note:'Reviewed classification',expectedUpdatedAt:'2026-01-01'};
+  const patch=value=>fetch(`${base}/admin/data/suppliers/s1`,{method:'PATCH',headers,body:JSON.stringify(value)});
+  for (const fields of [{status:'PUBLIC'},{phases:['7.1']},{stages:[7]},{phase:'9.1'},{stage:9},{name:{}},{phases:'1.1'},{stages:[{}]}]) assert.equal((await patch({...body,patch:fields})).status,400);
+  assert.equal((await patch(body)).status,200);
+  for (const [code,status] of [['42501',403],['P0002',404],['22023',400],['OTHER',503]]) {
+    f.client.rpc=async()=>({error:{code,message:'private sql details'}});
+    const r=await patch(body); assert.equal(r.status,status); assert.doesNotMatch(await r.text(),/private sql details/);
+  }
 });
