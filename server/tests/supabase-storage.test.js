@@ -63,6 +63,8 @@ test('database errors never silently fall back to JSON or empty success and do n
 });
 
 test('public projection removes nested contacts/internal fields and refuses private, draft or rejected records', () => {
+  const aliases = publicRecord({ name: 'Public', tax_code: 'secret', tel: 'secret', mobile: 'secret', contact: { name: 'secret', address: 'secret' }, phone_number: 'secret' });
+  assert.equal(JSON.stringify(aliases).includes('secret'), false);
   const safe = publicRecord({ id: '1', name: 'Public', phone: 'secret', data: 'safe', nested: { email: 'secret', logo: 'x.jpg' }, buyerInfo: { companyName: 'secret' }, internalNotes: 'secret' });
   assert.equal(JSON.stringify(safe).includes('secret'), false);
   assert.equal(safe.nested.logo, 'x.jpg');
@@ -70,6 +72,20 @@ test('public projection removes nested contacts/internal fields and refuses priv
   assert.deepEqual(nested.entries, [{ id: 'approved', status: 'APPROVED' }]);
   assert.equal(JSON.stringify(nested).includes('secret'), false);
   for (const record of [{ status: 'DRAFT' }, { visibility: 'PRIVATE' }, { publishable: false }, { moderationStatus: 'REJECTED' }, { isPublished: false }]) assert.equal(publicRecord(record), null);
+});
+
+test('supplier response can be edited by its owner while pending, but not after review', async () => {
+  const client = fakeClient();
+  const store = createSubmissionStore({ client });
+  const input = { kind: 'supplierResponse', ownerId: 'a', idempotencyKey: 'response:1', data: { message: 'First' } };
+  const first = await store.create(input);
+  const revised = await store.create({ ...input, data: { message: 'Revised' } });
+  assert.equal(first.id, revised.id);
+  assert.equal(revised.data.message, 'Revised');
+  assert.equal(client.tables.ccu_submissions.length, 1);
+  client.tables.ccu_submissions[0].status = 'APPROVED';
+  await assert.rejects(store.create({ ...input, data: { message: 'Cannot alter reviewed record' } }), { code: 'SUBMISSION_REVIEWED' });
+  assert.equal(client.tables.ccu_submissions[0].data.message, 'Revised');
 });
 
 test('public data documents are filtered by collection and visibility, no cross-collection private read', async () => {

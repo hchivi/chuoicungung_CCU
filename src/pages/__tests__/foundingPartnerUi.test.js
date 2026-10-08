@@ -41,9 +41,10 @@ test('scope and contact fields have associated labels', () => {
   }
 });
 
-test('local-only submission, illustration, and reference pricing are disclosed', () => {
+test('private cloud submission, illustration, and reference pricing are disclosed', () => {
   const html = renderPage();
-  assert.match(html, /chỉ lưu trên trình duyệt này/);
+  assert.match(html, /lưu bảo mật trên hệ thống/);
+  assert.doesNotMatch(html, /chỉ lưu trên trình duyệt này|chưa gửi đến máy chủ/);
   assert.match(html, /Ảnh minh họa/);
   assert.match(html, /Giá tham khảo/);
   assert.doesNotMatch(html, /24 giờ|KYC 3 Lớp|VIP|Hội đồng Cố vấn/);
