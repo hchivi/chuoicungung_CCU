@@ -66,6 +66,9 @@ test('public projection removes nested contacts/internal fields and refuses priv
   const safe = publicRecord({ id: '1', name: 'Public', phone: 'secret', data: 'safe', nested: { email: 'secret', logo: 'x.jpg' }, buyerInfo: { companyName: 'secret' }, internalNotes: 'secret' });
   assert.equal(JSON.stringify(safe).includes('secret'), false);
   assert.equal(safe.nested.logo, 'x.jpg');
+  const nested = publicRecord({ id: 'p', entries: [{ id: 'approved', status: 'APPROVED', senderEmail: 'secret', evidenceNotes: 'secret' }, { id: 'pending', moderationStatus: 'PENDING' }, { id: 'private', visibility: 'PRIVATE' }], responsibleUserName: 'secret' });
+  assert.deepEqual(nested.entries, [{ id: 'approved', status: 'APPROVED' }]);
+  assert.equal(JSON.stringify(nested).includes('secret'), false);
   for (const record of [{ status: 'DRAFT' }, { visibility: 'PRIVATE' }, { publishable: false }, { moderationStatus: 'REJECTED' }, { isPublished: false }]) assert.equal(publicRecord(record), null);
 });
 
