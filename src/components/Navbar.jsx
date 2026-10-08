@@ -14,9 +14,11 @@ import { STAGE_ID_TO_SLUG_MAP } from '../data/sixStagesData';
 import LanguageSwitcher from './LanguageSwitcher';
 import BrandLogo from './BrandLogo';
 import AuthModal from './auth/AuthModal';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function Navbar() {
   const { t, lang } = useLanguage();
+  const { identity } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -490,11 +492,11 @@ export default function Navbar() {
             {/* Right Action Button: ĐĂNG NHẬP (Rolex Green Pill Button - Image 1 Style) */}
             <div className="hidden sm:flex items-center flex-shrink-0 space-x-2 pl-1 lg:pl-1.5 xl:pl-2">
               <button
-                onClick={() => setAuthModal({ isOpen: true, tab: 'login' })}
+                onClick={() => identity ? navigate('/tai-khoan') : setAuthModal({ isOpen: true, tab: 'login' })}
                 className="px-3.5 py-1.5 lg:px-3 lg:py-2 xl:px-4.5 2xl:px-5 rounded-full bg-gradient-to-b from-[#127b4b] to-[#006039] hover:from-[#158b54] hover:to-[#00472a] text-white text-[10.5px] xl:text-xs font-heading font-black tracking-wider uppercase transition-all duration-200 flex items-center space-x-1 whitespace-nowrap flex-shrink-0 shadow-sm shadow-emerald-950/25 hover:shadow-md hover:shadow-emerald-900/35 hover:-translate-y-0.5 active:scale-98"
               >
                 <LogIn className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>{lang === 'en' ? 'LOG IN' : 'ĐĂNG NHẬP'}</span>
+                <span>{identity ? (lang === 'en' ? 'ACCOUNT' : 'TÀI KHOẢN') : (lang === 'en' ? 'LOG IN' : 'ĐĂNG NHẬP')}</span>
               </button>
             </div>
 
@@ -593,11 +595,11 @@ export default function Navbar() {
             {/* Mobile Action Button: Rolex Green Pill Style */}
             <div className="pt-2">
               <button
-                onClick={() => { setIsMobileMenuOpen(false); setAuthModal({ isOpen: true, tab: 'login' }); }}
+                onClick={() => { setIsMobileMenuOpen(false); if (identity) navigate('/tai-khoan'); else setAuthModal({ isOpen: true, tab: 'login' }); }}
                 className="w-full py-3.5 rounded-full bg-gradient-to-b from-[#127b4b] to-[#006039] hover:from-[#158b54] hover:to-[#00472a] text-white text-sm font-extrabold text-center shadow-md shadow-emerald-950/25 whitespace-nowrap flex items-center justify-center space-x-2 font-heading active:scale-[0.98] transition-all"
               >
                 <LogIn className="w-4 h-4" />
-                <span>{lang === 'en' ? 'Login / Register' : 'Đăng nhập / Đăng ký Doanh nghiệp'}</span>
+                <span>{identity ? 'Tài khoản của bạn' : (lang === 'en' ? 'Login / Register' : 'Đăng nhập / Đăng ký Doanh nghiệp')}</span>
               </button>
             </div>
           </div>

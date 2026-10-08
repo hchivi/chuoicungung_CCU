@@ -1,0 +1,92 @@
+/* Hallmark · component restoration · CCU modern-minimal · user reference symmetry.
+   P4 H4 E4 S4 R4 V3: contrast, states and responsive parity over decorative novelty. */
+.ccu-auth-overlay { position: fixed; inset: 0; z-index: var(--auth-z-modal); display: flex; align-items: center; justify-content: center; padding: var(--auth-md); background: var(--auth-overlay); backdrop-filter: blur(5px); overflow-y: auto; }
+.ccu-auth-panel, .ccu-auth-page-panel { position: relative; width: 100%; max-width: var(--auth-panel-width); padding: var(--auth-2xl); border: 1px solid var(--auth-rule); border-radius: var(--auth-panel-radius); background: var(--auth-paper); color: var(--auth-ink); }
+.ccu-auth-panel { max-height: calc(100dvh - 2rem); overflow-y: auto; margin-block: auto; box-shadow: var(--auth-shadow); animation: ccu-auth-enter var(--auth-duration) var(--auth-ease); }
+.ccu-auth-page { padding: var(--auth-2xl) var(--auth-md); }
+.ccu-auth-page-panel { margin-inline: auto; }
+.ccu-auth, .ccu-auth * { box-sizing: border-box; }
+.ccu-auth { color: var(--auth-ink); }
+.ccu-auth h1 { text-transform: none !important; font-size: clamp(1.35rem, 2.1vw, 1.9rem); font-weight: 700; line-height: 1.4; letter-spacing: -.035em; margin: 0; overflow-wrap: anywhere; min-width: 0; }
+.ccu-auth-heading { display: flex; flex-direction: column; align-items: center; gap: var(--auth-sm); text-align: center; padding: var(--auth-md) 0 var(--auth-xl); border-bottom: 1px solid var(--auth-rule); }
+.ccu-auth-heading > :first-child { margin-bottom: var(--auth-xs); }
+.ccu-auth-heading p, .ccu-auth-account p { margin: 0; color: var(--auth-muted); font-size: .9375rem; line-height: 1.7; }
+.ccu-auth button { cursor: pointer; }
+.ccu-auth button:disabled { cursor: wait; opacity: .6; }
+.ccu-auth input:disabled { cursor: not-allowed; opacity: .6; }
+.ccu-auth :is(button,a,summary):active { opacity: .8; }
+.ccu-auth button, .ccu-auth a, .ccu-auth input, .ccu-auth summary, .ccu-auth-close { -webkit-tap-highlight-color: transparent; }
+.ccu-auth :is(button,a,input,summary):focus-visible, .ccu-auth-close:focus-visible { outline: 3px solid var(--auth-green); outline-offset: 3px; }
+.ccu-auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--auth-xs); padding: var(--auth-xs); border-radius: var(--auth-control-radius); background: var(--auth-surface); max-width: 33rem; margin: var(--auth-xl) auto var(--auth-lg); }
+.ccu-auth-tabs button { min-height: 44px; padding: var(--auth-xs) var(--auth-md); border-radius: .625rem; color: var(--auth-muted); font-size: .9375rem; font-weight: 650; line-height: 1.5; white-space: nowrap; }
+.ccu-auth-tabs button[aria-pressed="true"] { background: var(--auth-paper); color: var(--auth-green); box-shadow: var(--auth-tab-shadow); }
+.ccu-auth-tabs button:hover:not(:disabled) { color: var(--auth-green); }
+.ccu-auth-social-label { color: var(--auth-muted); font-weight: 600; font-size: .8125rem; margin: 0 0 var(--auth-sm); }
+.ccu-auth-social-options { display: grid; grid-template-columns: 1fr 1fr; gap: var(--auth-md); }
+.ccu-auth-provider { display: flex; align-items: center; justify-content: center; gap: var(--auth-md); border: 1px solid var(--auth-edge); border-radius: var(--auth-control-radius); min-height: 74px; padding: var(--auth-sm) var(--auth-md); text-align: left; }
+.ccu-auth-provider--zalo { background: var(--auth-tint); }
+.ccu-auth-provider:hover:not(:disabled) { border-color: var(--auth-green); background: var(--auth-tint); }
+.ccu-auth-provider:active:not(:disabled), .ccu-auth-submit:active:not(:disabled) { transform: scale(.99); }
+.ccu-auth-provider strong { display: block; font-size: .9375rem; font-weight: 650; }
+.ccu-auth-provider small { display: block; color: var(--auth-muted); font-size: .8125rem; margin-top: .125rem; }
+.ccu-auth-provider-mark { display: grid; place-items: center; width: 40px; height: 40px; flex-shrink: 0; }
+.ccu-auth-provider-mark svg { width: 28px; height: 28px; }
+.ccu-auth-zalo-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: .875rem; background: var(--auth-blue); color: var(--auth-paper); font-weight: 750; font-size: .875rem; letter-spacing: -.04em; }
+.ccu-auth-provider-note { font-size: .75rem; color: var(--auth-muted); line-height: 1.65; margin: var(--auth-xs) 0 0; }
+.ccu-auth-divider { display: flex; align-items: center; gap: var(--auth-md); color: var(--auth-muted); font-size: .8125rem; margin-block: var(--auth-lg); }
+.ccu-auth-divider::before, .ccu-auth-divider::after { content: ''; height: 1px; flex: 1; background: var(--auth-rule); }
+.ccu-auth-form { display: flex; flex-direction: column; gap: var(--auth-md); width: 100%; max-width: var(--auth-form-width); margin-inline: auto; }
+.ccu-auth-business-fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--auth-md); }
+.ccu-auth-field { min-width: 0; }
+.ccu-auth-field-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--auth-xs); min-height: 36px; margin-bottom: .25rem; }
+.ccu-auth-field label { font-size: .875rem; line-height: 1.5; font-weight: 650; }
+.ccu-auth-input-wrap { position: relative; }
+.ccu-auth-input-wrap input { display: block; width: 100%; min-width: 0; min-height: 54px; padding: var(--auth-sm) var(--auth-md); border: 1px solid var(--auth-edge); border-radius: var(--auth-control-radius); background: var(--auth-surface); color: var(--auth-ink); font-size: 1rem; line-height: 1.5; }
+.ccu-auth-input-wrap input::placeholder { color: var(--auth-muted); opacity: 1; }
+.ccu-auth-input-wrap:has(.ccu-auth-eye) input { padding-right: 3.5rem; }
+.ccu-auth-input-wrap input:focus { background: var(--auth-paper); border-color: var(--auth-green); }
+.ccu-auth-input-wrap input:hover:not(:disabled) { border-color: var(--auth-green); }
+.ccu-auth-eye { position: absolute; right: .25rem; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; display: grid; place-items: center; color: var(--auth-muted); border-radius: .5rem; }
+.ccu-auth-eye svg { width: 22px; height: 22px; }
+.ccu-auth-text-button { color: var(--auth-green); min-height: 44px; font-size: .8125rem; font-weight: 650; line-height: 1.5; }
+.ccu-auth-text-button:hover:not(:disabled), .ccu-auth a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ccu-auth-submit { display: flex; justify-content: center; align-items: center; gap: var(--auth-sm); min-height: 54px; width: 100%; border: 1px solid var(--auth-green); border-radius: var(--auth-control-radius); background: var(--auth-green); color: var(--auth-paper); padding: var(--auth-sm) var(--auth-lg); font-size: 1rem; font-weight: 650; line-height: 1.5; transition: transform 120ms var(--auth-ease); }
+.ccu-auth-submit:hover:not(:disabled) { background: var(--auth-green-hover); border-color: var(--auth-green-hover); text-decoration: none; }
+.ccu-auth-submit { white-space: nowrap; }
+.ccu-auth-submit span { font-size: 1.25rem; }
+.ccu-auth-hint { color: var(--auth-muted); font-size: .75rem; line-height: 1.65; text-align: center; margin: 0; }
+.ccu-auth-notice { padding: var(--auth-sm) var(--auth-md); border: 1px solid currentColor; border-radius: .625rem; font-size: .875rem; line-height: 1.7; margin: 0; overflow-wrap: anywhere; }
+.ccu-auth-notice--error { color: var(--auth-error); background: var(--auth-error-paper); }
+.ccu-auth-notice--success { color: var(--auth-green); background: var(--auth-tint); }
+.ccu-auth-footer { border-top: 1px solid var(--auth-rule); margin-top: var(--auth-xl); padding-top: var(--auth-lg); text-align: center; color: var(--auth-muted); font-size: .8125rem; line-height: 1.8; }
+.ccu-auth-footer a, .ccu-auth-session-note a { color: var(--auth-green); font-weight: 650; }
+.ccu-auth-footer a { white-space: nowrap; }
+.ccu-auth-close { position: absolute; z-index: 1; right: var(--auth-md); top: var(--auth-md); width: 44px; height: 44px; border-radius: 50%; background: var(--auth-surface); color: var(--auth-muted); font-size: 1.75rem; line-height: 1; cursor: pointer; }
+.ccu-auth-close:hover { color: var(--auth-ink); }
+.ccu-auth--forgot .ccu-auth-form, .ccu-auth--password .ccu-auth-form { margin-top: var(--auth-lg); }
+.ccu-auth-session-note { color: var(--auth-muted); font-size: .8125rem; line-height: 1.6; padding: var(--auth-sm) var(--auth-md); margin-bottom: var(--auth-md); background: var(--auth-tint); border-radius: .625rem; }
+.ccu-auth-account { max-width: var(--auth-form-width); margin-inline: auto; display: flex; flex-direction: column; gap: var(--auth-lg); }
+.ccu-auth-account .ccu-auth-account-email { font-size: 1.125rem; color: var(--auth-ink); overflow-wrap: anywhere; }
+.ccu-auth-account-actions { display: flex; flex-wrap: wrap; gap: var(--auth-md); }
+.ccu-auth-account-actions .ccu-auth-submit { width: auto; }
+.ccu-auth-secondary { border: 1px solid var(--auth-edge); border-radius: var(--auth-control-radius); padding: var(--auth-sm) var(--auth-lg); min-height: 54px; }
+.ccu-auth-password-settings { border-top: 1px solid var(--auth-rule); padding-top: var(--auth-md); }
+.ccu-auth-password-settings summary { cursor: pointer; padding-block: var(--auth-sm); min-height: 44px; font-weight: 650; }
+@keyframes ccu-auth-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 600px) {
+  .ccu-auth-panel, .ccu-auth-page-panel { padding: var(--auth-xl) var(--auth-md) var(--auth-lg); border-radius: 1.25rem; }
+  .ccu-auth-page { padding: var(--auth-lg) var(--auth-sm); }
+  .ccu-auth-panel .ccu-auth-heading { padding-top: var(--auth-xl); }
+  .ccu-auth-heading { padding-bottom: var(--auth-lg); }
+  .ccu-auth-heading p { font-size: .8125rem; }
+  .ccu-auth-tabs { margin-top: var(--auth-lg); gap: .25rem; padding: .25rem; }
+  .ccu-auth-tabs { grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); }
+  .ccu-auth-tabs button { font-size: .75rem; padding-inline: .25rem; }
+  .ccu-auth-submit { font-size: .875rem; padding-inline: var(--auth-sm); gap: var(--auth-xs); }
+  .ccu-auth-social-options, .ccu-auth-business-fields { grid-template-columns: 1fr; gap: var(--auth-sm); }
+  .ccu-auth-provider { min-height: 64px; }
+  .ccu-auth-divider { gap: var(--auth-xs); }
+  .ccu-auth-field-heading { flex-wrap: wrap; }
+  .ccu-auth-close { right: var(--auth-xs); top: var(--auth-xs); }
+}
+@media (prefers-reduced-motion: reduce) { .ccu-auth-panel { animation: none; } .ccu-auth-submit { transition: none; } .ccu-auth-provider:active, .ccu-auth-submit:active { transform: none; } }

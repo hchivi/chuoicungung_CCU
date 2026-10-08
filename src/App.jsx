@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import SearchModal from './components/SearchModal';
 import SuppliMascot from './components/SuppliMascot';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext.jsx';
 
 // Lazy-loaded Pages for instant initial load and code-splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -194,6 +195,7 @@ export default function App() {
     <ErrorBoundary>
       <LanguageProvider>
         <BrowserRouter>
+          <AuthProvider>
           <ScrollToTop />
           <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
           
@@ -455,6 +457,7 @@ export default function App() {
                 
                 {/* Đăng Nhập & Đăng Ký */}
                 <Route path="/dang-nhap" element={<AuthPage />} />
+                <Route path="/tai-khoan" element={<AuthPage />} />
                 <Route path="/dang-ky" element={<AuthPage />} />
                 <Route path="/login" element={<Navigate to="/dang-nhap" replace />} />
                 <Route path="/register" element={<Navigate to="/dang-ky" replace />} />
@@ -510,6 +513,7 @@ export default function App() {
               </Routes>
             </Suspense>
           </MainLayout>
+          </AuthProvider>
       </BrowserRouter>
     </LanguageProvider>
   </ErrorBoundary>

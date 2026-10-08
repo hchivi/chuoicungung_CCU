@@ -1,11 +1,25 @@
 import express from 'express';
 import { createAssistantSession } from '../assistants/session.js';
 import { setAuthCookies } from '../auth/service.js';
+import { createSocialAuth } from '../auth/social.js';
 
-export function createAuthRouter({ service }) {
+export function createAuthRouter({ service, social = createSocialAuth({ service }) }) {
   const router = express.Router();
   router.use((_req, res, next) => { res.setHeader('Cache-Control', 'no-store'); next(); });
   router.get('/session', async (req, res) => res.json({ success: true, data: await service.session(req, res) }));
+  router.get('/providers', async (_req, res) => res.json({ success: true, data: await social.providers() }));
+  router.post('/oauth/start', createAssistantSession(), async (req, res) => {
+    const data = await social.start({ provider: req.body?.provider, next: req.body?.next, ownerId: req.assistantOwnerId }, res);
+    res.json({ success: true, data });
+  });
+  router.get('/oauth/callback', async (req, res) => {
+    res.setHeader('Referrer-Policy', 'no-referrer');
+    try {
+      const result = await social.finish(req, res);
+      setAuthCookies(res, result.session);
+      res.redirect(303, result.identity.role ? '/admin' : result.next);
+    } catch { res.redirect(303, '/dang-nhap?oauth_error=failed'); }
+  });
   for (const action of ['login', 'register']) router.post(`/${action}`, createAssistantSession(), async (req, res) => {
     const result = await service[action](req.body || {});
     if (result.session) {

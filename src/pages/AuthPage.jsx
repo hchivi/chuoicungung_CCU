@@ -19,17 +19,21 @@ export default function AuthPage() {
   const success = identity => {
     if (recovery) { setRecovery(false); return; }
     const next = new URLSearchParams(location.search).get('next');
-    navigate(next?.startsWith('/') && !next.startsWith('//') && !next.includes('\\') ? next : identity?.role ? '/admin' : '/dang-nhap', { replace: true });
+    navigate(next?.startsWith('/') && !next.startsWith('//') && !/[\\\x00-\x20]|%(?:2f|5c|0[ad])/i.test(next) ? next : identity?.role ? '/admin' : '/tai-khoan', { replace: true });
   };
   async function logout() { try { await authAction('logout'); } catch (err) { setError(err.message); } }
-  return <section className="mx-auto max-w-xl px-5 py-16"><div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
-    {error && <p role="alert" className="mb-5 text-red-800">{error}</p>}
-    {session.error && <p role="alert" className="mb-5 text-red-800">{session.error}</p>}
-    {session.loading ? <p role="status">Đang kiểm tra phiên đăng nhập…</p> : recovery ? <AuthForm initialTab="password" onSuccess={success} /> : session.identity ? <>
-      <h1 className="text-2xl font-bold text-[#183e30]">Tài khoản của bạn</h1><p className="mt-4 break-words">{session.identity.user.email}</p>
-      <p className="mt-2 text-sm text-slate-600">{session.identity.role ? `Quyền quản trị: ${session.identity.role}` : 'Tài khoản doanh nghiệp — dữ liệu riêng được gắn với tài khoản của bạn.'}</p>
-      <div className="mt-6 flex flex-wrap gap-4">{session.identity.role && <Link className="rounded-lg bg-emerald-800 px-4 py-3 font-semibold text-white" to="/admin">Vào quản trị</Link>}<button className="rounded-lg border border-slate-300 px-4 py-3" onClick={logout}>Đăng xuất</button></div>
-      <div className="mt-10 border-t pt-7"><AuthForm initialTab="password" /></div>
-    </> : <AuthForm key={location.pathname} initialTab={location.pathname === '/dang-ky' ? 'register' : 'login'} onSuccess={success} />}
+  const accountPage = location.pathname === '/tai-khoan';
+  const oauthFailed = new URLSearchParams(location.search).get('oauth_error') === 'failed';
+  return <section className="ccu-auth-page"><div className="ccu-auth-page-panel">
+    {(error || session.error || oauthFailed) && <p role="alert" className="ccu-auth-notice ccu-auth-notice--error">{error || session.error || 'Chưa hoàn tất đăng nhập nhanh. Phiên có thể đã hết hạn hoặc chưa được cấu hình. Vui lòng thử lại hoặc dùng email.'}</p>}
+    {recovery ? <AuthForm initialTab="password" onSuccess={success} /> : accountPage && session.loading ? <p role="status">Đang kiểm tra phiên đăng nhập…</p> : accountPage && session.identity ? <div className="ccu-auth ccu-auth-account">
+      <h1>Tài khoản của bạn</h1><p className="ccu-auth-account-email">{session.identity.user.email}</p>
+      <p>{session.identity.role ? `Quyền quản trị: ${session.identity.role}` : 'Tài khoản doanh nghiệp — dữ liệu riêng được gắn với tài khoản của bạn.'}</p>
+      <div className="ccu-auth-account-actions">{session.identity.role && <Link className="ccu-auth-submit" to="/admin">Vào quản trị →</Link>}<button className="ccu-auth-secondary" onClick={logout}>Đăng xuất</button></div>
+      <details className="ccu-auth-password-settings"><summary>Thay đổi mật khẩu</summary><AuthForm initialTab="password" /></details>
+    </div> : <>
+      {session.identity && <div className="ccu-auth-session-note">Bạn đang đăng nhập. <Link to="/tai-khoan">Quản lý tài khoản →</Link></div>}
+      <AuthForm key={location.pathname} initialTab={location.pathname === '/dang-ky' ? 'register' : 'login'} onSuccess={success} />
+    </>}
   </div></section>;
 }

@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import express from 'express';
 import { createSocialAuth } from '../auth/social.js';
+import { createAuthRouter } from '../routes/auth.js';
 
 function fixture(external = { google: true, 'custom:zalo': true }) {
   const calls = [], cookies = {}, cleared = [];
@@ -60,4 +62,38 @@ test('customer entry preserves original brand/tabs/social choices and keeps pass
   assert.match(form, /oauth\/start/); assert.doesNotMatch(form, /setTimeout|alert\(|localStorage|Hạng Vàng|SSL 256/);
   assert.match(page, /location.pathname === '\/tai-khoan'/);
   assert.doesNotMatch(page, /mt-10 border-t pt-7/);
+});
+
+test('settings HTTP, malformed JSON and null responses fail closed without private diagnostics', async () => {
+  for (const response of [new Response('private diagnostic', { status: 500 }), new Response('not-json'), new Response('null')]) {
+    const social = createSocialAuth({ service: {}, config: { url: 'https://test.supabase.co', key: 'public' }, fetchImpl: async () => response });
+    await assert.rejects(social.providers(), error => error.code === 'OAUTH_UNAVAILABLE' && !error.message.includes('private diagnostic'));
+  }
+});
+test('enabled Zalo uses only the configured custom provider; safe local return path survives', async () => {
+  const f = fixture();
+  const result = await f.social.start({ provider: 'zalo', next: '/tai-khoan/nhu-cau', ownerId: 'forged' }, f.res);
+  assert.equal(new URL(result.url).searchParams.get('provider'), 'custom:zalo');
+  const state = new URL(new URL(result.url).searchParams.get('redirect_to')).searchParams.get('state');
+  const completed = await f.social.finish({ headers: { cookie: `ccu_oauth=${f.cookies.ccu_oauth.value}` }, query: { code: 'code', state } }, f.res);
+  assert.equal(completed.next, '/tai-khoan/nhu-cau'); assert.equal(f.calls.some(([name]) => name === 'claim'), false);
+});
+test('callback routes set HttpOnly session cookies only after verified success, otherwise redirect safely', async t => {
+  let reject = false;
+  const social = { providers: async () => ({ google: true, zalo: false }), finish: async () => {
+    if (reject) throw new Error('private provider diagnostic');
+    return { session: { access_token: 'synthetic-access', refresh_token: 'synthetic-refresh', expires_in: 3600 }, identity: { user: { id: 'verified' }, role: null }, next: '/tai-khoan' };
+  } };
+  const app = express(); app.use('/api/auth', createAuthRouter({ service: {}, social }));
+  const server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve)); t.after(() => server.close());
+  const base = `http://127.0.0.1:${server.address().port}`;
+  const flags = await fetch(`${base}/api/auth/providers`); assert.deepEqual((await flags.json()).data, { google: true, zalo: false });
+  const success = await fetch(`${base}/api/auth/oauth/callback?code=test`, { redirect: 'manual' });
+  assert.equal(success.status, 303); assert.equal(success.headers.get('location'), '/tai-khoan');
+  assert.match(success.headers.get('set-cookie'), /HttpOnly/); assert.match(success.headers.get('set-cookie'), /SameSite=Strict/);
+  assert.equal(success.headers.get('referrer-policy'), 'no-referrer');
+  reject = true;
+  const failure = await fetch(`${base}/api/auth/oauth/callback?code=test`, { redirect: 'manual' });
+  assert.equal(failure.status, 303); assert.equal(failure.headers.get('location'), '/dang-nhap?oauth_error=failed');
+  assert.equal(failure.headers.get('set-cookie'), null); assert.doesNotMatch(await failure.text(), /synthetic|private provider diagnostic/);
 });
