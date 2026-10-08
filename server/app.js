@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import mongoose from 'mongoose';
+import { getSupabase } from './supabase.js';
+import { createSupabaseRepository } from './storage/supabaseRepository.js';
 
-import apiRoutes from './routes/api.js';
-import suppiRoutes from './routes/suppi.js';
+import { createApiRouter } from './routes/api.js';
 import { createAssistantRouter } from './routes/assistants.js';
 import { handleCanonicalRedirects } from './routes/redirects.js';
 import { handleRobotsTxt, handleSitemapXml } from './routes/seo.js';
@@ -12,10 +12,10 @@ import {
   requestIdMiddleware, 
   noSqlSanitizer, 
   createRateLimiter,
-  sessionOwnershipMiddleware 
+  sessionOwnershipMiddleware
 } from './middleware/security.js';
 
-export function createApp({ assistantService = null } = {}) {
+export function createApp({ assistantService = null, client = getSupabase(), repository = createSupabaseRepository({ client }) } = {}) {
   const app = express();
 
   // 1. Security & Core Middleware
@@ -34,7 +34,7 @@ export function createApp({ assistantService = null } = {}) {
       if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
         callback(null, true);
       } else {
-        callback(null, true); // Allow during transition, can restrict via CORS_STRICT=1
+        callback(null, false);
       }
     },
     credentials: true
@@ -63,14 +63,15 @@ export function createApp({ assistantService = null } = {}) {
     });
   });
 
-  // /readyz: Dependency readiness (MongoDB connection check)
-  app.get('/readyz', (req, res) => {
+  // /readyz: actual Supabase schema/read readiness, not mere key presence.
+  app.get('/readyz', async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    const isReady = mongoose.connection.readyState === 1;
+    let isReady = false;
+    try { await repository.health(); isReady = true; } catch { /* Return 503 without leaking provider errors. */ }
     if (isReady) {
       return res.status(200).json({
         status: 'ready',
-        database: 'connected',
+        database: 'connected', provider: 'supabase',
         timestamp: new Date().toISOString()
       });
     }
@@ -83,16 +84,21 @@ export function createApp({ assistantService = null } = {}) {
 
   // 3. SEO Endpoints
   app.get('/robots.txt', handleRobotsTxt);
-  app.get('/sitemap.xml', handleSitemapXml);
+  app.get('/sitemap.xml', (req, res, next) => handleSitemapXml(req, res, next, repository));
 
   // 4. Canonical Redirects Middleware (Section VI)
   app.use(handleCanonicalRedirects);
 
   // 5. API Routes
   app.use('/api', generalLimiter);
-  app.use('/api/assistants', writeLimiter, createAssistantRouter({ service: assistantService }));
-  app.use('/api/suppi', writeLimiter, sessionOwnershipMiddleware, suppiRoutes);
-  app.use('/api', apiRoutes);
+  app.use('/api', (req, res, next) => {
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && req.headers.origin && !allowedOrigins.includes(req.headers.origin)) return res.status(403).json({ success: false, error: { code: 'ORIGIN_DENIED', message: 'Nguồn truy cập không được phép.' } });
+    next();
+  });
+  app.use('/api/assistants', writeLimiter, createAssistantRouter({ service: assistantService, client, repository }));
+  // Retired legacy Mongo/OpenAI endpoint. All current UI uses /api/assistants.
+  app.use('/api/suppi', (_req, res) => res.status(410).json({ success: false, error: { code: 'API_RETIRED', message: 'Sử dụng /api/assistants/chat. API MongoDB cũ đã ngừng hoạt động.' } }));
+  app.use('/api', writeLimiter, createApiRouter({ repository, client }));
 
   // Server root welcome info
   app.get('/', (_req, res) => {

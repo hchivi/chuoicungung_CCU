@@ -1,38 +1,24 @@
-import mongoose from 'mongoose';
-import Enterprise from '../models/Enterprise.js';
-import Factory from '../models/Factory.js';
-import IndustrialPark from '../models/IndustrialPark.js';
-import Organization from '../models/Organization.js';
-import SuppiConversation from '../models/SuppiConversation.js';
-import RequirementDraft from '../models/RequirementDraft.js';
-import { createConversationStore } from '../suppi/conversationStore.js';
-import { createDraftStore } from '../suppi/draftStore.js';
+import { getSupabase } from '../supabase.js';
+import { createSupabaseConversationStore, createSupabaseDraftStore } from '../storage/assistantStores.js';
+import { createSupabaseRepository } from '../storage/supabaseRepository.js';
 import { createSearchEngine } from '../suppi/searchEngine.js';
 import { createToolExecutor } from '../suppi/toolRegistry.js';
 import { createDifyTurnRunner } from './difyOrchestrator.js';
-import { loadPublicAssistantData } from './dataSource.js';
 import { createAssistantService } from './service.js';
-import { AssistantError } from './difyClient.js';
 import { createAssistantProvider } from './provider.js';
 
-export function createAssistantRuntime({ env = process.env, fetchImpl = fetch } = {}) {
-  const conversationStore = createConversationStore({ model: SuppiConversation });
-  const draftStore = createDraftStore({ model: RequirementDraft });
+export function createAssistantRuntime({ env = process.env, fetchImpl = fetch, client = getSupabase(), repository = createSupabaseRepository({ client }) } = {}) {
+  const conversationStore = createSupabaseConversationStore({ client });
+  const draftStore = createSupabaseDraftStore({ client });
   const executeTool = async (name, args) => {
     // Draft ownership is supplied by the server, never the model or browser.
     if (name === 'create_requirement_draft') {
-      if (mongoose.connection.readyState !== 1) throw new AssistantError('DATABASE_UNAVAILABLE', 'Chưa lưu bản nháp vì database CCU chưa kết nối. Nội dung trao đổi vẫn được giữ trong phiên hiện tại.', 503);
       const conversation = await conversationStore.get(args.conversation_id);
       if (!conversation?.owner_id) throw new Error('Draft requires an owned conversation');
       return draftStore.create({ ...args, owner_id: conversation.owner_id });
     }
-    if (['search_products_services', 'search_programs', 'search_catalogues', 'search_public_requirements'].includes(name)) {
-      throw new AssistantError('SOURCE_NOT_CONNECTED', 'Nguồn dữ liệu này chưa được kết nối với trợ lý; chưa thể xác nhận kết quả.', 503);
-    }
-    const data = await loadPublicAssistantData({ connected: mongoose.connection.readyState === 1, models: {
-      suppliers: Enterprise, factories: Factory, industrialParks: IndustrialPark,
-      associations: { find: (filter, projection) => Organization.find({ ...filter, roles: 'ASSOCIATION' }, projection) }
-    } });
+    const sources = ['suppliers', 'factories', 'industrialParks', 'associations', 'productsServices', 'programs', 'catalogues', 'publicRequirements'];
+    const data = Object.fromEntries(await Promise.all(sources.map(async key => [key, await repository.all(key)])));
     return createToolExecutor({ searchEngine: createSearchEngine(data), draftStore })(name, args);
   };
   const provider = createAssistantProvider({ env, fetchImpl });

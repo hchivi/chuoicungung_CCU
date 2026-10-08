@@ -29,7 +29,7 @@ export function requireDatabase(client) {
   if (!client) throw new AssistantError('DATABASE_UNAVAILABLE', 'Backend chưa cấu hình Supabase bằng secret/service-role key.', 503);
 }
 
-export function createSupabaseRepository({ client, cacheMs = 60000 } = {}) {
+export function createSupabaseRepository({ client, cacheMs = 30 * 60 * 1000 } = {}) {
   const cache = new Map();
   const loading = new Map();
   const definition = collection => {
