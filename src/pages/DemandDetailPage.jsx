@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
@@ -31,7 +32,7 @@ export default function DemandDetailPage() {
   // Authenticated user state from session
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_user_session');
+      const saved = privateBrowserStorage.getItem('ccu_user_session');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return {

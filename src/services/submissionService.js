@@ -1,10 +1,14 @@
 const privateRecords = new Map();
+let accountGeneration = 0;
+export function clearPrivateSubmissions() { accountGeneration++; privateRecords.clear(); }
 export function getPrivateSubmissions(kind) { return privateRecords.get(kind) || []; }
 const project = record => ({ ...record.data, id: record.id, status: record.status === 'PENDING' ? 'SUBMITTED' : record.status, createdAt: record.created_at, persisted: true });
 export async function loadPrivateSubmissions() {
+  const generation = accountGeneration;
   const response = await fetch('/api/submissions', { credentials: 'same-origin' });
   const body = await response.json();
   if (!response.ok || !body.success || body.source !== 'supabase' || !Array.isArray(body.data)) throw new Error(body.error?.message || 'Chưa tải được biểu mẫu đã lưu.');
+  if (generation !== accountGeneration) return;
   privateRecords.clear();
   for (const record of body.data) {
     if (!privateRecords.has(record.kind)) privateRecords.set(record.kind, []);
@@ -12,6 +16,7 @@ export async function loadPrivateSubmissions() {
   }
 }
 export async function persistSubmission(kind, data) {
+  const generation = accountGeneration;
   // Identical retries must not create duplicate registrations after a lost ACK.
   const { id, createdAt, updatedAt, ...fields } = data;
   const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify([kind, fields])));
@@ -19,6 +24,7 @@ export async function persistSubmission(kind, data) {
   const response = await fetch(`/api/submissions/${kind}`, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'Idempotency-Key': key }, body: JSON.stringify({ data }) });
   const body = await response.json();
   if (!response.ok || !body.success || body.source !== 'supabase' || !body.data?.id || !body.data?.data || !body.data?.status) throw new Error(body.error?.message || 'Chưa lưu được dữ liệu. Vui lòng thử lại.');
+  if (generation !== accountGeneration) throw new Error('Tài khoản đã thay đổi trong lúc gửi. Mở lại phiên tài khoản đã gửi để kiểm tra kết quả.');
   const saved = project(body.data);
   privateRecords.set(kind, [saved, ...getPrivateSubmissions(kind).filter(row => row.id !== saved.id)]);
   return saved;

@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -12,6 +13,10 @@ import {
   Share2, LogIn, LogOut, Smartphone, Sparkle
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext.jsx';
+import { authAction } from '../services/authSession.js';
+import { persistSubmission } from '../services/submissionService.js';
+import AuthModal from '../components/auth/AuthModal.jsx';
 import DualMascotInteractive from '../components/DualMascotInteractive';
 import BrandLogo from '../components/BrandLogo';
 import {
@@ -573,13 +578,13 @@ function buildLiveSidebarRoleSections({ currentDraft, currentUser }) {
   let userSavedQuotes = [];
   let userActiveConnections = [];
   try {
-    userSubmittedDemands = JSON.parse(localStorage.getItem('ccu_submitted_demands') || '[]');
+    userSubmittedDemands = JSON.parse(privateBrowserStorage.getItem('ccu_submitted_demands') || '[]');
   } catch (e) {}
   try {
-    userSavedQuotes = JSON.parse(localStorage.getItem('ccu_saved_quotations') || '[]');
+    userSavedQuotes = JSON.parse(privateBrowserStorage.getItem('ccu_saved_quotations') || '[]');
   } catch (e) {}
   try {
-    userActiveConnections = JSON.parse(localStorage.getItem('ccu_active_connections') || '[]');
+    userActiveConnections = JSON.parse(privateBrowserStorage.getItem('ccu_active_connections') || '[]');
   } catch (e) {}
 
   // 1. NHÀ MÁY
@@ -860,26 +865,13 @@ export default function AiWorkspacePage() {
   const processedParamRef = useRef(false);
 
   // User & Auth State (Section VII & XIX: Guest by default, can log in or link Zalo)
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ccu_user_session');
-      if (saved) return JSON.parse(saved);
-    } catch (e) {}
-    return {
-      isLoggedIn: false, // Default Guest
-      name: 'Nguyễn Văn An',
-      orgName: 'Công ty Cổ phần Tân Á Packaging',
-      role: 'Nhà máy',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-      isZaloLinked: false,
-      zaloUid: null
-    };
-  });
+  const { identity } = useAuth();
+  const currentUser = useMemo(() => ({ isLoggedIn: !!identity, name: identity?.user.fullName || identity?.user.email || 'Khách', orgName: identity?.user.companyName || '', role: 'Doanh nghiệp', avatar: '', isZaloLinked: false, zaloUid: null }), [identity]);
 
   // Requirement Draft state (Section III, IV, V: Auto created and synced to localStorage)
   const [currentDraft, setCurrentDraft] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_requirement_draft');
+      const saved = privateBrowserStorage.getItem('ccu_requirement_draft');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return null;
@@ -888,7 +880,7 @@ export default function AiWorkspacePage() {
   // Flexible Conversation Entity Link (Section 9: Intent Router & Entity Linking)
   const [conversation, setConversation] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_active_conversation');
+      const saved = privateBrowserStorage.getItem('ccu_active_conversation');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return {
@@ -907,7 +899,6 @@ export default function AiWorkspacePage() {
   const [showDraftDrawer, setShowDraftDrawer] = useState(false);
   const [publishPrivacy, setPublishPrivacy] = useState('ONLY_MATCHED'); // Section VIII default: CHỈ NCC PHÙ HỢP
   const [toastMessage, setToastMessage] = useState(null);
-  const [loginPhone, setLoginPhone] = useState('');
   const [zaloPhone, setZaloPhone] = useState('');
 
   // Workspace Chat State
@@ -922,7 +913,7 @@ export default function AiWorkspacePage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeTab, setActiveTab] = useState('chat');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [chatHistory, setChatHistory] = useState(INITIAL_WORK_HISTORY);
+  const [chatHistory, setChatHistory] = useState([]);
   const [messages, setMessages] = useState([]);
 
   const messagesEndRef = useRef(null);
@@ -951,7 +942,7 @@ export default function AiWorkspacePage() {
     };
     setConversation(newConv);
     try {
-      localStorage.setItem('ccu_active_conversation', JSON.stringify(newConv));
+      privateBrowserStorage.setItem('ccu_active_conversation', JSON.stringify(newConv));
     } catch (e) {}
     setMessages([]);
     setInputPrompt('');
@@ -961,68 +952,28 @@ export default function AiWorkspacePage() {
   };
 
   // Login handler (Section VII)
-  const handleLoginSubmit = (e) => {
-    if (e) e.preventDefault();
-    const updated = {
-      ...currentUser,
-      isLoggedIn: true,
-      name: loginPhone ? `Doanh nghiệp (${loginPhone.slice(-4)})` : currentUser.name
-    };
-    setCurrentUser(updated);
-    localStorage.setItem('ccu_user_session', JSON.stringify(updated));
-    setShowLoginModal(false);
-    showToast("✓ Đăng nhập thành công! Phiên làm việc và bản nháp đã được lưu.");
-    // If pending a draft confirmation, immediately open confirmation modal without repeating data
-    if (currentDraft && currentDraft.status === 'DRAFT_AI') {
-      setTimeout(() => setShowConfirmModal(true), 300);
-    }
-  };
 
   // Logout / Switch back to Guest
-  const handleLogout = () => {
-    const guest = { ...currentUser, isLoggedIn: false, isZaloLinked: false };
-    setCurrentUser(guest);
-    localStorage.removeItem('ccu_user_session');
-    showToast("Đã chuyển về chế độ Khách (Guest).");
-  };
+  const handleLogout = () => authAction('logout').catch(error => showToast(error.message));
 
   // Link Zalo CRM (Section XII & XIII)
   const handleLinkZaloSubmit = (e) => {
     if (e) e.preventDefault();
-    const updated = {
-      ...currentUser,
-      isZaloLinked: true,
-      zaloUid: 'zalo_uid_' + Math.floor(100000 + Math.random() * 900000)
-    };
-    setCurrentUser(updated);
-    localStorage.setItem('ccu_user_session', JSON.stringify(updated));
     setShowZaloModal(false);
-    showToast("✓ Đã liên kết Zalo CRM thành công! Cập nhật từ CHAINY sẽ được gửi song song.");
+    showToast('Chưa tích hợp xác thực Zalo. Không có liên kết hoặc thông báo nào được tạo.');
   };
 
   // Confirm and Publish Draft (Section VIII)
-  const handleConfirmPublish = () => {
-    if (!currentDraft) return;
-    const updatedDraft = {
-      ...currentDraft,
-      status: 'CONFIRMED_SEARCHING',
-      visibility: publishPrivacy,
-      confirmed_at: new Date().toISOString()
-    };
-    setCurrentDraft(updatedDraft);
-    localStorage.setItem('ccu_requirement_draft', JSON.stringify(updatedDraft));
-    setShowConfirmModal(false);
-    showToast("✓ Đã xác nhận nhu cầu! SUPPI & CHAINY đang tiến hành tìm kiếm và điều phối kết nối.");
-
-    // Append system handoff event to chat
-    const handoffMsg = {
-      id: Date.now() + 20,
-      sender: 'system_event',
-      title: 'SUPPI_HANDOFF_CHAINY',
-      text: 'Nhu cầu đã được xác nhận. SUPPI đã bàn giao kết nối cho CHAINY điều phối thực thi pipeline 9 giai đoạn.',
-      timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-    };
-    setMessages(prev => [...prev, handoffMsg]);
+  const handleConfirmPublish = async () => {
+    if (!currentDraft || !currentUser.isLoggedIn) return;
+    try {
+      const saved = await persistSubmission('demand', { ...currentDraft, visibility: publishPrivacy });
+      const updatedDraft = { ...currentDraft, id: saved.id, status: saved.status, persisted: true };
+      setCurrentDraft(updatedDraft);
+      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(updatedDraft));
+      setShowConfirmModal(false);
+      showToast('Đã lưu nhu cầu trên Supabase, chờ điều phối viên rà soát. Chưa công bố hoặc gửi cho nhà cung ứng.');
+    } catch (error) { showToast(error.message); }
   };
 
   // Handle clicking "Xác nhận & Tìm nguồn" (Section VII & VIII)
@@ -1193,8 +1144,8 @@ export default function AiWorkspacePage() {
     if (conversation.entityType === 'need' || updated) {
       setCurrentDraft(updated);
       try {
-        localStorage.setItem('ccu_requirement_draft', JSON.stringify(updated));
-        localStorage.setItem('ccu_draft_' + updated.id, JSON.stringify(updated));
+        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(updated));
+        privateBrowserStorage.setItem('ccu_draft_' + updated.id, JSON.stringify(updated));
       } catch (e) {}
     }
 
@@ -1204,7 +1155,7 @@ export default function AiWorkspacePage() {
     };
     setConversation(updatedConv);
     try {
-      localStorage.setItem('ccu_active_conversation', JSON.stringify(updatedConv));
+      privateBrowserStorage.setItem('ccu_active_conversation', JSON.stringify(updatedConv));
     } catch (e) {}
 
     // Append user message & SUPPI acknowledgment
@@ -2221,7 +2172,7 @@ export default function AiWorkspacePage() {
       const response = await sendDifyMessage({ query });
       const nextConversation = { ...conversation, backendConversationId: response.conversation_id };
       setConversation(nextConversation);
-      try { localStorage.setItem('ccu_active_conversation', JSON.stringify(nextConversation)); } catch {}
+      try { privateBrowserStorage.setItem('ccu_active_conversation', JSON.stringify(nextConversation)); } catch {}
       const findings = (response.results || []).map(item => ({
         name: item.name, location: item.location || 'Chưa có địa bàn trong hồ sơ',
         matchRate: 'Theo tiêu chí', kyc: item.verification_status === 'VERIFIED' ? 'Có trạng thái xác minh' : 'Chưa xác minh',
@@ -2277,7 +2228,7 @@ export default function AiWorkspacePage() {
     let sourceMsgs = location.state?.transferredMessages;
     if (!sourceMsgs) {
       try {
-        const raw = localStorage.getItem('ccu_active_chat_messages');
+        const raw = privateBrowserStorage.getItem('ccu_active_chat_messages');
         if (raw) {
           sourceMsgs = JSON.parse(raw);
         }
@@ -3806,8 +3757,8 @@ export default function AiWorkspacePage() {
                     const u = { ...currentDraft, title: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                     setCurrentDraft(u);
                     try {
-                      localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                      localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                     } catch (err) {}
                   }}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3825,8 +3776,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, productService: e.target.value, product_service: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3841,8 +3792,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, category: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3861,8 +3812,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, quantity: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3877,8 +3828,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, location: e.target.value, province: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3897,8 +3848,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, deadline: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3913,8 +3864,8 @@ export default function AiWorkspacePage() {
                       const u = { ...currentDraft, budgetMin: e.target.value, budget_min: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                       setCurrentDraft(u);
                       try {
-                        localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                        localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                        privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                       } catch (err) {}
                     }}
                     className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc]"
@@ -3932,8 +3883,8 @@ export default function AiWorkspacePage() {
                     const u = { ...currentDraft, sampleRequired: e.target.checked, sample_required: e.target.checked, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                     setCurrentDraft(u);
                     try {
-                      localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                      localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                     } catch (err) {}
                   }}
                   className="rounded text-[#0052cc] focus:ring-0"
@@ -3953,8 +3904,8 @@ export default function AiWorkspacePage() {
                     const u = { ...currentDraft, specifications: e.target.value, notes: e.target.value, updatedAt: new Date().toISOString(), updated_at: new Date().toISOString() };
                     setCurrentDraft(u);
                     try {
-                      localStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
-                      localStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(u));
+                      privateBrowserStorage.setItem('ccu_draft_' + u.id, JSON.stringify(u));
                     } catch (err) {}
                   }}
                   className="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc] resize-none"
@@ -3995,72 +3946,7 @@ export default function AiWorkspacePage() {
       {/* ========================================================
           4. MODAL: LOGIN / LƯU NHU CẦU (Section VII)
       ======================================================== */}
-      {showLoginModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200 relative">
-            <button
-              type="button"
-              onClick={() => setShowLoginModal(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* Title & Copy from Section VII */}
-            <div className="space-y-2 text-center pt-2">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0052cc] mx-auto flex items-center justify-center shadow-inner">
-                <Lock className="w-6 h-6" />
-              </div>
-              <h2 className="text-base sm:text-lg font-black text-slate-900 font-heading uppercase">
-                LƯU NHU CẦU VÀ BẮT ĐẦU TÌM NGUỒN
-              </h2>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Đăng nhập để SUPPI lưu nhu cầu này, tìm nhà cung ứng phù hợp và để CHAINY theo dõi công việc đến kết quả.
-              </p>
-            </div>
-
-            {/* Preserved Data Note */}
-            <div className="p-3 rounded-2xl bg-amber-50/80 border border-amber-200 text-amber-900 text-xs font-medium text-center">
-              🔒 <strong>Yên tâm:</strong> Những thông tin bạn vừa trao đổi với SUPPI sẽ được giữ lại nguyên vẹn.
-            </div>
-
-            {/* Quick Login Form */}
-            <form onSubmit={handleLoginSubmit} className="space-y-3">
-              <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">
-                  Số điện thoại hoặc Email doanh nghiệp
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="0912 345 678 hoặc email@company.com"
-                  value={loginPhone}
-                  onChange={(e) => setLoginPhone(e.target.value)}
-                  className="w-full p-3 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0052cc] focus:ring-2 focus:ring-blue-100"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#0052cc] to-sky-600 hover:from-[#0041a8] hover:to-[#0052cc] text-white font-bold text-xs uppercase shadow-md shadow-blue-500/25 transition cursor-pointer"
-              >
-                ĐĂNG NHẬP NHANH
-              </button>
-            </form>
-
-            {/* Create account button */}
-            <div className="text-center pt-1 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={handleLoginSubmit}
-                className="text-xs font-bold text-[#0052cc] hover:underline cursor-pointer"
-              >
-                TẠO TÀI KHOẢN MIỄN PHÍ
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <AuthModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
 
       {/* ========================================================
           5. MODAL: PRE-PUBLISH CONFIRMATION (Section VIII)

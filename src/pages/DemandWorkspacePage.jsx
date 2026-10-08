@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -31,10 +32,10 @@ export default function DemandWorkspacePage() {
     const targetId = id || searchParams.get('id');
     try {
       if (targetId) {
-        const savedById = localStorage.getItem('ccu_draft_' + targetId);
+        const savedById = privateBrowserStorage.getItem('ccu_draft_' + targetId);
         if (savedById) return JSON.parse(savedById);
 
-        const listStr = localStorage.getItem('ccu_user_demands');
+        const listStr = privateBrowserStorage.getItem('ccu_user_demands');
         if (listStr) {
           const list = JSON.parse(listStr);
           const found = list.find(d => String(d.id) === String(targetId) || d.publicCode === targetId);
@@ -46,7 +47,7 @@ export default function DemandWorkspacePage() {
         if (foundMaster) return foundMaster;
       }
 
-      const latestDraft = localStorage.getItem('ccu_requirement_draft');
+      const latestDraft = privateBrowserStorage.getItem('ccu_requirement_draft');
       if (latestDraft) {
         const parsed = JSON.parse(latestDraft);
         if (!targetId || targetId.startsWith('REQ-') || parsed.id === targetId || parsed.publicCode === targetId) {

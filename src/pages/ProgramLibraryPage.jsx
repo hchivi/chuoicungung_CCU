@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import {
@@ -57,7 +58,7 @@ export default function ProgramLibraryPage() {
   // Simulated User Context (supports guest / participant / admin)
   const [userContext, setUserContext] = useState(() => {
     try {
-      const stored = localStorage.getItem('ccu_user_session_v1');
+      const stored = privateBrowserStorage.getItem('ccu_user_session_v1');
       if (stored) return JSON.parse(stored);
     } catch (e) {
       // safe ignore

@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../../services/privateBrowserStorage.js";
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -35,7 +36,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   // Khởi tạo và nạp lịch sử chat (từ localStorage nếu có)
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('ccu_active_chat_messages');
+      const saved = privateBrowserStorage.getItem('ccu_active_chat_messages');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -65,7 +66,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   useEffect(() => {
     if (messages.length > 0) {
       try {
-        localStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
+        privateBrowserStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
       } catch (e) {}
     }
   }, [messages]);
@@ -77,8 +78,8 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
   // Xử lý mở rộng sang trang Trợ lý AI toàn màn hình mà vẫn giữ nguyên đoạn chat
   const handleExpandToWorkspace = () => {
     try {
-      localStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
-      localStorage.setItem('ccu_active_chat_mode', mode);
+      privateBrowserStorage.setItem('ccu_active_chat_messages', JSON.stringify(messages));
+      privateBrowserStorage.setItem('ccu_active_chat_mode', mode);
     } catch (e) {}
     onClose?.();
     navigate('/tro-ly-ai', {

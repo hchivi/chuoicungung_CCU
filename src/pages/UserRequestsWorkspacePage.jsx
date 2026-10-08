@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
@@ -35,7 +36,7 @@ export default function UserRequestsWorkspacePage() {
   // Lấy thông tin phiên đăng nhập hiện tại
   const currentUser = React.useMemo(() => {
     try {
-      const saved = localStorage.getItem('ccu_user_session');
+      const saved = privateBrowserStorage.getItem('ccu_user_session');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return null;
