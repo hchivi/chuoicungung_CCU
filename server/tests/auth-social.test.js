@@ -1,0 +1,63 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+import { createSocialAuth } from '../auth/social.js';
+
+function fixture(external = { google: true, 'custom:zalo': true }) {
+  const calls = [], cookies = {}, cleared = [];
+  let now = 1000, fail = false;
+  const service = { acceptRecovery: async input => { calls.push(['verify', input]); return { session: { ...input, expires_in: 3600 }, identity: { user: { id: 'verified' }, role: null } }; }, claimAnonymous: async (...args) => calls.push(['claim', ...args]) };
+  const social = createSocialAuth({ service, config: { url: 'https://test.supabase.co', key: 'public-test-key', site: 'http://localhost:3000', secret: 'synthetic-server-secret', zaloProvider: 'custom:zalo' }, now: () => now, fetchImpl: async (url, options) => { calls.push([url, options]); if (fail) throw new Error('private diagnostic'); return new Response(JSON.stringify(url.includes('/settings') ? { external } : { access_token: 'verified-access', refresh_token: 'private-refresh' })); } });
+  const res = { cookie: (key, value, options) => { cookies[key] = { value, options }; }, clearCookie: key => cleared.push(key) };
+  return { social, res, calls, cookies, cleared, expire: () => { now += 700000; }, fail: () => { fail = true; } };
+}
+
+test('social auth exposes enabled flags only and fails closed for disabled or unknown providers', async () => {
+  const f = fixture({});
+  assert.deepEqual(await f.social.providers(), { google: false, zalo: false });
+  await assert.rejects(f.social.start({ provider: 'google' }, f.res), { code: 'OAUTH_NOT_CONFIGURED' });
+  await assert.rejects(f.social.start({ provider: 'attacker' }, f.res), { code: 'AUTH_VALIDATION' });
+  const failed = fixture(); failed.fail();
+  await assert.rejects(failed.social.providers(), { code: 'OAUTH_UNAVAILABLE' });
+});
+test('PKCE start binds callback to a signed expiring HttpOnly Lax cookie and local next path', async () => {
+  const f = fixture();
+  const result = await f.social.start({ provider: 'google', next: '//attacker.invalid', ownerId: 'ccu_' + 'a'.repeat(64) }, f.res);
+  const url = new URL(result.url), callback = new URL(url.searchParams.get('redirect_to'));
+  assert.equal(url.origin, 'https://test.supabase.co'); assert.equal(url.searchParams.get('provider'), 'google');
+  assert.equal(url.searchParams.get('code_challenge_method'), 's256'); assert.ok(url.searchParams.get('code_challenge'));
+  assert.equal(callback.pathname, '/api/auth/oauth/callback'); assert.ok(callback.searchParams.get('state'));
+  const cookie = f.cookies.ccu_oauth;
+  assert.equal(cookie.options.httpOnly, true); assert.equal(cookie.options.sameSite, 'lax'); assert.equal(cookie.options.maxAge, 600000);
+  assert.doesNotMatch(JSON.stringify(result), /private-refresh|code_verifier/);
+  const completed = await f.social.finish({ headers: { cookie: `ccu_oauth=${cookie.value}` }, query: { code: 'real-auth-code', state: callback.searchParams.get('state') } }, f.res);
+  assert.equal(completed.next, '/tai-khoan'); assert.equal(completed.identity.user.id, 'verified');
+  const token = f.calls.find(([url]) => typeof url === 'string' && url.includes('/token?'));
+  assert.equal(JSON.parse(token[1].body).auth_code, 'real-auth-code'); assert.ok(JSON.parse(token[1].body).code_verifier);
+  assert.ok(f.calls.some(([name]) => name === 'verify')); assert.ok(f.calls.some(([name]) => name === 'claim'));
+  assert.ok(f.cleared.includes('ccu_oauth'));
+});
+test('social callback rejects missing, tampered, expired, cancelled or mismatched state before exchanging tokens', async () => {
+  for (const variant of ['missing','tampered','expired','cancelled','state','code']) {
+    const f = fixture(); const result = await f.social.start({ provider: 'zalo', next: '/tai-khoan/nhu-cau' }, f.res);
+    const state = new URL(new URL(result.url).searchParams.get('redirect_to')).searchParams.get('state');
+    let cookie = f.cookies.ccu_oauth.value;
+    if (variant === 'tampered') cookie += 'bad'; if (variant === 'expired') f.expire();
+    await assert.rejects(f.social.finish({ headers: { cookie: variant === 'missing' ? '' : `ccu_oauth=${cookie}` }, query: { code: variant === 'code' ? '' : 'code', state: variant === 'state' ? 'forged' : state, ...(variant === 'cancelled' ? { error: 'denied' } : {}) } }, f.res), { code: 'OAUTH_CALLBACK_FAILED' });
+    assert.equal(f.calls.some(([url]) => typeof url === 'string' && url.includes('/token?')), false);
+  }
+});
+test('provider errors are safe and do not create authenticated cookies', async () => {
+  const f = fixture(); const start = await f.social.start({ provider: 'google', next: '/admin' }, f.res);
+  f.fail();
+  await assert.rejects(f.social.finish({ headers: { cookie: `ccu_oauth=${f.cookies.ccu_oauth.value}` }, query: { code: 'code', state: new URL(new URL(start.url).searchParams.get('redirect_to')).searchParams.get('state') } }, f.res), { code: 'OAUTH_UNAVAILABLE' });
+  assert.equal(f.calls.some(([name]) => name === 'verify'), false);
+});
+test('customer entry preserves original brand/tabs/social choices and keeps password management separate', async () => {
+  const form = await readFile(new URL('../../src/components/auth/AuthForm.jsx', import.meta.url), 'utf8');
+  const page = await readFile(new URL('../../src/pages/AuthPage.jsx', import.meta.url), 'utf8');
+  assert.match(form, /BrandLogo/); assert.match(form, /Đăng ký doanh nghiệp/); assert.match(form, /Zalo/); assert.match(form, /Google/);
+  assert.match(form, /oauth\/start/); assert.doesNotMatch(form, /setTimeout|alert\(|localStorage|Hạng Vàng|SSL 256/);
+  assert.match(page, /location.pathname === '\/tai-khoan'/);
+  assert.doesNotMatch(page, /mt-10 border-t pt-7/);
+});
