@@ -2,14 +2,16 @@ import { AssistantError } from '../assistants/difyClient.js';
 
 export const ENTITY_TABLES = Object.freeze({ suppliers: 'enterprises', factories: 'factories', industrialParks: 'industrial_parks', organizations: 'organizations', associations: 'organizations' });
 export const DOCUMENT_COLLECTIONS = new Set(['programs', 'catalogues', 'catalogueEditions', 'catalogueEntries', 'publicRequirements', 'productsServices', 'categories', 'categoriesAlphabetical', 'associationProfiles', 'programOrganizations', 'organizationMemberships', 'factoryProfiles', 'kcnOrganizations', 'supplyGaps']);
-const HIDDEN_KEYS = /^(phone|email|authorEmail|authorPhone|author_email|author_phone|contactPerson|contactName|contactEmail|contactPhone|representative|buyerInfo|ownerUserId|owner_id|internal.*|confidential.*|password|token|apiKey|secret|taxCode)$/i;
+const HIDDEN_KEYS = /^(.*(?:email|phone|password|token|apiKey|secret).*|hotline|zalo|fax|tel|mobile|contact|legalRepresentative|author_name|contactPerson|contactName|representative.*|buyerInfo|owner.*|senderName|requesterName|receiverName|responsibleUser.*|confirmedBy|reviewedBy|evidenceNotes|internal.*|confidential.*|tax[_-]?code)$/i;
+const isPrivate = record => record.publishable === false || record.isPublished === false || record.publicDisplay === false || ['PRIVATE', 'INTERNAL', 'ONLY_MATCHED', 'CHỈ NCC PHÙ HỢP'].includes(String(record.visibility).toUpperCase()) || ['DRAFT', 'ARCHIVED', 'REJECTED', 'PENDING'].includes(String(record.status).toUpperCase()) || ['REJECTED', 'PENDING'].includes(String(record.moderationStatus).toUpperCase());
 
 export function publicRecord(record) {
   if (!record || typeof record !== 'object') return null;
-  if (record.publishable === false || record.isPublished === false || ['PRIVATE', 'INTERNAL', 'ONLY_MATCHED', 'CHỈ NCC PHÙ HỢP'].includes(record.visibility) || ['DRAFT', 'ARCHIVED', 'REJECTED', 'PENDING', 'draft', 'pending', 'rejected'].includes(record.status) || ['REJECTED', 'PENDING'].includes(record.moderationStatus)) return null;
+  if (isPrivate(record)) return null;
   const clean = value => {
-    if (Array.isArray(value)) return value.map(clean);
+    if (Array.isArray(value)) return value.map(clean).filter(child => child !== null);
     if (!value || typeof value !== 'object') return value;
+    if (isPrivate(value)) return null;
     return Object.fromEntries(Object.entries(value).filter(([key]) => !HIDDEN_KEYS.test(key)).map(([key, child]) => [key, clean(child)]));
   };
   return clean(record);
@@ -29,7 +31,7 @@ export function requireDatabase(client) {
   if (!client) throw new AssistantError('DATABASE_UNAVAILABLE', 'Backend chưa cấu hình Supabase bằng secret/service-role key.', 503);
 }
 
-export function createSupabaseRepository({ client, cacheMs = 30 * 60 * 1000 } = {}) {
+export function createSupabaseRepository({ client, cacheMs = 6 * 60 * 60 * 1000 } = {}) {
   const cache = new Map();
   const loading = new Map();
   const definition = collection => {

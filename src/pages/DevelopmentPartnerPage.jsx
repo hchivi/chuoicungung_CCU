@@ -71,13 +71,13 @@ export default function DevelopmentPartnerPage() {
     formRef.current?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     document.getElementById('dp-applicantName')?.focus({ preventScroll: true });
   };
-  const handleSubmitForm = event => {
+  const handleSubmitForm = async event => {
     event.preventDefault(); setFormError('');
     if (![formData.applicantName, formData.contactPerson, formData.email, formData.phone, formData.targetAudienceDescription].every(value => value.trim())) { setFormError('Vui lòng điền đủ thông tin bắt buộc và mô tả mạng lưới doanh nghiệp.'); return; }
     if (!formData.cooperationTypes.length) { setFormError('Vui lòng chọn ít nhất một hình thức phối hợp.'); return; }
     if (!formData.consentAccepted) { setFormError('Vui lòng xác nhận nguyên tắc hợp tác trước khi gửi.'); return; }
     setFormSubmitting(true);
-    try { setSubmitSuccess(submitPartnerApplication(formData, { name: formData.contactPerson, role: 'APPLICANT' })); }
+    try { setSubmitSuccess(await submitPartnerApplication(formData, { name: formData.contactPerson, role: 'APPLICANT' })); }
     catch (error) { setFormError(error.message || 'Chưa lưu được hồ sơ. Vui lòng thử lại.'); }
     finally { setFormSubmitting(false); }
   };
@@ -166,8 +166,8 @@ export default function DevelopmentPartnerPage() {
     <section className="dp-section dp-working" aria-labelledby="dp-working-title"><SectionHeading title={<span id="dp-working-title">Hợp tác có cách làm rõ ràng.</span>}>Trao đổi trước. Thống nhất trách nhiệm. Theo dõi việc thực tế.</SectionHeading><ProcessStrip steps={STEPS} /><div className="dp-principles"><ShieldCheck size={24} aria-hidden="true" /><div><h3>Uy tín mạng lưới là điều cần giữ.</h3><p>Không thu mua danh bạ. Không tổ chức tuyển tuyến dưới. Quyền lợi hợp tác không ảnh hưởng kết quả matching, thứ hạng hay xác minh doanh nghiệp.</p></div></div></section>
     <section className="dp-section dp-apply" id="dp-apply" ref={formRef} aria-labelledby="dp-apply-title">
       <aside className="dp-apply-intro"><span className="ec-service-label">Bắt đầu bằng một cuộc trao đổi</span><h2 id="dp-apply-title">Mạng lưới của anh/chị<br />{' '}phù hợp với hình thức nào?</h2><p>Cho CCU biết nhóm doanh nghiệp và nhu cầu anh/chị có thể kết nối. Đây là đăng ký trao đổi, chưa phải phê duyệt đối tác.</p><Photo src="/images/ecosystem/association.jpg" alt="Minh họa các đại diện trao đổi về mạng lưới doanh nghiệp" /><p className="dp-privacy">Chỉ cung cấp thông tin cần thiết. Không đính kèm danh bạ khách hàng.</p></aside>
-      {submitSuccess ? <div className="dp-success" role="status" tabIndex={-1} ref={statusRef}><ShieldCheck size={32} aria-hidden="true" /><h3>Đã lưu hồ sơ đăng ký.</h3><p>Mã hồ sơ: <strong>{submitSuccess.id}</strong></p><p>Trạng thái: chờ xem xét. Chưa phải xác nhận phê duyệt hoặc thỏa thuận hợp tác.</p><p>Bản hiện tại lưu hồ sơ trên trình duyệt này. Chưa xác nhận chuyển hồ sơ tới CCU.</p><Action onClick={() => { setSubmitSuccess(null); setFormData(prev => ({ ...prev, consentAccepted: false })); }}>Gửi hồ sơ khác</Action></div> : <form className="dp-form" onSubmit={handleSubmitForm} aria-labelledby="dp-apply-title" aria-describedby="dp-form-note">
-        <p id="dp-form-note">Dấu * là thông tin bắt buộc. Bản hiện tại lưu trên trình duyệt, chưa xác nhận gửi tới CCU.</p>
+      {submitSuccess ? <div className="dp-success" role="status" tabIndex={-1} ref={statusRef}><ShieldCheck size={32} aria-hidden="true" /><h3>Đã lưu hồ sơ đăng ký.</h3><p>Mã hồ sơ: <strong>{submitSuccess.id}</strong></p><p>Trạng thái: chờ xem xét. Chưa phải xác nhận phê duyệt hoặc thỏa thuận hợp tác.</p><p>Hồ sơ đã lưu riêng tư trên hệ thống, chờ điều phối viên tiếp nhận.</p><Action onClick={() => { setSubmitSuccess(null); setFormData(prev => ({ ...prev, consentAccepted: false })); }}>Gửi hồ sơ khác</Action></div> : <form className="dp-form" onSubmit={handleSubmitForm} aria-labelledby="dp-apply-title" aria-describedby="dp-form-note">
+        <p id="dp-form-note">Dấu * là thông tin bắt buộc. Hồ sơ được lưu riêng tư trên hệ thống để chờ rà soát.</p>
         {formError && <p className="dp-error" role="alert" ref={statusRef} tabIndex={-1}>{formError}</p>}
         <fieldset><legend>Thông tin tổ chức & đầu mối</legend><div className="dp-field-grid">
           {field('applicantName', 'Tên tổ chức / cá nhân', { required: true, autoComplete: 'organization' })}
