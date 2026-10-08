@@ -21,6 +21,10 @@ test('Gemini uses server header credentials, business instructions, JSON plannin
   assert.doesNotMatch(sent.url, /test-only-key|key=/);
   assert.equal(sent.options.redirect, 'error');
   assert.equal(sent.body.generationConfig.responseMimeType, 'application/json');
+  const schema = sent.body.generationConfig.responseJsonSchema;
+  assert.equal(schema.properties.slots.additionalProperties, false);
+  assert.deepEqual(schema.properties.mode.enum, ['SUPPI', 'CHAINY']);
+  assert.equal(schema.properties.tool.anyOf[0].type, 'null');
   assert.match(sent.body.systemInstruction.parts[0].text, /SUPPI[\s\S]*CHAINY/);
   assert.match(sent.body.systemInstruction.parts[0].text, /chưa gửi|không gửi/);
   assert.match(sent.body.systemInstruction.parts[0].text, /không phải danh bạ/i);
