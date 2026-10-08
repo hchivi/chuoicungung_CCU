@@ -3,9 +3,8 @@ import { createSupabaseConversationStore, createSupabaseDraftStore } from '../st
 import { createSupabaseRepository } from '../storage/supabaseRepository.js';
 import { createSearchEngine } from '../suppi/searchEngine.js';
 import { createToolExecutor } from '../suppi/toolRegistry.js';
-import { createDifyTurnRunner } from './difyOrchestrator.js';
+import { createModelRoutedTurn } from './modelRouting.js';
 import { createAssistantService } from './service.js';
-import { createAssistantProvider } from './provider.js';
 
 export function createAssistantRuntime({ env = process.env, fetchImpl = fetch, client = getSupabase(), repository = createSupabaseRepository({ client }) } = {}) {
   const conversationStore = createSupabaseConversationStore({ client });
@@ -21,9 +20,5 @@ export function createAssistantRuntime({ env = process.env, fetchImpl = fetch, c
     const data = Object.fromEntries(await Promise.all(sources.map(async key => [key, await repository.all(key)])));
     return createToolExecutor({ searchEngine: createSearchEngine(data), draftStore })(name, args);
   };
-  const provider = createAssistantProvider({ env, fetchImpl });
-  return createAssistantService({ conversationStore, difyTurn: createDifyTurnRunner({
-    dify: provider.client, executeTool, engine: provider.provider, model: provider.model,
-    skipReplyWhenNoTool: provider.provider === 'gemini'
-  }) });
+  return createAssistantService({ conversationStore, difyTurn: createModelRoutedTurn({ env, fetchImpl, executeTool }) });
 }

@@ -32,7 +32,7 @@ export function createAssistantService({ suppi, conversationStore, dify = null, 
           if (turn.searched) conversation.latest_results = turn.results;
           const now = new Date().toISOString();
           conversation.messages = [...(conversation.messages || []), { role: 'user', content: query.trim(), created_at: now }, { role: 'assistant', content: turn.answer, created_at: now }].slice(-40);
-          result = { answer: turn.answer, results: turn.results, draft: turn.draft, engine: turn.engine, model: turn.model, model_verified: turn.model_verified, retrieval: turn.retrieval };
+          result = { answer: turn.answer, results: turn.results, draft: turn.draft, engine: turn.engine, model: turn.model, model_verified: turn.model_verified, retrieval: turn.retrieval, model_routing: turn.modelRouting };
         } else if (selectedMode === 'SUPPI') {
           const turn = await suppi.sendMessage(id, query.trim());
           conversation = turn.conversation;
@@ -64,7 +64,7 @@ export function createAssistantService({ suppi, conversationStore, dify = null, 
         }
         conversation.assistant_mode = selectedMode;
         await conversationStore.save(conversation);
-        return { ...result, mode: selectedMode, conversation_id: id, slots: conversation.slots || {}, actions_executed: [], metadata: { engine: result.engine, model_verified: Boolean(result.model_verified), ...(result.model ? { configured_model: result.model } : {}) } };
+        return { ...result, mode: selectedMode, conversation_id: id, slots: conversation.slots || {}, actions_executed: [], metadata: { engine: result.engine, model_verified: Boolean(result.model_verified), ...(result.model ? { configured_model: result.model } : {}), ...(result.model_routing ? { model_routing: result.model_routing } : {}) } };
       } finally { active.delete(id); }
     }
   };

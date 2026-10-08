@@ -24,6 +24,7 @@ export function createAssistantRouter({ service = null, repository = createSupab
       suppi: config.configured ? `${config.provider}-configured` : 'not-configured',
       chainy: config.configured ? `${config.provider}-configured` : 'not-configured',
       provider: config.provider, configured_model: config.model, model_verified: false,
+      model_routing: config.routing,
       // Configuration is not a successful inference or a billing-tier check.
       model_verification: 'check_chat_response_metadata', billing_tier: 'not_verified',
       live_sources: connected ? ['suppliers', 'factories', 'industrialParks', 'associations', 'productsServices', 'programs', 'catalogues', 'publicRequirements'] : [],
