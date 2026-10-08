@@ -24,6 +24,7 @@ test('model configuration exposes both tiers without credentials and preserves l
   assert.equal(config.routing.complex_model, env.GEMINI_COMPLEX_MODEL);
   assert.equal(JSON.stringify(config).includes('test-only'), false);
   assert.equal(getAssistantConfiguration({ GEMINI_API_KEY: 'test', GEMINI_MODEL: 'custom-lite' }).routing.simple_model, 'custom-lite');
+  assert.equal(getAssistantConfiguration({ GEMINI_API_KEY: 'test' }).routing.complex_model, 'gemini-3.5-flash');
 });
 
 test('SUPPI and CHAINY switch models on one conversation with shared history, one call for no-tool turns', async () => {
