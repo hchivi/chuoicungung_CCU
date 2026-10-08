@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createSupabaseRepository, publicRecord } from '../storage/supabaseRepository.js';
 import { createSupabaseConversationStore, createSupabaseDraftStore } from '../storage/assistantStores.js';
+import { createSubmissionStore } from '../storage/submissionStore.js';
 
 function fakeClient(seed = {}) {
   const tables = structuredClone(seed);
@@ -107,4 +108,22 @@ test('draft persistence enforces owner, draft-only status, safe updates and dete
   assert.equal(updated.status, 'DRAFT');
   assert.equal(updated.owner_id, 'owner-a');
   await assert.rejects(second.get(draft.id), { code: 'SESSION_REQUIRED' });
+});
+
+test('private form submissions persist only after database acknowledgement, cannot self-approve or read other owners', async () => {
+  const client = fakeClient();
+  const store = createSubmissionStore({ client });
+  const input = { kind: 'programInterest', ownerId: 'a', idempotencyKey: 'k', data: { name: 'Synthetic', email: 'test@example.invalid', programId: 'p1', status: 'APPROVED', owner_id: 'b', paymentStatus: 'PAID' } };
+  const first = await store.create(input);
+  assert.equal(first.status, 'PENDING');
+  assert.equal(first.data.status, undefined);
+  assert.equal(first.data.paymentStatus, undefined);
+  assert.equal(first.owner_id, 'a');
+  assert.equal((await createSubmissionStore({ client }).create(input)).id, first.id);
+  assert.equal((await store.list({ ownerId: 'b' })).length, 0);
+  assert.equal((await store.list({ ownerId: 'a' })).length, 1);
+  await assert.rejects(store.create({ ...input, kind: 'adminApproval' }), { code: 'INVALID_SUBMISSION' });
+  await assert.rejects(store.create({ ...input, ownerId: '' }), { code: 'SESSION_REQUIRED' });
+  client.fail({ message: 'database down' });
+  await assert.rejects(store.create(input), { code: 'DATABASE_UNAVAILABLE' });
 });
