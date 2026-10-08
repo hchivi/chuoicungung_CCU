@@ -78,7 +78,9 @@ test('schema keeps roles/audit private, checks roles again in transactional RPCs
   const fs = await import('node:fs/promises'); const sql = await fs.readFile(new URL('../migrations/20261008_auth_admin.sql', import.meta.url), 'utf8');
   assert.match(sql, /ENABLE ROW LEVEL SECURITY/); assert.match(sql, /REVOKE ALL[\s\S]*anon, authenticated/);
   assert.match(sql, /FOR UPDATE/); assert.match(sql, /ccu_staff_roles/); assert.doesNotMatch(sql, /INSERT INTO public\.ccu_staff_roles/i);
-  assert.match(sql, /ccu_claim_anonymous[\s\S]*?SECURITY DEFINER SET search_path = ''/);
+  const claim = sql.split('CREATE OR REPLACE FUNCTION public.ccu_claim_anonymous')[1].split('END $$;')[0];
+  assert.match(claim, /SECURITY INVOKER SET search_path = ''/);
+  assert.doesNotMatch(claim, /FROM auth\.users/);
 });
 test('expired access with a refresh cookie cannot silently become an anonymous account', async () => {
   const f = fixture();

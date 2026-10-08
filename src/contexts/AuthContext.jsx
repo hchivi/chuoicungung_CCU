@@ -10,6 +10,6 @@ export function AuthProvider({ children }) {
     window.addEventListener('focus', refresh);
     return () => { clearInterval(timer); window.removeEventListener('focus', refresh); };
   }, []);
-  return <AuthContext.Provider value={session}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={session}><React.Fragment key={session.identity?.user.id || 'guest'}>{children}</React.Fragment></AuthContext.Provider>;
 }
 export function useAuth() { const value = useContext(AuthContext); if (!value) throw new Error('AuthProvider is required'); return value; }

@@ -37,9 +37,11 @@ BEGIN
 END $$;
 
 CREATE OR REPLACE FUNCTION public.ccu_claim_anonymous(p_old_owner text, p_user uuid)
+-- Backend verifies the confirmed account through Auth.getUser before this RPC.
+-- service_role cannot SELECT auth.users; keep SQL invoker privileges unchanged.
 RETURNS void LANGUAGE plpgsql SECURITY INVOKER SET search_path = '' AS $$
 BEGIN
-  IF p_old_owner !~ '^ccu_[0-9a-f]{64}$' OR NOT EXISTS (SELECT 1 FROM auth.users WHERE id=p_user AND email_confirmed_at IS NOT NULL) THEN
+  IF p_old_owner IS NULL OR p_user IS NULL OR p_old_owner !~ '^ccu_[0-9a-f]{64}$' THEN
     RAISE EXCEPTION USING ERRCODE='22023', MESSAGE='Invalid owner claim';
   END IF;
   UPDATE public.ccu_submissions SET owner_id='auth:'||p_user::text WHERE owner_id=p_old_owner;

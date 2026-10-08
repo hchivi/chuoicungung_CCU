@@ -1,8 +1,9 @@
 import { clearPrivateSubmissions, loadPrivateSubmissions } from './submissionService.js';
+import { setBrowserAccount } from './privateBrowserStorage.js';
 let snapshot = { identity: null, loading: true, error: '' };
 let refreshing;
 const listeners = new Set();
-const emit = value => { snapshot = { ...snapshot, ...value }; for (const listener of listeners) listener(); };
+const emit = value => { snapshot = { ...snapshot, ...value }; setBrowserAccount(snapshot.identity); for (const listener of listeners) listener(); };
 export const authSnapshot = () => snapshot;
 export const subscribeAuth = listener => { listeners.add(listener); return () => listeners.delete(listener); };
 async function request(url, options = {}) {
