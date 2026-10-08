@@ -41,3 +41,20 @@ test('a pending private read cannot repopulate cache after account changes', asy
     await pending; assert.equal(getPrivateSubmissions('demand').length, 0);
   } finally { globalThis.fetch = original; }
 });
+test('legacy private browser storage is account-scoped and cannot manufacture login or admin rights', async () => {
+  const original = globalThis.localStorage;
+  const values = new Map();
+  globalThis.localStorage = {getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,value),removeItem:key=>values.delete(key)};
+  try {
+    const { privateBrowserStorage: storage, setBrowserAccount } = await import('../../src/services/privateBrowserStorage.js');
+    setBrowserAccount({user:{id:'account-a',email:'a@example.invalid'},role:null});
+    storage.setItem('ccu_active_chat_messages','private A');
+    storage.setItem('ccu_user_session',JSON.stringify({isLoggedIn:true,isAdmin:true}));
+    assert.equal(JSON.parse(storage.getItem('ccu_user_session')).isAdmin,false);
+    setBrowserAccount({user:{id:'account-b',email:'b@example.invalid'},role:null});
+    assert.equal(storage.getItem('ccu_active_chat_messages'),null);
+    setBrowserAccount(null); assert.equal(storage.getItem('ccu_user_session'),null);
+    setBrowserAccount({user:{id:'account-a',email:'a@example.invalid'},role:null});
+    assert.equal(storage.getItem('ccu_active_chat_messages'),'private A');
+  } finally { globalThis.localStorage=original; }
+});
