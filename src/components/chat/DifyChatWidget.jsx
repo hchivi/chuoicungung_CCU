@@ -333,6 +333,9 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         <div ref={messagesEndRef} />
       </div>
 
+      <p className="px-3 pt-2 text-[10px] leading-relaxed text-slate-500">
+        Nội dung chat được gửi tới nhà cung cấp AI. Không gửi mật khẩu, bản vẽ, báo giá hoặc dữ liệu cá nhân nhạy cảm.
+      </p>
       {/* 3. FOOTER INPUT BOX */}
       <form
         onSubmit={(e) => {
@@ -345,12 +348,14 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
           type="text"
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
-          placeholder="Nhập nhu cầu tìm nguồn, nhà xưởng, sản phẩm hoặc điều phối Zalo..."
+          placeholder="Nhập nhu cầu tìm nguồn hoặc soạn nội dung kết nối..."
+          aria-label="Tin nhắn cho SUPPI và CHAINY"
           className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-black placeholder:text-slate-400 focus:outline-none focus:border-[#0052cc] focus:bg-white transition"
         />
 
         <button
           type="submit"
+          aria-label="Gửi tin nhắn cho trợ lý"
           disabled={!inputQuery.trim() || isLoading}
           className={`p-2.5 rounded-xl text-white font-bold transition flex items-center justify-center shrink-0 cursor-pointer ${
             inputQuery.trim() && !isLoading

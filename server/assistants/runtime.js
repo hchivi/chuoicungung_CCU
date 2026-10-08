@@ -12,9 +12,10 @@ import { createToolExecutor } from '../suppi/toolRegistry.js';
 import { createDifyTurnRunner } from './difyOrchestrator.js';
 import { loadPublicAssistantData } from './dataSource.js';
 import { createAssistantService } from './service.js';
-import { createDifyClient, AssistantError } from './difyClient.js';
+import { AssistantError } from './difyClient.js';
+import { createAssistantProvider } from './provider.js';
 
-export function createAssistantRuntime() {
+export function createAssistantRuntime({ env = process.env, fetchImpl = fetch } = {}) {
   const conversationStore = createConversationStore({ model: SuppiConversation });
   const draftStore = createDraftStore({ model: RequirementDraft });
   const executeTool = async (name, args) => {
@@ -34,6 +35,9 @@ export function createAssistantRuntime() {
     } });
     return createToolExecutor({ searchEngine: createSearchEngine(data), draftStore })(name, args);
   };
-  const dify = createDifyClient({ apiKey: process.env.DIFY_API_KEY, baseUrl: process.env.DIFY_API_URL || 'https://api.dify.ai/v1' });
-  return createAssistantService({ conversationStore, difyTurn: createDifyTurnRunner({ dify, executeTool }) });
+  const provider = createAssistantProvider({ env, fetchImpl });
+  return createAssistantService({ conversationStore, difyTurn: createDifyTurnRunner({
+    dify: provider.client, executeTool, engine: provider.provider, model: provider.model,
+    skipReplyWhenNoTool: provider.provider === 'gemini'
+  }) });
 }

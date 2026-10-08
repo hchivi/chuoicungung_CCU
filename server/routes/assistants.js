@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { createAssistantRuntime } from '../assistants/runtime.js';
 import { createAssistantSession } from '../assistants/session.js';
+import { getAssistantConfiguration } from '../assistants/provider.js';
 
 export function createAssistantRouter({ service = null } = {}) {
   const router = express.Router();
@@ -12,15 +13,20 @@ export function createAssistantRouter({ service = null } = {}) {
     res.setHeader('Cache-Control', 'no-store');
     next();
   });
-  router.get('/status', (_req, res) => res.json({ success: true, data: {
-    database: mongoose.connection.readyState === 1 ? 'connected' : 'unavailable',
-    suppi: process.env.DIFY_API_KEY ? 'dify-configured' : 'not-configured',
-    chainy: process.env.DIFY_API_KEY ? 'dify-configured' : 'not-configured',
-    provider: 'dify', configured_model: 'gemini-3.8-flash', model_verified: false,
-    live_sources: ['suppliers', 'factories', 'industrialParks', 'associations'],
-    pending_sources: ['productsServices', 'programs', 'catalogues', 'publicRequirements'],
-    write_actions: ['create_requirement_draft'], external_actions: []
-  } }));
+  router.get('/status', (_req, res) => {
+    const config = getAssistantConfiguration();
+    return res.json({ success: true, data: {
+      database: mongoose.connection.readyState === 1 ? 'connected' : 'unavailable',
+      suppi: config.configured ? `${config.provider}-configured` : 'not-configured',
+      chainy: config.configured ? `${config.provider}-configured` : 'not-configured',
+      provider: config.provider, configured_model: config.model, model_verified: false,
+      // Configuration is not a successful inference or a billing-tier check.
+      model_verification: 'check_chat_response_metadata', billing_tier: 'not_verified',
+      live_sources: ['suppliers', 'factories', 'industrialParks', 'associations'],
+      pending_sources: ['productsServices', 'programs', 'catalogues', 'publicRequirements'],
+      write_actions: ['create_requirement_draft'], external_actions: []
+    } });
+  });
   router.use(createAssistantSession());
   router.post('/chat', async (req, res, next) => {
     try {

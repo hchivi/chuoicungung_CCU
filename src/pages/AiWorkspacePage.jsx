@@ -2233,7 +2233,7 @@ export default function AiWorkspacePage() {
         id: Date.now() + 1, sender: 'ai', intent: 'GENERAL_QUESTION',
         draft: response.draft || null, entityType: response.draft ? 'need' : null, entityId: response.draft?.id || null,
         suppi: { name: 'SUPPI', role: 'Tìm nguồn có căn cứ', message: response.mode === 'SUPPI' ? response.answer : 'Ngữ cảnh tìm nguồn được giữ trong cuộc trao đổi; chưa thực hiện hành động kết nối bên ngoài.',
-          isLiveAi: response.engine === 'openai' || response.engine === 'dify', findings },
+          isLiveAi: ['openai', 'dify', 'gemini'].includes(response.engine), findings },
         chainy: { name: 'CHAINY', role: 'Chuẩn bị kết nối — chưa thực thi', actions: response.mode === 'CHAINY' ? [{ title: 'Nội dung CHAINY', desc: response.answer }] : [] },
         conversation: nextConversation,
         timestamp: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
@@ -2743,6 +2743,7 @@ export default function AiWorkspacePage() {
                         onChange={(e) => setInputPrompt(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder="Hãy mô tả nhu cầu, năng lực hoặc công việc bạn đang muốn giải quyết..."
+                        aria-label="Tin nhắn cho SUPPI và CHAINY"
                         className="w-full bg-transparent resize-none border-0 focus:outline-none text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 leading-relaxed"
                       />
 
@@ -2789,6 +2790,9 @@ export default function AiWorkspacePage() {
                   </div>
                 </div>
 
+                <p className="max-w-3xl mx-auto text-[11px] leading-relaxed text-slate-500">
+                  Nội dung chat được gửi tới nhà cung cấp AI. Không gửi mật khẩu, bản vẽ, báo giá hoặc dữ liệu cá nhân nhạy cảm.
+                </p>
                 {/* 5. LỰA CHỌN VAI TRÒ (ROLE SELECTOR CHIPS) */}
                 <div className="space-y-2 pt-1 max-w-3xl mx-auto">
                   <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 font-heading">
@@ -3529,7 +3533,7 @@ export default function AiWorkspacePage() {
                               </div>
                               <p className="text-[11px] text-slate-500">
                                 {msg.intent === 'GENERAL_QUESTION'
-                                  ? "Trợ lý AI Điều phối & Đôn đốc công việc — Bấm các tác vụ bên dưới để thử nghiệm Intent Router:"
+                                  ? "Giúp chuẩn bị nội dung và việc cần làm tiếp theo. Chưa gửi tin hoặc thiết lập lịch/nhắc tự động."
                                   : "Tôi tiếp nhận kết nối này và theo dõi các bước thực thi đến cùng:"}
                               </p>
                             </div>

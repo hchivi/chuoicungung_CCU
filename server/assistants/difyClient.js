@@ -24,7 +24,7 @@ export function createDifyClient({ apiKey, baseUrl = 'https://api.dify.ai/v1', t
       });
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('[Dify API Error]:', response.status, errorText);
+        console.warn('[Dify API Error]: HTTP', response.status);
         let errorMsg = 'Dify chưa xử lý được yêu cầu. Vui lòng kiểm tra kết nối hoặc hạn mức.';
         try {
           const errJson = JSON.parse(errorText);

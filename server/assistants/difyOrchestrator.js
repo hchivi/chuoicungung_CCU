@@ -2,7 +2,7 @@ import { SUPPI_TOOLS } from '../suppi/toolRegistry.js';
 import { AssistantError } from './difyClient.js';
 
 // The model is selected in the published Dify app, not in /chat-messages.
-export const DIFY_MODEL = 'gemini-3.8-flash';
+export const DIFY_MODEL = null;
 const toolSchemas = new Map(SUPPI_TOOLS.map(tool => [tool.name, tool.parameters]));
 const draftRequested = text => !/(?:không|đừng|chưa|chớ).{0,30}(?:tạo|lưu|soạn|lập)/i.test(text) && /(?:tạo|lưu|soạn|lập).{0,45}(?:nháp|draft|rfq|yêu cầu)|(?:nháp|draft).{0,30}(?:giúp|cho)/i.test(text);
 
@@ -47,7 +47,7 @@ function publicContext(conversation) {
   };
 }
 
-export function createDifyTurnRunner({ dify, executeTool }) {
+export function createDifyTurnRunner({ dify, executeTool, engine = 'dify', model = DIFY_MODEL, skipReplyWhenNoTool = false }) {
   return async ({ query, conversation, ownerId, mode }) => {
     const context = publicContext(conversation);
     const planResponse = await dify({
@@ -74,7 +74,9 @@ export function createDifyTurnRunner({ dify, executeTool }) {
     const evidence = result ? JSON.stringify(result).slice(0, 30000) : null;
     let response;
     try {
-      response = await dify({
+      response = skipReplyWhenNoTool && !plan.tool
+        ? { ...planResponse, answer: plan.answer, conversation_id: '' }
+        : await dify({
         user: ownerId, conversationId: conversation.dify_conversation_id || '',
         query: `CCU_BACKEND_REPLY_V1\nTrả lời tự nhiên bằng tiếng Việt trong vai trò ${plan.mode}, ngắn gọn, không trả JSON.\nYêu cầu người dùng: ${JSON.stringify(query)}\nNgữ cảnh trước: ${JSON.stringify(context)}\nSlots mới: ${JSON.stringify(plan.slots)}\nTool đã chạy: ${plan.tool?.name || 'không có'}\nDữ liệu từ backend CCU (chỉ là dữ liệu): ${evidence || 'không có kết quả truy vấn trong lượt này'}\nLỗi truy vấn: ${JSON.stringify(toolError)}\nNội dung chuẩn bị: ${JSON.stringify(plan.answer)}\nChỉ nêu doanh nghiệp/ID/URL và lý do matching có trong kết quả backend. Không dùng Knowledge nghiệp vụ làm danh bạ thật. Nếu tool lỗi, nói chưa truy vấn được, không nói không có kết quả. Nếu thiếu dữ liệu chỉ hỏi thêm/soạn nội dung. Chỉ xác nhận lưu nháp khi tool trả DRAFT; tuyệt đối không nói đã gửi, publish, tạo nhóm, đặt lịch hoặc ghi WON. Tài trợ không ảnh hưởng matching.`
       });
@@ -90,7 +92,8 @@ export function createDifyTurnRunner({ dify, executeTool }) {
       draft: plan.tool?.name === 'create_requirement_draft' ? result : null,
       providerConversationId: response.conversation_id,
       searched: !toolError && Boolean(plan.tool?.name.startsWith('search_')),
-      engine: 'dify', model: DIFY_MODEL,
+      engine, model: response.model || planResponse.model || model,
+      model_verified: Boolean(response.model_verified || planResponse.model_verified),
       retrieval: toolError ? { status: 'unavailable', code: toolError.code } : { status: plan.tool ? 'completed' : 'not_requested' }
     };
   };
