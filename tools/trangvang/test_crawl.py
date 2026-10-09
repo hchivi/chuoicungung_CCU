@@ -123,6 +123,16 @@ class CrawlTests(unittest.TestCase):
             self.assertEqual(report['jobs'], {'pending': 1})
             self.assertEqual((pathlib.Path(directory) / 'suppliers.jsonl').stat().st_mode & 0o777, 0o600)
 
+    def test_export_only_does_not_add_a_new_index_job_to_a_category_pilot(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory)
+            db = crawl.Queue(path / 'queue.sqlite')
+            db.add(crawl.ORIGIN + '/categories/12/a.html', 'category')
+            db.close()
+            args = types.SimpleNamespace(output=directory, start=crawl.ORIGIN + '/findex', export_only=True)
+            result = asyncio.run(crawl.run(args))
+            self.assertEqual(result['jobs'], {'pending': 1})
+
 
 if __name__ == '__main__':
     unittest.main()

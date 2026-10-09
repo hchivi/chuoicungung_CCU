@@ -73,8 +73,15 @@ test('apply writes durable backup before any mutation; rechecks concurrency and 
 
 test('Postgres JSONB key reordering is not a conflict or invalid ACK', async () => {
   const plan = implementation.planSupplierImport([source()], [existing()]);
-  const reorder = value => JSON.parse(JSON.stringify(value, Object.keys(value).sort()));
   const current = { ...existing(), data: Object.fromEntries(Object.entries(existing().data).reverse()) };
   const saved = { ...plan[0].after, data: Object.fromEntries(Object.entries(plan[0].after.data).reverse()) };
   assert.equal((await implementation.applySupplierPlan(plan, { read: async () => current, backup: async () => {}, write: async () => saved, receipt: async () => {} })).applied, 1);
+});
+
+test('source descriptions cannot leak contacts through a public text field', () => {
+  const [item] = implementation.planSupplierImport([source({ description: 'Gọi 0000000000 hoặc sample@example.invalid để trao đổi.' })], [existing()]);
+  const published = JSON.stringify(publicRecord(item.after.data));
+  assert.ok(!published.includes('sample@example.invalid'));
+  assert.ok(!published.includes('0000000000'));
+  assert.ok(item.after.data.contact.sourceDescription.includes('sample@example.invalid'));
 });
