@@ -93,4 +93,5 @@ test('enrichment retains branch details and captions, and places real source pho
   assert.equal(item.after.data.gallery[0], source().images[0]);
   assert.ok(item.after.data.gallery.includes('https://example.invalid/legacy.jpg'));
   assert.equal(item.after.data.imageAssets[0].caption, 'Sản phẩm mẫu');
+  assert.equal(item.after.data.images[0], source().images[0]);
 });
