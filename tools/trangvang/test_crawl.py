@@ -133,6 +133,40 @@ class CrawlTests(unittest.TestCase):
             result = asyncio.run(crawl.run(args))
             self.assertEqual(result['jobs'], {'pending': 1})
 
+    def test_current_listing_markup_scopes_contacts_and_extracts_profile_and_gallery(self):
+        html = '''<header><a href="tel:9999999999">Platform</a></header>
+        <div class="listing_trai"><div class="tvxl-hero"><div class="tvxl-logo"><img src="https://logo.trangvangvietnam.com/company.gif"></div>
+        <div class="tvxl-main"><h1>Công ty mẫu</h1><div class="tvxl-row"><i class="fa-location-dot"></i><div>Đường mẫu, <span>Hà Nội</span>, Việt Nam</div></div>
+        <div class="tvxl-row"><i class="fa-map-location-dot"></i><div><b>Chi nhánh:</b> Chi nhánh mẫu<br><b>Địa chỉ theo MST:</b> Trụ sở mẫu</div></div>
+        <a href="tel:0000000000">Gọi</a><div class="tvxl-acts"><a class="tvxl-act" href="https://supplier.example.invalid">Website</a></div></div></div>
+        <div class="tvxb-fact"><div class="k">Loại hình kinh doanh</div><div class="v">Sản xuất</div></div>
+        <div class="tvxb-fact"><div class="k">Thị trường chính</div><div class="v">Toàn quốc</div></div>
+        <div class="tvxb-fact"><div class="k">Khách hàng chính</div><div class="v">Nhà máy</div></div>
+        <div id="section1"><h2>Giới thiệu công ty</h2><div class="gioithieucongty_img">Mô tả năng lực thực tế</div></div>
+        <div id="section3"><div class="tvxg-img"><img src="https://pic.trangvangvietnam.com/company/photo.jpg" alt="Sản phẩm"></div></div>
+        <div id="section4"><div class="tvxf-r"><div class="tvxf-k">Mã số thuế</div><div class="tvxf-v">0100000000</div></div>
+        <div class="tvxf-r"><div class="tvxf-k">Năm thành lập</div><div class="tvxf-v">2017</div></div>
+        <div class="tvxf-r"><div class="tvxf-k">Số lượng nhân viên</div><div class="tvxf-v">11–50</div></div></div></div>
+        <div class="listing_phai"><div class="tvxc"><a href="tel:0000000001">Miền Nam</a><a href="mailto:sample@example.invalid">Email</a></div>
+        <div class="tvx-reg"><a href="tel:9999999998">Platform sales</a></div></div>
+        <div class="tvx-foot"><a href="mailto:platform@example.invalid">Platform footer</a></div>'''
+        row = crawl.parse_page(crawl.ORIGIN + '/listings/123456789/a.html', html)['supplier']
+        self.assertEqual(row['phones'], ['0000000000', '0000000001'])
+        self.assertEqual(row['emails'], ['sample@example.invalid'])
+        self.assertEqual(row['websites'], ['https://supplier.example.invalid'])
+        self.assertEqual(row['images'], ['https://pic.trangvangvietnam.com/company/photo.jpg'])
+        self.assertEqual(row['logo'], 'https://logo.trangvangvietnam.com/company.gif')
+        self.assertIn('Đường mẫu', row['address'])
+        self.assertEqual(row['province'], 'Hà Nội')
+        self.assertEqual(row['taxCode'], '0100000000')
+        self.assertEqual(row['establishedYear'], '2017')
+        self.assertEqual(row['employees'], '11–50')
+        self.assertEqual(row['businessType'], 'Sản xuất')
+        self.assertEqual(row['mainMarkets'], 'Toàn quốc')
+        self.assertEqual(row['mainCustomers'], 'Nhà máy')
+        self.assertEqual(row['description'], 'Mô tả năng lực thực tế')
+        self.assertIn('Chi nhánh mẫu', row['branches'])
+
 
 if __name__ == '__main__':
     unittest.main()
