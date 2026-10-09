@@ -64,6 +64,7 @@ export function planSupplierImport(incoming, existingRows) {
     // Whitelist descriptive fields, never source verification, phases, owner or ACL.
     for (const key of ['name', 'address', 'businessType', 'mainMarkets', 'mainCustomers', 'establishedYear', 'employees', 'taxCode', 'logo', 'province']) if (present(row[key])) data[key] = row[key].trim();
     data.contact = { ...old.contact };
+    if (present(row.branches)) data.contact.sourceBranches = row.branches.trim();
     for (const key of ['phones', 'emails', 'websites']) data.contact[key] = unique([...(old.contact?.[key] || []), ...(row[key] || [])]);
     if (present(row.description)) {
       // Source prose may repeat contacts; preserve the original only in private data.
@@ -76,7 +77,11 @@ export function planSupplierImport(incoming, existingRows) {
     if (row.emails?.length) data.email = row.emails[0];
     data.sourceCategories = [...new Map([...(old.sourceCategories || []), ...row.categories].map(item => [item.id, item])).values()];
     data.keywords = unique([...(old.keywords || []), ...data.sourceCategories.map(item => item.name)]);
-    data.gallery = unique([...(old.gallery || []).filter(value => typeof value === 'string'), ...(row.images || [])]);
+    data.gallery = unique([...(row.images || []), ...(old.gallery || []).filter(value => typeof value === 'string')]);
+    if (row.images?.length) {
+      data.images = unique([...row.images, ...(old.images || []).filter(value => typeof value === 'string')]);
+      data.imageAssets = row.images.map((url, index) => ({ url, caption: row.imageCaptions?.[index] || '', source: row.sourceUrl }));
+    }
     data.externalSource = { provider: 'trangvangvietnam', id: row.sourceId, url: row.sourceUrl, fetchedAt: row.fetchedAt };
     if (!before) Object.assign(data, { status: 'DRAFT', isPublished: false, phases: [], stages: [] });
     const after = { ...(before || {}), id: before?.id || `tv-${row.sourceId}`, name: data.name || before?.name, province: data.province || before?.province || '', data };

@@ -1,6 +1,37 @@
 # Permissioned Trang Vang refresh — 2026-10-09
 
-## Status: implementation prepared; live crawl and publication blocked
+## Current status: browser collection works; full-site refresh incomplete
+
+### Follow-up after user reconfirmed owner permission
+
+Ordinary access through the existing in-app browser works. The earlier direct-network failure was not evidence that all access was impossible. No CAPTCHA, proxy rotation, cookie copying or stealth was used. The supported browser API reads DOM snapshots and follows links already observed on source pages.
+
+- Downloaded all **69 index pages**, containing **3,421 distinct category IDs/entries**. The source heading says 3,422; offline recount found 3,421 entries and no duplicate IDs. This discrepancy is unresolved, not silently counted as a complete 3,422-category inventory.
+- Completed the sample category `484435`: **3 category pages, 36 distinct supplier profiles**, matching its current result-page count of 36 (the index badge says 40), **869 gallery URLs**. This is not evidence that all categories are complete.
+- Expanded the durable queue to all 3,421 observed categories. Latest saved archive/export: **59 supplier profiles**, 4 category pages and **1,937 gallery URLs**; **3,439 mixed category/listing jobs pending**. All 59 exported profiles have an address, 53 have telephone links. Missing fields remain missing rather than being invented.
+- First 36-profile reconciliation against all 21,680 Supabase enterprises: **36 inserts, 0 updates, 0 ambiguous matches**. Applied these **36 new records as DRAFT/unpublished**, with durable journal and database ACKs. Existing supplier records were not deleted/replaced. This is staging, **not a public-directory refresh**. Remaining 23 locally exported profiles have not been imported.
+- **Binary images downloaded: 0.** URLs/captions are preserved, not independent image copies. No claimed migration to Supabase Storage.
+- Crawl4AI 0.9.4 and dependencies are installed in ignored `.venv-crawl/`. No LLM extraction/model calls. Standard, fresh Chrome via Playwright was tested once (no user profile or stealth): HTTP 403, `Attention Required! | Cloudflare`. The standalone direct crawler still cannot run end-to-end from this machine.
+- The browser collector runs in **awaited bounded batches**. An experiment launching it without awaiting failed with an execution-context error; it was stopped and resumed normally. **There is no unattended crawl running after this handoff.** Its saved queue must be resumed in an active supported browser session. Do not promise that it runs in the background or consumes no Codex quota.
+
+Private snapshots/progress: `.crawl-data/trangvang-browser/`; supplier archive: `.crawl-data/trangvang-browser/pilot-484435/`. That directory now contains the expanded full-index queue despite its pilot name. Applied journal: `.crawl-data/trangvang/imports/2026-10-09T03-07-09-988Z/`. Do not publish these files: they contain contacts.
+
+### Follow-up implementation and verification
+
+- Added `tools/trangvang/browserArchive.mjs`: supported tab API only, observed same-source pagination, category membership, source-ID deduplication, private append-only ACK journal, one writer, resume, 3-second minimum interval, 2 GiB default archive cap, 1 GiB disk reserve, `STOP` file support. It does not perform database writes or solve challenges. The size cap can stop a large crawl before completion.
+- Corrected the actual `listing_trai`/`tvxl`/`tvxc` parser: explicit supplier panels override the source's incorrect JSON-LD publisher phone/email; registration/footer contacts excluded; 83 Hanteco gallery images correctly extracted; company type, markets, customers, tax code, year, employees and branches retained. Empty image `src` no longer becomes the listing URL.
+- Offline export: `python3 tools/trangvang/crawl.py --browser-archive .crawl-data/trangvang-browser/pilot-484435`. Preserves snapshot timestamps and category membership; rejects archive paths outside its pages directory. A `complete` flag concerns only the saved manifest scope.
+- Importer stores branch prose privately, preserves image captions and places source photos first in both `gallery` and the directory's actual `images` field. Existing publication/KYC/phases remain unchanged; new profiles still require classification and publication.
+- RED checkpoints on the current branch: `bd3ef19` (actual DOM scoping/gallery), `cc7500d` (publisher metadata/empty image sources), `c7c49b1` (browser archive missing), `4e969ce` (offline export/enrichment), `bbaddfb` (actual directory image field). Each failing target was executed before its corresponding production fix.
+- Latest `npm test`: **144/144 passed**, no skips. Focused Node: **13/13 passed**, combined coverage **98.25% lines, 87.61% branches, 93.33% functions**. Python: **12/12 passed**. Node syntax/Python compilation and scoped whitespace checks passed. No frontend source changed; the prior build result below is historical, not a newly rerun build. Full Python branch coverage and live standalone crawling remain unverified.
+
+### Remaining
+
+Full supplier traversal, resolving source-count discrepancies, all-category live extraction checks, industry/18-phase reconciliation, publication, independent image storage and capacity/pagination work are still required. Public website cache invalidation is also required after future published updates. No public cache restart was needed for these hidden drafts. The current source access works only in the active browser, so an independently running crawler remains a technical limitation; owner permission is already confirmed and is not the missing authorization.
+
+Self-evaluation for this follow-up: accuracy **4/5** (real DOM and database ACK evidence, unresolved source counts), completeness **2/5** (59 profiles, not whole site; staged not published), clarity **4/5** (explicit scope/background limitations), actionability **3/5** (durable queue exists but requires active browser), conciseness **4/5** (detailed evidence centralized here). Overall **3.4/5**. Highest-impact next steps: a legitimate autonomous access path, then full traversal/taxonomy/publication. The user would not accept a claim that the whole request is complete.
+
+## Historical first pass — superseded counts, retained for audit
 
 The user confirmed permission to reuse source data/images. The actual network preflight is still blocked: `python3 tools/trangvang/crawl.py --probe --start 'https://trangvangvietnam.com/categories/484435/an-toan-song-nuoc-phao-ao-phao,...html' --output .crawl-data/trangvang-pilot` exited **2**, reporting `robots.txt unavailable/blocked; no site-wide crawl attempted`. An earlier direct robots request returned a Cloudflare block page rather than robots rules. No bypass, CAPTCHA service, proxy rotation or stealth mode was attempted.
 

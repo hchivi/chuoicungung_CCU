@@ -97,7 +97,19 @@ class Tree(HTMLParser):
 
 def excluded(node):
     while node:
-        if node.tag in {'footer', 'nav'} or re.search(r'footer|related|recommend|advert', node.attrs.get('id', '') + ' ' + node.attrs.get('class', ''), re.I):
+        if node.tag in {'footer', 'header', 'nav'} or re.search(r'footer|related|recommend|advert|tvx-foot|tvx-reg', node.attrs.get('id', '') + ' ' + node.attrs.get('class', ''), re.I):
+            return True
+        node = node.parent
+    return False
+
+
+def has_class(node, name):
+    return name in node.attrs.get('class', '').split()
+
+
+def within(node, element_id):
+    while node:
+        if node.attrs.get('id') == element_id:
             return True
         node = node.parent
     return False
@@ -126,6 +138,8 @@ def business_json(root):
 
 
 def media_url(value, base):
+    if not isinstance(value, str) or not value.strip():
+        return None
     url = urlsplit(urljoin(base, value or ''))
     if url.scheme in {'https', 'http'} and not url.username and not url.password and url.hostname and (url.hostname == 'trangvangvietnam.com' or url.hostname.endswith('.trangvangvietnam.com')):
         return urlunsplit((url.scheme, url.netloc, url.path, url.query, ''))
@@ -161,9 +175,10 @@ def parse_page(url, html):
     result['categories'] = list({item['id']: item for item in result['categories']}.values())
     listing_id = re.match(r'^/listings/(\d+)/', path)
     if listing_id:
-        main = next(root.all('main'), root)
+        listing_main = next((node for node in root.all() if has_class(node, 'listing_trai')), None)
+        main = listing_main or next(root.all('main'), root)
         heading = next((node for node in main.all('h1') if not excluded(node)), None)
-        structured = business_json(main)
+        structured = business_json(root)
         name = structured.get('name') or (heading.text() if heading else '')
         if not isinstance(name, str) or len(name.strip()) < 3:
             raise ValueError('Listing markup is unknown: missing business name; review parser before retry')
@@ -174,14 +189,39 @@ def parse_page(url, html):
         row['address'] = address if isinstance(address, str) else ''
         for key, output in [('telephone', 'phones'), ('email', 'emails')]:
             values = structured.get(key, [])
-            row[output] = [value for value in (values if isinstance(values, list) else [values]) if isinstance(value, str) and value.strip()]
+            # Live template's JSON-LD incorrectly repeats publisher contacts.
+            # Its explicit supplier contact panels are authoritative instead.
+            row[output] = [] if listing_main else [value for value in (values if isinstance(values, list) else [values]) if isinstance(value, str) and value.strip()]
         for key, output in [('description', 'description'), ('taxID', 'taxCode'), ('foundingDate', 'establishedYear')]:
             if isinstance(structured.get(key), str):
                 row[output] = structured[key]
-        for node in main.all():
+        # Current template has an explicit supplier contact sidebar. Do not scan
+        # its neighbouring registration advert or the platform header/footer.
+        contact_sidebar = next((node for node in root.all() if has_class(node, 'tvxc')), None) if listing_main else None
+        nodes = list(main.all()) + (list(contact_sidebar.all()) if contact_sidebar else [])
+        for node in nodes:
             if excluded(node):
                 continue
             prop = node.attrs.get('itemprop')
+            if has_class(node, 'tvxl-row'):
+                icons = ' '.join(child.attrs.get('class', '') for child in node.all('i'))
+                value = next((child for child in node.children if isinstance(child, Node) and child.tag == 'div'), None)
+                if value and 'fa-location-dot' in icons:
+                    row['address'] = value.text()
+                    province = next(value.all('span'), None)
+                    if province:
+                        row['province'] = province.text()
+                elif value and 'fa-map-location-dot' in icons:
+                    row['branches'] = value.text()
+            if has_class(node, 'tvxb-fact') or has_class(node, 'tvxf-r'):
+                label_class, value_class = ('k', 'v') if has_class(node, 'tvxb-fact') else ('tvxf-k', 'tvxf-v')
+                label = next((child.text() for child in node.all() if has_class(child, label_class)), '')
+                value = next((child.text() for child in node.all() if has_class(child, value_class)), '')
+                field = {'Loại hình kinh doanh': 'businessType', 'Thị trường chính': 'mainMarkets', 'Khách hàng chính': 'mainCustomers', 'Mã số thuế': 'taxCode', 'Năm thành lập': 'establishedYear', 'Số lượng nhân viên': 'employees'}.get(label)
+                if field and value:
+                    row[field] = value
+            if within(node, 'section1') and has_class(node, 'gioithieucongty_img'):
+                row['description'] = node.text()
             if prop == 'address' and not row['address']:
                 row['address'] = node.text()
             if node.tag == 'a':
@@ -194,14 +234,14 @@ def parse_page(url, html):
                 if category and (match := re.match(r'^/categories/(\d+)/', urlsplit(category).path)) and node.text():
                     row['categories'].append({'id': match[1], 'name': node.text(), 'url': category})
                 # Do not mistake platform navigation or adverts for supplier websites.
-                if href.startswith(('https://', 'http://')) and (prop == 'url' or 'website' in node.attrs.get('class', '').lower()) and 'trangvang' not in urlsplit(href).netloc:
+                if href.startswith(('https://', 'http://')) and (prop == 'url' or 'website' in node.attrs.get('class', '').lower() or has_class(node, 'tvxl-act')) and 'trangvang' not in urlsplit(href).netloc:
                     row['websites'].append(href)
             if node.tag == 'img':
                 src = media_url(node.attrs.get('data-src') or node.attrs.get('src'), url)
                 marker = ' '.join([src or '', node.attrs.get('class', ''), node.attrs.get('alt', '')]).lower()
                 if src and 'logo' in marker and not row.get('logo'):
                     row['logo'] = src
-                elif src and re.search(r'/pics?/|pics_low|sanpham|product|gallery', marker + ' ' + (node.parent.attrs.get('id', '') if node.parent else '')):
+                elif src and (within(node, 'section3') or re.search(r'/pics?/|pics_low|sanpham|product|gallery', marker + ' ' + (node.parent.attrs.get('id', '') if node.parent else ''))):
                     if src not in row['images']:
                         row['images'].append(src)
                         row['imageCaptions'].append(node.attrs.get('alt', ''))
@@ -276,6 +316,38 @@ def read_robots():
             return robots_policy(response.read(1024 * 1024).decode('utf-8', 'replace'), response.status)
     except (HTTPError, OSError) as error:
         raise CrawlBlocked('robots.txt unavailable/blocked; no site-wide crawl attempted') from error
+
+
+def export_browser_archive(directory):
+    """Parse an already-authorized DOM archive; never makes a network request."""
+    directory = Path(directory).resolve()
+    manifest = json.loads((directory / 'browser-manifest.json').read_text(encoding='utf-8'))
+    rows = {}
+    pages_root = (directory / 'pages').resolve()
+    for page in manifest['pages']:
+        if page['kind'] != 'listing':
+            continue
+        target = (pages_root / page['file']).resolve()
+        if not target.is_relative_to(pages_root):
+            raise ValueError('Archive file escapes pages directory')
+        url = source_url(page['url'], ORIGIN)
+        if not url or not re.match(r'^/listings/\d+/', urlsplit(url).path):
+            raise ValueError('Invalid archived listing URL')
+        row = parse_page(url, target.read_text(encoding='utf-8'))['supplier']
+        row['fetchedAt'] = page['fetchedAt']
+        row['categories'] = list({item['id']: item for item in row['categories'] + page.get('categories', [])}.values())
+        rows[row['sourceId']] = row
+    temp = directory / 'suppliers.jsonl.tmp'
+    with open(temp, 'w', encoding='utf-8') as handle:
+        for row in rows.values():
+            handle.write(json.dumps(row, ensure_ascii=False) + '\n')
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.chmod(temp, 0o600)
+    temp.replace(directory / 'suppliers.jsonl')
+    report = {'suppliers': len(rows), 'complete': manifest.get('complete', False), 'scope': 'saved browser manifest only', 'databaseWrites': 0, 'imageMode': 'source URLs'}
+    (directory / 'export-status.json').write_text(json.dumps(report), encoding='utf-8')
+    return report
 
 
 async def run(args):
@@ -353,11 +425,13 @@ def main():
     parser.add_argument('--delay', type=float, default=3)
     parser.add_argument('--probe', action='store_true')
     parser.add_argument('--export-only', action='store_true')
+    parser.add_argument('--browser-archive', help='Offline: parse a saved permissioned browser manifest instead of fetching')
     args = parser.parse_args()
     if args.max_pages < 1 or args.delay < 0:
         parser.error('Positive page limit and nonnegative delay required')
     try:
-        print(json.dumps(asyncio.run(run(args)), ensure_ascii=False))
+        result = export_browser_archive(args.browser_archive) if args.browser_archive else asyncio.run(run(args))
+        print(json.dumps(result, ensure_ascii=False))
     except Exception as error:
         print(json.dumps({'stopped': True, 'error': str(error), 'databaseWritten': False}, ensure_ascii=False))
         raise SystemExit(2)
