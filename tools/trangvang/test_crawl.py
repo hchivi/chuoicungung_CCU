@@ -168,6 +168,26 @@ class CrawlTests(unittest.TestCase):
         self.assertEqual(row['description'], 'Mô tả năng lực thực tế')
         self.assertIn('Chi nhánh mẫu', row['branches'])
 
+    def test_browser_archive_exports_without_network_and_refuses_file_escape(self):
+        self.assertTrue(callable(getattr(crawl, 'export_browser_archive', None)))
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            (root / 'pages').mkdir()
+            (root / 'pages' / 'supplier.html').write_text('<main><h1>Công ty mẫu</h1><a href="tel:0000000000">Gọi</a></main>')
+            page = {'kind': 'listing', 'url': crawl.ORIGIN + '/listings/123456789/a.html', 'file': 'supplier.html', 'fetchedAt': '2026-10-09T00:00:00Z', 'categories': [{'id': '12', 'name': 'Ngành mẫu', 'url': crawl.ORIGIN + '/categories/12/a.html'}]}
+            (root / 'browser-manifest.json').write_text(json.dumps({'complete': False, 'pages': [page]}))
+            with patch.object(crawl, 'read_robots', side_effect=AssertionError('Must be offline')):
+                result = crawl.export_browser_archive(root)
+            self.assertEqual(result['suppliers'], 1)
+            self.assertFalse(result['complete'])
+            row = json.loads((root / 'suppliers.jsonl').read_text())
+            self.assertEqual(row['fetchedAt'], page['fetchedAt'])
+            self.assertEqual(row['categories'][0]['id'], '12')
+            page['file'] = '../../outside.html'
+            (root / 'browser-manifest.json').write_text(json.dumps({'complete': True, 'pages': [page]}))
+            with self.assertRaises(ValueError):
+                crawl.export_browser_archive(root)
+
 
 if __name__ == '__main__':
     unittest.main()

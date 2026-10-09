@@ -85,3 +85,12 @@ test('source descriptions cannot leak contacts through a public text field', () 
   assert.ok(!published.includes('0000000000'));
   assert.ok(item.after.data.contact.sourceDescription.includes('sample@example.invalid'));
 });
+
+test('enrichment retains branch details and captions, and places real source photos before legacy photos', () => {
+  const [item] = implementation.planSupplierImport([source({ branches: 'Chi nhánh mẫu', employees: '11–50', imageCaptions: ['Sản phẩm mẫu'] })], [existing({ data: { sourceUrl: source().sourceUrl, gallery: ['https://example.invalid/legacy.jpg'] } })]);
+  assert.equal(item.after.data.contact.sourceBranches, 'Chi nhánh mẫu');
+  assert.equal(item.after.data.employees, '11–50');
+  assert.equal(item.after.data.gallery[0], source().images[0]);
+  assert.ok(item.after.data.gallery.includes('https://example.invalid/legacy.jpg'));
+  assert.equal(item.after.data.imageAssets[0].caption, 'Sản phẩm mẫu');
+});
