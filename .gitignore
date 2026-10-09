@@ -47,3 +47,8 @@ server/data/enterprisesFull.json
 catalog/
 public/catalogues/CATALOGUE_*.pdf
 zi*
+
+# Private crawl checkpoints, contact data, backups and isolated Python runtime
+.crawl-data/
+.venv-crawl/
+tools/trangvang/__pycache__/

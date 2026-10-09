@@ -1,0 +1,2 @@
+# Install into a dedicated Python 3.12 virtual environment, not global Python.
+crawl4ai==0.9.4
