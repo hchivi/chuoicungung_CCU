@@ -70,3 +70,11 @@ test('apply writes durable backup before any mutation; rechecks concurrency and 
   await assert.rejects(implementation.applySupplierPlan(plan, { ...io, backup: async () => { throw new Error('disk'); } }), /disk/);
   await assert.rejects(implementation.applySupplierPlan(plan, { ...io, write: async () => null }), /ack/i);
 });
+
+test('Postgres JSONB key reordering is not a conflict or invalid ACK', async () => {
+  const plan = implementation.planSupplierImport([source()], [existing()]);
+  const reorder = value => JSON.parse(JSON.stringify(value, Object.keys(value).sort()));
+  const current = { ...existing(), data: Object.fromEntries(Object.entries(existing().data).reverse()) };
+  const saved = { ...plan[0].after, data: Object.fromEntries(Object.entries(plan[0].after.data).reverse()) };
+  assert.equal((await implementation.applySupplierPlan(plan, { read: async () => current, backup: async () => {}, write: async () => saved, receipt: async () => {} })).applied, 1);
+});
