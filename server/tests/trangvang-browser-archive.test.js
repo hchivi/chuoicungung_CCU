@@ -77,8 +77,10 @@ test('transient network changes retry the same unacknowledged URL without duplic
     const calls = [], delays = [];
     const tab = fakeTab(calls);
     const navigate = tab.goto;
-    let failed = false;
+    let failed = false, currentUrl = 'about:blank';
+    tab.url = async () => currentUrl;
     tab.goto = async url => {
+      currentUrl = url; // Failed navigation can still change the address bar.
       if (!failed) { failed = true; throw new Error('net::ERR_NETWORK_CHANGED'); }
       await navigate(url);
     };
