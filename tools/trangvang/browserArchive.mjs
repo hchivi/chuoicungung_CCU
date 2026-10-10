@@ -16,13 +16,18 @@ const sourceUrl = value => {
 const keyOf = job => job.kind === 'listing' ? `listing:${new URL(job.url).pathname.match(/^\/listings\/(\d+)\//)[1]}` : job.url;
 const sleepDefault = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function runBrowserArchive({ tab, directory, categories = [], maxPages = 500000, delayMs = 3000, maxBytes = 2 * 1024 ** 3, sleep = sleepDefault, onProgress = () => {} }) {
-  if (!Number.isInteger(maxPages) || maxPages < 1 || delayMs < 0 || maxBytes < 1) throw new Error('Invalid crawl limits');
+export async function runBrowserArchive({ tab, directory, categories = [], maxPages = 500000, delayMs = 3000, maxBytes = 2 * 1024 ** 3, maxNetworkRetries = 2, deadlineMs = Infinity, sleep = sleepDefault, onProgress = () => {} }) {
+  if (!Number.isInteger(maxPages) || maxPages < 1 || delayMs < 0 || maxBytes < 1 || !Number.isInteger(maxNetworkRetries) || maxNetworkRetries < 0 || maxNetworkRetries > 5 || typeof deadlineMs !== 'number' || Number.isNaN(deadlineMs)) throw new Error('Invalid crawl limits');
   await mkdir(join(directory, 'pages'), { recursive: true, mode: 0o700 });
   const lockPath = join(directory, 'browser.lock');
   const lock = await open(lockPath, 'wx', 0o600);
   const jobs = new Map(), done = new Map();
-  let journal, bytes = 0, reason = null, failure = null;
+  let journal, bytes = 0, retries = 0, reason = null, failure = null;
+  const shouldStop = async () => {
+    try { await stat(join(directory, 'STOP')); reason = 'operator-stop'; return true; } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    if (Date.now() >= deadlineMs) { reason = 'time-budget'; return true; }
+    return false;
+  };
   const atomic = async (name, value) => {
     const target = join(directory, name);
     await writeFile(target + '.tmp', JSON.stringify(value), { mode: 0o600 });
@@ -40,7 +45,7 @@ export async function runBrowserArchive({ tab, directory, categories = [], maxPa
     complete: done.size === jobs.size && !failure,
     categoryPages: [...done.values()].filter(page => page.kind === 'category').length,
     listings: [...done.values()].filter(page => page.kind === 'listing').length,
-    pending: jobs.size - done.size, bytes, reason, error: failure,
+    pending: jobs.size - done.size, bytes, retries, reason, error: failure,
     updatedAt: new Date().toISOString(), databaseWrites: 0, binaryImagesDownloaded: 0
   });
   try {
@@ -60,8 +65,8 @@ export async function runBrowserArchive({ tab, directory, categories = [], maxPa
       bytes += event.page.bytes;
     }
     journal = await open(join(directory, 'browser-pages.jsonl'), 'a', 0o600);
-    for (let processed = 0; processed < maxPages; processed++) {
-      try { await stat(join(directory, 'STOP')); reason = 'operator-stop'; break; } catch (error) { if (error.code !== 'ENOENT') throw error; }
+    processing: for (let processed = 0; processed < maxPages; processed++) {
+      if (await shouldStop()) break;
       const pending = [...jobs.entries()].filter(([key]) => !done.has(key));
       // Finish discovered suppliers before moving to the next industry.
       const next = pending.find(([, job]) => job.kind === 'listing') || pending[0];
@@ -71,7 +76,20 @@ export async function runBrowserArchive({ tab, directory, categories = [], maxPa
       if (space.bavail * space.bsize < 1024 ** 3) { reason = 'disk-reserve'; break; }
       const [key, job] = next;
       await sleep(Math.max(3000, delayMs));
-      await tab.goto(job.url);
+      for (let attempt = 0; ; attempt++) {
+        if (await shouldStop()) break processing;
+        try {
+          if (attempt > 0 || typeof tab.url !== 'function' || await tab.url() !== job.url) await tab.goto(job.url);
+          break;
+        } catch (error) {
+          // Only transient transport failures; challenges, 403s and markup
+          // errors must still stop, never be worked around with retries.
+          if (attempt >= maxNetworkRetries || !/net::ERR_(?:NETWORK_CHANGED|INTERNET_DISCONNECTED|CONNECTION_RESET|CONNECTION_CLOSED|TIMED_OUT)\b|\bETIMEDOUT\b/.test(String(error.message))) throw error;
+          retries++;
+          await atomic('browser-status.json', { ...snapshot(), phase: 'network-backoff', retryAttempt: attempt + 1 });
+          await sleep(Math.min(30000, 3000 * 2 ** attempt));
+        }
+      }
       const page = await tab.playwright.evaluate(() => ({
         url: location.href,
         heading: document.querySelector('h1')?.textContent.trim() || '',

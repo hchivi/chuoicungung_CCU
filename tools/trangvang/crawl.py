@@ -179,7 +179,11 @@ def parse_page(url, html):
         main = listing_main or next(root.all('main'), root)
         heading = next((node for node in main.all('h1') if not excluded(node)), None)
         structured = business_json(root)
-        name = structured.get('name') or (heading.text() if heading else '')
+        name = (heading.text() if heading else '') or structured.get('name', '')
+        if listing_main and heading and structured.get('name') != name:
+            # The live site's Organization block may describe its publisher,
+            # not this supplier. Never use that publisher's fallback fields.
+            structured = {}
         if not isinstance(name, str) or len(name.strip()) < 3:
             raise ValueError('Listing markup is unknown: missing business name; review parser before retry')
         row = {'sourceId': listing_id[1], 'sourceUrl': url, 'name': name.strip(), 'categories': [], 'phones': [], 'emails': [], 'websites': [], 'images': [], 'imageCaptions': [], 'fetchedAt': datetime.datetime.now(datetime.timezone.utc).isoformat()}
@@ -319,24 +323,46 @@ def read_robots():
 
 
 def export_browser_archive(directory):
-    """Parse an already-authorized DOM archive; never makes a network request."""
+    """Incrementally parse an authorized archive; never makes a network request.
+
+    Cache only parsed source content, not category membership. The latter is
+    reconciled on every export, including newly discovered cross-listings.
+    Bump the version when extraction rules change to rebuild from saved HTML.
+    """
     directory = Path(directory).resolve()
     manifest = json.loads((directory / 'browser-manifest.json').read_text(encoding='utf-8'))
-    rows = {}
+    rows, parsed, reused = {}, 0, 0
     pages_root = (directory / 'pages').resolve()
-    for page in manifest['pages']:
-        if page['kind'] != 'listing':
-            continue
-        target = (pages_root / page['file']).resolve()
-        if not target.is_relative_to(pages_root):
-            raise ValueError('Archive file escapes pages directory')
-        url = source_url(page['url'], ORIGIN)
-        if not url or not re.match(r'^/listings/\d+/', urlsplit(url).path):
-            raise ValueError('Invalid archived listing URL')
-        row = parse_page(url, target.read_text(encoding='utf-8'))['supplier']
-        row['fetchedAt'] = page['fetchedAt']
-        row['categories'] = list({item['id']: item for item in row['categories'] + page.get('categories', [])}.values())
-        rows[row['sourceId']] = row
+    cache_path = directory / 'export-cache.sqlite'
+    cache = sqlite3.connect(cache_path)
+    os.chmod(cache_path, 0o600)
+    try:
+        cache.execute('CREATE TABLE IF NOT EXISTS parsed_pages(url TEXT PRIMARY KEY, signature TEXT NOT NULL, payload TEXT NOT NULL)')
+        with cache:
+            for page in manifest['pages']:
+                if page['kind'] != 'listing':
+                    continue
+                target = (pages_root / page['file']).resolve()
+                if not target.is_relative_to(pages_root):
+                    raise ValueError('Archive file escapes pages directory')
+                url = source_url(page['url'], ORIGIN)
+                if not url or not re.match(r'^/listings/\d+/', urlsplit(url).path):
+                    raise ValueError('Invalid archived listing URL')
+                info = target.stat()
+                signature = json.dumps([2, page['file'], info.st_mtime_ns, info.st_size])
+                cached = cache.execute('SELECT payload FROM parsed_pages WHERE url=? AND signature=?', (url, signature)).fetchone()
+                if cached:
+                    row = json.loads(cached[0])
+                    reused += 1
+                else:
+                    row = parse_page(url, target.read_text(encoding='utf-8'))['supplier']
+                    cache.execute('INSERT OR REPLACE INTO parsed_pages VALUES(?,?,?)', (url, signature, json.dumps(row, ensure_ascii=False)))
+                    parsed += 1
+                row['fetchedAt'] = page['fetchedAt']
+                row['categories'] = list({item['id']: item for item in row['categories'] + page.get('categories', [])}.values())
+                rows[row['sourceId']] = row
+    finally:
+        cache.close()
     temp = directory / 'suppliers.jsonl.tmp'
     with open(temp, 'w', encoding='utf-8') as handle:
         for row in rows.values():
@@ -345,7 +371,7 @@ def export_browser_archive(directory):
         os.fsync(handle.fileno())
     os.chmod(temp, 0o600)
     temp.replace(directory / 'suppliers.jsonl')
-    report = {'suppliers': len(rows), 'complete': manifest.get('complete', False), 'scope': 'saved browser manifest only', 'databaseWrites': 0, 'imageMode': 'source URLs'}
+    report = {'suppliers': len(rows), 'parsed': parsed, 'reused': reused, 'complete': manifest.get('complete', False), 'scope': 'saved browser manifest only', 'databaseWrites': 0, 'imageMode': 'source URLs'}
     (directory / 'export-status.json').write_text(json.dumps(report), encoding='utf-8')
     return report
 
