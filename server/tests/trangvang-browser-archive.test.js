@@ -160,3 +160,13 @@ test('pipeline respects an expired budget without navigating or exporting', asyn
   assert.equal(result.batches, 0);
   assert.equal(result.reason, 'time-budget');
 });
+
+test('resume reads an already-open pending source page without navigating it again', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'ccu-browser-'));
+  try {
+    const tab = { url: async () => category.url, goto: async () => assert.fail('Must not reload an already-open pending page'),
+      playwright: { evaluate: async () => ({ ...pages[category.url], url: category.url }) } };
+    const result = await implementation.runBrowserArchive({ tab, directory, categories: [category], sleep: async () => {}, maxPages: 1 });
+    assert.equal(result.categoryPages, 1);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
