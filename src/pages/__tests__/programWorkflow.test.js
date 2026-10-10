@@ -16,7 +16,7 @@ async function component(name, props) {
 }
 const model = () => import('../../components/programs/programWorkflowModel.js');
 const program = { id: 'test-event', title: 'Giao thương', status: 'dang-nhan-dang-ky', participationOptions: [{ id: 'buyer-free', role: 'BUYER', feeType: 'FREE', amount: 0 }, { id: 'supplier-paid', role: 'SUPPLIER', feeType: 'FIXED', amount: 6500000 }] };
-const valid = { companyName: 'Doanh nghiệp kiểm thử', contactPerson: 'Đại diện', phone: '0901234567', email: 'qa@example.com', productsNeeded: 'Bao bì', productsOffered: 'CNC', targetFactories: 'Nhà máy A', memberCount: '4', consent: true };
+const valid = { companyName: 'Doanh nghiệp kiểm thử', contactPerson: 'Đại diện', phone: '0901234567', email: 'qa@example.com', productsNeeded: 'Bao bì', productsOffered: 'CNC', targetFactories: 'Nhà máy A', memberCount: '4', presentationTopic: 'Giải pháp CNC', consent: true };
 
 test('registration has four roles, labelled fields and no invented sponsorship prices', async () => {
   const html = await component('ProgramRegistrationSection', { program });
@@ -92,6 +92,11 @@ test('post matching is an honest empty state, not identical fabricated deals on 
   assert.match(html, /Chưa công bố cặp kết nối/);
   assert.match(html, /Gửi ảnh và kết quả/);
   assert.doesNotMatch(html, /CJ Cầu Tre|86\.4%|142|18<|Đã Ký MOU/);
+});
+test('approved event results render counterparties, next action and their actual photos', async () => {
+  const html = await component('ProgramPostMatchingSection', { program: { ...program, matchedPairs: [{ id: 'pair-1', visibility: 'PUBLIC', publishStatus: 'PUBLISHED', buyer: 'Nhà máy kiểm thử', supplier: 'NCC kiểm thử', product: 'Sản phẩm kiểm thử', publicNextAction: 'Gửi mẫu tuần tới', email: 'private@example.com' }], gallery: [{ id: 'photo-1', visibility: 'PUBLIC', publishStatus: 'PUBLISHED', pairId: 'pair-1', url: '/images/event-test.jpg', caption: 'Cuộc gặp đã duyệt' }] } });
+  for (const text of ['Nhà máy kiểm thử', 'NCC kiểm thử', 'Gửi mẫu tuần tới', '/images/event-test.jpg', 'Cuộc gặp đã duyệt']) assert.ok(html.includes(text));
+  assert.ok(!html.includes('private@example.com'));
 });
 test('matching exposes readable public demand and capability with no blanket KYC guarantee', async () => {
   const html = await component('ProgramMatchingSection', { program, publicBuyerNeeds: [{ id: 'need-1', title: 'Bao bì carton', buyerSummary: 'Nhà máy A', publicSummary: 'Số lượng 1000', publicRequirements: ['ISO'] }] });
