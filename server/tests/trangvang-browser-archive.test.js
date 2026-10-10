@@ -66,3 +66,52 @@ test('browser archive resumes a page-limited run without resetting another activ
     assert.equal(calls.length, 3);
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
+
+test('transient network changes retry the same unacknowledged URL without duplicating pages', async () => {
+  const directory = await mkdtemp(join(tmpdir(), 'ccu-browser-'));
+  try {
+    const calls = [], delays = [];
+    const tab = fakeTab(calls);
+    const navigate = tab.goto;
+    let failed = false;
+    tab.goto = async url => {
+      if (!failed) { failed = true; throw new Error('net::ERR_NETWORK_CHANGED'); }
+      await navigate(url);
+    };
+    const result = await implementation.runBrowserArchive({ tab, directory, categories: [category], sleep: async ms => delays.push(ms), maxPages: 1 });
+    assert.equal(result.categoryPages, 1);
+    assert.equal(result.retries, 1);
+    assert.equal(delays.length, 2);
+    assert.equal(JSON.parse(await readFile(join(directory, 'browser-manifest.json'))).pages.length, 1);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+test('network retries are bounded and blocked navigation is never retried', async () => {
+  for (const [message, attempts] of [['net::ERR_NETWORK_CHANGED', 3], ['HTTP 403 Forbidden', 1]]) {
+    const directory = await mkdtemp(join(tmpdir(), 'ccu-browser-'));
+    try {
+      let calls = 0;
+      const tab = { goto: async () => { calls++; throw new Error(message); } };
+      await assert.rejects(implementation.runBrowserArchive({ tab, directory, categories: [category], sleep: async () => {}, maxPages: 1 }), new RegExp(message));
+      assert.equal(calls, attempts);
+      assert.equal(JSON.parse(await readFile(join(directory, 'browser-manifest.json'))).pages.length, 0);
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  }
+});
+
+test('deadline and operator stop during network backoff retain the pending job', async () => {
+  const { writeFile } = await import('node:fs/promises');
+  for (const stop of ['deadline', 'operator']) {
+    const directory = await mkdtemp(join(tmpdir(), 'ccu-browser-'));
+    try {
+      let calls = 0, sleeps = 0;
+      const tab = { goto: async () => { calls++; throw new Error('net::ERR_NETWORK_CHANGED'); } };
+      const result = await implementation.runBrowserArchive({ tab, directory, categories: [category], deadlineMs: stop === 'deadline' ? 0 : Infinity,
+        sleep: async () => { if (++sleeps === 2) await writeFile(join(directory, 'STOP'), 'stop'); } });
+      assert.equal(result.reason, stop === 'deadline' ? 'time-budget' : 'operator-stop');
+      assert.equal(result.categoryPages, 0);
+      assert.equal(result.pending, 1);
+      assert.equal(calls, stop === 'deadline' ? 0 : 1);
+    } finally { await rm(directory, { recursive: true, force: true }); }
+  }
+});

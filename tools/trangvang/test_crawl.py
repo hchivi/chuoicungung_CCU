@@ -17,6 +17,35 @@ if crawl:
 
 
 class CrawlTests(unittest.TestCase):
+    def test_supplier_heading_wins_over_publisher_jsonld_name(self):
+        html = '<script type="application/ld+json">{"@type":"Organization","name":"Publisher company"}</script><div class="listing_trai"><h1>Supplier company</h1></div>'
+        self.assertEqual(crawl.parse_page(crawl.ORIGIN + '/listings/123456789/a.html', html)['supplier']['name'], 'Supplier company')
+
+    def test_incremental_export_reuses_html_but_refreshes_memberships_and_changed_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = pathlib.Path(directory)
+            (root / 'pages').mkdir()
+            html = root / 'pages' / 'supplier.html'
+            html.write_text('<main><h1>Supplier original</h1></main>')
+            page = {'kind': 'listing', 'url': crawl.ORIGIN + '/listings/123456789/a.html', 'file': html.name, 'fetchedAt': '2026-10-09T00:00:00Z', 'categories': []}
+            manifest = root / 'browser-manifest.json'
+            manifest.write_text(json.dumps({'complete': False, 'pages': [page]}))
+            first = crawl.export_browser_archive(root)
+            self.assertEqual(first['parsed'], 1)
+            page['categories'] = [{'id': '12', 'name': 'New membership', 'url': crawl.ORIGIN + '/categories/12/a.html'}]
+            manifest.write_text(json.dumps({'complete': False, 'pages': [page]}))
+            with patch.object(crawl, 'parse_page', side_effect=AssertionError('Must not reparse unchanged HTML')):
+                second = crawl.export_browser_archive(root)
+            self.assertEqual(second['reused'], 1)
+            self.assertEqual(json.loads((root / 'suppliers.jsonl').read_text())['categories'][0]['id'], '12')
+            html.write_text('<main><h1>Supplier changed name</h1></main>')
+            self.assertEqual(crawl.export_browser_archive(root)['parsed'], 1)
+            self.assertEqual(json.loads((root / 'suppliers.jsonl').read_text())['name'], 'Supplier changed name')
+            page['file'] = '../../outside.html'
+            manifest.write_text(json.dumps({'complete': False, 'pages': [page]}))
+            with self.assertRaises(ValueError):
+                crawl.export_browser_archive(root)
+
     def test_implementation_present(self):
         self.assertIsNotNone(crawl, 'Missing resumable Crawl4AI pipeline')
 
