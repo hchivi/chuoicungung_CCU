@@ -61,6 +61,9 @@ test('invalid, non-consenting, closed and stale package registrations are reject
   const { buildRegistration } = await model();
   for (const fields of [{ ...valid, consent: false }, { ...valid, phone: 'x' }, { ...valid, email: 'invalid' }, { ...valid, companyName: ' ' }, { ...valid, productsNeeded: '' }]) assert.throws(() => buildRegistration(program, 'buyer', fields, ''));
   for (const memberCount of ['0', '1.5', '-2']) assert.throws(() => buildRegistration(program, 'association', { ...valid, memberCount }, ''));
+  for (const attendeesCount of ['0', '1.5', '-2', 'not-number']) assert.throws(() => buildRegistration(program, 'buyer', { ...valid, attendeesCount }, ''));
+  assert.throws(() => buildRegistration(program, 'association', { ...valid, productsOffered: '' }, ''));
+  assert.throws(() => buildRegistration(program, 'sponsor', { ...valid, presentationTopic: '' }, ''));
   assert.throws(() => buildRegistration({ ...program, status: 'huy' }, 'buyer', valid, ''));
   assert.throws(() => buildRegistration(program, 'supplier', valid, 'buyer-free'));
   assert.throws(() => buildRegistration(program, 'unknown', valid, ''));
