@@ -8,6 +8,10 @@ const implementation = await import('../../tools/trangvang/browserArchive.mjs').
   if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
   return {};
 });
+const pipeline = await import('../../tools/trangvang/pipeline.mjs').catch(error => {
+  if (error.code !== 'ERR_MODULE_NOT_FOUND') throw error;
+  return {};
+});
 const origin = 'https://trangvangvietnam.com';
 const category = { id: '12', name: 'Ngành mẫu', url: origin + '/categories/12/a.html' };
 const listing = origin + '/listings/123456789/a.html';
@@ -114,4 +118,45 @@ test('deadline and operator stop during network backoff retain the pending job',
       assert.equal(calls, stop === 'deadline' ? 0 : 1);
     } finally { await rm(directory, { recursive: true, force: true }); }
   }
+});
+
+test('pipeline collects the next batch while exporting and flushes the final checkpoint', async () => {
+  assert.equal(typeof pipeline.runArchivePipeline, 'function');
+  let collected = 0, exports = 0, release;
+  const gate = new Promise(resolve => { release = resolve; });
+  const checkpoints = [];
+  const result = await pipeline.runArchivePipeline({ deadlineMs: Infinity,
+    collect: async () => {
+      collected++;
+      if (collected === 2) { assert.equal(exports, 1); release(); }
+      return { complete: collected === 2, reason: 'page-limit', listings: collected };
+    },
+    exportData: async () => { exports++; if (exports === 1) await gate; return { suppliers: collected }; },
+    onState: async value => checkpoints.push(value)
+  });
+  assert.equal(collected, 2);
+  assert.equal(exports, 2);
+  assert.equal(result.lastExport.suppliers, 2);
+  assert.equal(checkpoints.at(-1).state, 'stopped');
+  assert.equal(result.reason, 'queue-complete');
+});
+
+test('pipeline surfaces export failure and never launches overlapping exporters', async () => {
+  assert.equal(typeof pipeline.runArchivePipeline, 'function');
+  let active = 0, maximum = 0, collected = 0;
+  const error = new Error('disk export failed');
+  await assert.rejects(pipeline.runArchivePipeline({ deadlineMs: Infinity,
+    collect: async ({ onProgress }) => { collected++; await new Promise(resolve => setImmediate(resolve)); onProgress(); return { complete: collected > 3, reason: 'page-limit' }; },
+    exportData: async () => { active++; maximum = Math.max(maximum, active); try { throw error; } finally { active--; } }
+  }), /disk export failed/);
+  assert.equal(maximum, 1);
+  assert.ok(collected <= 2);
+});
+
+test('pipeline respects an expired budget without navigating or exporting', async () => {
+  assert.equal(typeof pipeline.runArchivePipeline, 'function');
+  const result = await pipeline.runArchivePipeline({ deadlineMs: 0,
+    collect: async () => assert.fail('Must not navigate'), exportData: async () => assert.fail('Must not export') });
+  assert.equal(result.batches, 0);
+  assert.equal(result.reason, 'time-budget');
 });
