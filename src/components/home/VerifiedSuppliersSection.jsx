@@ -4,6 +4,73 @@ import { motion } from 'motion/react';
 import { 
   Building2, MapPin, Zap, CheckCircle2, Factory, ShieldCheck, ArrowRight, Info, Award, Calendar 
 } from 'lucide-react';
+import { suppliers as cloudSuppliers } from '../../data/cloudData.js';
+import { CRAWLED_PREVIEW_24_SUPPLIERS } from '../../data/verifiedSuppliersPreview.js';
+
+function formatRealSupplier(supp, idx) {
+  let capabilities = [];
+  if (Array.isArray(supp.products) && supp.products.length > 0) {
+    capabilities = supp.products.filter(p => typeof p === 'string' && p.trim()).slice(0, 3);
+  }
+  if (capabilities.length === 0 && Array.isArray(supp.productGroups) && supp.productGroups.length > 0) {
+    capabilities = supp.productGroups
+      .flatMap(g => Array.isArray(g.items) ? g.items : [g.name])
+      .filter(p => typeof p === 'string' && p.trim())
+      .slice(0, 3);
+  }
+  if (capabilities.length === 0 && Array.isArray(supp.categories) && supp.categories.length > 0) {
+    capabilities = supp.categories
+      .map(c => c.name || c.phaseTitle || c)
+      .filter(p => typeof p === 'string' && p.trim())
+      .slice(0, 3);
+  }
+  if (capabilities.length === 0 && supp.category) {
+    capabilities = [supp.category];
+  }
+
+  let factoryEquipment = supp.factoryEquipment;
+  if (!factoryEquipment) {
+    if (supp.description) {
+      const cleanDesc = supp.description.replace(/\r?\n+/g, ' ').trim();
+      factoryEquipment = cleanDesc.length > 100 ? cleanDesc.slice(0, 97) + '...' : cleanDesc;
+    } else if (supp.mainCustomers) {
+      factoryEquipment = `Khách hàng: ${supp.mainCustomers.slice(0, 80)}`;
+    } else if (supp.address) {
+      factoryEquipment = `Cơ sở: ${supp.address.slice(0, 80)}`;
+    }
+  }
+
+  let certifications = Array.isArray(supp.certifications) && supp.certifications.length > 0
+    ? supp.certifications
+    : [];
+  if (certifications.length === 0) {
+    if (supp.taxCode) certifications.push('Đối chiếu MST');
+    if (supp.isVerifiedPartner || supp.verification_status === 'VERIFIED') certifications.push('Năng lực xác minh');
+    if (supp.establishedYear) certifications.push(`Năm lập: ${supp.establishedYear}`);
+    else if (supp.businessType) certifications.push(supp.businessType);
+    if (certifications.length === 0) certifications.push('Hồ sơ chuẩn hóa B2B');
+  }
+
+  const code = supp.code || (supp.taxCode ? `MST: ${supp.taxCode}` : `NCC-2026-${String(idx + 1).padStart(4, '0')}`);
+  const status = supp.verification_status === 'VERIFIED' || supp.isVerifiedPartner ? 'Đã đối chiếu' : 'Đã xác minh';
+  const orderScale = supp.orderScale || (supp.employees ? `Quy mô: ${supp.employees}` : (supp.businessType || 'Theo đơn hàng B2B'));
+  const serviceArea = supp.serviceArea || supp.province || supp.location || 'Toàn quốc';
+  const detailUrl = `/nha-cung-ung/${supp.slug || supp.id}`;
+
+  return {
+    id: supp.id || `ncc-${idx + 1}`,
+    code,
+    status,
+    name: supp.name,
+    capabilities,
+    orderScale,
+    serviceArea,
+    factoryEquipment,
+    certifications: certifications.slice(0, 3),
+    detailUrl,
+    logo: supp.logo || supp.avatar
+  };
+}
 
 function SupplierCardItem({ supp }) {
   return (
@@ -28,7 +95,9 @@ function SupplierCardItem({ supp }) {
             Doanh nghiệp sản xuất / Cung ứng:
           </span>
           <h3 className="font-black text-base sm:text-lg text-slate-900 group-hover:text-[#006039] font-heading leading-snug line-clamp-2 transition-colors">
-            {supp.name}
+            <Link to={supp.detailUrl || `/nha-cung-ung/${supp.slug || supp.id}`}>
+              {supp.name}
+            </Link>
           </h3>
 
           <div className="flex flex-wrap gap-1.5 pt-1">
@@ -86,7 +155,7 @@ function SupplierCardItem({ supp }) {
       {/* CTA Xem năng lực */}
       <div className="pt-2 border-t border-slate-100">
         <Link
-          to="/nha-cung-ung"
+          to={supp.detailUrl || `/nha-cung-ung/${supp.slug || supp.id}`}
           className="w-full py-2.5 px-4 bg-slate-100 hover:bg-[#006039] hover:text-white text-slate-900 rounded-xl text-xs sm:text-sm font-bold font-heading transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-2xs group-hover:bg-[#006039] group-hover:text-white"
         >
           <span>Xem năng lực chi tiết</span>
@@ -128,122 +197,29 @@ function SuppliersColumn({ className = '', suppliers = [], duration = 28 }) {
 }
 
 export default function VerifiedSuppliersSection() {
-  const column1Suppliers = [
-    {
-      id: "ncc-01",
-      name: "Công ty May Mặc & Bảo Hộ Lao Động Tân Bình Minh",
-      capabilities: ["Đồng phục công nhân", "Áo thun polo kỹ thuật", "PPE phòng sạch ESD"],
-      serviceArea: "TP.HCM · Đồng Nai · Bình Dương",
-      orderScale: "300 – 5.000 bộ/đơn hàng",
-      factoryEquipment: "Xưởng may 1.800m², 120 máy may điện tử tự động Juki & Brother",
-      certifications: ["ISO 9001:2015", "OEKO-TEX Standard 100", "Kiểm định Trung tâm 3"],
-      updatedAt: "25/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/images/icons/zalo-icon.png"
-    },
-    {
-      id: "ncc-04",
-      name: "Công ty TNHH Nhựa Kỹ Thuật Cao VinaPoly",
-      capabilities: ["Khay nhựa chống tĩnh điện", "Gia công ép nhựa kỹ thuật", "Hộp blister định hình"],
-      serviceArea: "Bình Dương · Đồng Nai · Long An",
-      orderScale: "5.000 – 100.000 sản phẩm / tháng",
-      factoryEquipment: "18 máy ép nhựa tự động Sumitomo & Fanuc từ 80T đến 350T",
-      certifications: ["ISO 9001:2015", "RoHS", "REACH Compliant"],
-      updatedAt: "28/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    },
-    {
-      id: "ncc-07",
-      name: "Doanh nghiệp Xi Mạ & Xử Lý Bề Mặt Anode Thăng Long",
-      capabilities: ["Anodizing nhôm cứng", "Mạ Niken hóa học", "Thụ động hóa bề mặt Inox"],
-      serviceArea: "Hà Nội · Bắc Ninh · Hưng Yên",
-      orderScale: "10.000 – 200.000 chi tiết / lô",
-      factoryEquipment: "Dây chuyền mạ tự động khép kín theo tiêu chuẩn nước thải KCN",
-      certifications: ["ISO 14001:2015", "Chứng nhận xuất khẩu FDI"],
-      updatedAt: "24/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    }
-  ];
+  const { column1Suppliers, column2Suppliers, column3Suppliers } = React.useMemo(() => {
+    const rawList = (Array.isArray(cloudSuppliers) && cloudSuppliers.length > 0)
+      ? cloudSuppliers
+      : CRAWLED_PREVIEW_24_SUPPLIERS;
 
-  const column2Suppliers = [
-    {
-      id: "ncc-02",
-      name: "Bao Bì Công Nghiệp Toàn Thắng",
-      capabilities: ["Thùng carton 3-5-7 lớp sóng BC", "Pallet giấy", "Màng PE quấn hàng"],
-      serviceArea: "Bình Dương · Đồng Nai · Long An",
-      orderScale: "1.000 – 50.000 thùng/tháng",
-      factoryEquipment: "Dây chuyền tạo sóng 1.8m, máy in Flexo 4 màu khổ lớn tại KCN VSIP 1",
-      certifications: ["ISO 9001:2015", "FSC CoC Chain of Custody", "RoHS"],
-      updatedAt: "22/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    },
-    {
-      id: "ncc-05",
-      name: "Công ty TNHH Hóa Chất Công Nghiệp Nam Phát",
-      capabilities: ["Dung môi tẩy rửa công nghiệp", "Dầu cắt gọt kim loại CNC", "Hóa chất xử lý nước thải"],
-      serviceArea: "Đồng Nai · TP.HCM · Bà Rịa Vũng Tàu",
-      orderScale: "500 lít – 20 tấn / đơn hàng",
-      factoryEquipment: "Kho bồn chứa đạt chuẩn PCCC hóa chất và xe bồn chuyên dụng",
-      certifications: ["ISO 9001:2015", "Giấy phép hóa chất công nghiệp"],
-      updatedAt: "26/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    },
-    {
-      id: "ncc-08",
-      name: "Trung Tâm Thử Nghiệm & Hiệu Chuẩn Quatest Tech",
-      capabilities: ["Hiệu chuẩn thiết bị đo phòng Lab", "Thử nghiệm cơ lý vật liệu", "Kiểm định an toàn nồi hơi"],
-      serviceArea: "TP.HCM · Bình Dương · Đồng Nai",
-      orderScale: "Theo gói dự án hoặc hợp đồng định kỳ",
-      factoryEquipment: "Phòng đo chuẩn cấp 2, máy kéo nén đa năng 100 tấn Shimadzu",
-      certifications: ["ISO/IEC 17025", "Bộ KH&CN chỉ định"],
-      updatedAt: "21/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    }
-  ];
+    const formatted = rawList.map((supp, idx) => formatRealSupplier(supp, idx));
 
-  const column3Suppliers = [
-    {
-      id: "ncc-03",
-      name: "Cơ Khí Chính Xác & Khuôn Mẫu An Phát",
-      capabilities: ["Gia công phay tiện CNC", "Đồ gá Jig hàn", "Dập uốn chi tiết kim loại"],
-      serviceArea: "Bắc Ninh · Hà Nội · Hải Phòng",
-      orderScale: "50 – 5.000 chi tiết / đợt",
-      factoryEquipment: "14 trung tâm phay CNC Mazak & DMG Mori, phòng đo quang học CMM Mitutoyo",
-      certifications: ["ISO 9001:2015", "Cam kết bảo mật NDA FDI", "Đạt chuẩn CMM"],
-      updatedAt: "20/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    },
-    {
-      id: "ncc-06",
-      name: "Xưởng Pallet Gỗ & Thùng Kiện Xuất Khẩu Đông Á",
-      capabilities: ["Pallet gỗ tràm khử trùng HT", "Kiện gỗ máy móc công nghiệp", "Thùng gỗ dán ép"],
-      serviceArea: "Bình Dương · Đồng Nai · Tây Ninh",
-      orderScale: "500 – 10.000 pallet / tháng",
-      factoryEquipment: "Lò sấy nhiệt đạt chuẩn ISPM 15, máy cắt ghép nan tự động",
-      certifications: ["Chứng chỉ khử trùng ISPM 15", "ISO 9001:2015"],
-      updatedAt: "27/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    },
-    {
-      id: "ncc-09",
-      name: "Công ty Thiết Bị & Tự Động Hóa Dây Chuyền Tân Tiến",
-      capabilities: ["Lắp ráp băng tải công nghiệp", "Tủ điện điều khiển PLC", "Robot gắp sản phẩm tự động"],
-      serviceArea: "Hải Phòng · Bắc Ninh · Quảng Ninh",
-      orderScale: "Từng module đơn lẻ hoặc hệ thống trọn gói",
-      factoryEquipment: "Xưởng lắp ráp cơ điện tử 2.500m², bàn test tải tự động",
-      certifications: ["CE Marking", "ISO 9001:2015"],
-      updatedAt: "23/09/2026",
-      status: "Đã đối chiếu",
-      logo: "/logo_onlyc.png"
-    }
-  ];
+    const col1 = [];
+    const col2 = [];
+    const col3 = [];
+
+    formatted.forEach((supp, idx) => {
+      if (idx % 3 === 0) col1.push(supp);
+      else if (idx % 3 === 1) col2.push(supp);
+      else col3.push(supp);
+    });
+
+    return {
+      column1Suppliers: col1,
+      column2Suppliers: col2,
+      column3Suppliers: col3
+    };
+  }, []);
 
   return (
     <section className="w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-6">
