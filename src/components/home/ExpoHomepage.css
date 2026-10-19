@@ -4,7 +4,7 @@
  * Pre-emit critique: P4 H5 E4 S5 R5 V4. Approved invitation, no photo note.
  */
 .expo-home { padding: var(--expo-space-2xl) var(--expo-space-lg) var(--expo-space-3xl); background: var(--expo-paper); color: var(--expo-ink); font-family: inherit; }
-.expo-home-shell { max-width: 1280px; margin-inline: auto; min-width: 0; padding: var(--expo-space-xl) var(--expo-space-lg); border: 1px solid var(--expo-line); border-radius: var(--expo-radius-media); background: var(--expo-ticket); color: var(--expo-ink); }
+.expo-home-shell { max-width: 1600px; margin-inline: auto; min-width: 0; padding: var(--expo-space-xl) var(--expo-space-lg); border: 1px solid var(--expo-line); border-radius: var(--expo-radius-media); background: var(--expo-ticket); color: var(--expo-ink); }
 .expo-home-salutation { margin: 0 0 var(--expo-space-xl); padding-bottom: var(--expo-space-md); border-bottom: 1px solid var(--expo-line); color: var(--expo-green); font-size: 14px; font-weight: 600; }
 .expo-home-masthead { display: grid; gap: var(--expo-space-xl); padding-bottom: var(--expo-space-xl); }
 .expo-home-title-group { min-width: 0; }

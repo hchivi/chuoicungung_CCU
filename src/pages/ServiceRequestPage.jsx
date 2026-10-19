@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -227,7 +228,7 @@ export default function ServiceRequestPage() {
   // Kiểm tra User session nếu đã login (Không bắt nhập lại company info)
   useEffect(() => {
     try {
-      const savedUser = localStorage.getItem('ccu_user_session');
+      const savedUser = privateBrowserStorage.getItem('ccu_user_session');
       if (savedUser) {
         const u = JSON.parse(savedUser);
         setFormData(prev => ({
@@ -326,7 +327,7 @@ export default function ServiceRequestPage() {
   };
 
   // Xử lý nộp form chính thức (Section 7, 8, 9 Spec 17)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
     if (currentStep === 1) { handleNextToStep2(); return; }
@@ -341,7 +342,7 @@ export default function ServiceRequestPage() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
       // Đóng gói dynamicData tùy theo serviceType
       let dynamicDataPayload = {};
       if (formData.serviceType === 'TO_CHUC_KET_NOI') {
@@ -356,7 +357,7 @@ export default function ServiceRequestPage() {
         dynamicDataPayload = formData.sponsorship;
       }
 
-      const res = submitUnifiedServiceRequest({
+      const res = await submitUnifiedServiceRequest({
         serviceType: formData.serviceType,
         serviceIds: formData.serviceIds,
         companyName: formData.companyName,
@@ -426,7 +427,9 @@ export default function ServiceRequestPage() {
         setSubmittedResult(res.request);
         window.scrollTo({ top: 100, behavior: 'smooth' });
       }
-    }, 600);
+    } catch (error) {
+      setConsentError(error.message || 'Chưa lưu được yêu cầu. Thông tin vẫn còn trong biểu mẫu.');
+    } finally { setIsSubmitting(false); }
   };
 
   const currentServiceMeta = SERVICE_ENGINE_TYPES[formData.serviceType] || SERVICE_ENGINE_TYPES.TO_CHUC_KET_NOI;

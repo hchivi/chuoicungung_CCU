@@ -37,27 +37,31 @@ export function AssociationDiscoveryCard({ association, onClaim }) {
   const shortName = profile.shortName?.length <= 18 ? profile.shortName : null;
   const detailPath = `/hiep-hoi/${association.id}`;
   const firstProgramPath = programs.length > 0 ? getAssociationProgramPath(programs[0]) : null;
-  return <article className="ad-card" data-association-card={association.id} data-card-style="institutional">
-    <div className="ad-card__identity">
+  return <article className="ad-card" data-association-card={association.id} data-card-style="signature">
+    <div className="ad-card__front">
       <div className="ad-card__identity-top">
-        <div className="ad-card__image" data-image-state={imageFailed ? 'error' : imageLoaded ? 'loaded' : 'loading'}>{!imageLoaded && <span aria-hidden="true">{shortName?.slice(0, 2) || association.name.slice(0, 1)}</span>}{association.logo && !imageFailed && <img className={imageLoaded ? 'is-loaded' : ''} src={association.logo} alt="" width="64" height="64" loading="lazy" onLoad={() => setImageLoaded(true)} onError={() => { setImageFailed(true); setImageLoaded(false); }} />}</div>
+        <div className="ad-card__image" data-image-state={!association.logo ? 'initial' : imageFailed ? 'error' : imageLoaded ? 'loaded' : 'loading'}>{!imageLoaded && <span aria-hidden="true">{shortName?.slice(0, 2) || association.name.slice(0, 1)}</span>}{association.logo && !imageFailed && <img className={imageLoaded ? 'is-loaded' : ''} src={association.logo} alt="" width="48" height="48" loading="lazy" onLoad={() => setImageLoaded(true)} onError={() => { setImageFailed(true); setImageLoaded(false); }} />}</div>
         <div>{shortName && <p className="ad-card__short-name">{shortName}</p>}<span className="ad-card__scope">{scope.label}</span></div>
       </div>
       <h3><Link to={detailPath}>{association.name}</Link></h3>
-      <div className="ad-card__record">{memberCount > 0 && <p><strong>{memberCount.toLocaleString('vi-VN')}</strong><span>hội viên theo hồ sơ</span></p>}{year && <p><strong>{year}</strong><span>Năm thành lập</span></p>}{profile.hasCatalogue && <Link to={detailPath}>Catalogue / kỷ yếu <span aria-hidden="true">↗</span></Link>}</div>
+      <p className="ad-card__industry">{industries[0] || scope.label}</p>
+      <div className="ad-card__record">{memberCount > 0 && <p><strong>{memberCount.toLocaleString('vi-VN')}</strong><span>hội viên theo hồ sơ</span></p>}{year && <p><strong>{year}</strong><span>Năm thành lập</span></p>}</div>
+      <p className="ad-card__geography">{profile.geographicScope?.join(', ') || association.province || 'Xem địa bàn trong hồ sơ'}</p>
     </div>
-    <div className="ad-card__dossier">
-      <div className="ad-card__expertise"><p className="ad-card__label">Lĩnh vực kết nối</p><ul>{industries.slice(0, 3).map((industry, index) => <li key={`${industry}-${index}`}>{industry}</li>)}</ul></div>
-      <div className="ad-card__location"><p className="ad-card__label">Địa bàn hoạt động</p><p className="ad-card__geography">{profile.geographicScope?.join(', ') || association.province || 'Xem địa bàn trong hồ sơ'}</p></div>
-      <details className="ad-card__about"><summary>Tìm hiểu tổ chức <span aria-hidden="true">+</span></summary><p>{profile.scopeDescription || association.description || 'Khám phá thông tin và lĩnh vực hoạt động trong hồ sơ tổ chức.'}</p>{industries.length > 3 && <p><strong>Lĩnh vực khác:</strong> {industries.slice(3).join(' · ')}</p>}</details>
-    </div>
+    <details className="ad-card__connections"><summary>Xem kết nối ({programs.length}) <span aria-hidden="true">+</span></summary>
+    <div className="ad-card__expanded">
+      <div className="ad-card__expertise"><p className="ad-card__label">Lĩnh vực kết nối</p><ul>{industries.map((industry, index) => <li key={`${industry}-${index}`}>{industry}</li>)}</ul></div>
+      <details className="ad-card__about"><summary>Tìm hiểu tổ chức <span aria-hidden="true">+</span></summary><p>{profile.scopeDescription || association.description || 'Khám phá thông tin và lĩnh vực hoạt động trong hồ sơ tổ chức.'}</p></details>
     <div className="ad-card__activities">
       <p className="ad-card__label">Chương trình liên kết <span className="ad-card__program-count">{programs.length}</span></p>
       {programs.length > 0 ? <div className="ad-card__program"><AssociationProgramTitle program={programs[0]} /><p className="ad-card__role">{programs[0].roleLabel}</p>{programs[0].dates && <p className="ad-card__date">{programs[0].dates}</p>}{!firstProgramPath && <p className="ad-card__unavailable">Đang cập nhật thông tin chương trình.</p>}{programs.length > 1 && <details><summary>Chương trình khác <span aria-hidden="true">+</span></summary>{programs.slice(1).map(program => <div key={program.programId}><AssociationProgramTitle program={program} /><small>{program.roleLabel}</small>{program.dates && <small>{program.dates}</small>}{!getAssociationProgramPath(program) && <small>Đang cập nhật thông tin chương trình.</small>}</div>)}</details>}</div> : <p className="ad-card__no-program">Chưa có chương trình liên kết được công bố.</p>}
     </div>
+    {profile.hasCatalogue && <Link className="ad-card__catalogue" to={detailPath}>Catalogue / kỷ yếu <span aria-hidden="true">↗</span></Link>}
+    </div>
+    </details>
     <footer className="ad-card__footer">
-      <div className="ad-card__actions"><Link className="ad-button ad-button--primary" to={detailPath}>Xem hồ sơ tổ chức <span aria-hidden="true">↗</span></Link>{firstProgramPath && <Link className="ad-card__program-link" to={firstProgramPath}>Xem chương trình <span aria-hidden="true">↗</span></Link>}</div>
-      <button type="button" className="ad-card__claim" onClick={() => onClaim(association)}>Liên kết hồ sơ hội viên <span aria-hidden="true">↗</span></button>
+      <div className="ad-card__actions"><Link className="ad-button" to={detailPath} aria-label={`Xem hồ sơ tổ chức ${association.name}`}>Xem hồ sơ <span aria-hidden="true">↗</span></Link></div>
+      <button type="button" className="ad-card__claim" aria-label={`Liên kết hồ sơ hội viên với ${association.name}`} onClick={() => onClaim(association)}>Liên kết hội viên <span aria-hidden="true">↗</span></button>
     </footer>
   </article>;
 }

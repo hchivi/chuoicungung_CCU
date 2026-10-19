@@ -3,10 +3,8 @@
  * Standardized according to codex_fixed.txt Section VII.
  */
 
-import mongoose from 'mongoose';
-import Enterprise from '../models/Enterprise.js';
-import IndustrialPark from '../models/IndustrialPark.js';
-import Factory from '../models/Factory.js';
+import { createSupabaseRepository } from '../storage/supabaseRepository.js';
+import { getSupabase } from '../supabase.js';
 
 let sitemapCache = null;
 let sitemapCacheExpiry = 0;
@@ -20,6 +18,7 @@ const STATIC_CANONICAL_ROUTES = [
   '/hiep-hoi',
   '/san-nhu-cau',
   '/chuong-trinh',
+  '/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026',
   '/dich-vu',
   '/ban-do-6-giai-doan',
   '/giai-doan/giai-doan-1-chuan-bi-dau-tu',
@@ -46,7 +45,7 @@ export function handleRobotsTxt(req, res) {
   res.send(robots);
 }
 
-export async function handleSitemapXml(req, res) {
+export async function handleSitemapXml(req, res, next, repository = createSupabaseRepository({ client: getSupabase() })) {
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=3600');
 
@@ -65,13 +64,10 @@ export async function handleSitemapXml(req, res) {
   }
 
   // 2. Published database entities (if MongoDB is connected)
-  if (mongoose.connection.readyState === 1) {
+  {
     try {
       // Enterprises (Suppliers)
-      const enterprises = await Enterprise.find({ slug: { $exists: true, $ne: '' } })
-        .select('slug updatedAt')
-        .limit(2000)
-        .lean();
+      const enterprises = (await repository.all('suppliers')).slice(0, 2000);
       for (const ent of enterprises) {
         if (ent.slug) {
           const lastmod = (ent.updatedAt ? new Date(ent.updatedAt) : new Date()).toISOString().split('T')[0];
@@ -80,10 +76,7 @@ export async function handleSitemapXml(req, res) {
       }
 
       // Industrial Parks
-      const iparks = await IndustrialPark.find({ slug: { $exists: true, $ne: '' } })
-        .select('slug updatedAt')
-        .limit(600)
-        .lean();
+      const iparks = (await repository.all('industrialParks')).slice(0, 600);
       for (const ip of iparks) {
         if (ip.slug) {
           const lastmod = (ip.updatedAt ? new Date(ip.updatedAt) : new Date()).toISOString().split('T')[0];
@@ -92,10 +85,7 @@ export async function handleSitemapXml(req, res) {
       }
 
       // Factories
-      const factories = await Factory.find({ slug: { $exists: true, $ne: '' } })
-        .select('slug updatedAt')
-        .limit(2000)
-        .lean();
+      const factories = (await repository.all('factories')).slice(0, 2000);
       for (const fac of factories) {
         if (fac.slug) {
           const lastmod = (fac.updatedAt ? new Date(fac.updatedAt) : new Date()).toISOString().split('T')[0];
@@ -103,7 +93,7 @@ export async function handleSitemapXml(req, res) {
         }
       }
     } catch (e) {
-      console.warn('⚠️ Lỗi khi nạp dữ liệu động cho sitemap:', e.message);
+      return next ? next(e) : res.status(503).send('Sitemap temporarily unavailable');
     }
   }
 

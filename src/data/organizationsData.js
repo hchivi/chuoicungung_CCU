@@ -1,4 +1,6 @@
 // ============================================================================
+import { isCloudBrowser, getCloudRecords } from './cloudData.js';
+import { persistSubmission, getPrivateSubmissions } from '../services/submissionService.js';
 // MASTER ORGANIZATION REGISTRY & CLAIM OWNERSHIP SERVICE
 // PAGE 12: TẠO / NHẬN QUẢN LÝ HỒ SƠ (/tao-ho-so)
 // Chuẩn hóa theo spec 12.txt - CHUOICUNGUNG.COM
@@ -34,213 +36,13 @@ const STORAGE_KEYS = {
 // ----------------------------------------------------------------------------
 // 1. SEED ORGANIZATIONS (Khởi tạo sẵn một số doanh nghiệp tiêu biểu để test Search/Claim)
 // ----------------------------------------------------------------------------
-export const SEED_ORGANIZATIONS = [
-  {
-    id: 'ORG-PROSER-001',
-    name: 'Công ty TNHH Chuyên Gia Đồng Phục Proser',
-    legalName: 'CÔNG TY TNHH CHUYÊN GIA ĐỒNG PHỤC PROSER',
-    taxCode: '0314567890',
-    website: 'https://chuyengiadongphuc.com',
-    country: 'Việt Nam',
-    province: 'TP. Hồ Chí Minh',
-    address: '154 Phạm Văn Chiêu, Phường 9, Quận Gò Vấp, TP. Hồ Chí Minh',
-    orgType: 'Doanh nghiệp sản xuất',
-    logo: '/images/founding-partners/chuyen-gia-dong-phuc-logo.png',
-    roles: ['SUPPLIER', 'FACTORY', 'FOUNDING_PARTNER'],
-    isClaimed: true,
-    isPublished: true,
-    ownerUserId: 'USER-PROSER-ADMIN',
-    completenessScore: 85,
-    createdAt: '2026-01-15T08:00:00Z',
-    capabilities: ['May mặc bảo hộ lao động', 'Đồng phục doanh nghiệp FDI', 'Dệt kháng tĩnh điện ESD'],
-    productsServices: ['Áo thun polo', 'Đồng phục công nhân kaki', 'Đồng phục phòng sạch cleanroom']
-  },
-  {
-    id: 'ORG-TAHOMART-002',
-    name: 'Công ty Cổ phần Tập đoàn TAHOMART Việt Nam',
-    legalName: 'CÔNG TY CỔ PHẦN TẬP ĐOÀN TAHOMART VIỆT NAM',
-    taxCode: '0101234567',
-    website: 'https://tahomart.vn',
-    country: 'Việt Nam',
-    province: 'Hà Nội',
-    address: 'Tầng 12, Keangnam Landmark 72, Đường Phạm Hùng, Q. Nam Từ Liêm, Hà Nội',
-    orgType: 'Doanh nghiệp thương mại & chế biến',
-    logo: '/images/founding-partners/tahomart-logo.png',
-    roles: ['SUPPLIER', 'BUYER', 'FOUNDING_PARTNER'],
-    isClaimed: true,
-    isPublished: true,
-    ownerUserId: 'USER-TAHO-ADMIN',
-    completenessScore: 90,
-    createdAt: '2026-02-10T09:30:00Z',
-    capabilities: ['Đóng gói màng co nhiệt tự động', 'Nông sản chế biến xuất khẩu'],
-    productsServices: ['Giỏ quà màng co 9:16', 'Mít sấy Nam Huy', 'Hộp quà tết công nhân']
-  },
-  {
-    id: 'ORG-AMATA-003',
-    name: 'Công ty Cổ phần Đô Thị Amata Biên Hòa',
-    legalName: 'CÔNG TY CỔ PHẦN ĐÔ THỊ AMATA BIÊN HÒA',
-    taxCode: '3600284561',
-    website: 'https://amata.com',
-    country: 'Việt Nam',
-    province: 'Đồng Nai',
-    address: 'KCN Amata, Phường Long Bình, TP. Biên Hòa, Tỉnh Đồng Nai',
-    orgType: 'Chủ đầu tư Hạ tầng KCN',
-    logo: 'https://images.unsplash.com/photo-1577495508048-b635879837f1?w=100&auto=format&fit=crop&q=80',
-    roles: ['INDUSTRIAL_PARK', 'BUYER', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false, // Chưa được claim -> Có thể claim thử
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 60,
-    createdAt: '2026-03-01T10:00:00Z',
-    capabilities: ['Hạ tầng kỹ thuật KCN hoàn chỉnh', 'Cấp điện 110kV', 'Xử lý nước thải 12.000m3/ngày'],
-    productsServices: ['Cho thuê đất công nghiệp', 'Cho thuê nhà xưởng xây sẵn (RBF)']
-  },
-  {
-    id: 'ORG-MEKONG-FOOD-004',
-    name: 'Công ty Cổ phần Thực Phẩm Xanh Mekong',
-    legalName: 'CÔNG TY CỔ PHẦN THỰC PHẨM XANH MEKONG',
-    taxCode: '1100987654',
-    website: 'https://mekongfoods.vn',
-    country: 'Việt Nam',
-    province: 'Long An',
-    address: 'KCN Long Hậu, Xã Long Hậu, Huyện Cần Giuộc, Tỉnh Long An',
-    orgType: 'Nhà máy chế biến',
-    logo: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&auto=format&fit=crop&q=80',
-    roles: ['FACTORY', 'BUYER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 50,
-    createdAt: '2026-03-12T14:20:00Z',
-    capabilities: ['Chế biến đóng gói thực phẩm đạt chuẩn HACCP', 'Kho lạnh -18 độ C'],
-    productsServices: ['Thực phẩm sấy', 'Thủy hải sản đông lạnh']
-  },
-  {
-    id: 'ORG-HAME-005',
-    name: 'Hội Doanh Nghiệp Cơ Khí - Điện TP. Hồ Chí Minh (HAME)',
-    legalName: 'HỘI DOANH NGHIỆP CƠ KHÍ - ĐIỆN THÀNH PHỐ HỒ CHÍ MINH',
-    taxCode: '0303889911',
-    website: 'https://hame.org.vn',
-    country: 'Việt Nam',
-    province: 'TP. Hồ Chí Minh',
-    address: '156 Nam Kỳ Khởi Nghĩa, Phường Bến Nghé, Quận 1, TP. HCM',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'PROGRAM_ORGANIZER', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 65,
-    createdAt: '2026-01-20T11:00:00Z',
-    capabilities: ['Kết nối giao thương B2B ngành Cơ khí', 'Hội chợ triển lãm chuyên ngành'],
-    productsServices: ['Chương trình kết nối giao thương', 'Hội thảo đào tạo kỹ thuật']
-  },
-  {
-    id: 'ORG-VLA-008',
-    name: 'Hiệp hội Doanh nghiệp Dịch vụ Logistics Việt Nam (VLA)',
-    legalName: 'HIỆP HỘI DOANH NGHIỆP DỊCH VỤ LOGISTICS VIỆT NAM',
-    taxCode: '0101568912',
-    website: 'https://vla.com.vn',
-    country: 'Việt Nam',
-    province: 'Hà Nội',
-    address: 'Tầng 5, Tòa nhà VCCI, Số 9 Đào Duy Anh, Q. Đống Đa, Hà Nội',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 75,
-    createdAt: '2026-01-18T09:00:00Z',
-    capabilities: ['Logistics & Giao nhận quốc tế', 'Kho bãi & Vận tải đa phương thức'],
-    productsServices: ['Kết nối giải pháp logistics', 'Đào tạo hải quan & chuỗi cung ứng']
-  },
-  {
-    id: 'ORG-VITAS-009',
-    name: 'Hiệp hội Dệt May Việt Nam (VITAS)',
-    legalName: 'HIỆP HỘI DỆT MAY VIỆT NAM',
-    taxCode: '0101458923',
-    website: 'https://vietnamtextile.org.vn',
-    country: 'Việt Nam',
-    province: 'Hà Nội',
-    address: 'Số 32 Tràng Tiền, Quận Hoàn Kiếm, Hà Nội',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'PROGRAM_ORGANIZER', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 80,
-    createdAt: '2026-01-10T10:00:00Z',
-    capabilities: ['Chuỗi cung ứng dệt may xanh', 'Xúc tiến xuất khẩu thời trang'],
-    productsServices: ['Chương trình kết nối nguồn cung vải', 'Hội thảo ESG dệt may']
-  },
-  {
-    id: 'ORG-VASEP-010',
-    name: 'Hiệp hội Chế biến và Xuất khẩu Thủy sản Việt Nam (VASEP)',
-    legalName: 'HIỆP HỘI CHẾ BIẾN VÀ XUẤT KHẨU THỦY SẢN VIỆT NAM',
-    taxCode: '0301429811',
-    website: 'https://vasep.com.vn',
-    country: 'Việt Nam',
-    province: 'TP. Hồ Chí Minh',
-    address: 'Số 71 đường 75, KDC Tân Quy Đông, P. Tân Phong, Quận 7, TP. HCM',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1534483509719-3feaee7c30da?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 78,
-    createdAt: '2026-01-12T14:00:00Z',
-    capabilities: ['Bảo quản lạnh & Đóng gói thủy sản', 'Kiểm soát chất lượng xuất khẩu'],
-    productsServices: ['Chương trình kết nối nhà máy & bao bì', 'Kỷ yếu xuất khẩu thủy sản']
-  },
-  {
-    id: 'ORG-DNBA-012',
-    name: 'Hiệp hội Doanh nghiệp Tỉnh Đồng Nai (DNBA)',
-    legalName: 'HIỆP HỘI DOANH NGHIỆP TỈNH ĐỒNG NAI',
-    taxCode: '3600554421',
-    website: 'https://dnba.org.vn',
-    country: 'Việt Nam',
-    province: 'Đồng Nai',
-    address: 'Đường Nguyễn Ái Quốc, Phường Tân Phong, TP. Biên Hòa, Tỉnh Đồng Nai',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1541888946425-d0fbb1861593?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'PROGRAM_ORGANIZER', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 70,
-    createdAt: '2026-02-01T08:30:00Z',
-    capabilities: ['Phát triển công nghiệp phụ trợ KCN', 'Giao thương doanh nghiệp địa phương'],
-    productsServices: ['Chương trình kết nối cung cầu Đồng Nai', 'Diễn đàn đối thoại KCN']
-  },
-  {
-    id: 'ORG-VEIA-014',
-    name: 'Hiệp hội Doanh nghiệp Điện tử Việt Nam (VEIA)',
-    legalName: 'HIỆP HỘI DOANH NGHIỆP ĐIỆN TỬ VIỆT NAM',
-    taxCode: '0101889922',
-    website: 'https://veia.org.vn',
-    country: 'Việt Nam',
-    province: 'Hà Nội',
-    address: 'Số 11B Cát Linh, Quận Ba Đình, Hà Nội',
-    orgType: 'Hội / Hiệp hội',
-    logo: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&auto=format&fit=crop&q=80',
-    roles: ['ASSOCIATION', 'DEVELOPMENT_PARTNER'],
-    isClaimed: false,
-    isPublished: true,
-    ownerUserId: null,
-    completenessScore: 72,
-    createdAt: '2026-02-15T10:00:00Z',
-    capabilities: ['Linh kiện điện tử & Bán dẫn', 'SMT & Lắp ráp bo mạch PCB'],
-    productsServices: ['Danh bạ nhà cung cấp Tier-2', 'Kết nối chuỗi FDI điện tử']
-  }
-];
+export const SEED_ORGANIZATIONS = websiteSeed('organizationsData.SEED_ORGANIZATIONS');
 
 // ----------------------------------------------------------------------------
 // 2. HELPER FUNCTIONS & STORAGE ACCESS
 // ----------------------------------------------------------------------------
 export function getAllOrganizations() {
+  if (isCloudBrowser()) return getCloudRecords('organizations');
   const raw = safeGetItem(STORAGE_KEYS.ORGANIZATIONS);
   if (raw) {
     try { return JSON.parse(raw); } catch (e) {}
@@ -253,6 +55,7 @@ export function saveAllOrganizations(orgs) {
 }
 
 export function getAllClaims() {
+  if (isCloudBrowser()) return getPrivateSubmissions('organizationClaim');
   const raw = safeGetItem(STORAGE_KEYS.CLAIMS);
   if (raw) {
     try { return JSON.parse(raw); } catch (e) {}
@@ -389,7 +192,7 @@ export function searchOrganizations(keyword) {
  * Nộp yêu cầu nhận quyền quản lý hồ sơ (Claim Profile).
  * Không tự động phê duyệt ngay; tạo bản ghi PENDING và chờ xác minh.
  */
-export function submitOrganizationClaim({
+export async function submitOrganizationClaim({
   organizationId,
   requesterUserId,
   requesterName,
@@ -433,6 +236,7 @@ export function submitOrganizationClaim({
     createdAt: new Date().toISOString()
   };
 
+  if (isCloudBrowser()) return { success: true, claim: await persistSubmission('organizationClaim', newClaim) };
   claims.unshift(newClaim);
   saveAllClaims(claims);
 
@@ -454,7 +258,7 @@ export function submitOrganizationClaim({
  * Không duplicate Organization theo vai trò.
  * Tạo Organization != public ngay (Section 11).
  */
-export function createNewOrganization({
+export async function createNewOrganization({
   name,
   legalName,
   taxCode,
@@ -494,6 +298,10 @@ export function createNewOrganization({
     productsServices: []
   };
 
+  if (isCloudBrowser()) {
+    const saved = await persistSubmission('organizationProposal', { ...newOrg, creatorName });
+    return { success: true, organization: { ...saved, isPublished: false, isClaimed: false } };
+  }
   allOrgs.unshift(newOrg);
   saveAllOrganizations(allOrgs);
 
@@ -751,3 +559,4 @@ export function auditOrganizationDuplicates(customList = null) {
 
   return duplicateResults;
 }
+import { websiteSeed } from './websiteSeeds.js';

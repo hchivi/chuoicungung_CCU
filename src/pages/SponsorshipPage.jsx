@@ -179,7 +179,7 @@ export default function SponsorshipPage() {
   };
 
   // Xử lý gửi đề xuất tài trợ
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault();
     setFormError('');
 
@@ -196,7 +196,7 @@ export default function SponsorshipPage() {
     setFormSubmitting(true);
 
     try {
-      const result = submitSponsorshipInquiry(formData, {
+      const result = await submitSponsorshipInquiry(formData, {
         name: formData.contactName,
         role: 'PROSPECTIVE_SPONSOR'
       });

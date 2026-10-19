@@ -401,7 +401,8 @@ export function checkScopeConflict({ categoryId, keywordClusterId, locationId, s
 // 7. SUBMIT INQUIRY (SECTION 11, 12, 13 SPEC 18.TXT)
 // LUẬT BẮT BUỘC: Form submit CHỈ TẠO "INQUIRY", TUYỆT ĐỐI KHÔNG TỰ KÍCH HOẠT "ACTIVE"!
 // ----------------------------------------------------------------------------
-export function submitFoundingPartnershipInquiry(formData) {
+export async function submitFoundingPartnershipInquiry(formData) {
+  if (isCloudBrowser()) return persistInquiry('foundingPartnership', formData);
   const allPartnerships = getAllFoundingPartnerships();
   const year = new Date().getFullYear();
   const sequence = String(allPartnerships.length + 105).padStart(5, '0');
@@ -647,3 +648,5 @@ export function verifySupplierMatchingNeutrality() {
     message: 'Founding Partner không được cộng điểm matching, kết quả tìm kiếm tự nhiên hoàn toàn dựa trên năng lực kỹ thuật và khoảng cách địa lý.'
   };
 }
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';

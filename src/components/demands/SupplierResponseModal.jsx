@@ -139,7 +139,7 @@ export default function SupplierResponseModal({
   }
 
   // XỬ LÝ SUBMIT PHẢN HỒI
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.agreedTerms) {
       alert('Vui lòng tích cam kết xác nhận có năng lực đáp ứng nhu cầu này.');
@@ -147,8 +147,8 @@ export default function SupplierResponseModal({
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      const res = submitSupplierResponse({
+    try {
+      const res = await submitSupplierResponse({
         requirementId: requirement.id,
         supplierOrganizationId: supplierOrgId,
         supplierName: supplierName,
@@ -165,7 +165,8 @@ export default function SupplierResponseModal({
       setIsSubmitting(false);
       setSubmitSuccess(true);
       if (onResponseSubmitted) onResponseSubmitted(res.response);
-    }, 700);
+    } catch (error) { alert(error.message || 'Chưa lưu được phản hồi.'); }
+    finally { setIsSubmitting(false); }
   };
 
   return (

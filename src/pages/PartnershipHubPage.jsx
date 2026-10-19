@@ -71,12 +71,12 @@ export default function PartnershipHubPage() {
     formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
     setIsSubmitting(true);
 
-    const result = submitPartnershipInquiry({
+    try { const result = await submitPartnershipInquiry({
       ...formData,
       category: selectedCategory
     });
@@ -99,6 +99,8 @@ export default function PartnershipHubPage() {
     } else {
       setErrorMessage(result.message || 'Có lỗi xảy ra khi gửi đề xuất.');
     }
+    } catch (error) { setErrorMessage(error.message || 'Chưa lưu được đề xuất.'); }
+    finally { setIsSubmitting(false); }
   };
 
   const story = PARTNER_STORIES[selectedCategory];

@@ -38,17 +38,33 @@ Thumbs.db
 *.rar
 ziK6pLVQ
 deploy_inet.zip
+deploy_update.zip
 _backup_unused_assets/
 archive_uploads/
-catalog/
-
-archive_uploads/
-server/data/enterprisesFull.json
 catalog/
 public/catalogues/CATALOGUE_*.pdf
 zi*
 
+# Databases and sqlite dumps (>100MB limit on GitHub)
+*.db
+*.sqlite
+*.sqlite3
+server/data/*.db
+tools/suppliers/*.db
+
+# Python virtual environments & caches
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+tools/**/__pycache__/
+
 # Private crawl checkpoints, contact data, backups and isolated Python runtime
 .crawl-data/
+.supplier-data/
 .venv-crawl/
-tools/trangvang/__pycache__/
+
+# Scratch & temporary office lock files
+scratch/
+~$*
+

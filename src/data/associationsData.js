@@ -4,7 +4,8 @@
 // Tuân thủ triệt để đặc tả 24.txt - CHUOICUNGUNG.COM
 // ============================================================================
 
-import associationsList from './associations.json' with { type: 'json' };
+import { associations as associationsList, isCloudBrowser, getCloudRecords } from './cloudData.js';
+import { persistSubmission, getPrivateSubmissions } from '../services/submissionService.js';
 import { getAllOrganizations } from './organizationsData.js';
 import { getAllPrograms, PROGRAM_STATUSES_ENUM } from './programsData.js';
 import { getAllMasterRequirements } from './requirementsData.js';
@@ -75,239 +76,14 @@ export const MEMBERSHIP_TYPE_ENUM = {
 // QUY TẮC CỨNG SECTION 2: Không copy name, logo, address nếu Organization đã có
 // ----------------------------------------------------------------------------
 
-export const SEED_ASSOCIATION_PROFILES = [
-  {
-    id: 'ASSOC-PROF-HAME-005',
-    organizationId: 'ORG-HAME-005',
-    shortName: 'HAME',
-    associationType: 'Hội ngành nghề kỹ thuật công nghiệp',
-    scopeDescription: 'Tập hợp các doanh nghiệp hàng đầu trong lĩnh vực gia công cơ khí chính xác, thiết bị điện công nghiệp, tự động hóa và đúc dập kim loại tại TP.HCM và các tỉnh lân cận.',
-    geographicScope: ['TP. Hồ Chí Minh', 'Miền Nam', 'Bình Dương', 'Đồng Nai'],
-    industryScope: ['Cơ khí chính xác', 'Thiết bị điện & Tự động hóa', 'Khuôn mẫu & Đúc dập'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.REGIONAL,
-    establishedYear: 2001,
-    publicContact: {
-      phone: '028 3822 5555',
-      email: 'vanphong@hame.org.vn',
-      address: '156 Nam Kỳ Khởi Nghĩa, Phường Bến Nghé, Quận 1, TP. HCM',
-      website: 'https://hame.org.vn'
-    },
-    membershipPublicPolicy: 'Doanh nghiệp gia công cơ khí, thiết bị điện nộp hồ sơ đăng ký kèm giấy ĐKKD. Ban chấp hành họp xét duyệt định kỳ hàng tháng.',
-    publishable: true,
-    confirmedMembersCount: 380, // Section 14: Chỉ hiển thị khi có source xác nhận
-    hasCatalogue: true,
-    catalogueTitle: 'Kỷ yếu Năng lực Doanh nghiệp Cơ khí & Tự động hóa HAME 2026',
-    ownerUserId: 'USR-COORD-NAM',
-    ownerName: 'Lê Minh Quân (Lead Coordinator CCU)',
-    nextAction: 'Phối hợp chốt danh mục gian hàng cụm Cơ khí - Điện tại Sourcing Day',
-    nextActionAt: '2026-10-05T17:00:00Z',
-    updatedAt: '2026-09-28T08:00:00Z'
-  },
-  {
-    id: 'ASSOC-PROF-VLA-008',
-    organizationId: 'ORG-VLA-008',
-    shortName: 'VLA',
-    associationType: 'Hiệp hội Doanh nghiệp Dịch vụ Quốc gia',
-    scopeDescription: 'Hiệp hội đại diện cho các doanh nghiệp giao nhận kho vận, vận tải đa phương thức, cảng biển và chuỗi logistics tại Việt Nam.',
-    geographicScope: ['Toàn quốc', 'Cảng biển Hải Phòng', 'Cảng biển Cái Mép - Thị Vải'],
-    industryScope: ['Logistics & Giao nhận', 'Vận tải đa phương thức', 'Kho vận & Chuỗi cung ứng lạnh'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.NATIONAL,
-    establishedYear: 1993,
-    publicContact: {
-      phone: '024 3943 9555',
-      email: 'vla-hn@vla.com.vn',
-      address: 'Tầng 5, Tòa nhà VCCI, Số 9 Đào Duy Anh, Đống Đa, Hà Nội',
-      website: 'https://vla.com.vn'
-    },
-    membershipPublicPolicy: 'Doanh nghiệp hoạt động trong lĩnh vực vận tải, logistics, thủ tục hải quan có giấy phép thành lập hợp pháp tại Việt Nam.',
-    publishable: true,
-    confirmedMembersCount: 650,
-    hasCatalogue: true,
-    catalogueTitle: 'Danh bạ Năng lực Doanh nghiệp Dịch vụ Logistics Việt Nam 2026',
-    ownerUserId: 'USR-COORD-BAC',
-    ownerName: 'Trần Thanh Hải (Ban Hợp Tác Logistics)',
-    nextAction: 'Tổ chức hội thảo chuyên đề tối ưu chi phí vận tải đa phương thức',
-    nextActionAt: '2026-10-08T15:00:00Z',
-    updatedAt: '2026-09-26T10:00:00Z'
-  },
-  {
-    id: 'ASSOC-PROF-VITAS-009',
-    organizationId: 'ORG-VITAS-009',
-    shortName: 'VITAS',
-    associationType: 'Hiệp hội Ngành Dệt May Toàn Quốc',
-    scopeDescription: 'Đại diện cho các nhà sản xuất bông sợi, dệt nhuộm, may mặc xuất khẩu và phụ liệu ngành may trên toàn lãnh thổ Việt Nam.',
-    geographicScope: ['Toàn quốc', 'Long An', 'Nam Định', 'Bình Dương'],
-    industryScope: ['Dệt may & Thời trang', 'Bông sợi & Kéo sợi', 'Phụ liệu may & Nhuộm xanh'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.NATIONAL,
-    establishedYear: 1999,
-    publicContact: {
-      phone: '024 3936 1166',
-      email: 'info@vietnamtextile.org.vn',
-      address: 'Số 32 Tràng Tiền, Hoàn Kiếm, Hà Nội',
-      website: 'https://vietnamtextile.org.vn'
-    },
-    membershipPublicPolicy: 'Doanh nghiệp sản xuất dệt may và cung ứng phụ liệu đạt chuẩn ESG và trách nhiệm xã hội.',
-    publishable: true,
-    confirmedMembersCount: 820,
-    hasCatalogue: true,
-    catalogueTitle: 'Báo cáo & Danh bạ Chuỗi Cung Ứng Dệt May Xanh VITAS',
-    ownerUserId: 'USR-COORD-NAM',
-    ownerName: 'Nguyễn Thị Bích',
-    nextAction: 'Rà soát năng lực nhà cung ứng sợi tái chế cho đơn hàng xuất khẩu EU',
-    nextActionAt: '2026-10-06T14:00:00Z',
-    updatedAt: '2026-09-27T11:00:00Z'
-  },
-  {
-    id: 'ASSOC-PROF-VASEP-010',
-    organizationId: 'ORG-VASEP-010',
-    shortName: 'VASEP',
-    associationType: 'Hiệp hội Chế biến & Xuất khẩu Thủy sản',
-    scopeDescription: 'Quy tụ các tập đoàn và nhà máy nuôi trồng, chế biến, bảo quản lạnh và xuất khẩu thủy sản sang các thị trường khó tính EU, Mỹ, Nhật Bản.',
-    geographicScope: ['Toàn quốc', 'Đồng bằng Sông Cửu Long', 'Duyên hải Nam Trung Bộ'],
-    industryScope: ['Chế biến thủy sản', 'Bảo quản đông lạnh', 'Bao bì & Chuỗi cung ứng thực phẩm'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.NATIONAL,
-    establishedYear: 1998,
-    publicContact: {
-      phone: '028 6281 0430',
-      email: 'vasep@vasep.com.vn',
-      address: 'Số 71 đường 75, KDC Tân Quy Đông, P. Tân Phong, Quận 7, TP. HCM',
-      website: 'https://vasep.com.vn'
-    },
-    membershipPublicPolicy: 'Dành cho các doanh nghiệp chế biến thủy sản có mã code xuất khẩu và chứng chỉ HACCP / BRC / IFS.',
-    publishable: true,
-    confirmedMembersCount: 420,
-    hasCatalogue: true,
-    catalogueTitle: 'Danh bạ Doanh nghiệp Thủy sản Xuất khẩu Đạt Chuẩn VASEP',
-    ownerUserId: 'USR-COORD-NAM',
-    ownerName: 'Trần Hoài Nam',
-    nextAction: 'Khảo sát nhu cầu bao bì màng phức hợp cho các nhà máy thủy sản',
-    nextActionAt: '2026-10-10T10:00:00Z',
-    updatedAt: '2026-09-25T16:00:00Z'
-  },
-  {
-    id: 'ASSOC-PROF-DNBA-012',
-    organizationId: 'ORG-DNBA-012',
-    shortName: 'DNBA',
-    associationType: 'Hiệp hội Doanh nghiệp Địa phương Cấp Tỉnh',
-    scopeDescription: 'Tổ chức đại diện cho cộng đồng doanh nghiệp trong và ngoài các khu công nghiệp tại địa bàn tỉnh Đồng Nai.',
-    geographicScope: ['Tỉnh Đồng Nai', 'KCN Biên Hòa', 'KCN Nhơn Trạch', 'KCN Amata'],
-    industryScope: ['Công nghiệp hỗ trợ', 'Bao bì & Nhựa kỹ thuật', 'Hóa chất công nghiệp'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.PROVINCIAL,
-    establishedYear: 2004,
-    publicContact: {
-      phone: '0251 3832 999',
-      email: 'vanphong@dnba.org.vn',
-      address: 'Đường Nguyễn Ái Quốc, Phường Tân Phong, TP. Biên Hòa, Tỉnh Đồng Nai',
-      website: 'https://dnba.org.vn'
-    },
-    membershipPublicPolicy: 'Doanh nghiệp có đăng ký kinh doanh và hoạt động sản xuất thương mại tại tỉnh Đồng Nai.',
-    publishable: true,
-    confirmedMembersCount: 310,
-    hasCatalogue: true,
-    catalogueTitle: 'Kỷ yếu Doanh nghiệp Hội viên Hiệp hội Doanh nghiệp Đồng Nai',
-    ownerUserId: 'USR-COORD-NAM',
-    ownerName: 'Nguyễn Hoàng Khang',
-    nextAction: 'Chốt chương trình phối hợp với KCN Amata và Chuỗi Cung Ứng',
-    nextActionAt: '2026-10-04T16:00:00Z',
-    updatedAt: '2026-09-28T09:00:00Z'
-  },
-  {
-    id: 'ASSOC-PROF-VEIA-014',
-    organizationId: 'ORG-VEIA-014',
-    shortName: 'VEIA',
-    associationType: 'Hiệp hội Ngành Chuyên môn Sâu Điện tử',
-    scopeDescription: 'Quy tụ các doanh nghiệp thiết kế mạch, sản xuất linh kiện điện tử, gia công bo mạch SMT và vi mạch bán dẫn.',
-    geographicScope: ['Toàn quốc', 'Bắc Ninh', 'Hải Phòng', 'Khu Công Nghệ Cao TP.HCM'],
-    industryScope: ['Linh kiện điện tử', 'SMT & Gia công bo mạch PCB', 'Bán dẫn & Cơ khí điện tử'],
-    scopeType: ASSOCIATION_SCOPE_TYPE_ENUM.SPECIALIZED_INDUSTRY,
-    establishedYear: 2000,
-    publicContact: {
-      phone: '024 3733 6688',
-      email: 'veia@veia.org.vn',
-      address: 'Số 11B Cát Linh, Ba Đình, Hà Nội',
-      website: 'https://veia.org.vn'
-    },
-    membershipPublicPolicy: 'Dành cho các doanh nghiệp, viện nghiên cứu và trường đại học hoạt động trong ngành Điện tử - Vi mạch.',
-    publishable: true,
-    confirmedMembersCount: 290,
-    hasCatalogue: true,
-    catalogueTitle: 'Báo cáo Chuỗi Cung Ứng Ngành Điện tử & Phụ Trợ Việt Nam',
-    ownerUserId: 'USR-COORD-BAC',
-    ownerName: 'Đặng Tuấn Anh',
-    nextAction: 'Thẩm định hồ sơ năng lực Tier-2 cho chuỗi cung ứng máy bay không người lái',
-    nextActionAt: '2026-10-07T14:00:00Z',
-    updatedAt: '2026-09-27T15:00:00Z'
-  }
-];
+export const SEED_ASSOCIATION_PROFILES = websiteSeed('associationsData.SEED_ASSOCIATION_PROFILES');
 
 // ----------------------------------------------------------------------------
 // 3. SEED PROGRAM-ORGANIZATION RELATIONS (SECTIONS 8, 9, 10, 31)
 // QUY TẮC CỨNG SECTION 10: Chỉ public role khi status === 'CONFIRMED'
 // ----------------------------------------------------------------------------
 
-export const SEED_PROGRAM_ORGANIZATIONS = [
-  {
-    id: 'PROG-ORG-001',
-    programId: 'sourcing-day-electronics-bac-ninh',
-    programSlug: 'sourcing-day-electronics-bac-ninh',
-    programTitle: 'Ngày Hội Tìm Kiếm Nhà Cung Ứng Linh Kiện Điện Tử & Phụ Trợ Bắc Ninh 2026',
-    organizationId: 'ORG-HAME-005',
-    role: PROGRAM_ORG_ROLE_ENUM.ORGANIZER,
-    status: PROGRAM_ORG_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    confirmedBy: 'Lê Minh Quân (Lead Coordinator)',
-    confirmedAt: '2026-09-01T08:00:00Z'
-  },
-  {
-    id: 'PROG-ORG-002',
-    programId: 'green-packaging-dong-nai',
-    programSlug: 'green-packaging-dong-nai',
-    programTitle: 'Hội Thảo Chuỗi Cung Ứng Bao Bì Xanh & Vật Liệu Tái Chế KCN Đồng Nai',
-    organizationId: 'ORG-DNBA-012',
-    role: PROGRAM_ORG_ROLE_ENUM.ORGANIZER,
-    status: PROGRAM_ORG_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    confirmedBy: 'Nguyễn Thị Bích',
-    confirmedAt: '2026-09-05T09:00:00Z'
-  },
-  {
-    id: 'PROG-ORG-003',
-    programId: 'chuoi-cung-ung-det-may-long-an',
-    programSlug: 'chuoi-cung-ung-det-may-long-an',
-    programTitle: 'Kết Nối Doanh Nghiệp Cung Ứng Dệt May & Phụ Liệu May Mặc Long An',
-    organizationId: 'ORG-VITAS-009',
-    role: PROGRAM_ORG_ROLE_ENUM.CO_ORGANIZER,
-    status: PROGRAM_ORG_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    confirmedBy: 'Trần Hoài Nam',
-    confirmedAt: '2026-09-10T14:00:00Z'
-  },
-  {
-    id: 'PROG-ORG-004',
-    programId: 'vsip-binh-duong',
-    programSlug: 'vsip-binh-duong',
-    programTitle: 'Ngày Hội Chuỗi Cung Ứng Công Nghiệp Bình Dương 2026 - KCN VSIP 1',
-    organizationId: 'ORG-HAME-005',
-    role: PROGRAM_ORG_ROLE_ENUM.PARTNER,
-    status: PROGRAM_ORG_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    confirmedBy: 'Lê Minh Quân',
-    confirmedAt: '2026-09-12T10:00:00Z'
-  },
-  // Quan hệ PENDING để kiểm tra Rule Section 10 & 31: Tuyệt đối không được public
-  {
-    id: 'PROG-ORG-PENDING-005',
-    programId: 'trang-due-deep-c',
-    programSlug: 'trang-due-deep-c',
-    programTitle: 'Kết Nối Doanh Nghiệp Phụ Trợ Công Nghiệp Hải Phòng 2026',
-    organizationId: 'ORG-VLA-008',
-    role: PROGRAM_ORG_ROLE_ENUM.CO_ORGANIZER,
-    status: PROGRAM_ORG_STATUS_ENUM.PENDING, // BỊ CHẶN KHÔNG ĐƯỢC HIỂN THỊ
-    publicDisplay: false,
-    confirmedBy: null,
-    confirmedAt: null
-  }
-];
+export const SEED_PROGRAM_ORGANIZATIONS = websiteSeed('associationsData.SEED_PROGRAM_ORGANIZATIONS');
 
 // ----------------------------------------------------------------------------
 // 4. SEED ORGANIZATION MEMBERSHIPS (SECTIONS 11, 12, 13)
@@ -317,57 +93,7 @@ export const SEED_PROGRAM_ORGANIZATIONS = [
 // - Chỉ hiển thị khi có Membership record status === 'CONFIRMED'
 // ----------------------------------------------------------------------------
 
-export const SEED_ORGANIZATION_MEMBERSHIPS = [
-  {
-    id: 'MEMB-HAME-001',
-    associationOrganizationId: 'ORG-HAME-005',
-    memberOrganizationId: 'ORG-PROSER-001',
-    memberOrganizationName: 'Công ty TNHH Chuyên Gia Đồng Phục Proser',
-    membershipType: MEMBERSHIP_TYPE_ENUM.HOI_VIEN_CHINH_THUC,
-    status: MEMBERSHIP_STATUS_ENUM.CONFIRMED,
-    startDate: '2024-01-01',
-    endDate: null,
-    source: 'ANNUAL_OFFICIAL_ROSTER',
-    evidenceNotes: 'Hồ sơ hội viên HAME số HV-2024-088. Đã nộp hội phí 2026.',
-    publicDisplay: true,
-    confirmedBy: 'Ban Thư Ký HAME',
-    confirmedAt: '2024-01-15T09:00:00Z',
-    createdAt: '2024-01-10T08:00:00Z'
-  },
-  {
-    id: 'MEMB-DNBA-002',
-    associationOrganizationId: 'ORG-DNBA-012',
-    memberOrganizationId: 'ORG-AMATA-003',
-    memberOrganizationName: 'Công ty Cổ phần Đô Thị Amata Biên Hòa',
-    membershipType: MEMBERSHIP_TYPE_ENUM.HOI_VIEN_CHINH_THUC,
-    status: MEMBERSHIP_STATUS_ENUM.CONFIRMED,
-    startDate: '2023-05-10',
-    endDate: null,
-    source: 'OFFICIAL_DECISION',
-    evidenceNotes: 'Quyết định kết nạp số 45/QĐ-DNBA.',
-    publicDisplay: true,
-    confirmedBy: 'Chủ tịch DNBA',
-    confirmedAt: '2023-05-10T10:00:00Z',
-    createdAt: '2023-05-01T08:00:00Z'
-  },
-  // Bản ghi Claim tự nguyện đang chờ duyệt (Section 13 & 30): KHÔNG AUTO-APPROVE
-  {
-    id: 'MEMB-CLAIM-PENDING-003',
-    associationOrganizationId: 'ORG-HAME-005',
-    memberOrganizationId: 'ORG-TAHOMART-002',
-    memberOrganizationName: 'Công ty Cổ phần Tập đoàn TAHOMART Việt Nam',
-    membershipType: MEMBERSHIP_TYPE_ENUM.HOI_VIEN_LIEN_KET,
-    status: MEMBERSHIP_STATUS_ENUM.PENDING, // Chờ duyệt
-    startDate: null,
-    endDate: null,
-    source: 'PORTAL_CLAIM',
-    evidenceNotes: 'Chúng tôi tham gia nhóm cung ứng bao bì màng co và gửi giấy đề nghị gia nhập HAME.',
-    publicDisplay: false,
-    confirmedBy: null,
-    confirmedAt: null,
-    createdAt: '2026-09-28T09:30:00Z'
-  }
-];
+export const SEED_ORGANIZATION_MEMBERSHIPS = websiteSeed('associationsData.SEED_ORGANIZATION_MEMBERSHIPS');
 
 // ----------------------------------------------------------------------------
 // 5. IN-MEMORY RUNTIME REPOSITORIES & HELPERS
@@ -379,6 +105,7 @@ let inMemoryMemberships = [...SEED_ORGANIZATION_MEMBERSHIPS];
 let inMemoryAssociationAuditLogs = [];
 
 export function getAllAssociationProfiles() {
+  if (isCloudBrowser()) return getCloudRecords('associationProfiles');
   try {
     if (typeof localStorage !== 'undefined') {
       const raw = localStorage.getItem(STORAGE_KEYS.ASSOCIATION_PROFILES);
@@ -390,6 +117,7 @@ export function getAllAssociationProfiles() {
 }
 
 export function getAllProgramOrganizations() {
+  if (isCloudBrowser()) return getCloudRecords('programOrganizations');
   try {
     if (typeof localStorage !== 'undefined') {
       const raw = localStorage.getItem(STORAGE_KEYS.PROGRAM_ORGANIZATIONS);
@@ -401,6 +129,7 @@ export function getAllProgramOrganizations() {
 }
 
 export function getAllOrganizationMemberships() {
+  if (isCloudBrowser()) return getCloudRecords('organizationMemberships');
   try {
     if (typeof localStorage !== 'undefined') {
       const raw = localStorage.getItem(STORAGE_KEYS.ORGANIZATION_MEMBERSHIPS);
@@ -690,7 +419,7 @@ export function getAssociationsListing(options = {}) {
     if (region && region !== 'all') {
       const reg = region.toLowerCase();
       const matchProv = (item.province || '').toLowerCase().includes(reg);
-      const matchGeo = (item.profile?.geographicScope || []).some(g => g.toLowerCase().includes(reg));
+      const matchGeo = (item.profile?.geographicScope || []).some(g => (typeof g === 'string' ? g : String(g?.name || g || '')).toLowerCase().includes(reg));
       if (!matchProv && !matchGeo) return false;
     }
 
@@ -740,7 +469,7 @@ export function getAssociationsListing(options = {}) {
 // QUY TẮC CỨNG SECTION 13 & 30: KHÔNG AUTO APPROVE
 // ----------------------------------------------------------------------------
 
-export function submitMembershipClaim({
+export async function submitMembershipClaim({
   associationOrganizationId,
   memberOrganizationId,
   memberOrganizationName,
@@ -784,6 +513,10 @@ export function submitMembershipClaim({
     updatedAt: new Date().toISOString()
   };
 
+  if (isCloudBrowser()) {
+    const claim = await persistSubmission('membershipClaim', newClaim);
+    return { success: true, claimId: claim.id, claim, message: 'Đề nghị đã lưu và đang chờ Ban Thư ký thẩm tra.' };
+  }
   allMemberships.unshift(newClaim);
   inMemoryMemberships = allMemberships;
 
@@ -964,129 +697,14 @@ export function canUserAccessAssociationData(userContext, associationOrgId, reso
 // 13. SUPPLIER GROUPS MODEL & DATA (SECTIONS 18, 19, 20 SPEC 25.TXT)
 // ----------------------------------------------------------------------------
 
-export const SEED_SUPPLIER_GROUPS = [
-  {
-    id: 'GRP-HAME-01',
-    associationOrganizationId: 'ORG-HAME-005',
-    title: 'Cơ khí chính xác & Tiện phay CNC',
-    description: 'Tập hợp các nhà máy xưởng có máy phay tiện CNC từ 3 đến 5 trục, phòng đo CMM đạt chuẩn ISO 9001/IATF 16949.',
-    category: 'Cơ khí & Chế tạo',
-    location: 'TP. Hồ Chí Minh & Bình Dương',
-    visibility: 'PUBLIC',
-    status: 'ACTIVE',
-    supplierCount: 45,
-    sampleSuppliers: [
-      { id: 'ORG-PROSER-001', name: 'Công ty TNHH Chuyên Gia Đồng Phục Proser & Cơ khí Nam Việt', role: 'SUPPLIER', capabilities: ['Tiện phay CNC', 'Đồ gá Jig'] },
-      { id: 'ORG-MEKONG-FOOD-004', name: 'Phân xưởng Cơ điện Lạnh Mekong', role: 'FACTORY', capabilities: ['Gia công vỏ tủ điện', 'Hàn laser'] }
-    ]
-  },
-  {
-    id: 'GRP-HAME-02',
-    associationOrganizationId: 'ORG-HAME-005',
-    title: 'Thiết bị điện & Tự động hóa công nghiệp',
-    description: 'Cung cấp giải pháp tủ bảng điện, lập trình PLC/SCADA, cảm biến và cánh tay robot công nghiệp.',
-    category: 'Thiết bị điện & Tự động hóa',
-    location: 'TP. Hồ Chí Minh & Đồng Nai',
-    visibility: 'PUBLIC',
-    status: 'ACTIVE',
-    supplierCount: 38,
-    sampleSuppliers: [
-      { id: 'ORG-HAME-005', name: 'Trung tâm Phát triển Cơ điện HAME', role: 'SUPPLIER', capabilities: ['Tủ điện hạ thế', 'Tích hợp biến tần'] }
-    ]
-  },
-  {
-    id: 'GRP-HAME-03',
-    associationOrganizationId: 'ORG-HAME-005',
-    title: 'Gia công khuôn mẫu & Đúc dập kim loại',
-    description: 'Chế tạo khuôn ép nhựa kỹ thuật, khuôn dập liên hoàn và đúc hợp kim nhôm đồng áp lực cao.',
-    category: 'Khuôn mẫu & Đúc kim loại',
-    location: 'TP. Hồ Chí Minh & Long An',
-    visibility: 'PUBLIC',
-    status: 'ACTIVE',
-    supplierCount: 29,
-    sampleSuppliers: []
-  },
-  {
-    id: 'GRP-DNBA-01',
-    associationOrganizationId: 'ORG-DNBA-012',
-    title: 'Bao bì công nghiệp & Nhựa kỹ thuật KCN',
-    description: 'Sản xuất thùng carton 5-7 lớp, màng xốp PE Foam chống sốc và bao bì tự hủy sinh học cho các KCN Amata, Biên Hòa.',
-    category: 'Bao bì & Đóng gói',
-    location: 'Tỉnh Đồng Nai',
-    visibility: 'PUBLIC',
-    status: 'ACTIVE',
-    supplierCount: 32,
-    sampleSuppliers: [
-      { id: 'ORG-TAHOMART-002', name: 'Công ty Cổ phần Tập đoàn TAHOMART Việt Nam', role: 'SUPPLIER', capabilities: ['Màng co nhiệt', 'Thùng carton'] }
-    ]
-  },
-  {
-    id: 'GRP-VLA-01',
-    associationOrganizationId: 'ORG-VLA-008',
-    title: 'Vận tải đa phương thức & Kho vận cảng biển',
-    description: 'Dịch vụ vận tải container, kho ngoại quan, kho lạnh CFS tại cụm cảng Cái Mép và Hải Phòng.',
-    category: 'Logistics & Kho bãi',
-    location: 'Toàn quốc',
-    visibility: 'PUBLIC',
-    status: 'ACTIVE',
-    supplierCount: 65,
-    sampleSuppliers: []
-  }
-];
+export const SEED_SUPPLIER_GROUPS = websiteSeed('associationsData.SEED_SUPPLIER_GROUPS');
 
 // ----------------------------------------------------------------------------
 // 14. CONNECTION CASES MODEL & DATA (SECTIONS 23 & 24 SPEC 25.TXT)
 // QUY TẮC CỨNG: Chỉ public khi có consentStatus === 'GRANTED' và outcome xác nhận
 // ----------------------------------------------------------------------------
 
-export const SEED_ASSOCIATION_CASES = [
-  {
-    id: 'CASE-HAME-001',
-    associationOrganizationId: 'ORG-HAME-005',
-    title: 'Ghép nối thành công 10.000 chi tiết phay CNC nhôm anode cho nhà máy robot FDI',
-    summary: 'Doanh nghiệp FDI tại KCN VSIP 1 tìm nhà cung ứng phụ trợ cơ khí chính xác đạt chuẩn dung sai ±0.01mm. Hội HAME hỗ trợ thẩm tra năng lực nhà máy và tổ chức tiếp xúc 1:1 thành công.',
-    initialRequirement: {
-      id: 'NC-2026-00128',
-      title: 'Tìm đơn vị gia công 10.000 chi tiết tiện phay CNC nhôm anode',
-      category: 'Cơ khí & Chế tạo',
-      quantity: '10.000 chi tiết / đợt'
-    },
-    matchedSupplier: {
-      id: 'ORG-PROSER-001',
-      name: 'Công ty TNHH Chuyên Gia Đồng Phục Proser & Đối tác Cơ khí Nam Việt',
-      location: 'TP. Hồ Chí Minh',
-      role: 'Nhà cung ứng phụ trợ'
-    },
-    connectionDate: '15/09/2026',
-    outcome: 'Ký kết hợp đồng cung ứng Tier-2 và bàn giao đợt 1 đạt chuẩn kiểm định CMM',
-    consentStatus: 'GRANTED', // Quyền đồng ý công khai
-    publishStatus: 'PUBLISHED', // Đã được duyệt xuất bản
-    evidenceRef: 'HĐKT-2026-VSIP-088'
-  },
-  {
-    id: 'CASE-DNBA-002',
-    associationOrganizationId: 'ORG-DNBA-012',
-    title: 'Cung ứng bao bì màng co nhiệt và hộp quà tặng công nhân KCN Amata',
-    summary: 'Công đoàn các KCN Đồng Nai phối hợp Hội DN Đồng Nai kết nối nguồn cung 5.000 giỏ quà tết công nhân đạt chuẩn an toàn vệ sinh thực phẩm.',
-    initialRequirement: {
-      id: 'NC-2026-00132',
-      title: 'Cung cấp bao bì thùng carton & hộp quà tết',
-      category: 'Bao bì & Đóng gói',
-      quantity: '5.000 phần'
-    },
-    matchedSupplier: {
-      id: 'ORG-TAHOMART-002',
-      name: 'Công ty Cổ phần Tập đoàn TAHOMART Việt Nam',
-      location: 'Hà Nội / Đồng Nai',
-      role: 'Nhà cung cấp chuỗi'
-    },
-    connectionDate: '10/09/2026',
-    outcome: 'Ký kết thỏa thuận cung ứng định kỳ đạt 100% chỉ tiêu chất lượng',
-    consentStatus: 'GRANTED',
-    publishStatus: 'PUBLISHED',
-    evidenceRef: 'BIÊN_BẢN_NGHIỆM_THU_DNBA_01'
-  }
-];
+export const SEED_ASSOCIATION_CASES = websiteSeed('associationsData.SEED_ASSOCIATION_CASES');
 
 export function getSupplierGroupsForAssociation(associationOrgId) {
   return SEED_SUPPLIER_GROUPS.filter(g => g.associationOrganizationId === associationOrgId && g.status === 'ACTIVE');
@@ -1203,3 +821,4 @@ export function exportMembershipRoster(associationOrgId, userContext) {
     data: members
   };
 }
+import { websiteSeed } from './websiteSeeds.js';

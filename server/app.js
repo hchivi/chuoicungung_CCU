@@ -6,16 +6,20 @@ import { createSupabaseRepository } from './storage/supabaseRepository.js';
 
 import { createApiRouter } from './routes/api.js';
 import { createAssistantRouter } from './routes/assistants.js';
+import { createSubmissionsRouter } from './routes/submissions.js';
+import { createAuthService, identifyAccount } from './auth/service.js';
+import { createAuthRouter } from './routes/auth.js';
+import { createAdminRouter } from './routes/admin.js';
 import { handleCanonicalRedirects } from './routes/redirects.js';
 import { handleRobotsTxt, handleSitemapXml } from './routes/seo.js';
+import { createMediaProxyRouter } from './routes/media.js';
 import { 
   requestIdMiddleware, 
   noSqlSanitizer, 
-  createRateLimiter,
-  sessionOwnershipMiddleware
+  createRateLimiter
 } from './middleware/security.js';
 
-export function createApp({ assistantService = null, client = getSupabase(), repository = createSupabaseRepository({ client }) } = {}) {
+export function createApp({ assistantService = null, client = getSupabase(), repository = createSupabaseRepository({ client }), authService = createAuthService({ client }) } = {}) {
   const app = express();
 
   // 1. Security & Core Middleware
@@ -95,17 +99,33 @@ export function createApp({ assistantService = null, client = getSupabase(), rep
     if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && req.headers.origin && !allowedOrigins.includes(req.headers.origin)) return res.status(403).json({ success: false, error: { code: 'ORIGIN_DENIED', message: 'Nguồn truy cập không được phép.' } });
     next();
   });
-  app.use('/api/assistants', writeLimiter, createAssistantRouter({ service: assistantService, client, repository }));
+  const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 20, message: 'Quá nhiều thao tác xác thực. Vui lòng thử lại sau.' });
+  const sameOriginWrite = (req, res, next) => {
+    if (!['GET', 'HEAD', 'OPTIONS'].includes(req.method) && (!req.headers.origin || !allowedOrigins.includes(req.headers.origin))) return res.status(403).json({ success: false, error: { code: 'ORIGIN_DENIED', message: 'Thao tác này cần thực hiện từ website được phép.' } });
+    next();
+  };
+  app.use('/api/auth', sameOriginWrite, (req, res, next) => req.method === 'GET' ? next() : authLimiter(req, res, next), createAuthRouter({ service: authService }));
+  const apiRouter = createApiRouter({ repository, client });
+  app.use('/api/admin', sameOriginWrite, writeLimiter, createAdminRouter({ client, authService, invalidate: collection => {
+    repository.invalidate(collection);
+    if (['associations', 'organizations'].includes(collection)) { repository.invalidate('associations'); repository.invalidate('organizations'); }
+    apiRouter.invalidateBootstrap();
+  } }));
+  app.use('/api/assistants', writeLimiter, identifyAccount(authService), createAssistantRouter({ service: assistantService, client, repository }));
+  app.use('/api/submissions', writeLimiter, identifyAccount(authService), createSubmissionsRouter({ client }));
+  // Media Proxy for masking upstream crawler images with CCU domain
+  app.use('/api/media', createMediaProxyRouter());
+
   // Retired legacy Mongo/OpenAI endpoint. All current UI uses /api/assistants.
   app.use('/api/suppi', (_req, res) => res.status(410).json({ success: false, error: { code: 'API_RETIRED', message: 'Sử dụng /api/assistants/chat. API MongoDB cũ đã ngừng hoạt động.' } }));
-  app.use('/api', writeLimiter, createApiRouter({ repository, client }));
+  app.use('/api', (req, res, next) => ['GET', 'HEAD', 'OPTIONS'].includes(req.method) ? next() : writeLimiter(req, res, next), apiRouter);
 
   // Server root welcome info
   app.get('/', (_req, res) => {
     res.json({
       message: 'Chuỗi Cung Ứng - Backend API is running',
       version: '1.0.0',
-      endpoints: ['/healthz', '/readyz', '/api/status', '/api/enterprises', '/api/demands', '/api/industrial-parks', '/api/suppi/status']
+      endpoints: ['/healthz', '/readyz', '/api/status', '/api/enterprises', '/api/demands', '/api/industrial-parks', '/api/assistants/status']
     });
   });
 

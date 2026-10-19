@@ -174,9 +174,9 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
     <div className="fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-[1000] w-[92vw] sm:w-[420px] max-w-full h-[600px] max-h-[82vh] bg-white rounded-3xl shadow-2xl border border-slate-200/90 flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-5 duration-200 font-sans">
       
       {/* 1. HEADER (AVATAR mascot_duo.png + CHAT VỚI SUPPI & CHAINY) */}
-      <div className="p-3.5 sm:p-4 text-white transition-all flex items-center justify-between bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7]">
-        <div className="flex items-center space-x-2.5">
-          <div className="w-13 h-13 sm:w-14 sm:h-14 flex items-center justify-center shrink-0">
+      <div className="px-3 py-3 sm:px-4 sm:py-3.5 text-white transition-all flex items-center justify-between gap-2 bg-gradient-to-r from-[#003d8f] via-[#0052cc] to-[#0284c7]">
+        <div className="flex items-center space-x-2.5 min-w-0 flex-1">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
             <img 
               src="/mascot_duo.png" 
               alt="Mascot Duo" 
@@ -184,27 +184,32 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
               className="w-full h-full object-contain filter drop-shadow-md"
             />
           </div>
-          <div>
-            <div className="flex items-center space-x-2">
-              <span className="font-black text-sm uppercase tracking-wide font-heading text-white">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center space-x-1.5">
+              <span className="font-black text-xs sm:text-[13px] uppercase tracking-tight font-heading text-white whitespace-nowrap">
                 CHAT VỚI SUPPI &amp; CHAINY
               </span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
             </div>
-            <p className="text-[11px] text-blue-100/90 font-medium">
+            <p className="text-[11px] text-blue-100/90 font-medium whitespace-nowrap truncate">
               Tìm nguồn cung ứng &amp; Kết nối giao thương
             </p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-1">
-          {/* Nút Handoff Sang Zalo OA */}
+        <div className="flex items-center space-x-1 shrink-0">
+          {/* Nút Handoff Sang Zalo OA với Logo Zalo chuẩn */}
           <button
             onClick={() => setShowZaloModal(true)}
             title="Đồng bộ sang Zalo OA"
-            className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition flex items-center gap-1 text-xs font-bold cursor-pointer"
+            className="p-1 sm:p-1.5 rounded-xl bg-white/10 hover:bg-white/25 text-white transition flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 shrink-0"
           >
-            <span className="px-1.5 py-0.5 rounded bg-blue-600 text-[10px]">Zalo</span>
+            <img
+              src="/images/zalo_official.svg"
+              alt="Zalo"
+              className="w-5 h-5 object-contain rounded-md shadow-xs"
+              onError={(e) => { e.currentTarget.src = "/images/icons/zalo-icon.png"; }}
+            />
           </button>
 
           {/* Nút Mở rộng vào trang Trợ lý AI toàn màn hình — Vẫn giữ nguyên đoạn chat */}
@@ -334,9 +339,7 @@ export default function DifyChatWidget({ isOpen, onClose, initialMode = 'SUPPI' 
         <div ref={messagesEndRef} />
       </div>
 
-      <p className="px-3 pt-2 text-[10px] leading-relaxed text-slate-500">
-        Nội dung chat được gửi tới nhà cung cấp AI. Không gửi mật khẩu, bản vẽ, báo giá hoặc dữ liệu cá nhân nhạy cảm.
-      </p>
+
       {/* 3. FOOTER INPUT BOX */}
       <form
         onSubmit={(e) => {

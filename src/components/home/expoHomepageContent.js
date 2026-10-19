@@ -24,6 +24,22 @@ export const EXPO_HOME_ROLES = [
     action: 'Xem cách tổ chức',
     href: '/dich-vu/to-chuc-ket-noi',
   },
+  {
+    id: 'park_operator', label: 'Ban quản lý KCN', shortLabel: 'BQL KCN',
+    title: 'Xúc tiến đầu tư. Đồng hành KCN.',
+    description: 'Kết nối các doanh nghiệp trong KCN với mạng lưới nhà cung ứng và giới thiệu hạ tầng quỹ đất.',
+    benefits: ['Giới thiệu quỹ đất & hạ tầng', 'Hỗ trợ nhà máy trong KCN', 'Thu hút đầu tư thứ cấp'],
+    action: 'Kết nối KCN',
+    href: '/khu-cong-nghiep',
+  },
+  {
+    id: 'sponsor', label: 'Nhà tài trợ', shortLabel: 'Nhà tài trợ',
+    title: 'Đồng hành thương hiệu. Mở rộng vị thế.',
+    description: 'Hiện diện thương hiệu tại ngày hội B2B hàng đầu, tiếp cận trực tiếp 500+ nhà máy FDI & xưởng sản xuất.',
+    benefits: ['Hiện diện thương hiệu VIP', 'Gian hàng ưu tiên tại ngày hội', 'Tiếp cận 500+ doanh nghiệp'],
+    action: 'Xem gói tài trợ',
+    href: '/tai-tro',
+  },
 ];
 
 export function resolveExpoRole(id) {

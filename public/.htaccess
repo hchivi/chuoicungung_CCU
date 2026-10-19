@@ -14,6 +14,14 @@ AddDefaultCharset UTF-8
   AddType font/woff2 .woff2
 </IfModule>
 
+# Ensure /api/bootstrap and /api/auth/providers return application/json
+<FilesMatch "^(bootstrap|providers)$">
+  ForceType application/json
+  <IfModule mod_headers.c>
+    Header set Content-Type "application/json; charset=utf-8"
+  </IfModule>
+</FilesMatch>
+
 # Force direct binary download for PDF catalogues and VCF files (prevents inline preview on iOS/Android)
 <FilesMatch "\.(pdf|PDF|vcf|VCF)$">
   ForceType application/octet-stream
@@ -55,10 +63,19 @@ AddDefaultCharset UTF-8
   ExpiresByType font/woff2 "access plus 1 year"
 </IfModule>
 
-# SPA Routing: Route all requests to /index.html
+# Production API Endpoints for ChuoiCungUng.com
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 1. Media Proxy for masking upstream crawler images with CCU domain
+  RewriteRule ^api/media/(.*)$ /api-media.php?path=$1 [QSA,L]
+
+  # 2. Enterprises API for 150.000+ suppliers & single supplier details
+  RewriteRule ^api/enterprises/([^/]+)$ /api-enterprises.php?id=$1 [QSA,L]
+  RewriteRule ^api/enterprises/?$ /api-enterprises.php [QSA,L]
+
+  # SPA Routing: Route all remaining requests to /index.html
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

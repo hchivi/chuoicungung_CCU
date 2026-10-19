@@ -1,5 +1,47 @@
 # Association discovery redesign — 2026-10-07
 
+## Current approved selection — C: Danh thiếp lãnh đạo
+
+Applied the user's selected executive-business-card preview to the actual `/hiep-hoi` directory, not just the comparison page. The preview alternatives remain available for reference. This supersedes the earlier dossier-card revision below. No header, hero, filter, lower section, source record or backend changes were made in this adoption.
+
+Taste and Hallmark guided faithful component-level adoption: white cards, 4px corners, a restrained dark bottom rule, existing 48px identity thumbnail/initial and compact outline profile action. Desktop shows at most three cards per row, tablet two, phone one. Identity, main industry, recorded member/year facts and full geography remain immediately visible. Native “Xem kết nối” disclosure retains all industries, organization introduction, program titles/roles/dates and catalogue entry. Published program titles link to their canonical destinations; unpublished references remain explicitly unavailable. Membership linking still calls the original handler with the selected organization. No request was submitted during QA.
+
+Verification:
+
+- Updated the card regression first: it failed on the old institutional style, then passed with signature markup and disclosure. All 33 tests in the five existing discovery suites passed.
+- Chrome checked 320, 375, 414, 768, 1024, 1280, 1440 and 1920px. No horizontal overflow, component clipping, clipped control labels or controls below 44px. Card border widths are 1/1/3/1px; layout is 3/2/1 columns. Connection summaries reserve 56px.
+- Search, scopes, sectors, region, program/catalogue switches, sorting, shortcuts, empty/reset states and mobile select matched the existing data API. Native disclosure toggles by click and Enter; the existing membership dialog opens/closes. Profile, published program and cooperation destinations loaded their actual content. Simulated image failure kept the readable initial in its 48px frame.
+- Nine token contrast pairs passed 4.5:1 (minimum 6.15:1); keyboard focus and reduced motion were exercised. No full WCAG, axe, screen-reader or Core Web Vitals audit is claimed.
+- Desktop/mobile card screenshots were inspected against the selected C preview: `/tmp/ccu-association-cards-{1440,375}.png`. Expanded phone state is `/tmp/ccu-association-signature-expanded-mobile.png`. This is visual review, not automated pixel-regression certification. Some remote thumbnails loaded slowly; reserved initials remain visible while loading.
+- Production build passed, retaining existing large-chunk warnings. No deployment. Browser QA needed normal local Chrome launch outside the process sandbox; it performed no data writes.
+
+Scoped design critique: P4 H4 E4 S4 R5 V4. Card typography, contrast, four-sided borders, native interaction, image fallback and responsive wrapping were reviewed. Approved structure and existing fonts intentionally override layout/font rotation; page-level hero/navigation/footer gates are outside this card-only task.
+
+Self-evaluation: **4.0/5**. Accuracy 4: passing tests and live destinations support functional preservation; external source data remains unverified, so retain neutral record labels. Completeness 4: approved C and existing controls are implemented; formal assistive-technology review remains unperformed. Clarity 4: the front separates identity from expandable connections; very long original names still wrap naturally. Actionability 4: the real localhost page is ready for review; production deployment is outside scope. Conciseness 4: the collapsed cards are compact, but complete geography lists can still lengthen them. No axes at or below 2. Self-check: objective behavior is verified; visual approval remains the user's judgment. Future improvements: approved institutional imagery/data and representative leadership-user feedback. Verdict: deliver the selected design for review without claiming conversion gains.
+
+## Earlier revision — institutional organization dossiers
+
+The latest user request explicitly rejects the pastel covers and childlike presentation. This revision supersedes the card styling described in the earlier implementation record below; the invitation, filters, page hero, lower sections and shared chrome are untouched.
+
+Taste and Hallmark shaped a structurally different card: one organization per horizontal white dossier, subtle 6px corners, a restrained green top rule, three desktop information columns and a shared action footer. The columns distinguish identity, expertise/geography and linked programs. At tablet widths the program area spans both columns; phones use one column. Oversized acronyms, pastel covers and outlined industry pills have been removed. Existing source thumbnails and initials remain; no official logos or endorsements were invented.
+
+All original information remains, including every industry, description, location, recorded year/member count, program title, role and date. Extra industries/programs use native disclosures. Published programs retain working links; unpublished references retain their context and explicit unavailable-detail message. Profile and membership-linking actions use the original destinations/callbacks. The membership dialog was opened and closed, not submitted.
+
+Verification of this revision:
+
+- 33 regression tests passed across the five discovery suites, including 8 association tests.
+- Chrome checked 320, 375, 414, 768, 1024, 1280, 1440 and 1920px: no horizontal overflow, component clipping, clipped control labels or controls below 44px. All cards have a white background, complete borders and no legacy covers. Desktop dossiers have three internal columns, tablet two, phone one.
+- Existing filters, sorting, search, quick shortcuts, disclosures, empty/reset states and membership dialog matched the original behavior. Profile, published program and cooperation pages loaded their actual content. A simulated image failure retained its initial and reserved 64px frame.
+- Nine color pairs exceed 4.5:1 (minimum 6.15:1). Keyboard focus and reduced motion were exercised. These checks do not claim a complete accessibility audit.
+- Desktop, tablet and phone screenshots were inspected at `/tmp/ccu-association-cards-{1440,768,375}.png`. No baseline visual-regression comparison is claimed: the requested design is intentionally different.
+- Production build passes with existing large-chunk warnings. No deployment or backend changes were performed.
+
+Scoped design check: Philosophy 4, Hierarchy 4, Execution 4, Specificity 4, Restraint 5, Variety 5. The card-only review checks typography, contrast, image sizing, focus, responsive wrapping, factual content and absence of decorative icon/gradient/pastel-cover patterns. Existing site fonts/tokens are intentionally inherited; hero/navigation gates are out of scope.
+
+Self-evaluation: **4.0/5**. Accuracy 4: regression tests and live paths pass; source institution data is not independently verified, so approved organizational data remains the next improvement. Completeness 4: the pictured cards and existing interactions are covered; visual appeal still needs the user's review. Clarity 4: explicit information columns replace mixed tall card content; approved shorter program summaries could improve scan time further. Actionability 4: the result is live on the existing localhost route; production publishing was not requested. Conciseness 4: desktop rows are significantly less vertically fragmented, but preserving full source information still makes phone cards long. No critical axes at or below 2.
+
+Priority improvements: obtain approved institution imagery/data, then validate the hierarchy with association leaders. Self-check: functional preservation is evidenced; whether the new appearance meets the user's taste is theirs to judge. Verdict: deliver the scoped implementation for review, without claiming conversion gains.
+
 ## Scope
 
 Only the two requested screenshot areas on `/hiep-hoi` were redesigned: the old proof/guidance/filter area and organization cards. `AssociationsPage.jsx` remains the owner of filters, URL state, claim dialog and submission. The hero and every section below the directory remain unchanged; a regression test compares these boundaries with HEAD.

@@ -88,7 +88,7 @@ export default function VietnamMapPage() {
               <p className="text-[10.5px] font-bold text-slate-500 uppercase font-heading">Nhà Máy FDI</p>
             </div>
             <div className="bg-white px-3 py-2.5 rounded-2xl border border-slate-200/90 shadow-sm">
-              <span className="text-base sm:text-xl font-black text-rose-600 font-mono">32.000+</span>
+              <span className="text-base sm:text-xl font-black text-rose-600 font-mono">152.000+</span>
               <p className="text-[10.5px] font-bold text-slate-500 uppercase font-heading">NCC Phụ Trợ</p>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function VietnamMapPage() {
               Bạn Cần Khảo Sát Quỹ Đất Hoặc Tìm Nhà Thầu Xây Dựng Nhà Máy?
             </h3>
             <p className="text-xs text-blue-100 leading-relaxed">
-              Hệ thống Chuỗi Cung Ứng kết nối trực tiếp với Ban Quản Lý 480 KCN và 32.000+ Nhà thầu phụ trợ đã xác thực trong 18 Pha triển khai nhà máy.
+              Hệ thống Chuỗi Cung Ứng kết nối trực tiếp với Ban Quản Lý 480 KCN và 152.000+ Nhà thầu phụ trợ đã xác thực trong 18 Pha triển khai nhà máy.
             </p>
           </div>
 

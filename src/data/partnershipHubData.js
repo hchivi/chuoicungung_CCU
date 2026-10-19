@@ -375,7 +375,7 @@ export function checkDuplicatePartnershipInquiry(orgName, categoryId) {
  * HARD RULE (Section 37, 52): Form submit CHỈ tạo inquiry/request ở trạng thái RECEIVED.
  * Tuyệt đối KHÔNG auto-confirm partner.
  */
-export function submitPartnershipInquiry(formData) {
+export async function submitPartnershipInquiry(formData) {
   if (!formData.organizationName || !formData.representativeName || !formData.phone || !formData.email) {
     return { success: false, message: 'Vui lòng điền đầy đủ các trường bắt buộc (Tổ chức, Người đại diện, Email, SĐT).' };
   }
@@ -385,6 +385,7 @@ export function submitPartnershipInquiry(formData) {
   }
 
   const category = PARTNERSHIP_CATEGORIES.find(c => c.id === formData.category) || PARTNERSHIP_CATEGORIES[0];
+  if (isCloudBrowser()) return persistInquiry('partnership', { ...formData, categoryName: category.name });
   
   // Kiểm tra trùng lặp
   const dupCheck = checkDuplicatePartnershipInquiry(formData.organizationName, category.id);
@@ -519,3 +520,5 @@ export function verifyFinanceSeparationRule() {
     message: 'Quy tắc phân tách tài chính: Vốn đầu tư (INVESTMENT_CAPITAL) không được ghi nhận vào doanh thu thương mại.'
   };
 }
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';

@@ -1,0 +1,98 @@
+/* CCU B2B entry: existing brand, restrained motion, readable form controls. */
+.ccu-entry-page, .ccu-entry-form { --entry-green: #006039; --entry-ink: #17392f; --entry-muted: #596b65; --entry-rule: #d9e4df; --entry-paper: #fff; --entry-surface: #f5f8f6; color: var(--entry-ink); }
+.ccu-entry-page *, .ccu-entry-form * { box-sizing: border-box; }
+.ccu-entry-page { background: var(--entry-surface); padding: 40px 28px 48px; }
+.ccu-entry-layout { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 500px); gap: clamp(40px, 6vw, 88px); align-items: start; }
+.ccu-entry-story { padding-top: 16px; min-width: 0; }
+.ccu-entry-story h1 { font-size: clamp(32px, 3.1vw, 44px) !important; line-height: 1.18 !important; letter-spacing: -.035em; text-transform: none !important; font-weight: 750; color: var(--entry-ink); margin: 28px 0 16px; }
+.ccu-entry-intro { font-size: 17px; line-height: 1.65; color: var(--entry-muted); max-width: 440px; margin: 0; }
+.ccu-entry-benefits { display: grid; gap: 18px; margin: 26px 0 22px; }
+.ccu-entry-benefits > div { display: flex; align-items: start; gap: 14px; }
+.ccu-entry-benefits > div > span { width: 36px; height: 36px; display: grid; place-items: center; color: var(--entry-green); background: #e7f3ec; border-radius: 10px; flex-shrink: 0; }
+.ccu-entry-benefits svg { width: 19px; height: 19px; }
+.ccu-entry-benefits h3 { font-size: 16px !important; line-height: 1.45; font-weight: 650; text-transform: none !important; margin: 0 0 3px; }
+.ccu-entry-benefits p { font-size: 14px; line-height: 1.5; margin: 0; color: var(--entry-muted); }
+.ccu-entry-audience { font-size: 13px; line-height: 1.6; max-width: 460px; color: var(--entry-muted); padding-top: 18px; border-top: 1px solid var(--entry-rule); margin: 0 0 22px; }
+.ccu-entry-photo { margin: 0; }
+.ccu-entry-photo img { display: block; width: 100%; height: 165px; object-fit: cover; object-position: center 55%; border-radius: 14px; }
+.ccu-entry-photo figcaption { color: var(--entry-muted); font-size: 12px; margin-top: 8px; }
+.ccu-entry-form-column { min-width: 0; }
+.ccu-entry-form { width: 100%; padding: 30px; background: var(--entry-paper); border: 1px solid var(--entry-rule); border-radius: 20px; box-shadow: 0 8px 32px rgba(23, 57, 47, .04); }
+.ccu-entry-form-brand { display: none; }
+.ccu-entry-form button { font: inherit; cursor: pointer; }
+.ccu-entry-form button:disabled { cursor: not-allowed; }
+.ccu-entry-form :is(button, input, a):focus-visible { outline: 3px solid #439d72; outline-offset: 3px; }
+.ccu-entry-tabs { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4px; padding: 4px; background: var(--entry-surface); border-radius: 10px; margin-bottom: 26px; }
+.ccu-entry-tabs button { background: transparent; border: 0; border-radius: 7px; color: var(--entry-muted); font-size: 14px; font-weight: 650; padding: 10px 5px; min-height: 42px; white-space: nowrap; }
+.ccu-entry-tabs button[aria-pressed='true'] { color: var(--entry-green); background: var(--entry-paper); box-shadow: 0 1px 4px rgba(23, 57, 47, .08); }
+.ccu-entry-form-heading { margin-bottom: 24px; }
+.ccu-entry-form-heading h2 { margin: 0 0 8px; font-size: 25px !important; line-height: 1.3; font-weight: 700; letter-spacing: -.025em; text-transform: none !important; color: var(--entry-ink); }
+.ccu-entry-form-heading p { color: var(--entry-muted); font-size: 14px; line-height: 1.6; margin: 0; }
+.ccu-entry-social { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ccu-entry-social button { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; min-height: 48px; border: 1px solid var(--entry-rule); border-radius: 10px; background: var(--entry-paper); color: var(--entry-ink); font-size: 15px; font-weight: 650; }
+.ccu-entry-social button:hover:not(:disabled) { border-color: var(--entry-green); background: var(--entry-surface); }
+.ccu-entry-social button:disabled { background: var(--entry-surface); color: var(--entry-muted); }
+.ccu-entry-social small { display: block; font-size: 11px; font-weight: 400; line-height: 1.5; }
+.ccu-entry-provider-mark { display: grid; place-items: center; width: 24px; height: 24px; }
+.ccu-entry-provider-mark svg { width: 24px; height: 24px; }
+.ccu-entry-zalo { width: 27px; height: 27px; display: grid; place-items: center; border-radius: 7px; background: #0068ff; color: #fff; font-size: 10px; font-weight: 750; }
+.ccu-entry-provider-note { margin: 8px 0 0; font-size: 12px; color: var(--entry-muted); }
+.ccu-entry-divider { display: flex; align-items: center; gap: 12px; color: var(--entry-muted); font-size: 12px; margin: 24px 0; }
+.ccu-entry-divider::before, .ccu-entry-divider::after { content: ''; height: 1px; background: var(--entry-rule); flex: 1; }
+.ccu-entry-fields { display: grid; gap: 18px; }
+.ccu-entry-field { min-width: 0; }
+.ccu-entry-field label { color: var(--entry-ink); font-size: 14px; font-weight: 650; display: block; margin-bottom: 8px; line-height: 1.5; }
+.ccu-entry-field label > span { color: #b63737; }
+.ccu-entry-label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.ccu-entry-label-row > button { border: 0; padding: 0; background: transparent; color: var(--entry-green); font-size: 12px; font-weight: 600; }
+.ccu-entry-input { position: relative; }
+.ccu-entry-input > svg { position: absolute; left: 14px; top: 16px; width: 18px; height: 18px; color: var(--entry-muted); pointer-events: none; }
+.ccu-entry-input input { width: 100%; min-height: 50px; border: 1px solid var(--entry-rule); border-radius: 10px; background: var(--entry-paper); color: var(--entry-ink); padding: 12px 42px; font-size: 15px; line-height: 1.5; transition: border-color 150ms; }
+.ccu-entry-input input::placeholder { color: #6d7b75; opacity: 1; }
+.ccu-entry-input input:focus { border-color: var(--entry-green); outline: 2px solid #d1eadc; outline-offset: 0; }
+.ccu-entry-eye { display: grid; place-items: center; position: absolute; right: 5px; top: 5px; width: 40px; height: 40px; background: transparent; border: 0; color: var(--entry-muted); border-radius: 7px; }
+.ccu-entry-eye svg { width: 18px; height: 18px; }
+.ccu-entry-business-fields { display: grid; gap: 18px; }
+.ccu-entry-roles { border: 0; padding: 0; margin: 0; min-width: 0; }
+.ccu-entry-roles legend { font-size: 14px; font-weight: 650; padding: 0; }
+.ccu-entry-roles p { font-size: 12px; color: var(--entry-muted); margin: 4px 0 12px; }
+.ccu-entry-roles > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.ccu-entry-roles button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--entry-rule); background: var(--entry-paper); padding: 8px 10px; border-radius: 8px; font-size: 12px; color: var(--entry-muted); min-height: 36px; }
+.ccu-entry-roles button svg { width: 15px; height: 15px; }
+.ccu-entry-roles button[aria-pressed='true'] { color: var(--entry-green); background: #edf7f1; border-color: #8bbb9e; }
+.ccu-entry-submit { width: 100%; min-height: 52px; display: flex; justify-content: center; align-items: center; gap: 12px; background: var(--entry-green); border: 1px solid var(--entry-green); border-radius: 10px; color: #fff; padding: 12px; font-size: 15px !important; font-weight: 650 !important; margin-top: 2px; }
+.ccu-entry-submit:hover:not(:disabled) { background: #004b2c; }
+.ccu-entry-submit:disabled { opacity: .65; }
+.ccu-entry-submit svg, .ccu-entry-back svg { width: 18px; height: 18px; }
+.ccu-entry-back { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--entry-green); font-size: 13px !important; border: 0; background: transparent; min-height: 36px; }
+.ccu-entry-security { display: flex; align-items: start; gap: 9px; color: var(--entry-muted); font-size: 12px; line-height: 1.6; margin-top: 22px; }
+.ccu-entry-security svg { flex-shrink: 0; width: 17px; height: 17px; margin-top: 2px; color: var(--entry-green); }
+.ccu-entry-legal { font-size: 11px; line-height: 1.7; color: var(--entry-muted); padding-top: 16px; margin: 16px 0 0; border-top: 1px solid var(--entry-rule); }
+.ccu-entry-legal a { color: var(--entry-green); text-decoration: underline; text-underline-offset: 3px; }
+.ccu-entry-help { text-align: center; color: var(--entry-muted); margin: 18px 0 0; font-size: 12px; }
+.ccu-entry-help a { color: var(--entry-green); font-weight: 600; }
+.ccu-entry-notice { border-radius: 8px; padding: 12px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; margin: 0; }
+.ccu-entry-form-column > .ccu-entry-notice { margin-bottom: 16px; }
+.ccu-entry-notice--error { background: #fff1ef; color: #a12828; border: 1px solid #e9b6b1; }
+.ccu-entry-notice--success { background: #edf7f1; color: #006039; border: 1px solid #8bbb9e; }
+.ccu-auth-panel .ccu-entry-form-brand { display: block; margin: 4px 24px 22px 0; }
+.ccu-auth-panel .ccu-entry-form { padding-top: 26px; }
+@media (max-width: 1023px) {
+  .ccu-entry-page { padding: 32px 20px; }
+  .ccu-entry-layout { grid-template-columns: minmax(0, 1fr); max-width: 560px; gap: 28px; }
+  .ccu-entry-story { padding: 0; }
+  .ccu-entry-story-content > .inline-flex, .ccu-entry-benefits, .ccu-entry-audience, .ccu-entry-photo { display: none; }
+  .ccu-entry-story h1 { margin: 0 0 12px; font-size: 32px !important; }
+  .ccu-entry-intro { font-size: 15px; max-width: 460px; }
+}
+@media (max-width: 480px) {
+  .ccu-entry-page { padding: 24px 14px 32px; }
+  .ccu-entry-form { padding: 22px 18px; border-radius: 16px; }
+  .ccu-entry-form-heading h2 { font-size: 23px !important; }
+  .ccu-entry-story h1 { font-size: 29px !important; }
+  .ccu-entry-tabs button { font-size: 13px; }
+  .ccu-entry-input input { font-size: 16px; }
+  .ccu-entry-roles button { font-size: 12px; }
+  .ccu-entry-submit { font-size: 14px !important; }
+}
+@media (prefers-reduced-motion: reduce) { .ccu-entry-input input { transition: none; } }

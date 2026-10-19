@@ -5,6 +5,8 @@
 // ============================================================================
 
 import { PROGRAMS_DATA } from './programsData.js';
+import { isCloudBrowser } from './cloudData.js';
+import { getPrivateSubmissions } from '../services/submissionService.js';
 
 const STORAGE_KEYS = {
   SERVICES: 'ccu_master_services_v1',
@@ -447,6 +449,7 @@ export const SEED_SERVICE_REQUESTS = [
 ];
 
 export function getAllServiceRequests() {
+  if (isCloudBrowser()) return getPrivateSubmissions('serviceRequest');
   const raw = safeGetItem(STORAGE_KEYS.SERVICE_REQUESTS);
   if (raw) {
     try {

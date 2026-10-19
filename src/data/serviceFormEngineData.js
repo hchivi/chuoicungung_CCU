@@ -6,6 +6,8 @@
 
 import { MASTER_SERVICES, getAllServiceRequests, saveAllServiceRequests, logServiceAudit } from './servicesData.js';
 import { SEED_ORGANIZATIONS } from './organizationsData.js';
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';
 import { PROGRAMS_DATA } from './programsData.js';
 
 // Safe Storage Helper: Hỗ trợ cả Client Browser (localStorage) lẫn Node.js CLI / Test scripts
@@ -207,7 +209,13 @@ export function generatePublicTrackingCode(existingReqs = []) {
 // ----------------------------------------------------------------------------
 // 5. UNIFIED SUBMIT SERVICE REQUEST (SECTION 7, 8, 9, 15, 18, 21 SPEC 17.TXT)
 // ----------------------------------------------------------------------------
-export function submitUnifiedServiceRequest(formData) {
+export async function submitUnifiedServiceRequest(formData) {
+  if (isCloudBrowser()) {
+    if (!formData.consentToContact) throw new Error('Cần đồng ý cho phép liên hệ về yêu cầu.');
+    const receipt = await persistInquiry('service', formData);
+    clearServiceRequestDraft();
+    return receipt;
+  }
   const existingReqs = getAllServiceRequests();
 
   // 1. Phân giải ServiceType & Routing Desk (Section 18)

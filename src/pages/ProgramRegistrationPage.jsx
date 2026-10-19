@@ -236,7 +236,7 @@ export default function ProgramRegistrationPage() {
   };
 
   // Submit Handler (Section 22 & 23)
-  const handleSubmitRegistration = (e) => {
+  const handleSubmitRegistration = async (e) => {
     if (e) e.preventDefault();
     setSubmitError('');
 
@@ -262,7 +262,7 @@ export default function ProgramRegistrationPage() {
         o => o.id === formData.participationOptionId
       ) || program.participationOptions?.[0];
 
-      const res = submitProgramRegistration({
+      const res = await submitProgramRegistration({
         programId: program.id,
         role: formData.role,
         participationOptionId: selectedOption?.id,

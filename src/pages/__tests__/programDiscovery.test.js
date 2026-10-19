@@ -7,7 +7,7 @@ import { build } from 'esbuild';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server.js';
-import { PROGRAMS_DATA, PROGRAM_STATUSES, PROGRAM_TYPES } from '../../data/programsData.js';
+import { PROGRAMS_DATA, PROGRAM_STATUSES, PROGRAM_TYPES, PROGRAM_MONTHS, PROGRAM_YEARS, getProgramMonthAndYear } from '../../data/programsData.js';
 import { getProgramCardState } from '../../components/programs/programCardModel.js';
 
 async function load(file) {
@@ -58,7 +58,7 @@ test('program navigation exposes every type and labelled filters without offscre
   const { default: Explorer } = await load('programs/ProgramDiscoveryMenu.jsx');
   const html = render(Explorer, { programs: PROGRAMS_DATA, resultCount: 11, activeType: 'all', filters: {}, onTypeChange: () => {}, onFilterChange: () => {}, onReset: () => {} });
   for (const type of PROGRAM_TYPES) assert.ok(html.includes(`data-program-type="${type.id}"`));
-  for (const filter of ['search', 'status', 'zone', 'industry', 'role', 'format', 'time']) assert.match(html, new RegExp(`id="pd-${filter}"`));
+  for (const filter of ['search', 'status', 'zone', 'industry', 'role', 'format', 'time', 'month', 'year']) assert.match(html, new RegExp(`id="pd-${filter}"`));
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /aria-pressed="true"/);
   assert.match(html, /aria-controls="pd-extra-filters"/);
@@ -122,3 +122,35 @@ test('invitation intake keeps seven labelled fields, consent and honest local-sa
   const error = render(Invitation, { ...props, error: 'Không thể lưu trên trình duyệt này.' });
   assert.match(error, /role="alert"/);
 });
+
+test('month and year event filter correctly isolates events by month and year', () => {
+  assert.ok(PROGRAM_MONTHS.length >= 13);
+  assert.ok(PROGRAM_YEARS.length >= 3);
+
+  // Month 11 in 2026 has exactly 3 programs
+  const nov2026 = PROGRAMS_DATA.filter(p => {
+    const { month, year } = getProgramMonthAndYear(p);
+    return month === 11 && year === 2026;
+  });
+  assert.equal(nov2026.length, 3);
+  const novTitles = nov2026.map(p => p.title || p.name);
+  assert.ok(novTitles.some(t => t.includes('Tràng Duệ')));
+  assert.ok(novTitles.some(t => t.includes('FDI Điện Tử')));
+  assert.ok(novTitles.some(t => t.includes('Hiệp Phước')));
+
+  // Month 9 in 2026 has 2 programs
+  const sep2026 = PROGRAMS_DATA.filter(p => {
+    const { month, year } = getProgramMonthAndYear(p);
+    return month === 9 && year === 2026;
+  });
+  assert.equal(sep2026.length, 2);
+
+  // Year 2027 matches postponed program
+  const year2027 = PROGRAMS_DATA.filter(p => {
+    const { year } = getProgramMonthAndYear(p);
+    return year === 2027;
+  });
+  assert.equal(year2027.length, 1);
+  assert.ok(year2027[0].title.includes('Tân Đức'));
+});
+

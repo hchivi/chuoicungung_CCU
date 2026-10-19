@@ -9,7 +9,7 @@ import {
   Headphones, Landmark, Handshake, Rocket, X, Tag, FileCheck,
   Target, ArrowUpRight, FolderLock, FileDown, BookOpen, AlertCircle
 } from 'lucide-react';
-import associationsList from '../data/associations.json';
+import { associations as associationsList } from '../data/cloudData.js';
 import { associationsData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
 import { 
@@ -1070,11 +1070,11 @@ export default function AssociationDetailPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   setClaimSubmitting(true);
                   try {
-                    const res = submitMembershipClaim({
+                    const res = await submitMembershipClaim({
                       associationOrganizationId: orgId,
                       memberOrganizationName: claimFormData.companyName,
                       requesterName: claimFormData.representativeName,

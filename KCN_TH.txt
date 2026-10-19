@@ -1,0 +1,856 @@
+PROJECT: CHUOICUNGUNG.COM
+
+PAGE:
+NGÀY HỘI CHUỖI CUNG ỨNG
+BUSINESS MATCHING KCN THÁI HÒA 2026
+
+ROUTE:
+Reuse:
+/chuong-trinh/[slug]
+
+Example:
+/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026
+
+SCOPE:
+Tối ưu PAGE DETAIL sự kiện với 3 lifecycle tabs:
+
+1. TRƯỚC SỰ KIỆN
+2. ĐANG DIỄN RA
+3. SAU SỰ KIỆN
+
+Trong task này:
+FOCUS triển khai hoàn chỉnh TAB “TRƯỚC SỰ KIỆN”.
+
+Không tạo 3 route riêng cho 3 trạng thái.
+Reuse cùng Program page.
+
+IMPORTANT:
+- Audit/reuse architecture hiện có.
+- Không rebuild website.
+- Không duplicate Organization.
+- Không fake số liệu.
+- Không hard-code các con số trong mockup nếu chưa có dữ liệu thật.
+- Không public contact cá nhân/private data.
+- Sponsor không ảnh hưởng SUPPI organic matching.
+- Sponsor không đồng nghĩa “verified supplier”.
+- Không cam kết deal/đơn hàng/lead nếu chưa có thỏa thuận cụ thể.
+
+==================================================
+1. EVENT MINI HEADER
+==================================================
+
+Trên phần đầu event page, hiển thị 3 logo theo đúng thứ tự:
+
+[ LOGO KCN THÁI HÒA ]
+        —
+[ LOGO CHUOICUNGUNG.COM ]
+        —
+[ LOGO TEAM KCN / HỘI ]
+
+Yêu cầu:
+- Logo CHUOICUNGUNG.COM nằm CHÍNH GIỮA.
+- 3 logo cân đối về visual.
+- Dưới mỗi logo có role label đúng với relationship thực tế.
+- Không tự ghi “Đồng tổ chức” nếu dữ liệu chưa xác nhận.
+
+Ví dụ label:
+KCN Thái Hòa
+“Đơn vị phối hợp”
+
+CHUOICUNGUNG.COM
+“Nền tảng kết nối & điều phối”
+
+Team KCN Miền Nam / Hội
+“Đơn vị phối hợp”
+
+==================================================
+2. LIFECYCLE TABS
+==================================================
+
+Ngay dưới mini header:
+
+TAB 1:
+TRƯỚC SỰ KIỆN
+“Chuẩn bị & Matching”
+
+TAB 2:
+ĐANG DIỄN RA
+“Check-in & Kết nối”
+
+TAB 3:
+SAU SỰ KIỆN
+“Kết quả & Follow-up”
+
+Pre-event active:
+blue/orange emphasis.
+
+Default tab dựa trên:
+registrationCloseAt
+eventStartAt
+eventEndAt
+statusOverride
+
+User vẫn được click xem các tab khác.
+
+==================================================
+3. HERO
+==================================================
+
+H1:
+
+“NGÀY HỘI CHUỖI CUNG ỨNG
+BUSINESS MATCHING KCN THÁI HÒA 2026”
+
+Sub:
+
+“Nhu cầu thật – Nguồn cung phù hợp –
+Cuộc gặp được theo dõi đến kết quả”
+
+Description:
+
+“Kết nối nhu cầu thực tế của các nhà máy tại KCN Thái Hòa
+với nhà cung ứng có năng lực phù hợp.
+Từ đăng ký, matching, cuộc gặp 1:1
+đến follow-up sau chương trình
+đều được ghi nhận trên CHUOICUNGUNG.COM.”
+
+Event facts:
+
+08:00
+Thứ Tư, 07/10/2026
+
+Địa điểm:
+Văn phòng Ban Quản lý KCN Thái Hòa,
+ấp Tân Hòa, xã Đức Lập III,
+tỉnh Tây Ninh.
+
+Hạn đăng ký:
+29/09/2026
+
+Target:
+Khoảng 20 Nhà máy
+↔
+20+ Nhà cung ứng.
+
+Primary CTA:
+“ĐĂNG KÝ THAM GIA”
+
+Secondary:
+“XEM DOANH NGHIỆP THAM GIA”
+
+==================================================
+4. SUPPI & CHAINY IN HERO
+==================================================
+
+SUPPI:
+placed toward Buyer / sourcing side.
+
+Copy:
+“Tìm đúng đối tác nên gặp!”
+
+Sub role:
+“Khớp nhu cầu – Tìm nguồn phù hợp”
+
+CHAINY:
+placed toward connection/follow-up side.
+
+Copy:
+“Kết nối và theo việc đến cùng!”
+
+Sub role:
+“Ghi nhận – Theo dõi – Đến kết quả”
+
+Mascots must have functional meaning,
+not decorative placement.
+
+Do not make mascots dominate Hero.
+
+==================================================
+5. QUICK EVENT STATS
+==================================================
+
+Under Hero create KPI strip.
+
+Possible fields:
+
+- Nhà máy dự kiến / đã xác nhận
+- Nhà cung ứng dự kiến / đã xác nhận
+- Doanh nghiệp đăng ký
+- Cuộc gặp 1:1 dự kiến
+- Bàn trưng bày
+
+Use REAL DB values.
+
+If no data:
+show current confirmed count or suitable empty state.
+
+Do not use mockup numbers as production facts.
+
+==================================================
+6. BLOCK — DÀNH CHO NHÀ MÁY / BUYER
+==================================================
+
+Large card.
+
+Title:
+“DÀNH CHO NHÀ MÁY / BUYER”
+
+Content:
+
+✓ Tìm nhà cung ứng theo đúng nhu cầu
+✓ Đưa nhu cầu mua hàng/vận hành vào chương trình
+✓ Xem hồ sơ và năng lực trước khi gặp
+✓ Nhận gợi ý matching từ SUPPI
+✓ Đặt lịch 1:1 trước sự kiện
+✓ Theo dõi việc sau cuộc gặp cùng CHAINY
+
+CTA:
+“ĐĂNG KÝ NHÀ MÁY”
+
+Secondary:
+“ĐĂNG NHU CẦU”
+
+==================================================
+7. BLOCK — DÀNH CHO NHÀ CUNG ỨNG
+==================================================
+
+Large card.
+
+Title:
+“DÀNH CHO NHÀ CUNG ỨNG / SUPPLIER”
+
+Content:
+
+✓ Giới thiệu năng lực và sản phẩm chủ lực
+✓ Tiếp cận các nhu cầu nhà máy phù hợp
+✓ Được SUPPI gợi ý tới đúng nhóm nhu cầu
+✓ Đề nghị meeting với nhà máy
+✓ Tham gia bàn trưng bày nếu đăng ký
+✓ Theo dõi báo giá/mẫu/follow-up sau chương trình
+
+CTA:
+“ĐĂNG KÝ NHÀ CUNG ỨNG”
+
+Secondary:
+“HOÀN THIỆN HỒ SƠ NĂNG LỰC”
+
+==================================================
+8. BLOCK — NEED ↔ SOLUTION GEARS
+==================================================
+
+Use concept:
+2 interlocking gears.
+
+Use asset:
+logo_only.png
+
+LEFT GEAR:
+“Nhu cầu Nhà máy”
+
+RIGHT GEAR:
+“Giải pháp Nhà cung ứng”
+
+CENTER:
+“SUPPI KHỚP NHU CẦU ↔ NĂNG LỰC”
+
+Rotating examples:
+
+“Cần bao bì carton”
+↔
+“Nhà cung ứng bao bì”
+
+“Cần logistics quốc tế”
+↔
+“Nhà cung ứng logistics”
+
+“Cần xử lý nước thải”
+↔
+“Doanh nghiệp môi trường”
+
+“Cần đồng phục công nhân”
+↔
+“Nhà cung ứng đồng phục”
+
+“Cần HVAC nhà xưởng”
+↔
+“Nhà cung ứng HVAC”
+
+Animation:
+slow
+smooth
+professional
+not game-like.
+
+==================================================
+9. BLOCK — DOANH NGHIỆP ĐÃ XÁC NHẬN THAM GIA
+==================================================
+
+Split 2 columns.
+
+LEFT:
+“NHÀ MÁY / BUYER”
+
+Each card:
+- Logo
+- Company
+- Industry
+- Public needs
+- View profile
+- Request meeting
+
+RIGHT:
+“NHÀ CUNG ỨNG / SUPPLIER”
+
+Each card:
+- Logo
+- Company
+- Capability
+- Product/service
+- Network/association if confirmed
+- View profile
+- Request meeting
+
+Show only approved/published records.
+
+CTA:
+“XEM TẤT CẢ DOANH NGHIỆP”
+
+==================================================
+10. BLOCK — SUPPI MATCHING PREVIEW
+==================================================
+
+Title:
+
+“SUPPI ĐANG GHÉP NHU CẦU
+VỚI NĂNG LỰC PHÙ HỢP”
+
+Example row:
+
+NEED:
+“Cần xử lý nước thải nhà máy”
+
+→
+
+SUPPLIER:
+“VACETCO”
+
+Reason:
+“Môi trường / xử lý nước thải /
+phục vụ khu vực phù hợp”
+
+CTA:
+“ĐỀ NGHỊ GẶP”
+
+Matching logic:
+
+NHU CẦU
+× NĂNG LỰC
+× ĐỊA BÀN
+× THỜI GIAN
+× KHẢ NĂNG ĐÁP ỨNG.
+
+No sponsor ranking.
+
+==================================================
+11. BLOCK — 4 NHÓM KẾT NỐI
+==================================================
+
+Title:
+“4 NHÓM KẾT NỐI CHÍNH”
+
+01.
+MUA BÁN
+
+Raw materials
+Packaging
+Machines
+Industrial products.
+
+02.
+LOGISTICS
+
+Container
+Transport
+Warehouse
+Customs
+International shipping.
+
+03.
+DỊCH VỤ CHUYÊN MÔN
+
+Environment
+HVAC
+Banking
+Insurance
+Security
+Pest control.
+
+04.
+CHIA SẺ VẬN HÀNH & HẠ TẦNG
+
+Pallet
+Energy
+Factory systems
+Technology
+Operational services.
+
+==================================================
+12. BLOCK — CHI PHÍ THAM GIA
+==================================================
+
+Title:
+“CHI PHÍ THAM GIA”
+
+Member:
+750.000đ / người
+
+Non-member:
+1.000.000đ / người
+
+Bàn trưng bày – Member:
+1.500.000đ
+
+Bàn trưng bày – Non-member:
+2.000.000đ
+
+Text:
+“Hạn đăng ký và hoàn tất thanh toán:
+29/09/2026.”
+
+CTA:
+“ĐĂNG KÝ THAM GIA”
+
+Do not invent:
+VAT
+refund
+bank account
+unless configured.
+
+==================================================
+13. BLOCK — GÓI TÀI TRỢ SỰ KIỆN
+==================================================
+
+Add a dedicated sponsor section.
+
+Title:
+
+“ĐỒNG HÀNH CÙNG NGÀY HỘI CHUỖI CUNG ỨNG”
+
+Sub:
+
+“Dành cho doanh nghiệp muốn tăng hiện diện thương hiệu,
+tham gia sâu hơn vào hoạt động kết nối
+và đồng hành cùng cộng đồng doanh nghiệp tại chương trình.”
+
+Create 3 packages:
+
+BẠC
+VÀNG
+KIM CƯƠNG
+
+Sponsor package data must be configurable from admin.
+
+IMPORTANT:
+Nếu BTC chưa duyệt giá chính thức:
+DO NOT hard-code sponsor price.
+Show:
+“Liên hệ BTC”
+or configurable price field.
+
+==================================================
+14. SPONSOR — BẠC
+==================================================
+
+Title:
+“TÀI TRỢ BẠC”
+
+Suggested rights:
+
+- Logo trên khu vực sponsor page
+- Logo trên một số ấn phẩm chương trình theo thỏa thuận
+- Giới thiệu ngắn doanh nghiệp
+- Hiện diện trong danh sách nhà tài trợ
+- Tham gia networking cùng doanh nghiệp
+- Hồ sơ doanh nghiệp liên kết về profile CHUOICUNGUNG.COM
+- Báo cáo quyền lợi đã bàn giao
+
+CTA:
+“TRAO ĐỔI GÓI BẠC”
+
+==================================================
+15. SPONSOR — VÀNG
+==================================================
+
+Title:
+“TÀI TRỢ VÀNG”
+
+Includes Silver +
+
+- Logo prominence cao hơn
+- 01 nội dung/giới thiệu thương hiệu theo thỏa thuận
+- Quyền tham gia phiên networking dành cho sponsor
+- Tham gia bữa trưa giao lưu cùng đại diện Ban tổ chức
+- Được BTC giới thiệu/kết nối trong khuôn khổ chương trình
+  với các nhóm Nhà máy và Nhà cung ứng tham dự
+- Có thể tham gia bàn trưng bày theo package
+- Media/social visibility theo entitlement
+- Báo cáo quyền lợi sau chương trình
+
+CTA:
+“TRAO ĐỔI GÓI VÀNG”
+
+==================================================
+16. SPONSOR — KIM CƯƠNG
+==================================================
+
+Title:
+“TÀI TRỢ KIM CƯƠNG”
+
+Highest sponsor visibility.
+
+Includes Gold +
+
+- Logo prominence cao nhất trong phạm vi sponsor
+- Vị trí nhận diện nổi bật tại chương trình
+- Quyền tham gia phiên networking cấp BTC
+- Bữa trưa giao lưu cùng đại diện hai bên Ban tổ chức/phối hợp
+- Phiên giới thiệu/kết nối doanh nghiệp trong chương trình
+- Được hỗ trợ giới thiệu tới toàn bộ nhóm Nhà máy
+  và Nhà cung ứng tham dự trong phạm vi chương trình
+- Có đầu mối CHAINY hỗ trợ điều phối các kết nối sponsor
+- Booth/display entitlement nếu nằm trong hợp đồng
+- Media/video/interview entitlement nếu nằm trong hợp đồng
+- Báo cáo tổng hợp quyền lợi và hoạt động đã thực hiện
+
+CTA:
+“TRAO ĐỔI GÓI KIM CƯƠNG”
+
+VERY IMPORTANT:
+“Được kết nối với toàn bộ Nhà máy và Nhà cung ứng”
+must mean:
+
+- được BTC tạo cơ hội giới thiệu/networking
+  với toàn bộ nhóm doanh nghiệp tham dự;
+- được xuất hiện trong sponsor networking context;
+- được hỗ trợ tạo connection requests.
+
+It must NOT mean:
+
+- automatically receive all private phone/email;
+- guaranteed meeting with every company;
+- guaranteed commercial lead;
+- guaranteed contract/order.
+
+Use copy:
+
+“Được Ban tổ chức hỗ trợ giới thiệu và tạo cơ hội kết nối
+với toàn bộ nhóm Nhà máy và Nhà cung ứng tham dự,
+theo quyền chia sẻ thông tin của từng bên.”
+
+==================================================
+17. SPONSOR TRANSPARENCY
+==================================================
+
+Under sponsor packages show notice:
+
+“QUYỀN LỢI TÀI TRỢ KHÔNG ẢNH HƯỞNG MATCHING HỮU CƠ”
+
+Copy:
+
+“Tài trợ giúp doanh nghiệp tăng hiện diện thương hiệu
+và tham gia các hoạt động networking theo gói quyền lợi.
+
+SUPPI vẫn đề xuất Nhà cung ứng
+dựa trên nhu cầu, năng lực, địa bàn,
+thời gian và khả năng đáp ứng.
+
+Tài trợ không phải chứng nhận chất lượng
+và không đảm bảo đơn hàng.”
+
+==================================================
+18. SPONSOR ENTITLEMENT MODEL
+==================================================
+
+Reuse existing sponsorship architecture if available.
+
+Each package should support:
+
+- scope
+- rights
+- quantity
+- placement
+- validFrom
+- validTo
+- owner
+- delivery evidence
+- acceptance
+- report.
+
+Sponsor lifecycle:
+
+INQUIRY
+→ PROPOSAL
+→ CONFIRMED
+→ ACTIVE
+→ DELIVERY
+→ ACCEPTANCE
+→ REPORT
+→ COMPLETED.
+
+Do not create sponsor logic directly in UI only.
+
+==================================================
+19. BLOCK — AGENDA
+==================================================
+
+Title:
+“LỊCH TRÌNH CHƯƠNG TRÌNH”
+
+Confirmed:
+
+08:00 – 08:30
+Giao lưu đầu giờ
+
+08:30 – 08:45
+Giới thiệu KCN Thái Hòa
+
+08:45 – 09:00
+Giới thiệu Team KCN
+
+09:00 – 11:00
+Giới thiệu doanh nghiệp,
+sản phẩm/dịch vụ
+& Business Matching
+
+11:00
+Tổng kết kết quả Matching.
+
+Additional planned activities:
+
+- Bàn giao thương kết nối
+- Talk show sân khấu
+- Social media
+- Tiệc ăn trưa giao lưu
+- Business Café
+
+If time not confirmed:
+do not invent time.
+
+==================================================
+20. BLOCK — BÀN TRƯNG BÀY
+==================================================
+
+Preview confirmed exhibitors.
+
+Show:
+- Logo
+- Company
+- Product/service
+- Booth/table ID
+- Profile CTA
+- Request meeting.
+
+CTA:
+“XEM TẤT CẢ BÀN TRƯNG BÀY”
+
+==================================================
+21. BLOCK — CHUẨN BỊ TRƯỚC NGÀY HỘI
+==================================================
+
+Visual horizontal workflow:
+
+01
+Hoàn thiện hồ sơ
+
+→
+
+02
+Cập nhật nhu cầu / năng lực
+
+→
+
+03
+Đăng ký attendee
+
+→
+
+04
+Nhận QR Event Pass
+
+→
+
+05
+Xem SUPPI Matching
+
+→
+
+06
+Xác nhận lịch 1:1.
+
+Final CTA:
+“BẮT ĐẦU ĐĂNG KÝ”
+
+==================================================
+22. MASCOT ROLE
+==================================================
+
+SUPPI:
+appears around:
+
+- Buyer needs
+- Supplier discovery
+- matching
+- “nên gặp ai?”
+
+Message:
+“SUPPI tìm đúng nguồn.”
+
+CHAINY:
+appears around:
+
+- meeting
+- contact
+- event coordination
+- follow-up.
+
+Message:
+“CHAINY kết nối và theo việc đến cùng.”
+
+Do not show both mascots in every section.
+
+==================================================
+23. UI / VISUAL
+==================================================
+
+Follow the supplied design direction:
+
+- Desktop first 1440px
+- clean B2B
+- modern
+- industrial
+- professional
+- information-rich but easy to scan.
+
+Use:
+brand blue/navy
+green
+orange
+white.
+
+Sponsor:
+Silver = neutral silver/blue-gray
+Gold = warm gold
+Diamond = light cyan/teal/premium
+
+Avoid:
+heavy glow
+casino/luxury aesthetic
+overly gold visuals
+huge whitespace.
+
+Sponsor section should look premium
+but still corporate B2B.
+
+==================================================
+24. CONTENT HIERARCHY
+==================================================
+
+Recommended Pre-event block order:
+
+1. Event logo strip
+2. 3 lifecycle tabs
+3. Hero
+4. Quick stats
+5. Buyer / Supplier entry
+6. Need ↔ Solution gears
+7. Confirmed participants
+8. SUPPI matching preview
+9. 4 connection tracks
+10. Participation fee
+11. Sponsor packages
+12. Agenda
+13. Exhibitors
+14. Preparation checklist
+15. Final CTA.
+
+==================================================
+25. MOBILE
+==================================================
+
+390–430px.
+
+- Keep 3 lifecycle tabs usable
+- Hero compact
+- Logos remain visible but simplified
+- Buyer/Supplier cards stack
+- Gear visual simplified
+- Sponsor cards horizontal scroll or stack
+- CTA full width
+- No horizontal page overflow
+- Avoid oversized mascot illustrations.
+
+==================================================
+26. SEO
+==================================================
+
+Title:
+
+“Ngày Hội Chuỗi Cung Ứng KCN Thái Hòa 2026 | Business Matching B2B”
+
+H1:
+
+“Ngày Hội Chuỗi Cung Ứng – Business Matching KCN Thái Hòa 2026”
+
+Meta:
+
+“Business Matching B2B kết nối nhu cầu nhà máy KCN Thái Hòa với nhà cung ứng phù hợp, hỗ trợ đăng ký, matching, meeting 1:1 và follow-up trên CHUOICUNGUNG.COM.”
+
+Use:
+Event schema
+BreadcrumbList.
+
+==================================================
+27. ACCEPTANCE
+==================================================
+
+Test:
+
+desktop 1440
+tablet
+mobile 390 / 430.
+
+Validate:
+
+- CHUOICUNGUNG.COM logo is centered between KCN and Team/Hội logos
+- 3 lifecycle tabs work
+- PRE state active correctly
+- Buyer and Supplier paths are distinct
+- SUPPI/CHAINY roles are clear
+- pricing correct
+- sponsor tiers render from config
+- sponsor rights do not affect matching
+- sponsor cannot access private contact without permission
+- CTA works
+- no fake data
+- no oversized blank sections
+- responsive passes.
+
+==================================================
+28. FINAL REPORT
+==================================================
+
+Return:
+
+- files changed
+- components reused/created
+- Program data reused
+- sponsorship model reused
+- sponsor config added
+- CTA destinations
+- mascot usage
+- responsive behavior
+- SEO
+- tests PASS/FAIL/BLOCKED
+- missing real data requiring admin input.
+
+Do not modify LIVE or POST EVENT content unnecessarily.s

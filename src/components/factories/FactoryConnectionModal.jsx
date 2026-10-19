@@ -18,7 +18,7 @@ export default function FactoryConnectionModal({ isOpen, onClose, factory }) {
 
   if (!isOpen || !factory) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.senderName || !formData.senderPhone || !formData.message) {
       setErrorMsg('Vui lòng điền họ tên, số điện thoại và nội dung yêu cầu kết nối.');
@@ -28,7 +28,7 @@ export default function FactoryConnectionModal({ isOpen, onClose, factory }) {
     setIsSubmitting(true);
 
     try {
-      const result = submitFactoryConnectionRequest({
+      const result = await submitFactoryConnectionRequest({
         factoryId: factory.id,
         factoryName: factory.name,
         organizationId: factory.organizationId,

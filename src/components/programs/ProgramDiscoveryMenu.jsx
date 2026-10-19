@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
-import { PROGRAM_TYPES, PROGRAM_STATUSES, PROGRAM_ZONES, PROGRAM_INDUSTRIES, PROGRAM_ROLES, PROGRAM_FORMATS } from '../../data/programsData';
+import { PROGRAM_TYPES, PROGRAM_STATUSES, PROGRAM_ZONES, PROGRAM_INDUSTRIES, PROGRAM_ROLES, PROGRAM_FORMATS, PROGRAM_MONTHS, PROGRAM_YEARS } from '../../data/programsData';
 import './ProgramDiscovery.css';
 
 const types = {
@@ -29,6 +29,8 @@ export default function ProgramDiscoveryMenu({ programs, resultCount, activeType
         {select('zone', 'Địa bàn / KCN', PROGRAM_ZONES)}
         {select('industry', 'Ngành hàng / nhu cầu', PROGRAM_INDUSTRIES.map(name => ({ id: name, name })), 'Tất cả ngành hàng')}
         {select('status', 'Trạng thái', [{ id: 'all', name: 'Tất cả trạng thái' }, ...PROGRAM_STATUSES])}
+        {select('month', 'Tháng tổ chức', PROGRAM_MONTHS)}
+        {select('year', 'Năm tổ chức', PROGRAM_YEARS)}
       </div>
       <div className="pd-filter-summary"><p aria-live="polite" aria-atomic="true"><strong>{resultCount}</strong> / {programs.length} chương trình</p><div><button className="pd-text-button" aria-expanded={extraOpen} aria-controls="pd-extra-filters" onClick={() => setExtraOpen(!extraOpen)}><SlidersHorizontal size={16} aria-hidden="true" />Lọc thêm{extraCount > 0 && <b>{extraCount}</b>}</button>{hasActiveFilters && <button className="pd-text-button" onClick={onReset}><RotateCcw size={15} aria-hidden="true" />Đặt lại</button>}</div></div>
       <div id="pd-extra-filters" className="pd-extra-filters" hidden={!extraOpen}>

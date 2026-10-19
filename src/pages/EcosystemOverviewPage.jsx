@@ -374,7 +374,7 @@ export default function EcosystemOverviewPage() {
               </div>
             </div>
             <div className="pt-4 mt-4 border-t border-slate-100">
-              <Link to="/khu-cong-nghiep" className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center justify-between font-heading group/link">
+              <Link to="/ban-do-kcn" className="text-xs font-bold text-emerald-700 hover:text-emerald-900 flex items-center justify-between font-heading group/link">
                 <span>Bản đồ KCN</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
               </Link>

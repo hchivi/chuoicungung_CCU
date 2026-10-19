@@ -48,19 +48,20 @@ export function isValidCustomLogo(logo) {
   const trimmed = logo.trim();
   if (trimmed === '') return false;
   if (trimmed.includes('default_logo.png')) return false;
-  if (trimmed.includes('trangvangvietnam.com/images/default')) return false;
+  if (trimmed.includes('images/default') || trimmed.includes('/default/')) return false;
   return true;
 }
 
 export function getEnterpriseAvatarImage(ent) {
-  if (!ent) return "/images/supplier_b2b_hero.jpg";
+  if (!ent) return '';
   if (isValidCustomLogo(ent.logo)) {
     return ent.logo;
   }
-  if (Array.isArray(ent.images) && ent.images.length > 0 && ent.images[0] && typeof ent.images[0] === 'string' && !ent.images[0].includes('default_logo')) {
-    return ent.images[0];
+  if (isValidCustomLogo(ent.avatar)) {
+    return ent.avatar;
   }
-  return getCategoryBannerImage(ent.category || ent.industry || ent.name || '');
+  // Nếu doanh nghiệp không có ảnh/logo crawl được thì để trống theo yêu cầu
+  return '';
 }
 
 export function detectPhaseAndStage(name = '') {
@@ -451,140 +452,123 @@ export function maskPhoneNumber(phone = '') {
  * Generates 3 realistic, high-quality product / capability thumbnails for a supplier card based on phase & industry
  */
 export function getEnterpriseThumbnails(ent) {
-  if (!ent) return [
-    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
-  ];
+  if (!ent) return [];
 
-  const clean = (ent.category || ent.industry || ent.name || '').toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'd');
-
-  const isCutterOrBlade = /dao\s*bam|dao\s*cat|luoi\s*dao|cat\s*got|co\s*khi\s*cat/.test(clean);
-
-  // If enterprise has actual images array with valid urls (exclude repetitive cutter test urls if not cutter)
-  if (Array.isArray(ent.images) && ent.images.length >= 3) {
+  // Nếu doanh nghiệp có mảng ảnh thực tế hợp lệ từ crawl
+  if (Array.isArray(ent.images) && ent.images.length > 0) {
     const valid = ent.images.filter(img => {
-      if (typeof img !== 'string' || !img.startsWith('http') || img.includes('default')) return false;
-      if (!isCutterOrBlade && (img.includes('dao-bam') || img.includes('dao-cat') || img.includes('395771076'))) return false;
-      return true;
+      if (typeof img !== 'string') return false;
+      const trimmed = img.trim();
+      if (!trimmed || trimmed.includes('default') || trimmed.includes('placeholder')) return false;
+      return trimmed.startsWith('http') || trimmed.startsWith('/');
     });
-    if (valid.length >= 3) return valid.slice(0, 3);
+    if (valid.length > 0) return valid.slice(0, 3);
   }
 
-  const primaryCatImage = getCategoryBannerImage(ent.category || ent.industry || ent.name || '');
-  const phaseStr = Array.isArray(ent.phases) ? ent.phases.join(' ') : (ent.phase || '');
+  // Doanh nghiệp không có ảnh crawl được thì để trống, không chèn ảnh mẫu theo yêu cầu
+  return [];
+}
 
-  // 1. Pháp lý, ĐTM, Thủ tục, Khảo sát địa chất, Giấy phép, Quy hoạch, Đầu tư (Pha 1.1, 1.2, 1.3)
-  if (/dtm|moi\s*truong|tham\s*duyet|phap\s*ly|giay\s*phep|khao\s*sat|dia\s*chat|trac\s*dia|quy\s*hoach|tu\s*van|dau\s*tu|ho\s*so|fdi|bat\s*dong\s*san|thue\s*dat/.test(clean) || /1\.1|1\.2|1\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80", // Environmental / Document assessment
-      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=400&q=80", // Blueprint architectural planning
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80"  // Modern Industrial Park campus
-    ];
+export function cleanCompanyDisplayName(name = '') {
+  if (!name) return 'Doanh nghiệp';
+  let str = String(name).trim();
+  if (str.includes(' - ')) {
+    const parts = str.split(' - ');
+    const companyPart = parts[parts.length - 1];
+    const cleaned = companyPart.replace(/^(?:Công Ty\s+)?(?:TNHH|Cổ Phần|CP|Tư Nhân|MTV|TMDV|SX|Sản Xuất|Thương Mại)\s+/i, '').trim();
+    if (cleaned.length >= 3) return cleaned;
+    return parts[0].trim();
+  }
+  return str.replace(/^(?:Công Ty\s+)?(?:TNHH|Cổ Phần|CP|Tư Nhân|MTV|TMDV|SX|Sản Xuất|Thương Mại)\s+/i, '').trim();
+}
+
+export function synthesizeEnterpriseProfile(ent) {
+  if (!ent) return {
+    paragraphs: [],
+    factoryArea: '',
+    monthlyOutput: '',
+    mainCustomers: '',
+    brands: ''
+  };
+
+  const name = ent.name || '';
+  const cleanName = ent.shortName || cleanCompanyDisplayName(name);
+  const rawDesc = String(ent.description || '');
+
+  // 1. If it's Hanteco, return the exact master text
+  if (name.toLowerCase().includes('hanteco')) {
+    return {
+      paragraphs: [
+        "Hanteco Việt Nam là doanh nghiệp uy tín trong hệ sinh thái Chuỗi Cung Ứng B2B, chuyên nghiên cứu, sản xuất và phân phối các giải pháp thiết bị an toàn đường thủy, phao cứu sinh đạt kiểm định chất lượng cùng hạ tầng kỹ thuật nước trên toàn quốc.",
+        "Đơn vị sở hữu hạ tầng xưởng sản xuất hiện đại rộng 2.000m² với công suất ổn định từ 200.000 đến 500.000 sản phẩm/tháng, sẵn sàng nhận thiết kế, may đo và in ấn logo theo yêu cầu dự án. Đồng thời, hệ thống kho bãi lưu trữ quy mô 5.000m² tại cả hai miền Nam – Bắc đảm bảo nguồn cung dồi dào, vận chuyển nhanh chóng cho các đối tác công trình, ban quản lý khu du lịch và các đại lý bán buôn.",
+        "Bên cạnh trang thiết bị cứu sinh, doanh nghiệp còn là nhà phân phối chính thức của nhiều thương hiệu danh tiếng quốc tế (Waterco, Emaux, Midas, Maytronics, Sawo, Ruby...), cung ứng toàn diện thiết bị lọc nước, hóa chất chuyên dụng và giải pháp thi công công nghệ nước công nghiệp."
+      ],
+      factoryArea: "2.000 m² (Xưởng sản xuất) & 5.000 m² (Tổng kho 2 miền)",
+      monthlyOutput: "200.000 – 500.000 sản phẩm áo phao & thiết bị an toàn / tháng",
+      mainCustomers: "Nhà thầu xây dựng, Đơn vị thi công bể bơi, Ban quản lý KCN & Resort, Đại lý phân phối toàn quốc",
+      brands: "Waterco, Emaux, Midas, Maytronics, Sawo, Ruby"
+    };
   }
 
-  // 2. Thiết kế, Thi công xây dựng nhà xưởng, Kết cấu thép tiền chế, Móng, Cọc (Pha 2.1, 2.2)
-  if (/xay\s*dung|nha\s*thep|tien\s*che|ep\s*coc|be\s*tong|thi\s*cong|kien\s*truc|ket\s*cau|san\s*mai|mong/.test(clean) || /2\.1|2\.2/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=400&q=80", // Steel construction
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80", // Industrial site erection
-      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80"  // Factory frame building
-    ];
+  // 2. Dynamic high-end synthesis for all other enterprises (150k+)
+  const province = ent.province || 'Việt Nam';
+  const category = ent.category || ent.industry || 'Thiết bị & Phụ trợ công nghiệp';
+  const establishedYear = ent.establishedYear ? `được thành lập và phát triển từ năm ${ent.establishedYear}` : 'là thương hiệu uy tín';
+  const products = Array.isArray(ent.products) ? ent.products.filter(Boolean) : [];
+  const productSample = products.slice(0, 5).join(', ');
+
+  // Extract factory area from description or branches
+  let factoryArea = '';
+  const areaMatch = rawDesc.match(/(?:xưởng|nhà máy|kho|kho bãi|diện tích|quy mô)[:\s]+([^\n\.\;]+(?:m2|m²|ha)[^\n\.\;]*)/i);
+  if (areaMatch) {
+    factoryArea = areaMatch[1].replace(/^[✔★►\+\-\s:]+/, '').trim();
+  } else if (ent.branches) {
+    factoryArea = `Hệ thống kho bãi & cơ sở sản xuất tại ${province} và các chi nhánh liên vùng`;
+  } else {
+    factoryArea = `Hạ tầng phân xưởng & kho lưu trữ tiêu chuẩn tại ${province}`;
   }
 
-  // 3. Cơ điện, MEP, PCCC, Trạm biến áp, HVAC, Chiller, Xử lý nước thải (Pha 2.3)
-  if (/mep|co\s*dien|pccc|bien\s*ap|hvac|chiller|nuoc\s*thai|khi\s*nen|cap\s*dien|ong\s*gio|thong\s*gio/.test(clean) || /2\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=400&q=80", // Electrical panel / Substation
-      "https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=400&q=80", // Industrial HVAC duct & pipes
-      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80"  // Industrial engineering facility
-    ];
+  // Extract monthly output / capacity
+  let monthlyOutput = '';
+  const outputMatch = rawDesc.match(/(?:sản lượng|công suất|năng lực)[:\s]+([^\n\.\;]+(?:sản phẩm|tấn|bộ|chiếc|m|kg|\/tháng|\/năm)[^\n\.\;]*)/i);
+  if (outputMatch) {
+    monthlyOutput = outputMatch[1].replace(/^[✔★►\+\-\s:]+/, '').trim();
+  } else if (ent.employees) {
+    monthlyOutput = `Quy mô ${ent.employees}, công suất ổn định đáp ứng các đơn hàng dự án và bán buôn`;
+  } else {
+    monthlyOutput = 'Năng lực cung ứng quy mô lớn, sẵn sàng phục vụ tiến độ các hợp đồng dự án B2B';
   }
 
-  // 4. Lắp đặt máy, Cẩu trục, Phòng sạch Class 1000, Sơn sàn Epoxy, Panel, Nghiệm thu (Pha 3.1, 3.2, 3.3)
-  if (/phong\s*sach|cleanroom|epoxy|cau\s*truc|lap\s*dat|nghiem\s*thu|chay\s*thu|kiem\s*dinh|panel|san\s*epoxy/.test(clean) || /3\.1|3\.2|3\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80", // Clean high-tech room / line
-      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80", // Machine rigging installation
-      "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?auto=format&fit=crop&w=400&q=80"  // Precision trial run QA
-    ];
+  // Extract brands
+  let brands = '';
+  const brandMatch = rawDesc.match(/(?:đại lý chính thức|thương hiệu|nhãn hiệu|phân phối chính thức|hãng)[:\s]+([^\n\.\;]+)/i);
+  if (brandMatch) {
+    brands = brandMatch[1].replace(/^[✔★►\+\-\s:]+/, '').replace(/\.\.$/, '').trim();
   }
 
-  // 5. Quà tặng, Bao bì, Hộp quà, Màng co, In ấn, Thùng Carton
-  if (/qua|hop|bao\s*bi|carton|in\s*an|mang\s*co|decal|tem|tui\s*giay|nhan\s*mac/.test(clean)) {
-    return [
-      "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=400&q=80"
-    ];
+  // Extract / synthesize main customers
+  let mainCustomers = ent.mainCustomers;
+  if (!mainCustomers || mainCustomers.length < 5) {
+    mainCustomers = 'Nhà máy sản xuất, Nhà thầu EPC, Ban quản lý KCN và Hệ thống phân phối B2B trên toàn quốc';
+  } else {
+    mainCustomers = mainCustomers.replace(/^[✔★►\+\-\s:]+/, '').trim();
   }
 
-  // 6. Nông sản, Cà phê, Trà, Mít sấy, Thực phẩm, Bánh kẹo, Đồ uống, Suất ăn (Pha 5.2)
-  if (/ca\s*phe|tra|mit\s*say|nong\s*san|thuc\s*pham|banh\s*keo|suat\s*an|can\s*tin|nuoc\s*giai\s*khat/.test(clean) || /5\.2/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400&q=80", // Industrial catering kitchen
-      "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=400&q=80", // Food preparation line
-      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=400&q=80"  // Packaged beverage & food
-    ];
-  }
+  // Formulate 3 professional B2B paragraphs rewritten completely:
+  const p1 = `${cleanName} là doanh nghiệp uy tín trong hệ sinh thái Chuỗi Cung Ứng B2B, ${establishedYear}, chuyên nghiên cứu, sản xuất và phân phối các giải pháp thuộc lĩnh vực ${category}. Doanh nghiệp cung ứng danh mục đa dạng bao gồm: ${productSample || 'các sản phẩm, trang thiết bị công nghiệp tiêu chuẩn'}, đáp ứng các tiêu chuẩn kiểm nghiệm và quy chuẩn kỹ thuật nghiêm ngặt trên toàn quốc.`;
 
-  // 7. Đồng phục, Áo thun, May mặc, Balo, Giày, Bảo hộ PPE (Pha 5.3)
-  if (/dong\s*phuc|ao\s*thun|may\s*mac|balo|tui|giay|bao\s*ho|ppe|khau\s*trang|gang\s*tay|non\s*bao\s*ho/.test(clean) || /5\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?auto=format&fit=crop&w=400&q=80", // Textile & uniform tailoring
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=400&q=80", // PPE Safety gear helmets
-      "https://images.unsplash.com/photo-1546938576-6e6a64f317cc?auto=format&fit=crop&w=400&q=80"  // Backpacks & apparel production
-    ];
-  }
+  const p2 = `Đơn vị sở hữu ${factoryArea.toLowerCase().includes('hạ tầng') ? factoryArea : 'hạ tầng ' + factoryArea} cùng ${monthlyOutput.toLowerCase().includes('công suất') || monthlyOutput.toLowerCase().includes('sản lượng') ? monthlyOutput : 'năng lực ' + monthlyOutput}. Doanh nghiệp sẵn sàng nhận may đo, gia công cơ khí chính xác theo bản vẽ kỹ thuật và in ấn nhận diện thương hiệu theo yêu cầu từng gói thầu, đồng thời duy trì nguồn hàng dồi dào, vận chuyển nhanh chóng cho các đối tác công trình, ban quản lý dự án và các đại lý bán buôn.`;
 
-  // 8. Tuyển dụng, Nhân sự, Lao động KCN (Pha 5.1)
-  if (/tuyen\s*dung|nhan\s*su|lao\s*dong|cung\s*ung\s*lao\s*dong|dao\s*tao/.test(clean) || /5\.1/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
-    ];
-  }
+  const p3 = brands 
+    ? `Bên cạnh hoạt động sản xuất chủ lực, ${cleanName} còn là đối tác phân phối chính thức của các thương hiệu uy tín (${brands}), cung ứng giải pháp vật tư kỹ thuật trọn gói, đồng hành bền vững cùng sự phát triển của chuỗi cung ứng công nghiệp Việt Nam.`
+    : `Bên cạnh hoạt động sản xuất chủ lực, ${cleanName} áp dụng quy trình kiểm soát chất lượng nghiêm ngặt và giải pháp cung ứng toàn diện, mang lại hiệu quả tối ưu cho các chủ đầu tư, ban quản lý KCN và các đối tác công nghiệp trên toàn quốc.`;
 
-  // 9. Logistics, Vận tải container lạnh, Xe nâng, Pallet gỗ, Kho bãi, Cảng biển (Pha 4.3)
-  if (/logistics|kho|van\s*tai|xe\s*nang|pallet|container|cang|giao\s*nhan|mooc|forwarding/.test(clean) || /4\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80", // Warehouse & pallet racking
-      "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=400&q=80", // Container port shipping
-      "https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=400&q=80"  // Forklift loading operations
-    ];
-  }
-
-  // 10. Cơ khí chính xác, CNC, Jig, Khuôn mẫu, Cắt laser, Bu lông, Thép cuộn mạ kẽm (Pha 4.1, 4.2)
-  if (/cnc|phay|tien|khuon|jig|co\s*khi|bu\s*long|cat\s*laser|dot\s*dap|gia\s*cong|thep|inox|nhom|ton|sat|bao\s*tri|mes/.test(clean) || /4\.1|4\.2/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80", // CNC 5-axis metal machining
-      "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=400&q=80", // Sheet metal laser cutting & sparks
-      "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=400&q=80"  // Precision machine inspection
-    ];
-  }
-
-  // 11. Chuyển đổi số, Robot AGV, Điện mặt trời, Tối ưu ESG, ISO Audit (Pha 6.1, 6.2, 6.3)
-  if (/robot|agv|tu\s*dong\s*hoa|chuyen\s*doi\s*so|dien\s*mat\s*troi|esg|iso|audit|mo\s*rong/.test(clean) || /6\.1|6\.2|6\.3/.test(phaseStr)) {
-    return [
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80", // Automated electronics & IoT
-      "https://images.unsplash.com/photo-1509391365360-2e959784a276?auto=format&fit=crop&w=400&q=80", // Rooftop Solar PV panels
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80"  // Green ISO certified factory
-    ];
-  }
-
-  // Fallback high-tech industrial manufacturing trio
-  const fallback = [
-    "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=400&q=80",
-    "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400&q=80"
-  ];
-
-  if (primaryCatImage && primaryCatImage !== '/images/supplier_b2b_hero.jpg') {
-    return [primaryCatImage, fallback[1], fallback[2]];
-  }
-
-  return fallback;
+  return {
+    paragraphs: [p1, p2, p3],
+    factoryArea,
+    monthlyOutput,
+    mainCustomers,
+    brands
+  };
 }
 

@@ -24,7 +24,13 @@ function forcePdfDownloadPlugin() {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), forcePdfDownloadPlugin()],
+  plugins: [{
+    name: 'server-only-fixture-boundary',
+    enforce: 'pre',
+    resolveId(source, importer, options) {
+      if (!options?.ssr && importer && path.resolve(path.dirname(importer.split('?')[0]), source) === path.resolve(__dirname, 'src/data/websiteSeeds.js')) return path.resolve(__dirname, 'src/data/websiteSeeds.browser.js');
+    }
+  }, react(), forcePdfDownloadPlugin()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -58,6 +64,7 @@ export default defineConfig({
     }
   },
   server: {
+    fs: { deny: ['.env', '.env.*', '**/server/**', '**/.git/**'] },
     port: 3000,
     open: false,
     proxy: {

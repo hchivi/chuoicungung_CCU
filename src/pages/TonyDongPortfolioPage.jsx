@@ -1792,7 +1792,8 @@ export default function TonyDongPortfolioPage() {
         >
           <img
             src="/logo_onlyc.png"
-            alt="Loading..."
+            alt=""
+            aria-hidden="true"
             className="w-full h-full object-contain drop-shadow-2xl"
           />
         </div>
@@ -2333,7 +2334,7 @@ export default function TonyDongPortfolioPage() {
           {/* ========================================================
               RIGHT COLUMN: 3D FLIPPABLE PORTRAIT & QR CARD (STICKY WHEN SCROLLING)
           ======================================================== */}
-          <div className="w-full md:w-[290px] lg:w-[320px] xl:w-[350px] shrink-0 flex flex-col items-center md:items-end justify-start relative order-1 md:order-2 z-20 md:pt-24 lg:pt-28 xl:pt-32 md:sticky md:top-6 self-start">
+          <div className="w-full md:w-[350px] lg:w-[390px] xl:w-[420px] shrink-0 flex flex-col items-center md:items-end justify-start relative order-1 md:order-2 z-20 md:pt-24 lg:pt-28 xl:pt-32 md:sticky md:top-6 self-start">
 
             {/* 3D Flip Card Container with Three.js Aura & Gyroscope */}
             <div
@@ -2345,7 +2346,7 @@ export default function TonyDongPortfolioPage() {
               onTouchEnd={handleCardTouchEnd}
               onTouchCancel={handleCardTouchEnd}
               onClick={handleToggleFlip}
-              className="relative w-full max-w-[340px] sm:max-w-[360px] md:max-w-[290px] lg:max-w-[320px] xl:max-w-[350px] h-[440px] sm:h-[470px] md:h-[405px] lg:h-[435px] xl:h-[465px] cursor-pointer select-none touch-manipulation group"
+              className="relative w-full max-w-[360px] min-[380px]:max-w-[390px] sm:max-w-[420px] md:max-w-[350px] lg:max-w-[390px] xl:max-w-[420px] aspect-[4/5] cursor-pointer select-none touch-manipulation group"
               style={{ perspective: 1200 }}
               title={showBack ? t.flipToFrontNotice : t.flipToBackNotice}
             >

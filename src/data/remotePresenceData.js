@@ -456,7 +456,8 @@ export const checkProgramReadiness = (request) => {
 /**
  * Nộp yêu cầu hiện diện từ xa mới (Section 32, 33)
  */
-export const submitRemotePresenceRequest = (formData) => {
+export const submitRemotePresenceRequest = async (formData) => {
+  if (isCloudBrowser()) return persistInquiry('remotePresence', formData);
   if (!formData.programId) {
     throw new Error('Bắt buộc phải chọn chương trình cụ thể có hỗ trợ tham gia từ xa.');
   }
@@ -725,7 +726,8 @@ export const handleProgramRescheduleOrCancel = (programId, newStatus, reason) =>
 /**
  * Đăng ký nhận thông báo khi có chương trình mới phù hợp (Section 52, 53)
  */
-export const submitRemotePresenceInterest = (interestData) => {
+export const submitRemotePresenceInterest = async (interestData) => {
+  if (isCloudBrowser()) return persistInquiry('remotePresenceInterest', interestData);
   const raw = safeGetItem(STORAGE_KEYS.INTERESTS);
   const list = raw ? JSON.parse(raw) : [];
 
@@ -745,3 +747,5 @@ export const submitRemotePresenceInterest = (interestData) => {
   safeSetItem(STORAGE_KEYS.INTERESTS, JSON.stringify(list));
   return newInterest;
 };
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';

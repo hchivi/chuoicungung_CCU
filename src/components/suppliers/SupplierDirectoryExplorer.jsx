@@ -1,8 +1,10 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Check, ChevronDown, Search, X } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronDown, Search, X, Compass, HardHat, Wrench, Factory, Users, Leaf } from 'lucide-react';
 import { slugify } from '../../pages/IndustryCategoryPage';
 import { findDirectoryCategories } from './supplierDirectoryModel';
+
+const STAGE_ICONS = [Compass, HardHat, Wrench, Factory, Users, Leaf];
 
 export default function SupplierDirectoryExplorer({ phases, categories, letters, keywords, selectedLetter, effectivePhase, effectiveStage, selectedCategory, selectedKeyword, letterCounts, onAllPhases, onStage, onPhase, onLetter, onCategory, onKeyword, lang }) {
   const [expanded, setExpanded] = useState(true);
@@ -20,6 +22,17 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
   const visibleCategories = query || showAll ? categoryMatches : categoryMatches.slice(0, 60);
   const english = lang === 'en';
 
+  const userActionRef = useRef(null);
+  const lastScrollYRef = useRef(0);
+
+  const handleToggleExpand = () => {
+    setExpanded(prev => {
+      const next = !prev;
+      userActionRef.current = next ? 'opened' : 'closed';
+      return next;
+    });
+  };
+
   useEffect(() => {
     const updateNavHeight = () => {
       const header = document.querySelector('header.sticky') || document.querySelector('header');
@@ -31,6 +44,24 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
     window.addEventListener('resize', updateNavHeight);
 
     const handleScroll = () => {
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      lastScrollYRef.current = scrollY;
+
+      // Mặc định tự động thu gọn A–Z khi cuộn trang xuống
+      if (scrollY > 60) {
+        if (userActionRef.current !== 'opened' || scrollY > 350) {
+          setExpanded(false);
+          if (scrollY > 350) {
+            userActionRef.current = null;
+          }
+        }
+      } else if (scrollY < 20) {
+        // Tự động mở lại khi cuộn về đầu trang (trừ khi người dùng chủ động bấm thu gọn)
+        if (userActionRef.current !== 'closed') {
+          setExpanded(true);
+        }
+      }
+
       if (!anchorRef.current) return;
       const rect = anchorRef.current.getBoundingClientRect();
       const header = document.querySelector('header.sticky') || document.querySelector('header');
@@ -107,9 +138,12 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
       <div className="sd-stage-grid">
         {[1, 2, 3, 4, 5, 6].map(stage => {
           const group = phases.filter(phase => phase.stage === stage);
+          const StageIcon = STAGE_ICONS[stage - 1];
           return <div className="sd-stage" data-stage={stage} key={stage} data-selected={effectiveStage === String(stage)}>
             <button className="sd-stage-heading" onClick={() => onStage?.(String(stage))} aria-pressed={effectiveStage === String(stage)}>
-              <span className="sd-stage-number">{String(stage).padStart(2, '0')}</span>
+              <div className="sd-stage-heading-top">
+                <span className="sd-stage-number">{String(stage).padStart(2, '0')}</span>
+              </div>
               <strong>{english ? ['Preparation & Investment', 'Design & Construction', 'Installation & Completion', 'Production & Operations', 'People & Welfare', 'Expansion & Transformation'][stage - 1] : group[0]?.stageName}</strong>
             </button>
             <div className="sd-phase-options">{group.map(phase => <button key={phase.id} data-phase={phase.id} aria-pressed={effectivePhase === phase.id} onClick={() => onPhase?.(phase.id, String(stage))} title={english ? phase.enTitle : phase.title}>
@@ -128,13 +162,28 @@ export default function SupplierDirectoryExplorer({ phases, categories, letters,
     <section className="sd-catalogue" aria-labelledby="sd-catalogue-title">
       <div className="sd-section-head">
         <div><h2 id="sd-catalogue-title">{english ? 'Industry directory, A–Z' : 'Danh mục ngành nghề A–Z'}</h2><p>{english ? 'Browse by industry or explore related keywords.' : 'Tra cứu theo tên ngành. Đi sâu bằng từ khoá sản phẩm, dịch vụ.'}</p></div>
-        <button className="sd-text-button" aria-expanded={expanded} aria-controls="sd-catalogue-content" onClick={() => setExpanded(value => !value)}>{expanded ? (english ? 'Collapse' : 'Thu gọn A–Z') : (english ? 'Expand' : 'Mở danh mục')}<ChevronDown size={16} className={expanded ? 'sd-chevron-open' : ''} /></button>
+        <button className="sd-text-button" aria-expanded={expanded} aria-controls="sd-catalogue-content" onClick={handleToggleExpand}>{expanded ? (english ? 'Collapse' : 'Thu gọn A–Z') : (english ? 'Expand' : 'Mở danh mục')}<ChevronDown size={16} className={expanded ? 'sd-chevron-open' : ''} /></button>
       </div>
-      {expanded && <div id="sd-catalogue-content">
-        <div className="sd-alphabet" aria-label="Bảng chữ cái ngành nghề">
-          <button aria-pressed={selectedLetter === 'TẤT CẢ'} onClick={() => { onLetter?.('TẤT CẢ'); setQuery(''); }}>{english ? 'All' : 'Tất cả'}</button>
-          {letters.map(letter => <button key={letter} aria-pressed={selectedLetter === letter} onClick={() => { onLetter?.(letter); setQuery(''); setShowAll(false); }} title={`${letter}: ${(letterCounts[letter] || 0).toLocaleString('vi-VN')} lượt trong danh mục`}>{letter}</button>)}
-        </div>
+      {/* Always show the alphabet bar even when catalogue details are collapsed */}
+      <div className="sd-alphabet" aria-label="Bảng chữ cái ngành nghề">
+        <button 
+          aria-pressed={selectedLetter === 'TẤT CẢ'} 
+          onClick={() => { onLetter?.('TẤT CẢ'); setQuery(''); setExpanded(true); userActionRef.current = 'opened'; }}
+        >
+          {english ? 'All' : 'Tất cả'}
+        </button>
+        {letters.map(letter => (
+          <button 
+            key={letter} 
+            aria-pressed={selectedLetter === letter} 
+            onClick={() => { onLetter?.(letter); setQuery(''); setShowAll(false); setExpanded(true); userActionRef.current = 'opened'; }} 
+            title={`${letter}: ${(letterCounts[letter] || 0).toLocaleString('vi-VN')} lượt trong danh mục`}
+          >
+            {letter}
+          </button>
+        ))}
+      </div>
+      {expanded && <div id="sd-catalogue-content" className="pt-2">
         {renderColumns()}
       </div>}
     </section>

@@ -178,13 +178,20 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(255,255,255,0.75),transparent_80%)] pointer-events-none" />
 
         {/* Center Container: Title & Search Bar (Di chuyển lên 1 chút để cân đối trên dưới) */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center space-y-4 sm:space-y-5 -mt-6 sm:-mt-10 lg:-mt-14">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full flex flex-col items-center space-y-4 sm:space-y-5 -mt-6 sm:-mt-10 lg:-mt-14">
           
-          {/* Main H1 Title (Cập nhật chuẩn theo yêu cầu) */}
-          <div className="space-y-2.5 sm:space-y-3">
-            <h1 className="hero-display-title text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-black uppercase text-center leading-[1.22] sm:leading-[1.18] tracking-tight">
-              <span className="text-[#072348] block lg:inline">NỀN TẢNG KẾT NỐI VÀ TÌM NGUỒN </span>
-              <span className="text-rainbow-gradient block sm:inline">CHUỖI CUNG ỨNG KHU CÔNG NGHIỆP</span>
+          {/* Main H1 Title (Cập nhật chuẩn theo yêu cầu: font Grotesk, không làm rớt dòng) */}
+          <div className="space-y-2.5 sm:space-y-3 w-full">
+            <h1 
+              className="hero-display-title font-grotesk text-2xl sm:text-3xl md:text-4xl lg:text-[50px] xl:text-[54px] 2xl:text-[56px] font-black uppercase text-center leading-[1.2] sm:leading-[1.18] tracking-tight"
+              style={{ fontFamily: "'Space Grotesk', 'SpaceGrotesk', sans-serif" }}
+            >
+              <span className="text-[#072348] block sm:whitespace-nowrap" style={{ fontFamily: "'Space Grotesk', 'SpaceGrotesk', sans-serif" }}>
+                NỀN TẢNG KẾT NỐI B2B2C
+              </span>
+              <span className="text-rainbow-gradient block sm:whitespace-nowrap" style={{ fontFamily: "'Space Grotesk', 'SpaceGrotesk', sans-serif" }}>
+                CHUỖI CUNG ỨNG KHU CÔNG NGHIỆP
+              </span>
             </h1>
             <p className="text-xs sm:text-sm md:text-base text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed">
               Tra cứu nhà máy, khu công nghiệp và kết nối đúng nhà cung ứng có năng lực thực tế tại Việt Nam.
@@ -281,8 +288,8 @@ export default function HomePage() {
       {/* =========================================================================
           03. 6 GIAI ĐOẠN — BẢN ĐỒ 6 GIAI ĐOẠN & 18 PHA VÒNG ĐỜI DỰ ÁN
          ========================================================================= */}
-      <section id="6-giai-doan" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 pt-4 pb-2">
-        <div className="text-center w-full max-w-7xl mx-auto space-y-2">
+      <section id="6-giai-doan" className="scroll-mt-24 w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-6 pt-4 pb-2">
+        <div className="text-center w-full max-w-5xl mx-auto space-y-2">
           <h2 className="text-xs min-[420px]:text-sm sm:text-base md:text-xl lg:text-[23px] xl:text-[27px] 2xl:text-[30px] font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-nowrap">
             <span className="text-gradient-flow-green">
               Nhu cầu nhà máy phát sinh trong suốt vòng đời đầu tư và vận hành
@@ -315,7 +322,7 @@ export default function HomePage() {
       {/* =========================================================================
           06. DỊCH VỤ — DỊCH VỤ HỖ TRỢ KẾT NỐI (DESIGN-TASTE PHOTOGRAPHIC CARDS)
          ========================================================================= */}
-      <section id="dich-vu" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <section id="dich-vu" className="scroll-mt-24 w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-6">
         <div className="text-center max-w-5xl mx-auto space-y-2">
 
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
@@ -459,7 +466,7 @@ export default function HomePage() {
       {/* =========================================================================
           07. HỢP TÁC — HỢP TÁC CHIẾN LƯỢC (DESIGN-TASTE PHOTOGRAPHIC CARDS)
          ========================================================================= */}
-      <section id="hop-tac" className="scroll-mt-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <section id="hop-tac" className="scroll-mt-24 w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-6">
         <div className="text-center max-w-5xl mx-auto space-y-2">
 
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-[34px] xl:text-4xl font-black uppercase font-heading tracking-tight text-center leading-tight whitespace-normal md:whitespace-nowrap">
@@ -472,7 +479,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-3.5 xl:gap-4">
           {[
             { 
               image: "/images/partners/partner_founding_alliance_2026.jpg",
@@ -537,6 +544,22 @@ export default function HomePage() {
               ],
               action: "Liên hệ hợp tác Hiệp hội",
               link: "/hop-tac" 
+            },
+            { 
+              image: "/images/roles/role_industrial_park_aerial.jpg",
+              imageAlt: "Hạ tầng khu công nghiệp hiện đại và nhà xưởng sẵn sàng kết nối chuỗi cung ứng",
+              tag: "HẠ TẦNG KCN & CCN", 
+              accentColor: "text-amber-300",
+              title: "Ban quản lý KCN", 
+              subtitle: "Industrial Park Authority",
+              desc: "Đồng hành cùng các KCN và CCN số hóa thông tin, xúc tiến đầu tư và kết nối chuỗi cung ứng cho nhà máy.",
+              highlights: [
+                "Số hóa hồ sơ KCN & quỹ đất nhà xưởng cho thuê trên cổng Quốc gia",
+                "Kết nối nhà máy FDI trong KCN với mạng lưới 18 pha cung ứng",
+                "Phối hợp tổ chức ngày hội kết nối B2B ngay tại địa bàn KCN"
+              ],
+              action: "Hợp tác Ban quản lý KCN",
+              link: "/khu-cong-nghiep" 
             }
           ].map((item, idx) => (
             <div
@@ -606,7 +629,7 @@ export default function HomePage() {
       {/* =========================================================================
           BLOCK 14 — CTA CUỐI TRANG (CLEAN ENTERPRISE ACTION)
          ========================================================================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8">
         <div className="bg-gradient-to-r from-[#0047a5] via-[#0052cc] to-[#0b3f6d] rounded-[36px] p-8 sm:p-12 lg:p-14 text-white text-center shadow-2xl relative overflow-hidden space-y-6">
           
           <div className="max-w-3xl mx-auto space-y-3">

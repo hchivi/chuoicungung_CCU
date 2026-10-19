@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -9,6 +10,7 @@ import {
 } from 'lucide-react';
 import { stagesData } from '../data/mockData';
 import { useLanguage } from '../contexts/LanguageContext';
+import { persistSubmission } from '../services/submissionService.js';
 
 export default function PostDemandPage() {
   const { t, lang } = useLanguage();
@@ -139,13 +141,13 @@ export default function PostDemandPage() {
       let savedDraftStr = null;
 
       if (draftId) {
-        savedDraftStr = localStorage.getItem('ccu_draft_' + draftId);
+        savedDraftStr = privateBrowserStorage.getItem('ccu_draft_' + draftId);
       }
       if (!savedDraftStr) {
-        savedDraftStr = localStorage.getItem('ccu_requirement_draft');
+        savedDraftStr = privateBrowserStorage.getItem('ccu_requirement_draft');
       }
       if (!savedDraftStr) {
-        const convStr = localStorage.getItem('ccu_active_conversation');
+        const convStr = privateBrowserStorage.getItem('ccu_active_conversation');
         if (convStr) {
           const parsedConv = JSON.parse(convStr);
           if (parsedConv.activeEntityDraft) {
@@ -326,9 +328,9 @@ export default function PostDemandPage() {
         completenessScore: completeness,
         lastSavedAt: now.toISOString()
       };
-      localStorage.setItem('ccu_requirement_draft', JSON.stringify(draftObj));
+      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(draftObj));
       if (formData.id) {
-        localStorage.setItem('ccu_draft_' + formData.id, JSON.stringify(draftObj));
+        privateBrowserStorage.setItem('ccu_draft_' + formData.id, JSON.stringify(draftObj));
       }
       setLastSavedAt(timeStr);
       setDraftToast(`Đã lưu bản nháp thành công lúc ${timeStr}! Bạn có thể quay lại tiếp tục bất kỳ lúc nào.`);
@@ -357,39 +359,11 @@ export default function PostDemandPage() {
       updatedAt: new Date().toISOString()
     };
 
-    // Save locally
+    // A submission remains private and pending review until the server approves it.
     try {
-      localStorage.setItem('ccu_requirement_draft', JSON.stringify(finalNeed));
-      if (finalNeed.id) {
-        localStorage.setItem('ccu_draft_' + finalNeed.id, JSON.stringify(finalNeed));
-      }
-      const savedDemandsStr = localStorage.getItem('ccu_user_demands');
-      let demandsList = savedDemandsStr ? JSON.parse(savedDemandsStr) : [];
-      demandsList = [finalNeed, ...demandsList.filter(d => d.id !== finalNeed.id)];
-      localStorage.setItem('ccu_user_demands', JSON.stringify(demandsList));
-    } catch (e) {
-      console.warn('Storage sync error:', e);
-    }
-
-    // Try mock API dispatch
-    try {
-      await fetch('/api/demands', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: finalNeed.title,
-          stageId: 4,
-          phaseId: '4.2',
-          productService: finalNeed.productService,
-          quantity: `${finalNeed.quantity} ${finalNeed.unit}`,
-          location: `${finalNeed.kcn}, ${finalNeed.location}`,
-          budget: `${finalNeed.budgetMin} - ${finalNeed.budgetMax} VNĐ`,
-          deadline: finalNeed.deadline,
-          status: 'ACTIVE_SOURCING',
-          visibility: finalNeed.visibility
-        })
-      });
-    } catch (e) {}
+      const saved = await persistSubmission('demand', finalNeed);
+      setFormData(previous => ({ ...previous, id: saved.id, status: 'PENDING' }));
+    } catch (error) { setDraftToast(error.message || 'Chưa lưu được nhu cầu. Nội dung nhập vẫn được giữ.'); return; }
 
     setCurrentStep(3);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1405,10 +1379,10 @@ export default function PostDemandPage() {
                     ĐÃ TIẾP NHẬN HỒ SƠ THÀNH CÔNG
                   </span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-900 font-heading">
-                    Đã xác nhận & Khởi động tìm nguồn
+                    Đã lưu nhu cầu — chờ rà soát
                   </h2>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Hệ thống điều phối Chuỗi Cung Ứng đã tiếp nhận nhu cầu #{formData.id}. Hồ sơ đã sẵn sàng kết nối bảo mật với mạng lưới nhà cung ứng đạt chuẩn.
+                    Nhu cầu #{formData.id} đã được lưu riêng tư trên hệ thống. Điều phối viên cần rà soát trước khi công bố hoặc kết nối; chưa gửi thông tin tới nhà cung ứng.
                   </p>
                 </div>
 
@@ -1422,7 +1396,7 @@ export default function PostDemandPage() {
                     <strong>Địa điểm:</strong> {formData.kcn}, {formData.location}
                   </div>
                   <div className="text-slate-600">
-                    <strong>Trạng thái:</strong> <span className="text-emerald-700 font-bold uppercase font-mono">ACTIVE_SOURCING</span>
+                    <strong>Trạng thái:</strong> <span className="text-emerald-700 font-bold uppercase font-mono">PENDING_REVIEW</span>
                   </div>
                 </div>
 
@@ -1430,24 +1404,10 @@ export default function PostDemandPage() {
                 <div className="pt-2 max-w-lg mx-auto space-y-2 text-left">
                   <div className="text-xs font-bold text-slate-700 font-heading uppercase flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-[#0052cc]" />
-                    <span>3 Nhà cung ứng sơ bộ đạt chuẩn năng lực khớp lệnh:</span>
+                    <span>Tra cứu nhà cung ứng sau khi hoàn tất rà soát nhu cầu.</span>
                   </div>
                   <div className="space-y-1.5">
-                    {[
-                      { name: 'Công ty Cổ phần May Mặc Đông Nam', loc: 'KCN Amata, Đồng Nai', match: '98%', kyc: 'KYC Kim Cương' },
-                      { name: 'Công ty TNHH Dệt May Công Nghiệp Sài Gòn', loc: 'KCN Biên Hòa 2, Đồng Nai', match: '95%', kyc: 'KYC Vàng' },
-                      { name: 'Tổng Công ty Sản Xuất & May Mặc Việt Thắng', loc: 'TP. Biên Hòa, Đồng Nai', match: '92%', kyc: 'KYC Kim Cương' }
-                    ].map((s, idx) => (
-                      <div key={idx} className="p-2.5 rounded-xl bg-blue-50/60 border border-blue-200/80 flex items-center justify-between text-xs">
-                        <div>
-                          <div className="font-bold text-slate-900">{s.name}</div>
-                          <div className="text-[11px] text-slate-500">{s.loc} · <span className="text-[#0052cc] font-semibold">{s.kyc}</span></div>
-                        </div>
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono font-bold text-[10.5px]">
-                          Khớp {s.match}
-                        </span>
-                      </div>
-                    ))}
+                    Chưa có kết quả khớp lệnh đã xác nhận cho nhu cầu này.
                   </div>
                 </div>
 

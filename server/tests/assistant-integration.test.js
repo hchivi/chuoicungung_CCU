@@ -106,14 +106,14 @@ test('CHAINY Dify receives bounded sourcing context and keeps its own provider c
   assert.deepEqual(first.actions_executed, []);
 });
 
-test('runtime requires Dify for both roles, never falls back to OpenAI or fixtures', async () => {
+test('runtime fails closed before provider calls when Supabase is unavailable', async () => {
   const saved = { openai: process.env.OPENAI_API_KEY, dify: process.env.DIFY_API_KEY };
   delete process.env.OPENAI_API_KEY;
   delete process.env.DIFY_API_KEY;
   try {
     const { createAssistantRuntime } = await import('../assistants/runtime.js');
-    const service = createAssistantRuntime();
-    for (const mode of ['SUPPI', 'CHAINY']) await assert.rejects(service.send({ query: 'Anh cần carton', ownerId: 'owner', mode }), { code: 'DIFY_NOT_CONFIGURED' });
+    const service = createAssistantRuntime({ env: { AI_PROVIDER: 'dify' }, client: null, fetchImpl: () => { throw new Error('Provider must not be called'); } });
+    for (const mode of ['SUPPI', 'CHAINY']) await assert.rejects(service.send({ query: 'Anh cần carton', ownerId: 'owner', mode }), { code: 'DATABASE_UNAVAILABLE' });
   } finally {
     for (const [name, value] of [['OPENAI_API_KEY', saved.openai], ['DIFY_API_KEY', saved.dify]]) {
       if (value === undefined) delete process.env[name]; else process.env[name] = value;
@@ -217,13 +217,13 @@ test('HTTP gateway retains cookie-owned memory, denies another session, validate
   const { createApp } = await import('../app.js');
   const store = createConversationStore();
   const suppi = createSuppiOrchestrator({ conversationStore: store, executeTool: async () => ({ items: [], total: 0 }) });
-  const server = createApp({ assistantService: createAssistantService({ suppi, conversationStore: store }) }).listen(0, '127.0.0.1');
+  const server = createApp({ client: null, repository: { health: async () => { throw new Error('not configured'); } }, assistantService: createAssistantService({ suppi, conversationStore: store }) }).listen(0, '127.0.0.1');
   await new Promise((resolve, reject) => { server.once('listening', resolve); server.once('error', reject); });
   t.after(() => new Promise(resolve => server.close(resolve)));
   const url = `http://127.0.0.1:${server.address().port}/api/assistants/chat`;
   const status = await fetch(url.replace('/chat', '/status'));
   assert.equal(status.status, 200);
-  assert.ok((await status.json()).data.pending_sources.includes('catalogues'));
+  assert.ok((await status.json()).data.pending_sources.includes('supabase'));
   const send = (body, headers = {}) => fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(body) });
   const first = await send({ query: 'Anh cần carton', user: 'admin' });
   assert.equal(first.status, 200);

@@ -1,4 +1,5 @@
 import express from 'express';
+import { gzipSync } from 'node:zlib';
 import { getSupabase, isSupabaseConfigured } from '../supabase.js';
 import { createSupabaseRepository, databaseResult, requireDatabase, DOCUMENT_COLLECTIONS, ENTITY_TABLES, publicRecord } from '../storage/supabaseRepository.js';
 import { AssistantError } from '../assistants/difyClient.js';
@@ -32,15 +33,89 @@ export function paginated(records, query = {}) {
 
 export function createApiRouter({ repository = createSupabaseRepository({ client: getSupabase() }), client = getSupabase() } = {}) {
   const router = express.Router();
+  let bootstrapCache;
+  router.invalidateBootstrap = () => { bootstrapCache = null; };
+  router.get('/bootstrap', async (req, res) => {
+    // Shared server cache avoids repeated Supabase egress on the free plan.
+    // Preserve synchronous legacy enrichment without bundling 60 MB of JSON.
+    if (!bootstrapCache || bootstrapCache.expires < Date.now()) {
+      const collections = [...Object.keys(ENTITY_TABLES), ...DOCUMENT_COLLECTIONS];
+      const data = Object.fromEntries(await Promise.all(collections.map(async collection => {
+        if (collection === 'suppliers') {
+          return [collection, await repository.preview('suppliers', 50)];
+        }
+        return [collection, await repository.all(collection)];
+      })));
+      const json = JSON.stringify({ success: true, source: 'supabase', data });
+      bootstrapCache = { json, gzip: gzipSync(json), expires: Date.now() + 6 * 60 * 60 * 1000 };
+    }
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'private, no-cache');
+    res.vary('Accept-Encoding');
+    if (/\bgzip\b/.test(req.headers['accept-encoding'] || '')) { res.setHeader('Content-Encoding', 'gzip'); return res.send(bootstrapCache.gzip); }
+    res.send(bootstrapCache.json);
+  });
   router.get('/status', async (_req, res) => {
     let connected = false;
     try { await repository.health(); connected = true; } catch { /* Liveness remains online; readiness is separate. */ }
     res.json({ status: 'online', database: { provider: 'supabase', connected }, supabase: { configured: isSupabaseConfigured(), connected }, timestamp: new Date().toISOString() });
   });
   for (const [route, collection] of Object.entries({ enterprises: 'suppliers', factories: 'factories', 'industrial-parks': 'industrialParks' })) {
-    router.get(`/${route}`, async (req, res) => res.json(paginated(filterDirectory(await repository.all(collection), req.query), req.query)));
+    router.get(`/${route}`, async (req, res) => {
+      if (collection === 'suppliers' && client !== null) {
+        try {
+          const { search150kSuppliers, count150kSuppliers } = await import('../storage/sqliteSupplierStore.js');
+          const total150k = count150kSuppliers();
+          if (total150k > 0) {
+            const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+            const requestedLimit = parseInt(req.query.limit, 10);
+            const pageSize = Math.min(1000, Math.max(1, requestedLimit || 24));
+            const offset = (page - 1) * pageSize;
+            const q = req.query.q || '';
+            const province = req.query.province || '';
+            const category = req.query.category || '';
+            const letter = req.query.letter || '';
+            const stage = req.query.stage || '';
+            const phase = req.query.phase || '';
+            const searchRes = search150kSuppliers({ 
+              query: q, 
+              province, 
+              category, 
+              letter,
+              stage,
+              phase,
+              limit: pageSize, 
+              offset 
+            });
+            const total = searchRes.total;
+            const totalPages = Math.max(1, Math.ceil(total / pageSize));
+            return res.json({
+              success: true,
+              source: 'supabase',
+              total,
+              count: searchRes.rows.length,
+              totalPages,
+              currentPage: page,
+              pageSize,
+              data: searchRes.rows
+            });
+          }
+        } catch {
+          // Fall back gracefully to repository
+        }
+      }
+      return res.json(paginated(filterDirectory(await repository.all(collection), req.query), req.query));
+    });
     router.get(`/${route}/:id`, async (req, res) => {
-      const data = await repository.get(collection, req.params.id);
+      let data = await repository.get(collection, req.params.id);
+      if (!data && collection === 'suppliers') {
+        try {
+          const { find150kSupplier } = await import('../storage/sqliteSupplierStore.js');
+          data = find150kSupplier(req.params.id);
+        } catch {
+          // Fall back gracefully if SQLite is not available
+        }
+      }
       if (!data) throw new AssistantError('ENTITY_NOT_FOUND', 'Không tìm thấy hồ sơ được xuất bản.', 404);
       res.json({ success: true, source: 'supabase', data });
     });

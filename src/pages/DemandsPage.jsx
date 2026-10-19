@@ -1,6 +1,7 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Filter, MapPin, Building2, Calendar, PlusCircle, ArrowRight, ChevronRight, RotateCcw, Send, Bot, ChevronDown, Check, X } from 'lucide-react';
+import { Search, Filter, MapPin, Building2, Calendar, PlusCircle, ArrowRight, ChevronRight, RotateCcw, Send, Bot, ChevronDown, Check, X, Tag } from 'lucide-react';
 import { 
   getPublicRequirements, 
   evaluateSupplierRelevance,
@@ -12,6 +13,8 @@ import SuppiDemandAssistantModal from '../components/demands/SuppiDemandAssistan
 import AuthModal from '../components/auth/AuthModal';
 import B2bTradeNetworkCanvas from '../components/demands/B2bTradeNetworkCanvas';
 import { getDemandFilterOptions, filterPublicDemands, formatDemandDeadline, formatDemandQuantity, getDemandStatus } from './demandMarketplaceUi';
+import supplierTopCategories from '../data/supplierTopCategories.json';
+import { CURATED_CATEGORIES } from '../data/categoryHubData';
 import './DemandMarketplace.css';
 
 export default function DemandsPage() {
@@ -19,6 +22,8 @@ export default function DemandsPage() {
 
   // Search & Filter States
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedKeyword, setSelectedKeyword] = useState('all');
+  const [keywordSearch, setKeywordSearch] = useState('');
   const [selectedStage, setSelectedStage] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedProvince, setSelectedProvince] = useState('all');
@@ -34,7 +39,7 @@ export default function DemandsPage() {
   // Authenticated user state from session
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_user_session');
+      const saved = privateBrowserStorage.getItem('ccu_user_session');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return {
@@ -57,24 +62,69 @@ export default function DemandsPage() {
   // Update session listener
   const refreshUserSession = () => {
     try {
-      const saved = localStorage.getItem('ccu_user_session');
+      const saved = privateBrowserStorage.getItem('ccu_user_session');
       if (saved) setCurrentUser(JSON.parse(saved));
     } catch (e) {}
   };
 
   // Filter choices remain stable while a query changes. Only sanitized summaries enter the UI.
   const allPublicDemands = useMemo(() => getPublicRequirements(), [dataRevision]);
-  const { categories: categoriesList, provinces: provincesList } = useMemo(() => getDemandFilterOptions(allPublicDemands), [allPublicDemands]);
+  const { provinces: provincesList } = useMemo(() => getDemandFilterOptions(allPublicDemands), [allPublicDemands]);
+
+  // Full comprehensive category list from database & taxonomy data (Image 3 fix)
+  const categoriesList = useMemo(() => {
+    const fromDemands = allPublicDemands.map(d => d.category).filter(Boolean);
+    const fromCurated = (CURATED_CATEGORIES || []).map(c => c.name).filter(Boolean);
+    const fromTop = (supplierTopCategories || []).map(c => c.name).filter(Boolean);
+    return [...new Set([...fromDemands, ...fromCurated, ...fromTop])].sort((a, b) => a.localeCompare(b, 'vi'));
+  }, [allPublicDemands]);
+
+  // Curated and demand-extracted keywords for instant 1-line filtering (Image 4 fix)
+  const demandKeywords = useMemo(() => {
+    const defaultKeywords = [
+      "Màng co nhiệt POF",
+      "Màng nhôm",
+      "Bảo trì máy may",
+      "Hiệu chuẩn ESD",
+      "Vải kaki 65/35",
+      "Quà tết hộp cứng",
+      "Khuôn mẫu dập nóng",
+      "Thép SKD11",
+      "Trạm biến áp 1000kVA",
+      "Quần áo phòng sạch",
+      "Vận tải container 40ft",
+      "Đồng phục công nhân",
+      "Gia công CNC",
+      "Thùng carton"
+    ];
+    const fromDemands = allPublicDemands.flatMap(d => [d.keyword, d.productService]).filter(k => k && k.length <= 30);
+    return [...new Set([...defaultKeywords, ...fromDemands])];
+  }, [allPublicDemands]);
+
+  const filteredDemandKeywords = useMemo(() => {
+    if (!keywordSearch.trim()) return demandKeywords;
+    const q = keywordSearch.trim().toLowerCase();
+    return demandKeywords.filter(k => k.toLowerCase().includes(q));
+  }, [demandKeywords, keywordSearch]);
+
   const publicDemands = useMemo(() => filterPublicDemands(allPublicDemands, {
-    search: searchTerm, stageId: selectedStage, category: selectedCategory, province: selectedProvince,
-    sampleRequired: selectedSampleReq, surveyRequired: selectedSurveyReq, sortBy, status: selectedStatus
-  }), [allPublicDemands, searchTerm, selectedStage, selectedCategory, selectedProvince, selectedSampleReq, selectedSurveyReq, sortBy, selectedStatus]);
+    search: searchTerm,
+    keyword: selectedKeyword !== 'all' ? selectedKeyword : '',
+    stageId: selectedStage,
+    category: selectedCategory,
+    province: selectedProvince,
+    sampleRequired: selectedSampleReq,
+    surveyRequired: selectedSurveyReq,
+    sortBy,
+    status: selectedStatus
+  }), [allPublicDemands, searchTerm, selectedKeyword, selectedStage, selectedCategory, selectedProvince, selectedSampleReq, selectedSurveyReq, sortBy, selectedStatus]);
+
   const visibleDemands = publicDemands.slice(0, visibleCount);
   const advancedFilterCount = Number(selectedStage !== 'all') + Number(selectedSampleReq) + Number(selectedSurveyReq);
-  const hasActiveFilters = Boolean(searchTerm || selectedCategory !== 'all' || selectedProvince !== 'all' || advancedFilterCount || selectedStatus !== 'open');
+  const hasActiveFilters = Boolean(searchTerm || selectedKeyword !== 'all' || selectedCategory !== 'all' || selectedProvince !== 'all' || advancedFilterCount || selectedStatus !== 'open');
   const supplierOrgId = currentUser.orgId || currentUser.taxId || (currentUser.name ? `SUP-${currentUser.name.replace(/\s+/g, '_')}` : 'SUP_ACTIVE_ORG');
 
-  useEffect(() => setVisibleCount(6), [searchTerm, selectedStage, selectedCategory, selectedProvince, selectedSampleReq, selectedSurveyReq, selectedStatus, sortBy]);
+  useEffect(() => setVisibleCount(6), [searchTerm, selectedKeyword, selectedStage, selectedCategory, selectedProvince, selectedSampleReq, selectedSurveyReq, selectedStatus, sortBy]);
 
   // Contain focus, support Escape and return to the trigger when closing public details.
   useEffect(() => {
@@ -103,6 +153,8 @@ export default function DemandsPage() {
   // Reset filters
   const handleResetFilters = () => {
     setSearchTerm('');
+    setSelectedKeyword('all');
+    setKeywordSearch('');
     setSelectedStage('all');
     setSelectedCategory('all');
     setSelectedProvince('all');
@@ -268,14 +320,37 @@ export default function DemandsPage() {
           <a href="#dm-how-it-works" className="dm-text-link">Cách tham gia <ArrowRight size={17} aria-hidden="true" /></a>
         </div>
         <div className="dm-finder" role="search" aria-label="Tìm nhu cầu mua hàng">
-          <div className="dm-search">
+          <div 
+            className="dm-search" 
+            onClick={() => document.getElementById('demand-search-input')?.focus()}
+            role="presentation"
+          >
             <Search size={21} aria-hidden="true" />
             <label htmlFor="demand-search-input" className="sr-only">Tìm nhu cầu theo sản phẩm, dịch vụ hoặc mã nhu cầu</label>
-            <input id="demand-search-input" type="search" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} placeholder="Bạn cung cấp sản phẩm hoặc dịch vụ gì?" />
-            {searchTerm && <button type="button" onClick={() => setSearchTerm('')} aria-label="Xóa từ khóa"><X size={18} aria-hidden="true" /></button>}
+            <input 
+              id="demand-search-input" 
+              type="search" 
+              value={searchTerm} 
+              onChange={e => setSearchTerm(e.target.value)} 
+              placeholder="Bạn cung cấp sản phẩm hoặc dịch vụ gì?" 
+              autoComplete="off"
+            />
+            {searchTerm && (
+              <button 
+                type="button" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSearchTerm('');
+                  document.getElementById('demand-search-input')?.focus();
+                }} 
+                aria-label="Xóa từ khóa"
+              >
+                <X size={18} aria-hidden="true" />
+              </button>
+            )}
           </div>
           <div className="dm-primary-filters">
-            <div><label htmlFor="demand-category-filter">Ngành hàng</label><select id="demand-category-filter" value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}><option value="all">Tất cả ngành hàng</option>{categoriesList.map(category => <option key={category} value={category}>{category}</option>)}</select></div>
+            <div><label htmlFor="demand-category-filter">Ngành hàng</label><select id="demand-category-filter" value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}><option value="all">Tất cả ngành hàng ({categoriesList.length})</option>{categoriesList.map(category => <option key={category} value={category}>{category}</option>)}</select></div>
             <div><label htmlFor="demand-province-filter">Khu vực</label><select id="demand-province-filter" value={selectedProvince} onChange={e => setSelectedProvince(e.target.value)}><option value="all">Toàn quốc</option>{provincesList.map(province => <option key={province} value={province}>{province}</option>)}</select></div>
             <div><label htmlFor="demand-status-filter">Tiếp nhận hồ sơ</label><select id="demand-status-filter" value={selectedStatus} onChange={e => setSelectedStatus(e.target.value)}><option value="open">Đang tìm nguồn</option><option value="all">Tất cả trạng thái</option><option value="PAUSED">Tạm dừng</option><option value="CLOSED">Đã đóng</option></select></div>
             <button type="button" className="dm-filter-toggle" aria-expanded={showAdvancedFilters} aria-controls="dm-advanced-filters" onClick={() => setShowAdvancedFilters(value => !value)}><Filter size={17} aria-hidden="true" />Lọc thêm{advancedFilterCount > 0 && <span>{advancedFilterCount}</span>}<ChevronDown size={16} aria-hidden="true" /></button>
@@ -289,6 +364,60 @@ export default function DemandsPage() {
 
         <div className="dm-market-layout">
           <div className="dm-results">
+            {/* 1-Line Keyword Quick Filter & Search (Image 4) */}
+            <div className="dm-keyword-section" aria-label="Lọc nhanh nhu cầu theo từ khóa">
+              <div className="dm-keyword-header">
+                <div className="dm-keyword-title">
+                  <Tag size={15} className="text-[#006039]" aria-hidden="true" />
+                  <span>Từ khóa nhu cầu phổ biến:</span>
+                </div>
+                <div className="dm-keyword-search-mini">
+                  <Search size={14} className="text-slate-400" aria-hidden="true" />
+                  <input
+                    type="text"
+                    value={keywordSearch}
+                    onChange={(e) => setKeywordSearch(e.target.value)}
+                    placeholder="Lọc từ khóa nhanh..."
+                    aria-label="Lọc danh sách từ khóa"
+                  />
+                  {keywordSearch && (
+                    <button 
+                      type="button" 
+                      onClick={() => setKeywordSearch('')} 
+                      className="text-slate-400 hover:text-slate-600 p-0.5"
+                      aria-label="Xóa tìm từ khóa"
+                    >
+                      <X size={12} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="dm-keyword-scroll" role="tablist" aria-label="Danh sách từ khóa">
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={selectedKeyword === 'all'}
+                  className={`dm-keyword-chip ${selectedKeyword === 'all' ? 'is-active' : ''}`}
+                  onClick={() => setSelectedKeyword('all')}
+                >
+                  Tất cả ({allPublicDemands.length})
+                </button>
+                {filteredDemandKeywords.map((kw) => (
+                  <button
+                    key={kw}
+                    type="button"
+                    role="tab"
+                    aria-selected={selectedKeyword === kw}
+                    className={`dm-keyword-chip ${selectedKeyword === kw ? 'is-active' : ''}`}
+                    onClick={() => setSelectedKeyword(selectedKeyword === kw ? 'all' : kw)}
+                  >
+                    {kw}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="dm-results-toolbar">
               <p role="status" aria-live="polite" aria-atomic="true"><strong>{publicDemands.length}</strong> nhu cầu{hasActiveFilters ? ' phù hợp' : ' đang tìm nguồn'}</p>
               <div className="dm-result-actions">

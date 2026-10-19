@@ -18,7 +18,7 @@ export default function ProgramCustomNotificationBlock() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.consent) {
       setErrorMsg('Vui lòng tích chọn đồng ý nhận thông báo từ hệ thống.');
@@ -29,7 +29,7 @@ export default function ProgramCustomNotificationBlock() {
     setErrorMsg('');
 
     try {
-      registerProgramNotificationConsent({
+      await registerProgramNotificationConsent({
         name: formData.name,
         company: formData.company,
         email: formData.email,

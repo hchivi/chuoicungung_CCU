@@ -1,0 +1,1102 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2907
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 PROJECT: CHUOICUNGUNG.COM\
+\
+TASK:\
+BUILD PAGE:\
+\'93NG\'c0Y H\uc0\u7896 I CHU\u7894 I CUNG \u7912 NG - BUSINESS MATCHING KCN TH\'c1I H\'d2A 2026\'94\
+\
+PROPOSED URL:\
+/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026\
+\
+IMPORTANT:\
+Audit/reuse architecture, models, FormEngine, Program, Organization,\
+Registration, Attendance, Meeting, Task, Requirement and Outcome\
+\uc0\u273 ang c\'f3 tr\u432 \u7899 c khi build.\
+\
+KH\'d4NG t\uc0\u7841 o h\u7879  th\u7889 ng event song song.\
+KH\'d4NG duplicate Organization.\
+KH\'d4NG hard-code s\uc0\u7889  li\u7879 u t\u7915  Excel/PDF.\
+KH\'d4NG fake statistics.\
+KH\'d4NG public contact/private requirement/quotation.\
+KH\'d4NG \uc0\u273 \'e1nh \u273 \u7891 ng meeting = deal.\
+\
+==================================================\
+1. PRODUCT CONCEPT\
+==================================================\
+\
+\uc0\u272 \'e2y kh\'f4ng ph\u7843 i event landing page t\u297 nh.\
+\
+\uc0\u272 \'e2y l\'e0 EVENT OPERATING PAGE v\u7899 i lifecycle:\
+\
+TR\uc0\u431 \u7898 C S\u7920  KI\u7878 N\
+\uc0\u8594  \u272 ANG DI\u7876 N RA\
+\uc0\u8594  SAU S\u7920  KI\u7878 N.\
+\
+Header page c\'f3 3 phase tabs m\'e0u kh\'e1c nhau:\
+\
+PRE EVENT:\
+\'93TR\uc0\u431 \u7898 C S\u7920  KI\u7878 N \'97 Chu\u7849 n b\u7883  & Matching\'94\
+\
+LIVE:\
+\'93\uc0\u272 ANG DI\u7876 N RA \'97 Check-in & K\u7871 t n\u7889 i\'94\
+\
+POST EVENT:\
+\'93SAU S\uc0\u7920  KI\u7878 N \'97 K\u7871 t qu\u7843  & Follow-up\'94\
+\
+Default active phase ph\uc0\u7843 i t\u7921  \u273 \u7897 ng d\u7921 a tr\'ean server time\
+timezone Asia/Ho_Chi_Minh.\
+\
+Use:\
+registrationCloseAt\
+eventStartAt\
+eventEndAt\
+statusOverride\
+\
+N\uc0\u7871 u event postponed/cancelled:\
+statusOverride th\uc0\u7855 ng time logic.\
+\
+User v\uc0\u7851 n \u273 \u432 \u7907 c click xem c\'e1c phase kh\'e1c.\
+\
+T\uc0\u7841 i th\u7901 i \u273 i\u7875 m sau event:\
+default POST EVENT.\
+\
+Kh\'f4ng hard-code eventEndAt = 11:00.\
+Cho admin c\uc0\u7845 u h\'ecnh v\'ec c\'f3 ho\u7841 t \u273 \u7897 ng sau ch\u432 \u417 ng tr\'ecnh ch\'ednh.\
+\
+==================================================\
+2. EVENT DATA\
+==================================================\
+\
+Event name:\
+NG\'c0Y H\uc0\u7896 I CHU\u7894 I CUNG \u7912 NG\
+BUSINESS MATCHING KCN TH\'c1I H\'d2A 2026\
+\
+Date:\
+Wednesday / Th\uc0\u7913  T\u432 \
+07/10/2026\
+\
+Start:\
+08:00\
+\
+Venue:\
+V\uc0\u259 n ph\'f2ng Ban Qu\u7843 n l\'fd KCN Th\'e1i H\'f2a,\
+\uc0\u7845 p T\'e2n H\'f2a, x\'e3 \u272 \u7913 c L\u7853 p III,\
+t\uc0\u7881 nh T\'e2y Ninh.\
+\
+Registration deadline:\
+29/09/2026\
+\
+Target:\
+Kho\uc0\u7843 ng 20 Nh\'e0 m\'e1y\
+\uc0\u8596 \
+20 Nh\'e0 cung \uc0\u7913 ng / th\'e0nh vi\'ean ph\'f9 h\u7907 p.\
+\
+Organizer context:\
+Team Khu C\'f4ng Nghi\uc0\u7879 p Mi\u7873 n Nam ph\u7889 i h\u7907 p v\u7899 i\
+Ban Qu\uc0\u7843 n l\'fd KCN Th\'e1i H\'f2a.\
+\
+Ch\uc0\u7881  hi\u7875 n th\u7883  logo/partner n\u7871 u relationship \u273 \'e3 \u273 \u432 \u7907 c x\'e1c nh\u7853 n.\
+\
+==================================================\
+3. HERO\
+==================================================\
+\
+H1:\
+\
+\'93NG\'c0Y H\uc0\u7896 I CHU\u7894 I CUNG \u7912 NG\
+BUSINESS MATCHING KCN TH\'c1I H\'d2A 2026\'94\
+\
+Sub:\
+\
+\'93Nhu c\uc0\u7847 u th\u7853 t - Ngu\u7891 n cung ph\'f9 h\u7907 p -\
+Cu\uc0\u7897 c g\u7863 p \u273 \u432 \u7907 c theo d\'f5i \u273 \u7871 n k\u7871 t qu\u7843 \'94\
+\
+Description:\
+\
+\'93K\uc0\u7871 t n\u7889 i nhu c\u7847 u th\u7921 c t\u7871  c\u7911 a c\'e1c nh\'e0 m\'e1y t\u7841 i KCN Th\'e1i H\'f2a\
+v\uc0\u7899 i nh\'e0 cung \u7913 ng c\'f3 n\u259 ng l\u7921 c ph\'f9 h\u7907 p.\
+T\uc0\u7915  \u273 \u259 ng k\'fd, matching, check-in, cu\u7897 c g\u7863 p 1:1\
+\uc0\u273 \u7871 n follow-up sau ch\u432 \u417 ng tr\'ecnh\
+\uc0\u273 \u7873 u \u273 \u432 \u7907 c ghi nh\u7853 n tr\'ean CHUOICUNGUNG.COM.\'94\
+\
+Show:\
+date\
+time\
+venue\
+registration deadline\
+current program status.\
+\
+Primary CTA changes by lifecycle:\
+\
+PRE:\
+\'93\uc0\u272 \u258 NG K\'dd THAM GIA\'94\
+\
+LIVE:\
+\'93CHECK-IN S\uc0\u7920  KI\u7878 N\'94\
+\
+POST:\
+\'93XEM K\uc0\u7870 T QU\u7842  CH\u431 \u416 NG TR\'ccNH\'94\
+\
+==================================================\
+4. PRE EVENT \'97 OVERVIEW\
+==================================================\
+\
+Show:\
+- m\uc0\u7909 c ti\'eau ch\u432 \u417 ng tr\'ecnh\
+- organizers\
+- location\
+- schedule\
+- target participants\
+- registration status\
+- industries expected.\
+\
+Factory industries include:\
+- Fertilizers\
+- Pesticides / agrochemicals\
+- Chemicals\
+- Paper / carton packaging\
+- Cosmetics\
+- Rope\
+- Yarn / textile\
+- other manufacturing sectors.\
+\
+==================================================\
+5. PRE EVENT \'97 TWO-SIDED MATCHING\
+==================================================\
+\
+Build large two-column section.\
+\
+LEFT:\
+\'93NH\'c0 M\'c1Y / BUYER\'94\
+\
+Each company card:\
+- organization\
+- industry\
+- location/KCN\
+- BUYING NEEDS\
+- products/services they are looking for\
+- SELLING / OUTPUT CAPABILITY if publicly shared\
+- target supplier categories\
+- public matching status\
+- request meeting CTA.\
+\
+RIGHT:\
+\'93NH\'c0 CUNG \uc0\u7912 NG\'94\
+\
+Each supplier card:\
+- organization\
+- products/services\
+- capabilities\
+- service area\
+- industry\
+- association/network membership if confirmed\
+- booth/display status\
+- suitable factory needs\
+- why matched\
+- profile CTA\
+- request meeting CTA.\
+\
+IMPORTANT:\
+Organization may have both BUY and SUPPLY roles.\
+Do not create duplicate organization records.\
+\
+Only public/approved need summaries are shown publicly.\
+\
+==================================================\
+6. PRE EVENT \'97 SUPPI MATCHING\
+==================================================\
+\
+Section title:\
+\
+\'93SUPPI \uc0\u272 ANG GH\'c9P NHU C\u7846 U\
+V\uc0\u7898 I N\u258 NG L\u7920 C PH\'d9 H\u7906 P\'94\
+\
+Show matched cards:\
+\
+NEED\
+\uc0\u8596 \
+SUPPLIER OPTIONS\
+\
+For every match explain:\
+\
+- requirement matched\
+- capability matched\
+- location\
+- relevant industry\
+- missing/unknown information.\
+\
+Matching must remain:\
+\
+NHU C\uc0\u7846 U\
+\'d7 N\uc0\u258 NG L\u7920 C\
+\'d7 \uc0\u272 \u7882 A B\'c0N\
+\'d7 TH\uc0\u7900 I GIAN\
+\'d7 KH\uc0\u7842  N\u258 NG \u272 \'c1P \u7912 NG.\
+\
+No sponsorship/payment ranking.\
+\
+==================================================\
+7. 4 CONNECTION TRACKS\
+==================================================\
+\
+Public-facing event taxonomy:\
+\
+01 \'97 MUA B\'c1N\
+\
+02 \'97 LOGISTICS\
+\
+03 \'97 D\uc0\u7882 CH V\u7908  CHUY\'caN M\'d4N\
+\
+04 \'97 CHIA S\uc0\u7866  V\u7852 N H\'c0NH & H\u7840  T\u7846 NG\
+\
+Each track:\
+- icon\
+- short explanation\
+- companies\
+- needs\
+- available suppliers.\
+\
+Do not automatically merge this taxonomy\
+with existing internal A/B/C/D analysis groups.\
+\
+Provide configurable mapping if needed.\
+\
+==================================================\
+8. PARTICIPANT DATA\
+==================================================\
+\
+Use the uploaded/source dataset only as seed/import data.\
+\
+The current source contains THIP,\
+TeamKCN and GEM participants.\
+\
+Examples of supplier capability groups include:\
+- logistics\
+- environmental treatment\
+- HVAC\
+- industrial construction\
+- heavy/container trucking\
+- banking\
+- insurance\
+- pest control\
+- security\
+- uniforms\
+- drone technology\
+- pallet\
+- solar.\
+\
+DO NOT PUBLICLY DISPLAY:\
+personal phone\
+personal email\
+private notes.\
+\
+Public cards use company-level information only.\
+\
+==================================================\
+9. PRICING\
+==================================================\
+\
+Cards:\
+\
+MEMBER\
+750,000 VND / pax\
+\
+NON-MEMBER\
+1,000,000 VND / pax\
+\
+DISPLAY TABLE \'97 MEMBER\
+1,500,000 VND\
+\
+DISPLAY TABLE \'97 NON-MEMBER\
+2,000,000 VND\
+\
+CTA:\
+\'93\uc0\u272 \u258 NG K\'dd THAM GIA\'94\
+\
+Text:\
+\'93H\uc0\u7841 n \u273 \u259 ng k\'fd v\'e0 ho\'e0n t\u7845 t thanh to\'e1n: 29/09/2026.\'94\
+\
+Do not invent:\
+VAT\
+refund policy\
+bank info\
+unless configured.\
+\
+Keep:\
+Registration status\
+Payment status\
+Attendance status\
+separate.\
+\
+==================================================\
+10. EXHIBITOR / DISPLAY TABLE\
+==================================================\
+\
+Create exhibitor section.\
+\
+Fields:\
+logo\
+company\
+product/service displayed\
+industry\
+public profile\
+who should meet them.\
+\
+Existing source data includes examples such as:\
+pump/air compressor,\
+banking,\
+agri/drone technology,\
+wood pallet,\
+industrial cleaning solutions.\
+\
+Only published/confirmed exhibitor entries are shown.\
+\
+==================================================\
+11. PROGRAM AGENDA\
+==================================================\
+\
+Confirmed agenda:\
+\
+08:00 \'97 Giao l\uc0\u432 u \u273 \u7847 u gi\u7901 \
+\
+08:30 \'97 Gi\uc0\u7899 i thi\u7879 u KCN Th\'e1i H\'f2a\
+\
+08:45 \'97 Gi\uc0\u7899 i thi\u7879 u Team KCN\
+\
+09:00 \'97 Gi\uc0\u7899 i thi\u7879 u s\u7843 n ph\u7849 m/d\u7883 ch v\u7909 \
+c\uc0\u7911 a th\'e0nh vi\'ean TeamKCN v\'e0 nh\'e0 m\'e1y tham gia\
+\
+11:00 \'97 T\uc0\u7893 ng k\u7871 t k\u7871 t qu\u7843  bu\u7893 i Matching\
+\
+Additional activities should be a separate\
+\'93D\uc0\u7920  KI\u7870 N / \u272 ANG HO\'c0N THI\u7878 N\'94 section until confirmed:\
+\
+- ho\uc0\u7841 t \u273 \u7897 ng k\u7871 t n\u7889 i giao th\u432 \u417 ng\
+- talk show s\'e2n kh\uc0\u7845 u\
+- social media coverage\
+- ti\uc0\u7879 c \u259 n tr\u432 a giao l\u432 u\
+- gi\uc0\u7899 i thi\u7879 u doanh nghi\u7879 p / Business Caf\'e9.\
+\
+Do not assign time unless configured.\
+\
+==================================================\
+12. PRE EVENT PREPARATION\
+==================================================\
+\
+Section:\
+\'93CHU\uc0\u7848 N B\u7882  TR\u431 \u7898 C NG\'c0Y H\u7896 I\'94\
+\
+Factory checklist:\
+- complete organization profile\
+- identify top 3 purchasing needs\
+- specify target supplier type\
+- select attendee\
+- confirm meetings.\
+\
+Supplier checklist:\
+- complete capability profile\
+- choose top 3 solutions/products\
+- identify target industries/factories\
+- select attendee\
+- confirm meetings.\
+\
+All attendees:\
+Registration\
+\uc0\u8594  approval\
+\uc0\u8594  payment if applicable\
+\uc0\u8594  attendee assignment\
+\uc0\u8594  Event Pass / QR.\
+\
+==================================================\
+13. LIVE EVENT MODE\
+==================================================\
+\
+When event enters LIVE phase,\
+page becomes operational dashboard.\
+\
+Hero:\
+\'93BUSINESS MATCHING \uc0\u272 ANG DI\u7876 N RA\'94\
+\
+Show LIVE aggregates:\
+\
+- registered organizations\
+- checked-in organizations\
+- registered attendees\
+- checked-in attendees\
+- factories present\
+- suppliers present\
+- active display tables\
+- meetings in progress\
+- completed meetings.\
+\
+All calculated from database.\
+\
+No hard-coded totals.\
+\
+==================================================\
+14. QR CHECK-IN\
+==================================================\
+\
+Build QR check-in flow.\
+\
+Attendee:\
+login\
+\uc0\u8594  select approved registration/company\
+\uc0\u8594  select their attendee identity\
+\uc0\u8594  scan/use Event Pass QR\
+\uc0\u8594  CHECKED IN.\
+\
+QR uses signed event token.\
+\
+QR must NOT contain directly:\
+phone\
+email\
+private buyer data.\
+\
+Allow:\
+organizer manual check-in fallback.\
+\
+If one organization has multiple attendees:\
+track each attendee separately.\
+\
+Organization attendance and attendee attendance\
+are different metrics.\
+\
+==================================================\
+15. LIVE ATTENDANCE\
+==================================================\
+\
+Public:\
+aggregate only.\
+\
+Example:\
+Factories arrived:\
+16 / 20\
+\
+Suppliers arrived:\
+18 / 20\
+\
+Organizer/admin:\
+detailed attendance list\
+with:\
+registered\
+checked in\
+late\
+not arrived.\
+\
+Do not expose absent person names publicly.\
+\
+==================================================\
+16. LIVE MATCHING BOARD\
+==================================================\
+\
+Create meeting board.\
+\
+Meeting statuses:\
+\
+UPCOMING\
+IN_PROGRESS\
+COMPLETED\
+RESCHEDULED\
+CANCELLED\
+NO_SHOW.\
+\
+Meeting card:\
+\
+time\
+table/meeting location\
+buyer organization\
+supplier organization\
+topic/need\
+status\
+next action if completed.\
+\
+Meeting status is separate\
+from requirement status.\
+\
+==================================================\
+17. BADGE-TO-BADGE MEETING CHECK-IN\
+==================================================\
+\
+Allow attendee A to scan attendee B's badge.\
+\
+System resolves:\
+Organization A\
+\uc0\u8596 \
+Organization B.\
+\
+Then attendee selects:\
+\
+\'93NHU C\uc0\u7846 U / CH\u7910  \u272 \u7872  \u272 ANG TRAO \u272 \u7892 I\'94\
+\
+CTA:\
+\'93B\uc0\u7854 T \u272 \u7846 U CU\u7896 C G\u7862 P\'94\
+\
+At end:\
+\'93K\uc0\u7870 T TH\'daC & GHI NH\u7852 N K\u7870 T QU\u7842 \'94\
+\
+Quick result options:\
+\
+- Ti\uc0\u7871 p t\u7909 c trao \u273 \u7893 i\
+- C\uc0\u7847 n kh\u7843 o s\'e1t\
+- C\uc0\u7847 n m\u7851 u\
+- C\uc0\u7847 n b\'e1o gi\'e1\
+- H\uc0\u7865 n cu\u7897 c g\u7863 p ti\u7871 p theo\
+- C\uc0\u7847 n th\'eam th\'f4ng tin\
+- Ch\uc0\u432 a ph\'f9 h\u7907 p.\
+\
+Do NOT include:\
+\'93Deal th\'e0nh c\'f4ng\'94\
+as an automatic meeting result.\
+\
+A completed meeting only means:\
+meeting happened.\
+\
+==================================================\
+18. MEETING CONFIRMATION\
+==================================================\
+\
+To count as COMPLETED:\
+\
+Prefer:\
+both sides confirm\
+OR\
+organizer confirms.\
+\
+Prevent one participant\
+from generating fake completed meetings.\
+\
+Record:\
+\
+meetingId\
+buyerOrgId\
+supplierOrgId\
+needId if applicable\
+topic\
+startTime\
+endTime\
+status\
+createdBy\
+confirmedBy\
+nextAction\
+nextActionOwner\
+nextActionAt.\
+\
+==================================================\
+19. \'93T\'d4I MU\uc0\u7888 N G\u7862 P TH\'caM\'94\
+==================================================\
+\
+During LIVE event add:\
+\
+\'93T\'d4I MU\uc0\u7888 N G\u7862 P TH\'caM\'94\
+\
+SUPPI searches attendees currently checked-in\
+and suggests suitable companies.\
+\
+User requests meeting.\
+\
+CHAINY coordinates:\
+availability\
+table\
+time\
+confirmation.\
+\
+==================================================\
+20. LIVE PROGRAM\
+==================================================\
+\
+Agenda states:\
+\
+\uc0\u272 ANG DI\u7876 N RA\
+\
+TI\uc0\u7870 P THEO\
+\
+\uc0\u272 \'c3 HO\'c0N TH\'c0NH.\
+\
+Allow organizer announcements.\
+\
+Example:\
+\'93Ph\uc0\u7847 n gi\u7899 i thi\u7879 u doanh nghi\u7879 p b\u7855 t \u273 \u7847 u sau 5 ph\'fat.\'94\
+\
+==================================================\
+21. LIVE NEEDS BOARD\
+==================================================\
+\
+Display only approved/public need summaries.\
+\
+Example:\
+\
+Nh\'e0 m\'e1y ng\'e0nh ph\'e2n b\'f3n \uc0\u273 ang t\'ecm:\
+- Bao b\'ec\
+- Logistics\
+- X\uc0\u7917  l\'fd m\'f4i tr\u432 \u7901 ng.\
+\
+No buyer confidential contact.\
+No quote data.\
+No purchasing document unless permission allows.\
+\
+==================================================\
+22. POST EVENT HERO\
+==================================================\
+\
+H1:\
+\
+\'93K\uc0\u7870 T QU\u7842  BUSINESS MATCHING\
+KCN TH\'c1I H\'d2A 2026\'94\
+\
+Sub:\
+\
+\'93Kh\'f4ng ch\uc0\u7881  \u273 \u7871 m ng\u432 \u7901 i tham d\u7921 .\
+B\'e1o c\'e1o theo d\'f5i nh\uc0\u7919 ng cu\u7897 c g\u7863 p th\u7921 c s\u7921  di\u7877 n ra,\
+nhu c\uc0\u7847 u \u273 \u432 \u7907 c trao \u273 \u7893 i\
+v\'e0 h\'e0nh \uc0\u273 \u7897 ng ti\u7871 p theo sau k\u7871 t n\u7889 i.\'94\
+\
+==================================================\
+23. POST EVENT KPI\
+==================================================\
+\
+Only display real calculated values.\
+\
+Potential KPIs:\
+\
+registered organizations\
+\
+actual organizations attended\
+\
+registered attendees\
+\
+checked-in attendees\
+\
+attendance rate\
+\
+factory count\
+\
+supplier count\
+\
+display tables\
+\
+scheduled meetings\
+\
+completed 1:1 meetings\
+\
+unique buyer-supplier pairs\
+\
+needs discussed\
+\
+next actions\
+\
+quote requests\
+\
+sample requests\
+\
+site surveys\
+\
+follow-up meetings.\
+\
+No fake data.\
+\
+==================================================\
+24. EVENT FUNNEL\
+==================================================\
+\
+Create visual funnel:\
+\
+\uc0\u272 \u258 NG K\'dd\
+\uc0\u8595 \
+CHECK-IN\
+\uc0\u8595 \
+MATCH \uc0\u272 \u7872  XU\u7844 T\
+\uc0\u8595 \
+CU\uc0\u7896 C G\u7862 P\
+\uc0\u8595 \
+NEXT ACTION\
+\uc0\u8595 \
+M\uc0\u7850 U / KH\u7842 O S\'c1T / B\'c1O GI\'c1\
+\uc0\u8595 \
+K\uc0\u7870 T QU\u7842 .\
+\
+This is a key visualization.\
+\
+==================================================\
+25. NEED / TOPIC ANALYTICS\
+==================================================\
+\
+Aggregate meeting topics and needs.\
+\
+Potential categories:\
+\
+Raw materials\
+Packaging\
+Logistics\
+Environment\
+HVAC\
+Finance\
+Insurance\
+Security\
+Uniform/PPE\
+Solar/Energy\
+Infrastructure\
+Professional services\
+etc.\
+\
+Use actual tagged records.\
+\
+==================================================\
+26. MATCHING ANALYTICS\
+==================================================\
+\
+Report separately:\
+\
+planned matches\
+\
+completed matches\
+\
+ad-hoc matches\
+\
+cancelled/no-show\
+\
+unique company pairs.\
+\
+One pair meeting 3 times:\
+3 meetings\
+but 1 unique company pair.\
+\
+==================================================\
+27. NEXT ACTION ANALYTICS\
+==================================================\
+\
+Count separately:\
+\
+Quotation requested\
+\
+Sample requested\
+\
+Site survey\
+\
+Meeting 2\
+\
+Need more information\
+\
+Not suitable\
+\
+Pending.\
+\
+Do not mark them as sales.\
+\
+==================================================\
+28. 7 / 30 / 60 DAY FOLLOW-UP\
+==================================================\
+\
+CHAINY tracks post-event follow-up.\
+\
+7 DAY:\
+responses / pending next actions.\
+\
+30 DAY:\
+quotes\
+samples\
+surveys\
+second meetings.\
+\
+60 DAY:\
+confirmed outcome categories:\
+\
+Won\
+Not suitable\
+Cancelled\
+Paused\
+Expired\
+Unknown result.\
+\
+Never auto-mark Won.\
+\
+==================================================\
+29. REPORTING\
+==================================================\
+\
+Create role-specific report views.\
+\
+PUBLIC SUMMARY:\
+aggregate only.\
+\
+KCN MANAGEMENT REPORT:\
+participation\
+industries\
+needs\
+supplier coverage\
+meetings\
+follow-up.\
+\
+ASSOCIATION REPORT:\
+member participation\
+meetings\
+needs\
+opportunities.\
+\
+ORGANIZER REPORT:\
+full operational metrics.\
+\
+GOVERNMENT / AUTHORITY SUMMARY:\
+aggregate/anonymized only:\
+company counts\
+industries\
+need groups\
+meetings\
+follow-up outcomes.\
+\
+No personal contact or private commercial data\
+unless legally/explicitly authorized.\
+\
+==================================================\
+30. DATA QUALITY\
+==================================================\
+\
+Current spreadsheets/PDFs contain\
+different totals for attendee/company counts.\
+\
+Therefore:\
+\
+DO NOT IMPORT DASHBOARD TOTALS AS TRUTH.\
+\
+Normalize source rows.\
+\
+Use stable IDs:\
+\
+organizationId\
+registrationId\
+attendeeId\
+eventId\
+meetingId.\
+\
+Dedupe Organization.\
+\
+One Organization may have:\
+multiple attendees\
+multiple roles\
+multiple meetings.\
+\
+Group assignment count\
+is not necessarily\
+unique Organization count.\
+\
+==================================================\
+31. PERMISSIONS\
+==================================================\
+\
+PUBLIC:\
+event overview\
+public company cards\
+approved public needs\
+agenda\
+aggregate report.\
+\
+LOGGED-IN ATTENDEE:\
+own QR\
+own company\
+own matches\
+own meetings\
+contact requests\
+own follow-ups.\
+\
+ORGANIZER:\
+registrations\
+attendance\
+matching board\
+no-shows\
+meeting details\
+reports.\
+\
+ADMIN:\
+full authorized access.\
+\
+All privacy enforcement must be server-side.\
+\
+==================================================\
+32. SPONSOR / PARTNER BLOCK\
+==================================================\
+\
+Display confirmed:\
+\
+organizer\
+co-organizer\
+event partner\
+sponsor\
+media partner.\
+\
+Do not show logos\
+unless relationship + display permission\
+is confirmed.\
+\
+Sponsorship never affects SUPPI matching.\
+\
+==================================================\
+33. MEDIA AFTER EVENT\
+==================================================\
+\
+Post-event section:\
+\
+Images\
+\
+Videos\
+\
+Talk show\
+\
+Business Caf\'e9\
+\
+Approved documents.\
+\
+Use existing program library/media architecture.\
+\
+==================================================\
+34. NEXT STEP AFTER EVENT\
+==================================================\
+\
+CTA:\
+\
+\'93TI\uc0\u7870 P T\u7908 C C\'c1C K\u7870 T N\u7888 I C\u7910 A T\'d4I\'94\
+\
+CHAINY continues:\
+\
+Meeting\
+\uc0\u8594  Sample\
+\uc0\u8594  Quote\
+\uc0\u8594  Next Action\
+\uc0\u8594  Outcome.\
+\
+Also CTA:\
+\'93\uc0\u272 \u258 NG NHU C\u7846 U M\u7898 I\'94\
+\
+==================================================\
+35. SEO\
+==================================================\
+\
+URL:\
+/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026\
+\
+Title:\
+\'93Ng\'e0y H\uc0\u7897 i Chu\u7895 i Cung \u7912 ng KCN Th\'e1i H\'f2a 2026 | Business Matching B2B\'94\
+\
+H1:\
+\'93Ng\'e0y H\uc0\u7897 i Chu\u7895 i Cung \u7912 ng - Business Matching KCN Th\'e1i H\'f2a 2026\'94\
+\
+Meta:\
+\'93Ch\uc0\u432 \u417 ng tr\'ecnh Business Matching B2B k\u7871 t n\u7889 i nhu c\u7847 u nh\'e0 m\'e1y KCN Th\'e1i H\'f2a v\u7899 i nh\'e0 cung \u7913 ng ph\'f9 h\u7907 p, theo d\'f5i t\u7915  \u273 \u259 ng k\'fd, cu\u7897 c g\u7863 p \u273 \u7871 n k\u7871 t qu\u7843  sau ch\u432 \u417 ng tr\'ecnh.\'94\
+\
+Add:\
+Event structured data\
+BreadcrumbList.\
+\
+After event:\
+keep page indexable as historical event page\
+if content/report remains useful.\
+\
+Do not remove URL.\
+\
+==================================================\
+36. RESPONSIVE / UI\
+==================================================\
+\
+Design:\
+professional\
+B2B\
+industrial\
+clean\
+data-oriented.\
+\
+Do not make it look like a generic conference site.\
+\
+Desktop:\
+wide matching views\
+two-sided cards\
+live dashboards.\
+\
+Mobile:\
+phase tabs horizontally usable\
+cards stacked\
+meeting actions thumb-friendly\
+QR prominent.\
+\
+No huge whitespace.\
+No horizontal overflow.\
+\
+==================================================\
+37. ACCEPTANCE TEST\
+==================================================\
+\
+Test:\
+\
+PRE event state\
+\
+registration closed state\
+\
+LIVE state\
+\
+POST state\
+\
+cancelled/postponed override\
+\
+logged out\
+\
+logged attendee\
+\
+organizer\
+\
+admin.\
+\
+Verify:\
+\
+registration \uc0\u8800  payment\
+\
+registration \uc0\u8800  attendance\
+\
+check-in \uc0\u8800  meeting\
+\
+meeting \uc0\u8800  deal\
+\
+quote request \uc0\u8800  quote received\
+\
+quote received \uc0\u8800  selected\
+\
+selected \uc0\u8800  Won unless confirmed.\
+\
+==================================================\
+38. FINAL REPORT\
+==================================================\
+\
+After implementation return:\
+\
+files changed\
+\
+models reused\
+\
+new models only if necessary\
+\
+migrations\
+\
+APIs/server actions\
+\
+phase logic\
+\
+QR flow\
+\
+matching flow\
+\
+meeting lifecycle\
+\
+report metrics\
+\
+permissions\
+\
+SEO changes\
+\
+test PASS/FAIL/BLOCKED\
+\
+remaining data-quality issues.\
+\
+Do not expand into unrelated P2 features.}

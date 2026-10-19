@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
@@ -12,7 +13,7 @@ import {
 import { stagesData } from '../data/mockData';
 import categoriesAlphabetical from '../data/categoriesAlphabetical.json';
 import phaseTaxonomyAlphabetical from '../data/phaseTaxonomyAlphabetical.json';
-import enterprisesFullList from '../data/enterprisesFull.json';
+import { suppliers as enterprisesFullList } from '../data/cloudData.js';
 import { useLanguage } from '../contexts/LanguageContext';
 import { slugify } from './IndustryCategoryPage';
 import {
@@ -24,6 +25,7 @@ import {
   getEnterpriseKYCLevel,
   getEnterpriseThumbnails
 } from '../utils/companyUtils';
+import FoundingPartnerCard from '../components/FoundingPartnerCard';
 import SupplierTopNavigationBlocks from '../components/SupplierTopNavigationBlocks';
 import SupplierRequestQuoteModal from '../components/suppliers/SupplierRequestQuoteModal';
 import SupplierRegistrationModal from '../components/suppliers/SupplierRegistrationModal';
@@ -302,7 +304,7 @@ export default function EnterprisesPage() {
       metaDesc.name = 'description';
       document.head.appendChild(metaDesc);
     }
-    metaDesc.content = "Danh bạ hơn 21.680+ nhà cung ứng, xưởng gia công, nhà máy phụ trợ B2B tại Việt Nam. Tìm kiếm và kết nối trực tiếp theo năng lực thực tế, vùng phục vụ, MOQ và hồ sơ năng lực xác minh.";
+    metaDesc.content = "Danh bạ hơn 152.000+ nhà cung ứng, xưởng gia công, nhà máy phụ trợ B2B tại Việt Nam. Tìm kiếm và kết nối trực tiếp theo năng lực thực tế, vùng phục vụ, MOQ và hồ sơ năng lực xác minh.";
 
     // 4. Open Graph Tags
     let ogTitle = document.querySelector('meta[property="og:title"]');
@@ -319,7 +321,7 @@ export default function EnterprisesPage() {
       ogDesc.setAttribute('property', 'og:description');
       document.head.appendChild(ogDesc);
     }
-    ogDesc.content = "Danh bạ hơn 21.680+ nhà cung ứng, xưởng gia công, nhà máy phụ trợ B2B tại Việt Nam. Kết nối trực tiếp bên mua và nhà cung cấp.";
+    ogDesc.content = "Danh bạ hơn 152.000+ nhà cung ứng, xưởng gia công, nhà máy phụ trợ B2B tại Việt Nam. Kết nối trực tiếp bên mua và nhà cung cấp.";
 
     let ogUrl = document.querySelector('meta[property="og:url"]');
     if (!ogUrl) {
@@ -351,12 +353,12 @@ export default function EnterprisesPage() {
       return;
     }
     try {
-      const savedById = localStorage.getItem('ccu_draft_' + requirementId);
+      const savedById = privateBrowserStorage.getItem('ccu_draft_' + requirementId);
       if (savedById) {
         setActiveRequirement(JSON.parse(savedById));
         return;
       }
-      const latestDraft = localStorage.getItem('ccu_requirement_draft');
+      const latestDraft = privateBrowserStorage.getItem('ccu_requirement_draft');
       if (latestDraft) {
         const parsed = JSON.parse(latestDraft);
         if (parsed.id === requirementId || requirementId === 'latest') {
@@ -364,7 +366,7 @@ export default function EnterprisesPage() {
           return;
         }
       }
-      const listStr = localStorage.getItem('ccu_user_demands');
+      const listStr = privateBrowserStorage.getItem('ccu_user_demands');
       if (listStr) {
         const list = JSON.parse(listStr);
         const found = list.find(d => String(d.id) === String(requirementId));
@@ -392,7 +394,7 @@ export default function EnterprisesPage() {
     try {
       if (requirementId) {
         const key = 'ccu_draft_' + requirementId;
-        const currentData = localStorage.getItem(key);
+        const currentData = privateBrowserStorage.getItem(key);
         let draftObj = currentData ? JSON.parse(currentData) : (activeRequirement || {});
         draftObj.suppliers = draftObj.suppliers || [];
         if (!draftObj.suppliers.find(s => s.id === entId || s.name === ent.name)) {
@@ -405,7 +407,7 @@ export default function EnterprisesPage() {
             status: 'CONSIDERING',
             notes: 'Mời từ Sàn Tìm Nhà Cung Ứng Theo Năng Lực'
           });
-          localStorage.setItem(key, JSON.stringify(draftObj));
+          privateBrowserStorage.setItem(key, JSON.stringify(draftObj));
         }
       }
     } catch (err) {
@@ -468,7 +470,7 @@ export default function EnterprisesPage() {
   // User Voting System state with LocalStorage persistence
   const [votes, setVotes] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_supplier_votes');
+      const saved = privateBrowserStorage.getItem('ccu_supplier_votes');
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -477,7 +479,7 @@ export default function EnterprisesPage() {
 
   const [userVoteActions, setUserVoteActions] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_user_vote_actions');
+      const saved = privateBrowserStorage.getItem('ccu_user_vote_actions');
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -500,13 +502,13 @@ export default function EnterprisesPage() {
 
     setVotes(prev => {
       const updated = { ...prev, [key]: (prev[key] || 0) + newDelta };
-      try { localStorage.setItem('ccu_supplier_votes', JSON.stringify(updated)); } catch { }
+      try { privateBrowserStorage.setItem('ccu_supplier_votes', JSON.stringify(updated)); } catch { }
       return updated;
     });
 
     setUserVoteActions(prev => {
       const updated = { ...prev, [key]: newAction };
-      try { localStorage.setItem('ccu_user_vote_actions', JSON.stringify(updated)); } catch { }
+      try { privateBrowserStorage.setItem('ccu_user_vote_actions', JSON.stringify(updated)); } catch { }
       return updated;
     });
   };
@@ -550,13 +552,71 @@ export default function EnterprisesPage() {
     votes
   ]);
 
-  const totalCount = filteredEnterprises.length;
+  const TOTAL_DATABASE_SUPPLIERS = 152623;
+  const isDefaultView = !searchTerm && selectedStage === 'all' && selectedPhase === 'all' && selectedProvince === 'Toàn quốc' && selectedCategory === 'all' && selectedLetter === 'TẤT CẢ' && selectedKyc === 'all' && !filterApiReady && !filterFastQuote && !filterIsoCertified;
+
+  // Remote search / pagination across full 152k database
+  const [remoteResults, setRemoteResults] = useState(null);
+  const [isSearchingRemote, setIsSearchingRemote] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+    // When searching, filtering, or navigating beyond page 1, query backend 152k database
+    const hasFilterOrPaging = Boolean(
+      searchTerm || 
+      (selectedProvince && selectedProvince !== 'Toàn quốc') ||
+      (selectedCategory && selectedCategory !== 'all') ||
+      (selectedLetter && selectedLetter !== 'TẤT CẢ') ||
+      (selectedStage && selectedStage !== 'all') ||
+      (selectedPhase && selectedPhase !== 'all') ||
+      currentPage > 1
+    );
+
+    if (hasFilterOrPaging) {
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('q', searchTerm);
+      if (selectedProvince && selectedProvince !== 'Toàn quốc') params.set('province', selectedProvince);
+      if (selectedCategory && selectedCategory !== 'all') params.set('category', selectedCategory);
+      if (selectedLetter && selectedLetter !== 'TẤT CẢ') params.set('letter', selectedLetter);
+      if (selectedStage && selectedStage !== 'all') params.set('stage', selectedStage);
+      if (selectedPhase && selectedPhase !== 'all') params.set('phase', selectedPhase);
+      params.set('page', String(currentPage));
+      params.set('limit', String(pageSize));
+
+      setIsSearchingRemote(true);
+      fetch(`/api/enterprises?${params.toString()}`)
+        .then(r => r.ok ? r.json() : null)
+        .then(json => {
+          if (!isCancelled && json?.success && Array.isArray(json.data)) {
+            setRemoteResults(json);
+          }
+        })
+        .catch(() => {
+          if (!isCancelled) setRemoteResults(null);
+        })
+        .finally(() => {
+          if (!isCancelled) setIsSearchingRemote(false);
+        });
+    } else {
+      setRemoteResults(null);
+      setIsSearchingRemote(false);
+    }
+    return () => { isCancelled = true; };
+  }, [searchTerm, selectedProvince, selectedCategory, selectedLetter, selectedStage, selectedPhase, currentPage, pageSize]);
+
+  const totalCount = remoteResults?.total != null
+    ? remoteResults.total
+    : (isDefaultView ? TOTAL_DATABASE_SUPPLIERS : filteredEnterprises.length);
+
   const totalPages = Math.ceil(totalCount / pageSize) || 1;
 
   const displayedEnterprises = useMemo(() => {
+    if (remoteResults && Array.isArray(remoteResults.data)) {
+      return remoteResults.data;
+    }
     const start = (currentPage - 1) * pageSize;
     return filteredEnterprises.slice(start, start + pageSize);
-  }, [filteredEnterprises, currentPage, pageSize]);
+  }, [remoteResults, filteredEnterprises, currentPage, pageSize]);
 
   // Instant Search Suggestions Matching
   const instantSuggestions = useMemo(() => {
@@ -885,7 +945,23 @@ export default function EnterprisesPage() {
         </div>
       </section>
 
-
+      {/* =========================================================================
+          FOUNDING PARTNER SHOWCASE (ĐỐI TÁC SÁNG LẬP TIÊU BIỂU - DƯỚI PHẦN HERO)
+         ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-2 mb-4">
+        <div className="bg-slate-50/80 p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-xs">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+              <h2 className="text-xs font-black uppercase tracking-wider text-slate-900 font-mono">
+                ĐỐI TÁC ĐỒNG HÀNH CHUỖI CUNG ỨNG (FOUNDING PARTNERS)
+              </h2>
+            </div>
+            <span className="text-[11px] text-slate-500 font-medium">Doanh nghiệp tiêu biểu cam kết chất lượng</span>
+          </div>
+          <FoundingPartnerCard selectedPhase={selectedPhase} selectedStage={selectedStage} />
+        </div>
+      </section>
 
       {/* =========================================================================
           TOP NAVIGATION BLOCK (18 Phases Tabs / 6 Stages / A-Z Alphabet Directory)
@@ -978,7 +1054,9 @@ export default function EnterprisesPage() {
                   {lang === 'en' ? 'Find your next supplier.' : 'Tìm đối tác cho nhu cầu thực tế.'}
                 </h3>
                 <span aria-live="polite" aria-atomic="true" className="sd-results-count">
-                  {totalCount.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} {lang === 'en' ? 'suppliers' : 'doanh nghiệp'}
+                  {isSearchingRemote
+                    ? (lang === 'en' ? 'Loading suppliers...' : 'Đang tìm kiếm...')
+                    : `${totalCount.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN')} ${lang === 'en' ? 'suppliers' : 'doanh nghiệp'}`}
                 </span>
               </div>
 
@@ -1073,7 +1151,17 @@ export default function EnterprisesPage() {
             )}
 
             {/* Supplier Cards (Grid or List View Mode) */}
-            {displayedEnterprises.length === 0 ? (
+            {isSearchingRemote ? (
+              <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
+                <div className="w-10 h-10 border-4 border-[#0052cc] border-t-transparent rounded-full animate-spin mx-auto" />
+                <h4 className="text-base font-bold text-slate-800 font-heading">
+                  {lang === 'en' ? 'Searching 150,000+ verified suppliers...' : 'Đang tìm kiếm trong kho 150.000+ nhà cung ứng...'}
+                </h4>
+                <p className="text-xs text-slate-500">
+                  {lang === 'en' ? 'Matching capabilities, certifications, and stages' : 'Đang khớp năng lực, pha chuỗi cung ứng và chứng chỉ'}
+                </p>
+              </div>
+            ) : displayedEnterprises.length === 0 ? (
               <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-sm space-y-4">
                 <div className="w-16 h-16 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">
                   🔍

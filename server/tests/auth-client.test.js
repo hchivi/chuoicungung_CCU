@@ -58,3 +58,17 @@ test('legacy private browser storage is account-scoped and cannot manufacture lo
     assert.equal(storage.getItem('ccu_active_chat_messages'),'private A');
   } finally { globalThis.localStorage=original; }
 });
+test('saving settings updates the current account but cannot switch browser identity', async () => {
+  const { restoreAuthSession, authSnapshot, authAction } = await import('../../src/services/authSession.js');
+  const original = globalThis.fetch;
+  let savedUser = 'settings-user';
+  globalThis.fetch = async url => new Response(JSON.stringify({ success: true, data: { user: { id: url === '/api/auth/session' ? 'settings-user' : savedUser, businessRoles: ['factory'] }, role: null } }));
+  try {
+    await restoreAuthSession();
+    await authAction('settings', { businessRoles: ['factory'] });
+    assert.deepEqual(authSnapshot().identity.user.businessRoles, ['factory']);
+    savedUser = 'other-user';
+    await assert.rejects(authAction('settings', {}), /Tài khoản đã thay đổi/);
+    assert.equal(authSnapshot().identity.user.id, 'settings-user');
+  } finally { globalThis.fetch = original; }
+});

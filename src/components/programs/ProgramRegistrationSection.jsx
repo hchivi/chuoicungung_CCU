@@ -8,7 +8,7 @@ function Field({ name, label, value, onChange, required = false, multiline = fal
   const Tag = multiline ? 'textarea' : 'input';
   return <label className={`pw-field ${multiline ? 'pw-field-wide' : ''}`} htmlFor={`pw-${name}`}><span>{label}{required && <span aria-hidden="true"> *</span>}</span><Tag id={`pw-${name}`} name={name} type={multiline ? undefined : type} rows={multiline ? 3 : undefined} min={min} step={type === 'number' ? 1 : undefined} value={value || ''} required={required} placeholder={placeholder} onChange={event => onChange(name, event.target.value)} /></label>;
 }
-export default function ProgramRegistrationSection({ program, targetMeetingEntity = null, selectedRole = 'buyer', registrationIntent = 0 }) {
+export default function ProgramRegistrationSection({ program, targetMeetingEntity = null, selectedRole = 'buyer', registrationIntent = 0, selectedOptionId = '' }) {
   const [role, setRole] = useState(selectedRole);
   const [forms, setForms] = useState(() => Object.fromEntries(REGISTRATION_ROLES.map(item => [item.id, emptyForm()])));
   const [options, setOptions] = useState({});
@@ -22,6 +22,7 @@ export default function ProgramRegistrationSection({ program, targetMeetingEntit
   const setField = (name, value) => { setForms(previous => ({ ...previous, [role]: { ...previous[role], [name]: value } })); setReceipt(null); };
   const changeRole = next => { setRole(next); setError(''); setReceipt(null); };
   useEffect(() => { if (REGISTRATION_ROLES.some(item => item.id === selectedRole)) changeRole(selectedRole); }, [selectedRole, registrationIntent]);
+  useEffect(() => { if (selectedOptionId) setOptions(previous => ({ ...previous, [selectedRole]: selectedOptionId })); }, [selectedOptionId, selectedRole, registrationIntent]);
   useEffect(() => {
     if (!targetMeetingEntity) return;
     const target = typeof targetMeetingEntity === 'string' ? { role: 'supplier', name: targetMeetingEntity } : targetMeetingEntity;

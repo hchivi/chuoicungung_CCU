@@ -28,7 +28,7 @@ export default function CatalogueBusinessRequestModal({
 
   if (!isOpen || !entry) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!contactName.trim() || !contactPhone.trim()) {
       alert('Vui lòng điền họ tên người liên hệ và số điện thoại.');
@@ -36,8 +36,8 @@ export default function CatalogueBusinessRequestModal({
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      const res = submitCatalogueConnectionRequest({
+    try {
+      const res = await submitCatalogueConnectionRequest({
         catalogueId: catalogue?.id,
         editionId: edition?.id,
         entryId: entry?.id,
@@ -51,7 +51,8 @@ export default function CatalogueBusinessRequestModal({
       });
       setIsSubmitting(false);
       setSubmittedResult(res);
-    }, 500);
+    } catch (error) { alert(error.message || 'Chưa lưu được yêu cầu.'); }
+    finally { setIsSubmitting(false); }
   };
 
   const handleResetAndClose = () => {

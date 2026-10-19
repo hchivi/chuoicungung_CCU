@@ -15,7 +15,7 @@ import {
   getKeywordPrograms,
   slugify 
 } from '../../data/keywordClustersData';
-import enterprisesFullList from '../../data/enterprisesFull.json';
+import { suppliers as enterprisesFullList } from '../../data/cloudData.js';
 import { getAdminAuditLogs } from '../../data/categoryHubData';
 
 export default function AdminKeywordsManagement() {

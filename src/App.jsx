@@ -6,6 +6,7 @@ import SearchModal from './components/SearchModal';
 import SuppliMascot from './components/SuppliMascot';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext.jsx';
+import ToDzungPortfolioPage from './pages/ToDzungPortfolioPage';
 
 // Lazy-loaded Pages for instant initial load and code-splitting
 const HomePage = lazy(() => import('./pages/HomePage'));
@@ -63,12 +64,12 @@ const RecruitmentPage = lazy(() => import('./pages/RecruitmentPage'));
 const AuthPage = lazy(() => import('./pages/AuthPage'));
 const B2bTermsOfServicePage = lazy(() => import('./pages/B2bTermsOfServicePage'));
 const B2bPrivacyPolicyPage = lazy(() => import('./pages/B2bPrivacyPolicyPage'));
-const ToDzungPortfolioPage = lazy(() => import('./pages/ToDzungPortfolioPage'));
 const TonyDongPortfolioPage = lazy(() => import('./pages/TonyDongPortfolioPage'));
 const JennyTrinhPortfolioPage = lazy(() => import('./pages/JennyTrinhPortfolioPage'));
 const SupplyChainExpoPage = lazy(() => import('./pages/SupplyChainExpoPage'));
 const SupplyChainExpoRegistrationPage = lazy(() => import('./pages/SupplyChainExpoRegistrationPage'));
 const ProgramDetailPage = lazy(() => import('./pages/ProgramDetailPage'));
+const ThaiHoaEventLandingPage = lazy(() => import('./pages/ThaiHoaEventLandingPage'));
 const ProgramRegistrationPage = lazy(() => import('./pages/ProgramRegistrationPage'));
 const ProgramLibraryPage = lazy(() => import('./pages/ProgramLibraryPage'));
 const UserProgramsWorkspacePage = lazy(() => import('./pages/UserProgramsWorkspacePage'));
@@ -85,13 +86,16 @@ const MerchandiseEventServicePage = lazy(() => import('./pages/MerchandiseEventS
 
 // Elegant brand loading placeholder with rotating logo_onlyc.png centered on PC and mobile
 function PageLoadingFallback() {
+  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/todzung')) {
+    return null;
+  }
   return (
     <div className="flex-1 min-h-[calc(100vh-280px)] sm:min-h-[calc(100vh-320px)] flex items-center justify-center p-6 w-full">
       <img 
-        src="/logo_onlyc.png" 
+        src="/logo_only.png" 
         alt="Logo Chuỗi Cung Ứng" 
-        className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 object-contain animate-spin select-none pointer-events-none drop-shadow-md"
-        style={{ animationDuration: '2.5s' }}
+        className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-contain animate-spin select-none pointer-events-none drop-shadow-md"
+        style={{ animationDuration: '2s' }}
       />
     </div>
   );
@@ -327,14 +331,15 @@ export default function App() {
                 <Route path="/chu-dau-tu-kcn" element={<Navigate to="/nha-may" replace />} />
                 <Route path="/chu-dau-tu-kcn/:id" element={<ParamRedirect toPrefix="/nha-may" />} />
                 
-                {/* Khu Công Nghiệp - Deduplicated to /khu-cong-nghiep */}
+                {/* Khu Công Nghiệp & Bản Đồ KCN GIS */}
                 <Route path="/khu-cong-nghiep" element={<IndustrialParksPage />} />
                 <Route path="/khu-cong-nghiep/:id" element={<IndustrialParkDetailPage />} />
-                <Route path="/ban-do-khu-cong-nghiep-viet-nam" element={<Navigate to="/khu-cong-nghiep" replace />} />
+                <Route path="/ban-do-kcn" element={<VietnamMapPage />} />
+                <Route path="/ban-do-khu-cong-nghiep-viet-nam" element={<Navigate to="/ban-do-kcn" replace />} />
                 <Route path="/ban-do-khu-cong-nghiep-viet-nam/:id" element={<ParamRedirect toPrefix="/khu-cong-nghiep" />} />
                 <Route path="/industrial-zones-vietnam" element={<Navigate to="/khu-cong-nghiep" replace />} />
                 <Route path="/industrial-zones-vietnam/:id" element={<ParamRedirect toPrefix="/khu-cong-nghiep" />} />
-                <Route path="/ban-do-quy-hoach-kcn" element={<Navigate to="/khu-cong-nghiep" replace />} />
+                <Route path="/ban-do-quy-hoach-kcn" element={<Navigate to="/ban-do-kcn" replace />} />
                 <Route path="/quy-hoach-kcn" element={<Navigate to="/khu-cong-nghiep" replace />} />
 
                 {/* Hiệp Hội Doanh Nghiệp - Deduplicated to /hiep-hoi */}
@@ -374,25 +379,34 @@ export default function App() {
                 <Route path="/tai-khoan/dich-vu" element={<Navigate to="/tai-khoan/yeu-cau-dich-vu" replace />} />
                 <Route path="/theo-doi-yeu-cau" element={<Navigate to="/tai-khoan/yeu-cau-dich-vu" replace />} />
 
-                {/* Chương Trình & Hội Nghị Giao Thương - Deduplicated to /chuong-trinh */}
-                <Route path="/chuong-trinh" element={<SupplyChainExpoPage />} />
+                {/* Ngày hội Chuỗi Cung Ứng & Chương Trình - Canonical route: /ngay-hoi-chuoi-cung-ung */}
+                <Route path="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026" element={<ThaiHoaEventLandingPage />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026" replace />} />
+                <Route path="/ngay-hoi-business-matching-kcn-thai-hoa" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026#dang_ky" replace />} />
+                <Route path="/chuong-trinh/business-matching-kcn-thai-hoa" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026#dang_ky" replace />} />
+                <Route path="/chuong-trinh/biz-matching-kcn-thai-hoa-team-kcn" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026#dang_ky" replace />} />
+                <Route path="/chuong-trinh/PRG-2026-TEAMKCN-THAIHOA" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026#dang_ky" replace />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung/biz-matching-kcn-thai-hoa-team-kcn" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026#dang_ky" replace />} />
+                <Route path="/kcn-thai-hoa-2026" element={<Navigate to="/chuong-trinh/ngay-hoi-chuoi-cung-ung-kcn-thai-hoa-2026" replace />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung" element={<SupplyChainExpoPage />} />
+                <Route path="/chuong-trinh" element={<Navigate to="/ngay-hoi-chuoi-cung-ung" replace />} />
                 <Route path="/chuong-trinh/:slug/dang-ky" element={<ProgramRegistrationPage />} />
                 <Route path="/chuong-trinh/:slug/thu-vien" element={<ProgramLibraryPage />} />
                 <Route path="/chuong-trinh/:slug" element={<ProgramDetailPage />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung/:slug/dang-ky" element={<ProgramRegistrationPage />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung/:slug/thu-vien" element={<ProgramLibraryPage />} />
+                <Route path="/ngay-hoi-chuoi-cung-ung/:slug" element={<ProgramDetailPage />} />
                 <Route path="/tai-khoan/chuong-trinh" element={<UserProgramsWorkspacePage />} />
                 <Route path="/theo-doi-chuong-trinh" element={<Navigate to="/tai-khoan/chuong-trinh" replace />} />
                 <Route path="/tim-hieu-hinh-thuc-tham-gia" element={<SupplyChainExpoRegistrationPage />} />
                 <Route path="/dang-ky-ngay-hoi" element={<SupplyChainExpoRegistrationPage />} />
-                <Route path="/ngay-hoi-chuoi-cung-ung" element={<Navigate to="/chuong-trinh" replace />} />
-                <Route path="/ngay-hoi-chuoi-cung-ung/dang-ky" element={<SupplyChainExpoRegistrationPage />} />
-                <Route path="/ngay-hoi-chuoi-cung-ung/:eventId" element={<ParamRedirect toPrefix="/chuong-trinh" />} />
-                <Route path="/ngay-hoi" element={<Navigate to="/chuong-trinh" replace />} />
-                <Route path="/ngay-hoi/:eventId" element={<ParamRedirect toPrefix="/chuong-trinh" />} />
-                <Route path="/hoi-cho-chuoi-cung-ung" element={<Navigate to="/chuong-trinh" replace />} />
-                <Route path="/hoi-cho-chuoi-cung-ung/:eventId" element={<ParamRedirect toPrefix="/chuong-trinh" />} />
-                <Route path="/expo" element={<Navigate to="/chuong-trinh" replace />} />
-                <Route path="/expo/:eventId" element={<ParamRedirect toPrefix="/chuong-trinh" />} />
-                <Route path="/trien-lam-chuoi-cung-ung" element={<Navigate to="/chuong-trinh" replace />} />
+                <Route path="/ngay-hoi" element={<Navigate to="/ngay-hoi-chuoi-cung-ung" replace />} />
+                <Route path="/ngay-hoi/:eventId" element={<ParamRedirect toPrefix="/ngay-hoi-chuoi-cung-ung" />} />
+                <Route path="/hoi-cho-chuoi-cung-ung" element={<Navigate to="/ngay-hoi-chuoi-cung-ung" replace />} />
+                <Route path="/hoi-cho-chuoi-cung-ung/:eventId" element={<ParamRedirect toPrefix="/ngay-hoi-chuoi-cung-ung" />} />
+                <Route path="/expo" element={<Navigate to="/ngay-hoi-chuoi-cung-ung" replace />} />
+                <Route path="/expo/:eventId" element={<ParamRedirect toPrefix="/ngay-hoi-chuoi-cung-ung" />} />
+                <Route path="/trien-lam-chuoi-cung-ung" element={<Navigate to="/ngay-hoi-chuoi-cung-ung" replace />} />
 
                 {/* Hợp Tác, Tài Trợ & Referral - Deduplicated to /hop-tac & /tai-tro */}
                 <Route path="/hop-tac" element={<PartnershipHubPage />} />
@@ -408,8 +422,8 @@ export default function App() {
                 {/* Thị Trường, Tuyển Dụng & Công Cụ Bổ Trợ */}
                 <Route path="/thi-truong" element={<MarketDashboardPage />} />
                 <Route path="/dinh-vi-doanh-nghiep" element={<DiagnosticQuizPage />} />
-                <Route path="/ban-do-viet-nam" element={<VietnamMapPage />} />
-                <Route path="/ban-do-so" element={<Navigate to="/ban-do-viet-nam" replace />} />
+                <Route path="/ban-do-viet-nam" element={<Navigate to="/ban-do-kcn" replace />} />
+                <Route path="/ban-do-so" element={<Navigate to="/ban-do-kcn" replace />} />
                 <Route path="/tuyen-dung" element={<RecruitmentPage />} />
                 <Route path="/tuyen-dung/viec-tim-nguoi" element={<RecruitmentPage defaultTab="jobs" />} />
                 <Route path="/tuyen-dung/nguoi-tim-viec" element={<RecruitmentPage defaultTab="candidates" />} />
@@ -431,7 +445,11 @@ export default function App() {
                 <Route path="/tro-ly-ai-legacy" element={<Navigate to="/tro-ly-ai" replace />} />
                 <Route path="/suppi-search" element={<SuppiSearchPage />} />
                 <Route path="/ai" element={<Navigate to="/tro-ly-ai" replace />} />
-                <Route path="/todzung" element={<ToDzungPortfolioPage />} />
+                <Route path="/todzung" element={
+                  <Suspense fallback={null}>
+                    <ToDzungPortfolioPage />
+                  </Suspense>
+                } />
                 <Route path="/to-ngoc-dung" element={<Navigate to="/todzung" replace />} />
                 <Route path="/ong-to-ngoc-dung" element={<Navigate to="/todzung" replace />} />
                 <Route path="/giam-doc" element={<Navigate to="/todzung" replace />} />
@@ -458,6 +476,7 @@ export default function App() {
                 {/* Đăng Nhập & Đăng Ký */}
                 <Route path="/dang-nhap" element={<AuthPage />} />
                 <Route path="/tai-khoan" element={<AuthPage />} />
+                <Route path="/tai-khoan/cai-dat" element={<AuthPage />} />
                 <Route path="/dang-ky" element={<AuthPage />} />
                 <Route path="/login" element={<Navigate to="/dang-nhap" replace />} />
                 <Route path="/register" element={<Navigate to="/dang-ky" replace />} />

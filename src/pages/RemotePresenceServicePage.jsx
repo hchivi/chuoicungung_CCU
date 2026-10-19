@@ -87,7 +87,7 @@ export default function RemotePresenceServicePage() {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
 
@@ -120,7 +120,7 @@ export default function RemotePresenceServicePage() {
     }
 
     try {
-      const newReq = submitRemotePresenceRequest({
+      const newReq = await submitRemotePresenceRequest({
         programId: selectedProgramId,
         supplierName: companyName,
         selectedProducts: rawProducts.map((p, idx) => ({ id: `P-${idx + 1}`, name: p })),
@@ -146,17 +146,18 @@ export default function RemotePresenceServicePage() {
     }
   };
 
-  const handleInterestSubmit = (e) => {
+  const handleInterestSubmit = async (e) => {
     e.preventDefault();
     if (!interestOrg.trim() || !interestPhone.trim()) return;
 
-    submitRemotePresenceInterest({
+    try { await submitRemotePresenceInterest({
       organizationName: interestOrg,
       contactName: interestContact,
       contactPhone: interestPhone,
       consent: true
     });
     setInterestSuccess(true);
+    } catch (error) { setFormError(error.message || 'Chưa lưu được thông tin.'); }
   };
 
   return (

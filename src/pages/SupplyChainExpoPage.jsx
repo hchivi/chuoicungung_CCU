@@ -15,6 +15,9 @@ import {
   PROGRAM_ROLES,
   PROGRAM_ZONES,
   PROGRAM_INDUSTRIES,
+  PROGRAM_MONTHS,
+  PROGRAM_YEARS,
+  getProgramMonthAndYear,
   PROGRAMS_DATA
 } from '../data/programsData';
 
@@ -42,6 +45,8 @@ export default function SupplyChainExpoPage() {
   const [filterRole, setFilterRole] = useState('all'); // 'all', 'buyer', 'supplier', 'partner'
   const [filterFormat, setFilterFormat] = useState('all'); // 'all', 'truc-tiep', 'truc-tuyen', 'ket-hop'
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterMonth, setFilterMonth] = useState('all'); // 'all', '1'..'12'
+  const [filterYear, setFilterYear] = useState('all'); // 'all', '2026', '2027'
 
   // Interest/Waitlist Modal State
   const [interestModalEvent, setInterestModalEvent] = useState(null);
@@ -134,6 +139,22 @@ export default function SupplyChainExpoPage() {
       if (filterTime === 'past' && p.status !== 'da-dien-ra') return false;
       if (filterTime === 'upcoming' && (p.status === 'da-dien-ra' || p.status === 'huy')) return false;
 
+      // Month Filter
+      if (filterMonth !== 'all') {
+        const { month } = getProgramMonthAndYear(p);
+        if (month == null || Number(month) !== Number(filterMonth)) {
+          return false;
+        }
+      }
+
+      // Year Filter
+      if (filterYear !== 'all') {
+        const { year } = getProgramMonthAndYear(p);
+        if (year == null || Number(year) !== Number(filterYear)) {
+          return false;
+        }
+      }
+
       // Keyword Search (Name, KCN, location, needs, highlight)
       if (searchKw.trim()) {
         const kw = searchKw.toLowerCase().trim();
@@ -149,7 +170,7 @@ export default function SupplyChainExpoPage() {
 
       return true;
     });
-  }, [activeTypeTab, filterZone, filterIndustry, filterRole, filterFormat, filterStatus, filterTime, searchKw]);
+  }, [activeTypeTab, filterZone, filterIndustry, filterRole, filterFormat, filterStatus, filterTime, filterMonth, filterYear, searchKw]);
 
   // Reset all filters
   const resetFilters = () => {
@@ -161,11 +182,14 @@ export default function SupplyChainExpoPage() {
     setFilterRole('all');
     setFilterFormat('all');
     setFilterStatus('all');
+    setFilterMonth('all');
+    setFilterYear('all');
   };
 
   const hasActiveFilters = activeTypeTab !== 'all' || searchKw || filterZone !== 'all' || 
     filterIndustry !== 'Tất cả ngành hàng' || filterTime !== 'all' || 
-    filterRole !== 'all' || filterFormat !== 'all' || filterStatus !== 'all';
+    filterRole !== 'all' || filterFormat !== 'all' || filterStatus !== 'all' ||
+    filterMonth !== 'all' || filterYear !== 'all';
 
   // Navigate to Registration Page
   const goToRegistration = (targetId) => {
@@ -783,16 +807,16 @@ export default function SupplyChainExpoPage() {
         /* ========================================================
             2. MAIN PROGRAMS LIST, TABS & COMPREHENSIVE FILTERS
         ======================================================== */
-        <div id="danh-sach-chuong-trinh" className="pd-discovery max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 scroll-mt-24">
+        <div id="danh-sach-chuong-trinh" className="pd-discovery w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-8 scroll-mt-24">
           
           <ProgramDiscoveryMenu
             programs={PROGRAMS_DATA}
             resultCount={filteredPrograms.length}
             activeType={activeTypeTab}
-            filters={{ search: searchKw, status: filterStatus, zone: filterZone, industry: filterIndustry, role: filterRole, format: filterFormat, time: filterTime }}
+            filters={{ search: searchKw, status: filterStatus, zone: filterZone, industry: filterIndustry, role: filterRole, format: filterFormat, time: filterTime, month: filterMonth, year: filterYear }}
             hasActiveFilters={hasActiveFilters}
             onTypeChange={setActiveTypeTab}
-            onFilterChange={(key, value) => ({ search: setSearchKw, status: setFilterStatus, zone: setFilterZone, industry: setFilterIndustry, role: setFilterRole, format: setFilterFormat, time: setFilterTime }[key])(value)}
+            onFilterChange={(key, value) => ({ search: setSearchKw, status: setFilterStatus, zone: setFilterZone, industry: setFilterIndustry, role: setFilterRole, format: setFilterFormat, time: setFilterTime, month: setFilterMonth, year: setFilterYear }[key]?.(value))}
             onReset={resetFilters}
           />
 

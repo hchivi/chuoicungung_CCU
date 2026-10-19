@@ -1,0 +1,3 @@
+import { getCloudRecords } from './cloudData.js';
+const collections = { SEED_PROGRAMS: 'programs', SEED_MASTER_CATALOGUES: 'catalogues', SEED_ORGANIZATIONS: 'organizations', SEED_REQUIREMENTS: 'publicRequirements', SEED_FACTORY_PROFILES: 'factoryProfiles', SEED_ASSOCIATION_PROFILES: 'associationProfiles', SEED_PROGRAM_ORGANIZATIONS: 'programOrganizations', SEED_ORGANIZATION_MEMBERSHIPS: 'organizationMemberships', SEED_PRODUCT_SERVICES: 'productsServices', SEED_KCN_ORGANIZATIONS: 'kcnOrganizations' };
+export function websiteSeed(name) { return getCloudRecords(collections[name.split('.').pop()]); }

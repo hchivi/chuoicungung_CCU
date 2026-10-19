@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, ArrowRight, Factory, Handshake, Building2, Check, ImageOff } from 'lucide-react';
+import { ArrowUpRight, ArrowRight, Factory, Handshake, Building2, MapPin, Award, Check, ImageOff } from 'lucide-react';
 import { EXPO_HOME_ROLES, resolveExpoRole } from './expoHomepageContent';
 import './ExpoHomepage.css';
 
-const ROLE_ICONS = { buyer: Factory, supplier: Handshake, organizer: Building2 };
+const ROLE_ICONS = { 
+  buyer: Factory, 
+  supplier: Handshake, 
+  organizer: Building2,
+  park_operator: MapPin,
+  sponsor: Award
+};
 
 // Keep the existing component entry point and #chuong-trinh section in HomePage.
 // Readable HTML replaces the texture-based pass; no WebGL or continuous render loop.
@@ -31,7 +37,7 @@ export default function SupplyChainExpoPaper3D({ preview = false } = {}) {
           </div>
           <div className="expo-home-invite-copy">
             <p className="expo-home-intro">Một cuộc gặp trực tiếp để xem mẫu, làm rõ nhu cầu và trao đổi khả năng hợp tác.</p>
-            <Link className="expo-home-link expo-home-program" data-expo-program-link to="/chuong-trinh" target={preview ? '_blank' : undefined} rel={preview ? 'noopener' : undefined}>
+            <Link className="expo-home-link expo-home-program" data-expo-program-link to="/ngay-hoi-chuoi-cung-ung" target={preview ? '_blank' : undefined} rel={preview ? 'noopener' : undefined}>
               Xem chương trình<span className="expo-home-arrow-disc"><ArrowUpRight size={24} aria-hidden="true" /></span>
             </Link>
           </div>

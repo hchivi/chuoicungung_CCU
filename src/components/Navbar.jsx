@@ -24,6 +24,17 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [authModal, setAuthModal] = useState({ isOpen: false, tab: 'login' });
   const [activeSection, setActiveSection] = useState('');
+  const [avatarError, setAvatarError] = useState(false);
+
+  const userAvatar = identity?.user?.avatar ||
+    identity?.user?.avatar_url ||
+    identity?.user?.user_metadata?.avatar_url ||
+    identity?.user?.user_metadata?.picture ||
+    identity?.avatar;
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [userAvatar]);
 
   const isActive = (path) => {
     if (path === '/' && location.pathname === '/') return true;
@@ -40,7 +51,7 @@ export default function Navbar() {
     if (location.pathname === subPath) {
       return true;
     }
-    const baseRoutes = ['/dich-vu', '/he-sinh-thai', '/hop-tac', '/nha-cung-ung', '/khu-cong-nghiep', '/nha-may', '/hiep-hoi', '/catalogue', '/ban-do-6-giai-doan', '/chuong-trinh', '/doi-tac-phat-trien'];
+    const baseRoutes = ['/dich-vu', '/he-sinh-thai', '/hop-tac', '/nha-cung-ung', '/khu-cong-nghiep', '/nha-may', '/hiep-hoi', '/catalogue', '/ban-do-6-giai-doan', '/chuong-trinh', '/ngay-hoi-chuoi-cung-ung', '/doi-tac-phat-trien'];
     if (!baseRoutes.includes(subPath) && location.pathname.startsWith(subPath)) {
       return true;
     }
@@ -69,7 +80,7 @@ export default function Navbar() {
     {
       name: lang === 'en' ? 'Supply Chain Expo' : 'Ngày hội chuỗi cung ứng',
       anchorId: "chuong-trinh",
-      path: "/chuong-trinh"
+      path: "/ngay-hoi-chuoi-cung-ung"
     },
     {
       name: lang === 'en' ? 'Ecosystem' : 'Hệ sinh thái',
@@ -160,7 +171,7 @@ export default function Navbar() {
                 <span>{t('topbar.diagnostic')}</span>
               </Link>
               <span className="text-slate-600/80 shrink-0">|</span>
-              <Link to="/khu-cong-nghiep" className="text-sky-200 hover:text-white flex items-center font-normal transition shrink-0 whitespace-nowrap">
+              <Link to="/ban-do-kcn" className="text-sky-200 hover:text-white flex items-center font-normal transition shrink-0 whitespace-nowrap">
                 <MapPin className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
                 <span>Bản đồ KCN</span>
               </Link>
@@ -308,7 +319,7 @@ export default function Navbar() {
                         </div>
                         <div className="space-y-0.5 mt-1.5">
                           {[
-                            { name: 'Nhà cung ứng B2B', path: '/nha-cung-ung', icon: Building2, desc: 'Hồ sơ năng lực & chế tạo' },
+                            { name: 'Nhà cung ứng B2B', path: '/nha-cung-ung', icon: Building2, desc: '152.000+ nhà cung ứng B2B' },
                             { name: 'Mạng lưới nhà máy FDI', path: '/nha-may', icon: Factory, desc: '14.200+ nhà máy sản xuất' },
                             { name: 'Khu công nghiệp', path: '/khu-cong-nghiep', icon: MapPin, desc: 'Bản đồ 480+ KCN Việt Nam' },
                             { name: 'Hội / Hiệp hội', path: '/hiep-hoi', icon: Users, desc: 'Bảo trợ & kết nối chuỗi' },
@@ -489,13 +500,23 @@ export default function Navbar() {
               ))}
             </nav>
 
-            {/* Right Action Button: ĐĂNG NHẬP (Rolex Green Pill Button - Image 1 Style) */}
+            {/* Right Action Button: ĐĂNG NHẬP (Rolex Green Pill Button - Chuyển thẳng vào trang /dang-nhap) */}
             <div className="hidden sm:flex items-center flex-shrink-0 space-x-2 pl-1 lg:pl-1.5 xl:pl-2">
               <button
-                onClick={() => identity ? navigate('/tai-khoan') : setAuthModal({ isOpen: true, tab: 'login' })}
-                className="px-3.5 py-1.5 lg:px-3 lg:py-2 xl:px-4.5 2xl:px-5 rounded-full bg-gradient-to-b from-[#127b4b] to-[#006039] hover:from-[#158b54] hover:to-[#00472a] text-white text-[10.5px] xl:text-xs font-heading font-black tracking-wider uppercase transition-all duration-200 flex items-center space-x-1 whitespace-nowrap flex-shrink-0 shadow-sm shadow-emerald-950/25 hover:shadow-md hover:shadow-emerald-900/35 hover:-translate-y-0.5 active:scale-98"
+                onClick={() => navigate(identity ? '/tai-khoan' : '/dang-nhap')}
+                className="px-3.5 py-1.5 lg:px-3 lg:py-2 xl:px-4.5 2xl:px-5 rounded-full bg-gradient-to-b from-[#127b4b] to-[#006039] hover:from-[#158b54] hover:to-[#00472a] text-white text-[10.5px] xl:text-xs font-heading font-black tracking-wider uppercase transition-all duration-200 flex items-center space-x-1.5 whitespace-nowrap flex-shrink-0 shadow-sm shadow-emerald-950/25 hover:shadow-md hover:shadow-emerald-900/35 hover:-translate-y-0.5 active:scale-98"
               >
-                <LogIn className="w-3.5 h-3.5 flex-shrink-0" />
+                {identity && userAvatar && !avatarError ? (
+                  <img
+                    src={userAvatar}
+                    alt="Avatar"
+                    className="w-4 h-4 xl:w-4.5 xl:h-4.5 rounded-full object-cover border border-white/80 shrink-0 shadow-2xs"
+                    referrerPolicy="no-referrer"
+                    onError={() => setAvatarError(true)}
+                  />
+                ) : (
+                  <LogIn className="w-3.5 h-3.5 flex-shrink-0" />
+                )}
                 <span>{identity ? (lang === 'en' ? 'ACCOUNT' : 'TÀI KHOẢN') : (lang === 'en' ? 'LOG IN' : 'ĐĂNG NHẬP')}</span>
               </button>
             </div>
@@ -528,7 +549,7 @@ export default function Navbar() {
                 <span className="text-xs font-black font-heading mt-2">Đăng Nhu Cầu</span>
               </Link>
               <Link
-                to="/khu-cong-nghiep"
+                to="/ban-do-kcn"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-3 bg-gradient-to-br from-[#006039] to-[#00472a] text-white rounded-2xl flex flex-col justify-between shadow-sm active:scale-95 transition-transform"
               >
@@ -595,10 +616,20 @@ export default function Navbar() {
             {/* Mobile Action Button: Rolex Green Pill Style */}
             <div className="pt-2">
               <button
-                onClick={() => { setIsMobileMenuOpen(false); if (identity) navigate('/tai-khoan'); else setAuthModal({ isOpen: true, tab: 'login' }); }}
+                onClick={() => { setIsMobileMenuOpen(false); navigate(identity ? '/tai-khoan' : '/dang-nhap'); }}
                 className="w-full py-3.5 rounded-full bg-gradient-to-b from-[#127b4b] to-[#006039] hover:from-[#158b54] hover:to-[#00472a] text-white text-sm font-extrabold text-center shadow-md shadow-emerald-950/25 whitespace-nowrap flex items-center justify-center space-x-2 font-heading active:scale-[0.98] transition-all"
               >
-                <LogIn className="w-4 h-4" />
+                {identity && userAvatar && !avatarError ? (
+                  <img
+                    src={userAvatar}
+                    alt="Avatar"
+                    className="w-5 h-5 rounded-full object-cover border border-white/80 shrink-0 shadow-2xs"
+                    referrerPolicy="no-referrer"
+                    onError={() => setAvatarError(true)}
+                  />
+                ) : (
+                  <LogIn className="w-4 h-4 shrink-0" />
+                )}
                 <span>{identity ? 'Tài khoản của bạn' : (lang === 'en' ? 'Login / Register' : 'Đăng nhập / Đăng ký Doanh nghiệp')}</span>
               </button>
             </div>

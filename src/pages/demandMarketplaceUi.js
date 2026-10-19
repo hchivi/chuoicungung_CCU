@@ -39,8 +39,10 @@ export function getDemandStatus(status) {
 
 export function filterPublicDemands(demands, filters = {}) {
   const query = normalize(filters.search);
+  const keywordQuery = normalize(filters.keyword);
   const filtered = demands.filter(demand => {
-    if (query && ![demand.title, demand.productService, demand.publicSummary, demand.publicCode, demand.category, demand.province].some(value => normalize(value).includes(query))) return false;
+    if (query && ![demand.title, demand.productService, demand.publicSummary, demand.publicCode, demand.category, demand.province, demand.keyword].some(value => normalize(value).includes(query))) return false;
+    if (keywordQuery && ![demand.title, demand.productService, demand.publicSummary, demand.category, demand.keyword, demand.publicCode].some(value => normalize(value).includes(keywordQuery))) return false;
     if (filters.category && filters.category !== 'all' && demand.category !== filters.category) return false;
     if (filters.province && filters.province !== 'all' && demand.province !== filters.province) return false;
     if (filters.stageId && filters.stageId !== 'all' && String(demand.stageId) !== String(filters.stageId)) return false;

@@ -7,7 +7,8 @@ import {
   CheckCircle2, Clock, Globe, DollarSign, AlertCircle, X,
   Send, Camera, FileText, Check, RotateCcw, Tag, ExternalLink,
   ShieldAlert, PhoneCall, Mail, MessageSquare, Download, Layers,
-  Compass, HelpCircle, UserCheck, ChevronDown, ChevronUp, Share2
+  Compass, HelpCircle, UserCheck, ChevronDown, ChevronUp, Share2,
+  BookOpen
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import {
@@ -24,6 +25,9 @@ import {
 import ProgramInterestModal from '../components/programs/ProgramInterestModal';
 import ProgramSuppiGuideModal from '../components/programs/ProgramSuppiGuideModal';
 import ProgramCompletedRecapModal from '../components/programs/ProgramCompletedRecapModal';
+import ProgramRegistrationSection from '../components/programs/ProgramRegistrationSection';
+import ProgramMatchingSection from '../components/programs/ProgramMatchingSection';
+import ProgramPostMatchingSection from '../components/programs/ProgramPostMatchingSection';
 
 export default function ProgramDetailPage() {
   const { lang } = useLanguage();
@@ -31,8 +35,10 @@ export default function ProgramDetailPage() {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
 
-  // Active Role Tab for "Chương trình dành cho ai" & "Bạn nên chuẩn bị gì"
-  const [activeRoleTab, setActiveRoleTab] = useState('buyer'); // 'buyer', 'supplier', 'partner'
+  // Target meeting entity requested from Matching section
+  const [selectedMeetingTarget, setSelectedMeetingTarget] = useState(null);
+  const [registrationRole, setRegistrationRole] = useState('buyer');
+  const [registrationIntent, setRegistrationIntent] = useState(0);
   const [activePrepTab, setActivePrepTab] = useState('buyer');
 
   // Policy Accordion Active Key
@@ -222,13 +228,29 @@ export default function ProgramDetailPage() {
 
   // Navigation handlers
   const handleBuyerReg = () => {
+    setRegistrationRole('buyer');
+    setRegistrationIntent(value => value + 1);
+    setSelectedMeetingTarget(null);
     trackProgramAnalytics('buyer_registration_click', { programId: program.id });
-    navigate(`/chuong-trinh/${program.slug || program.id}/dang-ky?role=buyer`);
+    const el = document.getElementById('dang-ky-tai-tro');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(`/chuong-trinh/${program.slug || program.id}/dang-ky?role=buyer`);
+    }
   };
 
   const handleSupplierReg = () => {
+    setRegistrationRole('supplier');
+    setRegistrationIntent(value => value + 1);
+    setSelectedMeetingTarget(null);
     trackProgramAnalytics('supplier_registration_click', { programId: program.id });
-    navigate(`/chuong-trinh/${program.slug || program.id}/dang-ky?role=supplier`);
+    const el = document.getElementById('dang-ky-tai-tro');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(`/chuong-trinh/${program.slug || program.id}/dang-ky?role=supplier`);
+    }
   };
 
   const handleSendNeed = () => {
@@ -242,7 +264,7 @@ export default function ProgramDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 pb-28 sm:pb-20 font-sans">
+    <div className="pw-page min-h-screen bg-[#f7f8f4] text-slate-800 pb-28 sm:pb-20 font-sans">
       
       {/* ========================================================
           1. BREADCRUMB & TOP NAV
@@ -316,7 +338,8 @@ export default function ProgramDetailPage() {
           </div>
 
           {/* H1 Title & Subtitle (Section 3) */}
-          <div className="space-y-3">
+          <div className="pw-event-title">
+            <div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading text-slate-950 tracking-tight leading-tight">
               {program.title}
             </h1>
@@ -332,6 +355,8 @@ export default function ProgramDetailPage() {
               </strong>
               . Xem nội dung, hình thức tham gia và gửi đăng ký phù hợp với doanh nghiệp của bạn.
             </p>
+            </div>
+            {program.image && <figure className="pw-event-cover"><img src={program.image} alt={`Giới thiệu chương trình ${program.shortName || program.title}`} /><figcaption>{program.typeName} · {program.provinceName || program.zone}</figcaption></figure>}
           </div>
 
           {/* Program Facts Grid */}
@@ -387,7 +412,17 @@ export default function ProgramDetailPage() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => {
+                      const el = document.getElementById('matching-giao-thuong');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="px-3.5 py-2 rounded-xl bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-300 font-bold text-xs shadow-2xs transition cursor-pointer flex items-center gap-1.5"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-[#006039]" />
+                    <span>Xem nhu cầu & đối tác</span>
+                  </button>
                   <button
                     onClick={handleBuyerReg}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition cursor-pointer"
@@ -523,995 +558,61 @@ export default function ProgramDetailPage() {
           3. MAIN CONTENT CONTAINER WITH SECTIONS
       ======================================================== */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-12">
-        
-        {/* ======================================================
-            SECTION 5: CHƯƠNG TRÌNH DÀNH CHO AI?
-        ====================================================== */}
-        <section id="chuong-trinh-danh-cho-ai" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-                Chương Trình Dành Cho Ai?
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Mỗi nhóm doanh nghiệp tham gia với mục tiêu, tiêu chuẩn xét duyệt và quyền lợi riêng biệt.
-              </p>
-            </div>
-
-            {/* Role Tabs */}
-            <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 self-start sm:self-auto text-xs font-bold">
-              <button
-                onClick={() => setActiveRoleTab('buyer')}
-                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  activeRoleTab === 'buyer' 
-                    ? 'bg-white text-emerald-700 shadow-2xs' 
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Nhà Máy / Buyer
-              </button>
-              <button
-                onClick={() => setActiveRoleTab('supplier')}
-                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  activeRoleTab === 'supplier' 
-                    ? 'bg-white text-blue-700 shadow-2xs' 
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Nhà Cung Ứng
-              </button>
-              <button
-                onClick={() => setActiveRoleTab('partner')}
-                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  activeRoleTab === 'partner' 
-                    ? 'bg-white text-purple-700 shadow-2xs' 
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                KCN / Đối Tác
-              </button>
-            </div>
-          </div>
-
-          {/* Active Role Card Details */}
-          {activeRoleTab === 'buyer' && (
-            <div className="bg-white rounded-3xl border border-emerald-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="space-y-1.5 border-b border-slate-100 pb-4">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-                  <span className="text-[11px] font-mono font-black text-emerald-700 uppercase tracking-widest">
-                    VAI TRÒ NGƯỜI MUA / BÊN MUA FDI
-                  </span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
-                  {program.audienceDetails?.buyer?.title || 'Dành cho Nhà máy / Phòng Mua hàng (Purchasing)'}
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">1. Đối tượng phù hợp:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.buyer?.whoIsItFor}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">2. Tiêu chí tham gia (Eligibility):</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.buyer?.eligibility}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">3. Cần chuẩn bị trước sự kiện:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.buyer?.expectedPreparation}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-100">
-                <div className="text-xs text-slate-500">
-                  Phòng Purchasing được <strong>miễn phí 100%</strong> bàn làm việc riêng và hỗ trợ lọc hồ sơ nhà cung ứng.
-                </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <button
-                    onClick={handleSendNeed}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-emerald-300 text-emerald-800 hover:bg-emerald-50 font-bold text-xs transition cursor-pointer"
-                  >
-                    Gửi Nhu Cầu Tìm Nguồn
-                  </button>
-                  <button
-                    onClick={handleBuyerReg}
-                    disabled={!isRegOpen}
-                    className={`w-full sm:w-auto px-6 py-2.5 rounded-xl text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                      isRegOpen ? 'bg-emerald-600 hover:bg-emerald-700 shadow-md' : 'bg-slate-400 cursor-not-allowed'
-                    }`}
-                  >
-                    <span>Đăng Ký Người Mua</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeRoleTab === 'supplier' && (
-            <div className="bg-white rounded-3xl border border-blue-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="space-y-1.5 border-b border-slate-100 pb-4">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-                  <span className="text-[11px] font-mono font-black text-blue-700 uppercase tracking-widest">
-                    VAI TRÒ NHÀ CUNG ỨNG NỘI ĐỊA
-                  </span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
-                  {program.audienceDetails?.supplier?.title || 'Dành cho Nhà cung ứng / Nhà sản xuất phụ trợ'}
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">1. Đối tượng phù hợp:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.supplier?.whoIsItFor}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">2. Tiêu chí năng lực (Eligibility):</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.supplier?.eligibility}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">3. Cần chuẩn bị trước sự kiện:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.supplier?.expectedPreparation}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-100">
-                <div className="text-xs text-slate-500">
-                  Lưu ý: Đăng ký tham gia cần kèm theo Hồ sơ năng lực (Profile) và danh mục mẫu sản phẩm.
-                </div>
-                <div className="flex items-center gap-3 w-full sm:w-auto">
-                  <Link
-                    to="/tao-ho-so"
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-blue-300 text-blue-800 hover:bg-blue-50 font-bold text-xs transition text-center"
-                  >
-                    Hoàn Thiện Hồ Sơ Năng Lực
-                  </Link>
-                  <button
-                    onClick={handleSupplierReg}
-                    disabled={!isRegOpen}
-                    className={`w-full sm:w-auto px-6 py-2.5 rounded-xl text-white font-bold text-xs transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                      isRegOpen ? 'bg-[#0052cc] hover:bg-[#003ea8] shadow-md' : 'bg-slate-400 cursor-not-allowed'
-                    }`}
-                  >
-                    <span>Đăng Ký Nhà Cung Ứng</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeRoleTab === 'partner' && (
-            <div className="bg-white rounded-3xl border border-purple-200/90 shadow-sm p-6 sm:p-8 space-y-6">
-              <div className="space-y-1.5 border-b border-slate-100 pb-4">
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-purple-600 animate-pulse"></span>
-                  <span className="text-[11px] font-mono font-black text-purple-700 uppercase tracking-widest">
-                    VAI TRÒ ĐỐI TÁC HẠ TẦNG & HIỆP HỘI
-                  </span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
-                  {program.audienceDetails?.partner?.title || 'Dành cho KCN, Hiệp hội & Đơn vị đồng hành'}
-                </h3>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">1. Đối tượng phù hợp:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.partner?.whoIsItFor}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">2. Tiêu chí đồng hành:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    {program.audienceDetails?.partner?.eligibility}
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                  <strong className="text-slate-900 block font-bold">3. Quyền lợi nhận được:</strong>
-                  <p className="text-slate-600 leading-relaxed">
-                    Quảng bá hình ảnh KCN, thu hút dòng vốn đầu tư phụ trợ thứ cấp và đồng chủ trì các phiên B2B.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-100">
-                <div className="text-xs text-slate-500">
-                  Liên hệ trực tiếp Ban Điều phối để bố trí bàn thông tin xúc tiến đầu tư.
-                </div>
-                <button
-                  onClick={() => setShowSponsorModal(true)}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition cursor-pointer"
-                >
-                  Đăng Ký Đồng Hành / Bảo Trợ
-                </button>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* ======================================================
-            SECTION 7 & 37: BUYER NEEDS (NHÓM NHU CẦU KẾT NỐI)
-            PRIVACY ENFORCED: Zero private contacts/internal budgets
-        ====================================================== */}
-        <section id="nhom-nhu-cau-ket-noi" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div className="flex items-center gap-2 text-emerald-800 font-black font-heading text-lg sm:text-xl">
-                <ShoppingCart className="w-5 h-5 text-emerald-600" />
-                <span>Nhóm Nhu Cầu Kết Nối (Buyer Sourcing Demands)</span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Danh mục phụ trợ và dịch vụ nhà máy công bố công khai để tìm kiếm nhà cung cấp tại chương trình.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
-                {publicBuyerNeeds.length} nhu cầu công khai
-              </span>
-              <button
-                onClick={handleSendNeed}
-                className="px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition cursor-pointer flex items-center gap-1"
-              >
-                <span>+ Gửi nhu cầu</span>
-              </button>
-            </div>
-          </div>
-
-          {publicBuyerNeeds.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {publicBuyerNeeds.map((need, idx) => (
-                <div
-                  key={need.id || idx}
-                  className="bg-white rounded-2xl border border-slate-200/90 hover:border-emerald-300 p-5 space-y-3.5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2 text-xs">
-                      <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
-                        {need.publicCode}
-                      </span>
-                      <span className="text-slate-500 font-medium">
-                        Hạn: <strong className="text-slate-800">{need.deadline}</strong>
-                      </span>
-                    </div>
-
-                    <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                      {need.title}
-                    </h4>
-
-                    <div className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                      {need.publicSummary}
-                    </div>
-
-                    <div className="space-y-1 pt-1 text-xs">
-                      <div className="text-slate-500">
-                        Đơn vị mua: <strong className="text-slate-800">{need.buyerSummary}</strong>
-                      </div>
-                      <div className="text-slate-500">
-                        Địa bàn / KCN: <strong className="text-slate-800">{need.industrialPark || need.location}</strong>
-                      </div>
-                      <div className="text-slate-500">
-                        Quy mô dự kiến: <strong className="text-slate-800 font-mono">{need.quantity}</strong>
-                      </div>
-                    </div>
-
-                    {need.publicRequirements && need.publicRequirements.length > 0 && (
-                      <div className="pt-1 space-y-1">
-                        <div className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Tiêu chuẩn chào hàng:</div>
-                        <ul className="text-xs text-slate-600 space-y-0.5 pl-3 list-disc">
-                          {need.publicRequirements.map((r, rIdx) => (
-                            <li key={rIdx}>{r}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-slate-500 italic text-[11px]">
-                      Bảo mật thông tin liên hệ theo quy chế
-                    </span>
-                    <button
-                      onClick={handleSupplierReg}
-                      className="px-3.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold transition cursor-pointer flex items-center gap-1"
-                    >
-                      <span>Chào giá tại sự kiện</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white rounded-2xl p-6 text-center text-slate-500 text-xs border border-dashed border-slate-200">
-              Hiện danh mục nhu cầu đang được điều phối viên thẩm định và sẽ cập nhật trước ngày diễn ra.
-            </div>
-          )}
-        </section>
-
-        {/* ======================================================
-            SECTION 9: HARD RULE — TRẢ PHÍ ≠ ĐƯỢC MEETING
-        ====================================================== */}
-        <section className="bg-amber-50/80 border border-amber-200 rounded-3xl p-6 sm:p-7 space-y-3">
-          <div className="flex items-center gap-2.5 text-amber-900 font-black font-heading text-base sm:text-lg">
-            <ShieldAlert className="w-6 h-6 text-amber-600 shrink-0" />
-            <span>NGUYÊN TẮC BẢO ĐẢM KẾT NỐI KHÁCH QUAN (B2B MATCHING RULE)</span>
-          </div>
-
-          <p className="text-xs sm:text-sm text-amber-900 leading-relaxed">
-            <strong>Hard Rule của CHUOICUNGUNG.COM:</strong> Nhà cung ứng thanh toán phí tham gia{' '}
-            <strong className="underline">KHÔNG tự động có cuộc gặp bảo đảm</strong> với Người mua.
-            Mọi đề nghị cuộc gặp đều được xem xét dựa trên mức độ phù hợp giữa <strong>Nhu cầu Mua hàng (Buyer Requirement)</strong> và{' '}
-            <strong>Năng lực Cung ứng (Supplier Capability)</strong>.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1 text-xs text-amber-800">
-            <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80">
-              ✓ Không bán vị trí gặp Buyer bằng tiền
-            </div>
-            <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80">
-              ✓ Ưu tiên hồ sơ đạt chuẩn ISO & năng lực xưởng thật
-            </div>
-            <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80">
-              ✓ Điều phối viên thẩm định trước khi lên lịch 1:1
-            </div>
-          </div>
-        </section>
-
-        {/* ======================================================
-            SECTION 10 & 11: PARTICIPATION MODES & FEE DISPLAY
-        ====================================================== */}
-        <section id="hinh-thuc-tham-gia" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-                Hình Thức Tham Gia & Mức Phí Minh Bạch
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Lựa chọn gói đồng hành phù hợp với mục tiêu và nguồn lực của doanh nghiệp.
-              </p>
-            </div>
-
-            <span className="text-xs font-bold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-              Chính sách phí công khai
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {program.participationOptions && program.participationOptions.map((opt, oIdx) => {
-              const isFree = opt.feeType === 'FREE';
-              const isFixed = opt.feeType === 'FIXED';
-              const isQuote = opt.feeType === 'QUOTE_REQUIRED';
-
-              return (
-                <div
-                  key={opt.id || oIdx}
-                  className={`bg-white rounded-3xl border p-6 flex flex-col justify-between space-y-5 shadow-2xs hover:shadow-lg transition-all ${
-                    isFree ? 'border-emerald-200 hover:border-emerald-300' : 'border-slate-200/90 hover:border-blue-300'
-                  }`}
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
-                        opt.role === 'BUYER' ? 'bg-emerald-50 text-emerald-800' : 'bg-blue-50 text-blue-800'
-                      }`}>
-                        {opt.role === 'BUYER' ? 'Nhà máy / Buyer' : opt.role === 'SUPPLIER' ? 'Nhà cung ứng' : 'Đối tác'}
-                      </span>
-
-                      {/* Fee Badge (Section 11) */}
-                      <span className={`px-3 py-1 rounded-full text-xs font-black font-mono ${
-                        isFree ? 'bg-emerald-100 text-emerald-800' : isFixed ? 'bg-blue-100 text-blue-900' : 'bg-slate-100 text-slate-800'
-                      }`}>
-                        {isFree ? 'MIỄN PHÍ' : isFixed ? `${opt.amount?.toLocaleString('vi-VN')} ${opt.currency || 'VND'}` : 'NHẬN BÁO GIÁ'}
-                      </span>
-                    </div>
-
-                    <h4 className="text-base sm:text-lg font-black font-heading text-slate-900 leading-snug">
-                      {opt.title}
-                    </h4>
-
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {opt.description}
-                    </p>
-
-                    <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
-                      <div className="font-bold text-slate-800">Quyền lợi bàn giao (Deliverables):</div>
-                      <ul className="space-y-1.5 text-slate-600 pl-4 list-disc">
-                        <li>Bố trí vị trí làm việc giao thương theo tiêu chuẩn</li>
-                        <li>Đăng tải thông tin trên Kỷ yếu giao thương</li>
-                        <li>Tham gia các phiên trình bày năng lực & Networking</li>
-                        <li>Hỗ trợ kết nối follow-up sau sự kiện</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100">
-                    <button
-                      onClick={() => {
-                        if (opt.role === 'BUYER') handleBuyerReg();
-                        else handleSupplierReg();
-                      }}
-                      disabled={!isRegOpen}
-                      className={`w-full py-3 rounded-xl font-bold text-xs sm:text-sm transition cursor-pointer flex items-center justify-center gap-1.5 ${
-                        !isRegOpen 
-                          ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                          : isFree 
-                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm'
-                            : 'bg-[#0052cc] hover:bg-[#003ea8] text-white shadow-sm'
-                      }`}
-                    >
-                      <span>{isRegOpen ? 'Chọn Hình Thức Này' : 'Chưa Mở Đăng Ký'}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Section 12: Remote Presence Option */}
-          <div className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-blue-200 text-xs font-bold uppercase tracking-wider">
-                <Globe className="w-3.5 h-3.5" />
-                <span>HIỆN DIỆN TỪ XA / ỦY THÁC KẾT NỐI (REMOTE PRESENCE)</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black font-heading text-white">
-                Không Thể Có Mặt Trực Tiếp?
-              </h3>
-              <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-                Doanh nghiệp ở xa có thể ủy thác Điều phối viên CCU đại diện trưng bày mẫu phôi, phát catalogue in ấn, chiếu video năng lực xưởng và thu thập danh thiếp phản hồi từ các Trưởng phòng Mua hàng FDI.
-              </p>
-            </div>
-
-            <button
-              onClick={handleRemotePresence}
-              className="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs sm:text-sm shadow-lg transition shrink-0 cursor-pointer flex items-center gap-2"
+        {/* Navigation jump bar between 3 key blocks */}
+        <nav className="pw-nav" aria-label="Hành trình tham gia chương trình">
+            <a
+              href="#dang-ky-tai-tro"
             >
-              <span>Đăng Ký Hiện Diện Từ Xa</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </section>
-
-        {/* ======================================================
-            SECTION 15: AGENDA (LỊCH TRÌNH CHƯƠNG TRÌNH)
-        ====================================================== */}
-        <section id="lich-trinh-chuong-trinh" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-                Lịch Trình Chương Trình (Agenda)
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Lịch trình chi tiết các phiên làm việc, kết nối 1:1 và thẩm định hồ sơ kỹ thuật.
-              </p>
-            </div>
-            <span className="text-xs font-mono font-bold text-slate-500">
-              {program.date}
-            </span>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-5 sm:p-8 space-y-4">
-            {program.agenda && program.agenda.map((ag, idx) => (
-              <div
-                key={ag.id || idx}
-                className="flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-2xl bg-slate-50 hover:bg-blue-50/50 border border-slate-200/80 transition-all"
-              >
-                <div className="sm:w-36 shrink-0">
-                  <span className="px-3 py-1 rounded-lg bg-blue-100/70 text-[#0047a5] font-mono font-black text-xs">
-                    {ag.timeRange || `${ag.startAt} - ${ag.endAt}`}
-                  </span>
-                  <div className="text-[11px] text-slate-500 mt-1 font-medium">{ag.room}</div>
-                </div>
-
-                <div className="space-y-1 flex-1">
-                  <div className="flex items-center gap-2">
-                    <h4 className="font-black text-slate-900 text-sm sm:text-base font-heading">
-                      {ag.title}
-                    </h4>
-                    {ag.type === 'B2B_MATCHING' && (
-                      <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">
-                        1:1 Matchmaking
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    {ag.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ======================================================
-            SECTION 16, 17, 18: CUỘC GẶP 1:1 (MEETINGS)
-        ====================================================== */}
-        <section className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 space-y-6 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-              <Handshake className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                QUY TRÌNH BẢO ĐẢM KẾT NỐI
-              </span>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-950 font-heading">
-                Cuộc Gặp Giao Thương 1:1 & Khớp Lệnh Nhu Cầu
-              </h3>
-            </div>
-          </div>
-
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            {program.meetingWorkflow?.policyDisclaimer}
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs sm:text-sm">
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <span className="w-6 h-6 rounded-full bg-[#0052cc] text-white flex items-center justify-center font-bold text-xs">
-                1
-              </span>
-              <strong className="block text-slate-900 font-bold">Nộp Hồ Sơ Kỹ Thuật</strong>
-              <p className="text-slate-600 text-xs">
-                Nhà cung ứng đăng ký kèm hồ sơ năng lực, chứng chỉ ISO và danh mục phụ trợ phù hợp nhu cầu công bố.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <span className="w-6 h-6 rounded-full bg-[#0052cc] text-white flex items-center justify-center font-bold text-xs">
-                2
-              </span>
-              <strong className="block text-slate-900 font-bold">Buyer Thẩm Định</strong>
-              <p className="text-slate-600 text-xs">
-                Trưởng phòng Purchasing xem xét hồ sơ và phê duyệt đề nghị gặp gỡ trực tiếp tại sự kiện.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <span className="w-6 h-6 rounded-full bg-[#0052cc] text-white flex items-center justify-center font-bold text-xs">
-                3
-              </span>
-              <strong className="block text-slate-900 font-bold">Sắp Xếp Bàn Riêng</strong>
-              <p className="text-slate-600 text-xs">
-                Điều phối viên CCU bố trí khung giờ (25 phút/phiên) và bàn làm việc 1:1 riêng tư.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <span className="w-6 h-6 rounded-full bg-[#0052cc] text-white flex items-center justify-center font-bold text-xs">
-                4
-              </span>
-              <strong className="block text-slate-900 font-bold">Gặp & Ký Biên Bản</strong>
-              <p className="text-slate-600 text-xs">
-                Hai bên trao đổi kỹ thuật, xem xét mẫu đối chứng và ký Biên bản ghi nhớ (MOU) kết nối.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500 italic">
-            Lưu ý bảo mật: Lịch hẹn cá nhân chỉ hiển thị trong tài khoản của đại biểu sau khi được Ban điều phối xác nhận. Không công bố danh sách phòng họp hay số điện thoại riêng của Buyer ra bên ngoài.
-          </div>
-        </section>
-
-        {/* ======================================================
-            SECTION 19: SUPPLIER SHOWCASE (NHÀ CUNG ỨNG TRƯNG BÀY)
-        ====================================================== */}
-        {showcaseSuppliers.length > 0 && (
-          <section id="nha-cung-ung-trung-bay" className="space-y-5">
-            <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-blue-900 font-black font-heading text-lg sm:text-xl">
-                  <Store className="w-5 h-5 text-blue-600" />
-                  <span>Sản Phẩm & Năng Lực Nhà Cung Ứng Trưng Bày</span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Các doanh nghiệp sản xuất phụ trợ đã qua kiểm duyệt KYC tham gia trưng bày tại chương trình.
-                </p>
-              </div>
-              <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full">
-                {showcaseSuppliers.length} nhà cung cấp
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {showcaseSuppliers.map((sup, idx) => (
-                <div
-                  key={sup.id || idx}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-4 space-y-3 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-slate-900 truncate">
-                        {sup.name}
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold flex items-center gap-1 shrink-0">
-                        <ShieldCheck className="w-3 h-3 text-emerald-600" />
-                        <span>KYC Verified</span>
-                      </span>
-                    </div>
-
-                    <div className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                      <strong>Sản phẩm trưng bày:</strong> {sup.productsServices?.join(', ')}
-                    </div>
-
-                    <div className="flex flex-wrap gap-1">
-                      {sup.capabilities?.map((c, cIdx) => (
-                        <span key={cIdx} className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-medium">
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500 flex items-center justify-between">
-                    <span>Địa bàn: {sup.province}</span>
-                    <span className="text-blue-600 font-bold hover:underline cursor-pointer">
-                      Xem gian hàng
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* ======================================================
-            SECTION 20: CATALOGUE (KỶ YẾU GIAO THƯƠNG)
-        ====================================================== */}
-        {program.catalogue && (
-          <section className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xs">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-20 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#0052cc] shrink-0 shadow-2xs">
-                <FileText className="w-8 h-8" />
-              </div>
-              <div className="space-y-1">
-                <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded uppercase tracking-wider">
-                  KỶ YẾU GIAO THƯƠNG CHÍNH THỨC
-                </span>
-                <h3 className="text-lg sm:text-xl font-black text-slate-900 font-heading">
-                  {program.catalogue.title}
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Tổng hợp {program.catalogue.totalSuppliers} nhà cung ứng phụ trợ và {program.catalogue.totalBuyerNeeds} danh mục mua hàng đã kiểm duyệt.
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => alert(`Kỷ yếu số ${program.catalogue.id} sẽ được gửi kèm qua email khi đăng ký thành công hoặc phát trực tiếp tại bàn Check-in.`)}
-              className="px-5 py-2.5 rounded-xl border border-blue-300 text-[#0052cc] hover:bg-blue-50 font-bold text-xs sm:text-sm transition shrink-0 cursor-pointer flex items-center gap-2"
+              <span>01</span><div>Đăng ký tham gia<small>Vai trò · Ngân sách · Lịch giới thiệu</small></div>
+            </a>
+            <a
+              href="#matching-giao-thuong"
             >
-              <Download className="w-4 h-4" />
-              <span>Nhận Kỷ Yếu Sự Kiện</span>
-            </button>
-          </section>
-        )}
+              <span>02</span><div>Ghép nối 1:1<small>Sản phẩm · Nhu cầu · Đối tác muốn gặp</small></div>
+            </a>
+            <a
+              href="#sau-matching"
+            >
+              <span>03</span><div>Sau kết nối<small>Cặp doanh nghiệp · Hình ảnh · Bước tiếp theo</small></div>
+            </a>
+        </nav>
 
-        {/* ======================================================
-            SECTION 21: BẠN NÊN CHUẨN BỊ GÌ? (ROLE CHECKLISTS)
-        ====================================================== */}
-        <section id="ban-nen-chuan-bi-gi" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-                Bạn Nên Chuẩn Bị Gì Trước Sự Kiện?
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Checklist chuyên nghiệp giúp các doanh nghiệp tối ưu hóa hiệu quả kết nối và khớp lệnh.
-              </p>
-            </div>
+        {/* ========================================================
+            BLOCK 1: ĐĂNG KÝ, GÓI TÀI TRỢ & LỊCH TRÌNH GIỜ GIẤC
+        ======================================================== */}
+        <ProgramRegistrationSection
+          key={program.id}
+          program={program}
+          selectedRole={registrationRole}
+          registrationIntent={registrationIntent}
+          targetMeetingEntity={selectedMeetingTarget}
+          onBuyerRegister={handleBuyerReg}
+          onSupplierRegister={handleSupplierReg}
+        />
 
-            <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs font-bold">
-              <button
-                onClick={() => setActivePrepTab('buyer')}
-                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  activePrepTab === 'buyer' 
-                    ? 'bg-white text-emerald-700 shadow-2xs' 
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Nhà Máy / Buyer
-              </button>
-              <button
-                onClick={() => setActivePrepTab('supplier')}
-                className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
-                  activePrepTab === 'supplier' 
-                    ? 'bg-white text-blue-700 shadow-2xs' 
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Nhà Cung Ứng
-              </button>
-            </div>
-          </div>
+        {/* ========================================================
+            BLOCK 2: MATCHING & GIAO THƯƠNG (NHÀ MÁY, NCC, DANH BẠ XTTM)
+        ======================================================== */}
+        <ProgramMatchingSection
+          program={program}
+          publicBuyerNeeds={publicBuyerNeeds}
+          showcaseSuppliers={showcaseSuppliers}
+          onRequestMeetingWith={(target) => {
+            setSelectedMeetingTarget(target);
+            const el = document.getElementById("form-dang-ky-truc-tiep");
+            if (el) {
+              el.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+        />
 
-          {activePrepTab === 'buyer' ? (
-            <div className="bg-white rounded-3xl border border-emerald-200 p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">1. Danh mục phụ trợ cần tìm nguồn:</strong>
-                <p className="text-slate-600 text-xs">
-                  Chuẩn bị mã linh kiện, thông số vật liệu, dung sai bản vẽ và sản lượng dự kiến theo tháng/quý.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">2. Tiêu chuẩn nhà cung cấp & chứng chỉ:</strong>
-                <p className="text-slate-600 text-xs">
-                  Yêu cầu bắt buộc về chứng chỉ chất lượng (ISO 9001, IATF 16949, ESD, RoHS, REACH...).
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">3. Mẫu sản phẩm đối chứng (nếu có):</strong>
-                <p className="text-slate-600 text-xs">
-                  Mang theo mẫu phôi hoặc sản phẩm hoàn thiện để nhà cung ứng đánh giá trực tiếp độ khó gia công.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">4. Đại biểu đại diện có quyền quyết định:</strong>
-                <p className="text-slate-600 text-xs">
-                  Cử đại diện Trưởng phòng Mua hàng hoặc Kỹ sư đánh giá nhà cung cấp tham dự trực tiếp.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-3xl border border-blue-200 p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">1. Hồ sơ năng lực (Company Profile):</strong>
-                <p className="text-slate-600 text-xs">
-                  In sẵn tối thiểu 10 bộ hồ sơ năng lực tóm tắt danh sách máy móc, diện tích xưởng và khách hàng tiêu biểu.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">2. Mẫu sản phẩm thực tế (Physical Samples):</strong>
-                <p className="text-slate-600 text-xs">
-                  Đem theo mẫu phôi gia công thực tế, chi tiết hoàn thiện và bảng dữ liệu kỹ thuật đối chứng.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">3. Danh thiếp & Mã QR liên hệ nhanh:</strong>
-                <p className="text-slate-600 text-xs">
-                  Chuẩn bị đầy đủ danh thiếp có số di động trực tiếp của Giám đốc kinh doanh hoặc Quản lý dự án.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">4. Khung giá tham chiếu & Điều khoản thanh toán:</strong>
-                <p className="text-slate-600 text-xs">
-                  Nắm rõ đơn giá gia công ước tính, thời gian lead-time và khả năng giao hàng nội bộ KCN.
-                </p>
-              </div>
-            </div>
-          )}
-        </section>
-
-        {/* ======================================================
-            SECTION 13 & 14: SPONSORS (ĐỒNG HÀNH CÙNG CHƯƠNG TRÌNH)
-            RULE: SPONSOR ≠ MATCHING
-        ====================================================== */}
-        {program.sponsors && program.sponsors.length > 0 && (
-          <section id="dong-hanh-cung-chuong-trinh" className="space-y-5">
-            <div className="border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-                  Đồng Hành Cùng Chương Trình
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Các đối tác chiến lược và doanh nghiệp tài trợ phát triển mạng lưới chuỗi cung ứng bền vững.
-                </p>
-              </div>
-
-              <button
-                onClick={() => setShowSponsorModal(true)}
-                className="px-4 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-800 font-bold text-xs transition cursor-pointer self-start sm:self-auto"
-              >
-                Tôi Muốn Tài Trợ Chương Trình
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {program.sponsors.map((sp, idx) => (
-                <div
-                  key={sp.organizationId || idx}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-5 flex items-center gap-4 shadow-2xs hover:shadow-md transition-all"
-                >
-                  <div className="w-14 h-14 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center p-2 shrink-0">
-                    <img src={sp.logo} alt={sp.name} className="max-w-full max-h-full object-contain" />
-                  </div>
-                  <div className="space-y-1 min-w-0">
-                    <span className="px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-[10px] font-bold uppercase tracking-wider block truncate">
-                      {sp.tierName || 'ĐỐI TÁC CHƯƠNG TRÌNH'}
-                    </span>
-                    <h4 className="font-bold text-slate-900 text-xs sm:text-sm truncate">
-                      {sp.name}
-                    </h4>
-                    <span className="text-[11px] text-slate-500 block">Đã xác nhận & kiểm duyệt</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Rule 14 Sponsor Disclaimer */}
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-xs">
-              <strong>Cam kết độc lập:</strong> Nhà tài trợ không được tự động xếp hạng ưu tiên trong kết quả tìm kiếm, không được cấp danh bạ Buyer bảo mật và không can thiệp vào quy trình matching khách quan.
-            </div>
-          </section>
-        )}
-
-        {/* ======================================================
-            SECTION 24: PROGRAM POLICIES (CHÍNH SÁCH CHƯƠNG TRÌNH)
-        ====================================================== */}
-        <section id="chinh-sach-quy-dinh" className="space-y-5">
-          <div className="border-b border-slate-200 pb-3">
-            <h2 className="text-xl sm:text-2xl font-black font-heading text-slate-900">
-              Chính Sách & Quy Định Chương Trình
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Quy chế tham gia, điều khoản bảo lưu, hoàn phí và cam kết bảo mật thông tin.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 space-y-4 shadow-2xs">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">1. Thay đổi thông tin & đại biểu:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed">{program.policies?.changeInfo}</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">2. Chính sách hủy & bảo lưu:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed">{program.policies?.cancellation}</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">3. Chính sách hoãn & bất khả kháng:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed">{program.policies?.postponement}</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">4. Chính sách hoàn phí tham dự:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed">{program.policies?.refund}</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">5. Đơn vị thụ hưởng thanh toán:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed font-mono">{program.policies?.paymentEntity}</p>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <strong className="text-slate-900 block font-bold">6. Bảo mật thông tin & Bản quyền:</strong>
-                <p className="text-slate-600 text-xs leading-relaxed">{program.policies?.dataPrivacy}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ======================================================
-            SECTION 25, 26, 27: SAU CHƯƠNG TRÌNH & THƯ VIỆN ẢNH
-        ====================================================== */}
-        {(isCompleted || program.recap) && (
-          <section id="ket-qua-sau-chuong-trinh" className="space-y-5">
-            <div className="border-b border-slate-200 pb-3 flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-indigo-900 font-black font-heading text-lg sm:text-xl">
-                  <CheckCircle2 className="w-5 h-5 text-indigo-600" />
-                  <span>Kết Quả Đã Xác Thực & Thư Viện Ảnh (Official Recap)</span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Số liệu giao dịch chính thức và bộ ảnh tư liệu hoạt động đã được kiểm duyệt.
-                </p>
-              </div>
-
-              <button
-                onClick={() => setShowRecapModal(true)}
-                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition cursor-pointer"
-              >
-                Xem Toàn Bộ Báo Cáo
-              </button>
-            </div>
-
-            {/* Confirmed Aggregate Result Cards (Section 26) */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-              <div className="bg-white p-4 rounded-2xl border border-indigo-100 shadow-2xs text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-indigo-950 font-mono">
-                  {program.recap?.factoriesJoined || program.factoriesCount || 68}
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium">Nhà máy tham gia</div>
-              </div>
-
-              <div className="bg-white p-4 rounded-2xl border border-indigo-100 shadow-2xs text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-indigo-950 font-mono">
-                  {program.recap?.suppliersJoined || program.suppliersCount || 160}
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium">Nhà cung ứng kết nối</div>
-              </div>
-
-              <div className="bg-white p-4 rounded-2xl border border-indigo-100 shadow-2xs text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-indigo-950 font-mono">
-                  {program.recap?.mouSigned || '28'}
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium">Biên bản MOU đã ký</div>
-              </div>
-
-              <div className="bg-white p-4 rounded-2xl border border-indigo-100 shadow-2xs text-center space-y-1">
-                <div className="text-xl sm:text-2xl font-black text-emerald-600 font-mono">
-                  {program.recap?.estimatedDealValue || '45.8 tỷ'}
-                </div>
-                <div className="text-[11px] text-slate-500 font-medium">Ước tính giá trị khớp lệnh</div>
-              </div>
-            </div>
-
-            {/* Photo Gallery Preview (Section 27) */}
-            {program.gallery && program.gallery.length > 0 && (
-              <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700">
-                    <Camera className="w-4 h-4 text-indigo-600" />
-                    <span>Hình ảnh tư liệu hoạt động đã kiểm duyệt bản quyền:</span>
-                  </div>
-                  <Link
-                    to={`/chuong-trinh/${program.slug || program.id}/thu-vien`}
-                    className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center space-x-1"
-                  >
-                    <span>Xem toàn bộ thư viện & tài liệu</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {program.gallery.map((img, gIdx) => (
-                    <div
-                      key={img.id || gIdx}
-                      onClick={() => setActiveGalleryPhoto(img)}
-                      className="group bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition cursor-pointer"
-                    >
-                      <div className="aspect-[16/10] overflow-hidden bg-slate-900 relative">
-                        <img
-                          src={img.url}
-                          alt={img.caption}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                        <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
-                          Bản quyền CCU
-                        </div>
-                      </div>
-                      <div className="p-3 text-xs text-slate-700 line-clamp-2 leading-relaxed">
-                        {img.caption}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
-        )}
+        {/* ========================================================
+            BLOCK 3: SAU MATCHING (HÌNH ẢNH TƯ LIỆU, CẶP DOANH NGHIỆP MATCHING)
+        ======================================================== */}
+        <ProgramPostMatchingSection
+          program={program}
+          onOpenRecapModal={() => setShowRecapModal(true)}
+        />
 
         {/* ======================================================
             SECTION 30: ĐƠN VỊ TỔ CHỨC & ĐẦU MỐI HỖ TRỢ

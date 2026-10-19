@@ -1799,7 +1799,8 @@ export default function JennyTrinhPortfolioPage() {
         >
           <img
             src="/logo_onlyc.png"
-            alt="Loading..."
+            alt=""
+            aria-hidden="true"
             className="w-full h-full object-contain drop-shadow-2xl"
           />
         </div>

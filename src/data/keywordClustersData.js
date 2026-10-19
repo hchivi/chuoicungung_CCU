@@ -2,7 +2,7 @@
 // Standardized according to CHUOICUNGUNG.COM Specification 09.txt
 
 import { slugify, CURATED_CATEGORIES, getCategoryHubBySlug } from './categoryHubData';
-import enterprisesFullList from './enterprisesFull.json' with { type: 'json' };
+import { suppliers as enterprisesFullList } from './cloudData.js';
 import { STRATEGIC_FOUNDING_PARTNERS } from './strategicFoundingPartners.js';
 import { getActiveEligiblePartnership } from './foundingPartnershipData.js';
 import { PROGRAMS_DATA } from './programsData.js';

@@ -507,7 +507,7 @@ export function getAllSponsorshipInquiries() {
  * Nộp đề xuất tài trợ mới (Section 16, 20)
  * HARD RULE: Submit CHỈ tạo INQUIRY, KHÔNG BAO GIỜ tự động ACTIVE
  */
-export function submitSponsorshipInquiry(formData, actor = null) {
+export async function submitSponsorshipInquiry(formData, actor = null) {
   if (!formData.organizationName || !formData.contactName || !formData.email || !formData.phone) {
     throw new Error('Vui lòng điền đầy đủ: Tên doanh nghiệp, Người liên hệ, Email và Số điện thoại.');
   }
@@ -518,6 +518,7 @@ export function submitSponsorshipInquiry(formData, actor = null) {
   }
 
   const inquiries = getAllSponsorshipInquiries();
+  if (isCloudBrowser()) return persistInquiry('sponsorship', formData);
   const newId = `SPON-INQ-${Date.now().toString().slice(-6)}`;
 
   const newInquiry = {
@@ -800,3 +801,5 @@ export function verifySupplierMatchingNeutrality(organizationId) {
     complianceRule: 'Section 14 Spec 32: Tài trợ không mua quyền matching'
   };
 }
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';

@@ -853,7 +853,7 @@ export default function IndustrialParksPage() {
           
           <div className="flex items-center space-x-2 shrink-0">
             <Link
-              to="/ban-do-so"
+              to="/ban-do-kcn"
               className="inline-flex items-center space-x-1.5 px-4 py-2 bg-[#0052cc] hover:bg-[#0041a3] text-white rounded-xl font-bold text-xs shadow-md transition font-heading uppercase cursor-pointer"
             >
               <span>Xem toàn màn hình</span>

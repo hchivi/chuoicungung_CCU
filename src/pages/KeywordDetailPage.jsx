@@ -8,7 +8,7 @@ import {
   Send, HelpCircle, Filter, X, SlidersHorizontal, Package, Calendar, Award,
   Play, FolderCheck
 } from 'lucide-react';
-import enterprisesFullList from '../data/enterprisesFull.json';
+import { suppliers as enterprisesFullList } from '../data/cloudData.js';
 import { useLanguage } from '../contexts/LanguageContext';
 import { 
   getCompanyMonogram, 
@@ -601,17 +601,27 @@ export default function KeywordDetailPage() {
                   >
                     <div className="space-y-3">
                       <div className="flex items-start space-x-3.5">
-                        <div className="w-14 h-14 rounded-2xl bg-white border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-blue-300 transition-colors">
-                          <img 
-                            src={getEnterpriseAvatarImage(ent)} 
-                            alt={ent.name} 
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover rounded-xl"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = "/logo_onlyc.png";
-                            }}
-                          />
+                        <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 p-0.5 shrink-0 overflow-hidden shadow-2xs flex items-center justify-center group-hover:border-blue-300 transition-colors">
+                          {getEnterpriseAvatarImage(ent) ? (
+                            <img 
+                              src={getEnterpriseAvatarImage(ent)} 
+                              alt={ent.name} 
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover rounded-xl"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                if (e.target.nextElementSibling) e.target.nextElementSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className="w-full h-full flex items-center justify-center text-slate-400 select-none"
+                            style={{ display: getEnterpriseAvatarImage(ent) ? 'none' : 'flex' }}
+                          >
+                            <span className="text-xs font-black font-mono text-slate-400">
+                              {getCompanyMonogram(ent.name)}
+                            </span>
+                          </div>
                         </div>
 
                         <div className="flex-1 min-w-0 space-y-1">
@@ -643,9 +653,9 @@ export default function KeywordDetailPage() {
                           <span className="truncate">{ent.category || ent.industry || cluster.categoryName}</span>
                         </div>
                         {ent.address && (
-                          <div className="flex items-start space-x-1.5 text-[11px] text-slate-500">
-                            <MapPin className="w-3 h-3 text-slate-400 shrink-0 mt-0.5" />
-                            <span className="line-clamp-1">{ent.address}</span>
+                          <div className="flex items-start space-x-1.5 text-[11px] text-slate-600">
+                            <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
+                            <span className="break-words leading-normal select-text">{ent.address}</span>
                           </div>
                         )}
                       </div>

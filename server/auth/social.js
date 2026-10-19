@@ -9,11 +9,16 @@ const localNext = value => typeof value === 'string' && value.length <= 512 && /
 export function createSocialAuth({ service, config = {}, fetchImpl = fetch, now = Date.now } = {}) {
   const url = config.url || process.env.SUPABASE_URL;
   const key = config.key || process.env.SUPABASE_PUBLISHABLE_KEY || process.env.SUPABASE_ANON_KEY;
-  const site = (config.site || process.env.SITE_URL || (process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : '')).replace(/\/$/, '');
+  const site = (config.site || process.env.SITE_URL || (process.env.NODE_ENV === 'production' ? 'https://chuoicungung.com' : 'http://localhost:3000')).replace(/\/$/, '');
   const signingKey = config.secret || process.env.SESSION_SECRET || process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
   const secret = signingKey ? createHmac('sha256', signingKey).update('ccu-customer-oauth-v1').digest() : null;
+  const zaloAppId = config.zaloAppId || process.env.ZALO_APP_ID;
+  const zaloAppSecret = config.zaloAppSecret || process.env.ZALO_APP_SECRET;
   const zaloProvider = config.zaloProvider || process.env.ZALO_SUPABASE_PROVIDER;
-  const providers = { google: 'google', zalo: /^custom:[a-z0-9-]+$/.test(zaloProvider || '') ? zaloProvider : null };
+  const providers = {
+    google: 'google',
+    zalo: /^custom:[a-z0-9-]+$/.test(zaloProvider || '') ? zaloProvider : (zaloAppId && zaloAppSecret ? 'direct:zalo' : null)
+  };
   let cached;
   const sign = value => createHmac('sha256', secret).update(value).digest('base64url');
   async function json(path, options = {}) {
@@ -28,7 +33,8 @@ export function createSocialAuth({ service, config = {}, fetchImpl = fetch, now 
     if (!cached || now() - cached.time >= 60000) {
       const settings = await json('settings');
       if (!settings || typeof settings !== 'object' || Array.isArray(settings)) throw unavailable();
-      cached = { time: now(), data: { google: settings.external?.google === true, zalo: !!providers.zalo && settings.external?.[providers.zalo] === true } };
+      const zaloEnabled = providers.zalo === 'direct:zalo' || (!!providers.zalo && settings.external?.[providers.zalo] === true);
+      cached = { time: now(), data: { google: settings.external?.google === true, zalo: zaloEnabled } };
     }
     return { ...cached.data };
   }
@@ -39,9 +45,20 @@ export function createSocialAuth({ service, config = {}, fetchImpl = fetch, now 
       if (!(await availability())[provider]) throw new AssistantError('OAUTH_NOT_CONFIGURED', `${provider === 'google' ? 'Google' : 'Zalo'} chưa được kích hoạt. Bạn có thể đăng nhập bằng email trong lúc chờ cấu hình.`, 503);
       if (!secret || !/^https?:\/\//.test(site) || (process.env.NODE_ENV === 'production' && !site.startsWith('https://'))) throw unavailable();
       const verifier = randomBytes(48).toString('base64url'), state = randomBytes(32).toString('base64url');
-      const payload = Buffer.from(JSON.stringify({ verifier, state, next: localNext(next), ownerId: /^ccu_[a-f0-9]{64}$/.test(ownerId || '') ? ownerId : null, expires: now() + 600000 })).toString('base64url');
+      const payload = Buffer.from(JSON.stringify({ provider, verifier, state, next: localNext(next), ownerId: /^ccu_[a-f0-9]{64}$/.test(ownerId || '') ? ownerId : null, expires: now() + 600000 })).toString('base64url');
       res.cookie('ccu_oauth', `${payload}.${sign(payload)}`, { ...cookieOptions, secure: process.env.NODE_ENV === 'production', maxAge: 600000 });
       const callback = new URL('/api/auth/oauth/callback', site); callback.searchParams.set('state', state);
+
+      if (providers[provider] === 'direct:zalo') {
+        const zaloCallback = new URL('/api/auth/oauth/callback', site);
+        const authorize = new URL('https://oauth.zaloapp.com/v4/permission');
+        authorize.searchParams.set('app_id', zaloAppId);
+        authorize.searchParams.set('redirect_uri', zaloCallback.toString());
+        authorize.searchParams.set('code_challenge', createHash('sha256').update(verifier).digest('base64url'));
+        authorize.searchParams.set('state', state);
+        return { url: authorize.toString() };
+      }
+
       const authorize = new URL(`${url.replace(/\/$/, '')}/auth/v1/authorize`);
       authorize.searchParams.set('provider', providers[provider]); authorize.searchParams.set('redirect_to', callback.toString());
       authorize.searchParams.set('code_challenge', createHash('sha256').update(verifier).digest('base64url'));
@@ -57,6 +74,44 @@ export function createSocialAuth({ service, config = {}, fetchImpl = fetch, now 
       if (extra !== undefined || !/^[A-Za-z0-9_-]{43}$/.test(signature || '') || !timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) throw failure();
       let flow; try { flow = JSON.parse(Buffer.from(payload, 'base64url')); } catch { throw failure(); }
       if (!flow || typeof flow.expires !== 'number' || flow.expires <= now() || typeof flow.verifier !== 'string' || !flow.verifier || !flow.state || flow.state !== req.query.state || req.query.error || typeof req.query.code !== 'string' || !req.query.code || req.query.code.length > 4096) throw failure();
+
+      if (flow.provider === 'zalo' && providers.zalo === 'direct:zalo') {
+        const tokenRes = await fetchImpl('https://oauth.zaloapp.com/v4/access_token', {
+          method: 'POST',
+          headers: {
+            'secret_key': zaloAppSecret,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            code: req.query.code,
+            app_id: zaloAppId,
+            grant_type: 'authorization_code',
+            code_verifier: flow.verifier
+          }).toString()
+        });
+        if (!tokenRes.ok) throw failure();
+        const tokenData = await tokenRes.json();
+        if (!tokenData?.access_token) throw failure();
+
+        const meRes = await fetchImpl('https://graph.zalo.me/v2.0/me?fields=id,name,picture', {
+          headers: { access_token: tokenData.access_token }
+        });
+        if (!meRes.ok) throw failure();
+        const meData = await meRes.json();
+        if (!meData?.id) throw failure();
+
+        const email = `zalo_${meData.id}@zalo.chuoicungung.com`;
+        const result = await service.acceptSocialProfile({
+          email,
+          fullName: meData.name || 'Người dùng Zalo',
+          avatar: meData.picture?.data?.url || '',
+          provider: 'zalo',
+          providerId: meData.id
+        });
+        if (flow.ownerId) await service.claimAnonymous(flow.ownerId, result.identity.user.id);
+        return { ...result, next: localNext(flow.next) };
+      }
+
       const tokens = await json('token?grant_type=pkce', { method: 'POST', body: JSON.stringify({ auth_code: req.query.code, code_verifier: flow.verifier }) });
       // Reuse the verified-session boundary: Supabase getUser + confirmed email + server role lookup.
       const result = await service.acceptRecovery(tokens);

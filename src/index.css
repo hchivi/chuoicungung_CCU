@@ -61,6 +61,34 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'SpaceGrotesk';
+  src: url('/fonts/static/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/static/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SpaceGrotesk';
+  src: url('/fonts/static/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/static/SpaceGrotesk-Bold.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --primary-color: #006039;
@@ -167,7 +195,8 @@
 @layer base {
   html, body {
     @apply bg-slate-50 text-slate-900 antialiased;
-    font-family: 'Poppins', sans-serif !important;
+    font-family: 'Be Vietnam Pro', 'Poppins', sans-serif !important;
+    font-size: 16.5px;
     font-weight: 400;
     overflow-x: clip;
     max-width: 100vw;
@@ -314,12 +343,13 @@ nav a, .nav-link, button, .btn {
   font-family: 'Space Grotesk', 'SpaceGrotesk', sans-serif !important;
 }
 
-/* Nội dung văn bản thì sử dụng Poppins với khoảng cách dòng mượt mà */
+/* Nội dung văn bản thì sử dụng Be Vietnam Pro với khoảng cách dòng mượt mà */
 p, li, article, section p, main p, div > p, .font-content, .font-normal-text, .font-poppins, .font-sans, .font-arial {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: 'Be Vietnam Pro', 'Poppins', sans-serif !important;
   font-weight: 400 !important;
   letter-spacing: normal;
-  line-height: 1.65 !important;
+  line-height: 1.68 !important;
+  font-size: 1.025rem;
 }
 
 /* ==========================================================================

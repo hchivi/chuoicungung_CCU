@@ -53,7 +53,7 @@ export const SEED_MEDIA_ASSETS = [
     title: 'Video giới thiệu xưởng may Proser (1 phút)',
     type: 'VIDEO',
     assetCategory: 'REAL_EVIDENCE',
-    url: 'https://pic.trangvangvietnam.com/pics_low/395785472/ao-thun-dong-phuc-doanh-nghiep-T408.jpg',
+    url: '/api/media/pic/pics_low/395785472/ao-thun-dong-phuc-doanh-nghiep-T408.jpg',
     videoEmbedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
     thumbnail: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&auto=format&fit=crop&q=80',
     duration: '01:15',

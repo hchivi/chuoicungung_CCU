@@ -7,7 +7,7 @@ import {
   RotateCcw, Maximize2, Minimize2, CheckCircle2, Clock
 } from 'lucide-react';
 import provinceCoords from '../data/provinceCoordinates.json';
-import industrialParksData from '../data/industrialParksFull.json';
+import { industrialParks as industrialParksData } from '../data/cloudData.js';
 import suppliersData from '../data/suppliersMapData.json';
 import demandsData from '../data/demandsMapData.json';
 import { useLanguage } from '../contexts/LanguageContext';

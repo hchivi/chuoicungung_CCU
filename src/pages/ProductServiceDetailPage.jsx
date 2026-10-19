@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 // File: src/pages/ProductServiceDetailPage.jsx
 // Page 07: Chi Tiết Sản Phẩm / Dịch Vụ (/san-pham-dich-vu/[slug])
 // Specification 7.txt — ChuoiCungUng.com
@@ -18,7 +19,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { slugify } from './IndustryCategoryPage';
-import enterprisesFullList from '../data/enterprisesFull.json';
+import { suppliers as enterprisesFullList } from '../data/cloudData.js';
 import foundingPartnersData from '../data/foundingPartners.json';
 import { 
   getProductServiceBySlug, 
@@ -27,7 +28,8 @@ import {
 } from '../data/productServicesData';
 import { 
   getEnterpriseAvatarImage, 
-  getCategoryBannerImage 
+  getCategoryBannerImage,
+  getCompanyMonogram
 } from '../utils/companyUtils';
 import SupplierRequestQuoteModal from '../components/suppliers/SupplierRequestQuoteModal';
 
@@ -88,12 +90,12 @@ export default function ProductServiceDetailPage() {
       return;
     }
     try {
-      const draft = localStorage.getItem('ccu_draft_' + requirementId);
+      const draft = privateBrowserStorage.getItem('ccu_draft_' + requirementId);
       if (draft) {
         setActiveRequirement(JSON.parse(draft));
         return;
       }
-      const latest = localStorage.getItem('ccu_requirement_draft');
+      const latest = privateBrowserStorage.getItem('ccu_requirement_draft');
       if (latest) {
         setActiveRequirement(JSON.parse(latest));
         return;
@@ -124,14 +126,14 @@ export default function ProductServiceDetailPage() {
   // Sync saved state
   useEffect(() => {
     try {
-      const savedList = JSON.parse(localStorage.getItem('ccu_saved_products') || '[]');
+      const savedList = JSON.parse(privateBrowserStorage.getItem('ccu_saved_products') || '[]');
       setIsSaved(savedList.some(p => p.id === product.id));
     } catch (e) {}
   }, [product.id]);
 
   const handleToggleSave = () => {
     try {
-      let savedList = JSON.parse(localStorage.getItem('ccu_saved_products') || '[]');
+      let savedList = JSON.parse(privateBrowserStorage.getItem('ccu_saved_products') || '[]');
       if (isSaved) {
         savedList = savedList.filter(p => p.id !== product.id);
         setIsSaved(false);
@@ -146,7 +148,7 @@ export default function ProductServiceDetailPage() {
         });
         setIsSaved(true);
       }
-      localStorage.setItem('ccu_saved_products', JSON.stringify(savedList));
+      privateBrowserStorage.setItem('ccu_saved_products', JSON.stringify(savedList));
     } catch (e) {}
   };
 
@@ -290,8 +292,8 @@ export default function ProductServiceDetailPage() {
       ]
     };
     try {
-      localStorage.setItem('ccu_draft_' + draftId, JSON.stringify(draftPayload));
-      localStorage.setItem('ccu_requirement_draft', JSON.stringify(draftPayload));
+      privateBrowserStorage.setItem('ccu_draft_' + draftId, JSON.stringify(draftPayload));
+      privateBrowserStorage.setItem('ccu_requirement_draft', JSON.stringify(draftPayload));
     } catch (e) {}
     setShowRequestActionModal(false);
     navigate(`/dang-nhu-cau?draft=${draftId}&targetSupplier=${supplier.id || supplier._id}`);
@@ -303,7 +305,7 @@ export default function ProductServiceDetailPage() {
     setIsAddedToRequirement(true);
     try {
       const key = 'ccu_draft_' + activeRequirement.id;
-      const current = localStorage.getItem(key);
+      const current = privateBrowserStorage.getItem(key);
       let draftObj = current ? JSON.parse(current) : activeRequirement;
       draftObj.suppliers = draftObj.suppliers || [];
       if (!draftObj.suppliers.find(s => s.name === supplier.name)) {
@@ -316,7 +318,7 @@ export default function ProductServiceDetailPage() {
           matchRate: 99,
           notes: `Mời cung cấp gói sản phẩm: ${product.title}`
         });
-        localStorage.setItem(key, JSON.stringify(draftObj));
+        privateBrowserStorage.setItem(key, JSON.stringify(draftObj));
       }
     } catch (e) {}
     setShowRequestActionModal(false);
@@ -472,12 +474,18 @@ export default function ProductServiceDetailPage() {
               {/* Supplier Identity Line */}
               <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 flex-wrap">
                 <div className="flex items-center space-x-3 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 p-0.5 overflow-hidden shrink-0 shadow-2xs">
-                    <img 
-                      src={getEnterpriseAvatarImage(supplier)} 
-                      alt={supplier.name} 
-                      className="w-full h-full object-cover rounded-lg"
-                    />
+                  <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 p-0.5 overflow-hidden shrink-0 shadow-2xs flex items-center justify-center">
+                    {getEnterpriseAvatarImage(supplier) ? (
+                      <img 
+                        src={getEnterpriseAvatarImage(supplier)} 
+                        alt={supplier.name} 
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    ) : (
+                      <span className="text-xs font-black font-mono text-slate-400">
+                        {getCompanyMonogram(supplier.name)}
+                      </span>
+                    )}
                   </div>
                   <div className="min-w-0">
                     <span className="text-[11px] text-slate-400 block font-medium">Nhà cung ứng / Đơn vị sản xuất:</span>
@@ -833,8 +841,14 @@ export default function ProductServiceDetailPage() {
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 p-1 shadow-sm shrink-0 overflow-hidden">
-                  <img src={getEnterpriseAvatarImage(supplier)} alt={supplier.name} className="w-full h-full object-cover rounded-xl" />
+                <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 p-1 shadow-xs shrink-0 overflow-hidden flex items-center justify-center">
+                  {getEnterpriseAvatarImage(supplier) ? (
+                    <img src={getEnterpriseAvatarImage(supplier)} alt={supplier.name} className="w-full h-full object-cover rounded-xl" />
+                  ) : (
+                    <span className="text-sm font-black font-mono text-slate-400">
+                      {getCompanyMonogram(supplier.name)}
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <h3 className="text-sm sm:text-base font-bold text-slate-900 font-heading">

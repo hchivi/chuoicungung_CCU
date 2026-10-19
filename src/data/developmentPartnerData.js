@@ -381,7 +381,7 @@ export function getAllPartnerApplications() {
  * HARD RULE 1 (Mục 24): KHÔNG YÊU CẦU / THU NHẬN DANH BẠ EXCEL BÊN THỨ BA
  * HARD RULE 2 (Mục 25): NỘP ĐƠN CHỈ TẠO TRẠNG THÁI APPLIED, KHÔNG BAO GIỜ AUTO APPROVED
  */
-export function submitPartnerApplication(formData, actor = null) {
+export async function submitPartnerApplication(formData, actor = null) {
   if (!formData.applicantName || !formData.contactPerson || !formData.email || !formData.phone) {
     throw new Error('Vui lòng điền đầy đủ: Tên đối tác/tổ chức, Người liên hệ, Email và Số điện thoại.');
   }
@@ -392,6 +392,7 @@ export function submitPartnerApplication(formData, actor = null) {
   }
 
   const applications = getAllPartnerApplications();
+  if (isCloudBrowser()) return persistInquiry('developmentPartner', formData);
   const newId = `DTPT-APP-${Date.now().toString().slice(-6)}`;
 
   const newApp = {
@@ -781,3 +782,5 @@ export function verifySupplierMatchingNeutrality(organizationId) {
     complianceRule: 'Section 9 & 10 Spec 33: Referral không ảnh hưởng SupplierMatching'
   };
 }
+import { isCloudBrowser } from './cloudData.js';
+import { persistInquiry } from '../services/submissionService.js';

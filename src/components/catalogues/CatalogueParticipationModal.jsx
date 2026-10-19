@@ -42,7 +42,7 @@ export default function CatalogueParticipationModal({
 
   const currentUpcomingEdition = UPCOMING_EDITIONS_CALL_FOR_PAPERS.find(e => e.id === selectedEditionId) || UPCOMING_EDITIONS_CALL_FOR_PAPERS[0];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!companyName.trim() || !contactPerson.trim() || !phone.trim()) {
       alert('Vui lòng điền đầy đủ tên doanh nghiệp, người phụ trách và số điện thoại liên hệ.');
@@ -50,8 +50,8 @@ export default function CatalogueParticipationModal({
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      const res = submitCatalogueParticipation({
+    try {
+      const res = await submitCatalogueParticipation({
         editionId: selectedEditionId,
         editionTitle: currentUpcomingEdition?.title,
         companyName,
@@ -66,7 +66,8 @@ export default function CatalogueParticipationModal({
       });
       setIsSubmitting(false);
       setSubmittedData(res);
-    }, 600);
+    } catch (error) { alert(error.message || 'Chưa lưu được hồ sơ.'); }
+    finally { setIsSubmitting(false); }
   };
 
   const handleResetAndClose = () => {

@@ -4,7 +4,7 @@
 import phaseTaxonomyAlphabetical from './phaseTaxonomyAlphabetical.json' with { type: 'json' };
 import supplierTopCategories from './supplierTopCategories.json' with { type: 'json' };
 import categoriesAlphabetical from './categoriesAlphabetical.json' with { type: 'json' };
-import enterprisesFullList from './enterprisesFull.json' with { type: 'json' };
+import { suppliers as enterprisesFullList } from './cloudData.js';
 import { STRATEGIC_FOUNDING_PARTNERS } from './strategicFoundingPartners.js';
 import { getActiveEligiblePartnership } from './foundingPartnershipData.js';
 import { PROGRAMS_DATA } from './programsData.js';
@@ -12,7 +12,8 @@ import { SEEDED_PRODUCT_SERVICES } from './productServicesData.js';
 
 export function slugify(str) {
   if (!str) return '';
-  return str
+  const text = typeof str === 'string' ? str : (str?.name || str?.title || String(str || ''));
+  return text
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')

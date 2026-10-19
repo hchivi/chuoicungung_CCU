@@ -37,14 +37,20 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Poppins', 'Arial', 'sans-serif'],
-        body: ['Poppins', 'Arial', 'sans-serif'],
-        poppins: ['Poppins', 'Arial', 'sans-serif'],
+        sans: ["'Be Vietnam Pro'", 'Poppins', 'Arial', 'sans-serif'],
+        body: ["'Be Vietnam Pro'", 'Poppins', 'Arial', 'sans-serif'],
+        poppins: ["'Be Vietnam Pro'", 'Poppins', 'Arial', 'sans-serif'],
         heading: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
         title: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
         hero: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
         grotesk: ['"Space Grotesk"', 'SpaceGrotesk', 'sans-serif'],
-        arial: ['Poppins', 'Arial', 'sans-serif'],
+        arial: ["'Be Vietnam Pro'", 'Poppins', 'Arial', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': ['0.725rem', { lineHeight: '1rem' }],
+        'xs': ['0.8125rem', { lineHeight: '1.25rem' }],  /* ~13px (was 12px) */
+        'sm': ['0.9375rem', { lineHeight: '1.45rem' }],  /* ~15px (was 14px) */
+        'base': ['1.05rem', { lineHeight: '1.68rem' }],   /* ~16.8px (was 16px) */
       },
       boxShadow: {
         'card': '0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)',

@@ -383,7 +383,7 @@ export default function B2bTermsOfServicePage() {
               </p>
               <ul className="list-disc pl-5 space-y-1.5 text-xs sm:text-sm text-slate-700">
                 <li>Phát hành yêu cầu báo giá (RFQ) công khai hoặc bảo mật danh tính (Anonymous RFQ).</li>
-                <li>Tiếp cận danh bạ 10.256+ nhà máy và 128.540+ doanh nghiệp phụ trợ đã qua rà soát KYC.</li>
+                <li>Tiếp cận danh bạ 14.237+ nhà máy và 152.623+ doanh nghiệp phụ trợ đã qua rà soát KYC.</li>
                 <li>Yêu cầu Nền tảng CCU cung cấp báo cáo thẩm định năng lực thực tế (Factory Audit Dossier) của nhà cung ứng trước khi chốt hợp đồng.</li>
               </ul>
 

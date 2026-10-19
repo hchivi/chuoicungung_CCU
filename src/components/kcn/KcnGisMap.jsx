@@ -9,7 +9,7 @@ import {
   ArrowRight, Check, X, Eye, PhoneCall, FileText, ChevronDown, ChevronUp, Radio
 } from 'lucide-react';
 import provinceCoords from '../../data/provinceCoordinates.json';
-import industrialParksData from '../../data/industrialParksFull.json';
+import { industrialParks as industrialParksData } from '../../data/cloudData.js';
 import expresswaysData from '../../data/vietnamExpressways.json';
 import { 
   LOGISTICS_HUBS, 

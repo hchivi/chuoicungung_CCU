@@ -1,3 +1,4 @@
+import { privateBrowserStorage } from "../services/privateBrowserStorage.js";
 import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -44,7 +45,7 @@ export default function CreateProfilePage() {
   // Authenticated user state from session
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('ccu_user_session');
+      const saved = privateBrowserStorage.getItem('ccu_user_session');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return {
@@ -140,14 +141,15 @@ export default function CreateProfilePage() {
   }, []);
 
   // Xử lý nộp yêu cầu Claim Profile
-  const handleClaimSubmit = (e) => {
+  const handleClaimSubmit = async (e) => {
     e.preventDefault();
     if (!currentUser?.isLoggedIn) {
       setAuthModalOpen(true);
       return;
     }
 
-    const res = submitOrganizationClaim({
+    try {
+    const res = await submitOrganizationClaim({
       organizationId: claimModal.organization.id,
       requesterUserId: currentUser.email || currentUser.name,
       requesterName: currentUser.name,
@@ -164,10 +166,11 @@ export default function CreateProfilePage() {
     } else {
       alert(res.message);
     }
+    } catch (error) { alert(error.message || 'Chưa lưu được đề nghị.'); }
   };
 
   // Xử lý tạo mới Organization
-  const handleCreateOrgSubmit = (e) => {
+  const handleCreateOrgSubmit = async (e) => {
     e.preventDefault();
 
     // Check duplicate nếu chưa bỏ qua
@@ -176,7 +179,8 @@ export default function CreateProfilePage() {
       return;
     }
 
-    const res = createNewOrganization({
+    try {
+    const res = await createNewOrganization({
       name: newOrgForm.name,
       legalName: newOrgForm.legalName || newOrgForm.name,
       taxCode: newOrgForm.taxCode,
@@ -195,6 +199,7 @@ export default function CreateProfilePage() {
       setCompletedOrg(res.organization);
       setActiveTab('completion_checklist');
     }
+    } catch (error) { alert(error.message || 'Chưa lưu được hồ sơ.'); }
   };
 
   // Profile completeness data
@@ -662,7 +667,7 @@ export default function CreateProfilePage() {
                   type="button"
                   onClick={() => {
                     try {
-                      localStorage.setItem('ccu_org_draft', JSON.stringify(newOrgForm));
+                      privateBrowserStorage.setItem('ccu_org_draft', JSON.stringify(newOrgForm));
                       alert('Đã lưu bản nháp hồ sơ thành công vào trình duyệt!');
                     } catch(e) {}
                   }}
@@ -930,7 +935,7 @@ export default function CreateProfilePage() {
         onClose={() => {
           setAuthModalOpen(false);
           try {
-            const saved = localStorage.getItem('ccu_user_session');
+            const saved = privateBrowserStorage.getItem('ccu_user_session');
             if (saved) setCurrentUser(JSON.parse(saved));
           } catch (e) {}
         }}

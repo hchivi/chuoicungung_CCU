@@ -33,50 +33,84 @@
 .pd-extra-filters { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 16px; }
 .pd-extra-filters[hidden] { display: none; }
 .pd-program-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--pd-gap); align-items: stretch; }
-.pd-card { display: flex; flex-direction: column; border: 1px solid var(--pd-rule); border-radius: var(--pd-radius); overflow: hidden; background: var(--pd-paper); color: var(--pd-ink); box-shadow: 0 4px 16px var(--pd-shadow); }
-.pd-card-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 16px; min-height: 48px; font-size: 12px; }
-.pd-status { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--pd-accent); }
-.pd-code { color: var(--pd-muted); font-variant-numeric: tabular-nums; font-size: 11px; }
-.pd-sponsored { background: var(--pd-amber-soft); color: var(--pd-amber); padding: 4px 8px; border-radius: 4px; font-weight: 700; }
+.pd-card { display: flex; flex-direction: column; border: 1px solid var(--pd-rule); border-radius: var(--pd-radius); overflow: hidden; background: var(--pd-paper); color: var(--pd-ink); box-shadow: 0 3px 14px var(--pd-shadow); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.pd-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--pd-shadow); border-color: rgba(0, 96, 57, 0.25); }
+.pd-card-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; padding: 7px 14px; min-height: 36px; font-size: 12.5px; background: #fbfdfc; border-bottom: 1px solid var(--pd-rule); }
+.pd-status { display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--pd-accent); font-size: 12.5px; }
+.pd-code { color: var(--pd-muted); font-variant-numeric: tabular-nums; font-size: 11.5px; }
+.pd-sponsored { background: var(--pd-amber-soft); color: var(--pd-amber); padding: 2px 7px; border-radius: 4px; font-weight: 700; font-size: 11.5px; }
 .pd-card[data-status="postponed"] .pd-status, .pd-card[data-status="discovery"] .pd-status { color: var(--pd-amber); }
 .pd-card[data-status="cancelled"] .pd-status { color: var(--pd-error); }
 .pd-card[data-status="closed"] .pd-status, .pd-card[data-status="completed"] .pd-status { color: var(--pd-muted); }
 .pd-card-photo { position: relative; display: grid; place-items: center; aspect-ratio: 16/9; overflow: hidden; background: var(--pd-soft); color: var(--pd-muted); }
-.pd-card-photo img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.pd-card-photo img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; transition: transform 0.25s ease; }
+.pd-card:hover .pd-card-photo img { transform: scale(1.02); }
 .pd-card-photo img[hidden] { display: none; }
-.pd-card-content { display: flex; flex-direction: column; gap: 16px; padding: 20px; flex: 1; }
-.pd-card-intro { display: grid; grid-template-columns: 60px minmax(0, 1fr); gap: 16px; align-items: center; }
-.pd-date { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 4px; background: var(--pd-green-soft); color: var(--pd-accent); border-radius: var(--pd-control); font-variant-numeric: tabular-nums; }
-.pd-date > strong { font-size: 32px; line-height: 1; letter-spacing: -.04em; font-weight: 750; }
-.pd-date > span { font-size: 10px; font-weight: 700; margin-top: 4px; }
-.pd-date small { font-size: 11px; }
-.pd-date .pd-date-text { font-size: 13px; line-height: 1.3; text-align: center; letter-spacing: 0; }
-.pd-card-kind { display: flex; flex-direction: column; gap: 4px; line-height: 1.4; }
-.pd-card-kind > span { font-size: 13px; font-weight: 650; color: var(--pd-accent); }
-.pd-card-kind small, .pd-card-kind time { font-size: 13px; color: var(--pd-muted); }
-.pd-card h3 { font-size: 20px; line-height: 1.35; letter-spacing: -.025em; font-weight: 750; overflow-wrap: anywhere; }
+.pd-card-content { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 14px; flex: 1; justify-content: flex-start; }
+
+/* iRace.vn Compact Row: Date Block on Left, Title + Description on Right (Auto-fluid, min-height 96px) */
+.pd-irace-row { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 12px; align-items: stretch; min-height: 96px; }
+.pd-date { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 68px; min-width: 68px; min-height: 96px; padding: 8px 4px; background: var(--pd-green-soft); color: var(--pd-accent); border: 1px solid rgba(0, 96, 57, 0.2); border-radius: 8px; text-align: center; font-variant-numeric: tabular-nums; flex-shrink: 0; box-sizing: border-box; }
+.pd-date-day { font-size: 26px; line-height: 1; letter-spacing: -.03em; font-weight: 800; color: var(--pd-accent); }
+.pd-date-month { font-size: 10.5px; line-height: 1.2; font-weight: 750; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.02em; }
+.pd-date-year { font-size: 11px; line-height: 1.15; opacity: 0.85; margin-top: 2px; }
+.pd-date-fallback { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+.pd-date-special { font-size: 15px; line-height: 1; font-weight: 850; }
+.pd-date-fallback .pd-date-month { font-size: 10px; font-weight: 700; max-width: 62px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Status-specific Date Box Tones */
+.pd-card[data-status="cancelled"] .pd-date { background: var(--pd-error-soft); color: var(--pd-error); border-color: rgba(225, 29, 72, 0.25); }
+.pd-card[data-status="cancelled"] .pd-date-day, .pd-card[data-status="cancelled"] .pd-date-month { color: var(--pd-error); }
+.pd-card[data-status="postponed"] .pd-date { background: var(--pd-amber-soft); color: var(--pd-amber); border-color: rgba(217, 119, 6, 0.25); }
+.pd-card[data-status="postponed"] .pd-date-day, .pd-card[data-status="postponed"] .pd-date-month { color: var(--pd-amber); }
+.pd-card[data-status="completed"] .pd-date, .pd-card[data-status="closed"] .pd-date { background: #f1f5f9; color: #475569; border-color: #cbd5e1; }
+.pd-card[data-status="completed"] .pd-date-day, .pd-card[data-status="completed"] .pd-date-month, .pd-card[data-status="closed"] .pd-date-day, .pd-card[data-status="closed"] .pd-date-month { color: #475569; }
+
+/* Right Main Section of iRace Row */
+.pd-irace-main { display: flex; flex-direction: column; justify-content: flex-start; gap: 6px; min-height: 96px; min-width: 0; }
+
+/* SYNCHRONIZED TITLE: Exactly 2 lines max, legible 16.5px, no cut-off */
+.pd-card h3.pd-card-title, .pd-card h3 { font-size: 16.5px; line-height: 1.35; letter-spacing: -.02em; font-weight: 750; overflow-wrap: anywhere; margin: 0; min-height: 45px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
 .pd-card h3 a { color: var(--pd-ink); text-decoration: none; }
-.pd-description { font-size: 14px; line-height: 1.6; color: var(--pd-muted); }
-.pd-relevance { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.5; color: var(--pd-accent); }
-.pd-relevance svg { flex-shrink: 0; margin-top: 2px; }
-.pd-needs { padding: 16px; margin-inline: -4px; background: var(--pd-green-soft); color: var(--pd-ink); border-radius: var(--pd-control); }
-.pd-needs h4 { font-size: 13px; font-weight: 700; color: var(--pd-accent); margin-bottom: 12px; }
-.pd-needs ul { display: flex; flex-wrap: wrap; gap: 8px 12px; }
-.pd-needs li { display: flex; gap: 6px; font-size: 14px; line-height: 1.4; }
-.pd-needs li > svg { color: var(--pd-accent); flex-shrink: 0; margin-top: 2px; }
-.pd-logistics { display: flex; flex-direction: column; gap: 12px; margin-top: auto; }
-.pd-logistics p { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 1.5; color: var(--pd-muted); }
-.pd-logistics svg { color: var(--pd-accent); flex-shrink: 0; margin-top: 2px; }
+.pd-card h3 a:hover { color: var(--pd-accent); text-decoration: underline; text-underline-offset: 3px; }
+
+/* SYNCHRONIZED DESCRIPTION: 2 lines with generous 1.48 line-height, no sliced letters */
+.pd-description { font-size: 13.5px; line-height: 1.48; color: var(--pd-muted); min-height: 40px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+
+/* Sub-meta: Kind, Format & Time */
+.pd-card-kind { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--pd-muted); line-height: 22px; height: 22px; min-height: 22px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pd-card-kind svg { color: var(--pd-accent); flex-shrink: 0; }
+.pd-kind-name { font-weight: 650; color: var(--pd-accent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; font-size: 12.5px; }
+.pd-kind-sep { color: var(--pd-rule); flex-shrink: 0; }
+.pd-kind-format, .pd-kind-time { font-size: 12px; color: var(--pd-muted); white-space: nowrap; flex-shrink: 0; }
+
+.pd-relevance { display: flex; align-items: center; gap: 5px; font-size: 12px; line-height: 1.3; color: var(--pd-accent); min-height: 18px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pd-relevance svg { flex-shrink: 0; }
+
+/* Needs Section: Clean, comfortable spacing and clear text */
+.pd-needs { padding: 8px 12px; background: var(--pd-green-soft); color: var(--pd-ink); border-radius: 8px; min-height: 64px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; }
+.pd-needs h4 { font-size: 11.5px; font-weight: 750; color: var(--pd-accent); margin: 0 0 5px 0; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.03em; }
+.pd-needs ul { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; padding: 0; list-style: none; overflow: hidden; }
+.pd-needs li { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; line-height: 1.25; background: rgba(255, 255, 255, 0.85); padding: 2.5px 8px; border-radius: 4px; color: var(--pd-ink); white-space: nowrap; max-width: 100%; text-overflow: ellipsis; overflow: hidden; }
+.pd-needs li > svg { color: var(--pd-accent); flex-shrink: 0; }
+
+/* Logistics Section: Clear typography and location info */
+.pd-logistics { display: flex; flex-direction: column; justify-content: center; gap: 4px; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--pd-rule); min-height: 44px; }
+.pd-logistics p { display: flex; align-items: center; gap: 6px; font-size: 12.5px; line-height: 18px; color: var(--pd-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pd-logistics p span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; max-width: calc(100% - 20px); }
+.pd-logistics svg { color: var(--pd-accent); flex-shrink: 0; }
 .pd-logistics strong { font-weight: 600; }
-.pd-logistics small { display: block; font-size: 12px; margin-bottom: 2px; }
-.pd-card-footer { border-top: 1px dashed var(--pd-rule); padding: 16px 20px 20px; }
-.pd-attendance { display: flex; align-items: center; gap: 24px; margin-bottom: 16px; color: var(--pd-accent); }
-.pd-attendance > div { display: flex; flex-direction: column; gap: 4px; }
-.pd-attendance strong { font-size: 24px; line-height: 1; font-weight: 750; font-variant-numeric: tabular-nums; }
-.pd-attendance span { font-size: 11px; color: var(--pd-muted); }
-.pd-attendance > svg { margin-inline-start: auto; }
+.pd-logistics small { display: inline; font-size: 11.5px; margin-right: 3px; }
+
+/* Card Footer: Proportional numbers & clear action buttons */
+.pd-card-footer { border-top: 1px dashed var(--pd-rule); padding: 10px 14px 12px; }
+.pd-attendance { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; color: var(--pd-accent); min-height: 34px; }
+.pd-attendance > div { display: flex; flex-direction: column; gap: 2px; }
+.pd-attendance strong { font-size: 20px; line-height: 1; font-weight: 800; font-variant-numeric: tabular-nums; }
+.pd-attendance span { font-size: 11.5px; color: var(--pd-muted); }
+.pd-attendance > svg { margin-inline-start: auto; width: 18px; height: 18px; }
 .pd-card-actions { display: flex; gap: 8px; }
-.pd-primary, .pd-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 12px; border-radius: var(--pd-control); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap; flex: 1; }
+.pd-primary, .pd-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; height: 40px; padding: 6px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 700; text-decoration: none; white-space: nowrap; flex: 1; }
 .pd-primary { background: linear-gradient(110deg, var(--pd-accent), var(--pd-accent-dark)); color: var(--pd-on-accent); border: 1px solid var(--pd-accent); }
 .pd-secondary { background: var(--pd-soft); color: var(--pd-accent); border: 1px solid var(--pd-rule); }
 .pd-empty { padding: 32px 24px; border-block: 1px solid var(--pd-rule); color: var(--pd-ink); }
@@ -145,7 +179,7 @@
   .pd-invitation-content { padding: 32px; }
   .pd-type-nav { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .pd-type-nav button { min-height: 132px; }
-  .pd-main-filters { grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); }
+  .pd-main-filters { grid-template-columns: minmax(0, 1.4fr) repeat(5, minmax(0, 1fr)); }
   .pd-program-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 359px) {

@@ -2741,9 +2741,7 @@ export default function AiWorkspacePage() {
                   </div>
                 </div>
 
-                <p className="max-w-3xl mx-auto text-[11px] leading-relaxed text-slate-500">
-                  Nội dung chat được gửi tới nhà cung cấp AI. Không gửi mật khẩu, bản vẽ, báo giá hoặc dữ liệu cá nhân nhạy cảm.
-                </p>
+
                 {/* 5. LỰA CHỌN VAI TRÒ (ROLE SELECTOR CHIPS) */}
                 <div className="space-y-2 pt-1 max-w-3xl mx-auto">
                   <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 font-heading">

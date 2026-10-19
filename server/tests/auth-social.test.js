@@ -97,3 +97,58 @@ test('callback routes set HttpOnly session cookies only after verified success, 
   assert.equal(failure.status, 303); assert.equal(failure.headers.get('location'), '/dang-nhap?oauth_error=failed');
   assert.equal(failure.headers.get('set-cookie'), null); assert.doesNotMatch(await failure.text(), /synthetic|private provider diagnostic/);
 });
+
+test('direct Zalo OAuth v4 generates Zalo permission URL with PKCE and exchanges profile', async () => {
+  const calls = [];
+  const service = {
+    acceptSocialProfile: async profile => {
+      calls.push(['acceptSocialProfile', profile]);
+      return { session: { access_token: 'zalo-sess', refresh_token: 'zalo-ref', expires_in: 3600 }, identity: { user: { id: 'zalo_user_123' }, role: null } };
+    },
+    claimAnonymous: async () => {}
+  };
+  const social = createSocialAuth({
+    service,
+    config: {
+      url: 'https://test.supabase.co',
+      key: 'public-test-key',
+      site: 'http://localhost:3000',
+      secret: 'synthetic-server-secret',
+      zaloAppId: '3500129788309602073',
+      zaloAppSecret: '41jH76paHINop4AgVE2s'
+    },
+    fetchImpl: async (url, options) => {
+      calls.push([url, options]);
+      if (url.includes('/settings')) return new Response(JSON.stringify({ external: { google: true } }));
+      if (url.includes('/access_token')) return new Response(JSON.stringify({ access_token: 'zalo-test-token' }));
+      if (url.includes('/me')) return new Response(JSON.stringify({ id: '987654321', name: 'Test Zalo User', picture: { data: { url: 'https://avatar' } } }));
+      return new Response('{}');
+    }
+  });
+
+  const providers = await social.providers();
+  assert.equal(providers.zalo, true);
+
+  const cookies = {};
+  const res = { cookie: (k, v, o) => { cookies[k] = { value: v, options: o }; }, clearCookie: () => {} };
+  const start = await social.start({ provider: 'zalo', next: '/tai-khoan' }, res);
+  const authUrl = new URL(start.url);
+  assert.equal(authUrl.origin, 'https://oauth.zaloapp.com');
+  assert.equal(authUrl.pathname, '/v4/permission');
+  assert.equal(authUrl.searchParams.get('app_id'), '3500129788309602073');
+  assert.ok(authUrl.searchParams.get('code_challenge'));
+  assert.ok(authUrl.searchParams.get('state'));
+
+  const finishRes = await social.finish({
+    headers: { cookie: `ccu_oauth=${cookies.ccu_oauth.value}` },
+    query: { code: 'zalo-auth-code', state: authUrl.searchParams.get('state') }
+  }, res);
+
+  assert.equal(finishRes.identity.user.id, 'zalo_user_123');
+  assert.equal(finishRes.next, '/tai-khoan');
+  const accepted = calls.find(([name]) => name === 'acceptSocialProfile');
+  assert.ok(accepted);
+  assert.equal(accepted[1].providerId, '987654321');
+  assert.equal(accepted[1].fullName, 'Test Zalo User');
+});
+

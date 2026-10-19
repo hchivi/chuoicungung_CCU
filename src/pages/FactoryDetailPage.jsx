@@ -467,7 +467,7 @@ export default function FactoryDetailPage() {
                   Nhà máy hiện chưa có nhu cầu thu mua nào ở chế độ công bố công khai
                 </div>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">
-                  Bạn là cán bộ quản lý thu mua của nhà máy này? Hãy đăng nhu cầu để được Bàn Điều Phối kết nối mạng lưới 14.000+ nhà cung ứng xác thực.
+                  Bạn là cán bộ quản lý thu mua của nhà máy này? Hãy đăng nhu cầu để được Bàn Điều Phối kết nối mạng lưới 152.000+ nhà cung ứng xác thực.
                 </p>
                 <Link
                   to={`/dang-nhu-cau?factoryId=${factory.id}&role=factory&organizationId=${factory.organizationId}`}

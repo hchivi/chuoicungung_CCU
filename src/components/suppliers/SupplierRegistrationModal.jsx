@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { persistSubmission } from '../../services/submissionService.js';
 import { X, Send, CheckCircle, Building2, Phone, Mail, User, ShieldCheck, MapPin, Sparkles, Layers } from 'lucide-react';
 
 export default function SupplierRegistrationModal({ isOpen, onClose }) {
@@ -20,13 +21,14 @@ export default function SupplierRegistrationModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await persistSubmission('supplierRegistration', formData);
       setIsSuccess(true);
-    }, 800);
+    } catch (error) { alert(error.message || 'Chưa lưu được hồ sơ.'); }
+    finally { setIsSubmitting(false); }
   };
 
   const handleReset = () => {
@@ -72,7 +74,7 @@ export default function SupplierRegistrationModal({ isOpen, onClose }) {
                 Đăng Ký Thành Công Hồ Sơ 18 Pha!
               </h4>
               <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                Ban xác thực hệ thống Chuỗi Cung Ứng sẽ tiến hành đối soát thông tin pháp nhân & thực địa của <strong className="text-slate-900">{formData.companyName}</strong> trong 24h để cấp huy hiệu KYC.
+                Hồ sơ của <strong className="text-slate-900">{formData.companyName}</strong> đã được lưu và đang chờ xác minh. Việc nộp hồ sơ chưa đồng nghĩa được cấp huy hiệu KYC.
               </p>
             </div>
             <button

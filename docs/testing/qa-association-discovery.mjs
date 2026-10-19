@@ -30,9 +30,16 @@ try {
         wrappedControls: [...document.querySelectorAll('.ad-button, .ad-text-link, .ad-card__claim, .ad-quick button, .ad-card summary')].filter(visible).filter(element => element.scrollWidth > element.clientWidth + 1).map(element => element.textContent),
         borders: ['Top', 'Right', 'Bottom', 'Left'].map(side => getComputedStyle(document.querySelector('.ad-filter-panel'))[`border${side}Width`]),
         columns: getComputedStyle(document.querySelector('.ad-grid')).gridTemplateColumns.split(' ').length,
+        cardDisplay: getComputedStyle(document.querySelector('.ad-card')).display,
+        cardStyles: [...new Set([...document.querySelectorAll('.ad-card')].map(card => card.dataset.cardStyle))],
+        dossierBackground: getComputedStyle(document.querySelector('.ad-card')).backgroundColor,
+        dossierBorders: ['Top', 'Right', 'Bottom', 'Left'].map(side => getComputedStyle(document.querySelector('.ad-card'))[`border${side}Width`]),
+        legacyCovers: document.querySelectorAll('.ad-card__cover, .ad-card__wordmark').length,
       };
     });
     assert.equal(state.overflow, false, `Page overflow at ${width}`); assert.deepEqual(state.clipped, [], `Component clipping ${width}`); assert.deepEqual(state.smallControls, [], `Small controls ${width}`); assert.deepEqual(state.wrappedControls, [], `Wrapped or clipped labels ${width}`); assert.ok(state.borders.every(value => value === '1px')); assert.ok(state.columns <= 3);
+    assert.equal(state.columns, width > 1100 ? 3 : width >= 768 ? 2 : 1); assert.equal(state.cardDisplay, 'flex'); assert.deepEqual(state.cardStyles, ['signature']);
+    assert.equal(state.dossierBackground, 'rgb(255, 255, 255)'); assert.deepEqual(state.dossierBorders, ['1px', '1px', '3px', '1px']); assert.equal(state.legacyCovers, 0);
     report.viewports.push(state);
     if ([375, 768, 1440].includes(width)) {
       await page.$$eval('.ad-card__image img', images => images.slice(0, 6).forEach(image => { image.loading = 'eager'; }));
@@ -60,13 +67,27 @@ try {
   for (const [name, filters] of [['mechanical', { sector: 'cơ khí' }], ['dongnai', { region: 'Đồng Nai' }], ['programs', { hasOpenPrograms: true }]]) { await click(`[data-quick="${name}"]`); await expectResults(filters); }
   await click('.ad-reset'); report.interactions.push('All scopes, sectors, query, region, program/catalogue filters, sorts, quick shortcuts, empty state and reset match existing data API');
   assert.equal(await page.$$eval('[data-association-card]', elements => elements.length === new Set(elements.map(element => element.dataset.associationCard)).size), true);
+  assert.equal(await page.$eval('.ad-card__connections', element => element.open), false);
+  await click('.ad-card__connections > summary'); assert.equal(await page.$eval('.ad-card__connections', element => element.open), true);
   await click('.ad-card__about summary'); assert.equal(await page.$eval('.ad-card__about', element => element.open), true);
+  await page.focus('.ad-card__connections > summary'); await page.keyboard.press('Enter');
+  assert.equal(await page.$eval('.ad-card__connections', element => element.open), false);
+  await page.keyboard.press('Enter'); assert.equal(await page.$eval('.ad-card__connections', element => element.open), true);
   await click('.ad-card__claim');
   await page.waitForFunction(() => document.body.textContent.includes('Đề Nghị Liên Kết Hồ Sơ Hội Viên'));
   await click('.fixed.inset-0.z-50 button');
   report.interactions.push('Deduplicated organization records; information disclosure; existing membership dialog opens and closes, no request submitted');
+  await page.$eval('.ad-card__image img', image => image.dispatchEvent(new Event('error')));
+  await page.waitForFunction(() => document.querySelector('.ad-card__image').dataset.imageState === 'error');
+  assert.ok(await page.$eval('.ad-card__image > span', element => element.textContent.trim().length > 0));
+  assert.equal(await page.$eval('.ad-card__image', element => element.getBoundingClientRect().width), 48);
+  report.interactions.push('Image failure keeps a readable initial in the reserved 48px identity frame; connection disclosure responds to click and Enter');
   await page.setViewport({ width: 375, height: 1000 });
   await page.select('#ad-sector', 'logistics'); await expectResults({ sector: 'logistics' }); await click('.ad-reset');
+  await click('.ad-card__connections > summary');
+  assert.equal(await page.$eval('.ad-card', element => element.scrollWidth <= element.clientWidth + 1), true);
+  await page.$eval('.ad-card', element => element.scrollIntoView({ block: 'start', behavior: 'instant' }));
+  await page.screenshot({ path: '/tmp/ccu-association-signature-expanded-mobile.png', fullPage: false });
   await page.focus('#ad-search'); assert.equal(await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle), 'solid');
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   assert.equal(await page.$eval('.ad-button', element => getComputedStyle(element).transitionDuration), '0s');

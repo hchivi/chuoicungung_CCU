@@ -22,8 +22,8 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
   }, [isOpen]);
   if (!isOpen) return null;
   return createPortal(<div className="ccu-auth-overlay" onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
-    <div ref={panel} role="dialog" aria-modal="true" aria-label="Đăng nhập hoặc đăng ký" className="ccu-auth-panel">
-      <button aria-label="Đóng đăng nhập" onClick={onClose} className="ccu-auth-close">×</button>
+    <div ref={panel} role="dialog" aria-modal="true" aria-label="Đăng nhập hoặc đăng ký" className="ccu-auth-panel relative">
+      <button aria-label="Đóng đăng nhập" onClick={onClose} className="absolute z-20 right-4 top-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-lg transition">×</button>
       <AuthForm initialTab={initialTab} onSuccess={identity => { onClose(); if (identity?.role) navigate('/admin'); }} />
     </div>
   </div>, document.body);

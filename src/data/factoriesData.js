@@ -4,7 +4,8 @@
 // TUÂN THỦ TOÀN DIỆN SPEC 28.TXT - CHUOICUNGUNG.COM
 // ============================================================================
 
-import factoriesFullList from './factoriesFull.json' with { type: 'json' };
+import { factories as factoriesFullList, isCloudBrowser, getCloudRecords } from './cloudData.js';
+import { persistSubmission, getPrivateSubmissions } from '../services/submissionService.js';
 import { getAllOrganizations } from './organizationsData.js';
 import { getAllMasterRequirements } from './requirementsData.js';
 import { getAllPrograms, TARGET_ROLES_ENUM } from './programsData.js';
@@ -31,459 +32,10 @@ export const PRODUCT_DATA_STATUS_ENUM = {
 
 // Seed specialized Factory Profiles linking to existing Organizations
 // MỘT DOANH NGHIỆP CÓ THỂ CÓ NHIỀU NHÀ MÁY / PHÂN XƯỞNG (SECTION 2, 32 SPEC 29.TXT)
-const SEED_FACTORY_PROFILES = [
-  {
-    id: 'FP-ORG-PROSER-001',
-    organizationId: 'ORG-PROSER-001',
-    facilityCode: 'FAC-PROSER-01',
-    factorySlug: 'chuyen-gia-dong-phuc-proser',
-    factoryName: 'Công ty TNHH Chuyên Gia Đồng Phục Proser - Phân Xưởng May Hiệp Phước',
-    industrialParkId: 'khu-cong-nghiep-hiep-phuoc-ho-chi-minh',
-    industrialParkName: 'Khu Công Nghiệp Hiệp Phước',
-    province: 'TP. Hồ Chí Minh',
-    industryCategories: ['May mặc & Bảo hộ lao động', 'Vật tư phòng sạch Cleanroom', 'Dệt may kỹ thuật'],
-    productionDescription: 'Tổ hợp 2 phân xưởng may công nghiệp khép kín với 180 máy may điện tử tự động, dây chuyền may 2 kim và phòng đo kiểm kháng tĩnh điện ESD đạt chuẩn quốc tế phục vụ các nhà máy FDI công nghệ cao.',
-    outputProductsSummary: [
-      'Đồng phục công nhân vải kaki 65/35 chống xù lông',
-      'Áo thun polo quà tặng doanh nghiệp công nghệ thấm hút Dri-fit',
-      'Quần áo liền thân phòng sạch Cleanroom ESD Class 1000'
-    ],
-    outputProducts: [
-      {
-        id: 'PROD-PROSER-01',
-        name: 'Đồng phục công nhân vải Kaki 65/35 chống xù lông',
-        slug: 'dong-phuc-cong-nhan-kaki-65-35',
-        category: 'Đồng phục bảo hộ lao động',
-        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Vải Kaki 65/35 may 2 kim bền chắc, phối dải phản quang 3M, túi hộp tiện dụng',
-        useCase: 'Nhà xưởng cơ khí, điện tử, sản xuất linh kiện, kho vận logistics',
-        orderCondition: 'May đo hoặc may theo bảng size chuẩn S-4XL',
-        minOrderQuantity: 'Từ 100 bộ'
-      },
-      {
-        id: 'PROD-PROSER-02',
-        name: 'Áo thun polo quà tặng doanh nghiệp công nghệ Dri-fit',
-        slug: 'ao-thun-polo-doanh-nghiep-dri-fit',
-        category: 'Áo thun sự kiện & Văn phòng',
-        image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Thun cá sấu poly thái dệt tổ ong thấm hút mồ hôi, co giãn 4 chiều kháng khuẩn',
-        useCase: 'Đồng phục nhân viên văn phòng, sự kiện tri ân, hội nghị khách hàng KCN',
-        orderCondition: 'In thêu logo vi tính sắc nét độ phân giải cao',
-        minOrderQuantity: 'Từ 50 áo'
-      },
-      {
-        id: 'PROD-PROSER-03',
-        name: 'Quần áo liền thân phòng sạch Cleanroom ESD Class 1000',
-        slug: 'quan-ao-phong-sach-cleanroom-esd',
-        category: 'Vật tư phòng sạch Cleanroom',
-        image: 'https://images.unsplash.com/photo-1584467735871-8e85353a8413?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Vải phòng sạch dệt sợi carbon dẫn điện sọc 5mm, điện trở bề mặt 10^6 - 10^8 Ohm',
-        useCase: 'Nhà máy sản xuất vi mạch, lắp ráp điện thoại, dược phẩm, thiết bị y tế',
-        orderCondition: 'Đóng gói tiệt trùng buồng áp lực dương trước khi xuất xưởng',
-        minOrderQuantity: 'Từ 100 bộ'
-      }
-    ],
-    capabilitiesDetail: {
-      processCapabilities: [
-        'Cắt vải tự động dao rung CNC Paragon',
-        'May công nghiệp 2 kim tự động Juki',
-        'Thêu vi tính 20 đầu Tajima công nghệ Nhật Bản',
-        'In ép nhiệt Pet chuyển nhiệt cao tần không bong tróc',
-        'Đo điện trở bề mặt phòng sạch ESD S20.20',
-        'Đóng gói hút chân không buồng áp lực dương'
-      ],
-      equipmentList: [
-        { name: '180 Máy may điện tử tự động Juki DDL-9000C', origin: 'Nhật Bản', year: '2023', status: 'Hoạt động 100%' },
-        { name: 'Máy cắt vải tự động Gerber Paragon HX', origin: 'Mỹ', year: '2024', status: 'Hoạt động 100%' },
-        { name: 'Dàn máy thêu vi tính Tajima TFMX-IIC20', origin: 'Nhật Bản', year: '2022', status: 'Hoạt động 100%' },
-        { name: 'Máy đo điện trở bề mặt ESD Trek 152', origin: 'Mỹ', year: '2023', status: 'Đã kiểm định Quatest 3' }
-      ],
-      capacity: {
-        value: '65.000 bộ / tháng',
-        unit: 'bộ/tháng',
-        scope: 'Tổng công suất 2 phân xưởng may',
-        source: 'Doanh nghiệp cung cấp',
-        updatedAt: '2026-09-20',
-        visibility: 'PUBLIC'
-      },
-      minOrderQuantity: 'Từ 100 bộ / đơn hàng',
-      leadTime: '7 - 12 ngày làm việc',
-      qualityStandards: [
-        'Hệ thống quản lý chất lượng ISO 9001:2015',
-        'Hệ thống quản lý môi trường ISO 14001:2015',
-        'Tiêu chuẩn an toàn dệt may sinh thái OEKO-TEX Standard 100',
-        'Tiêu chuẩn phòng sạch kiểm soát tĩnh điện ESD S20.20'
-      ]
-    },
-    facilityInfo: {
-      landArea: '12.500 m²',
-      productionArea: '8.200 m²',
-      warehouseArea: '3.000 m²',
-      productionLinesCount: 6,
-      cleanroomClass: 'Class 10.000 (ISO 7)',
-      powerCapacity: 'Trạm biến áp riêng 1.500 kVA',
-      wasteTreatment: 'Hệ thống xử lý nước thải đạt QCVN 40:2011/BTNMT Cột A'
-    },
-    manufacturingTypes: ['OEM', 'ODM', 'Gia công theo đơn đặt hàng'],
-    oemAvailable: true,
-    odmAvailable: true,
-    oemDetails: [
-      'Gia công nhãn riêng (Private Label) may theo mẫu đối tác cung cấp',
-      'Sản xuất theo thiết kế và bản vẽ kỹ thuật chi tiết của khách hàng (OEM)',
-      'Tư vấn chọn vải, dựng rập số 3D và may mẫu đối chứng miễn phí (ODM)'
-    ],
-    exportAvailable: true,
-    exportInfo: {
-      markets: ['Nhật Bản', 'Hàn Quốc', 'Châu Âu (EU)', 'Bắc Mỹ'],
-      certificates: ['CO Form AK (Hàn Quốc)', 'CO Form AJ (Nhật Bản)', 'CO Form EUR.1 (EU)', 'WRAP Gold Certificate'],
-      incoterms: ['FOB Cát Lái', 'CIF', 'EXW Hiệp Phước'],
-      languages: ['Tiếng Việt', 'English', '日本語']
-    },
-    distributionAvailable: true,
-    distributionInfo: {
-      channels: ['Cung ứng trực tiếp KCN & Doanh nghiệp FDI', 'Đại lý phân phối cấp tỉnh', 'Kênh thương mại B2B'],
-      seekingDistributors: true,
-      seekingDistributorsNote: 'Đang tìm kiếm đại lý phân phối đồ bảo hộ và thiết bị phòng sạch tại Bắc Ninh, Hải Phòng, Thái Nguyên'
-    },
-    serviceAreas: [
-      'Toàn quốc',
-      'Đông Nam Bộ (TP.HCM, Đồng Nai, Bình Dương, Long An, Bà Rịa - Vũng Tàu)',
-      'Khu vực phía Bắc (Hà Nội, Bắc Ninh, Hải Phòng, Thái Nguyên)'
-    ],
-    evidences: [
-      { id: 'EV-PROSER-01', title: 'Toàn cảnh phân xưởng may tự động KCN Hiệp Phước', type: 'FACTORY_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop&q=60', source: 'Doanh nghiệp cung cấp', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-09-20' },
-      { id: 'EV-PROSER-02', title: 'Dây chuyền đo kiểm điện trở bề mặt ESD Class 1000', type: 'EQUIPMENT_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=60', source: 'Doanh nghiệp cung cấp', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-09-20' },
-      { id: 'EV-PROSER-03', title: 'Chứng chỉ Hệ thống Quản lý Chất lượng ISO 9001:2015', type: 'CERTIFICATE', fileUrl: '/certificates/iso-9001-proser.pdf', source: 'Tổ chức chứng nhận TUV Rheinland', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-08-15' },
-      { id: 'EV-PROSER-04', title: 'Chứng nhận an toàn dệt may sinh thái OEKO-TEX Standard 100', type: 'CERTIFICATE', fileUrl: '/certificates/oeko-tex-proser.pdf', source: 'Viện kiểm định TESTEX Thụy Sĩ', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-07-10' },
-      { id: 'EV-PROSER-05', title: 'Báo cáo kiểm định phòng sạch ESD S20.20 Quatest 3', type: 'TEST_REPORT', fileUrl: '/reports/quatest3-proser.pdf', source: 'Trung tâm Đo lường Quatest 3', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-09-01' }
-    ],
-    mediaAssets: [
-      { id: 'MEDIA-PROSER-01', type: 'VIDEO', title: 'Phim tài liệu giới thiệu năng lực sản xuất nhà máy Proser', embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', duration: '3:45', producer: 'CHUOICUNGUNG.COM Media' }
-    ],
-    catalogues: [
-      { id: 'CAT-PROSER-2026', title: 'Catalogue Đồng Phục Doanh Nghiệp & Thiết Bị Phòng Sạch 2026', coverImage: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&auto=format&fit=crop&q=60', fileUrl: '/files/catalogue-proser-2026.pdf', fileSize: '8.5 MB', pages: 36, updatedAt: '2026-09-15' }
-    ],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: true,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-28'
-  },
-  {
-    id: 'FP-PROSER-BD-002',
-    organizationId: 'ORG-PROSER-001',
-    facilityCode: 'FAC-PROSER-02',
-    factorySlug: 'xuong-in-theu-ky-thuat-so-proser-binh-duong',
-    factoryName: 'Công ty TNHH Chuyên Gia Đồng Phục Proser - Xưởng In Thêu VSIP 1',
-    industrialParkId: 'khu-cong-nghiep-vsip-1-binh-duong',
-    industrialParkName: 'Khu Công Nghiệp VSIP 1',
-    province: 'Bình Dương',
-    industryCategories: ['In ấn bao bì & Thêu vi tính công nghệ cao'],
-    productionDescription: 'Xưởng in thêu kỹ thuật số vệ tinh chuyên xử lý in ép nhiệt cao tần, thêu logo vi tính tự động và hoàn thiện đóng gói cho các đơn hàng khu vực Bình Dương, Đồng Nai.',
-    outputProductsSummary: [
-      'Dịch vụ in Pet chuyển nhiệt độ nét 4K trên vải',
-      'Thêu vi tính 3D chỉ kim tuyến công nghiệp'
-    ],
-    outputProducts: [
-      {
-        id: 'PROD-PROSER-BD-01',
-        name: 'Gia công in ép nhiệt Pet chuyển nhiệt cao tần',
-        slug: 'in-pet-chuyen-nhiet-cao-tan',
-        category: 'Gia công in ấn dệt may',
-        image: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Mực in gốc nước bảo vệ môi trường, chịu giặt trên 100 lần không nứt vỡ',
-        useCase: 'In logo thương hiệu trên áo thun, bảo hộ, balo, túi vải canvas',
-        orderCondition: 'Nhận file vector AI / Corel / PDF',
-        minOrderQuantity: 'Từ 100 hình in'
-      }
-    ],
-    capabilitiesDetail: {
-      processCapabilities: ['In kỹ thuật số khổ lớn', 'Ép nhiệt khí nén tự động', 'Thêu vi tính 12 đầu'],
-      equipmentList: [
-        { name: 'Máy in Pet chuyển nhiệt 4 đầu phun Epson i3200', origin: 'Nhật Bản', year: '2024', status: 'Hoạt động 100%' },
-        { name: 'Máy ép nhiệt thủy lực 2 mâm tự động', origin: 'Đài Loan', year: '2023', status: 'Hoạt động 100%' }
-      ],
-      capacity: { value: '40.000 hình in / tháng', unit: 'sản phẩm/tháng', source: 'Doanh nghiệp cung cấp', updatedAt: '2026-09-15', visibility: 'PUBLIC' },
-      minOrderQuantity: 'Từ 100 sản phẩm',
-      leadTime: '3 - 5 ngày làm việc',
-      qualityStandards: ['ISO 9001:2015', 'OEKO-TEX ECO PASSPORT']
-    },
-    facilityInfo: {
-      landArea: '3.500 m²',
-      productionArea: '2.200 m²',
-      warehouseArea: '800 m²',
-      productionLinesCount: 2,
-      cleanroomClass: 'Tiêu chuẩn xưởng sạch',
-      powerCapacity: '500 kVA',
-      wasteTreatment: 'Hệ thống thu gom nước thải xưởng in tuần hoàn'
-    },
-    manufacturingTypes: ['Gia công in thêu chuyên sâu'],
-    oemAvailable: true,
-    odmAvailable: false,
-    exportAvailable: false,
-    distributionAvailable: true,
-    serviceAreas: ['Bình Dương', 'TP. Hồ Chí Minh', 'Đồng Nai'],
-    evidences: [
-      { id: 'EV-PROSER-BD-01', title: 'Máy in kỹ thuật số khổ lớn xưởng VSIP 1', type: 'EQUIPMENT_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&auto=format&fit=crop&q=60', source: 'Doanh nghiệp cung cấp', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-09-15' }
-    ],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: true,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-25'
-  },
-  {
-    id: 'FP-ORG-TAHOMART-002',
-    organizationId: 'ORG-TAHOMART-002',
-    facilityCode: 'FAC-TAHOMART-01',
-    factorySlug: 'tap-doan-tahomart-viet-nam',
-    factoryName: 'Tập đoàn TAHOMART Việt Nam - Phân Xưởng Đóng Gói Hà Nội',
-    industrialParkId: 'khu-cong-nghiep-quang-minh-ha-noi',
-    industrialParkName: 'Khu Công Nghiệp Quang Minh',
-    province: 'Hà Nội',
-    industryCategories: ['Chế biến nông sản & Đóng gói màng co', 'Quà tặng & Phúc lợi doanh nghiệp'],
-    productionDescription: 'Dây chuyền bọc màng co nhiệt tự động khổ 9:16 và sấy thăng hoa trái cây nhiệt đới phục vụ các khu công nghiệp phía Bắc.',
-    outputProductsSummary: [
-      'Giỏ quà tết công nhân đóng màng co nhiệt 9:16',
-      'Mít sấy giòn Nam Huy đóng gói túi nhôm 200g',
-      'Hộp quà tri ân đối tác chuỗi cung ứng'
-    ],
-    outputProducts: [
-      {
-        id: 'PROD-TAHO-01',
-        name: 'Giỏ quà tết công nhân viên bọc màng co nhiệt khổ 9:16',
-        slug: 'gio-qua-tet-cong-nhan-mang-co',
-        category: 'Quà tặng phúc lợi công nhân',
-        image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Màng co nhiệt POF trong suốt, bảo vệ sản phẩm chống bụi ẩm, bố cục giỏ sang trọng',
-        useCase: 'Quà tết công đoàn KCN, phúc lợi nhân viên cuối năm, quà tri ân đối tác',
-        orderCondition: 'Tùy biến thành phần bánh mứt hạt theo ngân sách từ 250k - 1tr',
-        minOrderQuantity: 'Từ 50 giỏ'
-      }
-    ],
-    capabilitiesDetail: {
-      processCapabilities: ['Đóng gói màng co nhiệt tự động', 'Hút chân không túi nhôm', 'Sấy thăng hoa trái cây'],
-      equipmentList: [
-        { name: 'Máy bọc màng co nhiệt tự động tốc độ cao L-Bar Sealer', origin: 'Hàn Quốc', year: '2023', status: 'Hoạt động 100%' }
-      ],
-      capacity: { value: '80.000 giỏ quà / tháng', unit: 'giỏ/tháng', source: 'Doanh nghiệp cung cấp', updatedAt: '2026-09-10', visibility: 'PUBLIC' },
-      minOrderQuantity: 'Từ 50 phần',
-      leadTime: '5 - 10 ngày',
-      qualityStandards: ['ISO 22000:2018', 'HACCP Codex Alimentarius']
-    },
-    facilityInfo: {
-      landArea: '8.000 m²',
-      productionArea: '5.500 m²',
-      warehouseArea: '2.500 m²',
-      productionLinesCount: 4,
-      cleanroomClass: 'Phòng sạch thực phẩm Class 100.000',
-      powerCapacity: '1.000 kVA',
-      wasteTreatment: 'Hệ thống thu gom rác thải hữu cơ theo quy chuẩn'
-    },
-    manufacturingTypes: ['Gia công đóng gói', 'Phân phối sỉ'],
-    oemAvailable: true,
-    odmAvailable: true,
-    exportAvailable: false,
-    distributionAvailable: true,
-    serviceAreas: ['Toàn quốc', 'Miền Bắc (Hà Nội, Bắc Ninh, Hưng Yên, Hải Phòng, Vĩnh Phúc)'],
-    evidences: [
-      { id: 'EV-TAHO-01', title: 'Dây chuyền bọc màng co nhiệt tự động phân xưởng Hà Nội', type: 'FACTORY_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=60', source: 'Doanh nghiệp cung cấp', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-09-10' },
-      { id: 'EV-TAHO-02', title: 'Chứng nhận Hệ thống An toàn Thực phẩm ISO 22000:2018', type: 'CERTIFICATE', fileUrl: '/certificates/iso-22000-tahomart.pdf', source: 'Tổ chức BVC', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-08-01' }
-    ],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: true,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-27'
-  },
-  {
-    id: 'FP-TAHOMART-HY-003',
-    organizationId: 'ORG-TAHOMART-002',
-    facilityCode: 'FAC-TAHOMART-02',
-    factorySlug: 'tahomart-kho-lanh-nong-san-hung-yen',
-    factoryName: 'Tập đoàn TAHOMART Việt Nam - Tổng Kho Lạnh & Sơ Chế Hưng Yên',
-    industrialParkId: 'khu-cong-nghiep-pho-noi-a-hung-yen',
-    industrialParkName: 'Khu Công Nghiệp Phố Nối A',
-    province: 'Hưng Yên',
-    industryCategories: ['Kho lạnh bảo quản & Sơ chế nông sản'],
-    productionDescription: 'Hệ thống kho lạnh bảo quản nông sản nhiệt độ âm sâu -18°C đến 5°C và phân xưởng phân loại sấy khô tự động.',
-    outputProductsSummary: ['Nông sản sấy khô đóng túi hút chân không', 'Dịch vụ lưu kho lạnh nông sản'],
-    outputProducts: [],
-    manufacturingTypes: ['Kho vận lạnh & Sơ chế'],
-    oemAvailable: false,
-    exportAvailable: false,
-    distributionAvailable: true,
-    serviceAreas: ['Hưng Yên', 'Hà Nội', 'Hải Dương', 'Hải Phòng'],
-    evidences: [],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: true,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-24'
-  },
-  {
-    id: 'FP-SAMSUNG-BN-001',
-    organizationId: 'ORG-SAMSUNG-BN',
-    facilityCode: 'FAC-SEV-BN',
-    factorySlug: 'samsung-electronics-vietnam-bac-ninh',
-    factoryName: 'Công ty TNHH Samsung Electronics Việt Nam (SEV Bắc Ninh)',
-    industrialParkId: 'khu-cong-nghiep-yen-phong-bac-ninh',
-    industrialParkName: 'Khu Công Nghiệp Yên Phong',
-    province: 'Bắc Ninh',
-    industryCategories: ['Điện tử & Bán dẫn', 'Thiết bị viễn thông di động'],
-    productionDescription: 'Tổ hợp nhà máy sản xuất điện thoại thông minh và linh kiện viễn thông quy mô hàng đầu thế giới với hơn 40.000 kỹ sư và công nhân vận hành.',
-    outputProductsSummary: [
-      'Điện thoại thông minh Galaxy dòng cao cấp',
-      'Màn hình hiển thị AMOLED công nghệ cao',
-      'Pin lithium-ion & Bản mạch in linh hoạt FPCB'
-    ],
-    outputProducts: [
-      {
-        id: 'PROD-SS-01',
-        name: 'Điện thoại thông minh Galaxy cao cấp sản xuất tại Bắc Ninh',
-        slug: 'samsung-galaxy-flagship-bac-ninh',
-        category: 'Thiết bị viễn thông di động',
-        image: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Màn hình Dynamic AMOLED 2X, chip xử lý tiến trình 4nm, tiêu chuẩn chống nước IP68',
-        useCase: 'Xuất khẩu toàn cầu và phân phối chính hãng',
-        orderCondition: 'Kênh phân phối chính thức tập đoàn Samsung',
-        minOrderQuantity: 'Theo hợp đồng xuất khẩu'
-      }
-    ],
-    capabilitiesDetail: {
-      processCapabilities: ['Gắn chip bề mặt SMT siêu chính xác', 'Lắp ráp mô-đun màn hình AMOLED', 'Kiểm tra tín hiệu RF 5G phòng câm', 'Kiểm tra độ bền rơi thả tự động'],
-      equipmentList: [
-        { name: 'Hơn 120 dây chuyền SMT công nghệ cao', origin: 'Hàn Quốc / Nhật Bản', year: '2023', status: 'Hoạt động 100%' }
-      ],
-      capacity: { value: '10.000.000 thiết bị / tháng', unit: 'chiếc/tháng', source: 'Báo cáo thường niên tập đoàn', updatedAt: '2026-06-30', visibility: 'PUBLIC' },
-      qualityStandards: ['ISO 9001:2015', 'ISO 14001:2015', 'ISO 45001:2018', 'Tiêu chuẩn bảo mật thông tin ISO 27001']
-    },
-    facilityInfo: {
-      landArea: '110.000 m²',
-      productionArea: '85.000 m²',
-      warehouseArea: '25.000 m²',
-      cleanroomClass: 'Class 100 - Class 1000'
-    },
-    manufacturingTypes: ['FDI Công nghệ cao', 'Xuất khẩu toàn cầu'],
-    oemAvailable: false,
-    exportAvailable: true,
-    exportInfo: {
-      markets: ['Bắc Mỹ', 'Châu Âu', 'Hàn Quốc', 'Toàn cầu'],
-      certificates: ['CE', 'FCC', 'KC', 'RoHS Compliant'],
-      incoterms: ['FOB Nội Bài', 'CIF Hải Phòng'],
-      languages: ['Tiếng Việt', 'English', '한국어']
-    },
-    distributionAvailable: false,
-    serviceAreas: ['Toàn cầu'],
-    evidences: [
-      { id: 'EV-SS-01', title: 'Tổ hợp nhà máy SEV KCN Yên Phong Bắc Ninh', type: 'FACTORY_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&auto=format&fit=crop&q=60', source: 'Thông cáo báo chí tập đoàn', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-06-30' }
-    ],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: false,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-28'
-  },
-  {
-    id: 'FP-SAMSUNG-TN-002',
-    organizationId: 'ORG-SAMSUNG-BN',
-    facilityCode: 'FAC-SEVT-TN',
-    factorySlug: 'samsung-electronics-vietnam-thai-nguyen',
-    factoryName: 'Công ty TNHH Samsung Electronics Việt Nam Thái Nguyên (SEVT)',
-    industrialParkId: 'khu-cong-nghiep-yen-binh-thai-nguyen',
-    industrialParkName: 'Khu Công Nghiệp Yên Bình',
-    province: 'Thái Nguyên',
-    industryCategories: ['Điện tử & Viễn thông'],
-    productionDescription: 'Tổ hợp nhà máy sản xuất điện thoại thông minh lớn nhất thế giới của Samsung với tổng vốn đầu tư hàng tỷ USD.',
-    outputProductsSummary: ['Lắp ráp điện thoại thông minh Galaxy', 'Khung vỏ kim loại nguyên khối'],
-    outputProducts: [],
-    manufacturingTypes: ['FDI Công nghệ cao', 'Xuất khẩu toàn cầu'],
-    oemAvailable: false,
-    exportAvailable: true,
-    distributionAvailable: false,
-    serviceAreas: ['Toàn cầu'],
-    evidences: [],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: false,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-26'
-  },
-  {
-    id: 'FP-SAMSUNG-HCM-003',
-    organizationId: 'ORG-SAMSUNG-BN',
-    facilityCode: 'FAC-SEHC-HCM',
-    factorySlug: 'samsung-hcmc-ce-complex',
-    factoryName: 'Công ty TNHH Điện Tử Samsung HCMC CE Complex (SEHC)',
-    industrialParkId: 'khu-cong-nghe-cao-tp-hcm-shtp',
-    industrialParkName: 'Khu Công Nghệ Cao TP.HCM (SHTP)',
-    province: 'TP. Hồ Chí Minh',
-    industryCategories: ['Điện tử tiêu dùng & Thiết bị gia dụng thông minh'],
-    productionDescription: 'Nhà máy sản xuất TV màn hình lớn và thiết bị điện tử gia dụng cao cấp hàng đầu khu vực Đông Nam Á.',
-    outputProductsSummary: ['Tivi QLED / Neo QLED thông minh', 'Tủ lạnh Bespoke công nghệ cao', 'Máy giặt cửa trước AI Control'],
-    outputProducts: [],
-    manufacturingTypes: ['FDI Công nghệ cao'],
-    oemAvailable: false,
-    exportAvailable: true,
-    distributionAvailable: false,
-    serviceAreas: ['Toàn cầu'],
-    evidences: [],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: false,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-25'
-  },
-  {
-    id: 'FP-DENSO-HN-001',
-    organizationId: 'ORG-DENSO-VN',
-    facilityCode: 'FAC-DENSO-01',
-    factorySlug: 'cong-ty-tnhh-denso-viet-nam',
-    factoryName: 'Công ty TNHH DENSO Việt Nam - Nhà Máy Thăng Long',
-    industrialParkId: 'khu-cong-nghiep-thang-long-ha-noi',
-    industrialParkName: 'Khu Công Nghiệp Thăng Long',
-    province: 'Hà Nội',
-    industryCategories: ['Cơ khí ô tô & Phụ trợ chính xác'],
-    productionDescription: 'Nhà máy sản xuất linh kiện phụ tùng ô tô và xe máy hàng đầu thế giới (bộ biến tần, van tiết lưu, cảm biến vị trí).',
-    outputProductsSummary: [
-      'Bộ điều khiển bướm ga điện tử',
-      'Van tuần hoàn khí thải EGR',
-      'Cảm biến oxy & Cảm biến áp suất đường ống nạp'
-    ],
-    outputProducts: [
-      {
-        id: 'PROD-DENSO-01',
-        name: 'Van tuần hoàn khí thải EGR ô tô chính xác cao',
-        slug: 'van-tuan-hoan-khi-thai-egr-denso',
-        category: 'Linh kiện ô tô chính xác',
-        image: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=800&auto=format&fit=crop&q=60',
-        shortSpecification: 'Độ chịu nhiệt lên tới 600°C, kiểm soát dòng khí thải tuần hoàn đạt tiêu chuẩn Euro 6',
-        useCase: 'Lắp ráp động cơ ô tô Toyota, Honda, Mitsubishi',
-        orderCondition: 'Cung cấp theo kế hoạch đặt hàng Tier-1 OEM',
-        minOrderQuantity: 'Theo hợp đồng dây chuyền'
-      }
-    ],
-    capabilitiesDetail: {
-      processCapabilities: ['Đúc nhôm áp lực cao', 'Gia công CNC 5 trục độ chính xác sub-micron', 'Lắp ráp phòng sạch tự động', 'Kiểm tra rò rỉ khí áp suất cao'],
-      capacity: { value: '500.000 linh kiện / tháng', unit: 'linh kiện/tháng', source: 'Doanh nghiệp cung cấp', updatedAt: '2026-08-30', visibility: 'PUBLIC' },
-      qualityStandards: ['IATF 16949:2016', 'ISO 14001:2015', 'ISO 45001:2018']
-    },
-    facilityInfo: {
-      landArea: '60.000 m²',
-      productionArea: '40.000 m²',
-      warehouseArea: '15.000 m²'
-    },
-    manufacturingTypes: ['Tier-1 OEM Ô tô', 'Xuất khẩu linh kiện'],
-    oemAvailable: true,
-    exportAvailable: true,
-    distributionAvailable: false,
-    serviceAreas: ['Toàn quốc', 'Xuất khẩu Nhật Bản, Thái Lan, Indonesia'],
-    evidences: [
-      { id: 'EV-DENSO-01', title: 'Phân xưởng gia công chính xác DENSO KCN Thăng Long', type: 'FACTORY_PHOTO', fileUrl: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?w=800&auto=format&fit=crop&q=60', source: 'Doanh nghiệp cung cấp', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-08-30' },
-      { id: 'EV-DENSO-02', title: 'Chứng nhận Hệ thống Quản lý Ngành Ô tô IATF 16949:2016', type: 'CERTIFICATE', fileUrl: '/certificates/iatf-16949-denso.pdf', source: 'Tổ chức DNV', status: 'ĐÃ ĐỐI CHIẾU', updatedAt: '2026-07-20' }
-    ],
-    productDataStatus: PRODUCT_DATA_STATUS_ENUM.REVIEWED,
-    hasSupplierRole: true,
-    publicProfileStatus: FACTORY_PROFILE_STATUS_ENUM.PUBLISHED,
-    updatedAt: '2026-09-26'
-  }
-];
+export const SEED_FACTORY_PROFILES = websiteSeed('factoriesData.SEED_FACTORY_PROFILES');
 
 // In-memory profiles, connection requests & audit logs
-let inMemoryFactoryProfiles = [...SEED_FACTORY_PROFILES];
+let inMemoryFactoryProfiles = isCloudBrowser() ? getCloudRecords('factoryProfiles') : [...SEED_FACTORY_PROFILES];
 let inMemoryFactoryAuditLogs = [];
 let inMemoryFactoryConnectionRequests = [];
 
@@ -518,7 +70,7 @@ export function getAllFactoryAuditLogs(factoryId = null) {
  * Gửi yêu cầu kết nối tới Nhà máy (Section 34, 35 Spec 29.txt)
  * Tuyệt đối không để lộ SĐT / Zalo cá nhân của đại diện nhà máy trên giao diện
  */
-export function submitFactoryConnectionRequest(requestData, actor = 'Anonymous Buyer/Partner') {
+export async function submitFactoryConnectionRequest(requestData, actor = 'Anonymous Buyer/Partner') {
   const connId = `CONN-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
   const connectionItem = {
     id: connId,
@@ -540,6 +92,10 @@ export function submitFactoryConnectionRequest(requestData, actor = 'Anonymous B
     nextActionAt: new Date(Date.now() + 86400000).toISOString()
   };
 
+  if (isCloudBrowser()) {
+    const saved = await persistSubmission('factoryConnection', connectionItem);
+    return { success: true, connectionId: saved.id, message: 'Yêu cầu đã lưu và đang chờ điều phối.' };
+  }
   inMemoryFactoryConnectionRequests.unshift(connectionItem);
 
   // Ghi AuditLog (Section 18 QA)
@@ -560,6 +116,7 @@ export function submitFactoryConnectionRequest(requestData, actor = 'Anonymous B
 }
 
 export function getAllFactoryConnectionRequests(factoryId = null) {
+  if (isCloudBrowser()) return getPrivateSubmissions('factoryConnection').filter(row => !factoryId || row.factoryId === factoryId);
   if (factoryId) {
     return inMemoryFactoryConnectionRequests.filter(r => r.factoryId === factoryId);
   }
@@ -860,7 +417,7 @@ export function getFactoriesListing(options = {}) {
   });
 
   // 2. Lấy dữ liệu nền tảng từ factoriesFull
-  const rawList = factoriesFullList.slice(0, 500).map(f => enrichFactoryEntity(f));
+  const rawList = factoriesFullList.map(f => enrichFactoryEntity(f));
 
   // Ghép và loại bỏ duplicate theo organizationId hoặc slug
   const seenOrgIds = new Set(seedEntities.map(s => s.organizationId));
@@ -1087,3 +644,4 @@ export function checkFactoryDataQuality(factory) {
     warnings
   };
 }
+import { websiteSeed } from './websiteSeeds.js';

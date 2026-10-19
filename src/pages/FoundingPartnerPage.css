@@ -4,7 +4,7 @@
 .fp-page ::selection { background:#d6e9fa; }
 .fp-container { max-width:1400px; padding:0 52px; margin:0 auto; }
 .fp-page h1,.fp-page h2,.fp-page h3,.fp-page h4 { font-family:'Space Grotesk', sans-serif; font-weight:700; letter-spacing:-.02em; color:var(--fp-ink); }
-.fp-page p { font-family:'Poppins', sans-serif; font-weight:400; font-size:15px; line-height:1.75; color:var(--fp-muted); }
+.fp-page p { font-family:'Be Vietnam Pro', 'Poppins', sans-serif; font-weight:400; font-size:15px; line-height:1.75; color:var(--fp-muted); }
 .fp-page svg { width:20px; height:20px; flex-shrink:0; stroke-width:1.7; }
 .fp-page a, .fp-page button, .fp-page summary, .fp-page input, .fp-page select, .fp-page textarea { -webkit-tap-highlight-color:transparent; }
 .fp-page a:focus-visible,.fp-page button:focus-visible,.fp-page summary:focus-visible,.fp-page input:focus-visible,.fp-page select:focus-visible,.fp-page textarea:focus-visible { outline:3px solid #0b64b1; outline-offset:4px; }

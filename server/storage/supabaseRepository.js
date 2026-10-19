@@ -3,7 +3,7 @@ import { AssistantError } from '../assistants/difyClient.js';
 export const ENTITY_TABLES = Object.freeze({ suppliers: 'enterprises', factories: 'factories', industrialParks: 'industrial_parks', organizations: 'organizations', associations: 'organizations' });
 export const DOCUMENT_COLLECTIONS = new Set(['programs', 'catalogues', 'catalogueEditions', 'catalogueEntries', 'publicRequirements', 'productsServices', 'categories', 'categoriesAlphabetical', 'associationProfiles', 'programOrganizations', 'organizationMemberships', 'factoryProfiles', 'kcnOrganizations', 'supplyGaps']);
 const HIDDEN_KEYS = /^(.*(?:email|phone|password|token|apiKey|secret).*|hotline|zalo|fax|tel|mobile|contact|legalRepresentative|author_name|contactPerson|contactName|representative.*|buyerInfo|owner.*|senderName|requesterName|receiverName|responsibleUser.*|confirmedBy|reviewedBy|evidenceNotes|internal.*|confidential.*|tax[_-]?code)$/i;
-const isPrivate = record => record.publishable === false || record.isPublished === false || record.publicDisplay === false || ['PRIVATE', 'INTERNAL', 'ONLY_MATCHED', 'CHỈ NCC PHÙ HỢP'].includes(String(record.visibility).toUpperCase()) || ['DRAFT', 'ARCHIVED', 'REJECTED', 'PENDING'].includes(String(record.status).toUpperCase()) || ['REJECTED', 'PENDING'].includes(String(record.moderationStatus).toUpperCase());
+const isPrivate = record => record.publishable === false || record.isPublished === false || record.publicDisplay === false || ['PRIVATE', 'INTERNAL', 'ONLY_MATCHED', 'MATCHED_SUPPLIERS_ONLY', 'CHỈ NCC PHÙ HỢP'].includes(String(record.visibility).toUpperCase()) || ['DRAFT', 'ARCHIVED', 'REJECTED', 'PENDING'].includes(String(record.status).toUpperCase()) || ['REJECTED', 'PENDING'].includes(String(record.moderationStatus).toUpperCase());
 
 export function publicRecord(record) {
   if (!record || typeof record !== 'object') return null;
@@ -12,6 +12,10 @@ export function publicRecord(record) {
     if (Array.isArray(value)) return value.map(clean).filter(child => child !== null);
     if (!value || typeof value !== 'object') return value;
     if (isPrivate(value)) return null;
+    if (String(value.visibility).toUpperCase() === 'PUBLIC_SUMMARY') {
+      const summaryKeys = new Set(['id','slug','title','summary','category','province','visibility','status','createdAt','created_at']);
+      return Object.fromEntries(Object.entries(value).filter(([key]) => summaryKeys.has(key)).map(([key, child]) => [key, clean(child)]));
+    }
     return Object.fromEntries(Object.entries(value).filter(([key]) => !HIDDEN_KEYS.test(key)).map(([key, child]) => [key, clean(child)]));
   };
   return clean(record);
@@ -73,6 +77,26 @@ export function createSupabaseRepository({ client, cacheMs = 6 * 60 * 60 * 1000 
         return data;
       }).finally(() => loading.delete(collection)));
       return structuredClone(await loading.get(collection));
+    },
+    async preview(collection, limit = 50) {
+      const { table, document } = definition(collection);
+      requireDatabase(client);
+      let query = client.from(table).select('*').order('id', { ascending: true }).limit(limit);
+      if (document) query = query.eq('collection', collection).eq('visibility', 'PUBLIC');
+      const { data } = await databaseResult(query);
+      if (!Array.isArray(data)) return [];
+      const records = [];
+      for (const row of data) {
+        if (collection === 'associations' && !row.roles?.includes('ASSOCIATION')) continue;
+        const payload = document ? row.data : { ...(row.metadata || {}), ...row, ...(row.data || {}) };
+        const safe = publicRecord(payload);
+        if (safe) {
+          delete safe.data;
+          delete safe.metadata;
+          records.push(safe);
+        }
+      }
+      return records;
     },
     async get(collection, id) {
       const records = await this.all(collection);

@@ -63,6 +63,19 @@ test('presentation never publishes generated year and member defaults as recorde
   assert.match(recorded, /1999/); assert.match(recorded, /820/); assert.match(recorded, /hội viên theo hồ sơ/);
 });
 
+test('executive business cards expose identity first and disclose complete connection context', () => {
+  const association = { id: 'DOSSIER', name: 'Hiệp hội kiểm thử', profile: { shortName: 'TEST', geographicScope: ['Hà Nội', 'Toàn quốc'], industryScope: ['Cơ khí', 'Điện', 'Nhựa', 'Bao bì'] }, activePrograms: [{ programId: 'one', title: 'Chương trình một', roleLabel: 'Đơn vị tổ chức', dates: '10/2026' }, { programId: 'two', title: 'Chương trình hai', roleLabel: 'Đồng tổ chức', dates: '11/2026' }] };
+  const html = render(Card, { association, onClaim() {} });
+  for (const hook of ['data-card-style="signature"', 'ad-card__front', 'ad-card__connections', 'ad-card__expanded', 'ad-card__activities', 'ad-card__footer']) assert.ok(html.includes(hook), hook);
+  assert.match(html, /<details class="ad-card__connections"><summary>Xem kết nối \(2\)/);
+  assert.ok(html.indexOf('Hà Nội, Toàn quốc') < html.indexOf('ad-card__connections'));
+  for (const text of ['TEST', 'Hà Nội, Toàn quốc', 'Bao bì', '10/2026', '11/2026', 'Xem hồ sơ tổ chức', 'Liên kết hồ sơ hội viên']) assert.ok(html.includes(text));
+  assert.doesNotMatch(html, /ad-card__cover|ad-card__wordmark|ad-tone-|<svg/);
+  assert.match(html, /data-image-state="initial"/);
+  const withLogo = render(Card, { association: { ...association, logo: '/organization.png' }, onClaim() {} });
+  assert.match(withLogo, /data-image-state="loading"/);
+});
+
 test('unavailable related programs retain their context without dead detail links', () => {
   const program = { programId: 'NOT-PUBLISHED', programSlug: 'unavailable-example', title: 'Chương trình tham chiếu', roleLabel: 'Đơn vị đồng tổ chức' };
   const html = render(Card, { association: { id: 'TEST', name: 'Hội kiểm thử', activePrograms: [program] }, onClaim() {} });

@@ -1,0 +1,49 @@
+.th-confirmed{margin:40px 0 56px}
+.th-confirmed-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:18px}
+.th-confirmed-heading h2{font-size:26px;line-height:1.35;font-weight:750;text-transform:uppercase;max-width:45ch;text-wrap:balance}
+.th-confirmed-heading>button{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;border:0;background:none;color:#0055d9;padding:8px 0;font-size:15px;flex-shrink:0}
+.th-confirmed-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.th-confirmed-group{min-width:0;padding:18px;background:#eff6ff;border:1px solid #e1edff;border-radius:12px}
+.th-confirmed-group.is-supplier{background:#fff6ef;border-color:#fbe9db}
+.th-confirmed-group>header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}
+.th-confirmed-group h3{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700;line-height:1.4;color:#0055d9}
+.th-confirmed-group h3>svg{width:22px;height:22px;flex-shrink:0}
+.th-confirmed-group.is-supplier h3{color:#b84900}
+.th-confirmed-group>header>span{font-size:13px;white-space:nowrap;color:#526780;line-height:1.5;padding-top:4px}
+.th-confirmed-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:start}
+.th-confirmed-cards article{min-width:0;background:white;border:1px solid #e5edf8;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.th-confirmed-company{display:flex;align-items:flex-start;gap:7px;min-width:0;min-height:68px}
+.th-confirmed-company>img,.th-confirmed-company>svg{width:26px;height:30px;object-fit:contain;flex-shrink:0;color:#3971bd}
+.th-confirmed-company>div{min-width:0;flex:1}
+.th-confirmed-company h4{font-size:16px;line-height:1.35;font-weight:700;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.th-confirmed-company p{font-size:14px;line-height:1.45;color:#526780;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-confirmed-company h4>button{font:inherit;line-height:inherit;color:inherit;border:0;background:none;padding:0;text-align:left;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.th-confirmed-company h4>button:hover{color:#0055d9;text-decoration:underline}
+.th-confirmed-cards .th-confirmed-detail-trigger{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:32px;font-size:14px;font-weight:600;color:#0055d9;cursor:pointer;border:0;border-top:1px solid #edf1f7;background:none;padding:6px 0 0;margin-top:auto;text-align:left}
+.th-confirmed-detail-trigger:hover{color:#003d9e}
+.th-company-dialog{position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow-y:auto;border:1px solid #dce7f5;border-radius:16px;padding:24px;color:#15345d;background:#fff;box-shadow:0 24px 80px #102b5240}
+.th-company-dialog::backdrop{background:#142b4b80}
+.th-company-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+.th-company-dialog>header>span{font-size:12px;font-weight:700;color:#526780;letter-spacing:.04em}
+.th-company-dialog>header>button{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border:1px solid #dce7f5;border-radius:8px;background:#f5f8fc;color:#15345d}
+.th-company-dialog-identity{display:flex;align-items:center;gap:14px}
+.th-company-dialog-identity>img,.th-company-dialog-identity>svg{width:44px;height:44px;flex-shrink:0;object-fit:contain;color:#3971bd}
+.th-company-dialog-identity h2{font-size:23px;line-height:1.35;font-weight:700;overflow-wrap:anywhere}
+.th-company-dialog dl{margin:22px 0;display:grid;gap:18px}
+.th-company-dialog dt{font-size:13px;font-weight:600;color:#526780;margin-bottom:5px}
+.th-company-dialog dd{margin:0;font-size:16px;line-height:1.6;overflow-wrap:anywhere}
+.th-company-dialog-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;border-top:1px solid #e5edf8;padding-top:18px}
+.th-company-dialog-actions>a,.th-company-dialog-actions>button{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:600;border:1px solid #c8dafa;border-radius:8px;padding:9px 14px;color:#0055d9;background:#fff}
+.th-company-dialog-actions>button{background:#0055d9;color:#fff;border-color:#0055d9}
+.th-company-dialog .th-company-dialog-note{font-size:13px;line-height:1.6;color:#526780;margin-top:14px}
+.th-confirmed-paging{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:14px}
+.th-confirmed-paging button{display:grid;place-items:center;width:34px;height:34px;background:white;border:1px solid #c8dafa;border-radius:7px;color:#0055d9}
+.th-confirmed-paging button:hover:not(:disabled){background:#e3efff}
+.th-confirmed-paging span{font-size:14px;color:#526780;font-variant-numeric:tabular-nums}
+.th-confirmed-empty{background:#ffffffd9;border-radius:8px;display:flex;align-items:flex-start;gap:16px;padding:24px;min-height:150px}
+.th-confirmed-empty>svg{width:32px;height:32px;flex-shrink:0;color:#6799d8}
+.th-confirmed-group.is-supplier .th-confirmed-empty>svg{color:#c7895b}
+.th-confirmed-empty strong{display:block;font-size:17px;line-height:1.5;color:#334f78}
+.th-confirmed-empty p{font-size:15px;line-height:1.6;color:#526780;max-width:48ch;margin-top:8px}
+@media(max-width:1199px){.th-confirmed-columns{grid-template-columns:1fr}.th-confirmed-heading h2{font-size:24px}}
+@media(max-width:699px){.th-confirmed{margin:28px 0 40px}.th-confirmed-heading{align-items:flex-start;gap:12px}.th-confirmed-heading h2{font-size:21px}.th-confirmed-heading>button{font-size:13px}.th-confirmed-group{padding:14px}.th-confirmed-group>header{flex-direction:column;gap:5px}.th-confirmed-group h3{font-size:18px}.th-confirmed-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.th-confirmed-cards article{padding:10px}.th-confirmed-company{min-height:68px}.th-confirmed-company>svg,.th-confirmed-company>img{width:22px;height:26px}.th-confirmed-company h4{font-size:15px}.th-confirmed-empty{padding:18px;gap:12px}.th-confirmed-empty>svg{width:24px}.th-confirmed-empty strong{font-size:16px}}

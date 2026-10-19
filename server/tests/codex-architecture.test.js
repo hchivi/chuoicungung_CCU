@@ -17,7 +17,8 @@ let baseUrl;
 test.before(async () => {
   process.env.SUPPI_DISABLE_OPENAI = '1';
   process.env.TEST_RATE_LIMIT = '1';
-  const app = createApp();
+  const query = { select() { return this; }, eq() { return this; }, order() { return this; }, limit() { return this; }, then(resolve) { return Promise.resolve({ data: [], error: null }).then(resolve); } };
+  const app = createApp({ client: { from: () => query }, repository: { all: async () => [], get: async () => null, health: async () => { throw new Error('offline fixture'); } } });
   server = app.listen(0, '127.0.0.1');
   await new Promise(r => server.once('listening', r));
   const { port } = server.address();
@@ -35,7 +36,8 @@ test('1. /api/status trả JSON', async () => {
   assert.match(res.headers.get('content-type') || '', /application\/json/);
   const data = await res.json();
   assert.equal(data.status, 'online');
-  assert.ok(data.mongodb !== undefined);
+  assert.equal(data.database.provider, 'supabase');
+  assert.equal(data.database.connected, false);
 });
 
 // 2. /robots.txt trả text/plain
@@ -293,7 +295,7 @@ test('21. Sitemap không chứa route admin hoặc ghost 404', async () => {
 });
 
 // 22. MongoDB unavailable làm /readyz trả 503
-test('22. /readyz trả 503 khi MongoDB chưa kết nối', async () => {
+test('22. /readyz trả 503 khi Supabase chưa kết nối', async () => {
   const res = await fetch(`${baseUrl}/readyz`);
   // If local mongodb is not connected in this test process, readyState is 0/2, so status is 503
   // If connected, it would be 200.

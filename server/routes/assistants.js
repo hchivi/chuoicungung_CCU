@@ -5,6 +5,7 @@ import { createSupabaseDraftStore, createSupabaseConversationStore } from '../st
 import { createAssistantRuntime } from '../assistants/runtime.js';
 import { createAssistantSession } from '../assistants/session.js';
 import { getAssistantConfiguration } from '../assistants/provider.js';
+import { buildMatchingContext } from '../auth/matchingContext.js';
 
 export function createAssistantRouter({ service = null, repository = createSupabaseRepository({ client: getSupabase() }), client = getSupabase() } = {}) {
   const router = express.Router();
@@ -36,7 +37,8 @@ export function createAssistantRouter({ service = null, repository = createSupab
   router.post('/chat', async (req, res, next) => {
     try {
       runtime ||= createAssistantRuntime({ client, repository });
-      const result = await runtime.send({ query: req.body?.query, conversationId: req.body?.conversation_id, mode: req.body?.mode, ownerId: req.assistantOwnerId });
+      const matchingContext = await buildMatchingContext({ user: req.authIdentity?.user, client });
+      const result = await runtime.send({ query: req.body?.query, conversationId: req.body?.conversation_id, mode: req.body?.mode, ownerId: req.assistantOwnerId, matchingContext });
       res.json({ success: true, data: result });
     } catch (error) {
       console.warn('CCU assistant request failed:', error.code || 'INTERNAL_ERROR', req.id);

@@ -25,8 +25,10 @@ import {
   Globe,
   Languages,
   MapPin,
-  Landmark
+  Landmark,
+  PenTool
 } from 'lucide-react';
+import { SIGNATURE_PHILOSOPHY } from '../data/todzungPhilosophy.js';
 
 // ========================================================
 // AUTHENTIC REAL BRAND ICONS
@@ -464,7 +466,17 @@ const translations = {
     bankModalTitle: "Quét Mã QR Chuyển Khoản",
     bankModalScanDesc: "Mở ứng dụng ngân hàng hoặc ví điện tử bất kỳ để quét mã chuyển tiền nhanh 24/7",
     bankCopiedSuccess: "Đã sao chép số tài khoản!",
-    bankDownloadQr: "Tải ảnh QR"
+    bankDownloadQr: "Tải ảnh QR",
+
+    // Added translations
+    addressDisplay: "29 Quách Văn Tuấn, Phường Bảy Hiền, TP. Hồ Chí Minh",
+    signatureButton: "Ý NGHĨA CHỮ KÝ TODZUNG",
+    signatureButtonTitle: "Khám phá triết lý & ý nghĩa đằng sau chữ ký TODZUNG",
+    downloadTaho: "Tải ngay The Taho Way (TAHOMART - THE TAHO WAY.pdf)",
+    downloadLogistics: "Tải ngay Profile Logistics (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "Tải ngay Catalogue Đồng Phục (CATALOGUE_DP.pdf)",
+    shareText: "Kết nối cùng Doanh nhân Tô Ngọc Dũng - Chuỗi Cung Ứng (Danh thiếp điện tử)",
+    footerLegalText: "CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH"
   },
   en: {
     greeting: "Hello, I am",
@@ -570,7 +582,17 @@ const translations = {
     bankModalTitle: "Scan QR For Transfer",
     bankModalScanDesc: "Open any banking or e-wallet app to scan and transfer instantly 24/7",
     bankCopiedSuccess: "Account number copied!",
-    bankDownloadQr: "Download QR Code"
+    bankDownloadQr: "Download QR Code",
+
+    // Added translations
+    addressDisplay: "29 Quach Van Tuan, Bay Hien Ward, Tan Binh Dist, Ho Chi Minh City, Vietnam",
+    signatureButton: "PHILOSOPHY OF TODZUNG SIGNATURE",
+    signatureButtonTitle: "Explore the philosophy and meaning behind the TODZUNG signature",
+    downloadTaho: "Download The Taho Way (TAHOMART - THE TAHO WAY.pdf)",
+    downloadLogistics: "Download Logistics Profile (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "Download Uniform Catalogue (CATALOGUE_DP.pdf)",
+    shareText: "Connect with Entrepreneur To Ngoc Dung - Supply Chain Ecosystem (Digital Business Card)",
+    footerLegalText: "VN SUPPLY CHAIN CO., LTD - TAX CODE: 0319430529 - HQ: 29 QUACH VAN TUAN, BAY HIEN WARD, HO CHI MINH CITY"
   },
   zh: {
     greeting: "您好，我是",
@@ -676,7 +698,17 @@ const translations = {
     bankModalTitle: "扫描二维码转账",
     bankModalScanDesc: "打开任意手机银行或电子钱包扫描二维码即可 24/7 快速转账",
     bankCopiedSuccess: "已复制银行账号！",
-    bankDownloadQr: "下载二维码图片"
+    bankDownloadQr: "下载二维码图片",
+
+    // Added translations
+    addressDisplay: "越南胡志明市新平郡七贤坊郭文俊街29号",
+    signatureButton: "TODZUNG 签名哲学与内涵",
+    signatureButtonTitle: "探索 TODZUNG 签名背后的哲学与深层寓意",
+    downloadTaho: "立即下载 The Taho Way (TAHOMART 零售手册)",
+    downloadLogistics: "立即下载物流公司简介 (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "立即下载定制制服产品手册 (CATALOGUE_DP.pdf)",
+    shareText: "与企业家苏玉勇先生（To Ngoc Dung）建立联系 - 越南供应链生态系统（数字名片）",
+    footerLegalText: "越南供应链有限公司 - 税号: 0319430529 - 地址: 越南胡志明市七贤坊郭文俊街29号"
   },
   ja: {
     greeting: "こんにちは、私は",
@@ -782,7 +814,17 @@ const translations = {
     bankModalTitle: "送金用QRコード",
     bankModalScanDesc: "銀行アプリまたは電子マネーでQRコードを読み取って即時送金できます",
     bankCopiedSuccess: "口座番号をコピーしました！",
-    bankDownloadQr: "QR画像を保存"
+    bankDownloadQr: "QR画像を保存",
+
+    // Added translations
+    addressDisplay: "ベトナム ホーチミン市タンビン区バイヒエン坊クアック・ヴァン・トゥアン通り29番地",
+    signatureButton: "TODZUNG 署名の哲学と意味",
+    signatureButtonTitle: "TODZUNG署名の背後にある哲学と深い意味を探求する",
+    downloadTaho: "The Taho Way を今すぐダウンロード (TAHOMART 概要)",
+    downloadLogistics: "物流プロファイルを今すぐダウンロード (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "ユニフォームカタログを今すぐダウンロード (CATALOGUE_DP.pdf)",
+    shareText: "実業家 トー・ゴック・ズン（To Ngoc Dung）と繋がる - サプライチェーンエコシステム（デジタル名刺）",
+    footerLegalText: "ベトナム・サプライチェーン有限会社 - 納税者番号: 0319430529 - 住所: ホーチミン市バイヒエン坊クアック・ヴァン・トゥアン29番地"
   },
   ko: {
     greeting: "안녕하세요, 저는",
@@ -888,7 +930,17 @@ const translations = {
     bankModalTitle: "계좌이체 QR코드",
     bankModalScanDesc: "은행 앱 또는 전자지갑으로 QR코드를 스캔하여 24/7 실시간 이체하세요",
     bankCopiedSuccess: "계좌번호가 복사되었습니다!",
-    bankDownloadQr: "QR코드 다운로드"
+    bankDownloadQr: "QR코드 다운로드",
+
+    // Added translations
+    addressDisplay: "베트남 호치민시 탄빈군 바이히엔동 꽉반투안길 29호",
+    signatureButton: "TODZUNG 서명의 철학과 의미",
+    signatureButtonTitle: "TODZUNG 서명 뒤에 숨겨진 철학과 비전을 탐구합니다",
+    downloadTaho: "The Taho Way 즉시 다운로드 (TAHOMART 프로필)",
+    downloadLogistics: "물류 회사 프로필 즉시 다운로드 (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "유니폼 카탈로그 즉시 다운로드 (CATALOGUE_DP.pdf)",
+    shareText: "기업가 토응옥융(To Ngoc Dung)과 연결하기 - 베트남 공급망 에코시스템 (디지털 명함)",
+    footerLegalText: "베트남 서플라이체인 유한회사 - 사업자등록번호: 0319430529 - 주소: 호치민시 바이히엔동 꽉반투안 29"
   },
   th: {
     greeting: "สวัสดีครับ ผมคือ",
@@ -994,7 +1046,17 @@ const translations = {
     bankModalTitle: "สแกนรหัส QR เพื่อโอนเงิน",
     bankModalScanDesc: "เปิดแอปธนาคารหรือกระเป๋าเงินดิจิทัลเพื่อสแกนและโอนเงินได้ตลอด 24/7",
     bankCopiedSuccess: "คัดลอกเลขที่บัญชีเรียบร้อยแล้ว!",
-    bankDownloadQr: "ดาวน์โหลดรูปภาพ QR"
+    bankDownloadQr: "ดาวน์โหลดรูปภาพ QR",
+
+    // Added translations
+    addressDisplay: "29 ถนน Quach Van Tuan, แขวง Bay Hien, เขต Tan Binh, นครโฮจิมินห์, เวียดนาม",
+    signatureButton: "ความหมายและปรัชญาลายเซ็น TODZUNG",
+    signatureButtonTitle: "ค้นพบปรัชญาและความหมายเบื้องหลังลายเซ็น TODZUNG",
+    downloadTaho: "ดาวน์โหลด The Taho Way ทันที (TAHOMART)",
+    downloadLogistics: "ดาวน์โหลดโปรไฟล์โลจิสติกส์ทันที (PROFILE_PORTALINK.pdf)",
+    downloadUniform: "ดาวน์โหลดแคตตาล็อกชุดยูนิฟอร์มทันที (CATALOGUE_DP.pdf)",
+    shareText: "เชื่อมต่อกับนักธุรกิจ โต หง็อก สุง (To Ngoc Dung) - ระบบนิเวศซัพพลายเชน (นามบัตรดิจิทัล)",
+    footerLegalText: "บริษัท ซัพพลายเชน เวียดนาม จำกัด - เลขประจำตัวผู้เสียภาษี: 0319430529 - ที่อยู่: 29 Quach Van Tuan, Bay Hien, นครโฮจิมินห์"
   }
 };
 
@@ -1005,6 +1067,7 @@ export default function ToDzungPortfolioPage() {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showPromptModal, setShowPromptModal] = useState(false);
   const [selectedBankModal, setSelectedBankModal] = useState(null);
   const [copiedBankId, setCopiedBankId] = useState(null);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -1746,7 +1809,7 @@ export default function ToDzungPortfolioPage() {
   const handleShare = async () => {
     const shareUrl = window.location.href;
     const shareTitle = t.nameTitle || "TÔ NGỌC DŨNG | TODZUNG";
-    const shareText = "Kết nối cùng Doanh nhân Tô Ngọc Dũng - Chuỗi Cung Ứng (Danh thiếp điện tử)";
+    const shareText = t.shareText || "Kết nối cùng Doanh nhân Tô Ngọc Dũng - Chuỗi Cung Ứng (Danh thiếp điện tử)";
 
     const shareData = {
       title: shareTitle,
@@ -1955,13 +2018,13 @@ export default function ToDzungPortfolioPage() {
                       className="text-xs sm:text-sm md:text-[15px] font-bold text-slate-900 hover:text-rose-600 transition-colors leading-snug truncate block"
                       title={t.openMaps}
                     >
-                      {profile.address}
+                      {t.addressDisplay || profile.address}
                     </a>
                   </div>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-1.5 shrink-0 ml-2">
                   <button
-                    onClick={() => copyToClipboard(profile.address, 'address')}
+                    onClick={() => copyToClipboard(t.addressDisplay || profile.address, 'address')}
                     className="p-1.5 sm:p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-all"
                     title={t.copyAddress}
                   >
@@ -2206,7 +2269,7 @@ export default function ToDzungPortfolioPage() {
           {/* ========================================================
               RIGHT COLUMN: 3D FLIPPABLE PORTRAIT & QR CARD (ALIGNED WITH LEFT COLUMN)
           ======================================================== */}
-          <div className="w-full md:w-[290px] lg:w-[320px] xl:w-[350px] shrink-0 flex flex-col items-center md:items-end justify-start relative order-1 md:order-2 z-20 md:pt-7 lg:pt-8">
+          <div className="w-full md:w-[350px] lg:w-[390px] xl:w-[420px] shrink-0 flex flex-col items-center md:items-end justify-start relative order-1 md:order-2 z-20 md:pt-7 lg:pt-8">
 
             {/* 3D Flip Card Container with Three.js Aura & Gyroscope */}
             <div
@@ -2218,7 +2281,7 @@ export default function ToDzungPortfolioPage() {
               onTouchEnd={handleCardTouchEnd}
               onTouchCancel={handleCardTouchEnd}
               onClick={handleToggleFlip}
-              className="relative w-full max-w-[340px] sm:max-w-[360px] md:max-w-[290px] lg:max-w-[320px] xl:max-w-[350px] h-[480px] sm:h-[510px] md:h-[480px] lg:h-[485px] xl:h-[495px] cursor-pointer select-none touch-manipulation group"
+              className="relative w-full max-w-[360px] min-[380px]:max-w-[390px] sm:max-w-[420px] md:max-w-[350px] lg:max-w-[390px] xl:max-w-[420px] aspect-[4/5] cursor-pointer select-none touch-manipulation group"
               style={{ perspective: 1200 }}
               title={showBack ? t.flipToFrontNotice : t.flipToBackNotice}
             >
@@ -2271,14 +2334,14 @@ export default function ToDzungPortfolioPage() {
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 pointer-events-none"
                       />
 
-                      {/* Rotating Logo on Top Right of Avatar (Click to visit chuoicungung.com) */}
+                      {/* Rotating Logo on Top Left of Avatar (Click to visit chuoicungung.com) */}
                       <a
                         ref={avatarRotatingLogoRef}
                         href="https://chuoicungung.com"
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center pointer-events-auto hover:scale-125 active:scale-95 transition-all drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] cursor-pointer"
+                        className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center pointer-events-auto hover:scale-125 active:scale-95 transition-all drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)] cursor-pointer"
                         title="Truy cập chuoicungung.com"
                       >
                         <img
@@ -2373,6 +2436,22 @@ export default function ToDzungPortfolioPage() {
                 </div>
               </div>
 
+            </div>
+
+            {/* Nút xem Ý nghĩa chữ ký TODZUNG (prompt.txt popup) */}
+            <div className="w-full max-w-[360px] min-[380px]:max-w-[390px] sm:max-w-[420px] md:max-w-[350px] lg:max-w-[390px] xl:max-w-[420px] mt-3.5 z-20">
+              <button
+                type="button"
+                onClick={() => setShowPromptModal(true)}
+                className="w-full py-3 sm:py-3.5 px-4 sm:px-5 rounded-2xl bg-gradient-to-r from-[#006938] via-[#00552d] to-[#006938] hover:from-[#00552d] hover:to-[#004223] text-white font-bold text-xs sm:text-sm shadow-lg shadow-[#006938]/20 hover:shadow-xl hover:shadow-[#006938]/30 transition-all duration-300 flex items-center justify-center gap-2 group border border-emerald-400/30 active:scale-[0.98] cursor-pointer"
+                title={t.signatureButtonTitle || "Khám phá triết lý & ý nghĩa đằng sau chữ ký TODZUNG"}
+              >
+                <PenTool className="w-4 h-4 text-emerald-200 group-hover:rotate-12 transition-transform shrink-0" />
+                <span className="font-heading tracking-wide uppercase font-black">
+                  {t.signatureButton || "Ý NGHĨA CHỮ KÝ TODZUNG"}
+                </span>
+                <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse shrink-0" />
+              </button>
             </div>
 
           </div>
@@ -2601,7 +2680,7 @@ export default function ToDzungPortfolioPage() {
             {/* Desktop / Máy tính: Nền trắng thu gọn lại bằng chiều dài chữ, cố định */}
             <div className="hidden sm:inline-flex items-center justify-center rounded-2xl bg-white border border-slate-200/90 shadow-xs py-2.5 px-6 max-w-full text-center">
               <span className="text-xs sm:text-[13px] font-black uppercase tracking-wider text-slate-800 font-heading whitespace-nowrap">
-                CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH
+                {t.footerLegalText || "CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH"}
               </span>
             </div>
 
@@ -2610,7 +2689,7 @@ export default function ToDzungPortfolioPage() {
               <div className="flex w-max animate-marquee-legal select-none">
                 <div className="flex items-center shrink-0 pr-4">
                   <span className="text-xs font-black uppercase tracking-wider text-slate-800 font-heading whitespace-nowrap">
-                    CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH
+                    {t.footerLegalText || "CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH"}
                   </span>
                   <span className="mx-3.5 text-emerald-600 font-bold opacity-60 text-xs">
                     •
@@ -2618,7 +2697,7 @@ export default function ToDzungPortfolioPage() {
                 </div>
                 <div className="flex items-center shrink-0 pr-4" aria-hidden="true">
                   <span className="text-xs font-black uppercase tracking-wider text-slate-800 font-heading whitespace-nowrap">
-                    CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH
+                    {t.footerLegalText || "CÔNG TY TNHH CHUỖI CUNG ỨNG VN - MST: 0319430529 - Đ/C: 29 QUÁCH VĂN TUẤN, PHƯỜNG BẢY HIỀN, TP. HỒ CHÍ MINH"}
                   </span>
                   <span className="mx-3.5 text-emerald-600 font-bold opacity-60 text-xs">
                     •
@@ -2642,7 +2721,7 @@ export default function ToDzungPortfolioPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex-1 min-w-0 max-w-[32%] sm:max-w-[220px] md:max-w-[250px] inline-flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 drop-shadow-sm hover:drop-shadow-lg cursor-pointer -translate-y-0.5 sm:-translate-y-1 shrink-0"
-              title="Tải ngay The Taho Way (TAHOMART - THE TAHO WAY.pdf)"
+              title={t.downloadTaho || "Tải ngay The Taho Way (TAHOMART - THE TAHO WAY.pdf)"}
             >
               <img
                 src="/images/button_TAHO.png"
@@ -2658,7 +2737,7 @@ export default function ToDzungPortfolioPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex-1 min-w-0 max-w-[32%] sm:max-w-[220px] md:max-w-[250px] inline-flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 drop-shadow-sm hover:drop-shadow-lg cursor-pointer shrink-0"
-              title="Tải ngay Profile Logistics (PROFILE_PORTALINK.pdf)"
+              title={t.downloadLogistics || "Tải ngay Profile Logistics (PROFILE_PORTALINK.pdf)"}
             >
               <img
                 src="/images/button_LO.jpeg"
@@ -2674,7 +2753,7 @@ export default function ToDzungPortfolioPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="group flex-1 min-w-0 max-w-[32%] sm:max-w-[220px] md:max-w-[250px] inline-flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95 drop-shadow-sm hover:drop-shadow-lg cursor-pointer shrink-0"
-              title="Tải ngay Catalogue Đồng Phục (CATALOGUE_DP.pdf)"
+              title={t.downloadUniform || "Tải ngay Catalogue Đồng Phục (CATALOGUE_DP.pdf)"}
             >
               <img
                 src="/images/button_DP.jpeg"
@@ -3128,6 +3207,148 @@ export default function ToDzungPortfolioPage() {
           </div>
         </div>
       )}
+
+      {/* ========================================================
+          PROMPT / SIGNATURE PHILOSOPHY MODAL (Ý NGHĨA CHỮ KÝ TODZUNG)
+      ======================================================== */}
+      {showPromptModal && (() => {
+        const phil = SIGNATURE_PHILOSOPHY[lang] || SIGNATURE_PHILOSOPHY.vi;
+        return (
+          <div
+            onClick={() => setShowPromptModal(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200 cursor-pointer"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl p-5 sm:p-7 max-w-2xl w-full border border-slate-200 shadow-2xl relative max-h-[90vh] flex flex-col cursor-default text-left overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3 pb-3.5 border-b border-slate-100 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-[#006938] to-emerald-700 text-white flex items-center justify-center shadow-md shadow-[#006938]/20 shrink-0">
+                    <PenTool className="w-5 h-5 text-emerald-200" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[10px] sm:text-[11px] font-black text-[#006938] uppercase tracking-widest block font-heading">
+                      {phil.badge}
+                    </span>
+                    <h3 className="text-lg sm:text-xl font-black text-slate-900 font-heading leading-tight truncate">
+                      {phil.title}
+                    </h3>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                      {phil.subtitle}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPromptModal(false)}
+                  className="p-2 text-slate-400 hover:text-slate-700 rounded-full hover:bg-slate-100 transition-colors shrink-0"
+                  title={phil.close || "Đóng"}
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Scrollable Content Body */}
+              <div className="overflow-y-auto pr-1 sm:pr-3 py-4 space-y-5 text-slate-700 text-sm sm:text-[15px] leading-relaxed custom-scrollbar flex-1">
+                
+                {/* Introduction Card */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-2.5">
+                  <p>{phil.introP1}</p>
+                  <p>{phil.introP2}</p>
+                </div>
+
+                {/* Core Philosophy Banner */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#006938] via-[#00552d] to-[#004223] text-white shadow-md shadow-[#006938]/20 space-y-2 text-center">
+                  <p className="text-sm sm:text-base font-extrabold italic leading-snug">
+                    {phil.motto}
+                  </p>
+                  <div className="inline-block px-3 py-0.5 rounded-full bg-white/15 backdrop-blur-xs text-emerald-200 font-black text-xs tracking-wider uppercase font-heading">
+                    {phil.tagline}
+                  </div>
+                </div>
+
+                {/* 6 Philosophy Sections */}
+                {phil.sections?.map((sec, idx) => (
+                  <div key={idx} className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2.5 hover:border-emerald-500/40 transition-colors">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-lg bg-emerald-100 text-[#006938] font-black text-xs flex items-center justify-center font-heading shrink-0">
+                        {sec.num}
+                      </span>
+                      <h4 className="font-black text-slate-900 text-sm sm:text-base font-heading">
+                        {sec.title}
+                      </h4>
+                    </div>
+                    {sec.p1 && <p>{sec.p1}</p>}
+                    {sec.p2 && <p>{sec.p2}</p>}
+                    {sec.p3 && <p>{sec.p3}</p>}
+                    {sec.highlight && (
+                      idx === 2 ? (
+                        <p className="font-extrabold text-[#006938] tracking-wide uppercase text-xs sm:text-sm">
+                          {sec.highlight}
+                        </p>
+                      ) : idx === 5 ? (
+                        <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 font-black text-[#006938] text-center text-xs sm:text-sm font-heading">
+                          {sec.highlight}
+                        </div>
+                      ) : (
+                        <p className="font-bold text-[#006938] italic">
+                          {sec.highlight}
+                        </p>
+                      )
+                    )}
+                  </div>
+                ))}
+
+                {/* Summary Conclusion Card */}
+                <div className="p-4 sm:p-6 rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white space-y-3.5">
+                  <div className="flex items-center gap-2">
+                    <Award className="w-5 h-5 text-amber-400 shrink-0" />
+                    <h4 className="font-black text-base sm:text-lg font-heading tracking-wide uppercase text-amber-300">
+                      {phil.summaryTitle}
+                    </h4>
+                  </div>
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    {phil.summaryDesc}
+                  </p>
+                  <ul className="space-y-1.5 text-xs sm:text-sm">
+                    {phil.pillars?.map((pil, pIdx) => (
+                      <li key={pIdx} className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                        <span><strong>{pil.tag}:</strong> {pil.desc}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="pt-3 border-t border-slate-700/80 text-center space-y-1">
+                    <p className="text-xs sm:text-sm font-extrabold italic text-amber-200">
+                      {phil.motto}
+                    </p>
+                    <p className="text-sm font-black text-white font-heading tracking-wide">
+                      TÔ NGỌC DŨNG | TODZUNG
+                    </p>
+                    <p className="text-xs text-emerald-400 font-semibold italic">
+                      {phil.tagline}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Footer Action */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setShowPromptModal(false)}
+                  className="py-2.5 px-6 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold font-heading transition-all active:scale-95 shadow-sm cursor-pointer"
+                >
+                  {phil.close || "Đóng"}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
     </div>
   );

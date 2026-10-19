@@ -18,7 +18,7 @@ test('business visitors can read the event purpose without a WebGL canvas',async
   const html=await markup();
   assert.match(html,/<h2[^>]*id="expo-home-title"/);
   assert.match(html,/NGÀY HỘI/);assert.match(html,/CHUỖI CUNG ỨNG/);
-  assert.match(html,/Sourcing Day/);assert.match(html,/href="\/chuong-trinh"/);
+  assert.match(html,/Sourcing Day/);assert.match(html,/href="(\/ngay-hoi-chuoi-cung-ung|\/chuong-trinh)"/);
   assert.doesNotMatch(html,/<canvas|Official Program|2026|đảm bảo|cam kết|phù hợp nhất/);
   const source=await readFile(new URL('../../components/home/SupplyChainExpoPaper3D.jsx',import.meta.url),'utf8');
   assert.doesNotMatch(source,/from 'three'|createPaperTexture|requestAnimationFrame|touch-none/);
@@ -35,9 +35,11 @@ test('approved exhibition invitation has a ticket frame without the yellow photo
 });
 test('factory, supplier and organizer choices each have a real scoped next step',async()=>{
   const {EXPO_HOME_ROLES,resolveExpoRole}=await import('../../components/home/expoHomepageContent.js');
-  assert.deepEqual(EXPO_HOME_ROLES.map(role=>role.id),['buyer','supplier','organizer']);
+  assert.deepEqual(EXPO_HOME_ROLES.map(role=>role.id),['buyer','supplier','organizer','park_operator','sponsor']);
   assert.equal(resolveExpoRole('supplier').label,'Nhà cung cấp');
   assert.equal(resolveExpoRole('organizer').label,'Hội / Hiệp hội / Tổ chức');
+  assert.equal(resolveExpoRole('park_operator').label,'Ban quản lý KCN');
+  assert.equal(resolveExpoRole('sponsor').label,'Nhà tài trợ');
   assert.match(resolveExpoRole('buyer').href,/role=buyer/);
   assert.match(resolveExpoRole('supplier').href,/role=supplier/);
   assert.equal(resolveExpoRole('organizer').href,'/dich-vu/to-chuc-ket-noi');
@@ -46,7 +48,7 @@ test('factory, supplier and organizer choices each have a real scoped next step'
 });
 test('role choices expose their selected state and accessible changing content',async()=>{
   const html=await markup();
-  assert.equal((html.match(/data-expo-role=/g)||[]).length,3);
+  assert.equal((html.match(/data-expo-role=/g)||[]).length,5);
   assert.equal((html.match(/aria-pressed="true"/g)||[]).length,1);
   assert.match(html,/aria-controls="expo-home-role-panel"/);
   assert.match(html,/id="expo-home-role-panel"/);
@@ -56,7 +58,7 @@ test('role choices expose their selected state and accessible changing content',
 test('editorial photograph reserves space, loads lazily and has a working error fallback',async()=>{
   const html=await markup();
   assert.match(html,/data-expo-photo/);assert.match(html,/loading="lazy"/);
-  assert.match(html,/width="1536" height="1024"/);
+  assert.match(html,/width="1264" height="848"/);
   assert.match(html,/alt="Doanh nghiệp trao đổi nhu cầu và xem mẫu sản phẩm tại bàn kết nối B2B"/);
   const source=await readFile(new URL('../../components/home/SupplyChainExpoPaper3D.jsx',import.meta.url),'utf8');
   assert.match(source,/onError=/);assert.match(source,/role="status"/);

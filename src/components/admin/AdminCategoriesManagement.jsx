@@ -12,7 +12,7 @@ import {
   SIX_STAGES_TAXONOMY,
   slugify 
 } from '../../data/categoryHubData';
-import enterprisesFullList from '../../data/enterprisesFull.json';
+import { suppliers as enterprisesFullList } from '../../data/cloudData.js';
 import { STRATEGIC_FOUNDING_PARTNERS } from '../../data/strategicFoundingPartners.js';
 import { PROGRAMS_DATA } from '../../data/programsData.js';
 import { SEEDED_PRODUCT_SERVICES } from '../../data/productServicesData.js';

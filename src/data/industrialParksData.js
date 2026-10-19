@@ -4,7 +4,7 @@
 // Tuân thủ triệt để đặc tả 26.txt - CHUOICUNGUNG.COM
 // ============================================================================
 
-import industrialParksList from './industrialParksFull.json' with { type: 'json' };
+import { industrialParks as industrialParksList, isCloudBrowser, getCloudRecords } from './cloudData.js';
 import { getAllOrganizations } from './organizationsData.js';
 import { getAllPrograms, PROGRAM_STATUSES_ENUM } from './programsData.js';
 import { getAllMasterRequirements } from './requirementsData.js';
@@ -99,47 +99,10 @@ export const KCN_ALIASES_MAP = {
 // QUY TẮC CỨNG SECTION 4: KCN chỉ có role khi quan hệ được CONFIRMED
 // ----------------------------------------------------------------------------
 
-export const SEED_KCN_ORGANIZATIONS = [
-  {
-    id: 'KCN-ORG-AMATA-01',
-    industrialParkId: 'khu-cong-nghiep-amata-dong-nai',
-    organizationId: 'ORG-AMATA-003',
-    organizationName: 'Công ty Cổ phần Đô Thị Amata Biên Hòa',
-    role: KCN_ORG_ROLE_ENUM.DEVELOPER,
-    status: KCN_RELATION_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    source: 'Giấy chứng nhận đầu tư & Ban Quản lý DIZA Đồng Nai',
-    confirmedBy: 'super_admin_ccu',
-    confirmedAt: '2026-01-15T09:00:00Z'
-  },
-  {
-    id: 'KCN-ORG-VSIP-01',
-    industrialParkId: 'khu-cong-nghiep-vsip-1-binh-duong',
-    organizationId: 'ORG-VSIP-JV',
-    organizationName: 'Công ty Liên doanh TNHH KCN Việt Nam - Singapore (VSIP)',
-    role: KCN_ORG_ROLE_ENUM.DEVELOPER,
-    status: KCN_RELATION_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    source: 'Quyết định thành lập KCN VSIP 1',
-    confirmedBy: 'super_admin_ccu',
-    confirmedAt: '2026-01-20T10:00:00Z'
-  },
-  {
-    id: 'KCN-ORG-DEEPC-01',
-    industrialParkId: 'khu-cong-nghiep-deep-c-dinh-vu-hai-phong',
-    organizationId: 'ORG-DEEPC-HP',
-    organizationName: 'Tổ hợp Khu công nghiệp DEEP C Hải Phòng',
-    role: KCN_ORG_ROLE_ENUM.DEVELOPER,
-    status: KCN_RELATION_STATUS_ENUM.CONFIRMED,
-    publicDisplay: true,
-    source: 'Ban Quản lý Khu kinh tế Hải Phòng (HEZA)',
-    confirmedBy: 'super_admin_ccu',
-    confirmedAt: '2026-02-01T11:00:00Z'
-  }
-];
+export const SEED_KCN_ORGANIZATIONS = websiteSeed('industrialParksData.SEED_KCN_ORGANIZATIONS');
 
 // In-memory repositories
-let inMemoryKcnOrganizations = [...SEED_KCN_ORGANIZATIONS];
+let inMemoryKcnOrganizations = isCloudBrowser() ? getCloudRecords('kcnOrganizations') : [...SEED_KCN_ORGANIZATIONS];
 let inMemoryKcnAuditLogs = [];
 
 // ----------------------------------------------------------------------------
@@ -737,7 +700,7 @@ let inMemorySupplyGaps = [
  */
 export function getSupplyGapsForKcn(kcnId, includeAll = false) {
   const canonicalId = resolveCanonicalKcnId(kcnId);
-  return inMemorySupplyGaps.filter(gap => {
+  return (isCloudBrowser() ? getCloudRecords('supplyGaps') : inMemorySupplyGaps).filter(gap => {
     if (gap.industrialParkId !== canonicalId) return false;
     if (includeAll) return true;
     return gap.status === SUPPLY_GAP_STATUS_ENUM.ACTIVE && 
@@ -1003,3 +966,4 @@ export function getFoundingPartnerForKcn(kcnId) {
     profileUrl: `/doanh-nghiep/${partnerOrg.slug || partnerOrg.id}`
   };
 }
+import { websiteSeed } from './websiteSeeds.js';

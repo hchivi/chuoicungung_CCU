@@ -18,7 +18,7 @@ export default function ProgramInterestModal({ program, onClose }) {
 
   if (!program) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.consent) {
       setErrorMsg('Vui lòng tích chọn đồng ý nhận thông báo từ Ban tổ chức.');
@@ -29,7 +29,7 @@ export default function ProgramInterestModal({ program, onClose }) {
     setErrorMsg('');
 
     try {
-      registerProgramInterest({
+      await registerProgramInterest({
         programId: program.id,
         programTitle: program.title || program.name,
         name: formData.name,

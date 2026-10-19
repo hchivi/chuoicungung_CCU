@@ -116,13 +116,13 @@ export default function AssociationsPage() {
   }, []);
 
   // Handle Membership Claim Submit (Section 13)
-  const handleClaimSubmit = (e) => {
+  const handleClaimSubmit = async (e) => {
     e.preventDefault();
     if (!selectedAssocForClaim) return;
     setClaimSubmitting(true);
 
     try {
-      const res = submitMembershipClaim({
+      const res = await submitMembershipClaim({
         associationOrganizationId: selectedAssocForClaim.id,
         memberOrganizationName: claimFormData.companyName,
         requesterName: claimFormData.representativeName,

@@ -246,7 +246,7 @@ export default function VerifiedSuppliersSection() {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <section className="w-full max-w-[1600px] mx-auto px-2 sm:px-3 lg:px-2 xl:px-4 2xl:px-8 space-y-6">
       
       {/* Section Header (Centered, Strictly 1 Line Title) */}
       <div className="text-center max-w-5xl mx-auto space-y-2">

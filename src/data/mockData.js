@@ -527,7 +527,7 @@ export const enterprisesData = [
   }
 ];
 
-import industrialParksFullList from './industrialParksFull.json' with { type: 'json' };
+import { industrialParks as industrialParksFullList } from './cloudData.js';
 
 export const industrialParksData = industrialParksFullList;
 

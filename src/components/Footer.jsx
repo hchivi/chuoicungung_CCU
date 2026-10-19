@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, Mail, Bot, Sparkles, Compass } from 'lucide-react';
+import { Phone, Mail, ChevronRight } from 'lucide-react';
 import BrandLogo from './BrandLogo';
 
 export default function Footer() {
@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
         {/* ========================================================================= */}
-        {/* MAIN 4-COLUMN FOOTER STRUCTURE (KHỚP CHÍNH XÁC NỘI DUNG CHUOICUNGUNG.COM) */}
+        {/* MAIN 4-COLUMN FOOTER STRUCTURE (ĐỒNG BỘ KÍCH THƯỚC & NỘI DUNG CHUOICUNGUNG.COM) */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-10 items-start">
 
@@ -29,13 +29,13 @@ export default function Footer() {
                 <BrandLogo variant="dark" size="md" />
               </Link>
 
-              <p className="text-xs text-emerald-100/80 leading-relaxed font-normal">
-                Hạ tầng số cốt lõi kết nối chuỗi cung ứng công nghiệp Việt Nam. Khép kín hệ sinh thái 480+ Khu công nghiệp, 14.237+ Nhà máy FDI và 32.000+ Nhà cung ứng qua 6 Giai đoạn &amp; 18 Pha kỹ thuật.
+              <p className="text-[13px] text-emerald-100/80 leading-relaxed font-normal">
+                Hạ tầng số cốt lõi kết nối chuỗi cung ứng công nghiệp Việt Nam. Khép kín hệ sinh thái 480+ Khu công nghiệp, 14.237+ Nhà máy FDI và 152.000+ Nhà cung ứng qua 6 Giai đoạn &amp; 18 Pha kỹ thuật.
               </p>
             </div>
 
             {/* Direct Contact Hotline & Email */}
-            <div className="space-y-2 text-xs text-emerald-100/90 pt-3 border-t border-emerald-900/60">
+            <div className="space-y-2.5 text-[13px] text-emerald-100/90 pt-3 border-t border-emerald-900/60">
               <div className="flex items-center space-x-3">
                 <div className="w-5 h-5 flex items-center justify-center text-[#10b981] flex-shrink-0">
                   <Phone className="w-4 h-4" />
@@ -58,53 +58,53 @@ export default function Footer() {
                 Hệ Sinh Thái Danh Bạ
               </h4>
               <div className="w-16 h-[2px] bg-[#10b981] mt-2 mb-3.5"></div>
-              <ul className="space-y-2 text-xs text-emerald-100/85 font-normal">
+              <ul className="space-y-2.5">
                 <li>
-                  <Link to="/khu-cong-nghiep" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/khu-cong-nghiep" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Danh mục 480+ Khu Công Nghiệp</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/nha-may" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/ban-do-kcn" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
+                    <span>Bản Đồ KCN Sa Bàn GIS</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/nha-may" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Mạng lưới 14.237+ Nhà Máy FDI</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/nha-cung-ung" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
-                    <span>32.000+ Nhà Cung Ứng Đã KYC</span>
+                  <Link to="/nha-cung-ung" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
+                    <span>152.000+ Nhà Cung Ứng Đã Xác Thực</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/hiep-hoi" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/hiep-hoi" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Hội &amp; Hiệp Hội Ngành Hàng</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/san-nhu-cau" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/san-nhu-cau" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Sàn Nhu Cầu Tìm Nguồn B2B</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dang-nhu-cau" className="hover:text-white transition flex items-center group text-emerald-300 font-medium">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/dang-nhu-cau" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Đăng Nhu Cầu Mua Hàng &amp; Báo Giá</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/catalogue" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/catalogue" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Catalogue &amp; Ấn Phẩm Nhà Cung Ứng</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/he-sinh-thai" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
-                    <span>Tổng Quan Hạ Tầng Hệ Sinh Thái</span>
                   </Link>
                 </li>
               </ul>
@@ -118,52 +118,52 @@ export default function Footer() {
                 6 Giai Đoạn &amp; Dịch Vụ
               </h4>
               <div className="w-16 h-[2px] bg-[#10b981] mt-2 mb-3.5"></div>
-              <ul className="space-y-2 text-xs text-emerald-100/85 font-normal">
+              <ul className="space-y-2.5">
                 <li>
-                  <Link to="/ban-do-6-giai-doan" className="hover:text-white transition flex items-center group font-medium text-emerald-200">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/ban-do-6-giai-doan" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Bản Đồ 6 Giai Đoạn &amp; 18 Pha</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dinh-vi-doanh-nghiep" className="text-amber-300 font-semibold hover:underline flex items-center">
-                    <span className="text-amber-400 mr-1.5 font-bold">★</span>
+                  <Link to="/dinh-vi-doanh-nghiep" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Trắc Nghiệm Định Vị 18 Pha</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dich-vu" className="text-emerald-300 font-semibold hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">★</span>
+                  <Link to="/dich-vu" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Trung Tâm Dịch Vụ Doanh Nghiệp</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dich-vu/to-chuc-ket-noi" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/dich-vu/to-chuc-ket-noi" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Tổ Chức Phiên Kết Nối B2B</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dich-vu/hien-dien-tu-xa" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/dich-vu/hien-dien-tu-xa" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Hiện Diện Từ Xa Sự Kiện KCN</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dich-vu/truyen-thong-doanh-nghiep" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/dich-vu/truyen-thong-doanh-nghiep" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Hồ Sơ &amp; Truyền Thông Năng Lực</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dich-vu/vat-pham-su-kien" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/dich-vu/vat-pham-su-kien" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Vật Phẩm Doanh Nghiệp &amp; Quà Tặng</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/yeu-cau-dich-vu" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/yeu-cau-dich-vu" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Gửi Yêu Cầu Tư Vấn Dịch Vụ</span>
                   </Link>
                 </li>
@@ -178,52 +178,52 @@ export default function Footer() {
                 Chương Trình &amp; Hợp Tác
               </h4>
               <div className="w-16 h-[2px] bg-[#10b981] mt-2 mb-3.5"></div>
-              <ul className="space-y-2 text-xs text-emerald-100/85 font-normal">
+              <ul className="space-y-2.5">
                 <li>
-                  <Link to="/chuong-trinh" className="text-amber-300 font-semibold hover:text-white transition flex items-center group">
-                    <span className="text-amber-400 mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">★</span>
+                  <Link to="/ngay-hoi-chuoi-cung-ung" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Ngày Hội Chuỗi Cung Ứng (Expo)</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/hop-tac" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/hop-tac" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Trung Tâm Hợp Tác Toàn Diện</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/founding-partner" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/founding-partner" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Đối Tác Sáng Lập (Founding Partners)</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tai-tro" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/tai-tro" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Tài Trợ &amp; Đồng Hành Sự Kiện</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/doi-tac-phat-trien" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/doi-tac-phat-trien" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Đối Tác Phát Triển / B2B Referral</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tam-nhin-chien-luoc-quoc-gia" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/tam-nhin-chien-luoc-quoc-gia" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Tầm Nhìn &amp; Sứ Mệnh Quốc Gia</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/tam-nhin-ha-tang-quoc-gia" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/tam-nhin-ha-tang-quoc-gia" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Bản Tuyên Ngôn Hạ Tầng Số</span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/thi-truong" className="hover:text-white transition flex items-center group">
-                    <span className="text-[#10b981] mr-1.5 font-bold group-hover:translate-x-0.5 transition-transform">›</span>
+                  <Link to="/thi-truong" className="flex items-start gap-1.5 text-[13px] text-emerald-100/80 hover:text-white transition-colors duration-200 group leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-[#10b981] shrink-0 mt-0.5 group-hover:translate-x-0.5 transition-transform duration-200" />
                     <span>Báo Cáo Thị Trường &amp; Chỉ Số ESG</span>
                   </Link>
                 </li>

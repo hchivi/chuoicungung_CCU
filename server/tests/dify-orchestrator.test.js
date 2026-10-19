@@ -17,10 +17,9 @@ test('SUPPI search surface uses the same Dify backend and never legacy API', asy
 });
 
 test('runtime refuses to claim a draft is saved when database is disconnected', async () => {
-  const source = await fs.readFile(new URL('../assistants/runtime.js', import.meta.url), 'utf8');
-  const draftBranch = source.slice(source.indexOf("if (name === 'create_requirement_draft')"), source.indexOf("if (['search_products_services'"));
-  assert.match(draftBranch, /mongoose\.connection\.readyState !== 1/);
-  assert.match(draftBranch, /DATABASE_UNAVAILABLE/);
+  const { createAssistantRuntime } = await import('../assistants/runtime.js');
+  const runtime = createAssistantRuntime({ client: null, env: {}, fetchImpl: () => { throw new Error('No inference without database'); } });
+  await assert.rejects(runtime.send({ query: 'Lưu bản nháp carton', ownerId: 'unit-test-owner' }), { code: 'DATABASE_UNAVAILABLE' });
 });
 
 test('planner and response use Dify, preserve context, and execute only validated search', async () => {
