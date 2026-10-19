@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
 import { 
   Building2, MapPin, Zap, CheckCircle2, Factory, ShieldCheck, ArrowRight, Info, Award, Calendar 
 } from 'lucide-react';
@@ -167,21 +166,10 @@ function SupplierCardItem({ supp }) {
   );
 }
 
-function SuppliersColumn({ className = '', suppliers = [], duration = 28 }) {
+function SuppliersColumn({ className = '', suppliers = [], animationClass = 'animate-supplier-col-1' }) {
   return (
-    <div className={`w-full max-w-sm flex-1 ${className}`}>
-      <motion.div
-        animate={{
-          translateY: "-50%",
-        }}
-        transition={{
-          duration: duration,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
-        className="flex flex-col gap-5 pb-5"
-      >
+    <div className={`w-full max-w-sm flex-1 supplier-col-wrapper ${className}`}>
+      <div className={`flex flex-col gap-5 pb-5 animate-supplier-track ${animationClass}`}>
         {[
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
@@ -191,7 +179,7 @@ function SuppliersColumn({ className = '', suppliers = [], duration = 28 }) {
             </React.Fragment>
           )),
         ]}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -247,18 +235,44 @@ export default function VerifiedSuppliersSection() {
         </div>
       </div>
 
-      {/* Infinite Scrolling Supplier Columns */}
+      {/* Infinite Scrolling Supplier Columns (Chạy chậm & Pause on Hover) */}
       <div 
-        className="flex justify-center gap-5 sm:gap-6 pt-2 max-h-[640px] sm:max-h-[680px] overflow-hidden relative"
+        className="supplier-scrolling-container flex justify-center gap-5 sm:gap-6 pt-2 max-h-[640px] sm:max-h-[680px] overflow-hidden relative cursor-default"
         style={{
           maskImage: 'linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)',
           WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)'
         }}
       >
-        <SuppliersColumn suppliers={column1Suppliers} duration={28} />
-        <SuppliersColumn suppliers={column2Suppliers} className="hidden md:block" duration={34} />
-        <SuppliersColumn suppliers={column3Suppliers} className="hidden lg:block" duration={30} />
+        <SuppliersColumn suppliers={column1Suppliers} animationClass="animate-supplier-col-1" />
+        <SuppliersColumn suppliers={column2Suppliers} className="hidden md:block" animationClass="animate-supplier-col-2" />
+        <SuppliersColumn suppliers={column3Suppliers} className="hidden lg:block" animationClass="animate-supplier-col-3" />
       </div>
+
+      {/* Keyframe Animation & Tự động dừng khi hover vào bất kỳ card nào */}
+      <style>{`
+        @keyframes supplierScrollLoop {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(-50%);
+          }
+        }
+        .animate-supplier-col-1 {
+          animation: supplierScrollLoop 85s linear infinite;
+        }
+        .animate-supplier-col-2 {
+          animation: supplierScrollLoop 100s linear infinite;
+        }
+        .animate-supplier-col-3 {
+          animation: supplierScrollLoop 92s linear infinite;
+        }
+        /* Dừng chuyển động khi rê chuột vào khung danh sách hoặc từng card */
+        .supplier-scrolling-container:hover .animate-supplier-track,
+        .supplier-col-wrapper:hover .animate-supplier-track {
+          animation-play-state: paused !important;
+        }
+      `}</style>
 
     </section>
   );
