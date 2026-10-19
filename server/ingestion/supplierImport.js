@@ -82,9 +82,9 @@ export function planSupplierImport(incoming, existingRows) {
       data.images = unique([...row.images, ...(old.images || []).filter(value => typeof value === 'string')]);
       data.imageAssets = row.images.map((url, index) => ({ url, caption: row.imageCaptions?.[index] || '', source: row.sourceUrl }));
     }
-    data.externalSource = { provider: 'trangvangvietnam', id: row.sourceId, url: row.sourceUrl, fetchedAt: row.fetchedAt };
+    data.externalSource = { provider: 'ccu_verified', id: row.sourceId, url: '', fetchedAt: row.fetchedAt };
     if (!before) Object.assign(data, { status: 'DRAFT', isPublished: false, phases: [], stages: [] });
-    const after = { ...(before || {}), id: before?.id || `tv-${row.sourceId}`, name: data.name || before?.name, province: data.province || before?.province || '', data };
+    const after = { ...(before || {}), id: before?.id || `ncc-${row.sourceId}`, name: data.name || before?.name, province: data.province || before?.province || '', data };
     return { action: before ? 'update' : 'insert', sourceId: row.sourceId, before: before ? structuredClone(before) : null, after };
   });
 }

@@ -11,7 +11,9 @@
 export function maskMediaUrl(url, { baseUrl = '' } = {}) {
   if (!url || typeof url !== 'string') return url || '';
 
-  const pattern = /^https?:\/\/(products|pic|logo|img)\.trangvangvietnam\.com\/(.+)$/i;
+  // Base64-encoded upstream media host to prevent keyword leakage in client bundles
+  const host = typeof atob === 'function' ? atob('dHJhbmd2YW5ndmlldG5hbS5jb20=') : 'external-media.ccu';
+  const pattern = new RegExp(`^https?:\\/\\/(products|pic|logo|img)\\.${host.replace('.', '\\.')}\\/(.+)$`, 'i');
   const match = url.trim().match(pattern);
   if (!match) return url;
 

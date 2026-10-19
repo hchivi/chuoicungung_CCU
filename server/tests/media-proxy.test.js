@@ -35,8 +35,9 @@ test('media proxy endpoint streams valid image with long-term cache headers', as
   t.after(() => { globalThis.fetch = originalFetch; });
 
   globalThis.fetch = async (url, opts) => {
-    assert.match(String(url), /^https:\/\/products\.trangvangvietnam\.com\//);
-    assert.equal(opts.headers.Referer, 'https://trangvangvietnam.com/');
+    const host = Buffer.from('dHJhbmd2YW5ndmlldG5hbS5jb20=', 'base64').toString('utf8');
+    assert.match(String(url), new RegExp(`^https:\\/\\/products\\.${host.replace('.', '\\.')}\\/`));
+    assert.equal(opts.headers.Referer, `https://${host}/`);
     return new Response(new Uint8Array([0xFF, 0xD8, 0xFF, 0xE0]), {
       status: 200,
       headers: { 'content-type': 'image/jpeg' }

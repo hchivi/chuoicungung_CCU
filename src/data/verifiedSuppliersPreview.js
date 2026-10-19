@@ -2,8 +2,8 @@
 // Được đưa tạm thời lên trang đầu của /nha-cung-ung để xem trước và kiểm tra giao diện
 export const CRAWLED_PREVIEW_24_SUPPLIERS = [
   {
-    "id": "tv-1187742132",
-    "_id": "tv-1187742132",
+    "id": "ncc-1187742132",
+    "_id": "ncc-1187742132",
     "sourceId": "1187742132",
     "slug": "chuyen-gia-dong-phuc--cong-ty-tnhh-proser",
     "name": "Chuyên Gia Đồng Phục- Công Ty TNHH Proser",
@@ -287,8 +287,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     ]
   },
   {
-    "id": "tv-1187907492",
-    "_id": "tv-1187907492",
+    "id": "ncc-1187907492",
+    "_id": "ncc-1187907492",
     "sourceId": "1187907492",
     "slug": "ao-phao-boi-phao-cuu-sinh-hanteco---cong-ty-tnhh-thuong-mai-va-cong-nghe-hanteco-viet-nam",
     "name": "Áo Phao Bơi, Phao Cứu Sinh Hanteco - Công Ty TNHH Thương Mại Và Công Nghệ Hanteco Việt Nam",
@@ -743,8 +743,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     }
   },
   {
-    "id": "tv-1187873697",
-    "_id": "tv-1187873697",
+    "id": "ncc-1187873697",
+    "_id": "ncc-1187873697",
     "name": "Thiết Bị Hàng Hải Việt Chính - Công Ty TNHH Việt Chính",
     "category": "Hàng Hải - Thiết Bị Hàng Hải",
     "industry": "Bảo hộ lao động & An toàn",
@@ -797,8 +797,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Thiết Bị Hàng Hải Việt Chính - Công Ty TNHH Việt Chính hoạt động chuyên sâu trong lĩnh vực Hàng Hải - Thiết Bị Hàng Hải tại TP. Hải Phòng. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187703483",
-    "_id": "tv-1187703483",
+    "id": "ncc-1187703483",
+    "_id": "ncc-1187703483",
     "name": "Bảo Hộ Lao Động Vĩnh Xuyên - Công Ty TNHH Sản Xuất - Thương Mại - Dịch Vụ Vĩnh Xuyên",
     "category": "Giày Bảo Hộ Lao Động, ủng Bảo Hộ Lao Động",
     "industry": "Bảo hộ lao động & An toàn",
@@ -851,8 +851,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Bảo Hộ Lao Động Vĩnh Xuyên - Công Ty TNHH Sản Xuất - Thương Mại - Dịch Vụ Vĩnh Xuyên hoạt động chuyên sâu trong lĩnh vực Giày Bảo Hộ Lao Động, ủng Bảo Hộ Lao Động tại TP. Hải Phòng. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1188004833",
-    "_id": "tv-1188004833",
+    "id": "ncc-1188004833",
+    "_id": "ncc-1188004833",
     "name": "Thiết Bị Hàng Hải AZMarine - Công Ty TNHH Thương Mại Dịch Vụ AZMarine",
     "category": "Hàng Hải - Thiết Bị Hàng Hải",
     "industry": "Bảo hộ lao động & An toàn",
@@ -905,8 +905,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Thiết Bị Hàng Hải AZMarine - Công Ty TNHH Thương Mại Dịch Vụ AZMarine hoạt động chuyên sâu trong lĩnh vực Hàng Hải - Thiết Bị Hàng Hải tại TP. Hồ Chí Minh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1188033333",
-    "_id": "tv-1188033333",
+    "id": "ncc-1188033333",
+    "_id": "ncc-1188033333",
     "name": "Công Ty TNHH Một Thành Viên 76",
     "category": "Nhà Lều Bạt",
     "industry": "Vật liệu công nghiệp & Ống nhựa",
@@ -959,8 +959,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Công Ty TNHH Một Thành Viên 76 hoạt động chuyên sâu trong lĩnh vực Nhà Lều Bạt tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187815065",
-    "_id": "tv-1187815065",
+    "id": "ncc-1187815065",
+    "_id": "ncc-1187815065",
     "name": "Hộ Kinh Doanh Huỳnh Xuân Hương (Thanh Thieu Nhi Group)",
     "category": "Bảo Hộ Lao Động",
     "industry": "Máy bơm & Thiết bị công nghiệp",
@@ -1012,8 +1012,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Hộ Kinh Doanh Huỳnh Xuân Hương (Thanh Thieu Nhi Group) hoạt động chuyên sâu trong lĩnh vực Bảo Hộ Lao Động tại Phú Yên. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187704830",
-    "_id": "tv-1187704830",
+    "id": "ncc-1187704830",
+    "_id": "ncc-1187704830",
     "name": "Công Ty TNHH An Toàn Công Nghiệp Gia Bảo Minh",
     "category": "Bảo Hộ Lao Động",
     "industry": "Máy bơm & Thiết bị công nghiệp",
@@ -1066,8 +1066,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Công Ty TNHH An Toàn Công Nghiệp Gia Bảo Minh hoạt động chuyên sâu trong lĩnh vực Bảo Hộ Lao Động tại TP. Hồ Chí Minh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1188011190",
-    "_id": "tv-1188011190",
+    "id": "ncc-1188011190",
+    "_id": "ncc-1188011190",
     "name": "HAN Computer - Công Ty Cổ Phần CNC-AI Việt Nam",
     "category": "Máy Văn Phòng",
     "industry": "Tủ bảng điện & Thiết bị điện",
@@ -1120,8 +1120,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp HAN Computer - Công Ty Cổ Phần CNC-AI Việt Nam hoạt động chuyên sâu trong lĩnh vực Máy Văn Phòng tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187730708",
-    "_id": "tv-1187730708",
+    "id": "ncc-1187730708",
+    "_id": "ncc-1187730708",
     "name": "Máy Văn Phòng Nhật Thiên Thanh - Công Ty TNHH Một Thành Viên Thương Mại - Dịch Vụ Nhật Thiên Thanh",
     "category": "Máy Văn Phòng",
     "industry": "Bao bì & Pallet đóng gói",
@@ -1174,8 +1174,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Máy Văn Phòng Nhật Thiên Thanh - Công Ty TNHH Một Thành Viên Thương Mại - Dịch Vụ Nhật Thiên Thanh hoạt động chuyên sâu trong lĩnh vực Máy Văn Phòng tại TP. Hồ Chí Minh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187832894",
-    "_id": "tv-1187832894",
+    "id": "ncc-1187832894",
+    "_id": "ncc-1187832894",
     "name": "Văn Phòng Phẩm Phương Huy Vinh - Công Ty TNHH Phương Huy Vinh",
     "category": "Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm",
     "industry": "Bao bì & Pallet đóng gói",
@@ -1228,8 +1228,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Văn Phòng Phẩm Phương Huy Vinh - Công Ty TNHH Phương Huy Vinh hoạt động chuyên sâu trong lĩnh vực Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm tại Đồng Nai. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187735265",
-    "_id": "tv-1187735265",
+    "id": "ncc-1187735265",
+    "_id": "ncc-1187735265",
     "name": "Văn Phòng Phẩm Toàn Trẻ - Công Ty TNHH Toàn Trẻ",
     "category": "Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm",
     "industry": "Bao bì & Pallet đóng gói",
@@ -1282,8 +1282,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Văn Phòng Phẩm Toàn Trẻ - Công Ty TNHH Toàn Trẻ hoạt động chuyên sâu trong lĩnh vực Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm tại Đồng Nai. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187761404",
-    "_id": "tv-1187761404",
+    "id": "ncc-1187761404",
+    "_id": "ncc-1187761404",
     "name": "Thiết Bị Văn Phòng Khang Minh - Công Ty TNHH Thiết Bị Văn Phòng Khang Minh",
     "category": "Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm",
     "industry": "Vật liệu công nghiệp & Ống nhựa",
@@ -1336,8 +1336,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Thiết Bị Văn Phòng Khang Minh - Công Ty TNHH Thiết Bị Văn Phòng Khang Minh hoạt động chuyên sâu trong lĩnh vực Văn Phòng Phẩm - Công Ty Văn Phòng Phẩm tại TP. Hồ Chí Minh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-119293728",
-    "_id": "tv-119293728",
+    "id": "ncc-119293728",
+    "_id": "ncc-119293728",
     "name": "Thiết Bị Văn Phòng Hà Nội - Công Ty Cổ Phần Xuất Nhập Khẩu Và Đầu Tư Công Nghệ Hà Nội",
     "category": "Thiết Bị Văn Phòng",
     "industry": "Tủ bảng điện & Thiết bị điện",
@@ -1390,8 +1390,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Thiết Bị Văn Phòng Hà Nội - Công Ty Cổ Phần Xuất Nhập Khẩu Và Đầu Tư Công Nghệ Hà Nội hoạt động chuyên sâu trong lĩnh vực Thiết Bị Văn Phòng tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-735267",
-    "_id": "tv-735267",
+    "id": "ncc-735267",
+    "_id": "ncc-735267",
     "name": "Keo Dán Trung Minh - Công Ty TNHH Thương Mại Và Dịch Vụ Trung Minh",
     "category": "Keo Dán và Chất Dính",
     "industry": "Vật liệu công nghiệp & Ống nhựa",
@@ -1444,8 +1444,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Keo Dán Trung Minh - Công Ty TNHH Thương Mại Và Dịch Vụ Trung Minh hoạt động chuyên sâu trong lĩnh vực Keo Dán và Chất Dính tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187724507",
-    "_id": "tv-1187724507",
+    "id": "ncc-1187724507",
+    "_id": "ncc-1187724507",
     "name": "Keo Dán AMIBOND - Công Ty TNHH AMIBOND",
     "category": "Keo Dán và Chất Dính",
     "industry": "Xây dựng nhà xưởng & Kết cấu",
@@ -1498,8 +1498,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Keo Dán AMIBOND - Công Ty TNHH AMIBOND hoạt động chuyên sâu trong lĩnh vực Keo Dán và Chất Dính tại Tây Ninh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-988935",
-    "_id": "tv-988935",
+    "id": "ncc-988935",
+    "_id": "ncc-988935",
     "name": "Keo Dán Techbond - Công Ty TNHH Techbond MFG (Việt Nam)",
     "category": "Keo Dán và Chất Dính",
     "industry": "Xây dựng nhà xưởng & Kết cấu",
@@ -1552,8 +1552,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Keo Dán Techbond - Công Ty TNHH Techbond MFG (Việt Nam) hoạt động chuyên sâu trong lĩnh vực Keo Dán và Chất Dính tại Bình Dương. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187774997",
-    "_id": "tv-1187774997",
+    "id": "ncc-1187774997",
+    "_id": "ncc-1187774997",
     "name": "Keo Dán Sơn Thành Long - Công Ty TNHH Sơn Thành Long",
     "category": "Keo Dán và Chất Dính",
     "industry": "Xây dựng nhà xưởng & Kết cấu",
@@ -1606,8 +1606,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Keo Dán Sơn Thành Long - Công Ty TNHH Sơn Thành Long hoạt động chuyên sâu trong lĩnh vực Keo Dán và Chất Dính tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187882547",
-    "_id": "tv-1187882547",
+    "id": "ncc-1187882547",
+    "_id": "ncc-1187882547",
     "name": "Quảng Cáo Khang Mỹ - Công Ty TNHH Thương Mại Dịch Vụ Giải Pháp Khang Mỹ",
     "category": "Quảng Cáo - Công Ty Quảng Cáo",
     "industry": "Tủ bảng điện & Thiết bị điện",
@@ -1660,8 +1660,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Quảng Cáo Khang Mỹ - Công Ty TNHH Thương Mại Dịch Vụ Giải Pháp Khang Mỹ hoạt động chuyên sâu trong lĩnh vực Quảng Cáo - Công Ty Quảng Cáo tại TP. Hồ Chí Minh. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187677482",
-    "_id": "tv-1187677482",
+    "id": "ncc-1187677482",
+    "_id": "ncc-1187677482",
     "name": "Công Ty TNHH Đầu Tư Quốc Tế Việt Nam",
     "category": "Quảng Cáo - Máy Móc, Thiết Bị, Vật Tư Quảng Cáo",
     "industry": "Tự động hóa & Thiết bị thông minh",
@@ -1714,8 +1714,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Công Ty TNHH Đầu Tư Quốc Tế Việt Nam hoạt động chuyên sâu trong lĩnh vực Quảng Cáo - Máy Móc, Thiết Bị, Vật Tư Quảng Cáo tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187704713",
-    "_id": "tv-1187704713",
+    "id": "ncc-1187704713",
+    "_id": "ncc-1187704713",
     "name": "Cơ Sở Cơ Khí Quốc Huy",
     "category": "Cơ Khí - Chế Tạo Máy",
     "industry": "Cơ khí chính xác & Chế tạo máy",
@@ -1764,8 +1764,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Cơ Sở Cơ Khí Quốc Huy hoạt động chuyên sâu trong lĩnh vực Cơ Khí - Chế Tạo Máy tại Đắk Lắk. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-707685",
-    "_id": "tv-707685",
+    "id": "ncc-707685",
+    "_id": "ncc-707685",
     "name": "Công Ty TNHH MTV Động Cơ Và Máy Nông Nghiệp Miền Nam",
     "category": "Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp",
     "industry": "Cơ khí chính xác & Chế tạo máy",
@@ -1817,8 +1817,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Công Ty TNHH MTV Động Cơ Và Máy Nông Nghiệp Miền Nam hoạt động chuyên sâu trong lĩnh vực Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp tại Đồng Nai. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-707163",
-    "_id": "tv-707163",
+    "id": "ncc-707163",
+    "_id": "ncc-707163",
     "name": "Máy Nông Nghiệp LAMICO - Công Ty CP Cơ Khí Chế Tạo Máy Long An",
     "category": "Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp",
     "industry": "Cơ khí chính xác & Chế tạo máy",
@@ -1867,8 +1867,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Máy Nông Nghiệp LAMICO - Công Ty CP Cơ Khí Chế Tạo Máy Long An hoạt động chuyên sâu trong lĩnh vực Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp tại Long An. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1312482",
-    "_id": "tv-1312482",
+    "id": "ncc-1312482",
+    "_id": "ncc-1312482",
     "name": "Công Ty TNHH Thiết Bị Công Nghệ Hoa Kỳ",
     "category": "Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp",
     "industry": "Điện lạnh công nghiệp & HVAC",
@@ -1921,8 +1921,8 @@ export const CRAWLED_PREVIEW_24_SUPPLIERS = [
     "description": "Doanh nghiệp Công Ty TNHH Thiết Bị Công Nghệ Hoa Kỳ hoạt động chuyên sâu trong lĩnh vực Nông Nghiệp - Máy Móc và Thiết Bị Nông Nghiệp tại Hà Nội. Dữ liệu được trích xuất xác thực từ kho dữ liệu B2B Chuỗi Cung Ứng."
   },
   {
-    "id": "tv-1187752854",
-    "_id": "tv-1187752854",
+    "id": "ncc-1187752854",
+    "_id": "ncc-1187752854",
     "name": "Công Ty TNHH Châu Đà",
     "category": "Cơ Khí - Chế Tạo Máy",
     "industry": "Tự động hóa & Thiết bị thông minh",

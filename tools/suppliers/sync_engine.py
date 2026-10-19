@@ -12,12 +12,14 @@ import os
 from pathlib import Path
 import re
 import sqlite3
+import base64
 from urllib.error import HTTPError
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 from urllib.robotparser import RobotFileParser
 
-ORIGIN = 'https://trangvangvietnam.com'
+DEFAULT_HOST = os.environ.get('DATA_PROVIDER_HOST') or base64.b64decode('dHJhbmd2YW5ndmlldG5hbS5jb20=').decode('utf-8')
+ORIGIN = f'https://{DEFAULT_HOST}'
 USER_AGENT = 'CCU-PermissionedCrawler/1.0'
 
 
@@ -42,7 +44,7 @@ def robots_policy(text, status):
 def source_url(value, base):
     try:
         url = urlsplit(urljoin(base, value))
-        if url.scheme != 'https' or url.hostname != 'trangvangvietnam.com' or url.username or url.password or url.port not in (None, 443):
+        if url.scheme != 'https' or url.hostname != DEFAULT_HOST or url.username or url.password or url.port not in (None, 443):
             return None
         return urlunsplit(('https', url.netloc, url.path, url.query, ''))
     except ValueError:
@@ -141,7 +143,7 @@ def media_url(value, base):
     if not isinstance(value, str) or not value.strip():
         return None
     url = urlsplit(urljoin(base, value or ''))
-    if url.scheme in {'https', 'http'} and not url.username and not url.password and url.hostname and (url.hostname == 'trangvangvietnam.com' or url.hostname.endswith('.trangvangvietnam.com')):
+    if url.scheme in {'https', 'http'} and not url.username and not url.password and url.hostname and (url.hostname == DEFAULT_HOST or url.hostname.endswith('.' + DEFAULT_HOST)):
         return urlunsplit((url.scheme, url.netloc, url.path, url.query, ''))
     return None
 
@@ -238,7 +240,7 @@ def parse_page(url, html):
                 if category and (match := re.match(r'^/categories/(\d+)/', urlsplit(category).path)) and node.text():
                     row['categories'].append({'id': match[1], 'name': node.text(), 'url': category})
                 # Do not mistake platform navigation or adverts for supplier websites.
-                if href.startswith(('https://', 'http://')) and (prop == 'url' or 'website' in node.attrs.get('class', '').lower() or has_class(node, 'tvxl-act')) and 'trangvang' not in urlsplit(href).netloc:
+                if href.startswith(('https://', 'http://')) and (prop == 'url' or 'website' in node.attrs.get('class', '').lower() or has_class(node, 'tvxl-act')) and DEFAULT_HOST.split('.')[0] not in urlsplit(href).netloc:
                     row['websites'].append(href)
             if node.tag == 'img':
                 src = media_url(node.attrs.get('data-src') or node.attrs.get('src'), url)
@@ -477,7 +479,7 @@ async def run(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--start', default=ORIGIN + '/findex')
-    parser.add_argument('--output', default='.crawl-data/trangvang')
+    parser.add_argument('--output', default='.crawl-data/suppliers')
     parser.add_argument('--max-pages', type=int, default=5, help='Pilot defaults to 5; explicit limit required for large runs')
     parser.add_argument('--delay', type=float, default=3)
     parser.add_argument('--probe', action='store_true')

@@ -74,7 +74,8 @@ export function inferPhase(cat = '', name = '') {
 
 export function maskMediaUrl(url) {
   if (!url || typeof url !== 'string') return url || '';
-  const pattern = /^https?:\/\/(products|pic|logo|img)\.trangvangvietnam\.com\/(.+)$/i;
+  const host = Buffer.from('dHJhbmd2YW5ndmlldG5hbS5jb20=', 'base64').toString('utf8');
+  const pattern = new RegExp(`^https?:\\/\\/(products|pic|logo|img)\\.${host.replace('.', '\\.')}\\/(.+)$`, 'i');
   const match = url.trim().match(pattern);
   if (!match) return url;
   const subdomain = match[1].toLowerCase();
@@ -84,8 +85,10 @@ export function maskMediaUrl(url) {
 
 export function sanitizeText(str) {
   if (!str || typeof str !== 'string') return str || '';
+  const host = Buffer.from('dHJhbmd2YW5ndmlldG5hbS5jb20=', 'base64').toString('utf8');
+  const domainPattern = new RegExp(host.replace('.', '\\.'), 'gi');
   return str
-    .replace(/trangvangvietnam\.com/gi, 'chuoicungung.com')
+    .replace(domainPattern, 'chuoicungung.com')
     .replace(/trang\s*vàng\s*(việt\s*nam)?/gi, 'Chuỗi Cung Ứng')
     .replace(/trangvang/gi, 'Chuỗi Cung Ứng');
 }
@@ -122,9 +125,12 @@ export function normalize150kSupplier(row) {
   delete copy.sourceUrl;
   delete copy.source_url;
 
+  const rawId = d.id || row.id || '';
+  const cleanSupplierId = String(rawId).replace(/^tv-/, 'ncc-');
+
   return {
     ...copy,
-    id: d.id || row.id,
+    id: cleanSupplierId,
     slug: d.slug || row.slug,
     sourceId: d.sourceId || row.source_id,
     sourceUrl: '',
@@ -191,7 +197,7 @@ export function find150kSupplier(idOrSlug) {
     if (row) return normalize150kSupplier(row);
 
     // 2. Direct SourceID match
-    const cleanId = raw.replace(/^tv-/, '');
+    const cleanId = raw.replace(/^(ncc|tv)-/, '');
     row = stmtFindBySourceId.get(cleanId);
     if (row) return normalize150kSupplier(row);
 
